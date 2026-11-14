@@ -20,6 +20,7 @@ import tempfile
 import time
 import wave
 from collections.abc import (
+    Callable,
     Iterable,
     Sequence,
 )
@@ -119,6 +120,10 @@ class Instrument:
     sustained : bool, default False
         True for bowed and blown instruments, whose notes end when the next one begins; struck and plucked ones ring on.
         Keyword-only.
+    damped : bool, default False
+        True for an instrument whose notes are stopped by a damper when the key is let go, played without the pedal: the
+        piano. Each note ends as the next one begins, as it does when the fingers move from key to key, instead of ringing
+        on over the following notes as if the pedal were down. Keyword-only.
     family : str, default ""
         Instruments that are ways of playing the same instrument share a family (the viola: arco and pizzicato).
         Keyword-only.
@@ -129,6 +134,8 @@ class Instrument:
     --------
     >>> Instrument("flute", label="Flute", folder="samples/flute", sustained=True).gain
     1.0
+    >>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
+    (True, False)
     """
 
     key: str
@@ -139,10 +146,16 @@ class Instrument:
     sustained: bool = False  # bowed and blown notes end when the next one begins; struck and plucked ones ring on
     family: str = ""  # instruments that are ways of playing the same instrument share a family (the viola: arco, pizzicato)
     variant: str = ""  # which way of playing it, within the family
+    damped: bool = False  # a damper stops each note as the next begins, as on a piano played without the pedal
 
 
 INSTRUMENTS = (
-    Instrument("piano", label="Piano", folder="piano"),
+    Instrument(
+        "piano",
+        label="Piano",
+        folder="piano",
+        damped=True,
+    ),
     Instrument(
         "flute",
         label="Flute",
@@ -345,7 +358,7 @@ class Sounds:
         self.enabled = True
         self.instrument = "piano"  # key into INSTRUMENT_BY_KEY
         self._effects = {}
-        self._sounding: list = []  # sustained notes that may still be sounding, to release when the next note begins
+        self._sounding: list = []  # sustained and damped notes that may still be sounding, to release when the next begins
         self._fades: dict = {}  # running fade-outs, by effect
         self._sequence_run = 0  # which sequence of notes is current, so that an older one stops when a new one starts
         self._sample_files: dict[str, dict[int, Path]] = {}
@@ -502,7 +515,7 @@ class Sounds:
 
     def _release_sounding(self) -> None:
         """
-        End the sustained notes that are still ringing.
+        End the sustained and damped notes that are still ringing.
 
         Examples
         --------
@@ -524,8 +537,9 @@ class Sounds:
         """
         Play a note in the chosen instrument (or another one).
 
-        A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, unless
-        `release_previous` is False, which is for the notes of a chord that start together. Nothing plays while muted unless
+        A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, and so does a damped
+        one (the piano, played without the pedal), unless `release_previous` is False, which is for the notes of a chord
+        that start together. Nothing plays while muted unless
         `force` is set. A failure to play is reported but never raised, so audio can never break an exercise.
 
         Parameters
@@ -539,7 +553,7 @@ class Sounds:
         force : bool, default False
             Play even while muted, for previews. Keyword-only.
         release_previous : bool, default True
-            End the sustained notes still ringing first. Keyword-only.
+            End the sustained or damped notes still ringing first. Keyword-only.
 
         Examples
         --------
@@ -552,7 +566,7 @@ class Sounds:
             return
         try:
             inst = INSTRUMENT_BY_KEY.get(instrument or self.instrument, INSTRUMENTS[0])
-            if inst.sustained and release_previous:
+            if (inst.sustained or inst.damped) and release_previous:
                 self._release_sounding()
             fx = self._effect(inst, midi=midi)
             fade = self._fades.pop(id(fx), None)  # this note may have been released a moment ago
@@ -560,7 +574,7 @@ class Sounds:
                 fade.stop()
             fx.setVolume(min(1.0, volume * inst.gain))
             fx.play()
-            if inst.sustained:
+            if inst.sustained or inst.damped:
                 self._sounding.append(fx)
         except Exception as exc:  # audio must never break an exercise
             print(f"audio unavailable: {exc}")
@@ -624,7 +638,7 @@ class Sounds:
         force: bool = False,
     ) -> None:
         """
-        Start the notes of one column together, first ending any sustained notes still ringing.
+        Start the notes of one column together, first ending any sustained or damped notes still ringing.
 
         Parameters
         ----------
@@ -644,7 +658,7 @@ class Sounds:
         >>> s._play_column([60, 64, 67], volume=1.0)  # muted: nothing sounds
         """
         inst = INSTRUMENT_BY_KEY.get(key or self.instrument, INSTRUMENTS[0])
-        if inst.sustained and (self.enabled or force):
+        if (inst.sustained or inst.damped) and (self.enabled or force):
             self._release_sounding()
         for midi in midis:
             self.play_midi(
@@ -662,6 +676,7 @@ class Sounds:
         steps: list[tuple[list[int], float]],
         gap_ms: int,
         force: bool = False,
+        on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
         Play steps one after another, a fixed time apart.
@@ -681,6 +696,10 @@ class Sounds:
             The time from the start of one step to the start of the next, in milliseconds. Keyword-only.
         force : bool, default False
             Play even while muted. Keyword-only.
+        on_step : callable or None, default None
+            Called with the index of each step as it starts, and with None one gap after the last one, so that the caller can
+            show which note is sounding. While muted the steps are still walked through, on the same timing, so the display
+            does not depend on the sound. Not called for a sequence that a newer one has replaced. Keyword-only.
 
         Examples
         --------
@@ -692,7 +711,16 @@ class Sounds:
         """
         self._sequence_run += 1
         run = self._sequence_run
-        if not (self.enabled or force) or not steps:
+        if not steps:
+            return
+        if not (self.enabled or force):
+            if on_step is not None:
+                self._walk(
+                    len(steps),
+                    gap_ms=gap_ms,
+                    run=run,
+                    on_step=on_step,
+                )
             return
         try:
             inst = INSTRUMENT_BY_KEY[key]
@@ -741,8 +769,13 @@ class Sounds:
                 key=key,
                 force=force,
             )
+            if on_step is not None:
+                on_step(i)
             if i + 1 < len(steps):  # the next one is due a full gap after this one has started, however long that took
                 QTimer.singleShot(gap_ms, lambda: step(i + 1))
+            elif on_step is not None:
+                finish = on_step
+                QTimer.singleShot(gap_ms, lambda: run == self._sequence_run and finish(None))  # the last note has had its time
 
         def wait() -> None:
             """
@@ -761,11 +794,64 @@ class Sounds:
 
         wait()
 
+    def _walk(
+        self,
+        count: int,
+        *,
+        gap_ms: int,
+        run: int,
+        on_step: Callable[[int | None], object],
+    ) -> None:
+        """
+        Go through the steps of a sequence without a sound, on the same timing, telling the caller each one.
+
+        Parameters
+        ----------
+        count : int
+            How many steps there are.
+        gap_ms : int
+            The time from the start of one step to the start of the next, in milliseconds. Keyword-only.
+        run : int
+            Which sequence this is; the walk stops if a newer one has started. Keyword-only.
+        on_step : callable
+            Called with each step's index, and with None one gap after the last. Keyword-only.
+
+        Examples
+        --------
+        >>> s = Sounds()
+        >>> seen = []
+        >>> s._walk(1, gap_ms=10, run=s._sequence_run, on_step=seen.append)
+        >>> seen
+        [0]
+        """
+
+        def step(i: int) -> None:
+            """
+            Report one step and schedule the next.
+
+            Parameters
+            ----------
+            i : int
+                The index of the step; `count` means the end.
+
+            Examples
+            --------
+            >>> step(0)  # doctest: +SKIP
+            """
+            if run != self._sequence_run:
+                return
+            on_step(i if i < count else None)
+            if i < count:
+                QTimer.singleShot(gap_ms, lambda: step(i + 1))
+
+        step(0)
+
     def play_notes(
         self,
         columns: Iterable[Sequence[Note]],
         *,
         gap_ms: int = 450,
+        on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
         Play staff columns left to right, evenly spaced.
@@ -778,6 +864,9 @@ class Sounds:
             The columns of notes, as drawn on a staff.
         gap_ms : int, default 450
             The time between columns, in milliseconds. Keyword-only.
+        on_step : callable or None, default None
+            Called with the index of each column as it starts, and with None when the last has had its time. It is called
+            while muted too, so a display can follow the music with the sound off. Keyword-only.
 
         Examples
         --------
@@ -789,6 +878,7 @@ class Sounds:
             self.instrument,
             steps=[([n.midi for n in col], min(1.0, 1.4 / len(col) ** 0.5)) for col in columns],
             gap_ms=gap_ms,
+            on_step=on_step,
         )
 
     def play_correct(self, streak: int) -> None:

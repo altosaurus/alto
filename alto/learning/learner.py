@@ -136,7 +136,7 @@ class Learner:
             if item.item_key in options or item.item_key == avoid:
                 continue
             try:
-                q = Question.from_dict(json.loads(item.payload))
+                q = exercise.refresh(Question.from_dict(json.loads(item.payload)))
             except (ValueError, KeyError, TypeError):
                 continue
             options[item.item_key] = (q, scheduler.weight(item.strain, last_seen=item.last_seen, now=now))

@@ -7,18 +7,37 @@ There are two kinds of settings. **App settings** apply everywhere. **Exercise s
 
 ## App settings
 
-Open them from the menu (☰) with **Settings…** or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. Categories are listed on the left, and
+Open them from the menu (☰) with **Settings…** or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. The dialog does not block the window: you can
+keep it open and use the exercises, and opening it again brings the same one forward. A new theme is applied to the window when you close
+the settings. Categories are listed on the left, and
 the selected one's settings appear on the right.
 
 {% include shot.html src="settings.png" alt="The settings dialog showing theme and notation style options" %}
 
 ### Appearance
 
-The Appearance page has three sections, **Theme**, **Notation style** and **Keyboard style**, which you switch between with the pill-shaped control at the top.
+The Appearance page has four sections, **Theme**, **Notation style**, **Keyboard style** and **Transitions**, which you switch between with the pill-shaped control at the top.
 
-**Theme.** Choose System to follow your operating system's light or dark setting, or Light or Dark to always use one.
-Each choice is a card with a small picture of the window in that theme (System shows both halves). It applies
-immediately.
+**Theme.** The themes are in a list on the left. The right side is the theme's card: its name, three pictures of the window one
+above another. Beside the Light and Dark pictures are squares of that version's colours, and the window, accent and ink colours
+written out as hexadecimal codes. The pictures are **Light**, **Dark** and **System**. The System picture is cut through
+on a slant, light on one side and dark on the other, because that version is light when your operating system is set to light and
+dark when it is set to dark, and changes with it. Choosing a theme in the list uses it at once, in whichever of Light, Dark and
+System you chose last, so you can go down the list and see each theme in the version you prefer. Clicking a picture changes the
+version. The picture in use is outlined, and its theme is bold in the list. The first theme, **Default**, is the desktop's own
+colours. Then there is **Studio**, with cool greys and a clear blue, and twenty-four more: Parchment, Slate Blue, Sage, Harbour,
+Lavender Hush, Rosewater, Marigold, Pine, Indigo Ink, Graphite, Terracotta, Mint, Sky, Plum, Sand, Teal, Copper, Charcoal and Gold,
+Cherry, Moss, Arctic, Dusk, Lime Shock and Ember.
+
+**Your own themes.** The top of the theme list is **My themes**, with a row **＋ New theme…**. Choosing it opens an editor in
+place of the card. **Save** (filled in the accent colour), **Cancel** and, for a theme already saved, **Delete theme** are at the top
+right of the editor, where they stay in view while the colours below them scroll. Give the theme a name, then choose a colour for each part of its **Light version** and its **Dark version**:
+the window, panels, text, quiet text, outlines, accent and the track behind a switch. Click a colour to open the colour picker: the pointer becomes a hand over a colour, a ring appears round it, and the code beside it turns bold and dark. A
+small picture of each version follows the colours as you change them. A new theme starts as a copy of Studio, and choosing another
+theme in the **Start from** list takes that theme's colours at once, for both versions. **Save** keeps the theme and uses it, in the
+version you last chose. Your themes are kept with your other settings, so they are there next time, and they are part of a
+backup. A theme of your own appears in the list with the same three pictures as any other, and its card has a **Change colours…**
+button for the editor, from which you can also **Delete theme** after it asks.
 
 **Notation style.** The music font used to draw clefs, notes and accidentals. Each choice shows a preview. Your choice
 applies to every staff in the app, including the small pictures in the settings panels. The default is Finale Maestro.
@@ -73,6 +92,22 @@ left out with the ✕ chip. Changing any part switches to the **Custom** style, 
 
 The breve is always drawn in its square form, whichever font you choose. All the fonts are bundled with Alto except Noto Music, which is read from your system.
 
+**Transitions.** How the home page changes when you switch between the exercises and the lessons. The choices are in a list on
+the left, and a preview on the right plays the one you pick, once, on a mock of the home page with the app's own cards and the
+Exercises | Lessons switch, so you can see it before you leave the settings. The Exercises | Lessons switch in the preview works, so you can press it to try the transition, in both directions, as often as you like. **Replay** starts again from the exercises. (Only the first lesson is real; the other three lesson
+cards in the preview are marked Example, so that the transition has more than one card to move.)
+**No transition** changes the cards at once. Next comes **Cascade**, the default, where the new cards arrive one after another.
+There are twenty-nine in all, and they fall into a few families:
+
+- **Fades and dissolves:** Fade in, Crossfade, Slow dissolve, Blur, Focus pull.
+- **Slides:** Slide sideways, Slide up, Rise, Stream.
+- **Growing and shrinking:** Zoom, Zoom out, Shrink and grow, Elastic, Burst, Ripple, Gather, Unfold.
+- **Spins and turns:** Flip, Flip over, Spin, Swing, Whirl.
+- **Reveals:** Wipe, Curtain.
+- **One card after another:** Cascade, Wave, Fall in, Scatter, Drop and pop.
+
+The choice applies the next time you flip the switch.
+
 ### Sound
 
 **Instrument.** The sound used for notes and for the correct-answer chime. The instruments are listed in a box on the
@@ -93,7 +128,7 @@ Press **Use this instrument**, or double-click the entry in the list, to switch 
 to a short arpeggio first without choosing it, even while sound is muted. Sound can also be muted with the speaker
 button in any exercise.
 
-The flute, French horn and arco viola, which are blown or bowed, end each note as the next one begins, as a player would. Struck and plucked instruments, such as the piano, marimba and pizzicato viola, ring on. An instrument
+The flute, French horn and arco viola, which are blown or bowed, end each note as the next one begins, as a player would. So does the piano, which is played without the pedal: each note is damped as the next key goes down, so a scale does not blur together. Other struck and plucked instruments, such as the marimba and pizzicato viola, ring on. An instrument
 whose recordings are not installed in your copy of Alto is shown in italics and cannot be chosen, because it would
 only play as the synthesized piano.
 

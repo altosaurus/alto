@@ -12,6 +12,7 @@ from alto import settings
 from alto.audio import sounds
 from alto.exercises.library import (
     ArpeggioNames,
+    CircleOfFifths,
     IntervalNames,
     KeyboardNotes,
     KeySignatures,
@@ -127,6 +128,51 @@ def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
     assert view.pane.maximumWidth() == 0 and not view.pane.isVisible()
 
 
+def test_only_an_exercise_with_a_reference_has_a_book_button(app: QApplication) -> None:
+    """
+    Check that the book button is there for the circle of fifths and not for an exercise with nothing to look up.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    assert view_of(NoteNames()).book_btn is None and view_of(NoteNames()).reference_pane is None
+    view = view_of(CircleOfFifths())
+    assert view.book_btn is not None and view.book_btn.toolTip().startswith("Reference")
+    view.resize(900, 700)
+    view.show()
+    assert view.help_btn.geometry().right() < view.book_btn.geometry().left() < view.sound_btn.geometry().left()
+
+
+def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(app: QApplication) -> None:
+    """
+    Check that the reference pane slides open and shut, and that it and the settings pane never show together.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    view = view_of(CircleOfFifths())
+    view.show()
+    assert view.book_btn is not None and view.reference_pane is not None
+    view.gear.setChecked(True)
+    QTest.qWait(500)
+    assert view.pane.maximumWidth() == view.PANE_WIDTH
+    view.book_btn.setChecked(True)
+    QTest.qWait(500)
+    assert view.reference_pane.maximumWidth() == view.REFERENCE_WIDTH
+    assert view.reference_pane.isVisible() and not view.gear.isChecked()
+    QTest.qWait(500)
+    assert view.pane.maximumWidth() == 0
+    view.gear.setChecked(True)
+    assert not view.book_btn.isChecked()
+    QTest.qWait(500)
+    assert view.reference_pane.maximumWidth() == 0
+    view.gear.setChecked(False)
+
+
 def test_a_change_in_the_settings_asks_a_new_question_straight_away(app: QApplication) -> None:
     """
     Check that a change in the settings asks a new question straight away.
@@ -145,7 +191,7 @@ def test_a_change_in_the_settings_asks_a_new_question_straight_away(app: QApplic
 
 def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(app: QApplication) -> None:
     """
-    Check that the choices have number key shortcuts when there are few enough.
+    Check that the choices have number key shortcuts when there are few enough, and that a two-part answer has keys too.
 
     Parameters
     ----------
@@ -155,7 +201,11 @@ def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(app: QA
     view = view_of(KeySignatures())
     assert [b.toolTip() for b in view.buttons] == [f"Key {i + 1}" for i in range(len(view.buttons))]
     arpeggio = view_of(ArpeggioNames())
-    assert all(b.toolTip() == "" for b in arpeggio.buttons)  # a two-part answer has no shortcuts
+    q = arpeggio.question
+    assert q is not None and q.octaves is not None
+    first = [f"Key {i + 1}" for i in range(len(q.choices))]  # the type is on the number keys
+    second = [f"Key {key}" for key in "ASDFGHJKL"[: len(q.octaves)]]  # and the inversion on the home row
+    assert [b.toolTip() for b in arpeggio.buttons] == first + second
 
 
 def test_the_score_starts_empty_and_counts_only_first_answers(app: QApplication) -> None:

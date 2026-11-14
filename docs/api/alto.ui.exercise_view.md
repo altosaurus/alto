@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 19
+order: 23
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
@@ -19,6 +19,118 @@ One `ExerciseView` works for every exercise. It asks the exercise (or, with a pr
 >>> # noinspection PyUnresolvedReferences
 >>> view.question.answer in [button.text() for button in view.buttons]
 True
+```
+
+## choice_keys
+
+```python
+def choice_keys(choices: list[str]) -> list[str]
+```
+
+Choose a key for each answer button, so that every answer can be given from the keyboard.
+
+Nine answers or fewer take the digits 1 to 9. More than that, as on the piano keyboard, take the notes' own names: the
+letter for a natural, Shift and the letter for a sharp, Ctrl and the letter for a flat. A minor key, such as F♯m, is
+typed the same way as the major key of its name. Any other long list takes 1 to 9
+and then 0, and the rest can be reached with Tab.
+
+**Parameters**
+
+- `choices` (*list of str*): The answers, in the order of their buttons.
+
+**Returns**
+
+- *list of str*: A key for each answer, such as "3" or "Shift+C"; "" for an answer that has none.
+
+**Examples**
+
+```pycon
+>>> choice_keys(["major", "minor", "diminished"])
+['1', '2', '3']
+>>> choice_keys(list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"])
+['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
+>>> choice_keys([str(n) for n in range(12)])[8:]
+['9', '0', '', '']
+```
+
+## second_row_keys
+
+```python
+def second_row_keys(
+    first: list[str],
+    *,
+    labels: list[str],
+) -> list[str]
+```
+
+Choose a key for each button of the second row of a two-part answer, such as the octave or the inversion.
+
+They must not be keys that the first row has. When the first row uses the digits the second row takes the home row,
+A S D F and so on; when the first row uses letters (the notes' names) it takes the digits, and an octave that is a single
+digit takes that digit.
+
+**Parameters**
+
+- `first` (*list of str*): The keys of the first row, as `choice_keys` chose them.
+- `labels` (*list of str*): The text of each button of the second row. Keyword-only.
+
+**Returns**
+
+- *list of str*: A key for each button; "" for one that has none.
+
+**Examples**
+
+```pycon
+>>> second_row_keys(["1", "2", "3"], labels=["root position", "1st inversion"])
+['A', 'S']
+>>> second_row_keys(["C", "Shift+C"], labels=["3", "4", "5"])
+['3', '4', '5']
+```
+
+## note_name
+
+```python
+def note_name(note: Note) -> str
+```
+
+Return a note's name as it is written, with its octave: F♯4.
+
+**Parameters**
+
+- `note` (*Note*): The note.
+
+**Returns**
+
+- *str*: The name in the naming the app is set to, then the octave number.
+
+**Examples**
+
+```pycon
+>>> note_name(Note.parse("F#4"))
+'F♯4'
+```
+
+## note_words
+
+```python
+def note_words(note: Note) -> str
+```
+
+Return a note's name in words, for a screen reader: "F sharp 4".
+
+**Parameters**
+
+- `note` (*Note*): The note.
+
+**Returns**
+
+- *str*: The letter, then "sharp", "flat" or "natural" if it has a sign, then the octave number.
+
+**Examples**
+
+```pycon
+>>> note_words(Note.parse("F#4")), note_words(Note.parse("Bb3")), note_words(Note.parse("C4"))
+('F sharp 4', 'B flat 3', 'C 4')
 ```
 
 ## ExerciseView
@@ -40,6 +152,7 @@ The screen for practising one exercise.
 **Attributes**
 
 - `PANE_WIDTH` (*int*): The width of the settings pane when it is open, in pixels.
+- `REFERENCE_WIDTH` (*int*): The width of the reference pane when it is open, in pixels.
 - `exercise` (*Exercise*): The exercise being practised.
 - `learner` (*Learner or None*): Records every answer and chooses what to ask next; None asks at random.
 - `rng` (*random.Random*): The random number generator for new questions.
@@ -54,6 +167,12 @@ The screen for practising one exercise.
 - `staff` (*StaffWidget*): Shows the notes of a question.
 - `keyboard` (*KeyboardWidget*): Shows the key of a keyboard question.
 - `input_staff` (*StaffInput*): The staff to click, for "place this note" questions.
+- `scale_input` (*ScaleInput*): The staff to click, for "place the notes of this scale" questions.
+- `fork` (*KeyFork*): The fork to pick a key signature on, for "build this key signature" questions.
+- `answer_button` (*QPushButton*): Hands in what was built with the fork or placed on the scale staff.
+- `book_btn` (*QToolButton or None*): Opens the exercise's reference in a pane on the right; None for an exercise that has none.
+- `reference_pane` (*QFrame or None*): The pane that holds the reference.
+- `lesson_requested` (*Signal*): Emitted with a lesson's key when the reference pane's lesson button is pressed.
 
 **Examples**
 

@@ -183,7 +183,7 @@ True
 class KeySignatures(Exercise)
 ```
 
-Read a key signature, or count the sharps and flats of a named key.
+Read a key signature drawn on a staff and name the key it belongs to.
 
 **Examples**
 
@@ -227,8 +227,32 @@ Return the help text for the exercise.
 **Examples**
 
 ```pycon
->>> "Key signatures" in KeySignatures().instructions()
+>>> "Key Signature Identification" in KeySignatures().instructions()
 True
+```
+
+### KeySignatures.refresh
+
+```python
+def refresh(question: Question) -> Question
+```
+
+Give a stored signature question the caption on its staff that older versions did not write.
+
+**Parameters**
+
+- `question` (*Question*): The question as it was stored.
+
+**Returns**
+
+- *Question*: The same question, captioned '_ Major' (or '_ minor', '_ Dorian' and so on) if it shows a staff and had no caption.
+
+**Examples**
+
+```pycon
+>>> old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
+>>> KeySignatures().refresh(old).caption
+'_ minor'
 ```
 
 ### KeySignatures.generate
@@ -237,7 +261,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-Make a key signature to read, or a key whose sharps and flats are to be counted.
+Make a key signature to read.
 
 **Parameters**
 
@@ -245,13 +269,93 @@ Make a key signature to read, or a key whose sharps and flats are to be counted.
 
 **Returns**
 
-- *Question*: Either a signature on a staff (answer: the tonic) or a named key (answer: how many sharps or flats).
+- *Question*: A signature on a staff; the answer is the tonic of the scale that has it.
 
 **Examples**
 
 ```pycon
 >>> q = KeySignatures().generate(random.Random(6))
->>> q.show_staff or "How many sharps or flats" in q.prompt
+>>> q.show_staff and q.answer in q.choices
+True
+```
+
+## KeySignatureConstruction
+
+```python
+class KeySignatureConstruction(Exercise)
+```
+
+Build the key signature of a named key on a blank staff, with the fork.
+
+**Examples**
+
+```pycon
+>>> q = KeySignatureConstruction().generate(random.Random(5))
+>>> q.build_key, q.staff, q.choices
+(True, [], [])
+```
+
+### KeySignatureConstruction.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Return what identifies the settings that shape these questions.
+
+**Returns**
+
+- *str*: The clefs, scales and key signatures in force.
+
+**Examples**
+
+```pycon
+>>> KeySignatureConstruction().settings_signature().startswith("[")
+True
+```
+
+### KeySignatureConstruction.instructions
+
+```python
+def instructions() -> str
+```
+
+Return the help text for the exercise.
+
+**Returns**
+
+- *str*: Simple HTML.
+
+**Examples**
+
+```pycon
+>>> "Key Signature Construction" in KeySignatureConstruction().instructions()
+True
+```
+
+### KeySignatureConstruction.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Name a key whose signature is to be built.
+
+**Parameters**
+
+- `rng` (*random.Random*): The random number generator.
+
+**Returns**
+
+- *Question*: A blank staff captioned with the key, such as 'D Major'; the answer is its sharps or flats.
+
+**Examples**
+
+```pycon
+>>> q = KeySignatureConstruction().generate(random.Random(1))
+>>> q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
+True
+>>> q.answer == format_key_signature(q.key)
 True
 ```
 
@@ -312,6 +416,167 @@ Make a question asking for one degree of a scale.
 >>> q = ScaleDegrees().generate(random.Random(8))
 >>> "scale degree" in q.prompt
 True
+```
+
+## ScaleConstruction
+
+```python
+class ScaleConstruction(Exercise)
+```
+
+Place the notes of a named scale on a blank staff, one after another.
+
+**Examples**
+
+```pycon
+>>> q = ScaleConstruction().generate(random.Random(5))
+>>> len(q.construct_scale or []), q.choices, q.key
+(8, [], 0)
+```
+
+### ScaleConstruction.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Return what identifies the settings that shape these questions.
+
+**Returns**
+
+- *str*: The clefs, scales and key signatures in force.
+
+**Examples**
+
+```pycon
+>>> ScaleConstruction().settings_signature().startswith("[")
+True
+```
+
+### ScaleConstruction.instructions
+
+```python
+def instructions() -> str
+```
+
+Return the help text for the exercise.
+
+**Returns**
+
+- *str*: Simple HTML.
+
+**Examples**
+
+```pycon
+>>> "Scale Construction" in ScaleConstruction().instructions()
+True
+```
+
+### ScaleConstruction.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Name a scale to be placed on the staff.
+
+**Parameters**
+
+- `rng` (*random.Random*): The random number generator.
+
+**Returns**
+
+- *Question*: A blank staff captioned with the scale, such as 'D Major'; `construct_scale` is its eight notes, going up an octave.
+
+**Examples**
+
+```pycon
+>>> q = ScaleConstruction().generate(random.Random(1))
+>>> scale = q.construct_scale or []
+>>> scale[0].name == scale[-1].name and q.accidentals
+True
+>>> q.check_scale(scale)
+True
+```
+
+## CircleOfFifths
+
+```python
+class CircleOfFifths(Exercise)
+```
+
+Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.
+
+**Examples**
+
+```pycon
+>>> q = CircleOfFifths().generate(random.Random(3))
+>>> q.circle is not None and q.answer in q.choices
+True
+```
+
+### CircleOfFifths.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Return what identifies the settings that shape these questions.
+
+**Returns**
+
+- *str*: The kinds of question in force.
+
+**Examples**
+
+```pycon
+>>> CircleOfFifths().settings_signature().startswith("[")
+True
+```
+
+### CircleOfFifths.instructions
+
+```python
+def instructions() -> str
+```
+
+Return the help text for the exercise.
+
+**Returns**
+
+- *str*: Simple HTML, with a paragraph for each kind of question that is switched on.
+
+**Examples**
+
+```pycon
+>>> "circle of fifths" in CircleOfFifths().instructions()
+True
+```
+
+### CircleOfFifths.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Pick a kind of question that is switched on, and ask it.
+
+**Parameters**
+
+- `rng` (*random.Random*): The random number generator.
+
+**Returns**
+
+- *Question*: A question on the circle: `circle_kind` says which kind.
+
+**Examples**
+
+```pycon
+>>> settings.circle.questions = {"minor"}
+>>> q = CircleOfFifths().generate(random.Random(5))
+>>> q.circle_kind, q.prompt
+('minor', 'Which minor key is the relative minor of F major?')
+>>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
 ```
 
 ## ChordQualities

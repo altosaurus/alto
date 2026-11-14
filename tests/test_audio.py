@@ -254,7 +254,6 @@ def test_struck_and_plucked_notes_ring_on(monkeypatch: pytest.MonkeyPatch) -> No
         Replaces settings, functions or attributes for the length of the test.
     """
     for instrument in (
-        "piano",
         "marimba",
         "vibraphone",
         "viola_plucked",
@@ -263,6 +262,45 @@ def test_struck_and_plucked_notes_ring_on(monkeypatch: pytest.MonkeyPatch) -> No
         s.play_midi(60)
         s.play_midi(62)
         assert log == [("play", 60), ("play", 62)], instrument
+
+
+def test_a_piano_played_without_the_pedal_stops_each_note_as_the_next_begins(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that a piano note is damped when the next one starts, as if the damper pedal were up, and a chord is not cut short.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    s, log = engine(monkeypatch, instrument="piano")
+    s.play_midi(60)
+    s.play_midi(62)
+    assert log == [("play", 60), ("release", 60), ("play", 62)]
+    s, log = engine(monkeypatch, instrument="piano")
+    s.play_notes([[Note(4, letter=1), Note(4, letter=3), Note(4, letter=5)]])  # D F A together
+    assert log == [("play", 62), ("play", 65), ("play", 69)]
+    s.play_notes([[Note(4, letter=0)]])
+    assert log[3:] == [("release", 62), ("release", 65), ("release", 69), ("play", 60)]
+    assert INSTRUMENT_BY_KEY["piano"].damped and not INSTRUMENT_BY_KEY["marimba"].damped
+
+
+def test_a_piano_scale_hands_over_from_note_to_note_and_leaves_the_last_to_fade(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that in a piano melody each note is stopped as the next starts, and that the last note is not stopped.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    s, log = engine(monkeypatch, instrument="piano")
+    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]], gap_ms=30)
+    QTest.qWait(250)
+    assert log == [("play", 60), ("release", 60), ("play", 62), ("release", 62), ("play", 64)]
 
 
 def test_the_notes_of_a_chord_sound_together_and_end_together(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -308,6 +346,72 @@ def test_a_melody_hands_over_from_note_to_note(monkeypatch: pytest.MonkeyPatch) 
         ("release", 62),
         ("play", 64),
     ]
+
+
+def test_a_melody_says_which_note_is_sounding_as_each_one_starts(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that the caller is told each note's place as it starts, and then that the melody is over.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    s, log = engine(monkeypatch, instrument="viola_bowed")
+    seen: list[tuple[int | None, int]] = []
+    s.play_notes(
+        [[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]],
+        gap_ms=30,
+        on_step=lambda i: seen.append((i, len(log))),
+    )
+    QTest.qWait(250)
+    assert [i for i, _ in seen] == [0, 1, 2, None]
+    assert [n for _, n in seen][:3] == [1, 3, 5]  # each is told after its own note has started, and not before
+
+
+def test_a_muted_melody_still_says_which_note_would_be_sounding(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that with the sound off the caller is still told each note's place, on the same timing, so a display can follow.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    s, log = engine(monkeypatch, instrument="viola_bowed")
+    s.enabled = False
+    seen: list[int | None] = []
+    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)]], gap_ms=30, on_step=seen.append)
+    QTest.qWait(200)
+    assert seen == [0, 1, None] and log == []
+
+
+def test_a_melody_that_is_replaced_stops_telling_the_caller(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that a melody replaced by a newer one says nothing more, so the display of the old one cannot spill onto the new.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+    _app = QApplication.instance() or QApplication([])  # kept alive for the timers
+    s, _ = engine(monkeypatch, instrument="viola_bowed")
+    s.enabled = False
+    old: list[int | None] = []
+    s.play_notes([[Note(4, letter=0)], [Note(4, letter=1)], [Note(4, letter=2)]], gap_ms=60, on_step=old.append)
+    QTest.qWait(20)
+    s.play_notes([[Note(4, letter=0)]], gap_ms=60)
+    QTest.qWait(300)
+    assert old == [0]
 
 
 def test_a_muted_engine_neither_plays_nor_releases(monkeypatch: pytest.MonkeyPatch) -> None:

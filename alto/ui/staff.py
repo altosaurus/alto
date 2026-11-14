@@ -292,10 +292,21 @@ class StaffWidget(QWidget):
         The notes drawn; each inner list is one chord or note.
     note_color : QColor or None
         The colour of the notes; None draws them in the notation style's ink.
+    column_colors : dict of int to QColor
+        The colour of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
+    wedges : list of str
+        The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point
+        above them, with the letter over the point; "" for none there.
+    wedge_colors : dict of int to QColor
+        The colour of particular wedges, by position from 0. The others take the colour of the note on their right,
+        or `note_color`.
     notation_style : NotationStyle or None
         A style to use instead of the one chosen in the settings.
     key : int
         The key signature drawn: sharps if positive, flats if negative.
+    key_room : int
+        How many sharps or flats' worth of room to keep for the signature at least, so that a capped staff does not change
+        width as the signature does. 0 keeps room only for the one drawn.
     value : str
         The note value drawn.
     caption : str
@@ -352,8 +363,12 @@ class StaffWidget(QWidget):
         self.clef = "treble"
         self.columns: list[list[Note]] = []
         self.note_color: QColor | None = None  # None draws notes in the style's ink
+        self.column_colors: dict[int, QColor] = {}  # a colour for a column of notes by its position, over `note_color`
+        self.wedges: list[str] = []  # the text of the wedge under each pair of neighbouring columns; "" for none
+        self.wedge_colors: dict[int, QColor] = {}  # a colour for a wedge by its position, over its right-hand note's
         self.notation_style: NotationStyle | None = None  # None follows the style chosen in settings
         self.key = 0
+        self.key_room = 0  # sharps or flats' worth of room to keep for the signature, so the width need not follow it
         self.value = "whole"
         self.caption = ""  # text written under the staff, inside the paper
         self._fit_height("treble")
@@ -401,18 +416,26 @@ class StaffWidget(QWidget):
         """
         Cap the width so that no column of notes is spread wider than `max_step`.
 
+        The room for the key signature is that of the signature drawn or of `key_room`, whichever is larger.
+
         Examples
         --------
         >>> staff = StaffWidget(max_step=120.0)
         >>> staff.show_notes([[Note.parse("C4")]])
         >>> staff.maximumWidth()  # room for the clef and at least three columns of notes
         500
+        >>> staff.key_room = 7  # keep the room of a signature of seven sharps or flats, whatever is drawn
+        >>> staff.show_notes([[Note.parse("C4")]])
+        >>> staff.maximumWidth() - 500
+        91
         """
         if self.max_step is None:
             return
         left = self.side + (18.0 if self.clef == "grand" else 0.0)  # the same left edge the drawing uses
         columns = max(len(self.columns), MIN_COLUMNS)
-        self.setMaximumWidth(round(left + self.note_offset + KEY_STEP * abs(self.key) + columns * self.max_step + self.side))
+        self.setMaximumWidth(
+            round(left + self.note_offset + KEY_STEP * max(abs(self.key), self.key_room) + columns * self.max_step + self.side),
+        )
 
     def sizeHint(self) -> QSize:
         """
@@ -618,14 +641,18 @@ class StaffWidget(QWidget):
         step = (right - x0) / n
         nfg = self.note_color or fg
         p.setBrush(nfg)
+        heads: dict[int, QPointF] = {}  # where the top note of each column was drawn, for the steps between them
         for ci, col in enumerate(self.columns):
             x = x0 + step * (ci + 0.5)
             acc_slot = 0
+            ncol = self.column_colors.get(ci, nfg)
+            p.setBrush(ncol)
             for note in sorted(col):
                 clef = staff_for(note)
                 bottom = staves[clef]
                 y = bottom - (note.diatonic - BOTTOM_LINE[clef]) * gap / 2
                 steps = round((bottom - y) / (gap / 2))
+                heads[ci] = QPointF(x, min(y, heads[ci].y()) if ci in heads else y)
                 p.setPen(QPen(fg, engraving.ledger_width(font, gap=gap) if font else line))
                 if steps < 0:
                     for s in range(-2, steps - 1, -2):
@@ -650,12 +677,12 @@ class StaffWidget(QWidget):
                     x=x,
                     y=y,
                     gap=gap,
-                    color=nfg,
+                    color=ncol,
                     value=value,
                     stem_down=steps >= 4,
                     font=font,
                 )
-                p.setPen(QPen(nfg, 1.4))
+                p.setPen(QPen(ncol, 1.4))
                 # A sign is written only where the note differs from what the key signature already says.
                 if note.accidental != key_accidental(note.letter, count=self.key):
                     ax = x - gap * (2.3 + 1.2 * (acc_slot % 3))
@@ -667,13 +694,85 @@ class StaffWidget(QWidget):
                             x=ax,
                             y=y,
                             gap=gap,
-                            colour=nfg,
+                            colour=ncol,
                         )
                     else:
                         sign = ACCIDENTAL_SYMBOLS[note.accidental] or "♮"
                         p.setFont(QFont("DejaVu Sans", int(gap * 2.0)))
                         p.drawText(QPointF(ax, y + gap * 0.5), sign)
                     acc_slot += 1
+        for i, text in enumerate(self.wedges):  # the steps between neighbouring notes, above them
+            if text and i in heads and i + 1 in heads:
+                self._draw_wedge(
+                    p,
+                    left=heads[i],
+                    right=heads[i + 1],
+                    text=text,
+                    gap=gap,
+                    color=self.wedge_colors.get(i) or self.column_colors.get(i + 1) or nfg,
+                )
+
+    def _draw_wedge(
+        self,
+        p: QPainter,
+        *,
+        left: QPointF,
+        right: QPointF,
+        text: str,
+        gap: float,
+        color: QColor,
+    ) -> None:
+        """
+        Draw the step between two neighbouring notes: two lines from the notes up to a point, and the letter over the point.
+
+        The lines leave the tops of the two notes and meet above them, so the point is above the higher of the two.
+
+        Parameters
+        ----------
+        p : QPainter
+            The painter to draw with.
+        left : QPointF
+            Where the left note was drawn: the middle of its head. Keyword-only.
+        right : QPointF
+            Where the right note was drawn. Keyword-only.
+        text : str
+            What to write over the point, such as "W". Keyword-only.
+        gap : float
+            The distance between staff lines. Keyword-only.
+        color : QColor
+            The colour of the lines and the letter. Keyword-only.
+
+        Examples
+        --------
+        >>> from PySide6.QtGui import QImage
+        >>> image = QImage(200, 120, QImage.Format.Format_ARGB32)
+        >>> image.fill(QColor("white"))
+        >>> painter = QPainter(image)
+        >>> staff, black = StaffWidget(), QColor("black")
+        >>> staff._draw_wedge(painter, left=QPointF(40, 80), right=QPointF(140, 70), text="W", gap=12, color=black)
+        >>> painter.end()
+        True
+        """
+        reach, rise = gap * 0.6, gap * 1.3
+        start = QPointF(left.x() + reach, left.y() - gap * 0.8)  # just above the left note
+        end = QPointF(right.x() - reach, right.y() - gap * 0.8)  # and the right one
+        point = QPointF((left.x() + right.x()) / 2, min(start.y(), end.y()) - rise)
+        p.setPen(QPen(color, 1.6, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawLine(start, point)
+        p.drawLine(point, end)
+        font = QFont(self.font())
+        font.setPixelSize(max(int(gap * 1.25), 11))
+        font.setBold(True)
+        p.setFont(font)
+        label = QRectF(
+            point.x() - gap * 0.8,
+            point.y() - gap * 1.6,
+            gap * 1.6,
+            gap * 1.5,
+        )
+        p.fillRect(label, QColor("white"))  # the paper, so that a staff line does not run through the letter
+        p.drawText(label, Qt.AlignmentFlag.AlignCenter, text)
 
     def _draw_key_signature(
         self,

@@ -12,6 +12,8 @@ False
 
 from __future__ import annotations
 
+import math
+
 from PySide6.QtCore import (
     QByteArray,
     Qt,
@@ -152,6 +154,60 @@ EXERCISE_INTERVALS = (
     + f'<path d="M15.5 6h4v12h-4" {_LINE}/>'
 )
 EXERCISE_KEY_SIGNATURES = f'<path d="M9 4v16M15 3.5v16M5 9.5l14-3M5 16.5l14-3" {_LINE}/>'
+# Key signature construction: a fork on its side, a stem and two tines, with a dot on one of them.
+EXERCISE_KEY_CONSTRUCTION = (
+    f'<path d="M2.5 12H8M8 6.5v11M8 6.5h13M8 17.5h13" {_LINE}/><circle cx="15" cy="6.5" r="2.6" fill="COLOR"/>'
+)
+# Scale construction: a staff with notes climbing across it.
+EXERCISE_SCALE_CONSTRUCTION = (
+    '<path d="M2 6.5H22M2 10H22M2 13.5H22M2 17H22" fill="none" stroke="COLOR" stroke-width="1.1" opacity=".5"/>'
+    + "".join(
+        _ring(
+            x,
+            y=y,
+            rx=2.2,
+            ry=1.6,
+        )
+        for x, y in ((4.5, 18.8), (9.5, 14.8), (14.5, 10.8), (19.5, 6.8))
+    )
+)
+
+
+def _cells(
+    radius: float,
+    *,
+    gap: float,
+) -> str:
+    """
+    Return the SVG for a ring cut into twelve cells, with the gap between cells centred at the top.
+
+    Parameters
+    ----------
+    radius : float
+        The ring's radius in the 24 by 24 drawing.
+    gap : float
+        The length of the gap between neighbouring cells, along the ring. Keyword-only.
+
+    Returns
+    -------
+    str
+        A dashed `<circle>` element.
+
+    Examples
+    --------
+    >>> _cells(9, gap=1).startswith('<circle cx="12" cy="12" r="9"')
+    True
+    """
+    per_cell = 2 * math.pi * radius / 12
+    start = -90 - math.degrees(gap / radius) / 2
+    return (
+        f'<circle cx="12" cy="12" r="{radius}" fill="none" stroke="COLOR" stroke-width="2.4" '
+        f'stroke-dasharray="{per_cell - gap:.2f} {gap}" transform="rotate({start:.2f} 12 12)"/>'
+    )
+
+
+# Circle of fifths: two rings, each cut into twelve cells.
+EXERCISE_CIRCLE = _cells(9, gap=1.0) + _cells(5, gap=0.8)
 EXERCISE_SCALES = "".join(
     _ring(
         x,
@@ -241,6 +297,24 @@ HELP = (
     '<circle cx="12" cy="12" r="9" fill="none" stroke="COLOR" stroke-width="2"/>'
     '<path d="M9.4 9.6a2.7 2.7 0 1 1 3.9 2.4c-.9.5-1.3 1.1-1.3 2" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"/>'
     '<circle cx="12" cy="16.9" r="1.15" fill="COLOR"/>'
+)
+
+# Reference: an open book.
+BOOK = (
+    '<path d="M12 6.5C10 5 7 4.6 3.5 5v13c3.5-.4 6.5 0 8.5 1.5M12 6.5c2-1.5 5-1.9 8.5-1.5v13c-3.5-.4-6.5 0-8.5 1.5M12 6.5v13" '
+    'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+
+# Exercises: a checklist.
+EXERCISES = (
+    '<path d="M4 6.5l1.6 1.6L8.4 5M4 12.5l1.6 1.6L8.4 11M4 18.5l1.6 1.6L8.4 17M12.5 7h8M12.5 13h8M12.5 19h8" '
+    'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+
+# Lessons: a mortarboard.
+LESSONS = (
+    '<path d="M2 9.5l10-5 10 5-10 5zM6 12v4.5c0 1.4 2.7 2.8 6 2.8s6-1.4 6-2.8V12M22 9.5v5.5" '
+    'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
 # Note construction: a staff with a note being dropped onto it.

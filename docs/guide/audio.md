@@ -183,10 +183,16 @@ open("/tmp/c4.wav", "wb").write(to_wav_bytes(synth_piano(60)))
 
 ### Sustained and plucked sounds
 
-A piano key, once struck, rings and fades whatever you do. A flute or a bowed string ends when the player stops. `Instrument.sustained`
+A marimba bar, once struck, rings and fades whatever you do. A flute or a bowed string ends when the player stops. `Instrument.sustained`
 captures that: when a **sustained** instrument plays a note, any note still sounding is **released** by `_release`: a 70 ms
 fade of the effect's `volume` property with a `QPropertyAnimation`, then `stop()`. Without that, melodies on a flute would
 pile up. `stop_all` cancels all fades and silences everything.
+
+A piano is in between. Its recordings ring for a long time, but on a real piano a damper stops each string when the key is let
+go. A recording played in full sounds as if the **damper pedal** were held down: the notes of a scale pile up into a blur.
+`Instrument.damped` marks an instrument that is played without the pedal, and it gets the same release as a sustained one,
+so each note ends as the next begins, the way fingers move from key to key. The last note of a melody is left to fade by
+itself.
 
 An abrupt stop is audible as a click, and a fade avoids it. The same idea (**an envelope**) shapes every synthesised note.
 The classical envelope is **ADSR**: *attack* (how fast the sound begins), *decay*, *sustain* level, *release* (how it ends).
@@ -220,7 +226,7 @@ The steps are in [For developers]({{ '/development/' | relative_url }}): the WAV
 - **Trim silence at the start**, or the note feels late. Normalise levels so that notes of one instrument are similar, then set
   `gain` to balance instruments against each other.
 - **Mono, 16-bit** files at any common rate (44.1 or 48 kHz) work; `QSoundEffect` resamples at playback.
-- Mark `sustained=True` for bowed and blown instruments; leave it off for struck and plucked ones.
+- Mark `sustained=True` for bowed and blown instruments, and `damped=True` for an instrument with dampers, such as the piano; leave both off for struck and plucked ones that ring on.
 - Gaps are fine: a missing note is made from its nearest neighbour.
 
 ## Testing audio without speakers

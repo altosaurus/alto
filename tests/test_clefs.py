@@ -175,7 +175,7 @@ def test_the_exercises_ask_on_the_new_clefs(clef: str) -> None:
     for _ in range(80):
         q = ArpeggioNames().generate(rng)
         assert q.clef == clef and low <= q.staff[0][0].diatonic and q.staff[-1][0].diatonic <= high
-    settings.key_signatures.clefs, settings.key_signatures.questions = {clef}, {"read"}
+    settings.key_signatures.clefs = {clef}
     assert all(KeySignatures().generate(rng).clef == clef for _ in range(40))
 
 

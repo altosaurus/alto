@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 31
+order: 39
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -730,7 +730,7 @@ Bases: `ExerciseSettingsPanel`
 
 The settings of the note construction exercise: a menu with a page for the staff and one for the keys.
 
-The menu has Staff, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
 emits `changed`.
 
 **Attributes**
@@ -866,7 +866,7 @@ Bases: `ExerciseSettingsPanel`
 
 The settings of the arpeggio exercise: a menu with a page for each group of settings.
 
-The menu has Staff, Arpeggio types, Inversions and Key signatures. Edits are live: each changes the settings, saves them
+The menu has Clefs, Arpeggio types, Inversions and Key signatures. Edits are live: each changes the settings, saves them
 and emits `changed`.
 
 **Attributes**
@@ -908,19 +908,64 @@ Build the panel for a set of settings.
 def load_key_signatures() -> None
 ```
 
-Load the saved key signature exercise settings into the shared settings object.
+Load the saved key signature identification settings into the shared settings object.
 
 Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
 
 **Examples**
 
 ```pycon
->>> store().setValue("keySignatures/questions", "count")
+>>> store().setValue("keySignatures/clefs", "alto")
 >>> load_key_signatures()
->>> settings.key_signatures.questions
-{'count'}
->>> settings.key_signatures.questions = {"read", "count"}
->>> store().setValue("keySignatures/questions", "read,count")
+>>> settings.key_signatures.clefs
+{'alto'}
+>>> settings.key_signatures.clefs = {"treble", "bass"}
+>>> store().setValue("keySignatures/clefs", "treble,bass")
+```
+
+## load_key_construction
+
+```python
+def load_key_construction() -> None
+```
+
+Load the saved key signature construction settings into the shared settings object.
+
+Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+
+**Examples**
+
+```pycon
+>>> store().setValue("keyConstruction/keys", "-3,4")
+>>> load_key_construction()
+>>> settings.key_construction.active_keys()
+[-3, 4]
+>>> settings.key_construction.keys = set(range(-7, 8))
+>>> store().remove("keyConstruction")
+```
+
+## load_scale_construction
+
+```python
+def load_scale_construction() -> None
+```
+
+Load the saved scale construction settings into the shared settings object.
+
+Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+
+**Examples**
+
+```pycon
+>>> store().setValue("scaleConstruction/keys", "1,-1")
+>>> store().setValue("scaleConstruction/steps", "true")
+>>> store().setValue("scaleConstruction/octave", "true")
+>>> load_scale_construction()
+>>> settings.scale_construction.active_keys(), settings.scale_construction.steps, settings.scale_construction.octave
+([-1, 1], True, True)
+>>> settings.scale_construction.keys, settings.scale_construction.steps = set(range(-7, 8)), False
+>>> settings.scale_construction.octave = False
+>>> store().remove("scaleConstruction")
 ```
 
 ## KeySignatureSettingsPanel
@@ -929,32 +974,38 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 KeySignatureSettingsPanel(
     cfg: settings.KeySignatureSettings,
     *,
+    prefix: str = 'keySignatures',
     parent: QWidget | None = None,
 )
 ```
 
 Bases: `ExerciseSettingsPanel`
 
-The settings of the key signatures exercise: a menu with a page for each group of settings.
+The settings of a key signature exercise: a menu with a page for each group of settings.
 
-The menu has Questions, Staff, Scales and Key signatures. Edits are live: each changes the settings, saves them and
-emits `changed`.
+The same panel serves key signature identification, key signature construction and scale construction, each saving
+under its own name.
+
+The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
+the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
+changes the settings, saves them and emits `changed`.
 
 **Attributes**
 
 - `cfg` (*KeySignatureSettings*): The settings being edited.
+- `prefix` (*str*): What the settings are saved under, such as "keySignatures".
 - `stack` (*SlideStack*): The menu and its pages.
-- `questions` (*ChoiceChecklist*): Reading a signature, counting its accidentals, or both.
 - `boxes` (*dict of str to QCheckBox*): The clef checkboxes.
 - `modes` (*ChoiceChecklist*): The scales (major, minor and the modes).
-- `key_list` (*KeyChecklist*): The key signatures.
+- `key_list` (*KeyChecklist*): The key signatures (of the scales, in scale construction).
+- `staff_key_list` (*KeyChecklist or None*): The key signatures that may be drawn on the staff; only scale construction has it.
 
 **Examples**
 
 ```pycon
 >>> panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
->>> panel.questions_row.value.text()
-'Both'
+>>> panel.modes_row.value.text()
+'2 of 7'
 ```
 
 **Constructor**
@@ -964,13 +1015,14 @@ Build the panel for a set of settings.
 **Parameters**
 
 - `cfg` (*KeySignatureSettings*): The settings to edit.
+- `prefix` (*str, default "keySignatures"*): What the settings are saved under. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
 
 **Constructor examples**
 
 ```pycon
->>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and four pages
-5
+>>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
+4
 ```
 
 ## settings_inversion_names
@@ -990,6 +1042,75 @@ Return the inversions as they are written in the settings.
 ```pycon
 >>> settings_inversion_names()
 ('Root position', '1st inversion', '2nd inversion', '3rd inversion')
+```
+
+## load_circle
+
+```python
+def load_circle() -> None
+```
+
+Load the saved circle of fifths settings into the shared settings object.
+
+Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+
+**Examples**
+
+```pycon
+>>> store().setValue("circle/questions", "numeral,nonsense")
+>>> load_circle()
+>>> settings.circle.questions
+{'numeral'}
+>>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+>>> store().remove("circle")
+```
+
+## CircleSettingsPanel
+
+```python
+CircleSettingsPanel(
+    cfg: settings.CircleSettings,
+    *,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `ExerciseSettingsPanel`
+
+The settings of the circle of fifths exercise: which kinds of question to ask.
+
+The menu has one row, Questions, which opens a page of switches. Edits are live: each changes the settings, saves them and
+emits `changed`.
+
+**Attributes**
+
+- `cfg` (*CircleSettings*): The settings being edited.
+- `stack` (*SlideStack*): The menu and its page.
+- `questions_row` (*_Row*): The menu row.
+- `questions` (*ChoiceChecklist*): The kinds of question: relative major, relative minor and Roman numerals.
+
+**Examples**
+
+```pycon
+>>> panel = CircleSettingsPanel(settings.CircleSettings())
+>>> panel.questions_row.value.text()
+'3 of 3'
+```
+
+**Constructor**
+
+Build the panel for a set of settings.
+
+**Parameters**
+
+- `cfg` (*CircleSettings*): The settings to edit.
+- `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu and one page
+2
 ```
 
 ## settings_panel_for

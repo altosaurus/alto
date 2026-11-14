@@ -67,6 +67,7 @@ def app_style(palette: QPalette) -> str:
         nav_hover=blend_name(window_c, b=text_c, t=0.07),
         nav_selected=blend_name(window_c, b=accent_c, t=0.2),
         check=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "check.svg").as_posix(),
+        chevron=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "chevron.svg").as_posix(),
     )
 
 
@@ -82,6 +83,33 @@ QPushButton:hover {{ background: {fill_hover}; border-color: palette(highlight);
 QPushButton:pressed {{ background: {fill_pressed}; border-bottom-width: 1px; padding-top: 7px; }}
 QPushButton:checked {{ border: 2px solid palette(highlight); border-bottom-width: 2px; }}
 QPushButton:disabled {{ background: palette(window); color: gray; border-color: palette(midlight); }}
+
+/* The main button of a form, such as Save: filled with the accent colour. */
+QPushButton[primary="true"] {{ background: {accent}; border-color: {accent}; color: palette(highlighted-text); font-weight: 600; }}
+QPushButton[primary="true"]:hover {{ background: {accent}; border-color: palette(text); }}
+QPushButton[primary="true"]:disabled {{ background: {accent_dim}; border-color: {accent_dim}; color: palette(highlighted-text); }}
+
+/* Text boxes and drop-down lists that are marked as fields: rounded, with the same heavier lower edge as the buttons. */
+QLineEdit[field="true"], QComboBox[field="true"] {{
+    border: 1px solid {edge};
+    border-bottom-width: 2px;
+    border-radius: {RADIUS}px;
+    background: {fill};
+    padding: 5px 10px;
+    selection-background-color: palette(highlight);
+    selection-color: palette(highlighted-text);
+}}
+QComboBox[field="true"] {{ combobox-popup: 0; }}  /* the list drops down below the box, and does not cover it and what is round it */
+QLineEdit[field="true"]:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on {{ border-color: palette(highlight); }}
+QComboBox[field="true"]::drop-down {{ border: none; width: 28px; }}
+QComboBox[field="true"]::down-arrow {{ image: url({chevron}); width: 16px; height: 16px; }}
+QComboBox[field="true"] QAbstractItemView {{
+    border: 1px solid palette(mid);
+    background: palette(base);
+    selection-background-color: palette(highlight);
+    selection-color: palette(highlighted-text);
+    outline: 0;
+}}
 
 /* Check boxes and radio buttons: rounded, soft-edged, and filled with the accent colour when selected. */
 QCheckBox, QRadioButton {{ spacing: 10px; }}

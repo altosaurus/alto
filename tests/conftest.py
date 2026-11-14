@@ -88,6 +88,9 @@ def _isolated_state() -> Iterator[None]:
         "construction",
         "arpeggio",
         "key_signatures",
+        "key_construction",
+        "scale_construction",
+        "circle",
     )
     before = {n: copy.deepcopy(getattr(settings, n).__dict__) for n in names}
     muted = sounds.enabled

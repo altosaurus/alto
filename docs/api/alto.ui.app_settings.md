@@ -2,11 +2,13 @@
 title: alto.ui.app_settings
 parent: api
 package: alto.ui
-order: 13
+order: 16
 permalink: /api/alto.ui.app_settings/
 ---
 {% raw %}
-The application-wide settings dialog: the colour theme, the notation font, the keyboard style and the instrument.
+The application-wide settings dialog.
+
+It holds the colour theme, the notation font, the keyboard style, the transitions and the instrument.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -189,53 +191,6 @@ Show each part's current colour on its swatch.
 ''
 ```
 
-## ThemeCard
-
-```python
-ThemeCard(
-    key: str,
-    *,
-    label: str,
-    note: str,
-    parent: QWidget | None = None,
-)
-```
-
-Bases: `QPushButton`
-
-A selectable tile that previews a theme: a miniature of the app window in light, in dark, or split for System.
-
-**Attributes**
-
-- `LIGHT, DARK` (*dict of str to str*): The colours of the miniature in each theme.
-- `theme_key` (*str*): "system", "light" or "dark".
-- `preview` (*QWidget*): The miniature.
-
-**Examples**
-
-```pycon
->>> ThemeCard("dark", label="Dark", note="Always dark.").theme_key
-'dark'
-```
-
-**Constructor**
-
-Build the card for a theme.
-
-**Parameters**
-
-- `key` (*str*): "system", "light" or "dark".
-- `label` (*str*): The name shown under the preview. Keyword-only.
-- `note` (*str*): A short explanation shown under the name. Keyword-only.
-- `parent` (*QWidget or None, default None*): The widget that owns the card. Keyword-only.
-
-**Constructor examples**
-
-```pycon
->>> ThemeCard("system", label="System", note="Follows your desktop.").height()
-168
-```
-
 ## AppSettingsDialog
 
 ```python
@@ -244,7 +199,7 @@ AppSettingsDialog(parent: QWidget | None = None)
 
 Bases: `QDialog`
 
-Application-wide settings. Changes apply immediately.
+Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
 
 **Attributes**
 
@@ -252,6 +207,17 @@ Application-wide settings. Changes apply immediately.
 - `categories` (*QListWidget*): The list of pages on the left: Appearance and Sound.
 - `pages` (*QStackedWidget*): The page for the chosen category.
 - `instruments` (*InstrumentPicker*): The instrument chooser on the Sound page.
+- `theme_list` (*QListWidget*): The themes, on the Theme section, with the one in use in bold.
+- `theme_items` (*dict of str to QListWidgetItem*): The rows of that list, by the key of the theme's family.
+- `theme_pages` (*QStackedWidget*): The card of the theme chosen in the list, or the editor.
+- `theme_editor` (*ThemeEditor*): The form that makes a theme of the user's own, or changes one.
+- `new_theme_item` (*QListWidgetItem*): The row of the list that makes a new theme.
+- `theme_cards` (*dict of str to ThemeCard*): The cards, by the key of the theme's family.
+- `theme_scrolls` (*dict of str to QScrollArea*): The scroll area each card is in, which is what the stack shows.
+- `theme_thumbs` (*dict of str to ThemeThumb*): The clickable pictures of every card, by the key of the theme each chooses.
+- `transition_list` (*QListWidget*): The choice of transition between the exercises and the lessons, on the Transitions section.
+- `transition_items` (*dict of str to QListWidgetItem*): The rows of that list, by the transition's key.
+- `transition_preview` (*TransitionPreview*): Plays the transition that is chosen, beside the choices.
 
 **Examples**
 
@@ -306,7 +272,7 @@ Switch the colour theme, remember it, and note that the window should be rebuilt
 
 **Parameters**
 
-- `key` (*str*): "system", "light" or "dark".
+- `key` (*str*): "system", "light" or "dark", or the key of a theme with colours of its own.
 
 **Examples**
 

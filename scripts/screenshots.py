@@ -297,8 +297,7 @@ def capture(
         ("ArpeggioNames", "arpeggios"),
         ("KeySignatures", "key-signatures"),
     ):
-        if cls == "KeySignatures":  # show a signature to read, on an alto clef staff, whatever the default is
-            settings.key_signatures.questions = {"read"}
+        if cls == "KeySignatures":  # show a signature on an alto clef staff, whatever the default is
             settings.key_signatures.clefs = {"alto"}
             settings.key_signatures.modes = {"Major (Ionian)"}
             settings.key_signatures.keys = {-3}  # three flats, so there is something to read

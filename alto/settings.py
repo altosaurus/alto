@@ -85,8 +85,8 @@ SOLFEGE = (
 )
 
 
-# How far the range arrows may go: up to 5 ledger lines (10 steps) beyond the staff.
-_BOTTOM_LINES = {
+# The note on the bottom line of each single staff. The range arrows may go up to 5 ledger lines (10 steps) beyond the staff.
+BOTTOM_LINES = {
     "treble": Note(4, letter=2),
     "bass": Note(2, letter=4),
     "alto": Note(3, letter=3),
@@ -96,10 +96,10 @@ _BOTTOM_LINES = {
     "baritone": Note(2, letter=6),
 }  # C4 A3 B2
 RANGE_LIMITS = {
-    **{c: (max(MIN_DIATONIC, n.diatonic - 10), min(MAX_DIATONIC, n.diatonic + 8 + 10)) for c, n in _BOTTOM_LINES.items()},
+    **{c: (max(MIN_DIATONIC, n.diatonic - 10), min(MAX_DIATONIC, n.diatonic + 8 + 10)) for c, n in BOTTOM_LINES.items()},
     "grand": (
-        max(MIN_DIATONIC, _BOTTOM_LINES["bass"].diatonic - 10),
-        min(MAX_DIATONIC, _BOTTOM_LINES["treble"].diatonic + 8 + 10),
+        max(MIN_DIATONIC, BOTTOM_LINES["bass"].diatonic - 10),
+        min(MAX_DIATONIC, BOTTOM_LINES["treble"].diatonic + 8 + 10),
     ),
     # The treble range runs from D3 to F7 and the bass range from F1 to A5. These are also the furthest the pickers go.
     "treble": DEFAULT_RANGES["treble"],
@@ -620,8 +620,7 @@ class ArpeggioSettings:
 arpeggio = ArpeggioSettings()
 
 
-# Key signature exercise: read the signature on a staff and name the key, or count its sharps and flats.
-KEY_QUESTIONS = {"read": "Name the key from its signature", "count": "Count the sharps or flats"}
+# Key signature identification: read the signature on a staff and name the key.
 KEY_MODES = (
     "Major (Ionian)",
     "Dorian",
@@ -645,12 +644,10 @@ MODE_LABELS = {
 @dataclass
 class KeySignatureSettings:
     """
-    The settings of the key signatures exercise.
+    The settings of the key signature identification exercise.
 
     Attributes
     ----------
-    questions : set of str
-        The kinds of question, keys of `KEY_QUESTIONS`: "read" a signature or "count" its sharps and flats.
     clefs : set of str
         The clefs a signature is drawn on, any of `CLEFS`. Keyword-only.
     modes : set of str
@@ -661,31 +658,14 @@ class KeySignatureSettings:
     Examples
     --------
     >>> cfg = KeySignatureSettings()
-    >>> cfg.active_questions(), len(cfg.active_keys())
-    (['read', 'count'], 15)
+    >>> cfg.active_clefs(), len(cfg.active_keys())
+    (['treble', 'bass'], 15)
     """
 
-    questions: set[str] = field(default_factory=lambda: {"read", "count"})  # keys of KEY_QUESTIONS
     _: KW_ONLY
     clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of CLEFS: the clef the signature is drawn on
     modes: set[str] = field(default_factory=lambda: {"Major (Ionian)", "Natural minor (Aeolian)"})  # of KEY_MODES
     keys: set[int] = field(default_factory=lambda: set(range(-7, 8)))  # the key signatures asked: sharps (+) / flats (-)
-
-    def active_questions(self) -> list[str]:
-        """
-        Return the kinds of question to ask.
-
-        Returns
-        -------
-        list of str
-            The chosen kinds in the order of `KEY_QUESTIONS`, or "read" if none are chosen.
-
-        Examples
-        --------
-        >>> KeySignatureSettings(questions={"count"}).active_questions()
-        ['count']
-        """
-        return [q for q in KEY_QUESTIONS if q in self.questions] or ["read"]
 
     def active_clefs(self) -> list[str]:
         """
@@ -737,3 +717,139 @@ class KeySignatureSettings:
 
 
 key_signatures = KeySignatureSettings()
+
+
+@dataclass
+class KeyConstructionSettings(KeySignatureSettings):
+    """
+    The settings of the key signature construction exercise: the same choices as key signature identification.
+
+    Attributes
+    ----------
+    clefs : set of str
+        The clefs the blank staff is drawn in, any of `CLEFS`. Keyword-only.
+    modes : set of str
+        The scales to ask for, from `KEY_MODES`. Keyword-only.
+    keys : set of int
+        The key signatures to build, as sharps (positive) or flats (negative). Keyword-only.
+
+    Examples
+    --------
+    >>> cfg = KeyConstructionSettings(keys={-2})
+    >>> cfg.active_keys(), cfg.active_modes()
+    ([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
+    """
+
+
+key_construction = KeyConstructionSettings()
+
+
+@dataclass
+class ScaleConstructionSettings(KeySignatureSettings):
+    """
+    The settings of the scale construction exercise: the same choices as key signature identification.
+
+    Here "keys" chooses the scale by the signature it has: G major and E minor both have one sharp. `staff_keys` is a
+    separate choice: the key signature drawn on the staff, which need not be the scale's. On a staff with two flats a C
+    major scale has to be placed with naturals where the staff would otherwise flatten the notes.
+
+    Attributes
+    ----------
+    clefs : set of str
+        The clefs the scale is placed on, any of `CLEFS`. Keyword-only.
+    modes : set of str
+        The kinds of scale to ask for, from `KEY_MODES`. Keyword-only.
+    keys : set of int
+        The key signatures the scales have, as sharps (positive) or flats (negative). Keyword-only.
+    steps : bool, default False
+        Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.
+    staff_keys : set of int
+        The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none.
+        Keyword-only.
+    octave : bool, default False
+        Name the octave of the first note, such as "G2 Major", and require the scale to start there; any scale asked then
+        fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.
+
+    Examples
+    --------
+    >>> cfg = ScaleConstructionSettings(keys={3})
+    >>> cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
+    ([3], ['treble', 'bass'], False, False, [0])
+    """
+
+    _: KW_ONLY
+    steps: bool = False  # also mark the whole and half steps between the notes
+    octave: bool = False  # name the octave of the first note, and require the scale to start there
+    staff_keys: set[int] = field(default_factory=lambda: {0})  # the key signatures drawn on the staff: sharps (+) / flats (-)
+
+    def active_staff_keys(self) -> list[int]:
+        """
+        Return the key signatures that may be drawn on the staff, lowest first.
+
+        Returns
+        -------
+        list of int
+            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
+
+        Examples
+        --------
+        >>> ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
+        [-2, 3]
+        >>> ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
+        [0]
+        """
+        return sorted(self.staff_keys) or [0]
+
+
+scale_construction = ScaleConstructionSettings()
+
+
+# Circle of fifths exercise: what to ask about the circle.
+CIRCLE_QUESTIONS = {
+    "major": "Relative major",
+    "minor": "Relative minor",
+    "numeral": "Roman numerals",
+}
+
+
+@dataclass
+class CircleSettings:
+    """
+    The settings of the circle of fifths exercise.
+
+    Attributes
+    ----------
+    questions : set of str
+        The kinds of question to ask, keys of `CIRCLE_QUESTIONS`: the relative major of a minor key, the relative minor of a
+        major key, and the Roman numeral of a chord of a key.
+
+    Examples
+    --------
+    >>> CircleSettings().active_questions()
+    ['major', 'minor', 'numeral']
+    >>> CircleSettings(questions={"numeral"}).active_questions()
+    ['numeral']
+    """
+
+    questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS))  # keys of CIRCLE_QUESTIONS
+
+    def active_questions(self) -> list[str]:
+        """
+        Return the kinds of question to ask, in the order they are listed.
+
+        Returns
+        -------
+        list of str
+            The chosen kinds, or all of them if none is chosen.
+
+        Examples
+        --------
+        >>> CircleSettings(questions=set()).active_questions()
+        ['major', 'minor', 'numeral']
+        >>> CircleSettings(questions={"minor", "nonsense"}).active_questions()
+        ['minor']
+        """
+        return [q for q in CIRCLE_QUESTIONS if q in self.questions] or list(CIRCLE_QUESTIONS)
+
+
+circle = CircleSettings()

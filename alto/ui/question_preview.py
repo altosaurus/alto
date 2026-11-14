@@ -24,6 +24,7 @@ from alto import settings as app_settings
 from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.settings import spell
+from alto.ui.circle import FifthsCircle
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.staff import (
     MAX_STEP,
@@ -93,10 +94,13 @@ class QuestionPreview(QDialog):
             lay.addWidget(prompt)
 
         q = question
-        if q.staff or q.show_staff or q.construct is not None:
+        scale = [[n] for n in q.construct_scale or []]
+        if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
-            # a "place this note" question shows the note that was the answer
-            notes = q.staff or ([[q.construct]] if q.construct is not None else [])
+            if q.construct_steps:  # a scale with its steps shows them above the notes
+                staff.wedges = list(q.construct_steps)
+            # a "place this note" or "place this scale" question shows the notes that were the answer
+            notes = q.staff or ([[q.construct]] if q.construct is not None else scale)
             staff.show_notes(
                 notes,
                 clef=q.clef,
@@ -105,6 +109,12 @@ class QuestionPreview(QDialog):
                 caption=q.caption,
             )
             lay.addWidget(staff, alignment=Qt.AlignmentFlag.AlignHCenter)
+        if q.circle is not None:  # a circle of fifths question shows the circle with its answer in
+            circle = FifthsCircle()
+            circle.setFixedSize(380, 380)
+            circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
+            circle.reveal(animate=False)
+            lay.addWidget(circle, alignment=Qt.AlignmentFlag.AlignHCenter)
         if q.keyboard is not None:
             if q.key_staff:
                 key_staff = StaffWidget(
@@ -136,7 +146,7 @@ class QuestionPreview(QDialog):
         lay.addWidget(info)
 
         buttons = QDialogButtonBox()
-        notes = q.staff or ([[q.keyboard]] if q.keyboard else [[q.construct]] if q.construct is not None else [])
+        notes = q.staff or ([[q.keyboard]] if q.keyboard else [[q.construct]] if q.construct is not None else scale)
         if notes:
             play = QPushButton("Play")
             play.clicked.connect(lambda: sounds.play_notes(notes))

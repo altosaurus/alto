@@ -2,11 +2,13 @@
 title: alto.ui.home
 parent: api
 package: alto.ui
-order: 20
+order: 24
 permalink: /api/alto.ui.home/
 ---
 {% raw %}
-The start screen: a card for every exercise, in rows by category.
+The start screen: a card for every exercise, or for every lesson, in rows.
+
+A switch at the top chooses between the exercises and the lessons.
 
 **Examples**
 
@@ -15,6 +17,54 @@ The start screen: a card for every exercise, in rows by category.
 >>> page = HomePage(REGISTRY)
 >>> len(page.cards) == len(REGISTRY)
 True
+```
+
+## TileCard
+
+```python
+TileCard(
+    *,
+    icon: str,
+    category: str,
+    name: str,
+    about: str,
+    status: str = '',
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `QPushButton`
+
+A big button: an icon on top, then a category, a name and a one-line description, and optionally a line of status.
+
+**Examples**
+
+```pycon
+>>> card = TileCard(icon=icons.EXERCISE_CIRCLE, category="Scales & Keys", name="Circle of Fifths", about="Find keys.")
+>>> (card.width(), card.height()) == (CARD_W, CARD_H)
+True
+>>> card.accessibleName()
+'Circle of Fifths, Scales & Keys'
+```
+
+**Constructor**
+
+Build a card.
+
+**Parameters**
+
+- `icon` (*str*): The inside of a 24 by 24 SVG, drawn in the text colour. Keyword-only.
+- `category` (*str*): The small heading above the name. Keyword-only.
+- `name` (*str*): The name. Keyword-only.
+- `about` (*str*): A line of description, which is also the tooltip. Keyword-only.
+- `status` (*str, default ""*): A line under the description, such as how far through a lesson you are; nothing if empty. Keyword-only.
+- `parent` (*QWidget or None, default None*): The widget that owns the card. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", status="Step 2 of 8").toolTip()
+'Get help.'
 ```
 
 ## ExerciseCard
@@ -27,9 +77,9 @@ ExerciseCard(
 )
 ```
 
-Bases: `QPushButton`
+Bases: `TileCard`
 
-A big button: the exercise's icon on top, then its category, name and a one-line description.
+The card of an exercise: its icon on top, then its category, name and a one-line description.
 
 **Examples**
 
@@ -59,6 +109,35 @@ Build the card for one exercise.
 'Name the interval between two notes (up to an octave).'
 ```
 
+## lesson_card
+
+```python
+def lesson_card(
+    lesson: Lesson,
+    *,
+    parent: QWidget | None = None,
+) -> TileCard
+```
+
+Make the card of a lesson: the icon of the exercise that practises the same topic, and how far through it you are.
+
+**Parameters**
+
+- `lesson` (*Lesson*): The lesson.
+- `parent` (*QWidget or None, default None*): The widget that owns the card. Keyword-only.
+
+**Returns**
+
+- *TileCard*: The card, which says "Start" or "Continue at step N".
+
+**Examples**
+
+```pycon
+>>> card = lesson_card(LESSONS[0])
+>>> card.accessibleName()
+'The Circle of Fifths, Scales & Keys'
+```
+
 ## HomePage
 
 ```python
@@ -76,7 +155,12 @@ The start screen: a row of exercise buttons for each category.
 **Attributes**
 
 - `exercise_chosen` (*Signal*): Emitted with the `Exercise` class when a card is clicked.
+- `lesson_chosen` (*Signal*): Emitted with a lesson's key when its card is clicked.
 - `cards` (*list of ExerciseCard*): One per exercise, in registry order.
+- `lesson_cards` (*list of TileCard*): One per lesson, with how far through it you are.
+- `canvas` (*TransitionCanvas*): Where the transition between the exercises and the lessons is drawn.
+- `mode_control` (*SegmentedControl*): The switch between the exercises and the lessons. The main window puts it in its top bar.
+- `mode` (*str*): "exercises" or "lessons": which cards are showing.
 - `scroll_area` (*QScrollArea*): Scrolls the rows when the window is shorter than all of them.
 
 **Examples**
@@ -106,6 +190,57 @@ Build the page.
 >>> from alto.exercises.library import NoteNames
 >>> len(HomePage([NoteNames]).cards)
 1
+```
+
+### HomePage.set_mode
+
+```python
+def set_mode(
+    mode: str,
+    *,
+    animate: bool = True,
+) -> None
+```
+
+Show the exercises or the lessons, and remember which.
+
+The cards change with the transition that is chosen in the settings. The new cards are in place at once, so nothing
+waits on it.
+
+**Parameters**
+
+- `mode` (*str*): "exercises" or "lessons".
+- `animate` (*bool, default True*): Play the chosen transition; if False the new cards simply appear. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises import REGISTRY
+>>> page = HomePage(REGISTRY)
+>>> page.set_mode("lessons")
+>>> page.mode, page.mode_control.current()
+('lessons', 1)
+>>> page.set_mode("exercises")
+```
+
+### HomePage.showEvent
+
+```python
+def showEvent(event: QShowEvent) -> None
+```
+
+Bring the lesson cards up to date each time the page is shown, so they say where each lesson was left.
+
+**Parameters**
+
+- `event` (*QShowEvent*): The show.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises import REGISTRY
+>>> page = HomePage(REGISTRY)
+>>> page.show()
 ```
 
 ### HomePage.resizeEvent

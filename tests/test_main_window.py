@@ -59,6 +59,27 @@ if TYPE_CHECKING:
 # -- the home screen ------------------------------------------------------------------------------------------------
 
 
+def test_every_card_shows_its_whole_name_and_description(app: QApplication) -> None:
+    """
+    Check that every card shows its whole name and description, with nothing cut off or running past the card.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    for cls in REGISTRY:
+        card = ExerciseCard(cls)
+        card.show()
+        app.processEvents()
+        for label in card.findChildren(QLabel):
+            if label.wordWrap():
+                assert label.heightForWidth(label.width()) <= label.height(), (cls.name, label.text())
+            else:
+                assert label.sizeHint().width() <= label.width(), (cls.name, label.text())
+        card.close()
+
+
 def test_the_home_screen_has_a_card_for_each_exercise_and_reports_the_one_clicked(app: QApplication) -> None:
     """
     Check that the home screen has a card for each exercise and reports the one clicked.
@@ -489,7 +510,7 @@ def test_changing_the_theme_in_settings_opens_a_fresh_window(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that changing the theme in settings opens a fresh window.
+    Check that changing the theme in settings opens a fresh window, once the settings are closed.
 
     Parameters
     ----------
@@ -500,44 +521,61 @@ def test_changing_the_theme_in_settings_opens_a_fresh_window(
     """
     rebuilt = []
     monkeypatch.setattr(window, "rebuild", lambda: rebuilt.append(1))
-
-    class Dialog:
-        """
-        A stand-in for the settings dialog that reports a theme change.
-        """
-
-        theme_changed = False
-
-        def __init__(self, parent: QWidget | None) -> None:
-            """
-            Build the stand-in.
-
-            Parameters
-            ----------
-            parent : QWidget or None
-                The owning widget.
-            """
-            del parent  # accepted to match what it stands in for, but not needed
-
-        # noinspection PyMethodMayBeStatic
-        def exec(self) -> int:
-            """
-            Pretend to show the dialog.
-
-            Returns
-            -------
-            int
-                Always 0.
-            """
-            return 0
-
-    # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(mw, "AppSettingsDialog", Dialog)
     window.open_settings()
-    assert rebuilt == []
-    Dialog.theme_changed = True
+    first = window._settings
+    assert first is not None
+    first.close()
+    assert rebuilt == [] and not settings_are_open(window)  # nothing changed
     window.open_settings()
-    assert rebuilt == [1]
+    second = window._settings
+    assert second is not None
+    second.theme_changed = True
+    assert rebuilt == []  # the window is not rebuilt while the settings are still open
+    second.close()
+    assert rebuilt == [1] and not settings_are_open(window)
+
+
+def settings_are_open(window: MainWindow) -> bool:
+    """
+    Say whether the window has its settings open.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window.
+
+    Returns
+    -------
+    bool
+        True if they are.
+    """
+    # noinspection PyProtectedMember
+    return window._settings is not None
+
+
+def test_the_settings_do_not_block_the_window(
+    window: MainWindow,
+    app: QApplication,
+) -> None:
+    """
+    Check that the settings dialog is modeless, that opening it again brings the same one forward, and that the window works.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The main window under test.
+    app : QApplication
+        The shared Qt application.
+    """
+    window.show()
+    window.open_settings()
+    dialog = window._settings
+    assert dialog is not None and not dialog.isModal() and dialog.isVisible()
+    window.open_settings()
+    assert window._settings is dialog  # the same one, not a second
+    window.open_exercise(REGISTRY[0])  # the window can be used while the settings are open
+    assert window.title_label.text() == REGISTRY[0].name
+    dialog.close()
 
 
 def test_a_rebuilt_window_takes_the_old_ones_place(

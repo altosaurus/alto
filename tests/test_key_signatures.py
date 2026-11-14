@@ -1,12 +1,13 @@
 """
-The key signature exercise.
+The key signature identification exercise.
 
-Reading a signature drawn on a staff, counting the sharps and flats of a named key, and the
-scales (major, minor and the modes) and the staffs and signatures it can use.
+Reading a signature drawn on a staff and naming its key, and the scales (major, minor and the modes) and the
+staffs and signatures it can use.
 """
 
 from __future__ import annotations
 
+import json
 import random
 from typing import TYPE_CHECKING
 
@@ -24,6 +25,11 @@ from alto.exercises.library import (
     NoteNames,
 )
 from alto.learning import stats
+from alto.learning.database import (
+    Database,
+    ItemRecord,
+)
+from alto.learning.learner import Learner
 from alto.theory.scales import (
     MODE_DEGREE,
     SCALES,
@@ -56,7 +62,7 @@ def questions(
     **choose: object,
 ) -> list[Question]:
     """
-    `n` questions made with these settings (questions, clefs, modes, keys).
+    `n` questions made with these settings (clefs, modes, keys).
 
     Parameters
     ----------
@@ -123,17 +129,13 @@ def test_a_scale_in_any_mode_carries_exactly_the_key_signature_it_is_asked_with(
         assert sum(n.accidental for n in notes) == count and len({n.letter for n in notes}) == 7
 
 
-def test_by_default_both_kinds_of_question_are_asked_about_major_and_minor_keys() -> None:
+def test_by_default_major_and_minor_keys_are_asked_on_a_staff() -> None:
     """
-    Check that by default both kinds of question are asked about major and minor keys.
+    Check that by default major and minor keys are asked, each shown on a staff.
     """
     asked = questions(400)
-    reading = [q for q in asked if q.show_staff]
-    counting = [q for q in asked if not q.show_staff]
-    assert reading and counting
-    assert {q.prompt for q in reading} == {"Which major key has this key signature?", "Which minor key has this key signature?"}
-    assert all(q.prompt.startswith("How many sharps or flats are in ") for q in counting)
-    assert all(q.prompt.endswith((" major?", " minor?")) for q in counting)
+    assert all(q.show_staff for q in asked)
+    assert {q.prompt for q in asked} == {"Which major key has this key signature?", "Which minor key has this key signature?"}
 
 
 def test_reading_a_signature_shows_a_staff_and_asks_for_the_tonic() -> None:
@@ -142,7 +144,6 @@ def test_reading_a_signature_shows_a_staff_and_asks_for_the_tonic() -> None:
     """
     for q in questions(
         200,
-        questions={"read"},
         modes={"Dorian"},
         clefs={"alto"},
         keys={2},
@@ -155,27 +156,12 @@ def test_reading_a_signature_shows_a_staff_and_asks_for_the_tonic() -> None:
         assert "2 sharps: E Dorian" in q.explanation
 
 
-def test_counting_names_the_key_and_asks_for_its_signature() -> None:
-    """
-    Check that counting names the key and asks for its signature.
-    """
-    for q in questions(
-        200,
-        questions={"count"},
-        modes={"Lydian"},
-        keys={-2},
-    ):
-        assert not q.show_staff and q.prompt == "How many sharps or flats are in E♭ Lydian?"  # B♭ major's 4th degree: E♭
-        assert q.answer == "2 flats" and q.answer in q.choices and len(q.choices) == 4
-
-
 def test_the_staffs_the_modes_and_the_keys_are_chosen_from_the_settings() -> None:
     """
     Check that the staffs the modes and the keys are chosen from the settings.
     """
     asked = questions(
         600,
-        questions={"read"},
         clefs={"treble", "tenor"},
         modes={MAJOR, "Locrian"},
         keys={-3, 0, 4},
@@ -191,14 +177,12 @@ def test_a_settings_choice_with_nothing_ticked_falls_back_to_something_sensible(
     Check that a settings choice with nothing ticked falls back to something sensible.
     """
     cfg = settings.key_signatures
-    cfg.questions, cfg.clefs, cfg.modes, cfg.keys = set(), set(), set(), set()
+    cfg.clefs, cfg.modes, cfg.keys = set(), set(), set()
     assert (
-        cfg.active_questions(),
         cfg.active_clefs(),
         cfg.active_modes(),
         cfg.active_keys(),
     ) == (
-        ["read"],
         ["treble"],
         [MAJOR],
         [0],
@@ -209,7 +193,7 @@ def test_a_question_comes_back_with_its_staff_and_its_scale() -> None:
     """
     Check that a question comes back with its staff and its scale.
     """
-    for q in questions(50, questions={"read"}):
+    for q in questions(50):
         again = Question.from_dict(q.to_dict())
         assert again == q and again.show_staff and again.item_key() == q.item_key()
 
@@ -229,7 +213,6 @@ def test_a_key_signature_question_is_described_by_its_signature_in_the_lists_of_
     """
     q = questions(
         1,
-        questions={"read"},
         keys={-3},
         clefs={"bass"},
     )[0]
@@ -258,16 +241,13 @@ def test_a_signature_is_drawn_and_a_right_answer_makes_no_sound(
     monkeypatch.setattr("alto.ui.exercise_view.sounds.play_notes", lambda notes: played.append(notes))
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr("alto.ui.exercise_view.sounds.play_correct", lambda streak: played.append(streak))
-    for kind in ({"read"}, {"count"}):
-        settings.key_signatures.questions = kind
-        view = ExerciseView(KeySignatures(), rng=random.Random(3))
-        q = view.question
-        assert q is not None
-        if "read" in kind:
-            assert view.staff.isVisibleTo(view) and view.staff.key == q.key and view.staff.clef == q.clef
-        next(b for b in view.buttons if b.text() == q.answer).click()
-        assert view.answered
-        view._advance.stop()
+    view = ExerciseView(KeySignatures(), rng=random.Random(3))
+    q = view.question
+    assert q is not None
+    assert view.staff.isVisibleTo(view) and view.staff.key == q.key and view.staff.clef == q.clef
+    next(b for b in view.buttons if b.text() == q.answer).click()
+    assert view.answered
+    view._advance.stop()
     assert played == []  # neither a tone nor the ordinary chime
 
 
@@ -301,25 +281,6 @@ def test_the_sound_button_is_a_global_mute_that_works_in_every_exercise(
     assert muted.sound_btn.toolTip().startswith("Muted") and muted.sound_btn.isEnabled()
 
 
-def test_a_counting_question_shows_no_staff(app: QApplication) -> None:
-    """
-    Check that a counting question shows no staff.
-
-    Parameters
-    ----------
-    app : QApplication
-        The shared Qt application.
-    """
-    settings.key_signatures.questions = {"count"}
-    view = ExerciseView(KeySignatures(), rng=random.Random(3))
-    assert not view.staff.isVisibleTo(view)
-    q = view.question
-    assert q is not None
-    next(b for b in view.buttons if b.text() == q.answer).click()
-    assert view.answered
-    view._advance.stop()
-
-
 def test_the_preview_shows_the_signature_and_the_caption(app: QApplication) -> None:
     """
     Check that the preview shows the signature and the caption.
@@ -329,8 +290,8 @@ def test_the_preview_shows_the_signature_and_the_caption(app: QApplication) -> N
     app : QApplication
         The shared Qt application.
     """
-    q = questions(1, questions={"read"})[0]
-    dialog = QuestionPreview("Key signatures", question=q)
+    q = questions(1)[0]
+    dialog = QuestionPreview("Key Signature Identification", question=q)
     assert q.caption and dialog.grab().width() > 0
     assert not [b for b in dialog.findChildren(QPushButton) if b.text() == "Play"]  # there is nothing to play
 
@@ -339,7 +300,7 @@ def test_a_question_stored_with_a_scale_to_play_still_loads() -> None:
     """
     Check that a question stored with a scale to play still loads.
     """
-    q = questions(1, questions={"read"})[0]
+    q = questions(1)[0]
     old = {**q.to_dict(), "play": [[{"octave": 4, "letter": 0, "accidental": 0}]]}
     assert Question.from_dict(old) == q
 
@@ -391,20 +352,19 @@ def test_the_pane_opens_each_page_and_back_returns(pane: KeySignatureSettingsPan
         The key signature panel under test.
     """
     for row, index in (
-        (pane.questions_row, 1),
-        (pane.staff_row, 2),
-        (pane.modes_row, 3),
-        (pane.keys_row, 4),
+        (pane.clefs_row, 1),
+        (pane.modes_row, 2),
+        (pane.keys_row, 3),
     ):
         row.click()
         QTest.qWait(300)
         assert pane.stack.currentIndex() == index
         back(pane)
-    pane.staff_row.click()
-    pane.staff_row.click()  # ignored mid-slide
+    pane.clefs_row.click()
+    pane.clefs_row.click()  # ignored mid-slide
     QTest.qWait(300)
-    pane._go(2)  # already there
-    assert pane.stack.currentIndex() == 2
+    pane._go(1)  # already there
+    assert pane.stack.currentIndex() == 1
 
 
 def test_the_pane_edits_and_saves_every_setting(pane: KeySignatureSettingsPanel) -> None:
@@ -419,8 +379,6 @@ def test_the_pane_edits_and_saves_every_setting(pane: KeySignatureSettingsPanel)
     cfg = settings.key_signatures
     changes = []
     pane.changed.connect(lambda: changes.append(1))
-    pane.questions.boxes["count"].setChecked(False)
-    assert cfg.questions == {"read"} and not pane.questions.boxes["read"].isEnabled()  # one kind always stays
     pane.boxes["alto"].setChecked(True)
     pane.boxes["bass"].setChecked(False)
     assert cfg.clefs == {"treble", "alto"}
@@ -428,19 +386,11 @@ def test_the_pane_edits_and_saves_every_setting(pane: KeySignatureSettingsPanel)
     assert "Dorian" in cfg.modes
     pane.key_list.boxes[5].setChecked(True)
     pane.key_list.boxes[-6].setChecked(False)
-    assert 5 in cfg.keys and -6 not in cfg.keys and len(changes) == 5
-    assert store().value("keySignatures/questions") == "read"
+    assert 5 in cfg.keys and -6 not in cfg.keys and len(changes) == 4
     assert store().value("keySignatures/clefs") == "treble,alto"
     assert "Dorian" in str(store().value("keySignatures/modes")).split("|")
     pane._refresh_summaries()
-    assert pane.questions_row.value.text() == "Read" and pane.modes_row.value.text() == "3 of 7"
-    pane.questions.boxes["count"].setChecked(True)
-    pane.questions.boxes["read"].setChecked(False)
-    pane._refresh_summaries()
-    assert pane.questions_row.value.text() == "Count"
-    pane.questions.boxes["read"].setChecked(True)
-    pane._refresh_summaries()
-    assert pane.questions_row.value.text() == "Both"
+    assert pane.modes_row.value.text() == "3 of 7"
 
 
 def test_the_saved_settings_are_read_back_and_bad_ones_ignored() -> None:
@@ -448,16 +398,14 @@ def test_the_saved_settings_are_read_back_and_bad_ones_ignored() -> None:
     Check that the saved settings are read back and bad ones ignored.
     """
     s = store()
-    s.setValue("keySignatures/questions", "count,nonsense")
     s.setValue("keySignatures/clefs", "tenor,bass,nonsense")
     s.setValue("keySignatures/modes", "Lydian|Locrian|Made up")
     s.setValue("keySignatures/keys", "-4,3,99")
     sp.load_key_signatures()
     cfg = settings.key_signatures
-    assert cfg.questions == {"count"} and cfg.clefs == {"tenor", "bass"}
+    assert cfg.clefs == {"tenor", "bass"}
     assert cfg.modes == {"Lydian", "Locrian"} and cfg.keys == {-4, 3}
     for name in (
-        "questions",
         "clefs",
         "modes",
         "keys",
@@ -465,15 +413,16 @@ def test_the_saved_settings_are_read_back_and_bad_ones_ignored() -> None:
         s.setValue(f"keySignatures/{name}", "nonsense")
     s.setValue("keySignatures/keys", "99")
     sp.load_key_signatures()
-    assert cfg.questions == {"count"} and cfg.keys == {-4, 3}  # nothing usable: what was there stays
+    assert cfg.clefs == {"tenor", "bass"} and cfg.keys == {-4, 3}  # nothing usable: what was there stays
 
 
-def test_the_exercises_help_describes_both_kinds_of_question() -> None:
+def test_the_exercise_is_called_key_signature_identification() -> None:
     """
-    Check that the exercises help describes both kinds of question.
+    Check that the exercise is called Key Signature Identification, in its name and its help.
     """
     text = KeySignatures().instructions()
-    assert "drawn on a staff" in text and "how many sharps or flats" in text and "Dorian" in text
+    assert KeySignatures.name == "Key Signature Identification"
+    assert "drawn on a staff" in text and "Dorian" in text and "how many sharps or flats" not in text
 
 
 def test_the_explanation_spells_the_scale_from_the_tonic_up_to_its_octave() -> None:
@@ -482,7 +431,6 @@ def test_the_explanation_spells_the_scale_from_the_tonic_up_to_its_octave() -> N
     """
     q = questions(
         1,
-        questions={"read"},
         keys={0},
         modes={MAJOR},
     )[0]
@@ -499,8 +447,7 @@ def test_the_kind_of_scale_is_written_under_the_staff_not_above_it(app: QApplica
         The shared Qt application.
     """
     asked = questions(200)
-    assert {q.caption for q in asked if q.show_staff} == {"_ Major", "_ minor"}
-    assert all(q.caption == "" for q in asked if not q.show_staff)  # counting questions keep their line of text
+    assert {q.caption for q in asked} == {"_ Major", "_ minor"}
     view = ExerciseView(KeySignatures(), rng=random.Random(1))
     view.resize(900, 600)
     view.show()
@@ -509,3 +456,38 @@ def test_the_kind_of_scale_is_written_under_the_staff_not_above_it(app: QApplica
         assert q is not None
         assert view.staff.caption == q.caption and view.prompt.isHidden() == bool(q.caption or not q.prompt)
         view.next_question()
+
+
+def test_a_question_stored_before_captions_is_captioned_when_it_comes_round_again() -> None:
+    """
+    Check that a stored signature question without a caption is asked with one.
+    """
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    old = Question(
+        "Which minor key has this key signature?",
+        choices=["C", "D"],
+        answer="C",
+        clef="treble",
+        key=-3,
+        show_staff=True,
+    )
+    db.save_item(
+        learner.profile.id,
+        exercise="KeySignatures",
+        item_key=old.item_key(),
+        item=ItemRecord(
+            50.0,
+            seen=1,
+            first_try_right=0,
+            wrong_attempts=1,
+            total_first_ms=1000,
+            last_seen=1.0,
+            signature=KeySignatures().settings_signature(),
+            payload=json.dumps(old.to_dict()),
+        ),
+    )
+    rng = random.Random(0)
+    asked = [learner.pick(KeySignatures(), rng=rng, now=2.0) for _ in range(200)]
+    replayed = [q for q in asked if q.item_key() == old.item_key()]
+    assert replayed and all(q.caption == "_ minor" for q in replayed)
