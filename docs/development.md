@@ -60,6 +60,12 @@ to know when writing Qt code:
 
 If Pyright is wrong about one line, silence just that line with `# pyright: ignore[ruleName]` and a short reason.
 
+## Running your copy apart from the installed one
+
+Alto's history and settings are kept by name, so a clone run with `python -m alto` shares them with an installed Alto. To
+keep them apart, run the clone with `sh scripts/dev.sh`. It sets `ALTO_HOME` to `~/.alto-dev` (or to a folder you choose),
+where the clone has its own database and settings. See [Your data]({{ '/data/' | relative_url }}).
+
 ## Pre-commit
 
 A [pre-commit](https://pre-commit.com/) configuration runs the checks automatically before each commit. Set it up once:

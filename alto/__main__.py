@@ -9,7 +9,6 @@ Examples
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
@@ -17,6 +16,7 @@ from alto.learning import (
     Database,
     Learner,
 )
+from alto.location import database_path
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import startup_profile
 from alto.ui.theme import (
@@ -29,8 +29,8 @@ def main() -> int:
     """
     Run the application.
 
-    Opens the database in the user's data folder, asks for a profile name the first time, shows the main window and runs
-    the event loop until the window is closed.
+    Opens the database in the user's data folder (or in `ALTO_HOME`, if that is set), asks for a profile name the first time,
+    shows the main window and runs the event loop until the window is closed.
 
     Returns
     -------
@@ -47,7 +47,7 @@ def main() -> int:
     apply_theme(saved_theme())
     app.setDesktopFileName("alto")  # lets the desktop match the window to alto.desktop and its icon
     app.setWindowIcon(QIcon(str(Path(__file__).parent / "assets" / "icon.svg")))
-    db = Database(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "alto.db")
+    db = Database(database_path())
     profile = startup_profile(db)  # asks for a name the first time
     if profile is None:
         return 0

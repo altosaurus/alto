@@ -19,18 +19,21 @@ from PySide6.QtCore import (
     QSettings,
 )
 
+from alto.location import settings_folder
+
 
 def store() -> QSettings:
     """
     Return the app's saved settings.
 
     The first time it is opened under the name "alto" it brings across anything saved under the old name ("mtheory"), so a
-    rename does not reset anyone's preferences.
+    rename does not reset anyone's preferences. If `ALTO_HOME` is set the settings are kept in a file in that folder instead,
+    and nothing is brought across from the system's own.
 
     Returns
     -------
     QSettings
-        The settings, kept in the user's configuration folder.
+        The settings, kept in the user's configuration folder or in `ALTO_HOME`.
 
     Examples
     --------
@@ -40,6 +43,10 @@ def store() -> QSettings:
     'Ada'
     >>> settings.remove("demo")
     """
+    folder = settings_folder()
+    if folder is not None:
+        QSettings.setPath(QSettings.Format.IniFormat, QSettings.Scope.UserScope, str(folder))
+        return QSettings(QSettings.Format.IniFormat, QSettings.Scope.UserScope, "alto", "alto")
     s = QSettings("alto", "alto")
     if not s.contains("migratedFromMtheory"):
         old = QSettings("mtheory", "mtheory")

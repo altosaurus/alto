@@ -26,6 +26,20 @@ python -m venv .venv
 On Windows the virtual environment's programs are in `.venv\Scripts\` instead of `.venv/bin/`. After installing, the
 command `alto` also starts the app from inside the environment.
 
+## Install as a program (Linux)
+
+To have Alto in your application menu, separate from a clone you are working in, use the install script. It needs
+[uv](https://docs.astral.sh/uv/). It installs the newest version from GitHub into its own environment.
+
+```bash
+sh scripts/alto-install.sh install     # install, and add Alto to the application menu
+sh scripts/alto-install.sh update      # fetch the newest version
+sh scripts/alto-install.sh uninstall   # remove the program, the menu entry and the icon
+```
+
+Uninstalling keeps your practice history and settings (see [Your data]({{ '/data/' | relative_url }})). Add `--purge` to
+delete those too; use **Export backup…** first if you might want them back.
+
 ## First launch
 
 The first time you open Alto it asks you to create a profile.
