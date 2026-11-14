@@ -11,6 +11,8 @@ from typing import (
 
 import pytest
 from PySide6.QtCore import (
+    QEvent,
+    QObject,
     QSize,
     Qt,
 )
@@ -24,6 +26,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QListWidget,
+    QWidget,
 )
 
 from alto import __main__ as entry
@@ -53,8 +56,6 @@ if TYPE_CHECKING:
         Iterator,
     )
     from pathlib import Path
-
-    from PySide6.QtWidgets import QWidget
 
 # -- the home screen ------------------------------------------------------------------------------------------------
 
@@ -257,6 +258,60 @@ def test_each_exercise_in_the_list_sits_under_its_own_category_heading(window: M
         else:
             assert heading == cls.category.upper(), f"{cls.name} is under {heading}"
     assert len(shown) == len(set(shown))  # each heading appears once
+
+
+def test_building_the_window_opens_no_other_window(
+    app: QApplication,
+    practised_learner: Callable[..., Learner],
+) -> None:
+    """
+    Check that building the main window opens no window of its own besides itself.
+
+    A widget with no parent that is shown opens as a window. The desktop gives the first window an app opens the startup token
+    of the launch, and the dock waits for it, so a button that flashed up as a window first made the icon wait for 15 seconds.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    practised_learner : Callable
+        Builds a learner with a history. Only the first parameter may be positional.
+    """
+    opened: list[str] = []
+
+    class Spy(QObject):
+        """Note every top-level widget that is shown."""
+
+        def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+            """
+            Note a top-level widget that is shown.
+
+            Parameters
+            ----------
+            watched : QObject
+                The object the event is for.
+            event : QEvent
+                The event.
+
+            Returns
+            -------
+            bool
+                False, so the event is not stopped.
+            """
+            if event.type() == QEvent.Type.Show and isinstance(watched, QWidget) and watched.isWindow():
+                opened.append(type(watched).__name__)
+            return False
+
+    spy = Spy()
+    app.installEventFilter(spy)
+    try:
+        for learner in (practised_learner(3), None):
+            w = MainWindow(learner)
+            w.close()
+            w.deleteLater()
+    finally:
+        app.removeEventFilter(spy)
+    assert opened == []
 
 
 def test_without_a_profile_nothing_is_recorded_and_the_history_buttons_are_hidden(app: QApplication) -> None:

@@ -14,7 +14,7 @@ SOURCE="${ALTO_SOURCE:-git+https://github.com/altosaurus/alto.git}"
 DATA="${XDG_DATA_HOME:-$HOME/.local/share}"
 CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 DESKTOP_FILE="$DATA/applications/alto.desktop"
-ICON_FILE="$DATA/icons/hicolor/scalable/apps/alto.svg"
+ICONS="$DATA/icons/hicolor"
 
 need_uv() {
     command -v uv >/dev/null 2>&1 || {
@@ -23,12 +23,19 @@ need_uv() {
     }
 }
 
-# The menu entry and the icon are not something uv knows about, so they are written here and removed by `uninstall`.
+refresh_desktop() {
+    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$DATA/applications" || true
+    command -v gtk-update-icon-cache >/dev/null 2>&1 && [ -f "$ICONS/icon-theme.cache" ] && gtk-update-icon-cache -q -f -t "$ICONS" || true
+}
+
+# The menu entry and the icon are not something uv knows about, so they are written here and removed by `uninstall`. The icon is
+# a PNG at two sizes that the entry names, and the desktop matches the window to the entry by the app ID that Alto announces.
 add_menu_entry() {
     bin="$(uv tool dir --bin)/alto"
     assets="$("$(uv tool dir)/alto/bin/python" -c 'import alto, pathlib; print(pathlib.Path(alto.__file__).parent / "assets")')"
-    mkdir -p "$(dirname "$DESKTOP_FILE")" "$(dirname "$ICON_FILE")"
-    cp "$assets/icon.svg" "$ICON_FILE"
+    mkdir -p "$DATA/applications" "$ICONS/256x256/apps" "$ICONS/512x512/apps"
+    cp "$assets/icon-256.png" "$ICONS/256x256/apps/alto.png"
+    cp "$assets/icon.png" "$ICONS/512x512/apps/alto.png"
     cat >"$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Type=Application
@@ -37,14 +44,14 @@ Comment=Music theory trainer
 Exec=$bin
 Icon=alto
 Terminal=false
-Categories=AudioVideo;Education;Music;
+Categories=Education;Music;
 EOF
-    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$(dirname "$DESKTOP_FILE")" || true
+    refresh_desktop
 }
 
 remove_menu_entry() {
-    rm -f "$DESKTOP_FILE" "$ICON_FILE"
-    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$(dirname "$DESKTOP_FILE")" || true
+    rm -f "$DESKTOP_FILE" "$ICONS/256x256/apps/alto.png" "$ICONS/512x512/apps/alto.png"
+    refresh_desktop
 }
 
 case "${1:-}" in
