@@ -13,6 +13,8 @@ os.environ["XDG_DATA_HOME"] = f"{_HOME}/data"
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 atexit.register(lambda: shutil.rmtree(_HOME, ignore_errors=True))
 
+from collections.abc import Iterator  # noqa: E402
+
 import pytest  # noqa: E402
 from PySide6.QtCore import QEvent  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
@@ -23,7 +25,7 @@ def _qt_application_for_doctests(
     request: pytest.FixtureRequest,
     *,
     doctest_namespace: dict,
-) -> None:
+) -> Iterator[None]:
     """
     Give every doctest a Qt application, available as `app`.
 
@@ -34,6 +36,12 @@ def _qt_application_for_doctests(
     doctest_namespace : dict
         The names every doctest can use without importing them. Keyword-only.
 
+    Yields
+    ------
+    None
+        Control, while the doctest runs. Afterwards every window it left open is closed, so they do not pile up: Qt restyles
+        every live widget when a theme is applied, and a thousand examples' worth made the theme examples take minutes.
+
     Examples
     --------
     >>> from PySide6.QtWidgets import QApplication
@@ -41,9 +49,22 @@ def _qt_application_for_doctests(
     True
     """
     if type(request.node).__name__ != "DoctestItem":
+        yield
         return
 
     doctest_namespace["app"] = QApplication.instance() or QApplication([])
+    yield
+    _delete_every_widget()
+
+
+def _delete_every_widget() -> None:
+    """Close and delete every top-level widget, then let Qt carry out the deletions."""
+    if QApplication.instance() is None:
+        return
+    for widget in QApplication.topLevelWidgets():
+        widget.close()
+        widget.deleteLater()
+    QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
 
 def pytest_sessionfinish() -> None:
@@ -58,10 +79,5 @@ def pytest_sessionfinish() -> None:
     >>> callable(pytest_sessionfinish)
     True
     """
-    if QApplication.instance() is None:
-        return
-    for widget in QApplication.topLevelWidgets():
-        widget.close()
-        widget.deleteLater()
-    QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    _delete_every_widget()
     gc.collect()

@@ -71,7 +71,10 @@ from alto.ui.theme import (
     user_records,
     variant_key,
 )
-from alto.ui.theme_cards import ThemeCard
+from alto.ui.theme_cards import (
+    ThemeCard,
+    ThemeThumb,
+)
 from alto.ui.theme_editor import ThemeEditor
 from alto.ui.transition_preview import TransitionPreview
 from alto.ui.transitions import (
@@ -499,11 +502,12 @@ class AppSettingsDialog(QDialog):
     new_theme_item : QListWidgetItem
         The row of the list that makes a new theme.
     theme_cards : dict of str to ThemeCard
-        The cards, by the key of the theme's family.
+        The cards built so far, by the key of the theme's family. A card is built when its row is first chosen, because every
+        widget makes a change of theme slower; use `card` to get one.
     theme_scrolls : dict of str to QScrollArea
-        The scroll area each card is in, which is what the stack shows.
+        The scroll area each built card is in, which is what the stack shows; use `scroll` to get one.
     theme_thumbs : dict of str to ThemeThumb
-        The clickable pictures of every card, by the key of the theme each chooses.
+        The clickable pictures of every built card, by the key of the theme each chooses; use `thumb` to get one.
     transition_list : QListWidget
         The choice of transition between the exercises and the lessons, on the Transitions section.
     transition_items : dict of str to QListWidgetItem
@@ -793,8 +797,8 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> len(dialog.theme_cards) == len(families()), len(dialog.theme_thumbs) == 3 * len(families())
-        (True, True)
+        >>> len(dialog.theme_items) == len(families()), len(dialog.theme_cards)  # only the card in view is built
+        (True, 1)
         """
         page, lay = self._page()
         body = QHBoxLayout()
@@ -856,14 +860,6 @@ class AppSettingsDialog(QDialog):
                 row.setSizeHint(QSize(0, 34))
                 self.theme_list.addItem(row)
                 self.theme_items[family] = row
-                card = ThemeCard(family, scale=1.45)
-                card.chosen.connect(self._pick_theme)
-                card.edit_requested.connect(self._edit_theme)
-                scroll = self._scrolling(card)  # a card that does not fit the dialog scrolls, and the list does not
-                self.theme_pages.addWidget(scroll)
-                self.theme_scrolls[family] = scroll
-                self.theme_cards[family] = card
-                self.theme_thumbs.update(card.thumbs)
             if mine:
                 self.new_theme_item = QListWidgetItem("＋  New theme…")
                 self.new_theme_item.setData(Qt.ItemDataRole.UserRole, NEW_THEME)
@@ -872,9 +868,92 @@ class AppSettingsDialog(QDialog):
         self.theme_list.blockSignals(False)
         in_use = saved_theme()
         self._show_theme(in_use)
-        family = select if select in self.theme_cards else family_of(in_use)[0]
+        family = select if select is not None and select in self.theme_items else family_of(in_use)[0]
         self.theme_list.setCurrentItem(self.theme_items[family])
-        self.theme_pages.setCurrentWidget(self.theme_scrolls[family])
+        self.theme_pages.setCurrentWidget(self.card_page(family))
+
+    def card(self, family: str) -> ThemeCard:
+        """
+        Give the card of a theme, building it the first time it is asked for.
+
+        Every card is a few dozen widgets, and Qt styles every widget again when the theme changes, so only the cards that have
+        been looked at exist.
+
+        Parameters
+        ----------
+        family : str
+            The key of the theme's family.
+
+        Returns
+        -------
+        ThemeCard
+            Its card.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> "sage" in dialog.theme_cards
+        False
+        >>> dialog.card("sage") is dialog.card("sage"), "sage" in dialog.theme_cards
+        (True, True)
+        """
+        card = self.theme_cards.get(family)
+        if card is None:
+            card = ThemeCard(family, scale=1.45)
+            card.chosen.connect(self._pick_theme)
+            card.edit_requested.connect(self._edit_theme)
+            scroll = self._scrolling(card)  # a card that does not fit the dialog scrolls, and the list does not
+            self.theme_pages.addWidget(scroll)
+            self.theme_scrolls[family] = scroll
+            self.theme_cards[family] = card
+            self.theme_thumbs.update(card.thumbs)
+            card.show_current(saved_theme())
+        return card
+
+    def card_page(self, family: str) -> QScrollArea:
+        """
+        Give the scroll area that holds a theme's card, which is the page the stack shows for it.
+
+        Parameters
+        ----------
+        family : str
+            The key of the theme's family.
+
+        Returns
+        -------
+        QScrollArea
+            The area, with the card built if it was not yet.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.card_page("sage").widget() is dialog.card("sage")
+        True
+        """
+        self.card(family)
+        return self.theme_scrolls[family]
+
+    def thumb(self, key: str) -> ThemeThumb:
+        """
+        Give the clickable picture that chooses a theme, with the card it is on built if it was not yet.
+
+        Parameters
+        ----------
+        key : str
+            The key of the theme, such as "light" or "sage_dark".
+
+        Returns
+        -------
+        ThemeThumb
+            Its picture.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.thumb("sage_dark").isChecked()
+        False
+        """
+        return self.card(family_of(key)[0]).thumbs[key]
 
     def _choose_family(self, row: QListWidgetItem | None) -> None:
         """
@@ -890,9 +969,9 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.theme_thumbs["dark"].click()
+        >>> dialog.thumb("dark").click()
         >>> dialog.theme_list.setCurrentItem(dialog.theme_items["sage"])
-        >>> dialog.theme_pages.currentWidget() is dialog.theme_scrolls["sage"], saved_theme()
+        >>> dialog.theme_pages.currentWidget() is dialog.card_page("sage"), saved_theme()
         (True, 'sage_dark')
         >>> dialog._pick_theme("system")
         """
@@ -903,7 +982,7 @@ class AppSettingsDialog(QDialog):
             self.theme_editor.load(None)
             self.theme_pages.setCurrentWidget(self.theme_editor)
             return
-        self.theme_pages.setCurrentWidget(self.theme_scrolls[family])
+        self.theme_pages.setCurrentWidget(self.card_page(family))
         key = variant_key(family, version=self._version)
         if key != saved_theme():
             self.choose_theme(key)
@@ -993,15 +1072,16 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> sage = dialog.card("sage")
         >>> dialog._show_theme("sage_auto")
-        >>> dialog.theme_thumbs["sage_auto"].isChecked(), dialog.theme_thumbs["sage"].isChecked()
+        >>> dialog.thumb("sage_auto").isChecked(), dialog.thumb("sage").isChecked()
         (True, False)
         """
-        for family, card in self.theme_cards.items():
+        for card in self.theme_cards.values():
             card.show_current(key)
-            row = self.theme_items[family]
+        for family, row in self.theme_items.items():
             font = row.font()
-            font.setBold(key in card.thumbs)  # the row of the theme in use is bold
+            font.setBold(family == family_of(key)[0])  # the row of the theme in use is bold
             row.setFont(font)
 
     def _pick_theme(self, key: str) -> None:
@@ -1017,7 +1097,7 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog._pick_theme("light")
-        >>> saved_theme(), dialog.theme_thumbs["light"].isChecked()
+        >>> saved_theme(), dialog.thumb("light").isChecked()
         ('light', True)
         >>> dialog._pick_theme("system")
         """
