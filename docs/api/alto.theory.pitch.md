@@ -2,7 +2,7 @@
 title: alto.theory.pitch
 parent: api
 package: alto.theory
-order: 11
+order: 14
 permalink: /api/alto.theory.pitch/
 ---
 {% raw %}

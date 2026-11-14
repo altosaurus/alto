@@ -569,7 +569,7 @@ def test_the_construction_pane_opens_its_pages_and_edits_the_settings(constructi
         The note construction view or panel under test.
     """
     cfg = settings.construction
-    construction.staff_row.click()
+    construction.clefs_row.click()
     slide()
     assert construction.stack.currentIndex() == 1
     construction.boxes["grand"].setChecked(True)
@@ -577,7 +577,7 @@ def test_the_construction_pane_opens_its_pages_and_edits_the_settings(constructi
     assert cfg.clefs == {"treble", "grand"} and store().value("construction/clefs") == "treble,grand"
     construction.boxes["treble"].setChecked(False)
     assert cfg.clefs == {"grand"} and not construction.boxes["grand"].isEnabled()
-    construction.staff_row.click()  # ignored: already open
+    construction.clefs_row.click()  # ignored: already open
     back(construction)
     assert construction.clef_pictures is not None
     construction.accidentals_row.click()
@@ -608,7 +608,7 @@ def test_the_arpeggio_pane_opens_each_page_and_back_returns(app: QApplication) -
     panel.resize(290, 600)
     panel.show()
     for row, index in (
-        (panel.staff_row, 1),
+        (panel.clefs_row, 1),
         (panel.types_row, 2),
         (panel.inversions_row, 3),
         (panel.keys_row, 4),
@@ -617,8 +617,8 @@ def test_the_arpeggio_pane_opens_each_page_and_back_returns(app: QApplication) -
         slide()
         assert panel.stack.currentIndex() == index
         back(panel)
-    panel.staff_row.click()
-    panel.staff_row.click()  # ignored mid-slide
+    panel.clefs_row.click()
+    panel.clefs_row.click()  # ignored mid-slide
     slide()
     panel._go(1)
     panel.boxes["alto"].setChecked(True)

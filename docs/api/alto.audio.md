@@ -66,6 +66,7 @@ Instrument(
     sustained: bool = False,
     family: str = '',
     variant: str = '',
+    damped: bool = False,
 )
 ```
 
@@ -78,6 +79,7 @@ An instrument that notes can be played on, and where its recordings are.
 - `folder` (*str*): Under `assets/`: "piano" or "samples/<key>". File names are MIDI note numbers. Keyword-only.
 - `gain` (*float, default 1.0*): The level relative to the piano. Keyword-only.
 - `sustained` (*bool, default False*): True for bowed and blown instruments, whose notes end when the next one begins; struck and plucked ones ring on. Keyword-only.
+- `damped` (*bool, default False*): True for an instrument whose notes are stopped by a damper when the key is let go, played without the pedal: the piano. Each note ends as the next one begins, as it does when the fingers move from key to key, instead of ringing on over the following notes as if the pedal were down. Keyword-only.
 - `family` (*str, default ""*): Instruments that are ways of playing the same instrument share a family (the viola: arco and pizzicato). Keyword-only.
 - `variant` (*str, default ""*): Which way of playing it, within the family. Keyword-only.
 
@@ -86,6 +88,8 @@ An instrument that notes can be played on, and where its recordings are.
 ```pycon
 >>> Instrument("flute", label="Flute", folder="samples/flute", sustained=True).gain
 1.0
+>>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
+(True, False)
 ```
 
 ## instrument_groups
@@ -269,8 +273,9 @@ def play_midi(
 
 Play a note in the chosen instrument (or another one).
 
-A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, unless
-`release_previous` is False, which is for the notes of a chord that start together. Nothing plays while muted unless
+A sustained instrument (bowed or blown) ends the notes still sounding first, as a player would, and so does a damped
+one (the piano, played without the pedal), unless `release_previous` is False, which is for the notes of a chord
+that start together. Nothing plays while muted unless
 `force` is set. A failure to play is reported but never raised, so audio can never break an exercise.
 
 **Parameters**
@@ -279,7 +284,7 @@ A sustained instrument (bowed or blown) ends the notes still sounding first, as 
 - `volume` (*float, default 1.0*): The level from 0 to 1, before the instrument's own gain. Keyword-only.
 - `instrument` (*str or None, default None*): The key of the instrument to use instead of the chosen one. Keyword-only.
 - `force` (*bool, default False*): Play even while muted, for previews. Keyword-only.
-- `release_previous` (*bool, default True*): End the sustained notes still ringing first. Keyword-only.
+- `release_previous` (*bool, default True*): End the sustained or damped notes still ringing first. Keyword-only.
 
 **Examples**
 
@@ -338,6 +343,7 @@ def play_notes(
     columns: Iterable[Sequence[Note]],
     *,
     gap_ms: int = 450,
+    on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
 
@@ -349,6 +355,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 - `columns` (*iterable of sequence of Note*): The columns of notes, as drawn on a staff.
 - `gap_ms` (*int, default 450*): The time between columns, in milliseconds. Keyword-only.
+- `on_step` (*callable or None, default None*): Called with the index of each column as it starts, and with None when the last has had its time. It is called while muted too, so a display can follow the music with the sound off. Keyword-only.
 
 **Examples**
 

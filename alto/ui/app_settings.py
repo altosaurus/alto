@@ -1,5 +1,7 @@
 """
-The application-wide settings dialog: the colour theme, the notation font, the keyboard style and the instrument.
+The application-wide settings dialog.
+
+It holds the colour theme, the notation font, the keyboard style, the transitions and the instrument.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -16,20 +18,13 @@ from __future__ import annotations
 
 from PySide6.QtCore import (
     QEvent,
-    QPointF,
-    QRectF,
     QSize,
     Qt,
     Signal,
 )
 from PySide6.QtGui import (
     QColor,
-    QPainter,
-    QPainterPath,
-    QPaintEvent,
     QPalette,
-    QPen,
-    QPolygonF,
 )
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -42,6 +37,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPushButton,
     QRadioButton,
     QScrollArea,
@@ -59,14 +55,33 @@ from alto.ui import (
 from alto.ui.colors import blend
 from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.lesson_nav import section_item
 from alto.ui.pictures import ClefPictures
 from alto.ui.staff import StaffWidget
 from alto.ui.theme import (
-    THEMES,
+    FAMILIES,
+    USER_PREFIX,
     apply_theme,
+    delete_user_theme,
+    families,
+    family_of,
     save_theme,
     saved_theme,
+    upsert_user_theme,
+    user_records,
+    variant_key,
 )
+from alto.ui.theme_cards import ThemeCard
+from alto.ui.theme_editor import ThemeEditor
+from alto.ui.transition_preview import TransitionPreview
+from alto.ui.transitions import (
+    TRANSITIONS,
+    save_transition,
+    saved_transition,
+    transition_named,
+)
+
+NEW_THEME = "__new__"  # what the row that makes a new theme holds in place of a theme's key
 
 
 class StyleCard(QPushButton):
@@ -459,259 +474,9 @@ class KeyboardBuilder(QFrame):
             self._set(part, colour=colour.name())
 
 
-class ThemeCard(QPushButton):
-    """
-    A selectable tile that previews a theme: a miniature of the app window in light, in dark, or split for System.
-
-    Attributes
-    ----------
-    LIGHT, DARK : dict of str to str
-        The colours of the miniature in each theme.
-    theme_key : str
-        "system", "light" or "dark".
-    preview : QWidget
-        The miniature.
-
-    Examples
-    --------
-    >>> ThemeCard("dark", label="Dark", note="Always dark.").theme_key
-    'dark'
-    """
-
-    LIGHT = dict(
-        window="#efefef",
-        panel="#ffffff",
-        line="#c9c9c9",
-        ink="#2a2a2a",
-        faint="#b9b9b9",
-        accent="#3b8ed0",
-        tint="#c9dce8",
-    )
-    DARK = dict(
-        window="#2b2b2b",
-        panel="#232323",
-        line="#454545",
-        ink="#ececec",
-        faint="#5a5a5a",
-        accent="#2f7fe0",
-        tint="#22364f",
-    )
-
-    def __init__(
-        self,
-        key: str,
-        *,
-        label: str,
-        note: str,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the card for a theme.
-
-        Parameters
-        ----------
-        key : str
-            "system", "light" or "dark".
-        label : str
-            The name shown under the preview. Keyword-only.
-        note : str
-            A short explanation shown under the name. Keyword-only.
-        parent : QWidget or None, default None
-            The widget that owns the card. Keyword-only.
-
-        Examples
-        --------
-        >>> ThemeCard("system", label="System", note="Follows your desktop.").height()
-        168
-        """
-        super().__init__(parent)
-        self.theme_key = key
-        self.setCheckable(True)
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedSize(232, 168)
-        self.preview = QWidget()
-        self.preview.setFixedHeight(92)
-        self.preview.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.preview.paintEvent = self._paint_preview
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            8,
-            8,
-            8,
-            6,
-        )
-        lay.setSpacing(4)
-        name = QLabel(f"<b>{label}</b>")
-        name.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        blurb = QLabel(note)
-        blurb.setStyleSheet("color: gray; font-size: 9pt;")
-        blurb.setWordWrap(True)
-        blurb.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        lay.addWidget(self.preview)
-        lay.addWidget(name)
-        lay.addWidget(blurb)
-        lay.addStretch(1)
-
-    def _paint_preview(self, _event: QPaintEvent) -> None:
-        """
-        Draw the miniature: light, dark, or the two side by side for System.
-
-        Parameters
-        ----------
-        _event : QPaintEvent
-            The paint request.
-
-        Examples
-        --------
-        >>> card = ThemeCard("system", label="System", note="Follows your desktop.")
-        >>> card.preview.grab().isNull()
-        False
-        """
-        p = QPainter(self.preview)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        r = QRectF(self.preview.rect()).adjusted(
-            0.5,
-            0.5,
-            -0.5,
-            -0.5,
-        )
-        clip = QPainterPath()
-        clip.addRoundedRect(r, 8, 8)
-        p.setClipPath(clip)
-        if self.theme_key == "system":  # light on the left, dark on the right, split on a slant
-            self._mock(p, r=r, c=self.LIGHT)
-            right = QPainterPath()
-            right.addPolygon(
-                QPolygonF(
-                    [
-                        QPointF(r.center().x() + 14, r.top()),
-                        r.topRight(),
-                        r.bottomRight(),
-                        QPointF(r.center().x() - 14, r.bottom()),
-                    ],
-                ),
-            )
-            p.setClipPath(right.intersected(clip))
-            self._mock(p, r=r, c=self.DARK)
-        else:
-            self._mock(p, r=r, c=self.LIGHT if self.theme_key == "light" else self.DARK)
-        p.setClipping(False)  # an outline, so the dark preview shows against a dark window
-        p.setBrush(Qt.BrushStyle.NoBrush)
-        p.setPen(
-            QPen(
-                QColor(
-                    128,
-                    128,
-                    128,
-                    150,
-                ),
-                1,
-            ),
-        )
-        p.drawRoundedRect(r, 8, 8)
-
-    @staticmethod
-    def _mock(
-        p: QPainter,
-        *,
-        r: QRectF,
-        c: dict,
-    ) -> None:
-        """
-        Draw a small picture of the settings window: a list on the left, a staff with notes and a button on the right.
-
-        Parameters
-        ----------
-        p : QPainter
-            The painter to draw with.
-        r : QRectF
-            Where to draw it. Keyword-only.
-        c : dict of str to str
-            The colours to use, `ThemeCard.LIGHT` or `ThemeCard.DARK`. Keyword-only.
-
-        Examples
-        --------
-        >>> from PySide6.QtGui import QImage
-        >>> image = QImage(120, 80, QImage.Format.Format_ARGB32)
-        >>> painter = QPainter(image)
-        >>> ThemeCard._mock(painter, r=QRectF(0, 0, 120, 80), c=ThemeCard.LIGHT)
-        >>> painter.end()
-        True
-        >>> image.pixelColor(2, 2).name()  # the window colour fills the margin
-        '#efefef'
-        """
-        p.fillRect(r, QColor(c["window"]))
-        side = QRectF(
-            r.left() + 6,
-            r.top() + 6,
-            40,
-            r.height() - 12,
-        )
-        p.setPen(QPen(QColor(c["line"]), 1))
-        p.setBrush(QColor(c["panel"]))
-        p.drawRoundedRect(side, 5, 5)
-        p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(QColor(c["tint"]))
-        p.drawRoundedRect(
-            QRectF(
-                side.left() + 4,
-                side.top() + 5,
-                side.width() - 8,
-                9,
-            ),
-            3,
-            3,
-        )
-        p.setBrush(QColor(c["faint"]))
-        for i in range(2):
-            p.drawRoundedRect(
-                QRectF(
-                    side.left() + 6,
-                    side.top() + 22 + i * 12,
-                    side.width() - 20 - i * 6,
-                    4,
-                ),
-                2,
-                2,
-            )
-        card = QRectF(
-            side.right() + 8,
-            r.top() + 6,
-            r.right() - side.right() - 14,
-            r.height() - 12,
-        )
-        p.setPen(QPen(QColor(c["line"]), 1))
-        p.setBrush(QColor(c["panel"]))
-        p.drawRoundedRect(card, 5, 5)
-        p.setPen(QPen(QColor(c["ink"]), 0.8))
-        top = card.top() + 12
-        for i in range(5):
-            p.drawLine(QPointF(card.left() + 6, top + i * 5), QPointF(card.right() - 6, top + i * 5))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(QColor(c["ink"]))
-        for x, row in (
-            (20, 4),
-            (38, 3),
-            (56, 1),
-            (74, 2),
-        ):
-            p.drawEllipse(QPointF(card.left() + x, top + row * 2.5), 3.2, 2.5)
-        p.setBrush(QColor(c["accent"]))
-        p.drawRoundedRect(
-            QRectF(
-                card.left() + 6,
-                card.bottom() - 17,
-                30,
-                10,
-            ),
-            4,
-            4,
-        )
-
-
 class AppSettingsDialog(QDialog):
     """
-    Application-wide settings. Changes apply immediately.
+    Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
 
     Attributes
     ----------
@@ -723,6 +488,28 @@ class AppSettingsDialog(QDialog):
         The page for the chosen category.
     instruments : InstrumentPicker
         The instrument chooser on the Sound page.
+    theme_list : QListWidget
+        The themes, on the Theme section, with the one in use in bold.
+    theme_items : dict of str to QListWidgetItem
+        The rows of that list, by the key of the theme's family.
+    theme_pages : QStackedWidget
+        The card of the theme chosen in the list, or the editor.
+    theme_editor : ThemeEditor
+        The form that makes a theme of the user's own, or changes one.
+    new_theme_item : QListWidgetItem
+        The row of the list that makes a new theme.
+    theme_cards : dict of str to ThemeCard
+        The cards, by the key of the theme's family.
+    theme_scrolls : dict of str to QScrollArea
+        The scroll area each card is in, which is what the stack shows.
+    theme_thumbs : dict of str to ThemeThumb
+        The clickable pictures of every card, by the key of the theme each chooses.
+    transition_list : QListWidget
+        The choice of transition between the exercises and the lessons, on the Transitions section.
+    transition_items : dict of str to QListWidgetItem
+        The rows of that list, by the transition's key.
+    transition_preview : TransitionPreview
+        Plays the transition that is chosen, beside the choices.
 
     Examples
     --------
@@ -748,7 +535,7 @@ class AppSettingsDialog(QDialog):
         """
         super().__init__(parent)
         self.setWindowTitle("Settings")
-        self.setModal(True)
+        self.setModal(False)  # the window stays usable while the settings are open
         self.resize(1000, 640)
         self.theme_changed = False
         lay = QVBoxLayout(self)
@@ -758,7 +545,10 @@ class AppSettingsDialog(QDialog):
         self.categories.setObjectName("categories")  # styled in style.py
         self.categories.setFixedWidth(170)
         self.pages = QStackedWidget()
-        for name, page in (("Appearance", self._appearance_page()), ("Sound", self._sound_page())):
+        for name, page in (
+            ("Appearance", self._appearance_page()),
+            ("Sound", self._sound_page()),
+        ):
             item = QListWidgetItem(name)
             item.setSizeHint(QSize(0, 36))
             self.categories.addItem(item)
@@ -891,7 +681,8 @@ class AppSettingsDialog(QDialog):
         """
         Build the Appearance page.
 
-        It has three sections, switched with a segmented control: the colour theme, the notation style and the keyboard style.
+        It has four sections, switched with a segmented control: the colour theme, the notation style, the keyboard style and the
+        transitions.
 
         Returns
         -------
@@ -902,13 +693,14 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.appearance_pages.count()
-        3
+        4
         """
         page, lay = self._page()
         self.appearance_pages = QStackedWidget()
-        self.appearance_pages.addWidget(self._theme_tab())
+        self.appearance_pages.addWidget(self._theme_tab())  # its cards and its editor scroll by themselves, not the page
         self.appearance_pages.addWidget(self._scrolling(self._notation_tab()))
         self.appearance_pages.addWidget(self._scrolling(self._keyboard_tab()))
+        self.appearance_pages.addWidget(self._scrolling(self._transitions_tab()))
         self.segments = QFrame()
         self.segments.setObjectName("segments")
         row = QHBoxLayout(self.segments)
@@ -922,7 +714,7 @@ class AppSettingsDialog(QDialog):
         group = QButtonGroup(self)
         group.setExclusive(True)
         self.segment_buttons = []
-        for i, label in enumerate(("Theme", "Notation style", "Keyboard style")):
+        for i, label in enumerate(("Theme", "Notation style", "Keyboard style", "Transitions")):
             b = QPushButton(label)
             b.setCheckable(True)
             b.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -984,11 +776,14 @@ class AppSettingsDialog(QDialog):
             self._style_segments()
         super().changeEvent(event)
 
-    THEME_NOTES = {"system": "Follows your desktop's light or dark setting.", "light": "Always light.", "dark": "Always dark."}
-
     def _theme_tab(self) -> QWidget:
         """
-        Build the theme section: a card for System, Light and Dark.
+        Build the theme section: the themes in a list on the left, and the one chosen in the list on the right.
+
+        The right side is the theme's card, with three pictures one above another to click: the theme light, dark, and System,
+        which is light or dark as the desktop is and is cut through on a slant to show it. Choosing a row uses that theme, in
+        whichever of light, dark and System was chosen last. The themes the user made are at the top of the list, with a row that
+        makes a new one; the editor for them is on the right.
 
         Returns
         -------
@@ -998,28 +793,237 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> sorted(dialog.theme_cards)
-        ['dark', 'light', 'system']
+        >>> len(dialog.theme_cards) == len(families()), len(dialog.theme_thumbs) == 3 * len(families())
+        (True, True)
         """
         page, lay = self._page()
-        lay.addWidget(self._about("Follow the system's light or dark setting, or always use one of them."))
-        row = QHBoxLayout()
-        row.setSpacing(10)
-        group = QButtonGroup(self)
-        group.setExclusive(True)
+        body = QHBoxLayout()
+        body.setSpacing(18)
+        self.theme_list = QListWidget()
+        self.theme_list.setObjectName("categories")  # styled as the list of settings pages is
+        self.theme_list.setFixedWidth(220)
+        self.theme_list.setAccessibleName("Themes")
+        self.theme_pages = QStackedWidget()
+        self.theme_editor = ThemeEditor()
+        self.theme_editor.saved.connect(self._save_theme)
+        self.theme_editor.cancelled.connect(self._fill_themes)
+        self.theme_editor.deleted.connect(self._delete_theme)
+        self.theme_pages.addWidget(self.theme_editor)
         self.theme_cards = {}
-        current = saved_theme()
-        for key, label in THEMES:
-            card = ThemeCard(key, label=label, note=self.THEME_NOTES.get(key, ""))
-            card.setChecked(key == current)
-            group.addButton(card)
-            card.clicked.connect(lambda _=False, k=key: self.choose_theme(k))
-            row.addWidget(card)
-            self.theme_cards[key] = card
-        row.addStretch(1)
-        lay.addLayout(row)
-        lay.addStretch(1)
+        self.theme_thumbs = {}
+        self.theme_items = {}
+        self.theme_scrolls = {}
+        self._version = family_of(saved_theme())[1]  # the version last chosen, which stays as the list is moved
+        self.theme_list.currentItemChanged.connect(lambda now, _before: self._choose_family(now))
+        self._fill_themes()
+        body.addWidget(self.theme_list)
+        side = QVBoxLayout()
+        side.addWidget(self.theme_pages)
+        side.addStretch(1)
+        body.addLayout(side, 1)
+        lay.addLayout(body, 1)
         return page
+
+    def _fill_themes(self, select: str | None = None) -> None:
+        """
+        Fill the list and the cards: the themes the user made and a row to make one, then the built-in themes.
+
+        Parameters
+        ----------
+        select : str or None, default None
+            The key of the theme whose row to choose; None for the theme in use.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._fill_themes()
+        >>> dialog.theme_list.item(0).text()
+        'MY THEMES'
+        """
+        self.theme_list.blockSignals(True)
+        self.theme_list.clear()
+        for scroll in self.theme_scrolls.values():
+            self.theme_pages.removeWidget(scroll)
+            scroll.deleteLater()
+        self.theme_cards, self.theme_thumbs, self.theme_items, self.theme_scrolls = {}, {}, {}, {}
+        own = [(key, label) for key, label, _note in families() if key.startswith(USER_PREFIX)]
+        sections = (("My themes", own, True), ("Themes", [(key, label) for key, label, _note in FAMILIES], False))
+        for title, rows, mine in sections:
+            self.theme_list.addItem(section_item(title, palette=self.palette()))
+            for family, label in rows:
+                row = QListWidgetItem(label)
+                row.setData(Qt.ItemDataRole.UserRole, family)
+                row.setSizeHint(QSize(0, 34))
+                self.theme_list.addItem(row)
+                self.theme_items[family] = row
+                card = ThemeCard(family, scale=1.45)
+                card.chosen.connect(self._pick_theme)
+                card.edit_requested.connect(self._edit_theme)
+                scroll = self._scrolling(card)  # a card that does not fit the dialog scrolls, and the list does not
+                self.theme_pages.addWidget(scroll)
+                self.theme_scrolls[family] = scroll
+                self.theme_cards[family] = card
+                self.theme_thumbs.update(card.thumbs)
+            if mine:
+                self.new_theme_item = QListWidgetItem("＋  New theme…")
+                self.new_theme_item.setData(Qt.ItemDataRole.UserRole, NEW_THEME)
+                self.new_theme_item.setSizeHint(QSize(0, 34))
+                self.theme_list.addItem(self.new_theme_item)
+        self.theme_list.blockSignals(False)
+        in_use = saved_theme()
+        self._show_theme(in_use)
+        family = select if select in self.theme_cards else family_of(in_use)[0]
+        self.theme_list.setCurrentItem(self.theme_items[family])
+        self.theme_pages.setCurrentWidget(self.theme_scrolls[family])
+
+    def _choose_family(self, row: QListWidgetItem | None) -> None:
+        """
+        Show the card of the theme whose row was chosen in the list, and use the theme, in the version that was last chosen.
+
+        The row that makes a new theme opens the editor instead, and uses nothing.
+
+        Parameters
+        ----------
+        row : QListWidgetItem or None
+            The row that is now chosen.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.theme_thumbs["dark"].click()
+        >>> dialog.theme_list.setCurrentItem(dialog.theme_items["sage"])
+        >>> dialog.theme_pages.currentWidget() is dialog.theme_scrolls["sage"], saved_theme()
+        (True, 'sage_dark')
+        >>> dialog._pick_theme("system")
+        """
+        if row is None:
+            return
+        family = str(row.data(Qt.ItemDataRole.UserRole))
+        if family == NEW_THEME:
+            self.theme_editor.load(None)
+            self.theme_pages.setCurrentWidget(self.theme_editor)
+            return
+        self.theme_pages.setCurrentWidget(self.theme_scrolls[family])
+        key = variant_key(family, version=self._version)
+        if key != saved_theme():
+            self.choose_theme(key)
+        self._show_theme(key)
+
+    def _edit_theme(self, family: str) -> None:
+        """
+        Open the editor on a theme the user made.
+
+        Parameters
+        ----------
+        family : str
+            The theme's key.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._edit_theme("my_nothing")  # no such theme: nothing opens
+        >>> dialog.theme_pages.currentWidget() is dialog.theme_editor
+        False
+        """
+        record = next((made for made in user_records() if made["id"] == family), None)
+        if record is not None:
+            self.theme_editor.load(record)
+            self.theme_pages.setCurrentWidget(self.theme_editor)
+
+    def _save_theme(self, family: str) -> None:
+        """
+        Save the theme in the editor, and use it, in the version that was last chosen.
+
+        Parameters
+        ----------
+        family : str
+            The theme's key.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._save_theme  # doctest: +SKIP
+        """
+        upsert_user_theme(self.theme_editor.record())
+        key = variant_key(family, version=self._version)
+        self.choose_theme(key)
+        self._fill_themes(select=family)
+
+    def _delete_theme(self, family: str) -> None:
+        """
+        Delete a theme the user made, after asking. If it was in use, the desktop's own colours are used instead.
+
+        Parameters
+        ----------
+        family : str
+            The theme's key.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._delete_theme("my_nothing")  # no such theme: nothing to ask
+        """
+        record = next((made for made in user_records() if made["id"] == family), None)
+        if record is None:
+            return
+        asked = QMessageBox.question(
+            self,
+            "Delete theme",
+            f"Delete the theme \u201c{record['name']}\u201d? This cannot be undone.",
+        )
+        if asked != QMessageBox.StandardButton.Yes:
+            return
+        if (
+            family_of(saved_theme())[0] == family
+        ):  # in use: the desktop's own colours first, while the theme can still be let go of
+            self._version = "system"
+            self.choose_theme("system")
+        delete_user_theme(family)
+        self._fill_themes()
+
+    def _show_theme(self, key: str) -> None:
+        """
+        Mark the theme that is in use in the gallery.
+
+        Parameters
+        ----------
+        key : str
+            The key of the theme in use.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._show_theme("sage_auto")
+        >>> dialog.theme_thumbs["sage_auto"].isChecked(), dialog.theme_thumbs["sage"].isChecked()
+        (True, False)
+        """
+        for family, card in self.theme_cards.items():
+            card.show_current(key)
+            row = self.theme_items[family]
+            font = row.font()
+            font.setBold(key in card.thumbs)  # the row of the theme in use is bold
+            row.setFont(font)
+
+    def _pick_theme(self, key: str) -> None:
+        """
+        Choose the theme whose picture was clicked, and mark it in the gallery.
+
+        Parameters
+        ----------
+        key : str
+            The key of the theme.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog._pick_theme("light")
+        >>> saved_theme(), dialog.theme_thumbs["light"].isChecked()
+        ('light', True)
+        >>> dialog._pick_theme("system")
+        """
+        self._version = family_of(key)[1]  # moving to another theme keeps to this version
+        self.choose_theme(key)
+        self._show_theme(key)
 
     def _notation_tab(self) -> QWidget:
         """
@@ -1065,6 +1069,89 @@ class AppSettingsDialog(QDialog):
             lay.addWidget(radio)
         self._draw_baritone_icons()
         lay.addStretch(1)
+        return page
+
+    def _transitions_tab(self) -> QWidget:
+        """
+        Build the transitions section: the choices in a list on the left, and a preview of the one chosen on the right.
+
+        The transitions are how the home page changes between the exercises and the lessons. The preview plays the one chosen
+        once, and a Replay button plays it again.
+
+        Returns
+        -------
+        QWidget
+            The page.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.transition_list.count() == len(TRANSITIONS)
+        True
+        >>> dialog.transition_preview.transition.key == saved_transition()
+        True
+        """
+        page, lay = self._page()
+        lay.addWidget(self._about("How the cards change when you switch between the exercises and the lessons on the home page."))
+        body = QHBoxLayout()
+        body.setSpacing(18)
+        self.transition_preview = TransitionPreview()
+        name = QLabel()
+        name.setStyleSheet("font-weight: bold; font-size: 12pt;")
+        about = self._about("")
+        self.transition_list = QListWidget()
+        self.transition_list.setObjectName("categories")  # styled as the list of settings pages is
+        self.transition_list.setFixedWidth(220)
+        self.transition_list.setAccessibleName("Transitions")
+        self.transition_items = {}
+        for transition in TRANSITIONS:
+            row = QListWidgetItem(transition.label)
+            row.setData(Qt.ItemDataRole.UserRole, transition.key)
+            row.setSizeHint(QSize(0, 34))
+            self.transition_list.addItem(row)
+            self.transition_items[transition.key] = row
+        chosen = saved_transition()
+        self.transition_list.setCurrentItem(self.transition_items[chosen])
+
+        def choose(picked_row: QListWidgetItem | None) -> None:
+            """
+            Remember the transition whose row is chosen, play it in the preview and say what it does.
+
+            Parameters
+            ----------
+            picked_row : QListWidgetItem or None
+                The row that is now chosen.
+
+            Examples
+            --------
+            >>> choose  # doctest: +SKIP
+            """
+            if picked_row is None:
+                return
+            picked = transition_named(str(picked_row.data(Qt.ItemDataRole.UserRole)))
+            save_transition(picked.key)
+            self.transition_preview.show_transition(picked.key)
+            name.setText(picked.label)
+            about.setText(picked.about)
+
+        self.transition_list.currentItemChanged.connect(lambda now, _previous: choose(now))
+        replay = QPushButton("Replay")
+        replay.setToolTip("Play the transition again")
+        replay.clicked.connect(self.transition_preview.replay)
+        right = QVBoxLayout()
+        right.addWidget(self.transition_preview, 1)
+        row = QHBoxLayout()
+        row.addWidget(name, 1)
+        row.addWidget(replay)
+        right.addLayout(row)
+        right.addWidget(about)
+        body.addWidget(self.transition_list)
+        body.addLayout(right, 1)
+        lay.addLayout(body, 1)
+        current = transition_named(chosen)
+        self.transition_preview.show_transition(current.key)
+        name.setText(current.label)
+        about.setText(current.about)
         return page
 
     def _choose_notation(self, key: str) -> None:
@@ -1189,7 +1276,7 @@ class AppSettingsDialog(QDialog):
         Parameters
         ----------
         key : str
-            "system", "light" or "dark".
+            "system", "light" or "dark", or the key of a theme with colours of its own.
 
         Examples
         --------

@@ -470,7 +470,6 @@ Return the key signatures to draw from, lowest first.
 
 ```python
 KeySignatureSettings(
-    questions: set[str] = field(default_factory=lambda: {'read', 'count'}),
     *,
     clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
     modes: set[str] = field(default_factory=lambda: {'Major (Ionian)', 'Natural minor (Aeolian)'}),
@@ -478,11 +477,10 @@ KeySignatureSettings(
 )
 ```
 
-The settings of the key signatures exercise.
+The settings of the key signature identification exercise.
 
 **Attributes**
 
-- `questions` (*set of str*): The kinds of question, keys of `KEY_QUESTIONS`: "read" a signature or "count" its sharps and flats.
 - `clefs` (*set of str*): The clefs a signature is drawn on, any of `CLEFS`. Keyword-only.
 - `modes` (*set of str*): The scales to ask about, from `KEY_MODES`. Keyword-only.
 - `keys` (*set of int*): The key signatures asked, as sharps (positive) or flats (negative). Keyword-only.
@@ -491,27 +489,8 @@ The settings of the key signatures exercise.
 
 ```pycon
 >>> cfg = KeySignatureSettings()
->>> cfg.active_questions(), len(cfg.active_keys())
-(['read', 'count'], 15)
-```
-
-### KeySignatureSettings.active_questions
-
-```python
-def active_questions() -> list[str]
-```
-
-Return the kinds of question to ask.
-
-**Returns**
-
-- *list of str*: The chosen kinds in the order of `KEY_QUESTIONS`, or "read" if none are chosen.
-
-**Examples**
-
-```pycon
->>> KeySignatureSettings(questions={"count"}).active_questions()
-['count']
+>>> cfg.active_clefs(), len(cfg.active_keys())
+(['treble', 'bass'], 15)
 ```
 
 ### KeySignatureSettings.active_clefs
@@ -569,5 +548,128 @@ Return the key signatures to ask about, lowest first.
 ```pycon
 >>> KeySignatureSettings(keys={3, -4}).active_keys()
 [-4, 3]
+```
+
+## KeyConstructionSettings
+
+```python
+KeyConstructionSettings()
+```
+
+Bases: `KeySignatureSettings`
+
+The settings of the key signature construction exercise: the same choices as key signature identification.
+
+**Attributes**
+
+- `clefs` (*set of str*): The clefs the blank staff is drawn in, any of `CLEFS`. Keyword-only.
+- `modes` (*set of str*): The scales to ask for, from `KEY_MODES`. Keyword-only.
+- `keys` (*set of int*): The key signatures to build, as sharps (positive) or flats (negative). Keyword-only.
+
+**Examples**
+
+```pycon
+>>> cfg = KeyConstructionSettings(keys={-2})
+>>> cfg.active_keys(), cfg.active_modes()
+([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
+```
+
+## ScaleConstructionSettings
+
+```python
+ScaleConstructionSettings(
+    *,
+    steps: bool = False,
+    octave: bool = False,
+    staff_keys: set[int] = field(default_factory=lambda: {0}),
+)
+```
+
+Bases: `KeySignatureSettings`
+
+The settings of the scale construction exercise: the same choices as key signature identification.
+
+Here "keys" chooses the scale by the signature it has: G major and E minor both have one sharp. `staff_keys` is a
+separate choice: the key signature drawn on the staff, which need not be the scale's. On a staff with two flats a C
+major scale has to be placed with naturals where the staff would otherwise flatten the notes.
+
+**Attributes**
+
+- `clefs` (*set of str*): The clefs the scale is placed on, any of `CLEFS`. Keyword-only.
+- `modes` (*set of str*): The kinds of scale to ask for, from `KEY_MODES`. Keyword-only.
+- `keys` (*set of int*): The key signatures the scales have, as sharps (positive) or flats (negative). Keyword-only.
+- `steps` (*bool, default False*): Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.
+- `staff_keys` (*set of int*): The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none. Keyword-only.
+- `octave` (*bool, default False*): Name the octave of the first note, such as "G2 Major", and require the scale to start there; any scale asked then fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> cfg = ScaleConstructionSettings(keys={3})
+>>> cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
+([3], ['treble', 'bass'], False, False, [0])
+```
+
+### ScaleConstructionSettings.active_staff_keys
+
+```python
+def active_staff_keys() -> list[int]
+```
+
+Return the key signatures that may be drawn on the staff, lowest first.
+
+**Returns**
+
+- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
+
+**Examples**
+
+```pycon
+>>> ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
+[-2, 3]
+>>> ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
+[0]
+```
+
+## CircleSettings
+
+```python
+CircleSettings(questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS)))
+```
+
+The settings of the circle of fifths exercise.
+
+**Attributes**
+
+- `questions` (*set of str*): The kinds of question to ask, keys of `CIRCLE_QUESTIONS`: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.
+
+**Examples**
+
+```pycon
+>>> CircleSettings().active_questions()
+['major', 'minor', 'numeral']
+>>> CircleSettings(questions={"numeral"}).active_questions()
+['numeral']
+```
+
+### CircleSettings.active_questions
+
+```python
+def active_questions() -> list[str]
+```
+
+Return the kinds of question to ask, in the order they are listed.
+
+**Returns**
+
+- *list of str*: The chosen kinds, or all of them if none is chosen.
+
+**Examples**
+
+```pycon
+>>> CircleSettings(questions=set()).active_questions()
+['major', 'minor', 'numeral']
+>>> CircleSettings(questions={"minor", "nonsense"}).active_questions()
+['minor']
 ```
 {% endraw %}

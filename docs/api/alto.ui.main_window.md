@@ -2,7 +2,7 @@
 title: alto.ui.main_window
 parent: api
 package: alto.ui
-order: 25
+order: 32
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
@@ -16,6 +16,28 @@ The page is the start screen, an exercise, or (while it is open) the statistics 
 >>> window = MainWindow()
 >>> window.title_label.text()
 'Alto - Music Theory'
+```
+
+## default_size
+
+```python
+def default_size() -> tuple[int, int]
+```
+
+Return the size a new window opens at.
+
+It is big enough for a lesson step, with its circle, to show without scrolling, but never more than most of the screen.
+
+**Returns**
+
+- *tuple of (int, int)*: The width and height in pixels.
+
+**Examples**
+
+```pycon
+>>> width, height = default_size()
+>>> 0 < width <= DEFAULT_WIDTH and 0 < height <= DEFAULT_HEIGHT
+True
 ```
 
 ## MainWindow
@@ -126,7 +148,7 @@ Show an exercise.
 >>> window = MainWindow()
 >>> window.open_exercise(KeySignatures)
 >>> window.title_label.text()
-'Key signatures'
+'Key Signature Identification'
 ```
 
 ### MainWindow.open_settings
@@ -135,12 +157,21 @@ Show an exercise.
 def open_settings() -> None
 ```
 
-Open the application settings, and rebuild the window if the theme was changed.
+Open the application settings without blocking the window, or bring them forward if they are already open.
+
+If the theme was changed, the window is rebuilt in it once the settings are closed.
 
 **Examples**
 
 ```pycon
->>> MainWindow().open_settings()  # doctest: +SKIP
+>>> window = MainWindow()
+>>> window.open_settings()
+>>> # noinspection PyUnresolvedReferences
+>>> window._settings is not None and not window._settings.isModal()
+True
+>>> # noinspection PyUnresolvedReferences
+>>> window._settings.close()
+True
 ```
 
 ### MainWindow.rebuild
@@ -174,6 +205,46 @@ Show the statistics in place of the current page. Nothing happens without a prof
 >>> window.open_stats()
 >>> window.title_label.text()
 'Statistics'
+>>> window.close_overlay()
+```
+
+### MainWindow.show_lessons
+
+```python
+def show_lessons() -> None
+```
+
+Go to the start screen showing the lessons.
+
+**Examples**
+
+```pycon
+>>> window = MainWindow()
+>>> window.show_lessons()
+>>> window.home.mode
+'lessons'
+>>> window.home.set_mode("exercises")
+```
+
+### MainWindow.open_lessons
+
+```python
+def open_lessons(lesson: str) -> None
+```
+
+Open a lesson in place of the current page, at the step it was left at, with the lesson list on the left.
+
+**Parameters**
+
+- `lesson` (*str*): The key of the lesson.
+
+**Examples**
+
+```pycon
+>>> window = MainWindow()
+>>> window.open_lessons("circle-of-fifths")
+>>> window.title_label.text(), window.nav_stack.currentWidget() is window.lesson_nav
+('The Circle of Fifths', True)
 >>> window.close_overlay()
 ```
 

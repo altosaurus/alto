@@ -14,6 +14,7 @@ Examples
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 
 from alto import settings
 from alto.exercises.base import (
@@ -24,6 +25,16 @@ from alto.exercises.base import (
     signature,
 )
 from alto.settings import spell
+from alto.theory.fifths import (
+    MAJORS,
+    MINORS,
+    NUMERALS,
+    SIGNATURES,
+    cells_of_key,
+    display_major,
+    display_minor,
+    numeral_chords,
+)
 from alto.theory.pitch import (
     MAJOR_KEYS,
     NATURAL_SEMITONES,
@@ -133,7 +144,8 @@ class NoteNames(Exercise):
         True
         """
         return (
-            "<b>Note Identification</b><br>A note is shown on the staff. Press the button with its name.<br><br>"
+            "<b>Note Identification</b><br>A note is shown on the staff. Press the button with its name, or press its number "
+            "(1 is the first button).<br><br>"
             "Use the sliders button to choose the clefs, the range of notes, key signatures (the name then has to "
             "match the signature), note values, letter or solfège names, and whether sharps, flats and naturals appear."
         )
@@ -259,7 +271,7 @@ class IntervalNames(Exercise):
             "<b>Interval identification</b><br>Two notes are shown. Name the interval from the lower note to the "
             "higher one.<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
-            "d (diminished)."
+            "d (diminished).<br><br>You can press an answer's number instead of the button: 1 is the first."
         )
 
     QUALITIES = {
@@ -344,10 +356,33 @@ def _scale_name(mode: str) -> str:
     return {"Major (Ionian)": "major", "Natural minor (Aeolian)": "minor"}.get(mode, mode)
 
 
+def _blank_scale(mode: str) -> str:
+    """
+    Return the caption that asks for a scale's tonic.
+
+    Parameters
+    ----------
+    mode : str
+        A key of `SCALES`.
+
+    Returns
+    -------
+    str
+        The scale's name after a blank: '_ Major', '_ minor', '_ Dorian' and so on.
+
+    Examples
+    --------
+    >>> _blank_scale("Major (Ionian)"), _blank_scale("Natural minor (Aeolian)"), _blank_scale("Dorian")
+    ('_ Major', '_ minor', '_ Dorian')
+    """
+    scale = _scale_name(mode)
+    return f"_ {scale if scale == 'minor' else scale[0].upper() + scale[1:]}"
+
+
 @register
 class KeySignatures(Exercise):
     """
-    Read a key signature, or count the sharps and flats of a named key.
+    Read a key signature drawn on a staff and name the key it belongs to.
 
     Examples
     --------
@@ -356,9 +391,9 @@ class KeySignatures(Exercise):
     True
     """
 
-    name = "Key signatures"
+    name = "Key Signature Identification"
     category = "Scales & keys"
-    description = "Read a key signature, or count the sharps and flats of a key."
+    description = "Name the key from its signature on a staff."
     par_seconds = 5.0
     has_sound = False
 
@@ -389,21 +424,49 @@ class KeySignatures(Exercise):
 
         Examples
         --------
-        >>> "Key signatures" in KeySignatures().instructions()
+        >>> "Key Signature Identification" in KeySignatures().instructions()
         True
         """
         return (
-            "<b>Key signatures</b><br>Two kinds of question. In one a key signature is drawn on a staff: press the "
-            "tonic of the scale it belongs to (the question says whether it is a major key, a minor key or a mode such "
-            "as Dorian). In the other a key is named: press how many sharps or flats it has.<br><br>"
+            "<b>Key Signature Identification</b><br>A key signature is drawn on a staff: press the tonic of the scale it "
+            "belongs to (the caption under the staff says whether it is a major key, a minor key or a mode such as "
+            "Dorian).<br><br>"
             "Sharp keys add sharps (G, D, A ...) and flat keys add flats (F, B♭, E♭ ...). A mode uses the signature of a "
             "major key, started from another degree: D Dorian has the signature of C major, started from its second note."
-            "<br><br>Use the sliders button to choose the kinds of question, the clefs, the scales and the key signatures."
+            "<br><br>You can press an answer's number instead of the button: 1 is the first.<br><br>"
+            "Use the sliders button to choose the clefs, the scales and the key signatures."
         )
+
+    def refresh(self, question: Question) -> Question:
+        """
+        Give a stored signature question the caption on its staff that older versions did not write.
+
+        Parameters
+        ----------
+        question : Question
+            The question as it was stored.
+
+        Returns
+        -------
+        Question
+            The same question, captioned '_ Major' (or '_ minor', '_ Dorian' and so on) if it shows a staff and had no caption.
+
+        Examples
+        --------
+        >>> old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
+        >>> KeySignatures().refresh(old).caption
+        '_ minor'
+        """
+        if question.caption or not question.show_staff:
+            return question
+        for mode in SCALES:
+            if question.prompt == f"Which {MODE_WORDS.get(mode, f'{mode} scale')} has this key signature?":
+                return replace(question, caption=_blank_scale(mode))
+        return question
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Make a key signature to read, or a key whose sharps and flats are to be counted.
+        Make a key signature to read.
 
         Parameters
         ----------
@@ -413,77 +476,24 @@ class KeySignatures(Exercise):
         Returns
         -------
         Question
-            Either a signature on a staff (answer: the tonic) or a named key (answer: how many sharps or flats).
+            A signature on a staff; the answer is the tonic of the scale that has it.
 
         Examples
         --------
         >>> q = KeySignatures().generate(random.Random(6))
-        >>> q.show_staff or "How many sharps or flats" in q.prompt
+        >>> q.show_staff and q.answer in q.choices
         True
         """
         cfg = settings.key_signatures
-        kind = rng.choice(cfg.active_questions())
         mode = rng.choice(cfg.active_modes())
         count = rng.choice(cfg.active_keys())
-        tonic = mode_tonic(count, mode=mode)
-        if kind == "count":
-            return self._count_question(
-                tonic,
-                mode=mode,
-                count=count,
-                rng=rng,
-            )
         return self._read_question(
-            tonic,
+            mode_tonic(count, mode=mode),
             mode=mode,
             count=count,
             clef=rng.choice(cfg.active_clefs()),
             rng=rng,
         )
-
-    @staticmethod
-    def _count_question(
-        tonic: Note,
-        *,
-        mode: str,
-        count: int,
-        rng: random.Random,
-    ) -> Question:
-        """
-        Ask how many sharps or flats a named key has.
-
-        Parameters
-        ----------
-        tonic : Note
-            The key's tonic.
-        mode : str
-            A key of `SCALES`, such as "Dorian". Keyword-only.
-        count : int
-            The key signature that the scale has: positive for sharps, negative for flats. Keyword-only.
-        rng : random.Random
-            The random number generator, used to choose the wrong answers. Keyword-only.
-
-        Returns
-        -------
-        Question
-            For example 'How many sharps or flats are in D Dorian?', answered 'no sharps or flats'.
-
-        Examples
-        --------
-        >>> # noinspection PyProtectedMember
-        >>> q = KeySignatures._count_question(Note.parse("D4"), mode="Dorian", count=0, rng=random.Random(0))
-        >>> q.prompt, q.answer
-        ('How many sharps or flats are in D Dorian?', 'no sharps or flats')
-        """
-        correct = format_key_signature(count)
-        near = [format_key_signature(c) for c in range(count - 2, count + 3) if abs(c) <= 7]
-        choices = pick_distractors(
-            correct,
-            pool=near,
-            n=3,
-            rng=rng,
-        )
-        return Question(f"How many sharps or flats are in {tonic.name} {_scale_name(mode)}?", choices=choices, answer=correct)
 
     @staticmethod
     def _read_question(
@@ -534,8 +544,6 @@ class KeySignatures(Exercise):
         )
         word = MODE_WORDS.get(mode, f"{mode} scale")
         notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]  # the scale, up to its octave
-        scale = _scale_name(mode)
-        blank = f"_ {scale if scale == 'minor' else scale[0].upper() + scale[1:]}"  # "_ Major", "_ minor", "_ Dorian"
         return Question(
             f"Which {word} has this key signature?",
             choices=choices,
@@ -543,8 +551,108 @@ class KeySignatures(Exercise):
             clef=clef,
             key=count,
             show_staff=True,
-            caption=blank,
+            caption=_blank_scale(mode),
             explanation=f"{format_key_signature(count)}: {tonic.name} {_scale_name(mode)}: " + " ".join(n.name for n in notes),
+        )
+
+
+@register
+class KeySignatureConstruction(Exercise):
+    """
+    Build the key signature of a named key on a blank staff, with the fork.
+
+    Examples
+    --------
+    >>> q = KeySignatureConstruction().generate(random.Random(5))
+    >>> q.build_key, q.staff, q.choices
+    (True, [], [])
+    """
+
+    name = "Key Signature Construction"
+    category = "Scales & keys"
+    description = "Build the key signature of a named key."
+    par_seconds = 6.0
+    has_sound = False
+
+    def settings_signature(self) -> str:
+        """
+        Return what identifies the settings that shape these questions.
+
+        Returns
+        -------
+        str
+            The clefs, scales and key signatures in force.
+
+        Examples
+        --------
+        >>> KeySignatureConstruction().settings_signature().startswith("[")
+        True
+        """
+        return signature(settings.key_construction)
+
+    def instructions(self) -> str:
+        """
+        Return the help text for the exercise.
+
+        Returns
+        -------
+        str
+            Simple HTML.
+
+        Examples
+        --------
+        >>> "Key Signature Construction" in KeySignatureConstruction().instructions()
+        True
+        """
+        return (
+            "<b>Key Signature Construction</b><br>The key under the staff is the one to build. Pick how many sharps (top) "
+            "or flats (bottom) it has on the fork under the staff, then press Answer (or Return). The staff shows what you "
+            "have picked.<br><br>Click a number on the fork, or turn the mouse wheel to move the circle along it. The "
+            "natural sign at the end of the stem is C major, with no sharps or flats.<br><br>"
+            "Without the mouse: the Up or Right arrow adds a sharp, the Down or Left arrow adds a flat, and Home goes "
+            "back to none. Then press Return to answer.<br><br>"
+            "A mode uses the signature of a major key, started from another degree: D Dorian has the signature of C "
+            "major.<br><br>Use the sliders button to choose the clefs, the scales and the key signatures."
+        )
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Name a key whose signature is to be built.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            A blank staff captioned with the key, such as 'D Major'; the answer is its sharps or flats.
+
+        Examples
+        --------
+        >>> q = KeySignatureConstruction().generate(random.Random(1))
+        >>> q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
+        True
+        >>> q.answer == format_key_signature(q.key)
+        True
+        """
+        cfg = settings.key_construction
+        mode = rng.choice(cfg.active_modes())
+        count = rng.choice(cfg.active_keys())
+        tonic = mode_tonic(count, mode=mode)
+        name = f"{tonic.name} {_blank_scale(mode)[2:]}"  # "D Major", "A♯ minor", "E Dorian"
+        notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]  # the scale, up to its octave
+        return Question(
+            f"Build the key signature of {name}.",
+            choices=[],
+            answer=format_key_signature(count),
+            clef=rng.choice(cfg.active_clefs()),
+            key=count,
+            show_staff=True,
+            caption=name,
+            build_key=True,
+            explanation=f"{name}: {format_key_signature(count)}: " + " ".join(n.name for n in notes),
         )
 
 
@@ -581,7 +689,8 @@ class ScaleDegrees(Exercise):
         """
         return (
             "<b>Scale spelling</b><br>Work out the note at the given degree of the scale or mode and press its name. "
-            "Each scale uses every letter name once, so use a sharp or flat where the pattern needs one."
+            "Each scale uses every letter name once, so use a sharp or flat where the pattern needs one. You can press an "
+            "answer's number instead of the button: 1 is the first."
         )
 
     def generate(self, rng: random.Random) -> Question:
@@ -629,6 +738,466 @@ class ScaleDegrees(Exercise):
 
 
 @register
+class ScaleConstruction(Exercise):
+    """
+    Place the notes of a named scale on a blank staff, one after another.
+
+    Examples
+    --------
+    >>> q = ScaleConstruction().generate(random.Random(5))
+    >>> len(q.construct_scale or []), q.choices, q.key
+    (8, [], 0)
+    """
+
+    name = "Scale Construction"
+    category = "Scales & keys"
+    description = "Place the notes of a named scale on the staff."
+    par_seconds = 25.0
+
+    def settings_signature(self) -> str:
+        """
+        Return what identifies the settings that shape these questions.
+
+        Returns
+        -------
+        str
+            The clefs, scales and key signatures in force.
+
+        Examples
+        --------
+        >>> ScaleConstruction().settings_signature().startswith("[")
+        True
+        """
+        return signature(settings.scale_construction)
+
+    def instructions(self) -> str:
+        """
+        Return the help text for the exercise.
+
+        Returns
+        -------
+        str
+            Simple HTML.
+
+        Examples
+        --------
+        >>> "Scale Construction" in ScaleConstruction().instructions()
+        True
+        """
+        text = [
+            (
+                "<b>Scale Construction</b><br>The name of a scale is under the blank staff. Click the staff to place its "
+                "notes from left to right, going up from the first note to the same note an octave higher: eight notes in "
+                "all. The note follows the pointer, and each click puts it in the next place. "
+                + (
+                    "The name says which octave the first note is in, such as G2 Major: start on that note, G in octave 2 "
+                    "(middle C is C4), and place the whole scale above it."
+                    if settings.scale_construction.octave
+                    else "Any octave will do, as long as all eight notes are in the same one."
+                )
+            ),
+            (
+                "The staff has no key signature, so a note that needs a sharp or a flat needs its own sign. Right click "
+                "the staff or turn the mouse wheel to step through no sign, ♯ and ♭ for the next note (or choose a sign "
+                "with the buttons), then click. Only the exact spelling counts, so G♯ is not A♭."
+            ),
+        ]
+        if any(settings.scale_construction.staff_keys):
+            text.append(
+                "The staff may have a key signature, and it need not be the scale's. A note you place with no sign takes "
+                "the sign that the staff's signature gives its letter: with two flats, B and E are flat. So a scale with a "
+                "different signature needs signs where it differs: a C major scale on that staff needs a natural (♮) on "
+                "its B and E, and a note that the staff does not flatten but the scale does needs a flat.",
+            )
+        if settings.scale_construction.steps:
+            text.append(
+                "Once the eight notes are placed, mark the steps between them. Two lines rise from each pair of "
+                "neighbouring notes to a point above them, and the point takes W for a whole step or H for a half step. "
+                "Turn the mouse wheel, right click, press the W and H buttons or keys, or use the arrow keys to choose, "
+                "then click the staff (or press Return) to mark it and move on to the next pair.",
+            )
+        text.append(
+            "You can do all of this without the mouse. The Up and Down arrows (or the Higher and Lower buttons) move the "
+            "next note a line or space, Page Up and Page Down (or the Octave buttons) an octave, and typing a letter from A "
+            "to G jumps to the nearest note with that name. The Left and Right arrows, or the keys + - and 0, choose its "
+            "sign. Press Return (or Place note) to place it. The line under the staff says what comes next.",
+        )
+        text.append(
+            "Undo (or Backspace) takes back the last thing you placed, the steps first. Press Answer (or Return) when "
+            "everything is placed. A wrong scale is cleared so that you can try again. A right one is played, each note "
+            "turning green as it sounds.",
+        )
+        text.append(
+            "A mode uses the signature of a major key, started from another degree: D Dorian has the notes of C major, "
+            "started from D. Use the sliders button to choose the clefs, the scales, the key signatures and whether to "
+            "mark the steps.",
+        )
+        return "<br><br>".join(text)
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Name a scale to be placed on the staff.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            A blank staff captioned with the scale, such as 'D Major'; `construct_scale` is its eight notes, going up an octave.
+
+        Examples
+        --------
+        >>> q = ScaleConstruction().generate(random.Random(1))
+        >>> scale = q.construct_scale or []
+        >>> scale[0].name == scale[-1].name and q.accidentals
+        True
+        >>> q.check_scale(scale)
+        True
+        """
+        cfg = settings.scale_construction
+        mode = rng.choice(cfg.active_modes())
+        count = rng.choice(cfg.active_keys())
+        clef = rng.choice(cfg.active_clefs())
+        staff_key = rng.choice(cfg.active_staff_keys())  # the signature on the staff, whatever the scale's own is
+        named = mode_tonic(count, mode=mode)
+        bottom = settings.BOTTOM_LINES[clef].diatonic
+        starts = [d for d in range(bottom - 3, bottom + 4) if d % 7 == named.letter]  # the scale sits on the staff
+        if cfg.octave:  # the octave is part of the question, so any octave where the whole scale can be placed will do
+            low, high = settings.RANGE_LIMITS[clef]  # the furthest the staff can be clicked, ledger lines and all
+            starts = [d for d in range(low, high - 6) if d % 7 == named.letter] or starts  # the top note is 7 steps up
+        tonic = Note.from_diatonic(rng.choice(starts), accidental=named.accidental)
+        notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]
+        kind = _blank_scale(mode)[2:]  # "Major", "minor", "Dorian"
+        name = f"{tonic.name}{tonic.octave} {kind}" if cfg.octave else f"{tonic.name} {kind}"  # "G2 Major", or "G Major"
+        steps = ["W" if b.midi - a.midi == 2 else "H" for a, b in zip(notes, notes[1:], strict=False)] if cfg.steps else None
+        explanation = f"{name}: " + " ".join(n.name for n in notes)
+        if steps:
+            explanation += f" ({' '.join(steps)})"
+        if staff_key and staff_key != count:  # a signature that is not the scale's own: say so
+            explanation += f". The staff has {format_key_signature(staff_key)}, but the scale has {format_key_signature(count)}"
+        return Question(
+            f"Place the notes of the {name} scale on the staff" + (", then mark its whole and half steps." if steps else "."),
+            choices=[],
+            answer=" ".join(f"{n.name}{n.octave}" for n in notes),
+            clef=clef,
+            key=staff_key,
+            construct_scale=notes,
+            construct_steps=steps,
+            exact_octave=cfg.octave,
+            accidentals=True,
+            caption=name,
+            explanation=explanation,
+        )
+
+
+MAJOR_CHOICES = (
+    "C♯",
+    "F♯",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "A",
+    "B",
+    "C♭",
+    "D♭",
+    "E♭",
+    "G♭",
+    "A♭",
+    "B♭",
+)  # the major keys that can be named: the naturals, and the sharp and flat keys
+MAJOR_GRID = {
+    "C♯": (0, 0),
+    "F♯": (0, 3),
+    "C": (1, 0),
+    "D": (1, 1),
+    "E": (1, 2),
+    "F": (1, 3),
+    "G": (1, 4),
+    "A": (1, 5),
+    "B": (1, 6),
+    "C♭": (2, 0),
+    "D♭": (2, 1),
+    "E♭": (2, 2),
+    "G♭": (2, 4),
+    "A♭": (2, 5),
+    "B♭": (2, 6),
+}  # the letters in the middle row, the sharps above them and the flats below, as on the piano keyboard exercise
+
+
+MINOR_CHOICES = (
+    "C♯m",
+    "D♯m",
+    "F♯m",
+    "G♯m",
+    "A♯m",
+    "Cm",
+    "Dm",
+    "Em",
+    "Fm",
+    "Gm",
+    "Am",
+    "Bm",
+    "E♭m",
+    "A♭m",
+    "B♭m",
+)  # the minor keys that can be named: the ones on the circle, with their other names
+MINOR_GRID = {
+    "C♯m": (0, 0),
+    "D♯m": (0, 1),
+    "F♯m": (0, 3),
+    "G♯m": (0, 4),
+    "A♯m": (0, 5),
+    "Cm": (1, 0),
+    "Dm": (1, 1),
+    "Em": (1, 2),
+    "Fm": (1, 3),
+    "Gm": (1, 4),
+    "Am": (1, 5),
+    "Bm": (1, 6),
+    "E♭m": (2, 2),
+    "A♭m": (2, 5),
+    "B♭m": (2, 6),
+}  # laid out like the major keys: the letters in the middle row, the sharps above and the flats below
+NUMERAL_CHOICES: list[str] = list(
+    NUMERALS,
+)  # the six chords of a key that are on the circle: capitals are major, small letters minor
+
+
+@register
+class CircleOfFifths(Exercise):
+    """
+    Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.
+
+    Examples
+    --------
+    >>> q = CircleOfFifths().generate(random.Random(3))
+    >>> q.circle is not None and q.answer in q.choices
+    True
+    """
+
+    name = "Circle of Fifths"
+    category = "Scales & keys"
+    description = "Find relative keys and the chords of a key on the circle of fifths."
+    par_seconds = 7.0
+    has_sound = False
+
+    def settings_signature(self) -> str:
+        """
+        Return what identifies the settings that shape these questions.
+
+        Returns
+        -------
+        str
+            The kinds of question in force.
+
+        Examples
+        --------
+        >>> CircleOfFifths().settings_signature().startswith("[")
+        True
+        """
+        return signature(settings.circle)
+
+    def instructions(self) -> str:
+        """
+        Return the help text for the exercise.
+
+        Returns
+        -------
+        str
+            Simple HTML, with a paragraph for each kind of question that is switched on.
+
+        Examples
+        --------
+        >>> "circle of fifths" in CircleOfFifths().instructions()
+        True
+        """
+        kinds = settings.circle.active_questions()
+        text = [
+            (
+                "<b>Circle of Fifths</b><br>This is the circle of fifths. The outer ring has the major keys, with C at the "
+                "top and a fifth higher at each step clockwise. The inner ring has their relative minors, which have the "
+                "same key signature: A minor sits under C major. Each question lights one cell and leaves its answer blank. "
+                "A right answer lights the cell, writes its name and shows the key signature on the staff in the middle. A "
+                "wrong one flashes the cell red, striped, so you can try again."
+            ),
+        ]
+        if "major" in kinds:
+            text.append("<b>Relative major.</b> A minor key is shown. Press the name of its relative major.")
+        if "minor" in kinds:
+            text.append("<b>Relative minor.</b> A major key is shown. Press the name of its relative minor.")
+        if "numeral" in kinds:
+            text.append(
+                "<b>Roman numerals.</b> A key is in the middle, with its staff, and its six chords that are on the circle "
+                "are lit: the major chords I, IV and V on the outer ring, and the minor chords ii, iii and vi on the inner "
+                "ring. (There is a seventh chord, vii°, which is diminished, and has no place on the circle.) Press the "
+                "numeral of the chord asked about. Capitals are major chords and small letters are minor ones. A right "
+                "answer shows the numerals of all six chords.",
+            )
+        text.append(
+            "Some keys have two names, such as B and C♭ or G♯m and A♭m. For those you press both names, in either order. "
+            "Press the letter of a key, Shift and the letter for a sharp, or Ctrl and the letter for a flat. A numeral is "
+            "on the number keys.",
+        )
+        return "<br><br>".join(text)
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Pick a kind of question that is switched on, and ask it.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            A question on the circle: `circle_kind` says which kind.
+
+        Examples
+        --------
+        >>> settings.circle.questions = {"minor"}
+        >>> q = CircleOfFifths().generate(random.Random(5))
+        >>> q.circle_kind, q.prompt
+        ('minor', 'Which minor key is the relative minor of F major?')
+        >>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+        """
+        kind = rng.choice(settings.circle.active_questions())
+        if kind == "numeral":
+            return self._numeral_question(rng)
+        place = rng.randrange(len(MAJORS))
+        return self._minor_question(place) if kind == "minor" else self._major_question(place)
+
+    @staticmethod
+    def _major_question(place: int) -> Question:
+        """
+        Ask for the relative major of a minor key.
+
+        Parameters
+        ----------
+        place : int
+            The place on the circle of the pair.
+
+        Returns
+        -------
+        Question
+            The minor key is shown; the answer is its major. A key with two names needs both.
+
+        Examples
+        --------
+        >>> # noinspection PyProtectedMember
+        >>> q = CircleOfFifths._major_question(5)
+        >>> q.answer, q.required, q.circle_ring
+        ('B', ('B', 'C♭'), 'outer')
+        >>> # noinspection PyProtectedMember
+        >>> CircleOfFifths._major_question(3).required  # one name: nothing more to press
+        ()
+        """
+        names = MAJORS[place]
+        main, double = names[0], len(names) > 1
+        both = " Press both of its names." if double else ""
+        return Question(
+            f"Which major key is the relative major of {display_minor(place)}?{both}",
+            choices=list(MAJOR_CHOICES),
+            answer=main,
+            required=names if double else (),
+            grid=dict(MAJOR_GRID),
+            circle=place,
+            circle_kind="major",
+            circle_ring="outer",
+            caption=f"{MINORS[place][0][:-1]} minor",
+            explanation=(
+                f"{display_major(place)} and {display_minor(place)} have the same key signature: "
+                f"{format_key_signature(SIGNATURES[place])}. A relative minor starts on the sixth note of the major."
+            ),
+        )
+
+    @staticmethod
+    def _minor_question(place: int) -> Question:
+        """
+        Ask for the relative minor of a major key.
+
+        Parameters
+        ----------
+        place : int
+            The place on the circle of the pair.
+
+        Returns
+        -------
+        Question
+            The major key is shown; the answer is its minor. A key with two names needs both.
+
+        Examples
+        --------
+        >>> # noinspection PyProtectedMember
+        >>> q = CircleOfFifths._minor_question(7)
+        >>> q.answer, q.required, q.circle_ring
+        ('B♭m', ('B♭m', 'A♯m'), 'inner')
+        """
+        names = MINORS[place]
+        main, double = names[0], len(names) > 1
+        both = " Press both of its names." if double else ""
+        return Question(
+            f"Which minor key is the relative minor of {display_major(place)}?{both}",
+            choices=list(MINOR_CHOICES),
+            answer=main,
+            required=names if double else (),
+            grid=dict(MINOR_GRID),
+            circle=place,
+            circle_kind="minor",
+            circle_ring="inner",
+            caption=f"{MAJORS[place][0]} major",
+            explanation=(
+                f"{display_major(place)} and {display_minor(place)} have the same key signature: "
+                f"{format_key_signature(SIGNATURES[place])}. A relative minor starts on the sixth note of the major."
+            ),
+        )
+
+    @staticmethod
+    def _numeral_question(rng: random.Random) -> Question:
+        """
+        Ask for the Roman numeral of one of the six chords of a key that are on the circle.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            A key is shown, with its six chords lit; the answer is the numeral of one of them.
+
+        Examples
+        --------
+        >>> # noinspection PyProtectedMember
+        >>> q = CircleOfFifths._numeral_question(random.Random(2))
+        >>> q.circle_kind, q.circle_key is not None, q.answer in NUMERAL_CHOICES
+        ('numeral', True, True)
+        """
+        key = rng.randrange(len(MAJORS))
+        (ring, place), numeral = rng.choice(list(cells_of_key(key).items()))
+        chords = numeral_chords(key)
+        tonic = MAJORS[key][0]
+        return Question(
+            f"In {tonic} major, which Roman numeral is the chord {chords[numeral]}?",
+            choices=list(NUMERAL_CHOICES),
+            answer=numeral,
+            circle=place,
+            circle_kind="numeral",
+            circle_ring=ring,
+            circle_key=key,
+            caption=f"{tonic} major",
+            explanation=f"In {tonic} major: " + ", ".join(f"{n} {chords[n]}" for n in NUMERALS) + ".",
+        )
+
+
+@register
 class ChordQualities(Exercise):
     """
     Identify the quality of a triad or seventh chord in root position.
@@ -661,7 +1230,8 @@ class ChordQualities(Exercise):
         """
         return (
             "<b>Chord quality</b><br>A chord is shown in root position. Press its type. Check the size of the "
-            "intervals stacked above the lowest note to tell the types apart."
+            "intervals stacked above the lowest note to tell the types apart. You can press an answer's number instead "
+            "of the button: 1 is the first."
         )
 
     def generate(self, rng: random.Random) -> Question:
@@ -769,7 +1339,8 @@ class ArpeggioNames(Exercise):
         """
         return (
             "<b>Arpeggio identification</b><br>A chord is played one note at a time, rising from its lowest note to "
-            "the same note an octave higher. Press its type, then its inversion.<br><br>"
+            "the same note an octave higher. Press its type, then its inversion. The type is on the number keys, 1 for the "
+            "first, and the inversion is on the home row: A for the first, S for the second and so on.<br><br>"
             "Find the chord's root by looking for the notes a third apart. The inversion is which chord tone is "
             "lowest: the root (root position), the third (1st inversion), the fifth (2nd inversion) or the seventh "
             "(3rd inversion, seventh chords only).<br><br>"
@@ -1074,9 +1645,18 @@ class KeyboardNotes(Exercise):
         True
         """
         cfg = settings.keyboard
-        text = ["<b>Keyboard Identification</b><br>One key on the keyboard is highlighted. Press the button with its name."]
+        text = [
+            (
+                "<b>Keyboard Identification</b><br>One key on the keyboard is highlighted. Press the button with its name, "
+                "or type its name on the keyboard: the letter for a natural, Shift and the letter for a sharp, Ctrl and "
+                "the letter for a flat."
+            ),
+        ]
         if cfg.require_octave:
-            text.append("Choose its octave too, from the row below. Octaves count up from C, so middle C is the C in octave 4.")
+            text.append(
+                "Choose its octave too, from the row below, or type its number. Octaves count up from C, so middle C is the "
+                "C in octave 4.",
+            )
         if cfg.key_signature:
             text.append(
                 "A key signature is shown above the keyboard. Name the key the way that signature spells it. Only "
@@ -1251,6 +1831,12 @@ class NoteConstruction(Exercise):
                 "click the staff to step through them. ♮ cancels a sharp or flat from the key signature. Only the "
                 "exact spelling counts, so G♯ is not A♭.",
             )
+        text.append(
+            "You can do all of this without the mouse. The Up and Down arrows (or the Higher and Lower buttons) move the "
+            "note a line or space, and Page Up and Page Down (or the Octave buttons) an octave. Typing a letter from A to G "
+            "jumps to the nearest note with that name. Press Return (or Place note) to place it."
+            + (" The Left and Right arrows, or the keys + - and 0, choose a sign." if cfg.accidentals else ""),
+        )
         text.append("A wrong click shows the note you placed so you can adjust and try again.")
         return "<br><br>".join(text)
 

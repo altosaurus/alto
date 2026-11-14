@@ -2,11 +2,11 @@
 title: alto.ui.widgets
 parent: api
 package: alto.ui
-order: 38
+order: 50
 permalink: /api/alto.ui.widgets/
 ---
 {% raw %}
-Small widgets shared by several screens: the sidebar toggle and the help button.
+Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.
 
 **Examples**
 
@@ -18,7 +18,11 @@ Small widgets shared by several screens: the sidebar toggle and the help button.
 ## SidebarToggle
 
 ```python
-SidebarToggle(parent: QWidget | None = None)
+SidebarToggle(
+    parent: QWidget | None = None,
+    *,
+    noun: str = 'exercise list',
+)
 ```
 
 Bases: `QToolButton`
@@ -45,12 +49,15 @@ Create the toggle, showing the list as open.
 **Parameters**
 
 - `parent` (*QWidget or None, default None*): The widget that owns the button.
+- `noun` (*str, default "exercise list"*): What the list is called in the tooltip: "Hide exercise list". Keyword-only.
 
 **Constructor examples**
 
 ```pycon
 >>> SidebarToggle().autoRaise()
 True
+>>> SidebarToggle(noun="lesson list").toolTip()
+'Hide lesson list'
 ```
 
 ### SidebarToggle.set_open
@@ -127,5 +134,139 @@ Open the popover under the button, right-aligned with it.
 
 ```pycon
 >>> HelpButton(lambda: "<b>Help</b>").show_help()  # doctest: +SKIP
+```
+
+## SegmentedControl
+
+```python
+SegmentedControl(
+    labels: Sequence[str],
+    *,
+    icons: Sequence[str] = (),
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `QFrame`
+
+A pill-shaped row of choices of which exactly one is chosen, like the switch between two views.
+
+**Attributes**
+
+- `buttons` (*list of QPushButton*): One per choice, in order.
+- `chosen` (*Signal*): Emitted with the number of the choice when the learner picks one.
+
+**Examples**
+
+```pycon
+>>> control = SegmentedControl(["Exercises", "Lessons"])
+>>> control.current()
+0
+>>> control.set_current(1)
+>>> control.current(), control.buttons[1].isChecked()
+(1, True)
+```
+
+**Constructor**
+
+Build the control with the first choice chosen.
+
+**Parameters**
+
+- `labels` (*sequence of str*): The text of each choice.
+- `icons` (*sequence of str, default ()*): The icon of each choice, as the inside of a 24 by 24 SVG; fewer than the labels, or none, leaves the rest without. Keyword-only.
+- `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> len(SegmentedControl(["A", "B", "C"]).buttons)
+3
+>>> SegmentedControl(["A"], icons=[HELP]).buttons[0].icon().isNull()
+False
+```
+
+### SegmentedControl.set_compact
+
+```python
+def set_compact(compact: bool) -> None
+```
+
+Show only the icons, or the icons and the text.
+
+The text is still the tooltip and the name a screen reader says.
+
+**Parameters**
+
+- `compact` (*bool*): True to hide the text.
+
+**Examples**
+
+```pycon
+>>> control = SegmentedControl(["Exercises", "Lessons"], icons=[HELP, HELP])
+>>> control.set_compact(True)
+>>> control.buttons[0].text(), control.buttons[0].toolTip()
+('', 'Exercises')
+>>> control.set_compact(False)
+>>> control.buttons[0].text()
+'Exercises'
+```
+
+### SegmentedControl.current
+
+```python
+def current() -> int
+```
+
+Return the number of the chosen choice.
+
+**Returns**
+
+- *int*: The choice, from 0.
+
+**Examples**
+
+```pycon
+>>> SegmentedControl(["A", "B"]).current()
+0
+```
+
+### SegmentedControl.set_current
+
+```python
+def set_current(number: int) -> None
+```
+
+Choose one, without announcing it.
+
+**Parameters**
+
+- `number` (*int*): The choice, from 0.
+
+**Examples**
+
+```pycon
+>>> control = SegmentedControl(["A", "B"])
+>>> control.set_current(1)
+>>> control.current()
+1
+```
+
+### SegmentedControl.restyle
+
+```python
+def restyle() -> None
+```
+
+Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.
+
+A change of theme rebuilds the main window, so the control there is drawn afresh in the new colours. One that stays, as in
+the settings, is restyled by calling this.
+
+**Examples**
+
+```pycon
+>>> "segments" in SegmentedControl(["A", "B"]).styleSheet()
+True
 ```
 {% endraw %}

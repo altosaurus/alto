@@ -38,9 +38,11 @@ for the exercise, since reading a note takes less time than spelling a scale:
 | Exercise | Par time |
 |---|---|
 | Note Identification, Keyboard Identification | 3 s |
-| Key signatures | 5 s |
-| Interval identification, Chord quality, Note Construction | 6 s |
+| Key Signature Identification | 5 s |
+| Interval identification, Chord quality, Note Construction, Key Signature Construction | 6 s |
+| Circle of Fifths | 7 s |
 | Scale spelling | 8 s |
+| Scale Construction | 25 s |
 | Arpeggio identification | 9 s |
 
 At half the par time or quicker you get the full speed bonus. At par there is no effect. At four times par or slower

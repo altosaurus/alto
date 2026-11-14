@@ -2,7 +2,7 @@
 title: alto.ui.engraving
 parent: api
 package: alto.ui
-order: 18
+order: 22
 permalink: /api/alto.ui.engraving/
 ---
 {% raw %}
@@ -160,6 +160,36 @@ Draw a clef with its left edge at a point.
 >>> painter.end()
 True
 >>> any(image.pixelColor(x_, y).lightness() < 128 for x_ in range(10, 40) for y in range(20, 90))
+True
+```
+
+## accidental_width
+
+```python
+def accidental_width(
+    *,
+    font: str,
+    sign: int,
+    gap: float,
+) -> float
+```
+
+Return how wide a sharp, flat or natural is drawn, so that it can be placed beside other things.
+
+**Parameters**
+
+- `font` (*str*): A key of `_FILES`. Keyword-only.
+- `sign` (*int*): -2 for a double flat, -1 flat, 0 natural, 1 sharp or 2 double sharp. Keyword-only.
+- `gap` (*float*): The distance between staff lines in pixels, which sets the size. Keyword-only.
+
+**Returns**
+
+- *float*: The width of the glyph's ink, in pixels.
+
+**Examples**
+
+```pycon
+>>> accidental_width(font="bravura", sign=1, gap=16) > accidental_width(font="bravura", sign=1, gap=8)
 True
 ```
 

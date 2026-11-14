@@ -45,6 +45,15 @@ Question(
     accept: tuple[str, ...] = (),
     show_staff: bool = False,
     caption: str = '',
+    build_key: bool = False,
+    construct_scale: list[Note] | None = None,
+    construct_steps: list[str] | None = None,
+    exact_octave: bool = False,
+    circle: int | None = None,
+    circle_kind: str = '',
+    circle_ring: str = 'outer',
+    circle_key: int | None = None,
+    required: tuple[str, ...] = (),
 )
 ```
 
@@ -72,6 +81,15 @@ One question, with what to show for it and which answer is right.
 - `accept` (*tuple of str*): Other answers that count as right, such as the enharmonic name of a black key. Keyword-only.
 - `show_staff` (*bool, default False*): Draw the staff even with no notes on it, to show only its clef and key signature. Keyword-only.
 - `caption` (*str, default ""*): Text written on the staff itself, under the music, in place of the prompt above it. Keyword-only.
+- `build_key` (*bool, default False*): The learner builds the key signature `key` on a blank staff with the fork widget, instead of pressing a button. Keyword-only.
+- `construct_scale` (*list of Note or None*): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.
+- `construct_steps` (*list of str or None*): The steps between the notes of `construct_scale`, each "W" (whole) or "H" (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.
+- `exact_octave` (*bool, default False*): The scale has to be placed in the octave asked, not in any octave. Keyword-only.
+- `circle` (*int or None*): A question on the circle of fifths: the place asked about, clockwise from C at 0. Keyword-only.
+- `circle_kind` (*str, default ""*): What the circle asks: "major" (the relative major of a minor key), "minor" (the relative minor of a major key) or "numeral" (the Roman numeral of a chord of a key). Keyword-only.
+- `circle_ring` (*str, default "outer"*): Which ring the cell asked about is in: "outer" for the major keys or "inner" for the minor ones. Keyword-only.
+- `circle_key` (*int or None*): For a Roman numeral question, the place of the key whose chords they are. Keyword-only.
+- `required` (*tuple of str*): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.
 
 **Examples**
 
@@ -111,6 +129,94 @@ True
 False
 ```
 
+### Question.check_scale
+
+```python
+def check_scale(notes: list[Note]) -> bool
+```
+
+Report whether the notes placed on the staff are the scale asked for.
+
+The spelling and the order of the notes must match, so a G♯ is not an A♭. Unless `exact_octave` is set the octave
+does not matter, as long as the whole scale is in the same one: the same scale an octave higher or lower is right,
+but a scale with one note in the wrong octave is not. With `exact_octave` the scale has to be in the octave asked.
+
+**Parameters**
+
+- `notes` (*list of Note*): The notes the learner placed, left to right.
+
+**Returns**
+
+- *bool*: True if they are the notes of `construct_scale`, all moved by the same whole number of octaves (or, with `exact_octave`, not moved at all).
+
+**Examples**
+
+```pycon
+>>> asked = [Note.parse("C4"), Note.parse("D4")]
+>>> q = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked)
+>>> q.check_scale([Note.parse("C4"), Note.parse("D4")])
+True
+>>> q.check_scale([Note.parse("C5"), Note.parse("D5")])  # the same scale, an octave higher
+True
+>>> q.check_scale([Note.parse("C4"), Note.parse("D5")])  # one note in another octave
+False
+>>> q.check_scale([Note.parse("C4"), Note.parse("D4"), Note.parse("E4")])
+False
+>>> exact = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked, exact_octave=True)
+>>> exact.check_scale([Note.parse("C4"), Note.parse("D4")]), exact.check_scale([Note.parse("C5"), Note.parse("D5")])
+(True, False)
+```
+
+### Question.check_steps
+
+```python
+def check_steps(steps: list[str]) -> bool
+```
+
+Report whether the steps marked between the notes of a scale are the right ones.
+
+**Parameters**
+
+- `steps` (*list of str*): The steps the learner marked, left to right, each "W" or "H".
+
+**Returns**
+
+- *bool*: True if the steps are not asked, or if they are those of `construct_steps`.
+
+**Examples**
+
+```pycon
+>>> q = Question("Mark the steps.", choices=[], answer="W H", construct_steps=["W", "H"])
+>>> q.check_steps(["W", "H"]), q.check_steps(["H", "W"]), q.check_steps(["W"])
+(True, False, False)
+>>> Question("No steps.", choices=[], answer="").check_steps([])
+True
+```
+
+### Question.check_built
+
+```python
+def check_built(count: int) -> bool
+```
+
+Report whether a key signature built with the fork is the one asked for.
+
+**Parameters**
+
+- `count` (*int*): The signature the learner built: that many sharps if positive, flats if negative.
+
+**Returns**
+
+- *bool*: True if it equals `key`.
+
+**Examples**
+
+```pycon
+>>> q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
+>>> q.check_built(2), q.check_built(-2)
+(True, False)
+```
+
 ### Question.check
 
 ```python
@@ -133,6 +239,35 @@ Report whether a chosen answer is right.
 >>> q = Question("", choices=["F♯", "G♭"], answer="F♯", accept=("G♭",))
 >>> q.check("F♯"), q.check("G♭"), q.check("A")
 (True, True, False)
+>>> both = Question("", choices=["B", "C♭", "D"], answer="B", required=("B", "C♭"))
+>>> both.check("B"), both.check("C♭"), both.check("D")  # each is right, but both are needed: see `complete`
+(True, True, False)
+```
+
+### Question.complete
+
+```python
+def complete(given: set[str]) -> bool
+```
+
+Report whether the answers given so far are all of those needed.
+
+**Parameters**
+
+- `given` (*set of str*): The right answers given so far.
+
+**Returns**
+
+- *bool*: For an ordinary question, whether the answer has been given; for one with several `required`, whether all have.
+
+**Examples**
+
+```pycon
+>>> both = Question("", choices=["B", "C♭"], answer="B", required=("B", "C♭"))
+>>> both.complete({"B"}), both.complete({"C♭", "B"})
+(False, True)
+>>> Question("", choices=["C"], answer="C").complete({"C"})
+True
 ```
 
 ### Question.item_key
@@ -304,6 +439,36 @@ A stored question is only asked again while this is unchanged. Exercises with se
 ...         return Question("?", choices=["A"], answer="A")
 >>> Demo().settings_signature()
 ''
+```
+
+### Exercise.refresh
+
+```python
+def refresh(question: Question) -> Question
+```
+
+Bring a stored question up to date with how the exercise draws its questions now.
+
+A question that is asked again comes from the copy stored when it was first asked, which an older version may
+have drawn differently. The default leaves it as it is.
+
+**Parameters**
+
+- `question` (*Question*): The question as it was stored.
+
+**Returns**
+
+- *Question*: The question as the exercise would draw it today.
+
+**Examples**
+
+```pycon
+>>> class Demo(Exercise):
+...     def generate(self, rng):
+...         return Question("?", choices=["A"], answer="A")
+>>> q = Question("?", choices=["A"], answer="A")
+>>> Demo().refresh(q) is q
+True
 ```
 
 ### Exercise.instructions

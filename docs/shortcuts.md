@@ -5,9 +5,60 @@ permalink: /shortcuts/
 ---
 ## Keyboard
 
+Every exercise can be answered without the mouse. When you choose an exercise from the list, the keyboard goes to it,
+so its keys work at once. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> move between the buttons, and
+<kbd>Space</kbd> presses the one that has the focus. Hover over any button to see its key.
+
+### Choosing an answer
+
 | Keys | What it does |
 |---|---|
-| <kbd>1</kbd> to <kbd>9</kbd> | Press the matching answer button. A button's tooltip shows its number. Available when an exercise has nine answers or fewer and no separate octave row. |
+| <kbd>1</kbd> to <kbd>9</kbd> | Press the matching answer button, counting from the left. Available when an exercise has nine answers or fewer. |
+| <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>A</kbd> <kbd>B</kbd> | Keyboard Identification and Circle of Fifths: the natural note or key of that name. A minor key is typed as the major key of its letter. |
+| <kbd>Shift</kbd>+a letter, <kbd>Ctrl</kbd>+a letter | Keyboard Identification and Circle of Fifths: the sharp (<kbd>Shift</kbd>) or the flat (<kbd>Ctrl</kbd>) of that note or key. |
+| <kbd>1</kbd> to <kbd>6</kbd> | Circle of Fifths, Roman numerals: I, ii, iii, IV, V and vi. For a key with two names (such as B and C♭) press the key of each name. |
+| <kbd>1</kbd> to <kbd>9</kbd> | Keyboard Identification with the octave asked: the octave, typed as its number. |
+| <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> | Arpeggio identification: the inversion, which is the second row of buttons. The chord type is on <kbd>1</kbd> to <kbd>4</kbd>. |
+
+### Placing notes on the staff (Note Construction and Scale Construction)
+
+Clicking the staff is never needed. A pale note, the **caret**, shows the note that would be placed, and the line under the
+staff says what comes next, in words that a screen reader can read.
+
+| Keys | Button | What it does |
+|---|---|---|
+| <kbd>↑</kbd> / <kbd>↓</kbd> | Higher / Lower | Move the note one line or space up or down. The first press starts from the middle line of the staff. |
+| <kbd>Page Up</kbd> / <kbd>Page Down</kbd> | Octave ↑ / Octave ↓ | Move the note an octave up or down. |
+| <kbd>A</kbd> to <kbd>G</kbd> | | Jump to the nearest note with that name, above or below. |
+| <kbd>←</kbd> / <kbd>→</kbd> | | Step backwards or forwards through no sign, ♯, ♭ and ♮ (♮ only when the staff has a key signature). |
+| <kbd>+</kbd> <kbd>-</kbd> <kbd>0</kbd> | ♯ ♭ ♮ | Choose a sharp, a flat or a natural for the next note. |
+| <kbd>Return</kbd> | Place note | Place the note at the caret. |
+| <kbd>Backspace</kbd> | Undo | Scale Construction: take back the last note or step. |
+
+Once all the notes of a scale are placed, and the **Steps** setting is on, the same keys mark the steps:
+
+| Keys | Button | What it does |
+|---|---|---|
+| <kbd>W</kbd> / <kbd>H</kbd> | W / H | Choose a whole or a half step. |
+| <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> | | Switch between whole and half. |
+| <kbd>Return</kbd> | Mark step | Mark the step and move on to the next pair of notes. |
+
+When everything is placed, <kbd>Return</kbd> presses **Answer**. <kbd>Return</kbd> always does the next thing: it places a
+note or marks a step while there is something to place, and answers once there is not.
+
+### Building a key signature (Key Signature Construction)
+
+| Keys | What it does |
+|---|---|
+| <kbd>↑</kbd> or <kbd>→</kbd> | One more sharp (or one fewer flat). |
+| <kbd>↓</kbd> or <kbd>←</kbd> | One more flat (or one fewer sharp). |
+| <kbd>Home</kbd> | Back to the natural sign: no sharps or flats. |
+| <kbd>Return</kbd> | Answer. |
+
+### Everywhere
+
+| Keys | What it does |
+|---|---|
 | <kbd>Esc</kbd> | Go back from the statistics or database page. |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> | Open the app settings. |
 | <kbd>Ctrl</kbd>+<kbd>R</kbd> | Restart Alto. |
@@ -19,8 +70,9 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 
 | Action | Where | What it does |
 |---|---|---|
-| Click the staff | Note Construction | Place the note. |
-| Right-click the staff | Note Construction with accidentals on | Step through no sign, sharp, flat and natural. |
+| Click the staff | Note Construction, Scale Construction | Place the note. |
+| Right-click the staff | Note Construction and Scale Construction with accidentals on | Step through no sign, sharp, flat and natural. |
+| Turn the wheel over the staff | Scale Construction | Step through the signs while notes are placed, then switch between whole and half steps. |
 | Double-click a row | Database: Answers or Questions | Preview that question. |
 | Click a column heading | Database | Sort by that column. |
 | Hover a chart | Statistics | Show the exact values for that period. |

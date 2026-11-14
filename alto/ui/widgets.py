@@ -1,5 +1,5 @@
 """
-Small widgets shared by several screens: the sidebar toggle and the help button.
+Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.
 
 Examples
 --------
@@ -9,22 +9,30 @@ Examples
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import (
+    Callable,
+    Sequence,
+)
 
 from PySide6.QtCore import (
     QPoint,
     QSize,
     Qt,
+    Signal,
 )
 from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import (
+    QButtonGroup,
     QFrame,
+    QHBoxLayout,
     QLabel,
+    QPushButton,
     QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
+from alto.ui.colors import blend
 from alto.ui.icons import (
     HELP,
     SIDEBAR_CLOSED,
@@ -49,7 +57,12 @@ class SidebarToggle(QToolButton):
     'Show exercise list'
     """
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        *,
+        noun: str = "exercise list",
+    ) -> None:
         """
         Create the toggle, showing the list as open.
 
@@ -57,13 +70,18 @@ class SidebarToggle(QToolButton):
         ----------
         parent : QWidget or None, default None
             The widget that owns the button.
+        noun : str, default "exercise list"
+            What the list is called in the tooltip: "Hide exercise list". Keyword-only.
 
         Examples
         --------
         >>> SidebarToggle().autoRaise()
         True
+        >>> SidebarToggle(noun="lesson list").toolTip()
+        'Hide lesson list'
         """
         super().__init__(parent)
+        self.noun = noun
         self.setAutoRaise(True)
         self.setIconSize(QSize(24, 24))  # same size as the sound and settings buttons
         self.set_open(True)
@@ -86,7 +104,8 @@ class SidebarToggle(QToolButton):
         """
         color = self.palette().color(QPalette.ColorRole.WindowText)  # same colour as the sound and settings icons
         self.setIcon(svg_icon(SIDEBAR_OPEN if is_open else SIDEBAR_CLOSED, color=color))
-        self.setToolTip("Hide exercise list" if is_open else "Show exercise list")
+        self.setToolTip(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
+        self.setAccessibleName(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
 
 
 class HelpButton(QToolButton):
@@ -131,6 +150,7 @@ class HelpButton(QToolButton):
         self.setIcon(svg_icon(HELP, color=self.palette().color(QPalette.ColorRole.WindowText)))
         self.setIconSize(QSize(24, 24))
         self.setToolTip("How this exercise works")
+        self.setAccessibleName("How this exercise works")
         self.clicked.connect(self.show_help)
         self._popup: QWidget | None = None
 
@@ -172,3 +192,173 @@ class HelpButton(QToolButton):
         popup.move(max(below.x(), 8), below.y())
         popup.show()
         self._popup = popup
+
+
+class SegmentedControl(QFrame):
+    """
+    A pill-shaped row of choices of which exactly one is chosen, like the switch between two views.
+
+    Attributes
+    ----------
+    buttons : list of QPushButton
+        One per choice, in order.
+    chosen : Signal
+        Emitted with the number of the choice when the learner picks one.
+
+    Examples
+    --------
+    >>> control = SegmentedControl(["Exercises", "Lessons"])
+    >>> control.current()
+    0
+    >>> control.set_current(1)
+    >>> control.current(), control.buttons[1].isChecked()
+    (1, True)
+    """
+
+    chosen = Signal(int)
+
+    def __init__(
+        self,
+        labels: Sequence[str],
+        *,
+        icons: Sequence[str] = (),
+        parent: QWidget | None = None,
+    ) -> None:
+        """
+        Build the control with the first choice chosen.
+
+        Parameters
+        ----------
+        labels : sequence of str
+            The text of each choice.
+        icons : sequence of str, default ()
+            The icon of each choice, as the inside of a 24 by 24 SVG; fewer than the labels, or none, leaves the rest without.
+            Keyword-only.
+        parent : QWidget or None, default None
+            The widget that owns it. Keyword-only.
+
+        Examples
+        --------
+        >>> len(SegmentedControl(["A", "B", "C"]).buttons)
+        3
+        >>> SegmentedControl(["A"], icons=[HELP]).buttons[0].icon().isNull()
+        False
+        """
+        super().__init__(parent)
+        self.setObjectName("segments")
+        row = QHBoxLayout(self)
+        row.setContentsMargins(
+            3,
+            3,
+            3,
+            3,
+        )
+        row.setSpacing(2)
+        self._group = QButtonGroup(self)
+        self._group.setExclusive(True)
+        self.buttons: list[QPushButton] = []
+        self._labels = list(labels)
+        for number, label in enumerate(labels):
+            button = QPushButton(label)
+            button.setToolTip(label)  # still said when the text is hidden
+            button.setAccessibleName(label)
+            button.setCheckable(True)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.setChecked(number == 0)
+            if number < len(icons):
+                button.setIcon(svg_icon(icons[number], color=self.palette().color(QPalette.ColorRole.WindowText), size=18))
+                button.setIconSize(QSize(18, 18))
+            self._group.addButton(button, number)
+            button.clicked.connect(lambda _=False, n=number: self.chosen.emit(n))
+            row.addWidget(button)
+            self.buttons.append(button)
+        self.restyle()
+
+    def set_compact(self, compact: bool) -> None:
+        """
+        Show only the icons, or the icons and the text.
+
+        The text is still the tooltip and the name a screen reader says.
+
+        Parameters
+        ----------
+        compact : bool
+            True to hide the text.
+
+        Examples
+        --------
+        >>> control = SegmentedControl(["Exercises", "Lessons"], icons=[HELP, HELP])
+        >>> control.set_compact(True)
+        >>> control.buttons[0].text(), control.buttons[0].toolTip()
+        ('', 'Exercises')
+        >>> control.set_compact(False)
+        >>> control.buttons[0].text()
+        'Exercises'
+        """
+        for button, label in zip(self.buttons, self._labels, strict=True):
+            button.setText("" if compact else label)
+
+    def current(self) -> int:
+        """
+        Return the number of the chosen choice.
+
+        Returns
+        -------
+        int
+            The choice, from 0.
+
+        Examples
+        --------
+        >>> SegmentedControl(["A", "B"]).current()
+        0
+        """
+        return max(self._group.checkedId(), 0)
+
+    def set_current(self, number: int) -> None:
+        """
+        Choose one, without announcing it.
+
+        Parameters
+        ----------
+        number : int
+            The choice, from 0.
+
+        Examples
+        --------
+        >>> control = SegmentedControl(["A", "B"])
+        >>> control.set_current(1)
+        >>> control.current()
+        1
+        """
+        self.buttons[number].setChecked(True)
+
+    def restyle(self) -> None:
+        """
+        Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.
+
+        A change of theme rebuilds the main window, so the control there is drawn afresh in the new colours. One that stays, as in
+        the settings, is restyled by calling this.
+
+        Examples
+        --------
+        >>> "segments" in SegmentedControl(["A", "B"]).styleSheet()
+        True
+        """
+        pal = self.palette()
+        window, text, base, accent = (
+            pal.color(role)
+            for role in (
+                QPalette.ColorRole.Window,
+                QPalette.ColorRole.Text,
+                QPalette.ColorRole.Base,
+                QPalette.ColorRole.Highlight,
+            )
+        )
+        track = blend(window, b=text, t=0.07)
+        sheet = (
+            f"QFrame#segments {{ background: {track.name()}; border-radius: 12px; }}"
+            "QFrame#segments QPushButton { border: 0; border-radius: 9px; padding: 6px 18px; background: transparent; }"
+            f"QFrame#segments QPushButton:checked {{ background: {base.name()}; color: {accent.name()}; "
+            f"border: 1px solid {pal.color(QPalette.ColorRole.Mid).name()}; }}"
+        )
+        self.setStyleSheet(sheet)

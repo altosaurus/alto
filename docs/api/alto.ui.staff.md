@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 32
+order: 40
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
@@ -138,8 +138,12 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `clef` (*str*): The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
 - `columns` (*list of list of Note*): The notes drawn; each inner list is one chord or note.
 - `note_color` (*QColor or None*): The colour of the notes; None draws them in the notation style's ink.
+- `column_colors` (*dict of int to QColor*): The colour of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
+- `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
+- `wedge_colors` (*dict of int to QColor*): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or `note_color`.
 - `notation_style` (*NotationStyle or None*): A style to use instead of the one chosen in the settings.
 - `key` (*int*): The key signature drawn: sharps if positive, flats if negative.
+- `key_room` (*int*): How many sharps or flats' worth of room to keep for the signature at least, so that a capped staff does not change width as the signature does. 0 keeps room only for the one drawn.
 - `value` (*str*): The note value drawn.
 - `caption` (*str*): Text written under the staff, inside the paper.
 

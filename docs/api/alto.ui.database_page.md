@@ -2,7 +2,7 @@
 title: alto.ui.database_page
 parent: api
 package: alto.ui
-order: 17
+order: 21
 permalink: /api/alto.ui.database_page/
 ---
 {% raw %}
