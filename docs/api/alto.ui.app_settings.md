@@ -212,9 +212,9 @@ Application-wide settings. Changes apply immediately, and the main window can be
 - `theme_pages` (*QStackedWidget*): The card of the theme chosen in the list, or the editor.
 - `theme_editor` (*ThemeEditor*): The form that makes a theme of the user's own, or changes one.
 - `new_theme_item` (*QListWidgetItem*): The row of the list that makes a new theme.
-- `theme_cards` (*dict of str to ThemeCard*): The cards, by the key of the theme's family.
-- `theme_scrolls` (*dict of str to QScrollArea*): The scroll area each card is in, which is what the stack shows.
-- `theme_thumbs` (*dict of str to ThemeThumb*): The clickable pictures of every card, by the key of the theme each chooses.
+- `theme_cards` (*dict of str to ThemeCard*): The cards built so far, by the key of the theme's family. A card is built when its row is first chosen, because every widget makes a change of theme slower; use `card` to get one.
+- `theme_scrolls` (*dict of str to QScrollArea*): The scroll area each built card is in, which is what the stack shows; use `scroll` to get one.
+- `theme_thumbs` (*dict of str to ThemeThumb*): The clickable pictures of every built card, by the key of the theme each chooses; use `thumb` to get one.
 - `transition_list` (*QListWidget*): The choice of transition between the exercises and the lessons, on the Transitions section.
 - `transition_items` (*dict of str to QListWidgetItem*): The rows of that list, by the transition's key.
 - `transition_preview` (*TransitionPreview*): Plays the transition that is chosen, beside the choices.
@@ -260,6 +260,83 @@ Restyle the segmented control when the palette changes, so it follows the theme.
 ```pycon
 >>> dialog = AppSettingsDialog()
 >>> dialog.changeEvent(QEvent(QEvent.Type.PaletteChange))
+```
+
+### AppSettingsDialog.card
+
+```python
+def card(family: str) -> ThemeCard
+```
+
+Give the card of a theme, building it the first time it is asked for.
+
+Every card is a few dozen widgets, and Qt styles every widget again when the theme changes, so only the cards that have
+been looked at exist.
+
+**Parameters**
+
+- `family` (*str*): The key of the theme's family.
+
+**Returns**
+
+- *ThemeCard*: Its card.
+
+**Examples**
+
+```pycon
+>>> dialog = AppSettingsDialog()
+>>> "sage" in dialog.theme_cards
+False
+>>> dialog.card("sage") is dialog.card("sage"), "sage" in dialog.theme_cards
+(True, True)
+```
+
+### AppSettingsDialog.card_page
+
+```python
+def card_page(family: str) -> QScrollArea
+```
+
+Give the scroll area that holds a theme's card, which is the page the stack shows for it.
+
+**Parameters**
+
+- `family` (*str*): The key of the theme's family.
+
+**Returns**
+
+- *QScrollArea*: The area, with the card built if it was not yet.
+
+**Examples**
+
+```pycon
+>>> dialog = AppSettingsDialog()
+>>> dialog.card_page("sage").widget() is dialog.card("sage")
+True
+```
+
+### AppSettingsDialog.thumb
+
+```python
+def thumb(key: str) -> ThemeThumb
+```
+
+Give the clickable picture that chooses a theme, with the card it is on built if it was not yet.
+
+**Parameters**
+
+- `key` (*str*): The key of the theme, such as "light" or "sage_dark".
+
+**Returns**
+
+- *ThemeThumb*: Its picture.
+
+**Examples**
+
+```pycon
+>>> dialog = AppSettingsDialog()
+>>> dialog.thumb("sage_dark").isChecked()
+False
 ```
 
 ### AppSettingsDialog.choose_theme

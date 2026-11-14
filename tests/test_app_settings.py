@@ -81,9 +81,10 @@ def test_each_theme_has_a_preview_card_and_the_saved_one_is_chosen(dialog: AppSe
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    assert list(dialog.theme_cards) == [family for family, _label, _note in theme.FAMILIES]
-    assert list(dialog.theme_cards["default"].thumbs) == ["light", "dark", "system"]
+    assert list(dialog.theme_items) == [family for family, _label, _note in theme.FAMILIES]
+    assert list(dialog.card("default").thumbs) == ["light", "dark", "system"]
     assert [key for key, thumb in dialog.theme_thumbs.items() if thumb.isChecked()] == ["dark"]
+    assert list(dialog.theme_cards) == ["default"]  # the cards of the other themes are built when they are chosen
 
 
 def test_every_theme_card_has_three_pictures_and_the_system_one_is_cut_in_two(dialog: AppSettingsDialog) -> None:
@@ -95,7 +96,8 @@ def test_every_theme_card_has_three_pictures_and_the_system_one_is_cut_in_two(di
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    for family, card in dialog.theme_cards.items():
+    for family in dialog.theme_items:
+        card = dialog.card(family)
         assert [thumb.other is not None for thumb in card.thumbs.values()] == [False, False, True], family
         light, dark, system = card.thumbs.values()
         assert system.colours == light.colours and system.other == dark.colours
@@ -150,7 +152,7 @@ def test_choosing_a_theme_saves_and_applies_it(
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(app_settings, "apply_theme", applied.append)
     assert not dialog.theme_changed
-    dialog.theme_thumbs["light"].click()
+    dialog.thumb("light").click()
     assert theme.saved_theme() == "light" and applied == ["light"] and dialog.theme_changed
 
 
@@ -292,24 +294,26 @@ def test_the_theme_list_is_on_the_left_and_the_card_of_the_chosen_row_on_the_rig
         listing, pages = dialog.theme_list, dialog.theme_pages
         assert listing.mapTo(dialog, listing.rect().topLeft()).x() < pages.mapTo(dialog, pages.rect().topLeft()).x()
         # two section labels and the row that makes a new theme, as well as a row for each theme
-        assert listing.count() == len(theme.FAMILIES) + 3 and len(dialog.theme_thumbs) == 3 * len(theme.FAMILIES)
+        assert listing.count() == len(theme.FAMILIES) + 3 and all(
+            len(dialog.card(family).thumbs) == 3 for family in dialog.theme_items
+        )
         assert dialog.new_theme_item.text().endswith("New theme…")
-        tops = [thumb.mapTo(dialog, thumb.rect().topLeft()).y() for thumb in dialog.theme_cards["default"].thumbs.values()]
+        tops = [thumb.mapTo(dialog, thumb.rect().topLeft()).y() for thumb in dialog.card("default").thumbs.values()]
         assert tops == sorted(tops) and len(set(tops)) == 3  # the three pictures are one above another
-        assert pages.currentWidget() is dialog.theme_scrolls["default"] and dialog.theme_thumbs["system"].isChecked()
+        assert pages.currentWidget() is dialog.card_page("default") and dialog.thumb("system").isChecked()
         # choosing a row shows its card and uses the theme, in the version last chosen: System, to begin with
         listing.setCurrentItem(dialog.theme_items["sage"])
-        assert pages.currentWidget() is dialog.theme_scrolls["sage"]
-        assert theme.saved_theme() == "sage_auto" and applied == ["sage_auto"] and dialog.theme_thumbs["sage_auto"].isChecked()
+        assert pages.currentWidget() is dialog.card_page("sage")
+        assert theme.saved_theme() == "sage_auto" and applied == ["sage_auto"] and dialog.thumb("sage_auto").isChecked()
         assert dialog.theme_items["sage"].font().bold() and not dialog.theme_items["default"].font().bold()
-        dialog.theme_thumbs["sage_dark"].click()  # a click chooses a version, which is then kept
-        assert theme.saved_theme() == "sage_dark" and not dialog.theme_thumbs["sage_auto"].isChecked()
+        dialog.thumb("sage_dark").click()  # a click chooses a version, which is then kept
+        assert theme.saved_theme() == "sage_dark" and not dialog.thumb("sage_auto").isChecked()
         listing.setCurrentItem(dialog.theme_items["pine"])
-        assert theme.saved_theme() == "pine_dark" and applied[-1] == "pine_dark" and dialog.theme_thumbs["pine_dark"].isChecked()
-        dialog.theme_thumbs["pine"].click()  # now the light version is the one that is kept
+        assert theme.saved_theme() == "pine_dark" and applied[-1] == "pine_dark" and dialog.thumb("pine_dark").isChecked()
+        dialog.thumb("pine").click()  # now the light version is the one that is kept
         listing.setCurrentItem(dialog.theme_items["default"])
-        assert theme.saved_theme() == "light" and dialog.theme_thumbs["light"].isChecked()
-        dialog.theme_thumbs["dark"].click()
+        assert theme.saved_theme() == "light" and dialog.thumb("light").isChecked()
+        dialog.thumb("dark").click()
         listing.setCurrentItem(dialog.theme_items["marigold"])
         assert theme.saved_theme() == "marigold_dark"
     finally:
@@ -336,8 +340,8 @@ def test_the_dialog_opens_on_the_theme_in_use(
     try:
         dialog = AppSettingsDialog()
         assert dialog.theme_list.currentItem() is dialog.theme_items["pine"]
-        assert dialog.theme_pages.currentWidget() is dialog.theme_scrolls["pine"]
-        assert dialog.theme_thumbs["pine_dark"].isChecked()
+        assert dialog.theme_pages.currentWidget() is dialog.card_page("pine")
+        assert dialog.thumb("pine_dark").isChecked()
     finally:
         theme.save_theme("system")
 
@@ -497,10 +501,10 @@ def test_a_theme_can_be_made_saved_and_used(
     family = records[0]["id"]
     assert family.startswith("my_") and family in dialog.theme_items and family in dialog.theme_cards
     assert dialog.theme_list.item(0).text() == "MY THEMES" and dialog.theme_items[family].text() == "Harbour Lights"
-    assert dialog.theme_pages.currentWidget() is dialog.theme_scrolls[family]
+    assert dialog.theme_pages.currentWidget() is dialog.card_page(family)
     assert theme.saved_theme() == f"{family}_auto"  # in the version that was last chosen: System
     assert theme.custom_theme(f"{family}_dark") is not None and theme.scheme_of(f"{family}_dark") == Qt.ColorScheme.Dark
-    dialog.theme_thumbs[f"{family}_dark"].click()
+    dialog.thumb(f"{family}_dark").click()
     assert QApplication.palette().color(QPalette.ColorRole.Highlight).name() == "#00ffcc"
     dialog.close()
     again = AppSettingsDialog()  # and it is still there the next time
@@ -531,10 +535,12 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     theme.upsert_user_theme(theme.ThemeRecord(id="my_test", name="Mine", light=dict(colours), dark=dict(colours)))
     dialog = AppSettingsDialog()
     dialog.show()
-    assert theme.custom_theme("my_test") is not None and dialog.theme_cards["my_test"].change_button is not None
-    assert dialog.theme_cards["sage"].change_button is None  # only a theme of the user's own can be changed
+    assert theme.custom_theme("my_test") is not None and dialog.card("my_test").change_button is not None
+    assert dialog.card("sage").change_button is None  # only a theme of the user's own can be changed
     dialog.theme_list.setCurrentItem(dialog.theme_items["my_test"])
-    dialog.theme_cards["my_test"].change_button.click()
+    change = dialog.card("my_test").change_button
+    assert change is not None
+    change.click()
     editor = dialog.theme_editor
     assert (
         dialog.theme_pages.currentWidget() is editor and editor.name_edit.text() == "Mine" and not editor.delete_button.isHidden()
@@ -547,7 +553,7 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     assert [(r["name"], r["light"]["accent"]) for r in theme.user_records()] == [("Mine, changed", "#abcdef")]
     # asked first, and "No" keeps it
     monkeypatch.setattr(app_settings.QMessageBox, "question", lambda *args, **kwargs: app_settings.QMessageBox.StandardButton.No)
-    dialog.theme_cards["my_test"].change_button.click()
+    change.click()
     editor.delete_button.click()
     assert len(theme.user_records()) == 1
     monkeypatch.setattr(app_settings.QMessageBox, "question", lambda *args, **kwargs: app_settings.QMessageBox.StandardButton.Yes)

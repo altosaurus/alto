@@ -106,9 +106,27 @@ def wait_until_still(page: HomePage) -> None:
         QTest.qWait(20)
 
 
+def jump_to_the_end(page: HomePage) -> None:
+    """
+    Take a transition on the home page to its last frame at once, so a test need not wait for it in real time.
+
+    Parameters
+    ----------
+    page : HomePage
+        The page.
+    """
+    QTest.qWait(1)  # the transition begins from a zero-delay timer, so let that go first
+    # noinspection PyProtectedMember
+    animation = page.canvas._animation
+    animation.setCurrentTime(animation.duration())
+    wait_until_still(page)
+
+
 def test_every_transition_plays_to_the_end_and_leaves_the_new_cards_showing(app: QApplication, clean_lessons: None) -> None:
     """
     Check that each transition covers the cards while it plays, finishes, and leaves the new cards in place.
+
+    The first one is waited for in real time; the others are taken to their last frame, which ends them the same way.
 
     Parameters
     ----------
@@ -118,7 +136,8 @@ def test_every_transition_plays_to_the_end_and_leaves_the_new_cards_showing(app:
         Clears what is saved.
     """
     try:
-        for transition in TRANSITIONS:
+        for number, transition in enumerate(TRANSITIONS):
+            finish = wait_until_still if number == 0 else jump_to_the_end
             save_transition(transition.key)
             page = HomePage(REGISTRY)
             page.resize(1000, 600)
@@ -130,10 +149,10 @@ def test_every_transition_plays_to_the_end_and_leaves_the_new_cards_showing(app:
             QTest.qWait(40)
             if transition.frame is not None:
                 assert page.canvas.running and page.canvas.new and page.canvas.old, transition.key
-            wait_until_still(page)
+            finish(page)
             assert not page.canvas.running and not page._hidden.isEnabled(), transition.key
             page.mode_control.buttons[0].click()  # and back again
-            wait_until_still(page)
+            finish(page)
             assert page.cards[0].isVisible() and not page.lesson_cards[0].isVisible() and not page.canvas.running
             page.close()
     finally:
