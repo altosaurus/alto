@@ -2,7 +2,7 @@
 title: alto.settings
 parent: api
 package: alto
-order: 4
+order: 5
 permalink: /api/alto.settings/
 ---
 {% raw %}

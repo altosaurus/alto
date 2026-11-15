@@ -2,7 +2,7 @@
 title: alto.learning.scheduler
 parent: api
 package: alto.learning
-order: 11
+order: 12
 permalink: /api/alto.learning.scheduler/
 ---
 {% raw %}

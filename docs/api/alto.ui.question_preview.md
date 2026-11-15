@@ -2,7 +2,7 @@
 title: alto.ui.question_preview
 parent: api
 package: alto.ui
-order: 39
+order: 41
 permalink: /api/alto.ui.question_preview/
 ---
 {% raw %}

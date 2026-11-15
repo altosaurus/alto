@@ -145,8 +145,16 @@ from a source folder) from the git address and commit the installer recorded for
 the commands and reads the answers. What the check follows is a setting (`updates/channel`, in Settings → Updates). On the
 default **releases** channel the flow asks GitHub's `releases/latest` on a worker thread and compares versions; on **main** it
 asks `git ls-remote` for the newest commit. A script install can then run `uv tool install --force git+<url>@<tag>` (or without
-the tag, for main) with the output on screen, and restarts through `MainWindow.restart_app()` once OK is pressed; a packaged
-build cannot replace itself, so it is offered the release's download page.
+the tag, for main) with the output on screen, and restarts through `MainWindow.restart_app()` once OK is pressed.
+
+A packaged copy replaces itself (`alto/selfupdate.py`, no Qt; `alto/ui/package_update.py`, the window). `alto/updates.py` holds what
+makes that safe: the public keys, the check of the signature over `SHA256SUMS`, the parsing of the list, and the certifi-based
+connection (the bundled Python cannot count on the system's certificate authorities). `selfupdate` works out whether this copy was
+installed by `install.sh` or the Windows installer (the only ones it may replace), downloads the signed list, verifies it, then
+downloads the one file the list names for this system while hashing it, and unpacks it (Linux). The hand-over starts a program and
+returns so that Alto can close: on Windows the installer with fixed arguments, on Linux a short `sh` helper that waits for Alto to end,
+runs the new download's `install.sh` and starts Alto again. A copy that cannot do this (an unpacked folder, a build with no key) is
+offered the release's download page.
 
 ### One question, start to finish
 
@@ -205,8 +213,9 @@ package's data files (`alto/assets`) and metadata (so `importlib.metadata`, and 
 update check, work). The same spec is used for Linux and Windows. `scripts/build-linux.sh` builds the Linux download and
 `packaging/linux/install.sh` is the script inside it; `scripts/build-windows.ps1` builds the Windows installer from
 `packaging/windows/alto.iss`. `.github/workflows/build-packages.yml` builds and tests both, and `release.yml` publishes them when a
-version is tagged. A frozen copy is told apart at run time by `sys.frozen` (`alto.updates.is_frozen`),
-which is why `restart_app()` starts it with no arguments and why it is offered a download page, not an update, when a release is newer.
+version is tagged, signing `SHA256SUMS` with `scripts/sign_release.py`. A frozen copy is told apart at run time by `sys.frozen`
+(`alto.updates.is_frozen`), which is why `restart_app()` starts it with no arguments and why it updates itself differently from a
+script install.
 
 ## Tests
 

@@ -53,7 +53,9 @@ The first release.
 - `scripts/alto-install.sh` installs Alto from GitHub into its own environment, adds it to the application menu, updates it and
   removes it. Uninstalling keeps your data unless `--purge` is given.
 - Check for updates… in the menu: says whether a newer release is available, offers to install it with its progress shown, and
-  restarts Alto when you press OK. A packaged copy is offered the release's download page instead, as it cannot replace itself.
+  restarts Alto when you press OK. A packaged copy (the Linux download installed with `install.sh`, or the Windows installer)
+  downloads the release, checks its signature and checksum, and then closes, installs it and opens again. Releases are signed, and
+  Alto installs nothing whose signature does not verify.
 - Settings → Updates shows the version you have, and a choice to follow the main branch instead of releases, for the latest
   changes before they are released.
 - A Linux download: a `.tar.gz` with its own Python and Qt, so nothing else needs installing. `sh install.sh install` installs it

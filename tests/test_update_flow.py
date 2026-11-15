@@ -10,6 +10,8 @@ from __future__ import annotations
 import json
 import sys
 import time
+from pathlib import Path
+from types import SimpleNamespace
 from typing import TYPE_CHECKING
 
 import pytest
@@ -20,7 +22,14 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from alto import updates
+from alto import (
+    selfupdate,
+    updates,
+)
+from alto.selfupdate import (
+    Prepared,
+    Target,
+)
 from alto.ui import update_flow as flow
 from alto.ui.main_window import MainWindow
 from alto.ui.update_flow import (
@@ -36,7 +45,6 @@ from alto.updates import Source
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from pathlib import Path
 
 INSTALLED = "b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"
 LATEST = "c0ffee0123456789abcdef0123456789abcdef01"
@@ -151,6 +159,16 @@ class Fakes:
         monkeypatch.setattr(QMessageBox, "question", lambda _parent, _title, text, _buttons, _default: self._ask(text))
         monkeypatch.setattr(flow.QDesktopServices, "openUrl", lambda url: self.opened.append(url.toString()) or True)
         monkeypatch.setattr(QDialog, "exec", lambda dialog: self._exec(dialog))
+        self.package_target: Target | None = None
+        self.prepared: Prepared | None = Prepared(Path("/nowhere/work"), installer=None, root=Path("/nowhere/work/unpacked/alto"))
+        self.package_runs: list[tuple[str, str]] = []
+        self.handoffs: list[tuple[Prepared, Target]] = []
+        self.handoff_error: Exception | None = None
+        self.quits = 0
+        monkeypatch.setattr(selfupdate, "self_update_target", lambda: self.package_target)
+        # noinspection PyUnresolvedReferences
+        monkeypatch.setattr(flow, "PackageUpdateDialog", self._package_window)
+        monkeypatch.setattr(selfupdate, "start_handoff", self._handoff)
 
     def _fetch(
         self,
@@ -276,6 +294,63 @@ class Fakes:
         """Note that Alto was asked to restart."""
         self.restarts += 1
 
+    def quit(self) -> None:
+        """Note that Alto was asked to close, as it is once an update has been handed to its installer."""
+        self.quits += 1
+
+    def _package_window(
+        self,
+        parent: object,
+        *,
+        release: updates.Release,
+        target: Target,
+    ) -> SimpleNamespace:
+        """
+        Stand in for the window that downloads and checks an update: it gives back what the test chose.
+
+        Parameters
+        ----------
+        parent : object
+            The window it belongs to, ignored.
+        release : updates.Release
+            The release to install. Keyword-only.
+        target : Target
+            The copy that will be replaced. Keyword-only.
+
+        Returns
+        -------
+        SimpleNamespace
+            Something with the `run` method of the window.
+        """
+        del parent
+        self.package_runs.append((release.version, target.system))
+        return SimpleNamespace(run=lambda: self.prepared)
+
+    def _handoff(
+        self,
+        prepared: Prepared,
+        *,
+        target: Target,
+    ) -> None:
+        """
+        Stand in for starting the program that installs the update.
+
+        Parameters
+        ----------
+        prepared : Prepared
+            The checked update.
+        target : Target
+            The copy that is replaced. Keyword-only.
+
+        Raises
+        ------
+        OSError
+            If the test says the program cannot be started.
+        """
+        if self.handoff_error is not None:
+            raise self.handoff_error
+        self.handoffs.append((prepared, target))
+
 
 @pytest.fixture
 def fakes(monkeypatch: pytest.MonkeyPatch) -> Fakes:
@@ -304,7 +379,7 @@ def check(fakes: Fakes) -> None:
     fakes : Fakes
         The stand-ins, which also say what a restart does.
     """
-    flow.check_for_updates(MainWindow(None), restart=fakes.restart)
+    flow.check_for_updates(MainWindow(None), restart=fakes.restart, quit_app=fakes.quit)
 
 
 # -- what the update check follows ----------------------------------------------------------------------------------
@@ -737,6 +812,244 @@ def test_a_packaged_copy_follows_releases_whatever_the_setting_says(app: QApplic
     fakes.programs.update({"git": None, "uv": None})
     check(fakes)
     assert fakes.fetched == [updates.RELEASES_API] and fakes.opened == [RELEASE_URL] and fakes.ran == []
+
+
+# -- a packaged copy that can replace itself -------------------------------------------------------------------------
+
+
+def make_packaged(
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    keys: tuple[str, ...] = ("a public key",),
+    can_replace_itself: bool = True,
+) -> Target:
+    """
+    Make the running copy a packaged one, with or without the key and the right place to replace itself.
+
+    Parameters
+    ----------
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    keys : tuple of str
+        The public keys the code holds. Keyword-only.
+    can_replace_itself : bool, default True
+        Whether the copy is in the place a copy that the install script or the installer made would be. Keyword-only.
+
+    Returns
+    -------
+    Target
+        Where the copy is.
+    """
+    fakes.frozen, fakes.installed, fakes.tool = True, None, False
+    target = Target("linux", folder=Path("/home/me/.local/opt/alto"), prefix=Path("/home/me/.local"))
+    fakes.package_target = target if can_replace_itself else None
+    monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", keys)
+    return target
+
+
+def test_a_packaged_copy_that_can_replace_itself_is_asked_updated_handed_over_and_closed(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check the whole path: the question names both versions, the update is downloaded, handed over once, and Alto closes.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    target = make_packaged(fakes, monkeypatch)
+    check(fakes)
+    assert len(fakes.shown) == 1 and fakes.shown[0][0] == "question"
+    assert "0.0.0 \u2192 0.1.0" in fakes.shown[0][1] and fakes.shown[0][1].endswith("Update now?")
+    assert fakes.package_runs == [("0.1.0", "linux")]
+    assert fakes.prepared is not None and fakes.handoffs == [(fakes.prepared, target)]
+    assert fakes.quits == 1 and fakes.opened == [] and fakes.restarts == 0 and fakes.installs == []
+
+
+def test_declining_the_update_of_a_packaged_copy_downloads_nothing(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that No to the question starts nothing and does not close Alto.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    make_packaged(fakes, monkeypatch)
+    fakes.answer = NO
+    check(fakes)
+    assert fakes.package_runs == [] and fakes.handoffs == [] and fakes.quits == 0
+
+
+def test_a_failed_or_cancelled_download_hands_nothing_over_and_leaves_alto_open(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that when the window gives back no update, which is how a failure and a cancel end, nothing is installed or closed.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    make_packaged(fakes, monkeypatch)
+    fakes.prepared = None
+    check(fakes)
+    assert len(fakes.package_runs) == 1 and fakes.handoffs == [] and fakes.quits == 0
+    assert [kind for kind, _ in fakes.shown] == ["question"]  # the window itself told the person what went wrong
+
+
+def test_an_installer_that_cannot_be_started_is_reported_and_removes_the_download(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """
+    Check that a hand-over that fails says so, deletes the downloaded update, and does not close Alto.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    tmp_path : Path
+        A new folder, standing in for the update's temporary folder.
+    """
+    make_packaged(fakes, monkeypatch)
+    work = tmp_path / "alto-update-x"
+    work.mkdir()
+    (work / "file").write_text("x")
+    fakes.prepared = Prepared(work, installer=None, root=work / "unpacked")
+    fakes.handoff_error = OSError("Permission denied")
+    check(fakes)
+    assert (
+        fakes.shown[-1][0] == "warning"
+        and "could not be started" in fakes.shown[-1][1]
+        and "Permission denied" in fakes.shown[-1][1]
+    )
+    assert "Nothing was installed" in fakes.shown[-1][1] and not work.exists() and fakes.quits == 0
+
+
+def test_a_packaged_copy_that_cannot_replace_itself_or_has_no_key_is_offered_the_page_instead(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that a copy that was only unpacked, and a build whose code holds no key, are each sent to the download page.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    make_packaged(fakes, monkeypatch, can_replace_itself=False)
+    check(fakes)
+    make_packaged(fakes, monkeypatch, keys=())
+    check(fakes)
+    assert fakes.opened == [RELEASE_URL, RELEASE_URL] and fakes.package_runs == [] and fakes.quits == 0
+    assert all("page where it can be downloaded" in text for _, text in fakes.shown)
+
+
+def test_a_packaged_copy_that_is_up_to_date_is_told_so_and_asked_nothing(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that the update is only offered when the release is newer.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    make_packaged(fakes, monkeypatch)
+    fakes.version = "0.1.0"
+    check(fakes)
+    assert fakes.shown == [("information", "Alto is up to date (0.1.0).")] and fakes.package_runs == []
+
+
+def test_the_main_branch_setting_does_not_change_how_a_packaged_copy_updates(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that a packaged copy follows releases and replaces itself from one even when the main branch is chosen.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    make_packaged(fakes, monkeypatch)
+    save_channel("main")
+    check(fakes)
+    assert fakes.fetched == [updates.RELEASES_API] and fakes.ran == [] and fakes.quits == 1
+
+
+def test_a_copy_installed_with_the_script_still_installs_from_uv_and_restarts_whatever_keys_there_are(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that the new way of updating a packaged copy does not touch a copy installed with the script.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    fakes : Fakes
+        The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Sets the keys in the code.
+    """
+    monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", ("a public key",))
+    fakes.package_target = Target("linux", folder=Path("/x"), prefix=Path("/y"))  # would be taken, were it a packaged copy
+    check(fakes)
+    assert fakes.installs == ["v0.1.0"] and fakes.restarts == 1 and fakes.package_runs == [] and fakes.quits == 0
 
 
 # -- copies that cannot update ---------------------------------------------------------------------------------------

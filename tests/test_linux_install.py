@@ -396,3 +396,43 @@ def test_the_download_scripts_are_valid_shell() -> None:
     for script in (SCRIPT, ROOT / "scripts" / "build-linux.sh"):
         done = subprocess.run(["sh", "-n", str(script)], capture_output=True, text=True, check=False)
         assert done.returncode == 0, done.stderr
+
+
+def test_a_failed_copy_leaves_the_installed_copy_exactly_as_it_was(site: Site) -> None:
+    """
+    Check that when the new files cannot be copied, install stops, says nothing was changed, and keeps the old copy.
+
+    Parameters
+    ----------
+    site : Site
+        The scratch home and the download.
+    """
+    assert run(site, "install").returncode == 0
+    (site.opt / "marker").write_text("the old copy")
+    unreadable = site.download / "alto" / "unreadable"
+    unreadable.write_text("x")
+    unreadable.chmod(0)
+    try:
+        done = run(site, "install")
+    finally:
+        unreadable.chmod(0o644)
+    assert done.returncode == 1 and "nothing was changed" in done.stderr
+    assert (site.opt / "marker").read_text() == "the old copy" and (site.opt / "alto").is_file()
+    assert site.link.is_symlink() and site.link.readlink() == site.opt / "alto"
+    assert not (site.opt.parent / "alto.new").exists() and not (site.opt.parent / "alto.old").exists()
+
+
+def test_a_successful_update_leaves_no_copy_of_the_old_files_beside_the_new(site: Site) -> None:
+    """
+    Check that after installing over an old copy only the new one remains, with nothing set aside.
+
+    Parameters
+    ----------
+    site : Site
+        The scratch home and the download.
+    """
+    assert run(site, "install").returncode == 0
+    (site.opt / "old-only").write_text("x")
+    assert run(site, "install").returncode == 0
+    assert not (site.opt / "old-only").exists()
+    assert sorted(path.name for path in site.opt.parent.iterdir()) == ["alto"]

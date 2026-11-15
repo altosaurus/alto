@@ -31,6 +31,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import __main__ as entry
+from alto import updates
 from alto.exercises import REGISTRY
 from alto.exercises.base import (
     Exercise,
@@ -879,6 +880,35 @@ def test_asking_for_the_version_prints_it_and_opens_nothing(
     assert capsys.readouterr().out == f"Alto {app_version()}\n"
     monkeypatch.setattr(sys, "stdout", None)  # a program with no console, as the Windows build is
     assert entry.main() == 0
+
+
+def test_the_self_test_says_ok_and_exits_with_0_or_names_the_problem_and_exits_with_1(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """
+    Check what the build runs on a packaged copy: `alto --self-test` opens nothing, prints `ok`, and fails if something is wrong.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the command line, the application and the keys in the code.
+    capsys : pytest.CaptureFixture
+        Captures what is printed.
+    """
+    monkeypatch.setattr(sys, "argv", ["alto", "--self-test"])
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(entry, "QApplication", lambda *_args: pytest.fail("--self-test must not open anything"))
+    assert entry.main() == 0
+    assert capsys.readouterr().out == "ok\n"
+    monkeypatch.setattr(updates, "UPDATE_PUBLIC_KEYS", ("not a key",))
+    assert entry.main() == 1
+    assert "not a valid Ed25519 key" in capsys.readouterr().out
+    monkeypatch.setattr(sys, "stdout", None)  # a program with no console, as the Windows build is
+    assert entry.main() == 1
 
 
 def test_the_app_quits_quietly_if_no_profile_is_chosen(

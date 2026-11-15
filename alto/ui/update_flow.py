@@ -15,6 +15,7 @@ Examples
 
 from __future__ import annotations
 
+import shutil
 import threading
 from typing import TYPE_CHECKING
 
@@ -34,6 +35,7 @@ from PySide6.QtGui import (
     QTextCursor,
 )
 from PySide6.QtWidgets import (
+    QApplication,
     QDialog,
     QLabel,
     QMessageBox,
@@ -44,7 +46,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto import updates
+from alto import (
+    selfupdate,
+    updates,
+)
+from alto.ui.package_update import PackageUpdateDialog
 from alto.ui.store import (
     store,
     text_value,
@@ -753,6 +759,7 @@ def check_for_updates(
     parent: QWidget,
     *,
     restart: Callable[[], None],
+    quit_app: Callable[[], None] = QApplication.quit,
 ) -> None:
     """
     Ask whether a newer Alto is available and, if the person agrees, install it and restart.
@@ -767,6 +774,9 @@ def check_for_updates(
         The window the questions are asked over.
     restart : Callable
         What to do after a successful update to start the new version in place of this one. Keyword-only.
+    quit_app : Callable, default QApplication.quit
+        What to do to close Alto once an update has been handed to the program that installs it, which is how a packaged copy is
+        replaced. Keyword-only.
 
     Examples
     --------
@@ -779,7 +789,7 @@ def check_for_updates(
         QMessageBox.information(parent, CHECK_TITLE, reason)
         return
     if kind is InstallKind.PACKAGE or source is None or saved_channel() == updates.RELEASES:
-        check_release(parent, kind=kind, source=source, restart=restart)
+        check_release(parent, kind=kind, source=source, restart=restart, quit_app=quit_app)
     else:
         check_main(parent, source=source, restart=restart)
 
@@ -790,6 +800,7 @@ def check_release(
     kind: InstallKind,
     source: Source | None,
     restart: Callable[[], None],
+    quit_app: Callable[[], None],
 ) -> None:
     """
     Ask GitHub for the latest release and compare it with the version that is running.
@@ -805,6 +816,8 @@ def check_release(
         Where the running copy came from; None for a packaged copy. Keyword-only.
     restart : Callable
         What to do after a successful update. Keyword-only.
+    quit_app : Callable
+        What to do to close Alto once an update has been handed to the program that installs it. Keyword-only.
 
     Examples
     --------
@@ -824,6 +837,10 @@ def check_release(
         QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({installed}).")
         return
     if kind is InstallKind.PACKAGE or source is None:
+        target = selfupdate.self_update_target() if updates.UPDATE_PUBLIC_KEYS else None
+        if target is not None:  # this copy can replace itself, and has a key to check what it downloads with
+            update_package(parent, release=release, target=target, installed=installed, quit_app=quit_app)
+            return
         asked = QMessageBox.question(
             parent,
             CHECK_TITLE,
@@ -924,3 +941,52 @@ def install(
         return
     if UpdateDialog(parent, command=updates.install_command(source, uv=uv, tag=tag)).run():
         restart()
+
+
+def update_package(
+    parent: QWidget,
+    *,
+    release: updates.Release,
+    target: selfupdate.Target,
+    installed: str,
+    quit_app: Callable[[], None],
+) -> None:
+    """
+    Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The window the questions are asked over.
+    release : updates.Release
+        The newer release. Keyword-only.
+    target : selfupdate.Target
+        The copy that will be replaced. Keyword-only.
+    installed : str
+        The version that is running. Keyword-only.
+    quit_app : Callable
+        What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.
+
+    Examples
+    --------
+    >>> update_package  # doctest: +SKIP
+    """
+    asked = QMessageBox.question(
+        parent,
+        CHECK_TITLE,
+        f"An update is available ({installed} \u2192 {release.version}).\n\nUpdate now?",
+        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        QMessageBox.StandardButton.Yes,
+    )
+    if asked != QMessageBox.StandardButton.Yes:
+        return
+    prepared = PackageUpdateDialog(parent, release=release, target=target).run()
+    if prepared is None:
+        return
+    try:
+        selfupdate.start_handoff(prepared, target=target)
+    except (selfupdate.UpdateError, OSError) as error:
+        shutil.rmtree(prepared.work, ignore_errors=True)
+        QMessageBox.warning(parent, UPDATE_TITLE, f"The update could not be started: {error}\n\nNothing was installed.")
+        return
+    quit_app()
