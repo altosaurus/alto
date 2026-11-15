@@ -11,6 +11,7 @@ Alto uses [semantic versioning](https://semver.org/).
   between them. A page of an older release says so and links to the latest.
 - The documentation home page has a Download Alto button under the first paragraph, and a download section in place of "Get started". Its
   main button names the visitor's system and goes to the right file, with the other systems listed below it.
+- The documentation has a Release notes page, made from this changelog, under About in the sidebar and linked from the home page.
 
 ### Changed
 
