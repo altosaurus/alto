@@ -65,8 +65,7 @@ permalink: /
       <div class="dl-act"><a class="dl-pill" href="{{ source }}">Run from source</a></div>
     </div>
   </div>
-  <p class="dl-more"><a href="https://github.com/altosaurus/alto/releases/tag/v{{ v }}">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="{{ base }}SHA256SUMS">Check your download (SHA256SUMS)</a> &middot; <a href="{{ '/getting-started/#download-and-install' | relative_url }}">Installation guide</a></p>
-  <p class="dl-more">Installed copies update themselves: choose <b>Check for updates&hellip;</b> in the menu.</p>
+  <p class="dl-more"><a href="https://github.com/altosaurus/alto/releases/tag/v{{ v }}">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="{{ '/getting-started/' | relative_url }}">Getting started</a></p>
 </section>
 <script src="{{ '/assets/js/downloads.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 {% endif %}

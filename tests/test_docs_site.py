@@ -343,7 +343,7 @@ def test_the_file_names_in_the_download_section_are_the_ones_the_release_workflo
     windows = updates.platform_asset_name("1.2.3", system="Windows", machine="AMD64")
     assert linux and windows
     assert linux.replace("1.2.3", "{{ v }}") in home and windows.replace("1.2.3", "{{ v }}") in home
-    assert "https://github.com/altosaurus/alto/releases/download/v" in home and "SHA256SUMS" in home
+    assert "https://github.com/altosaurus/alto/releases/download/v" in home
 
 
 def test_each_build_says_which_release_to_offer_and_a_build_without_a_release_shows_no_download() -> None:
@@ -543,3 +543,24 @@ def test_the_on_this_page_list_is_made_from_the_headings_and_only_for_pages_with
     assert 'id="toc"' in layout and 'id="page-grid"' in layout and "toc.js" in layout and "nav.js" in layout
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".page-grid.has-toc" in css and "min-width: 1240px" in css and ".toc-inline" in css
+
+
+def test_the_home_page_keeps_to_the_download_and_leaves_checking_and_updating_to_the_installation_guide() -> None:
+    """Check the home page's links, and that the instructions that moved off it are in Getting started."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    links = home[home.index('<p class="dl-more">') : home.index("</section>")]
+    assert (
+        "Release notes" in links and "Older releases" in links and "/getting-started/" in links and ">Getting started<" in links
+    )
+    assert "Installation guide" not in home and "SHA256SUMS" not in home and "update themselves" not in home
+    guide = (DOCS / "getting-started.md").read_text(encoding="utf-8")
+    assert (
+        "### Check your download" in guide
+        and "sha256sum --check --ignore-missing SHA256SUMS" in guide
+        and "Get-FileHash" in guide
+    )
+    assert "## Updating Alto" in guide and "**Check for updates…**" in guide
+    assert "offers to open its download page" not in guide  # a packaged copy replaces itself now
+    assert guide.index("## Updating Alto") < guide.index(
+        "## Install and run",
+    )  # for everyone, not under the Linux-only script section
