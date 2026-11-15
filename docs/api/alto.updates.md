@@ -6,11 +6,12 @@ order: 5
 permalink: /api/alto.updates/
 ---
 {% raw %}
-Whether an installed copy of Alto can update itself, and the commands that check for a newer version and install it.
+What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves.
 
-Alto is installed as a program with `scripts/alto-install.sh`, which uses `uv tool` to install it from a git address. The
-installed package records that address and the commit it was built from, so the newest commit at the address can be compared
-with it. This module only decides and describes; `alto.ui.update_flow` runs the commands and asks the questions.
+A copy installed with `scripts/alto-install.sh` is a `uv tool` install from a git address. The installed package records that
+address and the commit it was built from, so it can follow the newest release (a tag) or the newest commit on the main branch.
+A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
+decides and describes; `alto.ui.update_flow` runs the commands and asks the questions.
 
 **Examples**
 
@@ -144,36 +145,104 @@ Say whether Alto is running from an environment that `uv tool` made, which is wh
 False
 ```
 
-## updatable
+## InstallKind
 
 ```python
-def updatable(
+class InstallKind(Enum)
+```
+
+How the running copy of Alto got where it is, which decides how it can be updated.
+
+**Attributes**
+
+- `SCRIPT` (*InstallKind*): Installed with `scripts/alto-install.sh`: it can replace itself, from a release or from the main branch.
+- `PACKAGE` (*InstallKind*): A packaged build (a tarball or the Windows installer): it can only be told that a newer release exists.
+- `OTHER` (*InstallKind*): Installed from a git address some other way, so there is no `uv tool` to update it with.
+- `SOURCE` (*InstallKind*): Run from a source folder, which is updated with git.
+
+**Examples**
+
+```pycon
+>>> InstallKind.SCRIPT.name
+'SCRIPT'
+```
+
+## is_frozen
+
+```python
+def is_frozen() -> bool
+```
+
+Say whether Alto is running as a packaged build, made with PyInstaller, rather than from Python.
+
+**Returns**
+
+- *bool*: True for a packaged build.
+
+**Examples**
+
+```pycon
+>>> is_frozen()
+False
+```
+
+## install_kind
+
+```python
+def install_kind(
     source: Source | None,
     *,
     tool: bool,
-) -> Source | str
+    frozen: bool,
+) -> InstallKind
 ```
 
-Decide whether a copy of Alto can update itself, and say why not if it cannot.
+Decide what kind of copy of Alto this is.
 
 **Parameters**
 
 - `source` (*Source or None*): Where it was installed from, if it was installed from a git address.
 - `tool` (*bool*): Whether it runs from an environment that `uv tool` made. Keyword-only.
+- `frozen` (*bool*): Whether it is a packaged build. Keyword-only.
 
 **Returns**
 
-- *Source or str*: The source, if the copy can update itself; otherwise a sentence that says why it cannot.
+- *InstallKind*: The kind.
 
 **Examples**
 
 ```pycon
 >>> here = Source("https://example.org/a.git", commit="abc1234")
->>> updatable(here, tool=True) is here
-True
->>> updatable(None, tool=True) == SOURCE_FOLDER
-True
->>> updatable(here, tool=False) == NOT_BY_SCRIPT
+>>> install_kind(here, tool=True, frozen=False).name
+'SCRIPT'
+>>> install_kind(here, tool=False, frozen=False).name, install_kind(None, tool=False, frozen=False).name
+('OTHER', 'SOURCE')
+>>> install_kind(None, tool=False, frozen=True).name
+'PACKAGE'
+```
+
+## cannot_update
+
+```python
+def cannot_update(kind: InstallKind) -> str | None
+```
+
+Say why a kind of copy cannot update itself at all, if it cannot.
+
+**Parameters**
+
+- `kind` (*InstallKind*): The kind of copy.
+
+**Returns**
+
+- *str or None*: A sentence for a copy run from a source folder or installed some other way; None for one that can be told about updates.
+
+**Examples**
+
+```pycon
+>>> cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER, cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
+(True, True)
+>>> cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
 True
 ```
 
@@ -215,7 +284,7 @@ def check_command(
 ) -> tuple[str, list[str]]
 ```
 
-Give the command that asks the address Alto came from for its newest commit.
+Give the command that asks the address Alto came from for the commit at the end of a branch or tag.
 
 **Parameters**
 
@@ -233,20 +302,27 @@ Give the command that asks the address Alto came from for its newest commit.
 ('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
 ```
 
-## upgrade_command
+## install_command
 
 ```python
-def upgrade_command(
+def install_command(
+    source: Source,
     *,
     uv: str,
+    tag: str | None = None,
 ) -> tuple[str, list[str]]
 ```
 
-Give the command that installs the newest version of Alto over the installed one.
+Give the command that installs Alto over the installed copy: a release, or the newest commit of the address.
+
+`uv tool install --force` is used rather than `uv tool upgrade`, because an upgrade stays on the tag or branch the copy was
+installed from, and a copy that follows a release must be able to move to the main branch and back.
 
 **Parameters**
 
+- `source` (*Source*): Where the running copy came from.
 - `uv` (*str*): The path of the `uv` program. Keyword-only.
+- `tag` (*str or None, default None*): The release to install, such as "v0.1.0"; the address's default branch if None. Keyword-only.
 
 **Returns**
 
@@ -255,8 +331,11 @@ Give the command that installs the newest version of Alto over the installed one
 **Examples**
 
 ```pycon
->>> upgrade_command(uv="uv")
-('uv', ['tool', 'upgrade', 'alto'])
+>>> here = Source("https://example.org/alto.git", commit="abc1234")
+>>> install_command(here, uv="uv", tag="v0.1.0")
+('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
+>>> install_command(here, uv="uv")
+('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
 ```
 
 ## parse_ls_remote
@@ -282,5 +361,194 @@ Read the commit id out of what `git ls-remote` printed.
 'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
 >>> parse_ls_remote("") is None, parse_ls_remote("fatal: repository not found") is None
 (True, True)
+```
+
+## Release
+
+```python
+Release(
+    version: str,
+    tag: str,
+    url: str,
+)
+```
+
+A release of Alto, as published on GitHub.
+
+**Attributes**
+
+- `version` (*str*): Its version, such as "0.1.0".
+- `tag` (*str*): The tag it is made from, such as "v0.1.0".
+- `url` (*str*): The page where it and its downloads are.
+
+**Examples**
+
+```pycon
+>>> Release("0.1.0", tag="v0.1.0", url="https://example.org/r").version
+'0.1.0'
+```
+
+## version_key
+
+```python
+def version_key(text: str) -> tuple[int, ...] | None
+```
+
+Turn a version, with or without the "v" of a tag, into numbers that can be compared.
+
+**Parameters**
+
+- `text` (*str*): The version, such as "0.10.2" or "v1.0".
+
+**Returns**
+
+- *tuple of int or None*: Its numbers; None if it is not made only of numbers and dots, as a pre-release such as "1.0.0rc1" is not.
+
+**Examples**
+
+```pycon
+>>> version_key("v0.10.2"), version_key("1.0")
+((0, 10, 2), (1, 0))
+>>> version_key("1.0.0rc1") is None, version_key("") is None, version_key("unknown") is None
+(True, True, True)
+```
+
+## is_newer
+
+```python
+def is_newer(
+    candidate: str,
+    *,
+    installed: str,
+) -> bool
+```
+
+Say whether one version is newer than another, comparing numbers and not text, so 0.10.0 is newer than 0.9.0.
+
+**Parameters**
+
+- `candidate` (*str*): The version that may be newer.
+- `installed` (*str*): The version to compare it with. Keyword-only.
+
+**Returns**
+
+- *bool*: True if the candidate is newer. False if it is the same or older, or if either is not a plain version.
+
+**Examples**
+
+```pycon
+>>> is_newer("0.10.0", installed="0.9.0"), is_newer("v0.1.0", installed="0.0.0")
+(True, True)
+>>> is_newer("1.0", installed="1.0.0"), is_newer("0.0.0", installed="0.1.0")
+(False, False)
+>>> is_newer("1.0.0", installed="unknown")
+False
+```
+
+## installed_version
+
+```python
+def installed_version() -> str
+```
+
+Give the version of Alto that is running.
+
+**Returns**
+
+- *str*: The installed version, or "unknown" if Alto was not installed as a package.
+
+**Examples**
+
+```pycon
+>>> installed_version().count(".") >= 1
+True
+```
+
+## parse_latest_release
+
+```python
+def parse_latest_release(text: str) -> Release | None
+```
+
+Read GitHub's answer about the latest release.
+
+**Parameters**
+
+- `text` (*str*): The JSON that `releases/latest` answers with.
+
+**Returns**
+
+- *Release or None*: The release, or None if the answer is not one, is a draft or a pre-release, or has a tag that is not a plain version.
+
+**Examples**
+
+```pycon
+>>> answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
+>>> parse_latest_release(answer)
+Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r')
+>>> parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
+True
+>>> parse_latest_release("not json") is None
+True
+```
+
+## release_answer
+
+```python
+def release_answer(
+    status: int,
+    *,
+    text: str,
+) -> Release | str
+```
+
+Make sense of what came back when the latest release was asked for.
+
+**Parameters**
+
+- `status` (*int*): The HTTP status, or 0 if no answer came at all.
+- `text` (*str*): The body of the answer, or the reason there was none. Keyword-only.
+
+**Returns**
+
+- *Release or str*: The release, or a sentence that says why there is none to offer.
+
+**Examples**
+
+```pycon
+>>> release_answer(404, text="") == NO_RELEASE
+True
+>>> release_answer(0, text="Name or service not known")
+'Alto could not reach GitHub: Name or service not known'
+>>> release_answer(403, text="rate limit exceeded")
+'GitHub answered with an error (403): rate limit exceeded'
+```
+
+## fetch_text
+
+```python
+def fetch_text(
+    url: str,
+    *,
+    seconds: int,
+) -> tuple[int, str]
+```
+
+Fetch a web address, waiting at most a number of seconds. It blocks, so the interface runs it on another thread.
+
+**Parameters**
+
+- `url` (*str*): The address.
+- `seconds` (*int*): How long to wait for the server. Keyword-only.
+
+**Returns**
+
+- *tuple of int and str*: The HTTP status and the body. If the server was not reached, 0 and the reason.
+
+**Examples**
+
+```pycon
+>>> fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
+0
 ```
 {% endraw %}

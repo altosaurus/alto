@@ -52,8 +52,10 @@ The first release.
 
 - `scripts/alto-install.sh` installs Alto from GitHub into its own environment, adds it to the application menu, updates it and
   removes it. Uninstalling keeps your data unless `--purge` is given.
-- Check for updates… in the menu: says whether a newer version is available, offers to install it with its progress shown, and
-  restarts Alto when you press OK.
+- Check for updates… in the menu: says whether a newer release is available, offers to install it with its progress shown, and
+  restarts Alto when you press OK. A packaged copy is offered the release's download page instead, as it cannot replace itself.
+- Settings → Updates shows the version you have, and a choice to follow the main branch instead of releases, for the latest
+  changes before they are released.
 - `alto --version` prints the version.
 - `ALTO_HOME` keeps a copy of Alto apart, with its own history and settings, and `scripts/dev.sh` runs a clone that way.
 

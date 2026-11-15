@@ -18,7 +18,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
-| [alto.updates](alto.updates/) | Whether an installed copy of Alto can update itself, and the commands that check for a newer version and install it. |
+| [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
 
 ## alto.exercises
 

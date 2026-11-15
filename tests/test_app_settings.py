@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
     QToolButton,
 )
 
+from alto import updates
 from alto.ui import (
     app_settings,
     keyboard_styles,
@@ -39,6 +40,10 @@ from alto.ui import (
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.theme_cards import ThemeCard
 from alto.ui.theme_editor import ThemeEditor
+from alto.ui.update_flow import (
+    save_channel,
+    saved_channel,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -703,3 +708,43 @@ def test_the_code_beside_a_colour_lights_up_with_the_colour(app: QApplication, n
     QApplication.sendEvent(button, QEvent(QEvent.Type.Leave))  # the pointer goes away
     assert "bold" not in code.styleSheet()
     editor.close()
+
+
+def test_the_updates_page_shows_the_version_and_remembers_whether_to_follow_the_main_branch(dialog: AppSettingsDialog) -> None:
+    """
+    Check that Settings has an Updates page that names the running version, follows releases by default, and saves the choice.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The dialog under test.
+    """
+    names = [dialog.categories.item(row).text() for row in range(dialog.categories.count())]
+    assert names == ["Appearance", "Sound", "Updates"]
+    dialog.categories.setCurrentRow(names.index("Updates"))
+    page = dialog.pages.currentWidget()
+    assert page is not None
+    texts = [label.text() for label in page.findChildren(QLabel)]
+    assert f"You have Alto {updates.installed_version()}." in texts
+    assert any("a packaged copy always follows releases" in text for text in texts)
+    assert not dialog.main_channel.isChecked() and saved_channel() == "releases"
+    dialog.main_channel.click()
+    assert saved_channel() == "main"
+    dialog.main_channel.click()
+    assert saved_channel() == "releases"
+
+
+def test_a_dialog_opens_with_the_main_branch_ticked_if_that_was_chosen(dialog: AppSettingsDialog) -> None:
+    """
+    Check that the box shows what was saved when the dialog is opened again.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        A dialog, which makes sure the settings are isolated from the real ones.
+    """
+    save_channel("main")
+    assert AppSettingsDialog().main_channel.isChecked()
+    save_channel("releases")
+    assert not AppSettingsDialog().main_channel.isChecked()
+    assert dialog is not None

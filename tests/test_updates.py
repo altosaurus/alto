@@ -6,24 +6,42 @@ from __future__ import annotations
 
 import json
 import os
+import socket
+import sys
+import threading
+from http.server import (
+    BaseHTTPRequestHandler,
+    HTTPServer,
+)
 from pathlib import Path
 
 import pytest
 
 from alto import updates
 from alto.updates import (
+    NO_RELEASE,
     NOT_BY_SCRIPT,
+    RELEASES_PAGE,
     SOURCE_FOLDER,
+    InstallKind,
+    Release,
     Source,
+    cannot_update,
     check_command,
+    fetch_text,
     find_program,
+    install_command,
+    install_kind,
     installed_source,
+    is_frozen,
+    is_newer,
     is_tool_install,
     parse_direct_url,
+    parse_latest_release,
     parse_ls_remote,
+    release_answer,
     short,
-    updatable,
-    upgrade_command,
+    version_key,
 )
 
 COMMIT = "b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"
@@ -131,13 +149,39 @@ def test_a_copy_installed_by_uv_has_its_receipt_in_its_environment(tmp_path: Pat
     assert is_tool_install(prefix=tmp_path)
 
 
-def test_only_a_git_install_made_by_the_script_can_update_itself() -> None:
-    """Check that a copy updates itself only with a git source and a `uv tool` environment, and is told why not otherwise."""
+def test_the_kind_of_copy_comes_from_where_it_was_installed_from_and_how() -> None:
+    """Check that a packaged build, a script install, another git install and a source folder are told apart."""
     here = Source(URL, commit=COMMIT)
-    assert updatable(here, tool=True) is here
-    assert updatable(None, tool=True) == SOURCE_FOLDER
-    assert updatable(None, tool=False) == SOURCE_FOLDER
-    assert updatable(here, tool=False) == NOT_BY_SCRIPT
+    assert install_kind(here, tool=True, frozen=False) is InstallKind.SCRIPT
+    assert install_kind(here, tool=False, frozen=False) is InstallKind.OTHER
+    assert install_kind(None, tool=False, frozen=False) is InstallKind.SOURCE
+    assert install_kind(None, tool=True, frozen=False) is InstallKind.SOURCE
+    assert install_kind(here, tool=True, frozen=True) is InstallKind.PACKAGE  # a packaged build is one whatever it records
+    assert install_kind(None, tool=False, frozen=True) is InstallKind.PACKAGE
+
+
+def test_a_source_folder_and_another_kind_of_install_are_told_why_they_cannot_update() -> None:
+    """Check that only the kinds of copy that can be told about updates have no reason given."""
+    assert cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER
+    assert cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
+    assert cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
+
+
+def test_a_packaged_build_is_the_one_that_python_marks_as_frozen(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that `is_frozen` follows the flag that PyInstaller sets on `sys`.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Sets and removes the flag for the length of the test.
+    """
+    # noinspection PyUnresolvedReferences
+    monkeypatch.delattr(sys, "frozen", raising=False)
+    assert not is_frozen()
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    assert is_frozen()
 
 
 def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -167,11 +211,15 @@ def test_a_program_is_found_on_the_path_or_where_the_installers_put_it(tmp_path:
     assert find_program("git", home=tmp_path) == str(on_path / "git")
 
 
-def test_the_two_commands_name_the_address_and_the_tool() -> None:
-    """Check that the check asks the install's own address and ref, and that the update upgrades the `alto` tool."""
+def test_the_check_asks_the_installs_own_address_and_the_install_command_names_a_release_or_the_default_branch() -> None:
+    """Check that the check uses the address and ref, and that installing names a tag, or none for the default branch."""
     source = Source(URL, commit=COMMIT, ref="dev")
     assert check_command(source, git="/usr/bin/git") == ("/usr/bin/git", ["ls-remote", URL, "dev"])
-    assert upgrade_command(uv="/usr/bin/uv") == ("/usr/bin/uv", ["tool", "upgrade", "alto"])
+    assert install_command(source, uv="/usr/bin/uv", tag="v0.1.0") == (
+        "/usr/bin/uv",
+        ["tool", "install", "--force", f"git+{URL}@v0.1.0"],
+    )
+    assert install_command(source, uv="/usr/bin/uv") == ("/usr/bin/uv", ["tool", "install", "--force", f"git+{URL}"])
 
 
 @pytest.mark.parametrize(
@@ -198,3 +246,165 @@ def test_the_commit_is_read_from_what_ls_remote_prints(text: str, expected: str 
         The commit id that should be read.
     """
     assert parse_ls_remote(text) == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("0.0.0", (0, 0, 0)),
+        ("v0.10.2", (0, 10, 2)),
+        ("1.0", (1, 0)),
+        (" v2 ", (2,)),
+        ("1.0.0rc1", None),
+        ("1.0.0-beta", None),
+        ("unknown", None),
+        ("", None),
+        ("v", None),
+    ],
+)
+def test_a_version_becomes_numbers_only_if_it_is_plain(text: str, expected: tuple[int, ...] | None) -> None:
+    """
+    Check that a version, with or without a tag's "v", is read as numbers, and that anything else is not.
+
+    Parameters
+    ----------
+    text : str
+        The version.
+    expected : tuple of int or None
+        The numbers it should become.
+    """
+    assert version_key(text) == expected
+
+
+def test_versions_are_compared_as_numbers_and_not_as_text() -> None:
+    """Check that 0.10.0 is newer than 0.9.0, that trailing zeros do not matter, and that unreadable versions are never newer."""
+    assert is_newer("0.10.0", installed="0.9.0") and is_newer("v0.1.0", installed="0.0.0") and is_newer("1", installed="0.9.9")
+    assert (
+        not is_newer("0.0.0", installed="0.0.0")
+        and not is_newer("1.0", installed="1.0.0")
+        and not is_newer("1.0.0", installed="1.0")
+    )
+    assert not is_newer("0.9.0", installed="0.10.0") and not is_newer("0.0.0", installed="0.1.0")
+    assert not is_newer("1.0.0", installed="unknown") and not is_newer("1.0.0rc1", installed="0.0.0")
+
+
+RELEASE_URL = "https://github.com/altosaurus/alto/releases/tag/v0.1.0"
+RELEASE = {
+    "tag_name": "v0.1.0",
+    "html_url": RELEASE_URL,
+    "draft": False,
+    "prerelease": False,
+}
+
+
+def test_the_latest_release_is_read_from_githubs_answer() -> None:
+    """Check that the tag becomes a version, with its page, and that a missing page falls back to the list of releases."""
+    assert parse_latest_release(json.dumps(RELEASE)) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
+    without_page = {key: value for key, value in RELEASE.items() if key != "html_url"}
+    found = parse_latest_release(json.dumps(without_page))
+    assert found is not None and found.url == RELEASES_PAGE
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        json.dumps({**RELEASE, "prerelease": True}),
+        json.dumps({**RELEASE, "draft": True}),
+        json.dumps({**RELEASE, "tag_name": "nightly"}),
+        json.dumps({**RELEASE, "tag_name": "v1.0.0rc1"}),
+        json.dumps({**RELEASE, "tag_name": 5}),
+        json.dumps({"message": "Not Found"}),
+        "[]",
+        "not json",
+        "",
+    ],
+)
+def test_an_answer_that_is_not_a_plain_release_is_not_one(text: str) -> None:
+    """
+    Check that drafts, pre-releases, odd tags and answers that are not releases at all give no release.
+
+    Parameters
+    ----------
+    text : str
+        What GitHub answered.
+    """
+    assert parse_latest_release(text) is None
+
+
+def test_each_kind_of_answer_gives_a_release_or_a_sentence_that_says_why_not() -> None:
+    """Check the release or the reason for success, no release yet, an error, no answer, and an answer that makes no sense."""
+    assert release_answer(200, text=json.dumps(RELEASE)) == Release("0.1.0", tag="v0.1.0", url=RELEASE_URL)
+    assert release_answer(404, text="Not Found") == NO_RELEASE
+    assert release_answer(403, text="rate limit exceeded") == "GitHub answered with an error (403): rate limit exceeded"
+    assert release_answer(500, text="") == "GitHub answered with an error (500): no details"
+    assert release_answer(0, text="Name or service not known") == "Alto could not reach GitHub: Name or service not known"
+    assert release_answer(0, text="") == "Alto could not reach GitHub: no answer"
+    assert "not understood" in str(release_answer(200, text="<html>"))
+
+
+class Handler(BaseHTTPRequestHandler):
+    """Answers a request for `/ok` with a release, and anything else with a 404."""
+
+    def do_GET(self) -> None:  # noqa: N802
+        """Answer one request, noting who asked and how."""
+        seen.append((self.path, self.headers.get("User-Agent", ""), self.headers.get("Accept", "")))
+        body = json.dumps(RELEASE).encode() if self.path == "/ok" else b'{"message": "Not Found"}'
+        self.send_response(200 if self.path == "/ok" else 404)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    # noinspection PyShadowingBuiltins
+    def log_message(self, format: str, *args: object) -> None:  # noqa: A002
+        """
+        Say nothing, so that the test output stays quiet.
+
+        Parameters
+        ----------
+        format : str
+            The format of the message, ignored.
+        *args : object
+            Its values, ignored.
+        """
+
+
+seen: list[tuple[str, str, str]] = []
+
+
+def test_fetching_reads_the_status_and_body_and_says_only_what_the_request_is_for() -> None:
+    """Check `fetch_text` against a real server: a 200, a 404, and headers that say only what the request is for."""
+    seen.clear()
+    # noinspection PyTypeChecker
+    server = HTTPServer(("127.0.0.1", 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        base = f"http://127.0.0.1:{server.server_port}"
+        status, text = fetch_text(f"{base}/ok", seconds=5)
+        assert status == 200 and json.loads(text)["tag_name"] == "v0.1.0"
+        status, _ = fetch_text(f"{base}/missing", seconds=5)
+        assert status == 404
+    finally:
+        server.shutdown()
+        server.server_close()
+    assert [agent for _, agent, _ in seen] == [updates.USER_AGENT, updates.USER_AGENT]
+    assert all(accept == "application/vnd.github+json" for _, _, accept in seen)
+    assert updates.USER_AGENT == "alto-update-check"
+
+
+def test_fetching_reports_no_answer_as_status_zero_with_the_reason() -> None:
+    """Check that a refused connection and a server that never answers both give 0 and a reason."""
+    free = socket.socket()
+    free.bind(("127.0.0.1", 0))
+    port = free.getsockname()[1]
+    free.close()  # nothing listens on this port now
+    status, reason = fetch_text(f"http://127.0.0.1:{port}/", seconds=2)
+    assert status == 0 and reason
+    silent = socket.socket()
+    silent.bind(("127.0.0.1", 0))
+    silent.listen(1)  # connections are accepted by the system, and then nobody answers
+    try:
+        status, reason = fetch_text(f"http://127.0.0.1:{silent.getsockname()[1]}/", seconds=1)
+    finally:
+        silent.close()
+    assert status == 0 and "timed out" in reason

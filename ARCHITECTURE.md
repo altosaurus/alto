@@ -140,10 +140,13 @@ flowchart TD
 and runs the event loop.
 
 The menu's **Check for updates…** (`alto/ui/update_flow.py`) is the one place Alto starts other programs and goes online.
-`alto/updates.py`, which has no Qt, decides whether this copy can update itself, from the git address and commit that the
-installer recorded for the package, and says what to run. The flow asks `git ls-remote` for the newest commit; if there is a newer
-one and the person agrees, it runs `uv tool upgrade alto` with the output on screen, and restarts through
-`MainWindow.restart_app()` once OK is pressed.
+`alto/updates.py`, which has no Qt, decides what kind of copy is running (installed with the script, a packaged build, or run
+from a source folder) from the git address and commit the installer recorded for the package and from `sys.frozen`, and builds
+the commands and reads the answers. What the check follows is a setting (`updates/channel`, in Settings → Updates). On the
+default **releases** channel the flow asks GitHub's `releases/latest` on a worker thread and compares versions; on **main** it
+asks `git ls-remote` for the newest commit. A script install can then run `uv tool install --force git+<url>@<tag>` (or without
+the tag, for main) with the output on screen, and restarts through `MainWindow.restart_app()` once OK is pressed; a packaged
+build cannot replace itself, so it is offered the release's download page.
 
 ### One question, start to finish
 

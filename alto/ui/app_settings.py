@@ -1,7 +1,7 @@
 """
 The application-wide settings dialog.
 
-It holds the colour theme, the notation font, the keyboard style, the transitions and the instrument.
+It holds the colour theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -10,8 +10,8 @@ Examples
 >>> dialog = AppSettingsDialog()
 >>> dialog.windowTitle()
 'Settings'
->>> dialog.pages.count()  # Appearance and Sound
-2
+>>> dialog.pages.count()  # Appearance, Sound and Updates
+3
 """
 
 from __future__ import annotations
@@ -28,6 +28,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QButtonGroup,
+    QCheckBox,
     QColorDialog,
     QDialog,
     QDialogButtonBox,
@@ -47,6 +48,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto import updates
 from alto.theory.pitch import Note
 from alto.ui import (
     keyboard_styles,
@@ -82,6 +84,10 @@ from alto.ui.transitions import (
     save_transition,
     saved_transition,
     transition_named,
+)
+from alto.ui.update_flow import (
+    save_channel,
+    saved_channel,
 )
 
 NEW_THEME = "__new__"  # what the row that makes a new theme holds in place of a theme's key
@@ -552,6 +558,7 @@ class AppSettingsDialog(QDialog):
         for name, page in (
             ("Appearance", self._appearance_page()),
             ("Sound", self._sound_page()),
+            ("Updates", self._updates_page()),
         ):
             item = QListWidgetItem(name)
             item.setSizeHint(QSize(0, 36))
@@ -1348,6 +1355,64 @@ class AppSettingsDialog(QDialog):
         self.instruments = InstrumentPicker()
         lay.addWidget(self.instruments, 1)
         return page
+
+    def _updates_page(self) -> QWidget:
+        """
+        Build the Updates page: the version that is running, and whether updates follow the main branch.
+
+        Returns
+        -------
+        QWidget
+            The page.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.main_channel.isChecked()
+        False
+        """
+        page, lay = self._page()
+        self._heading(
+            lay,
+            title="Updates",
+            about="Check for updates… in the menu looks for a newer Alto.",
+        )
+        lay.addWidget(QLabel(f"You have Alto {updates.installed_version()}."))
+        self.main_channel = QCheckBox("Follow the main branch (the latest changes, which may be unstable)")
+        self.main_channel.setChecked(saved_channel() == updates.MAIN)
+        self.main_channel.toggled.connect(self._choose_channel)
+        lay.addWidget(self.main_channel)
+        lay.addWidget(
+            self._about(
+                "By default, updates follow releases: a version is offered once it has been published. With this on, updates "
+                "follow the main branch instead, so you get each change as soon as it is merged, before it has been released. "
+                "This works for a copy installed with the install script; a packaged copy always follows releases.",
+            ),
+        )
+        lay.addStretch(1)
+        return page
+
+    @staticmethod
+    def _choose_channel(on: bool) -> None:
+        """
+        Remember whether updates follow the main branch.
+
+        Parameters
+        ----------
+        on : bool
+            True to follow the main branch, False to follow releases.
+
+        Examples
+        --------
+        >>> dialog = AppSettingsDialog()
+        >>> dialog.main_channel.setChecked(True)
+        >>> saved_channel()
+        'main'
+        >>> dialog.main_channel.setChecked(False)
+        >>> saved_channel()
+        'releases'
+        """
+        save_channel(updates.MAIN if on else updates.RELEASES)
 
     def choose_theme(self, key: str) -> None:
         """
