@@ -55,6 +55,7 @@ from alto.ui.database_page import (
 from alto.ui.main_window import MainWindow
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.stats_dialog import StatsPage
+from alto.ui.store import store
 from alto.ui.theme import apply_theme
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -69,6 +70,7 @@ SHOTS = (
     "intervals",
     "arpeggios",
     "key-signatures",
+    "circle-of-fifths",
     "stats",
     "stats-heatmap",
     "database",
@@ -283,6 +285,7 @@ def capture(
                 now=t,
             )
 
+    store().setValue("ui/sidebarWidth", 330)  # wide enough for the longest exercise name, so that none is cut off in a picture
     window = MainWindow(learner)
     window.resize(1100, 720)
     window.show()
@@ -296,6 +299,7 @@ def capture(
         ("IntervalNames", "intervals"),
         ("ArpeggioNames", "arpeggios"),
         ("KeySignatures", "key-signatures"),
+        ("CircleOfFifths", "circle-of-fifths"),
     ):
         if cls == "KeySignatures":  # show a signature on an alto clef staff, whatever the default is
             settings.key_signatures.clefs = {"alto"}

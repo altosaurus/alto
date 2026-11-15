@@ -14,8 +14,8 @@ signatures, find keys on a keyboard. It uses spaced repetition to optimize the l
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/note-identification-dark.png">
-    <img src="docs/assets/img/note-identification.png" alt="Alto's Note Identification exercise: a note on a staff with answer buttons" width="760">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/circle-of-fifths-dark.png">
+    <img src="docs/assets/img/circle-of-fifths.png" alt="Alto's Circle of Fifths exercise, with the list of exercises open on the left" width="760">
   </picture>
 </p>
 
