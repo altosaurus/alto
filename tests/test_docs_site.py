@@ -407,3 +407,65 @@ def test_every_icon_has_its_size_written_on_it_and_the_files_it_needs_are_stampe
             assert "width=" in tag and "height=" in tag, f"an icon in the {name} has no size: {tag}"
     assert "site.css' | relative_url }}?v={{ site.time" in pages["layout"]
     assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
+
+
+def _brightness(colour: str) -> float:
+    """
+    Give the relative luminance of a colour written as "#rrggbb", as the web accessibility guidelines define it.
+
+    Parameters
+    ----------
+    colour : str
+        The colour.
+
+    Returns
+    -------
+    float
+        0 for black up to 1 for white.
+    """
+    parts = [int(colour[index : index + 2], 16) / 255 for index in (1, 3, 5)]
+    linear = [value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4 for value in parts]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def _contrast(first: str, second: str) -> float:
+    """
+    Give the contrast ratio of two colours, from 1 (the same) to 21 (black on white).
+
+    Parameters
+    ----------
+    first : str
+        One colour, "#rrggbb".
+    second : str
+        The other.
+
+    Returns
+    -------
+    float
+        The ratio.
+    """
+    high, low = sorted((_brightness(first), _brightness(second)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+@pytest.mark.parametrize("block", [":root {", ':root:not([data-theme="light"]) {', ':root[data-theme="dark"] {'])
+def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block: str) -> None:
+    """
+    Check each theme's button colour: its words are readable on it (4.5 to 1) and the button stands out from the page (3 to 1).
+
+    Parameters
+    ----------
+    block : str
+        The start of the block of colours: light, dark by the system's setting, and dark by choice.
+    """
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    start = css.index(block)
+    colours = css[start : css.index("}", start)]
+    button = re.search(r"--button:\s*(#[0-9a-fA-F]{6})", colours)
+    words = re.search(r"--button-text:\s*(#[0-9a-fA-F]{6})", colours)
+    page = re.search(r"--bg:\s*(#[0-9a-fA-F]{6})", colours)
+    assert button and words and page
+    assert _contrast(button.group(1), words.group(1)) >= 4.5
+    assert _contrast(button.group(1), page.group(1)) >= 3.0
+    if "dark" in block or "light" in block:
+        assert button.group(1).lower() == "#2f6bd0"  # royal blue in both ways of getting dark
