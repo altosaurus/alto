@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/altosaurus/alto/graph/badge.svg)](https://codecov.io/gh/altosaurus/alto)
 [![Pyright](https://github.com/altosaurus/alto/actions/workflows/pyright.yml/badge.svg)](https://github.com/altosaurus/alto/actions/workflows/pyright.yml)
 [![License: MIT](https://img.shields.io/github/license/altosaurus/alto)](LICENSE)
-[![Docs](https://img.shields.io/github/actions/workflow/status/altosaurus/alto/pages%2Fpages-build-deployment?branch=main&label=docs)](https://altosaurus.github.io/alto/)
+[![Docs](https://img.shields.io/github/actions/workflow/status/altosaurus/alto/docs.yml?branch=main&label=docs)](https://altosaurus.github.io/alto/)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue)](https://github.com/altosaurus/alto/blob/main/.github/workflows/tests.yml)
 
 **Music theory practice for the Linux desktop that remembers what you get wrong.**
@@ -79,7 +79,7 @@ the Linux version. Alto may run on macOS too, but there is no package for it and
 
 Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
 carry their own Python and Qt, so nothing else needs installing. See
-[Getting started](https://altosaurus.github.io/alto/getting-started/) for how to install, update and uninstall them.
+[Getting started](https://altosaurus.github.io/alto/latest/getting-started/) for how to install, update and uninstall them.
 
 ## Get started from the source
 
@@ -98,7 +98,7 @@ The first time it opens, Alto asks you to create a profile. There is no password
 ## Documentation
 
 Guides for every exercise, how the practice scheduling works, the statistics, settings and shortcuts are in
-[`docs/`](docs/) and published at https://altosaurus.github.io/alto/.
+[`docs/`](docs/) and published at https://altosaurus.github.io/alto/, with a version for each release and one for the development docs.
 
 ## Development
 

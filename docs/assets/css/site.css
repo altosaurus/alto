@@ -132,3 +132,17 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
 }
 .theme-toggle:hover { border-color: var(--accent); }
 .theme-toggle .icon { font-size: 1.05rem; line-height: 1; }
+
+/* The version of the docs: a dropdown filled in by version-switcher.js, and a banner on a page that is not the latest release. */
+.version { display: flex; align-items: center; }
+.version-name { color: var(--muted); font-size: 0.85rem; }
+.version select {
+  font: inherit; font-size: 0.85rem; color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; max-width: 11rem;
+}
+.version select:hover, .version select:focus-visible { border-color: var(--accent); }
+.version-banner {
+  background: var(--accent-soft); color: var(--fg); border-bottom: 1px solid var(--line);
+  padding: 8px max(16px, env(safe-area-inset-left, 0px)); font-size: 0.9rem; text-align: center;
+}
+.version-banner a { color: var(--accent); font-weight: 600; }

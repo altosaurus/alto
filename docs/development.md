@@ -271,6 +271,50 @@ Add a `KeyboardStyle` to `STYLES` in `alto/ui/keyboard_styles.py`: the colours o
 a case, felt, bone caps or stop knobs. The settings page, the keyboard and the range picker all read from that list, so nothing
 else needs changing. Add a row to the table in `docs/settings.md`. The colours named after materials in the builder are `MATERIALS` in the same file.
 
+## Versions of the docs
+
+The docs exist in one copy for each release and one for the development version, and a dropdown in the top bar switches between them.
+A page of an old release says so in a banner, and links to the same page in the latest one.
+
+```
+/alto/dev/        the development version, rebuilt when a change to docs/ is merged into main
+/alto/v0.1.0/     one folder for each release, built once when its tag is pushed and not changed after that
+/alto/latest/     the newest release again, built with its own address so that its links and its sitemap say /latest/
+/alto/            goes to latest (to dev until there is a release); also versions.json, version-switcher.js, 404.html, robots.txt
+```
+
+The Docs workflow (`.github/workflows/docs.yml`) builds them with Jekyll and keeps the result on the branch `gh-pages`, which
+GitHub Pages serves. `scripts/docs_site.py` writes what sits around the versions: `versions.json`, the home page that goes to the
+latest, and the sitemap. The files that belong to the whole site and not to one version are in `docs/site-root/`. One of them,
+`version-switcher.js`, fills the dropdown from `versions.json` at run time, so a release made years ago still offers the newest
+versions, and a fix to the dropdown reaches all of them.
+
+Search engines are told to prefer the latest version: every page has a `canonical` address under `/latest/`, `dev` is `noindex`, and
+only `latest` is in the sitemap. A page that existed at the root before the docs had versions is sent to `/latest/` by `404.html`.
+
+To add a docs-only fix to an old release, there is nothing to do but publish a new release: a version is built once from its tag.
+To build a release that was tagged before it had a dropdown, run the Docs workflow by hand with `ref` set to its tag. It puts the
+current layout over that tag's docs, and the words stay as they were.
+
+**Switching a copy of the repository to this**, once: after the first run has created the `gh-pages` branch, set Settings, Pages,
+Source to "Deploy from a branch", `gh-pages`, `/ (root)`. Until then GitHub builds a single copy from `main:/docs` as before. Do this
+soon after merging, because the one copy no longer has `robots.txt`, `llms.txt` or the Search Console file, which now live in
+`docs/site-root/`.
+
+### Building the docs
+
+You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one version the way the workflow does:
+
+```bash
+cd docs
+printf 'baseurl: /alto/dev\ndocs_version: dev\n' > /tmp/version.yml
+bundle exec jekyll build --destination /tmp/site/dev --config _config.yml,/tmp/version.yml
+python ../scripts/docs_site.py finish /tmp/site --root-files site-root --site-url https://altosaurus.github.io/alto
+```
+
+then serve `/tmp/site` under a folder called `alto` (for example `mkdir /tmp/www && ln -s /tmp/site /tmp/www/alto && python -m http.server -d /tmp/www`)
+and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the script and the files without needing Ruby.
+
 ## Keeping the docs and screenshots current
 
 Every picture in the docs comes as a light and a dark pair, and `scripts/screenshots.py` makes all of them:
