@@ -17,6 +17,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from alto import updates
+
 if TYPE_CHECKING:
     from types import ModuleType
 
@@ -320,3 +322,67 @@ def test_the_examples_in_the_script_run() -> None:
     """Check the examples in the docstrings of `scripts/docs_site.py`, which pytest does not collect from `scripts/`."""
     result = doctest.testmod(docs_site, optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
     assert result.attempted > 10 and result.failed == 0
+
+
+def test_the_home_page_has_a_download_button_and_a_download_section_in_place_of_get_started() -> None:
+    """Check the button under the first paragraph, the section it goes to, and the words in it."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert "## Get started" not in home  # the section for developers is gone; the Getting started page keeps those steps
+    hero = home[home.index('<div class="hero">') : home.index("</div>", home.index('<div class="hero">'))]
+    assert hero.index('class="lead"') < hero.index('class="dl-go" href="#download"')  # under the first paragraph
+    assert '<section class="dl" id="download"' in home and "<b>Version {{ v }}</b>. Free on all platforms." in home
+    assert "Windows may warn" not in home and "publisher is unknown" not in home
+    assert "run Alto from its source code" in home and "/getting-started/#install-and-run" in home
+    assert "## Install and run" in (DOCS / "getting-started.md").read_text(encoding="utf-8")  # the section that link goes to
+
+
+def test_the_file_names_in_the_download_section_are_the_ones_the_release_workflow_makes() -> None:
+    """Check the file names and the address of a release's files against the name the updater itself looks for."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    linux = updates.platform_asset_name("1.2.3", system="Linux", machine="x86_64")
+    windows = updates.platform_asset_name("1.2.3", system="Windows", machine="AMD64")
+    assert linux and windows
+    assert linux.replace("1.2.3", "{{ v }}") in home and windows.replace("1.2.3", "{{ v }}") in home
+    assert "https://github.com/altosaurus/alto/releases/download/v" in home and "SHA256SUMS" in home
+
+
+def test_each_build_says_which_release_to_offer_and_a_build_without_a_release_shows_no_download() -> None:
+    """Check that every build is given its release (the newest for dev) and that the page copes with there being none."""
+    workflow = (ROOT / ".github" / "workflows" / "docs.yml").read_text(encoding="utf-8")
+    assert 'app_version: "%s"' in workflow and 'APP_VERSION="${VERSION#v}"' in workflow
+    assert "docs_site.py latest $(git -C source tag --list" in workflow  # for dev: the newest release
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert '{% if site.app_version != "" %}' in home and '{% if v != "" %}' in home
+    assert "app_version:" in (DOCS / "_config.yml").read_text(encoding="utf-8")
+
+
+def test_the_download_script_detects_the_system_and_keeps_and_sends_nothing() -> None:
+    """
+    Check the script that chooses the main button: it names the systems, copes with phones and ARM Linux, and stores nothing.
+
+    Reading the visitor's system to choose a button is harmless only while it stays in the page, so no way to store or send it may
+    ever be added to this file.
+    """
+    script = (DOCS / "assets" / "js" / "downloads.js").read_text(encoding="utf-8")
+    for word in ("windows", "linux", "macos", "phone", "other", "aarch64", "userAgentData", "Your system"):
+        assert word in script
+    for forbidden in (
+        "localStorage",
+        "sessionStorage",
+        "document.cookie",
+        "fetch(",
+        "XMLHttpRequest",
+        "sendBeacon",
+        "WebSocket",
+        "Image(",
+    ):
+        assert forbidden not in script, f"downloads.js must not use {forbidden}"
+
+
+def test_the_logos_are_in_the_page_and_credited() -> None:
+    """Check that the three system marks exist as symbols and that the page of credits names where two of them come from."""
+    icons = (DOCS / "_includes" / "os-icons.html").read_text(encoding="utf-8")
+    for name in ("os-windows", "os-apple", "os-linux", "os-computer"):
+        assert f'id="{name}"' in icons
+    page = (DOCS / "credits.md").read_text(encoding="utf-8")
+    assert "Simple Icons" in page and "CC0" in page

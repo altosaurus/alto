@@ -9,6 +9,9 @@ url: https://altosaurus.github.io
 site_root: /alto
 baseurl: /alto
 docs_version: dev
+# The release that the download section offers. The Docs workflow sets it for each build: the version itself for a release, and
+# the newest release for the development docs.
+app_version: "0.0.0"
 # Every page uses the one layout. (GitHub's own builder does this by itself; saying it here makes a build anywhere the same.)
 defaults:
   - scope:
