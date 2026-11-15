@@ -14,6 +14,7 @@ from PySide6.QtCore import QSettings
 from alto.location import (
     alto_home,
     database_path,
+    desktop_name,
     settings_folder,
 )
 from alto.ui.store import store
@@ -99,3 +100,18 @@ def test_settings_saved_with_alto_home_go_there_and_not_to_the_usual_place(home:
     settings.sync()
     assert Path(settings.fileName()).is_relative_to(home / "config") and Path(settings.fileName()).is_file()
     assert QSettings("alto", "alto").value("demo/where") is None
+
+
+def test_a_copy_kept_apart_has_its_own_name_for_the_desktop(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that the desktop name, which decides the icon and the grouping in the dock, differs when `ALTO_HOME` is set.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Sets and removes the variable for the length of the test.
+    """
+    monkeypatch.delenv("ALTO_HOME", raising=False)
+    assert desktop_name() == "alto"
+    monkeypatch.setenv("ALTO_HOME", "/tmp/alto-dev")
+    assert desktop_name() == "alto-dev"

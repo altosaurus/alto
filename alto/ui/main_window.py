@@ -318,7 +318,8 @@ class MainWindow(QMainWindow):
         self.stats_button.setAutoRaise(True)
         self.stats_button.setToolTip("Statistics")
         self.stats_button.setAccessibleName("Statistics")
-        self.stats_button.setVisible(self.learner is not None)
+        if self.learner is None:  # hidden, never shown here: a button with no parent that is shown opens as a window of its own
+            self.stats_button.hide()
         self.stats_button.clicked.connect(self.open_stats)
         buttons.addWidget(self.stats_button)
         self.database_button = QToolButton()
@@ -327,7 +328,8 @@ class MainWindow(QMainWindow):
         self.database_button.setAutoRaise(True)
         self.database_button.setToolTip("Browse the database")
         self.database_button.setAccessibleName("Browse the database")
-        self.database_button.setVisible(self.learner is not None)
+        if self.learner is None:
+            self.database_button.hide()
         self.database_button.clicked.connect(self.open_database)
         buttons.addWidget(self.database_button)
         bar = QGridLayout()

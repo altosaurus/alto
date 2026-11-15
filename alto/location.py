@@ -101,3 +101,25 @@ def settings_folder(*, environ: Mapping[str, str] = os.environ) -> Path | None:
     """
     home = alto_home(environ=environ)
     return None if home is None else home / "config"
+
+
+def desktop_name(*, environ: Mapping[str, str] = os.environ) -> str:
+    """
+    Give the name the desktop uses to match Alto's window to its menu entry, and so to its icon in the dock.
+
+    Parameters
+    ----------
+    environ : mapping of str to str
+        The environment to read. Keyword-only.
+
+    Returns
+    -------
+    str
+        "alto", or "alto-dev" when `ALTO_HOME` keeps a second copy apart, so that the two copies are separate in the dock.
+
+    Examples
+    --------
+    >>> desktop_name(environ={}), desktop_name(environ={"ALTO_HOME": "/tmp/alto-dev"})
+    ('alto', 'alto-dev')
+    """
+    return "alto" if alto_home(environ=environ) is None else "alto-dev"
