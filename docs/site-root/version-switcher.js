@@ -50,7 +50,7 @@
       var entries = [];
       if (latest) { entries.push({ value: "latest", label: "latest (" + latest + ")" }); }
       data.versions.forEach(function (name) {
-        entries.push({ value: name, label: name === "dev" ? "dev (unreleased)" : name });
+        entries.push({ value: name, label: name });
       });
       entries.forEach(function (entry) {
         var option = document.createElement("option");
