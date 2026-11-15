@@ -198,6 +198,14 @@ Both stores go into a backup (Export backup… and Import backup… in the menu)
 preferences and a checksummed manifest, written by `alto/learning/backup.py`. Importing replaces everything, so a clean install
 comes up exactly as the backup was made.
 
+## Packaging (`packaging/`, `scripts/build-linux.sh`)
+
+A packaged copy is Alto frozen with PyInstaller: `packaging/launcher.py` runs `alto.__main__.main`, and `packaging/alto.spec` adds the
+package's data files (`alto/assets`) and metadata (so `importlib.metadata`, and with it `alto --version`, a backup's version and the
+update check, work). The same spec is used for Linux and Windows. `scripts/build-linux.sh` builds the Linux download and
+`packaging/linux/install.sh` is the script inside it. A frozen copy is told apart at run time by `sys.frozen` (`alto.updates.is_frozen`),
+which is why `restart_app()` starts it with no arguments and why it is offered a download page, not an update, when a release is newer.
+
 ## Tests
 
 `pytest` runs the tests in `tests/` and the `>>>` examples in every docstring in `alto/`, so the examples cannot go out of date.

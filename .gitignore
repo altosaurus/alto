@@ -9,3 +9,6 @@ alto.egg-info/
 .coverage
 coverage.xml
 htmlcov/
+dist/
+build/
+.package-build/

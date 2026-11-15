@@ -293,6 +293,34 @@ pre-releases out, and compares version numbers (`0.10.0` is newer than `0.9.0`),
 `python scripts/changelog_section.py 0.1.0` prints the notes of one version, which is what a GitHub release shows. `alto --version`
 prints the version of the copy you run.
 
+## Building the Linux download
+
+```bash
+sh scripts/build-linux.sh                       # dist/alto-<version>-linux-<architecture>.tar.gz, and its .sha256 file
+PYTHON=/path/to/python3.13 sh scripts/build-linux.sh
+```
+
+The script makes a clean virtual environment under `.package-build/`, installs Alto and PyInstaller (the `package` extra in
+`pyproject.toml`) in it, freezes Alto with `packaging/alto.spec`, and packs the result with `packaging/linux/install.sh`, a
+README, the licence and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
+frozen program says `Alto <version>` and that it opens its window (under Qt's offscreen platform, with its own data folder, so a
+real profile is never touched).
+
+The download is the program folder, which carries its own Python and Qt, so users need no Python. `install.sh install` copies it to
+`~/.local/opt/alto`, links `~/.local/bin/alto` and adds the menu entry; `uninstall` removes those and keeps the user's data, and
+`uninstall --purge` deletes that too. `tests/test_linux_install.py` runs the real script in a scratch home.
+
+Two things to know when building a release:
+
+- **Build on an old Linux.** The frozen program needs at least the C library of the system it was built on, so the release
+  workflow builds on Ubuntu 22.04, and a build made on a newer system will not start on older ones.
+- **System libraries come from the build machine.** PyInstaller copies the libraries Qt needs from the system it runs on
+  (including GTK, glib and `libstdc++`), apart from a short list it leaves out (graphics drivers, `libxcb` and `libwayland`).
+  If a build misbehaves on another distribution, check which of those it loads, and exclude the offender in `packaging/alto.spec`.
+
+To try a build without touching your own install, extract it and run `./alto/alto`, or run `install.sh` with `ALTO_PREFIX`,
+`XDG_DATA_HOME` and `XDG_CONFIG_HOME` pointing at scratch folders.
+
 ## Reporting problems
 
 Open an issue on [GitHub](https://github.com/genedan/alto/issues). Say which operating system and Python version you
