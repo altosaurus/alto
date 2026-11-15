@@ -3,7 +3,7 @@ title: For developers
 nav_order: 9
 permalink: /development/
 ---
-Alto is a Python application using PySide6. The source is at [github.com/genedan/alto](https://github.com/genedan/alto).
+Alto is a Python application using PySide6. The source is at [github.com/altosaurus/alto](https://github.com/altosaurus/alto).
 
 This page is the quick reference: commands, tooling and the short recipes. The [developer guide]({{ '/guide/' | relative_url }}) explains how
 the program works and the ideas underneath it (audio, notation, spaced repetition, styling, animation), with reading lists.
@@ -371,5 +371,5 @@ The release is a normal one and never a pre-release, because Alto's update check
 
 ## Reporting problems
 
-Open an issue on [GitHub](https://github.com/genedan/alto/issues). Say which operating system and Python version you
+Open an issue on [GitHub](https://github.com/altosaurus/alto/issues). Say which operating system and Python version you
 use, and which exercise you were in.

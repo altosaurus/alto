@@ -1,6 +1,8 @@
 title: Alto
-description: Desktop music theory drills that adapt to what you find hard.
-url: https://genedan.github.io
+description: Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.
+plugins:
+  - jekyll-sitemap
+url: https://altosaurus.github.io
 baseurl: /alto
 markdown: kramdown
 kramdown:

@@ -39,7 +39,7 @@ newer release exists and offers to open its download page.
 ## Install and run
 
 ```bash
-git clone https://github.com/genedan/alto.git
+git clone https://github.com/altosaurus/alto.git
 cd alto
 python -m venv .venv
 .venv/bin/pip install -e .
