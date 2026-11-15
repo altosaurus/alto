@@ -1,0 +1,20 @@
+name: Package
+
+# Builds both packages on a pull request that could change them, so a break shows before a release is tagged. Nothing is published.
+on:
+  pull_request:
+    paths:
+      - "packaging/**"
+      - "scripts/build-*"
+      - "pyproject.toml"
+      - "alto/assets/**"
+      - ".github/workflows/build-packages.yml"
+      - ".github/workflows/package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-packages.yml

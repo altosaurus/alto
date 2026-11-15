@@ -1,0 +1,70 @@
+name: Release
+
+# Pushing a tag such as v0.1.0 builds the Linux download and the Windows installer and publishes them as a GitHub release, with the
+# notes of that version from CHANGELOG.md. Run by hand (workflow_dispatch) it only builds, to rehearse a release without publishing.
+#
+# The release is a normal one, not a pre-release: the update check inside Alto asks GitHub for the latest release, which leaves
+# pre-releases out.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The tag is the version, and the changelog has notes for it
+        run: |
+          version=$(python3 -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "The tag ${GITHUB_REF_NAME} is not v${version}, the version in pyproject.toml." >&2
+            exit 1
+          fi
+          python3 scripts/changelog_section.py "${version}" > /dev/null
+
+  build:
+    needs: check
+    uses: ./.github/workflows/build-packages.yml
+
+  publish:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Checksums and release notes
+        run: |
+          cd dist
+          sha256sum alto-* > SHA256SUMS
+          cd ..
+          python3 scripts/changelog_section.py "${GITHUB_REF_NAME}" > notes.md
+          cat >> notes.md <<'NOTES'
+
+          ## Downloads
+
+          - **Linux:** `alto-*-linux-x86_64.tar.gz`. Unpack it and run `sh install.sh install`. `sh install.sh uninstall` removes it and keeps your data; add `--purge` to delete that too.
+          - **Windows:** `alto-*-windows-x64-setup.exe`. Windows may say it protects your PC because the publisher is unknown, as the installer is not signed yet: choose **More info**, then **Run anyway**.
+          - `SHA256SUMS` has the checksum of each file.
+          NOTES
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/SHA256SUMS \
+            --title "Alto ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag

@@ -13,6 +13,29 @@ The default notation style, Finale Maestro, uses a font that comes with Alto, so
 "Noto Music" style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
 change the notation style in [Settings]({{ '/settings/' | relative_url }}).
 
+## Download and install
+
+Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
+carry their own Python and Qt, so nothing else needs installing.
+
+**Linux.** Download `alto-<version>-linux-x86_64.tar.gz`, unpack it, and in the folder it makes run:
+
+```bash
+sh install.sh install
+```
+
+This copies Alto to `~/.local/opt/alto`, links it as `~/.local/bin/alto`, and adds Alto to your application menu, for you only, with no
+root. To update, unpack the newer download and run the same command. `sh install.sh uninstall` removes Alto and keeps your practice
+history and settings; add `--purge` to delete those too (use **Export backup…** first if you might want them back).
+
+**Windows.** Download `alto-<version>-windows-x64-setup.exe` and run it. It installs for you only, with no administrator prompt, adds
+Alto to the Start menu, and lists it in Settings → Apps. Windows may say it protects your PC because the publisher is unknown: the
+installer is not signed yet. Choose **More info**, then **Run anyway**. To update, run the newer installer. To uninstall, use
+Settings → Apps; the uninstaller asks whether to also remove your practice history and settings.
+
+Each release has a `SHA256SUMS` file to check the downloads with. **Check for updates…** in the menu tells a packaged copy when a
+newer release exists and offers to open its download page.
+
 ## Install and run
 
 ```bash

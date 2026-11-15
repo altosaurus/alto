@@ -203,7 +203,9 @@ comes up exactly as the backup was made.
 A packaged copy is Alto frozen with PyInstaller: `packaging/launcher.py` runs `alto.__main__.main`, and `packaging/alto.spec` adds the
 package's data files (`alto/assets`) and metadata (so `importlib.metadata`, and with it `alto --version`, a backup's version and the
 update check, work). The same spec is used for Linux and Windows. `scripts/build-linux.sh` builds the Linux download and
-`packaging/linux/install.sh` is the script inside it. A frozen copy is told apart at run time by `sys.frozen` (`alto.updates.is_frozen`),
+`packaging/linux/install.sh` is the script inside it; `scripts/build-windows.ps1` builds the Windows installer from
+`packaging/windows/alto.iss`. `.github/workflows/build-packages.yml` builds and tests both, and `release.yml` publishes them when a
+version is tagged. A frozen copy is told apart at run time by `sys.frozen` (`alto.updates.is_frozen`),
 which is why `restart_app()` starts it with no arguments and why it is offered a download page, not an update, when a release is newer.
 
 ## Tests

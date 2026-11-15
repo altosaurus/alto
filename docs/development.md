@@ -285,7 +285,8 @@ To make a release:
 2. In `CHANGELOG.md`, rename **Unreleased** to the version with today's date (`## [0.1.0] - 2026-12-01`), add a new empty
    **Unreleased** above it, and update the two links at the bottom.
 3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
-4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`.
+4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
+   the tag starts the **Release** workflow (see below), which publishes the downloads.
 
 Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
 pre-releases out, and compares version numbers (`0.10.0` is newer than `0.9.0`), so a tag must be plain numbers such as `v0.1.0`.
@@ -320,6 +321,29 @@ Two things to know when building a release:
 
 To try a build without touching your own install, extract it and run `./alto/alto`, or run `install.sh` with `ALTO_PREFIX`,
 `XDG_DATA_HOME` and `XDG_CONFIG_HOME` pointing at scratch folders.
+
+## Building the Windows installer, and the release workflow
+
+`scripts\build-windows.ps1` builds `dist\alto-<version>-windows-x64-setup.exe`. It needs Windows, Python 3.13 and
+[Inno Setup 6](https://jrsoftware.org/isinfo.php). Like the Linux script it freezes Alto with `packaging/alto.spec` and checks that the
+program starts; then it compiles `packaging/windows/alto.iss` and tries the installer for real: a silent install, a run, a silent
+uninstall that must keep the data, and an uninstall with `/PURGE=1` that must remove it. That test uses the real `%APPDATA%\Alto`, so
+run it only on a computer where that folder may be touched, such as a CI runner. The installer is for one user (no administrator
+prompt); its `AppId` in `alto.iss` must never change, because a newer installer finds the copy it updates by it. The uninstaller asks
+whether to also remove the practice history (`%APPDATA%\Alto`) and the settings (`HKEY_CURRENT_USER\Software\alto`); a silent
+uninstall keeps them unless it is given `/PURGE=1`. The installer is not signed, so Windows shows an "unknown publisher" warning.
+
+Three GitHub workflows do the building:
+
+- **Build packages** (`build-packages.yml`) builds and tests both packages: the Linux download on Ubuntu 22.04 and the Windows
+  installer on a Windows runner, both with Python 3.13. The other two call it.
+- **Package** runs it on a pull request that changes `packaging/`, the build scripts, `pyproject.toml` or the assets, so a break
+  shows before a release. It publishes nothing.
+- **Release** runs when a tag such as `v0.1.0` is pushed. It first checks that the tag is `v` plus the version in `pyproject.toml` and
+  that `CHANGELOG.md` has notes for it; then builds both packages; then creates the GitHub release with both files, a `SHA256SUMS`
+  file and the changelog notes. Started by hand from the Actions tab, it only builds, to rehearse a release.
+
+The release is a normal one and never a pre-release, because Alto's update check asks GitHub for the latest release.
 
 ## Reporting problems
 

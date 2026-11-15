@@ -59,6 +59,10 @@ The first release.
 - A Linux download: a `.tar.gz` with its own Python and Qt, so nothing else needs installing. `sh install.sh install` installs it
   for you alone, with an entry in the application menu, and `sh install.sh uninstall` removes it and keeps your data unless
   `--purge` is given. Installing a newer download over it updates it.
+- A Windows installer: Alto for one user with no administrator prompt, an entry in the Start menu and in Settings → Apps, and an
+  uninstaller that asks whether to also remove your practice history and settings. Running a newer installer updates it. The
+  installer is not signed, so Windows may warn about an unknown publisher the first time.
+- Both downloads are built and tested on GitHub when a version is tagged, and published with checksums.
 - `alto --version` prints the version.
 - `ALTO_HOME` keeps a copy of Alto apart, with its own history and settings, and `scripts/dev.sh` runs a clone that way.
 
