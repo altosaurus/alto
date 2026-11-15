@@ -7,6 +7,7 @@ for real, with `sh` and the real `install.sh`, in a scratch home. Nothing here g
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import io
 import os
@@ -687,36 +688,110 @@ def test_the_environment_given_to_the_installer_is_the_systems_and_not_the_bundl
     assert env["LD_LIBRARY_PATH"] == "/opt/alto/_internal"  # the original is not changed
 
 
-def test_on_windows_the_installer_is_started_detached_with_the_arguments_the_installer_script_expects(
+def decoded(command: list[str]) -> str:
+    """
+    Read the PowerShell script that a command carries, which is base64 of UTF-16 after `-EncodedCommand`.
+
+    Parameters
+    ----------
+    command : list of str
+        The command.
+
+    Returns
+    -------
+    str
+        The script.
+    """
+    return base64.b64decode(command[-1]).decode("utf-16-le")
+
+
+def test_on_windows_a_step_waits_for_alto_to_end_then_runs_the_installer_and_restarts_the_old_alto_if_it_fails() -> None:
+    """Check the script handed over: wait for the process, run the installer with its arguments, and the way back if it fails."""
+    command = selfupdate.windows_handoff_command(
+        Path("C:/Temp/alto-update-x/setup.exe"),
+        pid=4242,
+        alto=Path("C:/Users/me/Alto/alto.exe"),
+    )
+    assert command[:-1] == ["powershell.exe", "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand"]
+    script = decoded(command).splitlines()
+    assert script[1] == "try { Wait-Process -Id 4242 -Timeout 60 -ErrorAction Stop } catch { }"
+    assert script[2].startswith("$run = Start-Process -FilePath 'C:") and script[2].endswith("-Wait -PassThru")
+    for argument in ("/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1"):
+        assert f"'{argument}'" in script[2]
+    assert "$run.ExitCode -ne 0" in script[3] and "alto.exe" in script[3] and "Start-Process" in script[3]
+
+
+def test_a_path_with_a_quote_in_it_cannot_end_the_powershell_string_early() -> None:
+    """Check that a single quote in a path, as an apostrophe in a user's name, is doubled and so stays inside its string."""
+    command = selfupdate.windows_handoff_command(
+        Path("C:/Users/O'Brien/AppData/setup.exe"),
+        pid=1,
+        alto=Path("C:/O'Brien/alto.exe"),
+    )
+    script = decoded(command)
+    assert script.count("O''Brien") == 2 and "O'Brien" not in script
+
+
+def test_on_windows_alto_starts_that_step_hidden_and_detached_and_does_not_start_the_installer_itself(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check the exact command: the downloaded installer and the fixed list of arguments, with the cleaned environment.
+    Check that with PowerShell available, what is started is the waiting step, with the cleaned environment.
 
     Parameters
     ----------
     tmp_path : Path
         A new folder.
     monkeypatch : pytest.MonkeyPatch
-        Replaces the starting of a program.
+        Replaces the starting of a program and the search for PowerShell.
     """
     started: list[tuple[list[str], dict[str, object]]] = []
     monkeypatch.setattr(selfupdate.subprocess, "Popen", lambda argv, **kwargs: started.append((argv, kwargs)))
+    monkeypatch.setattr(selfupdate.shutil, "which", lambda name, path=None: "C:/Windows/powershell.exe")
     installer = tmp_path / WINDOWS_NAME
     selfupdate.start_handoff(
         Prepared(tmp_path, installer=installer, root=None),
         target=Target("windows", folder=tmp_path, prefix=None),
+        pid=777,
         environ={"PATH": "x"},
     )
     command, options = started[0]
-    assert command == [str(installer), "/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1"]
+    script = decoded(command)
+    assert command[0] == "powershell.exe" and "Wait-Process -Id 777" in script and str(installer) in script
+    assert str(tmp_path / "alto.exe") in script  # the old one, for if the installer fails
     assert options["env"] == {"PATH": "x", "PYINSTALLER_RESET_ENVIRONMENT": "1"}
     with pytest.raises(UpdateError, match="no installer"):
         selfupdate.start_handoff(
             Prepared(tmp_path, installer=None, root=None),
             target=Target("windows", folder=tmp_path, prefix=None),
         )
+
+
+def test_on_windows_without_powershell_the_installer_is_started_at_once(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check the fallback: with nothing to wait with, the installer itself is started with its arguments.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A new folder.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the starting of a program and the search for PowerShell.
+    """
+    started: list[list[str]] = []
+    monkeypatch.setattr(selfupdate.subprocess, "Popen", lambda argv, **kwargs: started.append(argv))
+    monkeypatch.setattr(selfupdate.shutil, "which", lambda name, path=None: None)
+    installer = tmp_path / WINDOWS_NAME
+    selfupdate.start_handoff(
+        Prepared(tmp_path, installer=installer, root=None),
+        target=Target("windows", folder=tmp_path, prefix=None),
+        environ={"PATH": "x"},
+    )
+    assert started == [[str(installer), "/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1"]]
 
 
 class Home:

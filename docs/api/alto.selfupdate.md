@@ -293,6 +293,43 @@ Give the file the Linux helper writes to, so that a failed update can be looked 
 'update.log'
 ```
 
+## windows_handoff_command
+
+```python
+def windows_handoff_command(
+    installer: Path,
+    *,
+    pid: int,
+    alto: Path,
+) -> list[str]
+```
+
+Give the command that waits for Alto to end, runs the installer, and starts the old Alto again if the installer fails.
+
+The installer must not start while Alto is still closing: it would find Alto's files in use and, with no one to answer, give
+up. So Alto starts this command and quits, and the command waits for Alto's process to be gone before it begins.
+
+**Parameters**
+
+- `installer` (*Path*): The downloaded installer.
+- `pid` (*int*): Alto's process, which is waited for (for at most a minute). Keyword-only.
+- `alto` (*Path*): The installed `alto.exe`, which is started again if the installer fails, so that the person is not left with no Alto. When it succeeds, the installer starts Alto itself (`/RELAUNCH=1`). Keyword-only.
+
+**Returns**
+
+- *list of str*: The program and its arguments.
+
+**Examples**
+
+```pycon
+>>> command = windows_handoff_command(Path("C:/Temp/setup.exe"), pid=42, alto=Path("C:/Alto/alto.exe"))
+>>> command[0], command[1:-1] == list(POWERSHELL_ARGUMENTS)
+('powershell.exe', True)
+>>> text = base64.b64decode(command[-1]).decode("utf-16-le")
+>>> "Wait-Process -Id 42" in text and "/RELAUNCH=1" in text
+True
+```
+
 ## start_handoff
 
 ```python
@@ -312,7 +349,7 @@ Start the program that installs the update, and return at once so that Alto can 
 
 - `prepared` (*Prepared*): The checked update.
 - `target` (*Target*): The copy that is replaced.
-- `pid` (*int or None, default None*): The process to wait for on Linux, which is Alto; this one if None. Keyword-only.
+- `pid` (*int or None, default None*): The process to wait for, which is Alto; this one if None. Keyword-only.
 - `log` (*Path or None, default None*): Where the Linux helper writes; `log_path()` if None. Keyword-only.
 - `environ` (*Mapping or None, default None*): The environment to start from; this program's if None. Keyword-only.
 

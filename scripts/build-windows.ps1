@@ -131,25 +131,29 @@ WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 WaitUntilGone $Data "The practice history"
 Write-Host "An uninstall with /PURGE=1 removes the data too."
 
-# An update, the way Alto does it: a newer installer is run over a copy that is open, with the arguments Alto gives it and no more.
-# The old Alto must be closed, the new files must be in place, and Alto must be open again.
+# An update, the way Alto does it: Alto starts the step that Alto itself builds (`selfupdate.windows_handoff_command`) and quits; the step
+# waits for it to end, runs the newer installer, and opens Alto again. Here the open Alto is stopped, standing in for quitting.
 $Newer = "99.0.0"
 Run $Iscc @("/Qp", "/DAppVersion=$Newer", "/DSourceDir=$Frozen", "/DOutputDir=$Work", "/DIconFile=$Icon", (Join-Path $Root "packaging\windows\alto.iss"))
 $NewerSetup = Join-Path $Work "alto-$Newer-windows-x64-setup.exe"
 if (-not (Test-Path $NewerSetup)) { throw "The newer installer was not written: $NewerSetup" }
 RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target"))
-$UpdateArguments = @("/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1")
 $env:QT_QPA_PLATFORM = "offscreen"
 $env:ALTO_HOME = Join-Path $Work "home"
 try {
     $Old = Start-Process -FilePath (Join-Path $Target "alto.exe") -PassThru
     Start-Sleep -Seconds 8
     if ($Old.HasExited) { throw "Alto did not stay open for the update test" }
-    RunAndWait $NewerSetup $UpdateArguments
+    $Encoded = & $Py -c "import sys; from pathlib import Path; from alto import selfupdate; print(selfupdate.windows_handoff_command(Path(sys.argv[1]), pid=int(sys.argv[2]), alto=Path(sys.argv[3]))[-1])" $NewerSetup $Old.Id (Join-Path $Target "alto.exe")
+    if ($LASTEXITCODE -ne 0 -or -not $Encoded) { throw "The update step could not be made" }
+    $Step = Start-Process -FilePath "powershell.exe" -ArgumentList @("-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", $Encoded) -PassThru
+    Start-Sleep -Seconds 2
+    if ($Step.HasExited) { throw "The update step ended before Alto had quit" }
+    $Old.Kill()
     $Old.WaitForExit(30000) | Out-Null
-    if (-not $Old.HasExited) { throw "The update did not close the Alto that was open" }
+    if (-not $Step.WaitForExit(240000)) { throw "The update step did not finish" }
     $Open = $false
-    for ($i = 0; $i -lt 40 -and -not $Open; $i++) {
+    for ($i = 0; $i -lt 60 -and -not $Open; $i++) {
         Start-Sleep -Milliseconds 500
         $Open = [bool](Get-Process -Name alto -ErrorAction SilentlyContinue)
     }
@@ -163,7 +167,7 @@ finally {
     Get-Process -Name alto -ErrorAction SilentlyContinue | Stop-Process -Force
     Remove-Item Env:QT_QPA_PLATFORM, Env:ALTO_HOME -ErrorAction SilentlyContinue
 }
-Write-Host "An update run over an open Alto closes it, installs the newer version and opens Alto again."
+Write-Host "An update step, built by Alto, waits for Alto to quit, installs the newer version and opens Alto again."
 RunAndWait (Join-Path $Target "unins000.exe") ($Quiet + @("/PURGE=1"))
 WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 Write-Host "Done: $Setup"

@@ -128,14 +128,14 @@ def test_the_build_scripts_run_the_self_test_on_the_frozen_program() -> None:
 
 def test_the_windows_update_arguments_are_the_same_in_alto_the_test_script_and_the_installer() -> None:
     """
-    Check that the arguments Alto gives the installer are the ones the build script tries and the installer script understands.
+    Check that the arguments Alto gives the installer suit the installer script, and that the build script runs Alto's own step.
 
     The installer's own restart must stay off, or Alto would be started twice.
     """
     script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
-    line = next(line for line in script.splitlines() if line.strip().startswith("$UpdateArguments"))
-    arguments = re.findall(r'"(/[A-Z=0-9]+)"', line)
-    assert tuple(arguments) == selfupdate.WINDOWS_INSTALLER_ARGUMENTS
+    assert "selfupdate.windows_handoff_command" in script  # the build script runs the step Alto builds, not a copy of it
+    arguments = ("/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1")
+    assert selfupdate.WINDOWS_INSTALLER_ARGUMENTS == arguments
     iss = INSTALLER.read_text(encoding="utf-8")
     assert "Check: ShouldRelaunch" in iss and "{param:RELAUNCH|0}" in iss
     assert "RestartApplications=no" in iss and "CloseApplications=yes" in iss
