@@ -1,6 +1,7 @@
 ---
 title: Lessons
 nav_order: 5.5
+nav_group: Using Alto
 permalink: /lessons/
 ---
 Lessons are step-by-step walks through a topic for someone meeting it for the first time. Nothing about them is scored or recorded.

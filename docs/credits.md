@@ -1,6 +1,7 @@
 ---
 title: License and credits
 nav_order: 12
+nav_group: About
 permalink: /credits/
 ---
 ## License

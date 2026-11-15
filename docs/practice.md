@@ -1,6 +1,7 @@
 ---
 title: How practice adapts
 nav_order: 4
+nav_group: Using Alto
 permalink: /practice/
 ---
 Alto is not a flash-card list that shows every question equally often. It keeps track of how you do on each question

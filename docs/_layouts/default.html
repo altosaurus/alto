@@ -37,6 +37,8 @@
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
   </svg>
   <a class="skip" href="#content">Skip to the content</a>
   <header class="topbar">
@@ -63,41 +65,67 @@
     <aside class="sidebar">
       <details class="menu" id="menu">
         <summary>Contents</summary>
-        <nav aria-label="Documentation">
+        <nav class="nav" aria-label="Documentation">
+          {% comment %}
+            Pages are listed in nav_order. A page with `nav_group` goes under that heading, which opens and closes. A heading that is also the
+            title of a page (For developers) is that page's link, so the page is listed once. A page with `children` is one row that links to
+            it and opens its own pages (the developer guide, the API reference), also listed once. Whatever holds the current page is open.
+          {% endcomment %}
           {% assign pages = site.pages | where_exp: "p", "p.nav_order" | sort: "nav_order" %}
-          <ul>
+          {% assign current_group = page.nav_group %}
+          {% if page.parent %}{% assign owner = pages | where: "children", page.parent | first %}{% assign current_group = owner.nav_group %}{% endif %}
+          {% assign last_group = "" %}
+          <ul class="nav-list">
             {% for p in pages %}
-            <li><a href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a>
-              {% if p.children and page.url contains p.permalink %}
+            {% assign group = p.nav_group | default: "" %}
+            {% if group != last_group %}
+            {% if last_group != "" %}</ul></details></li>{% endif %}
+            {% if group != "" %}
+            {% assign head = pages | where: "nav_group", group | where: "title", group | first %}
+            <li class="nav-group"><details data-nav-group="{{ group }}" open>
+              <summary class="nav-head">{% if head %}<a class="grow" href="{{ head.url | relative_url }}"{% if head.url == page.url %} aria-current="page"{% endif %}>{{ group }}</a>{% else %}<span class="grow">{{ group }}</span>{% endif %}<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            {% endif %}
+            {% assign last_group = group %}
+            {% endif %}
+            {% unless group != "" and p.title == group %}
+            {% if p.children %}
+            <li><details class="nav-section"{% if page.url == p.url or page.parent == p.children %} open{% endif %}>
+              <summary class="nav-row"><a class="row grow" href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
               {% assign child_pages = site.pages | where: "parent", p.children | sort: "order" %}
               {% assign last_package = "" %}
-              <ul class="sub-nav">
+              <ul class="kids">
                 {% for a in child_pages %}
                 {% if a.package and a.package != last_package %}
-                {% unless last_package == "" %}</ul></li>{% endunless %}
-                <li class="sub-group"><span>{{ a.package }}</span>
+                {% unless last_package == "" %}</ul></details></li>{% endunless %}
+                <li><details class="nav-pkg"{% if page.parent == p.children and page.package == a.package %} open{% endif %}>
+                  <summary>{{ a.package }}<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
                 {% assign last_package = a.package %}
                 {% endif %}
-                    <li><a href="{{ a.url | relative_url }}"{% if a.url == page.url %} aria-current="page"{% endif %}>{% if a.package %}{{ a.title | remove_first: a.package | remove_first: "." }}{% else %}{{ a.title }}{% endif %}</a></li>
+                    <li><a class="row sub" href="{{ a.url | relative_url }}"{% if a.url == page.url %} aria-current="page"{% endif %}>{% if a.package %}{{ a.title | remove_first: a.package | remove_first: "." }}{% else %}{{ a.title }}{% endif %}</a></li>
                 {% endfor %}
-                {% if last_package != "" %}
-                  </ul>
-                </li>
-                {% endif %}
+                {% if last_package != "" %}</ul></details></li>{% endif %}
               </ul>
-              {% endif %}
-            </li>
+            </details></li>
+            {% else %}
+            <li><a class="row" href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a></li>
+            {% endif %}
+            {% endunless %}
             {% endfor %}
+            {% if last_group != "" %}</ul></details></li>{% endif %}
           </ul>
         </nav>
       </details>
     </aside>
     <main id="content" class="content">
-      <article>
-        {% unless page.url == '/' %}<h1>{{ page.title }}</h1>{% endunless %}
-        {{ content }}
-      </article>
+      <div class="page-grid" id="page-grid">
+        <article>
+          {% unless page.url == '/' %}<h1>{{ page.title }}</h1>{% endunless %}
+          {{ content }}
+        </article>
+        <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
+      </div>
       <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
     </main>
   </div>
@@ -154,6 +182,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
+  <script src="{{ '/assets/js/nav.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+  <script src="{{ '/assets/js/toc.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
   <script src="{{ site.site_root }}/version-switcher.js" defer></script>
 </body>
 </html>

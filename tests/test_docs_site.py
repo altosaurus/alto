@@ -469,3 +469,77 @@ def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block
     assert _contrast(button.group(1), page.group(1)) >= 3.0
     if "dark" in block or "light" in block:
         assert button.group(1).lower() == "#2f6bd0"  # royal blue in both ways of getting dark
+
+
+def _nav_pages() -> list[dict[str, str]]:
+    """
+    Read the front matter of every page that is listed in the sidebar, in the order the sidebar lists them.
+
+    Returns
+    -------
+    list of dict of str to str
+        For each page its title, its `nav_order` and its `nav_group` (empty if it has none), by `nav_order`.
+    """
+    pages = []
+    for path in sorted(DOCS.glob("*.md")) + sorted((DOCS / "guide").glob("index.md")) + sorted((DOCS / "api").glob("index.md")):
+        text = path.read_text(encoding="utf-8")
+        found = re.match(r"---\n(.*?)\n---\n", text, re.DOTALL)
+        if not found:
+            continue
+        fields = dict(re.findall(r"^([a-z_]+):\s*(.*)$", found.group(1), re.MULTILINE))
+        if "nav_order" in fields:
+            pages.append({"title": fields["title"], "order": fields["nav_order"], "group": fields.get("nav_group", "")})
+    return sorted(pages, key=lambda page: float(page["order"]))
+
+
+def test_every_page_in_the_sidebar_but_home_has_a_group_and_each_group_is_one_block() -> None:
+    """Check that the pages sort into three headings, each a single run in the order of the sidebar, with Home on its own."""
+    pages = _nav_pages()
+    assert pages[0]["title"] == "Home" and pages[0]["group"] == ""
+    assert all(page["group"] for page in pages[1:])
+    runs = [page["group"] for index, page in enumerate(pages[1:]) if index == 0 or pages[index]["group"] != page["group"]]
+    assert runs == ["Using Alto", "For developers", "About"]  # no heading comes twice
+
+
+def test_no_page_is_listed_twice_and_a_heading_that_is_a_page_is_that_pages_link() -> None:
+    """
+    Check that the sidebar can list each page once: the titles differ, and a heading named like a page stands for that page.
+
+    "For developers" is both a heading and a page. The layout makes the heading the page's link and leaves the page out of the
+    list under it, so it appears once. The developer guide and the API reference are single rows that link to their page and
+    open their chapters, so they appear once as well.
+    """
+    pages = _nav_pages()
+    titles = [page["title"] for page in pages]
+    assert len(titles) == len(set(titles))
+    same = [page for page in pages if page["title"] == page["group"]]
+    assert [page["title"] for page in same] == ["For developers"]
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'where: "title", group' in layout and 'unless group != "" and p.title == group' in layout
+    assert (
+        layout.count("<summary") >= 4
+        and 'class="count"' not in layout
+        and "count" not in layout.split("<nav")[1].split("</nav>")[0].replace("account", "")
+    )
+
+
+def test_the_sidebar_opens_whatever_holds_the_current_page_and_the_groups_are_remembered() -> None:
+    """Check that the current page's group, section and package are open, and that the script keeps only what you closed."""
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert "page.parent == p.children" in layout and "page.package == a.package" in layout and "data-nav-group" in layout
+    script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
+    assert (
+        "localStorage" in script and "try" in script and '[aria-current="page"]' in script
+    )  # never closes the current page's group
+    assert "fetch(" not in script and "XMLHttpRequest" not in script
+
+
+def test_the_on_this_page_list_is_made_from_the_headings_and_only_for_pages_with_more_than_one() -> None:
+    """Check the contents list script: it reads h2 and h3, skips pages with under two, follows the scroll, and has a fallback."""
+    script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
+    assert '"h2, h3"' in script and "heads.length < 2" in script and "On this page" in script
+    assert "scroll" in script and "toc-inline" in script and "has-toc" in script
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'id="toc"' in layout and 'id="page-grid"' in layout and "toc.js" in layout and "nav.js" in layout
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".page-grid.has-toc" in css and "min-width: 1240px" in css and ".toc-inline" in css

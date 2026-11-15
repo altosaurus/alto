@@ -1,6 +1,7 @@
 ---
 title: Getting started
 nav_order: 2
+nav_group: Using Alto
 permalink: /getting-started/
 ---
 ## What you need

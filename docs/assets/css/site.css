@@ -68,20 +68,37 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 700; color: var(--fg); text-decoration: none; }
 .brand img { border-radius: 7px; }
-.menu summary { cursor: pointer; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; list-style: none; }
-.menu summary::-webkit-details-marker { display: none; }
+.menu > summary { cursor: pointer; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; list-style: none; }
+.menu > summary::-webkit-details-marker { display: none; }
 .menu ul { list-style: none; margin: 0; padding: 0; }
 .menu li a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--fg); text-decoration: none; }
 .menu li a:hover { background: var(--accent-soft); }
 .menu li a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-/* The API reference and the developer guide list their pages under their own entry; the API pages are grouped by package. */
-.menu .sub-nav { margin: 2px 0 6px 12px; }
-.menu .sub-nav > li > a { padding: 3px 10px; font-size: .9rem; }
-.menu .sub-group > span { display: block; padding: 6px 10px 2px; font-size: .72rem; letter-spacing: .06em; color: var(--muted); }
-.menu .sub-group li a { padding: 3px 10px 3px 18px; font-size: .9rem; }
+/* The sidebar: groups and sections that open and close. A heading or row that is also a page links to it, so no page is listed twice. */
+.menu summary { list-style: none; }
+.menu summary::-webkit-details-marker { display: none; }
+.nav-list > li > a.row { margin: 0; }
+.nav .chev { width: 14px; height: 14px; color: var(--muted); transition: transform .12s; flex: none; margin-left: auto; }
+.nav details[open] > summary > .chev { transform: rotate(90deg); }
+.nav-head { display: flex; align-items: center; gap: 6px; padding: 14px 8px 4px; cursor: pointer; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.nav-head:hover { color: var(--fg); }
+.menu .nav-head a { display: inline; padding: 0; border-radius: 0; color: inherit; font-weight: inherit; background: none; }
+.menu .nav-head a:hover { background: none; color: var(--fg); }
+.menu .nav-head a[aria-current="page"] { color: var(--accent); background: none; }
+.nav-row { display: flex; align-items: center; border-radius: 8px; cursor: pointer; padding-right: 8px; }
+.nav-row:hover { background: var(--accent-soft); }
+.menu .nav-row a.row { flex: 1; min-width: 0; background: none; }
+.menu .nav-row a.row[aria-current="page"] { background: var(--accent-soft); }
+.menu .kids { margin: 2px 0 6px 12px; }
+.menu .kids a.row { padding: 4px 10px; font-size: .9rem; }
+.nav-pkg > summary { display: flex; align-items: center; padding: 8px 10px 2px; cursor: pointer; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.nav-pkg > summary:hover { color: var(--fg); }
+.menu .nav-pkg ul { margin: 0 0 0 6px; }
+.menu .nav summary:focus-visible, .menu .nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
 
 .content { padding: 40px clamp(20px, 5vw, 64px) 56px; min-width: 0; }
 article, footer { max-width: 780px; }
+.page-grid { display: block; }
 article > h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 .6em; }
 h2 { font-size: 1.45rem; margin: 2.1em 0 .5em; line-height: 1.3; padding-top: .2em; }
 h3 { font-size: 1.12rem; margin: 1.7em 0 .4em; }
@@ -230,3 +247,32 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .dl-more { color: var(--muted); font-size: .92rem; margin: 14px 0 0; }
 @media (max-width: 560px) { .dl-os { flex-wrap: wrap; } .dl-act { width: 100%; padding-left: 56px; } .dl-solid { padding-right: 16px; } }
 @media (prefers-reduced-motion: reduce) { .dl-go svg.i, .dl-arrow svg.i { transition: none; } }
+
+/* "On this page": a list beside the text on wide screens, built from the page's own headings; on narrower ones a box above the text. */
+h2, h3 { scroll-margin-top: 76px; }
+.toc { font-size: .86rem; }
+.toc .toc-cap { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0; }
+.toc a { display: block; color: var(--muted); text-decoration: none; padding: 3px 0 3px 12px; border-left: 2px solid var(--line); line-height: 1.35; }
+.toc a.sub { padding-left: 24px; font-size: .82rem; }
+.toc a:hover { color: var(--fg); }
+.toc a.on { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.toc a:focus-visible, .toc-inline summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.toc-inline { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 22px; background: var(--panel); }
+.toc-inline summary { cursor: pointer; padding: 9px 12px; font-size: .88rem; display: flex; align-items: center; gap: 8px; list-style: none; }
+.toc-inline summary::-webkit-details-marker { display: none; }
+.toc-inline .here { color: var(--accent); font-weight: 600; margin-left: auto; text-align: right; }
+.toc-inline .chev { width: 14px; height: 14px; color: var(--muted); transition: transform .12s; }
+.toc-inline[open] .chev { transform: rotate(180deg); }
+.toc-inline ul { list-style: none; margin: 0; padding: 0 12px 10px; }
+.toc-inline a { display: block; padding: 4px 0; color: var(--fg); text-decoration: none; font-size: .9rem; }
+.toc-inline a.sub { padding-left: 14px; color: var(--muted); }
+.toc-inline a.on { color: var(--accent); font-weight: 600; }
+@media (min-width: 1240px) {
+  .page-grid.has-toc { display: grid; grid-template-columns: minmax(0, 780px) 220px; gap: 44px; align-items: start; }
+  .page-grid.has-toc .toc { position: sticky; top: 76px; max-height: calc(100vh - 100px); overflow-y: auto; }
+  .page-grid.has-toc .toc-inline { display: none; }
+}
+@media (max-width: 1239px) { .toc { display: none; } }
+@media (prefers-reduced-motion: reduce) { .nav .chev, .toc-inline .chev { transition: none; } }

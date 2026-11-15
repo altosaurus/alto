@@ -538,7 +538,7 @@ def render_index(files: list[Path]) -> str:
     True
     """
     out = [
-        "---\ntitle: API reference\nnav_order: 11\nchildren: api\npermalink: /api/\n---\n",
+        "---\ntitle: API reference\nnav_order: 11\nnav_group: For developers\nchildren: api\npermalink: /api/\n---\n",
         (
             "Every public module, class and function in Alto, with its signature and docstring. Names that begin with an "
             "underscore are internal and are left out. The pages are written from the docstrings by `scripts/api_docs.py`, so "
