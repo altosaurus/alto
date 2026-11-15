@@ -11,7 +11,13 @@ import random
 
 import pytest
 from PySide6.QtCore import QPointF
-from PySide6.QtGui import QColor
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QFontMetricsF,
+    QImage,
+    QPainter,
+)
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
@@ -52,6 +58,7 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import mode_tonic
+from alto.ui import circle as circle_module
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
     GLOW_MS,
@@ -61,6 +68,7 @@ from alto.ui.circle import (
     wedge_color,
     wedge_middle,
     wedge_path,
+    write_text,
 )
 from alto.ui.exercise_view import (
     ExerciseView,
@@ -1085,3 +1093,52 @@ def test_the_home_card_has_the_new_name_and_its_own_icon(app: QApplication) -> N
     assert card.accessibleName().startswith("Circle of Fifths") and card.accessibleDescription() == CircleOfFifths.description
     for label in card.findChildren(QPushButton):
         assert label is not None
+
+
+def test_a_sharp_or_flat_is_never_measured_in_the_text_font(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that only the letters of a name are measured with the text font, since it has no ♯ or ♭.
+
+    Qt searches other fonts for a missing glyph, about 40 ms for each new size, and the width of a sign comes from the notation
+    font anyway. Measuring them was what made the first look at the circle, and every resize of it, slow.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the font metrics with one that records what it measures.
+    """
+    measured: list[str] = []
+
+    class Recording(QFontMetricsF):
+        """Font metrics that remember each text they measure."""
+
+        # noinspection PyMethodOverriding
+        def horizontalAdvance(self, text: str) -> float:  # noqa: N802
+            """
+            Measure a text and remember it.
+
+            Parameters
+            ----------
+            text : str
+                What to measure.
+
+            Returns
+            -------
+            float
+                The width.
+            """
+            measured.append(text)
+            return super().horizontalAdvance(text)
+
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(circle_module, "QFontMetricsF", Recording)
+    image = QImage(200, 100, QImage.Format.Format_ARGB32)
+    painter = QPainter(image)
+    write_text(painter, centre=QPointF(100, 50), text="B♭m", pixels=23, weight=QFont.Weight.Bold, colour=QColor("white"))
+    painter.end()
+    assert measured and not any(sign in text for text in measured for sign in "♯♭♮")
