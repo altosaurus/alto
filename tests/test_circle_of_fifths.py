@@ -25,6 +25,10 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
+from alto.circle_schemes import (
+    PRESETS,
+    preset,
+)
 from alto.exercises import REGISTRY
 from alto.exercises.base import Question
 from alto.exercises.library import (
@@ -345,15 +349,32 @@ def test_each_wedge_is_30_degrees_clockwise_from_the_top() -> None:
     assert wedge_middle(centre=centre, radius=100, index=9).x() < 200
 
 
-def test_the_hues_go_once_round_the_colour_wheel_from_red_at_the_top() -> None:
+def test_in_the_spectrum_scheme_the_hues_go_once_round_the_colour_wheel_from_red_at_the_top() -> None:
     """
-    Check that the wedges have twelve different hues, red at the top, each brighter when lit.
+    Check that the spectrum scheme's wedges have twelve different hues, red at the top, each brighter when lit.
     """
-    hues = [wedge_color(i, inner=False).hue() for i in range(12)]
+    spectrum = preset("spectrum")
+    hues = [wedge_color(i, inner=False, scheme=spectrum).hue() for i in range(12)]
     assert hues[0] == 0 and hues == sorted(hues) and len(set(hues)) == 12
     for index in range(12):
-        assert wedge_color(index, inner=False, lift=1.0).lightness() > wedge_color(index, inner=False).lightness()
-        assert wedge_color(index, inner=True).lightness() < wedge_color(index, inner=False).lightness()
+        assert (
+            wedge_color(index, inner=False, lift=1.0, scheme=spectrum).lightness()
+            > wedge_color(index, inner=False, scheme=spectrum).lightness()
+        )
+        assert (
+            wedge_color(index, inner=True, scheme=spectrum).lightness()
+            < wedge_color(index, inner=False, scheme=spectrum).lightness()
+        )
+
+
+def test_the_circle_is_drawn_in_the_scheme_chosen_in_the_settings() -> None:
+    """
+    Check that a wedge without a scheme named takes the colours of the chosen one.
+    """
+    settings.circle.scheme = "spectrum"
+    assert wedge_color(0, inner=False).hue() == 0
+    settings.circle.scheme = "midnight"
+    assert wedge_color(0, inner=False).hue() == round(222)
 
 
 def test_no_lit_wedge_is_too_bright_for_white_names() -> None:
@@ -362,11 +383,12 @@ def test_no_lit_wedge_is_too_bright_for_white_names() -> None:
 
     Yellows and greens look far brighter than blues at the same lightness, so they are brought down to the same level.
     """
-    for index in range(12):
-        for inner in (False, True):
-            for lift in (0.0, 0.3, 0.5, 1.0):
-                c = wedge_color(index, inner=inner, lift=lift)
-                assert 0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44, (index, inner, lift)
+    for scheme in (s for s in PRESETS.values() if not s.light):
+        for index in range(12):
+            for inner in (False, True):
+                for lift in (0.0, 0.3, 0.5, 1.0):
+                    c = wedge_color(index, inner=inner, lift=lift, scheme=scheme)
+                    assert 0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44, (scheme.key, index, inner, lift)
 
 
 def test_a_wrong_answer_is_flashed_in_the_red_of_the_wrong_buttons() -> None:
@@ -509,6 +531,7 @@ def test_what_is_drawn_for_each_state(app: QApplication) -> None:
     app : QApplication
         The shared Qt application.
     """
+    settings.circle.scheme = "spectrum"
     circle = FifthsCircle()
     circle.resize(520, 520)
     # the red cell at the top, where the red flash has to be told apart by its stripes
@@ -1023,7 +1046,7 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(app: QApplication)
     """
     view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
-    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 2
+    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 4
     assert pane.questions_row.value.text() == "3 of 3"
     assert list(pane.questions.boxes) == list(settings.CIRCLE_QUESTIONS)
     pane.questions.boxes["major"].setChecked(False)
