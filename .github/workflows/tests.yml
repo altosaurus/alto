@@ -1,7 +1,9 @@
 name: Tests
 
-# Run the test suite on every pull request and on every push to main, on every Python version that has not reached
-# end of life (see https://devguide.python.org/versions/). When a version reaches end of life, drop it here and in pyproject.toml.
+# Run the test suite on every pull request and on every push to main. A push to main runs every Python version that has not reached
+# end of life (see https://devguide.python.org/versions/; when one does, drop it in ALL below and in pyproject.toml). A pull request runs
+# the oldest and the newest, which is where a break shows first, and a pull request that changes only the docs runs one version of the
+# tests that read the docs. scripts/changed_tests.py decides which kind of change it is.
 on:
   push:
     branches: [main]
@@ -10,13 +12,49 @@ on:
 permissions:
   contents: read
 
+# A new push to a pull request cancels the run still going for the old one; a push to main is never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  # Which Python versions, and which tests, this change needs.
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.decide.outputs.versions }}
+      targets: ${{ steps.decide.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: decide
+        env:
+          ALL: '["3.11", "3.12", "3.13", "3.14", "3.15"]'
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          versions="$ALL"
+          targets=""
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            versions='["3.11", "3.15"]'
+            if [ "$(python3 scripts/changed_tests.py --kind --base "$BASE" --head "$HEAD")" = docs ]; then
+              versions='["3.14"]'
+              targets=$(python3 scripts/changed_tests.py --base "$BASE" --head "$HEAD")
+            fi
+          fi
+          echo "versions=${versions}" >> "$GITHUB_OUTPUT"
+          echo "targets=${targets}" >> "$GITHUB_OUTPUT"
+          echo "Versions: ${versions}; tests: ${targets:-all}"
+
   pytest:
+    needs: scope
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
+        python-version: ${{ fromJSON(needs.scope.outputs.versions) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -36,4 +74,5 @@ jobs:
       - name: Run the tests
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m pytest -q
+          TARGETS: ${{ needs.scope.outputs.targets }}
+        run: python -m pytest -q $TARGETS
