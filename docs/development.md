@@ -41,6 +41,39 @@ GitHub Actions runs the tests on every pull request (`.github/workflows/tests.ym
 pytest --cov --cov-report=term-missing
 ```
 
+## Keeping Alto fast
+
+Three things watch how fast Alto is, each for a different kind of slowdown. The operations they time are in
+`benchmarks/operations.py`: opening every page (and going between a lesson and an exercise), asking and answering a question,
+painting each screen, drawing the circle of fifths at new sizes, and reading and writing the data of a profile with a year of practice
+behind it.
+
+- **Budgets, on every pull request.** `tests/test_performance.py` fails when an operation takes longer than its budget in
+  `benchmarks/budgets.py`. A budget is four or five times what the operation takes on a development machine, so that a slow build
+  machine does not fail a test but a change that makes something many times slower does. The first use of something in a new process
+  (starting the app, the first look at a page, the circle at sizes not used before) is measured in a process of its own, because Qt
+  makes fonts and layouts on first use and later runs hide that cost.
+- **A history, from release to release.** `benchmarks/suite.py` is an [ASV](https://asv.readthedocs.io/) suite, and the Performance
+  workflow (`.github/workflows/performance.yml`) runs it when a version is tagged and once a week, and keeps the results on the
+  branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
+  failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
+  would catch.
+- **By hand, before a release.** The run takes a minute or two, and the feel of animations on a real screen is not something a test
+  can judge, so look at the lesson, the circle of fifths and the statistics page on a real display as well.
+
+```bash
+python -m benchmarks.survey        # every operation once, slowest first, in milliseconds
+python -m benchmarks.operations page:lesson --profile   # where the time goes in one operation, the first time
+pytest tests/test_performance.py   # the budgets
+asv run -E existing:$(which python) --set-commit-hash $(git rev-parse HEAD)   # record this commit
+asv compare v0.0.0 HEAD            # what changed since a release, once both have been recorded
+```
+
+When an operation is made faster or slower on purpose, change its budget in the same commit. A new page or exercise needs a line in
+`benchmarks/budgets.py` (a prefix such as `page:` covers it) and, if it is a new kind of operation, an entry in
+`benchmarks/operations.py`; the tests fail until it has a budget, so nothing goes unwatched. The first release to be measured is the
+one that has `benchmarks/`; to measure an earlier one, run the Performance workflow by hand with `ref` set to its tag.
+
 ## Type checking
 
 [Pyright](https://github.com/microsoft/pyright) checks the types of `alto`, `tests` and `scripts`, in basic mode, as if

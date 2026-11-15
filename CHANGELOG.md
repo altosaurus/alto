@@ -10,6 +10,10 @@ Alto uses [semantic versioning](https://semver.org/).
 - The documentation has a version for each release and one for the development version, with a dropdown in the top bar to switch
   between them. A page of an older release says so and links to the latest.
 
+### Changed
+
+- The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.
+
 ## [0.0.0] - 2026-11-15
 
 The first release.
