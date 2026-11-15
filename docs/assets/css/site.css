@@ -288,3 +288,4 @@ h2, h3 { scroll-margin-top: 76px; }
 .np-title { font-weight: 600; display: inline-flex; align-items: center; gap: 8px; overflow-wrap: anywhere; }
 .np-title svg.i { color: var(--accent); stroke-width: 2; }
 @media (max-width: 520px) { .page-nav { flex-direction: column; } .page-nav a { max-width: 100%; } .page-nav a.next { margin-left: 0; } }
+.hero h1 .hl { color: var(--accent); }

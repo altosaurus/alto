@@ -5,8 +5,8 @@ permalink: /
 ---
 {% include os-icons.html %}
 <div class="hero">
-  <h1>Alto</h1>
-  <p class="lead">Music theory drills for the desktop. Alto remembers what you get wrong and how long you take, and asks those questions again sooner.</p>
+  <h1>Learn music theory with <span class="hl">Alto</span></h1>
+  <p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>
   {% if site.app_version != "" %}<a class="dl-go" href="#download">Download Alto <svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>{% endif %}
 </div>
 

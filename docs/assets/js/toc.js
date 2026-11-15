@@ -56,7 +56,8 @@
   inline.appendChild(summary);
   inline.appendChild(links());
   var first = article.querySelector("h1");
-  if (first && first.nextSibling) { article.insertBefore(inline, first.nextSibling); } else { article.insertBefore(inline, article.firstChild); }
+  var anchor = first ? (first.closest(".hero") || first) : null;  // on the home page the title is inside the hero
+  if (anchor && anchor.nextSibling) { article.insertBefore(inline, anchor.nextSibling); } else { article.insertBefore(inline, article.firstChild); }
   inline.addEventListener("click", function (event) { if (event.target.closest("a")) { inline.open = false; } });
 
   grid.classList.add("has-toc");
