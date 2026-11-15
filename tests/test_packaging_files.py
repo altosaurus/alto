@@ -56,6 +56,18 @@ def test_the_release_checks_the_tag_against_the_version_and_the_changelog_before
     assert "scripts/changelog_section.py" in RELEASE
 
 
+def test_the_linux_build_has_the_x11_libraries_and_fails_without_them() -> None:
+    """
+    Check that the runner installs the libraries Qt's X11 plugin needs, and that the build script checks the plugin finds them.
+
+    PyInstaller copies them into the download from the machine it runs on, and the offscreen check cannot tell they are missing.
+    """
+    for package in ("libxcb-cursor0", "libxcb-icccm4", "libxcb-image0", "libxcb-keysyms1", "libxkbcommon-x11-0"):
+        assert package in BUILD
+    script = (ROOT / "scripts" / "build-linux.sh").read_text(encoding="utf-8")
+    assert "libqxcb.so" in script and "ldd" in script and "not found" in script
+
+
 def test_the_linux_package_is_built_on_an_old_ubuntu_with_the_python_that_is_shipped() -> None:
     """Check the Linux job's runner and Python: the program needs at least the C library of the system it is built on."""
     assert "runs-on: ubuntu-22.04" in BUILD

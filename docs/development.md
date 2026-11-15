@@ -317,7 +317,9 @@ Two things to know when building a release:
   workflow builds on Ubuntu 22.04, and a build made on a newer system will not start on older ones.
 - **System libraries come from the build machine.** PyInstaller copies the libraries Qt needs from the system it runs on
   (including GTK, glib and `libstdc++`), apart from a short list it leaves out (graphics drivers, `libxcb` and `libwayland`).
-  If a build misbehaves on another distribution, check which of those it loads, and exclude the offender in `packaging/alto.spec`.
+  That includes the libraries of Qt's X11 plugin (`libxcb-cursor`, `libxkbcommon-x11` and a few more), so the build machine must have
+  them installed: the workflow does, and the build script fails if the X11 plugin of the finished folder cannot find any of them.
+  If a build misbehaves on another distribution, check which libraries it loads, and exclude the offender in `packaging/alto.spec`.
 
 To try a build without touching your own install, extract it and run `./alto/alto`, or run `install.sh` with `ALTO_PREFIX`,
 `XDG_DATA_HOME` and `XDG_CONFIG_HOME` pointing at scratch folders.

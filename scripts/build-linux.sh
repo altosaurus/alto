@@ -45,6 +45,17 @@ QT_QPA_PLATFORM=offscreen ALTO_HOME="$WORK/home" timeout 10 "$FROZEN/alto" >/dev
 }
 echo "The frozen program starts and says: $SAID"
 
+# The libraries Qt's X11 plugin needs are copied into the folder from the system this runs on, so a build machine that lacks them makes
+# a download that starts on Wayland and not on X11, and the check above (which uses the offscreen platform) cannot tell.
+XCB="$FROZEN/_internal/PySide6/Qt/plugins/platforms/libqxcb.so"
+MISSING="$(LD_LIBRARY_PATH="$FROZEN/_internal:$FROZEN/_internal/PySide6/Qt/lib" ldd "$XCB" | grep 'not found' || true)"
+if [ -n "$MISSING" ]; then
+    echo "Qt's X11 plugin is missing libraries, so Alto would not start on an X11 session:" >&2
+    echo "$MISSING" >&2
+    echo "Install them on this machine (the list is in .github/workflows/build-packages.yml) and build again." >&2
+    exit 1
+fi
+
 PACKAGE="$WORK/$NAME"
 mkdir -p "$PACKAGE/icons"
 cp -R "$FROZEN" "$PACKAGE/alto"
