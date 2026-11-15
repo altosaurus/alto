@@ -42,6 +42,24 @@ GitHub Actions runs the tests on every pull request (`.github/workflows/tests.ym
 pytest --cov --cov-report=term-missing
 ```
 
+### Which checks run for which change
+
+Neither the workflows nor the pre-push hook run everything for every change. `scripts/changed_tests.py` looks at the files that
+changed and decides, and anything it does not recognise is a reason to run everything:
+
+- **Only docs** (`docs/**` and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
+  with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.
+- **A change to `alto/` or to a test:** the tests that import the changed module, directly or through others, their doctests, and
+  the tests that read every module or page. The pre-push hook runs exactly these, so a small change is checked in seconds;
+  `ALTO_TEST_ALL=1 git push` runs the whole suite. The workflows run the whole suite.
+- **Anything else** (a script, a workflow, `pyproject.toml`, a `conftest.py`, the packaging files, a picture): everything.
+
+In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
+and a push to `main` runs every supported version. A new push to a pull request cancels the runs still going for the old one.
+Nothing requires these checks to pass before a merge, so the ones a change skips do not leave it waiting; if you add required
+checks to the `main` ruleset, change the `paths-ignore` rules to job-level `if` conditions first, because a workflow that is skipped
+never reports and a required check would wait for it.
+
 ## Keeping Alto fast
 
 Three things watch how fast Alto is, each for a different kind of slowdown. The operations they time are in
