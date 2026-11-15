@@ -335,6 +335,28 @@ prompt); its `AppId` in `alto.iss` must never change, because a newer installer 
 whether to also remove the practice history (`%APPDATA%\Alto`) and the settings (`HKEY_CURRENT_USER\Software\alto`); a silent
 uninstall keeps them unless it is given `/PURGE=1`. The installer is not signed, so Windows shows an "unknown publisher" warning.
 
+### Signing releases, once
+
+A packaged copy of Alto updates itself, and it installs only what is signed with a key that came with it. The key pair is made once:
+
+1. Run `python scripts/make_signing_key.py`. It prints a **private** key and a **public** key and writes nothing.
+2. Store the private key as the GitHub secret `ALTO_SIGNING_KEY` (the repository's Settings → Secrets and variables → Actions), and keep
+   an offline copy of it, for example in a password manager. Whoever has it can sign an update that every copy of Alto will install,
+   and if it is lost no copy can be updated by a release signed with a new key: people would install the next version by hand.
+3. Put the public key in `UPDATE_PUBLIC_KEYS` in `alto/updates.py` and commit it. Until it is there a packaged copy does not replace
+   itself; it is only told that a newer release exists, and the Release workflow refuses to publish.
+
+The Release workflow signs `SHA256SUMS` with the secret (`scripts/sign_release.py`) and uploads `SHA256SUMS.sig` with it. Before it
+builds anything it signs a probe file, and the script checks the signature against the public key in the code, so a secret that is
+not that key's stops the release at once and not after the builds. `UPDATE_PUBLIC_KEYS` is a tuple so that a release can carry a
+second key before the first is retired.
+
+`alto --self-test` checks, with no network, that a packaged build has what an update needs (the certificate authorities, which the
+bundled Python cannot count on the system for, and the signature check). Both build scripts run it. The Windows script also runs a
+newer installer over a running Alto with the arguments Alto uses, and checks that the old one closed, the new one was installed and
+Alto opened again. What cannot be tested before a release exists is a copy checking a real release, which first happens when a
+release newer than the installed one is published; try the update on a real Linux and a real Windows machine then.
+
 Three GitHub workflows do the building:
 
 - **Build packages** (`build-packages.yml`) builds and tests both packages: the Linux download on Ubuntu 22.04 and the Windows

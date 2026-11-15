@@ -36,6 +36,10 @@ OutputBaseFilename=alto-{#AppVersion}-windows-x64-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+; An update started from inside Alto closes it with /CLOSEAPPLICATIONS and starts it again with /RELAUNCH=1 (see [Run] below), so the
+; installer's own restart of the programs it closed is off: Alto would be started twice.
+CloseApplications=yes
+RestartApplications=no
 UninstallDisplayIcon={app}\alto.exe
 #ifdef IconFile
 SetupIconFile={#IconFile}
@@ -55,8 +59,15 @@ Name: "{autodesktop}\Alto"; Filename: "{app}\alto.exe"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\alto.exe"; Description: "Start Alto"; Flags: nowait postinstall skipifsilent
+; After an update that Alto started itself, which is silent and given /RELAUNCH=1: open Alto again.
+Filename: "{app}\alto.exe"; Flags: nowait; Check: ShouldRelaunch
 
 [Code]
+function ShouldRelaunch: Boolean;
+begin
+  Result := ExpandConstant('{param:RELAUNCH|0}') = '1';
+end;
+
 { Alto keeps its practice history in %APPDATA%\Alto and its settings in the registry under HKEY_CURRENT_USER\Software\alto. }
 procedure RemoveUserData;
 begin

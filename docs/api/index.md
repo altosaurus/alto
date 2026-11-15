@@ -17,6 +17,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.audio](alto.audio/) | Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
+| [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
 | [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
 
@@ -85,6 +86,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.main_window](alto.ui.main_window/) | The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right. |
 | [alto.ui.notation](alto.ui.notation/) | Notation styles: which music font the staff, clefs, notes and accidentals are engraved in. |
 | [alto.ui.notes](alto.ui.notes/) | Engraved notes built from the Noto Music font's glyphs, the way notation software draws them. |
+| [alto.ui.package_update](alto.ui.package_update/) | The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next. |
 | [alto.ui.pictures](alto.ui.pictures/) | Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes. |
 | [alto.ui.profile_dialog](alto.ui.profile_dialog/) | Choosing who is practising. There is no password: a profile is just a name that keeps its own history. |
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |

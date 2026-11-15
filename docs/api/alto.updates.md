@@ -2,7 +2,7 @@
 title: alto.updates
 parent: api
 package: alto
-order: 5
+order: 6
 permalink: /api/alto.updates/
 ---
 {% raw %}
@@ -12,6 +12,11 @@ A copy installed with `scripts/alto-install.sh` is a `uv tool` install from a gi
 address and the commit it was built from, so it can follow the newest release (a tag) or the newest commit on the main branch.
 A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
 decides and describes; `alto.ui.update_flow` runs the commands and asks the questions.
+
+A packaged copy replaces itself with a downloaded release. What makes that safe is here: a release carries `SHA256SUMS` and a
+signature of it (`SHA256SUMS.sig`, Ed25519, made with a private key that only the release workflow has), and a copy of Alto
+trusts only the public keys in `UPDATE_PUBLIC_KEYS`. It installs a file only if the signature verifies, the signed list names the
+file, and the file's hash is the one listed.
 
 **Examples**
 
@@ -363,6 +368,31 @@ Read the commit id out of what `git ls-remote` printed.
 (True, True)
 ```
 
+## Asset
+
+```python
+Asset(
+    name: str,
+    url: str,
+    size: int = 0,
+)
+```
+
+A file of a release: the installer, the tarball, the checksums or their signature.
+
+**Attributes**
+
+- `name` (*str*): Its name, such as "alto-0.1.0-linux-x86_64.tar.gz".
+- `url` (*str*): The address it is downloaded from.
+- `size` (*int*): Its size in bytes, as GitHub states it; 0 if it does not.
+
+**Examples**
+
+```pycon
+>>> Asset("SHA256SUMS", url="https://example.org/s", size=300).size
+300
+```
+
 ## Release
 
 ```python
@@ -370,6 +400,7 @@ Release(
     version: str,
     tag: str,
     url: str,
+    assets: tuple[Asset, ...] = field(default=()),
 )
 ```
 
@@ -380,6 +411,7 @@ A release of Alto, as published on GitHub.
 - `version` (*str*): Its version, such as "0.1.0".
 - `tag` (*str*): The tag it is made from, such as "v0.1.0".
 - `url` (*str*): The page where it and its downloads are.
+- `assets` (*tuple of Asset*): Its files.
 
 **Examples**
 
@@ -485,7 +517,7 @@ Read GitHub's answer about the latest release.
 ```pycon
 >>> answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
 >>> parse_latest_release(answer)
-Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r')
+Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
 >>> parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
 True
 >>> parse_latest_release("not json") is None
@@ -550,5 +582,179 @@ Fetch a web address, waiting at most a number of seconds. It blocks, so the inte
 ```pycon
 >>> fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
 0
+```
+
+## ssl_context
+
+```python
+def ssl_context() -> ssl.SSLContext
+```
+
+Make the settings for a secure connection, trusting the certificate authorities that come with Alto.
+
+A packaged copy cannot count on the system's: the Python inside it may look for them where the computer it was built on keeps
+them, and a connection would then fail on a distribution that keeps them somewhere else.
+
+**Returns**
+
+- *ssl.SSLContext*: A context that checks the server's certificate and name against certifi's list.
+
+**Examples**
+
+```pycon
+>>> ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) > 100
+(True, True)
+```
+
+## platform_asset_name
+
+```python
+def platform_asset_name(
+    version: str,
+    *,
+    system: str,
+    machine: str,
+) -> str | None
+```
+
+Give the name of the file that updates a packaged copy on this system, as the release workflow names it.
+
+**Parameters**
+
+- `version` (*str*): The version, such as "0.1.0". Keyword-only after the first.
+- `system` (*str*): The operating system, as `platform.system()` says it ("Linux", "Windows"). Keyword-only.
+- `machine` (*str*): The processor, as `platform.machine()` says it ("x86_64", "AMD64"). Keyword-only.
+
+**Returns**
+
+- *str or None*: The name, or None if there is no package for this system.
+
+**Examples**
+
+```pycon
+>>> platform_asset_name("0.1.0", system="Linux", machine="x86_64")
+'alto-0.1.0-linux-x86_64.tar.gz'
+>>> platform_asset_name("0.1.0", system="Windows", machine="AMD64")
+'alto-0.1.0-windows-x64-setup.exe'
+>>> platform_asset_name("0.1.0", system="Linux", machine="aarch64") is None
+True
+```
+
+## find_asset
+
+```python
+def find_asset(
+    release: Release,
+    *,
+    name: str,
+    base: str = DOWNLOAD_BASE,
+) -> Asset | None
+```
+
+Find a file of a release by its name, if it is at the address where a release keeps its files.
+
+**Parameters**
+
+- `release` (*Release*): The release.
+- `name` (*str*): The file's name. Keyword-only.
+- `base` (*str, default DOWNLOAD_BASE*): What the address must start with. Keyword-only.
+
+**Returns**
+
+- *Asset or None*: The file, or None if the release has none by that name or it is somewhere else.
+
+**Examples**
+
+```pycon
+>>> files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
+>>> found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
+>>> found.name if found else None
+'a'
+>>> find_asset(Release("1", tag="v1", url="", assets=files), name="b") is None
+True
+```
+
+## parse_checksums
+
+```python
+def parse_checksums(text: str) -> dict[str, str]
+```
+
+Read a `SHA256SUMS` file: a line for each file, with its SHA-256 hash and its name.
+
+**Parameters**
+
+- `text` (*str*): The file's contents, as `sha256sum` writes them.
+
+**Returns**
+
+- *dict of str to str*: The hash of each named file, in lower case. Lines that are not a hash and a plain file name are left out.
+
+**Examples**
+
+```pycon
+>>> entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
+>>> parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
+{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
+```
+
+## verify_signature
+
+```python
+def verify_signature(
+    data: bytes,
+    *,
+    signature: str,
+    keys: tuple[str, ...],
+) -> bool
+```
+
+Say whether an Ed25519 signature of some data was made with one of the keys.
+
+**Parameters**
+
+- `data` (*bytes*): What was signed.
+- `signature` (*str*): The signature, base64. Keyword-only.
+- `keys` (*tuple of str*): The public keys (base64) that are trusted. Keyword-only.
+
+**Returns**
+
+- *bool*: True only if the signature is well formed and one of the keys made it. No key, a key that is not a key, and a signature that is not one all give False.
+
+**Examples**
+
+```pycon
+>>> from nacl.signing import SigningKey
+>>> pair = SigningKey.generate()
+>>> public = base64.b64encode(bytes(pair.verify_key)).decode()
+>>> signed = base64.b64encode(pair.sign(b"the list").signature).decode()
+>>> verify_signature(b"the list", signature=signed, keys=(public,))
+True
+>>> verify_signature(b"another list", signature=signed, keys=(public,))
+False
+>>> verify_signature(b"the list", signature=signed, keys=())
+False
+```
+
+## self_check
+
+```python
+def self_check() -> list[str]
+```
+
+Check, without any network, that what a copy needs to check an update is there and works.
+
+It is what `alto --self-test` runs, so that the build can tell that a packaged copy carries the certificate list and the
+signature library (which PyInstaller must be told about), and that the keys in the code are keys.
+
+**Returns**
+
+- *list of str*: What is wrong, one sentence each; empty if all is well.
+
+**Examples**
+
+```pycon
+>>> self_check()
+[]
 ```
 {% endraw %}

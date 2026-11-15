@@ -6,6 +6,11 @@ address and the commit it was built from, so it can follow the newest release (a
 A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
 decides and describes; `alto.ui.update_flow` runs the commands and asks the questions.
 
+A packaged copy replaces itself with a downloaded release. What makes that safe is here: a release carries `SHA256SUMS` and a
+signature of it (`SHA256SUMS.sig`, Ed25519, made with a private key that only the release workflow has), and a copy of Alto
+trusts only the public keys in `UPDATE_PUBLIC_KEYS`. It installs a file only if the signature verifies, the signed list names the
+file, and the file's hash is the one listed.
+
 Examples
 --------
 >>> short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
@@ -14,17 +19,35 @@ Examples
 
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import os
 import re
 import shutil
+import ssl
 import sys
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import (
+    dataclass,
+    field,
+)
 from enum import Enum
 from importlib import metadata
 from pathlib import Path
+
+import certifi
+from nacl.exceptions import (
+    BadSignatureError,
+)
+from nacl.exceptions import (
+    ValueError as NaClValueError,
+)
+from nacl.signing import (
+    SigningKey,
+    VerifyKey,
+)
 
 SOURCE_FOLDER = (
     "This copy of Alto runs from a source folder, not from an installed copy, so it is updated with git: "
@@ -41,6 +64,14 @@ RELEASES_PAGE = f"https://github.com/{REPOSITORY}/releases"
 USER_AGENT = "alto-update-check"  # says what the request is for and nothing about who sends it
 RELEASES, MAIN = "releases", "main"  # what updates follow: the newest release, or the newest commit on the main branch
 NO_RELEASE = "There is no release of Alto yet."
+DOWNLOAD_BASE = (
+    f"https://github.com/{REPOSITORY}/releases/download/"  # where the files of a release are, whatever they are redirected to
+)
+CHECKSUMS_NAME, SIGNATURE_NAME = "SHA256SUMS", "SHA256SUMS.sig"
+# The public keys (Ed25519, base64) whose signature an update must carry, made by `scripts/make_signing_key.py`. The private half
+# is the GitHub secret ALTO_SIGNING_KEY, which the release workflow signs with. If this is ever empty a packaged copy is not
+# updated by itself, only told that a newer release exists. A release can add a second key before the first is retired.
+UPDATE_PUBLIC_KEYS: tuple[str, ...] = ("reHE/7rXz6KVG8WcpwfuorBauZPWc3pNyJv7pgNf9UQ=",)
 
 
 @dataclass(frozen=True)
@@ -413,6 +444,31 @@ def parse_ls_remote(text: str) -> str | None:
 
 
 @dataclass(frozen=True)
+class Asset:
+    """
+    A file of a release: the installer, the tarball, the checksums or their signature.
+
+    Attributes
+    ----------
+    name : str
+        Its name, such as "alto-0.1.0-linux-x86_64.tar.gz".
+    url : str
+        The address it is downloaded from.
+    size : int
+        Its size in bytes, as GitHub states it; 0 if it does not.
+
+    Examples
+    --------
+    >>> Asset("SHA256SUMS", url="https://example.org/s", size=300).size
+    300
+    """
+
+    name: str
+    url: str
+    size: int = 0
+
+
+@dataclass(frozen=True)
 class Release:
     """
     A release of Alto, as published on GitHub.
@@ -425,6 +481,8 @@ class Release:
         The tag it is made from, such as "v0.1.0".
     url : str
         The page where it and its downloads are.
+    assets : tuple of Asset
+        Its files.
 
     Examples
     --------
@@ -435,6 +493,7 @@ class Release:
     version: str
     tag: str
     url: str
+    assets: tuple[Asset, ...] = field(default=())
 
 
 def version_key(text: str) -> tuple[int, ...] | None:
@@ -536,7 +595,7 @@ def parse_latest_release(text: str) -> Release | None:
     --------
     >>> answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
     >>> parse_latest_release(answer)
-    Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r')
+    Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
     >>> parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
     True
     >>> parse_latest_release("not json") is None
@@ -553,7 +612,13 @@ def parse_latest_release(text: str) -> Release | None:
     if key is None or not isinstance(tag, str):
         return None
     page = url if isinstance(url, str) and url else RELEASES_PAGE
-    return Release(version=".".join(str(part) for part in key), tag=tag, url=page)
+    files = data.get("assets")
+    assets = tuple(
+        Asset(name=item["name"], url=item["browser_download_url"], size=item["size"] if isinstance(item.get("size"), int) else 0)
+        for item in (files if isinstance(files, list) else [])
+        if isinstance(item, dict) and isinstance(item.get("name"), str) and isinstance(item.get("browser_download_url"), str)
+    )
+    return Release(version=".".join(str(part) for part in key), tag=tag, url=page, assets=assets)
 
 
 def release_answer(
@@ -622,9 +687,217 @@ def fetch_text(
     """
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/vnd.github+json"})
     try:
-        with urllib.request.urlopen(request, timeout=seconds) as response:
+        with urllib.request.urlopen(request, timeout=seconds, context=ssl_context()) as response:
             return response.status, response.read().decode("utf-8", errors="replace")
     except urllib.error.HTTPError as error:
         return error.code, str(error.reason)
     except (urllib.error.URLError, TimeoutError, OSError) as error:
         return 0, str(getattr(error, "reason", error))
+
+
+def ssl_context() -> ssl.SSLContext:
+    """
+    Make the settings for a secure connection, trusting the certificate authorities that come with Alto.
+
+    A packaged copy cannot count on the system's: the Python inside it may look for them where the computer it was built on keeps
+    them, and a connection would then fail on a distribution that keeps them somewhere else.
+
+    Returns
+    -------
+    ssl.SSLContext
+        A context that checks the server's certificate and name against certifi's list.
+
+    Examples
+    --------
+    >>> ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) > 100
+    (True, True)
+    """
+    return ssl.create_default_context(cafile=certifi.where())
+
+
+def platform_asset_name(
+    version: str,
+    *,
+    system: str,
+    machine: str,
+) -> str | None:
+    """
+    Give the name of the file that updates a packaged copy on this system, as the release workflow names it.
+
+    Parameters
+    ----------
+    version : str
+        The version, such as "0.1.0". Keyword-only after the first.
+    system : str
+        The operating system, as `platform.system()` says it ("Linux", "Windows"). Keyword-only.
+    machine : str
+        The processor, as `platform.machine()` says it ("x86_64", "AMD64"). Keyword-only.
+
+    Returns
+    -------
+    str or None
+        The name, or None if there is no package for this system.
+
+    Examples
+    --------
+    >>> platform_asset_name("0.1.0", system="Linux", machine="x86_64")
+    'alto-0.1.0-linux-x86_64.tar.gz'
+    >>> platform_asset_name("0.1.0", system="Windows", machine="AMD64")
+    'alto-0.1.0-windows-x64-setup.exe'
+    >>> platform_asset_name("0.1.0", system="Linux", machine="aarch64") is None
+    True
+    """
+    kind, chip = system.lower(), machine.lower()
+    if kind == "linux" and chip in {"x86_64", "amd64"}:
+        return f"alto-{version}-linux-x86_64.tar.gz"
+    if kind == "windows" and chip in {"x86_64", "amd64"}:
+        return f"alto-{version}-windows-x64-setup.exe"
+    return None
+
+
+def find_asset(
+    release: Release,
+    *,
+    name: str,
+    base: str = DOWNLOAD_BASE,
+) -> Asset | None:
+    """
+    Find a file of a release by its name, if it is at the address where a release keeps its files.
+
+    Parameters
+    ----------
+    release : Release
+        The release.
+    name : str
+        The file's name. Keyword-only.
+    base : str, default DOWNLOAD_BASE
+        What the address must start with. Keyword-only.
+
+    Returns
+    -------
+    Asset or None
+        The file, or None if the release has none by that name or it is somewhere else.
+
+    Examples
+    --------
+    >>> files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
+    >>> found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
+    >>> found.name if found else None
+    'a'
+    >>> find_asset(Release("1", tag="v1", url="", assets=files), name="b") is None
+    True
+    """
+    return next((asset for asset in release.assets if asset.name == name and asset.url.startswith(base)), None)
+
+
+def parse_checksums(text: str) -> dict[str, str]:
+    r"""
+    Read a `SHA256SUMS` file: a line for each file, with its SHA-256 hash and its name.
+
+    Parameters
+    ----------
+    text : str
+        The file's contents, as `sha256sum` writes them.
+
+    Returns
+    -------
+    dict of str to str
+        The hash of each named file, in lower case. Lines that are not a hash and a plain file name are left out.
+
+    Examples
+    --------
+    >>> entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
+    >>> parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
+    {'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
+    """
+    sums: dict[str, str] = {}
+    for line in text.splitlines():
+        match = re.fullmatch(r"([0-9a-fA-F]{64}) [ *]([^/\\\s]+)", line.strip())
+        if match:
+            sums[match.group(2)] = match.group(1).lower()
+    return sums
+
+
+def verify_signature(
+    data: bytes,
+    *,
+    signature: str,
+    keys: tuple[str, ...],
+) -> bool:
+    """
+    Say whether an Ed25519 signature of some data was made with one of the keys.
+
+    Parameters
+    ----------
+    data : bytes
+        What was signed.
+    signature : str
+        The signature, base64. Keyword-only.
+    keys : tuple of str
+        The public keys (base64) that are trusted. Keyword-only.
+
+    Returns
+    -------
+    bool
+        True only if the signature is well formed and one of the keys made it. No key, a key that is not a key, and a
+        signature that is not one all give False.
+
+    Examples
+    --------
+    >>> from nacl.signing import SigningKey
+    >>> pair = SigningKey.generate()
+    >>> public = base64.b64encode(bytes(pair.verify_key)).decode()
+    >>> signed = base64.b64encode(pair.sign(b"the list").signature).decode()
+    >>> verify_signature(b"the list", signature=signed, keys=(public,))
+    True
+    >>> verify_signature(b"another list", signature=signed, keys=(public,))
+    False
+    >>> verify_signature(b"the list", signature=signed, keys=())
+    False
+    """
+    try:
+        raw = base64.b64decode(signature.strip(), validate=True)
+    except (binascii.Error, ValueError):
+        return False
+    for key in keys:
+        try:
+            VerifyKey(base64.b64decode(key, validate=True)).verify(data, raw)
+        except (BadSignatureError, NaClValueError, binascii.Error, ValueError, TypeError):
+            continue
+        return True
+    return False
+
+
+def self_check() -> list[str]:
+    """
+    Check, without any network, that what a copy needs to check an update is there and works.
+
+    It is what `alto --self-test` runs, so that the build can tell that a packaged copy carries the certificate list and the
+    signature library (which PyInstaller must be told about), and that the keys in the code are keys.
+
+    Returns
+    -------
+    list of str
+        What is wrong, one sentence each; empty if all is well.
+
+    Examples
+    --------
+    >>> self_check()
+    []
+    """
+    problems: list[str] = []
+    if len(ssl_context().get_ca_certs()) < 100:
+        problems.append("The list of certificate authorities did not load, so a secure connection could not be made.")
+    key = SigningKey.generate()
+    public = base64.b64encode(bytes(key.verify_key)).decode()
+    signature = base64.b64encode(key.sign(b"alto").signature).decode()
+    good = verify_signature(b"alto", signature=signature, keys=(public,))
+    forged = verify_signature(b"not alto", signature=signature, keys=(public,))
+    if not good or forged:
+        problems.append("Checking a signature does not work.")
+    for text in UPDATE_PUBLIC_KEYS:
+        try:
+            VerifyKey(base64.b64decode(text, validate=True))
+        except (binascii.Error, ValueError, TypeError, NaClValueError):
+            problems.append("A public key in the code is not a valid Ed25519 key.")
+    return problems

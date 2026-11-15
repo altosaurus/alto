@@ -76,6 +76,9 @@ $Frozen = Join-Path $Work "dist\alto"
 # A program with no console prints nothing, so `--version` can only show that the imports worked, by ending with 0. The package's
 # metadata, which is where the version comes from, must be in the folder.
 Run (Join-Path $Frozen "alto.exe") @("--version")
+# What an update needs (the certificate list and the signature check) must be inside the folder. It prints nothing without a console,
+# and says what is wrong by its exit code.
+Run (Join-Path $Frozen "alto.exe") @("--self-test")
 if (-not (Get-ChildItem -Path $Frozen -Recurse -Directory -Filter "alto-$Version.dist-info")) { throw "The frozen program has no metadata for alto $Version" }
 
 # It must open its window and stay open. Nothing is drawn on a screen, and it uses its own folder for its data.
@@ -127,4 +130,44 @@ RunAndWait $Uninstaller ($Quiet + @("/PURGE=1"))
 WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 WaitUntilGone $Data "The practice history"
 Write-Host "An uninstall with /PURGE=1 removes the data too."
+
+# An update, the way Alto does it: Alto starts the step that Alto itself builds (`selfupdate.windows_handoff_command`) and quits; the step
+# waits for it to end, runs the newer installer, and opens Alto again. Here the open Alto is stopped, standing in for quitting.
+$Newer = "99.0.0"
+Run $Iscc @("/Qp", "/DAppVersion=$Newer", "/DSourceDir=$Frozen", "/DOutputDir=$Work", "/DIconFile=$Icon", (Join-Path $Root "packaging\windows\alto.iss"))
+$NewerSetup = Join-Path $Work "alto-$Newer-windows-x64-setup.exe"
+if (-not (Test-Path $NewerSetup)) { throw "The newer installer was not written: $NewerSetup" }
+RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target"))
+$env:QT_QPA_PLATFORM = "offscreen"
+$env:ALTO_HOME = Join-Path $Work "home"
+try {
+    $Old = Start-Process -FilePath (Join-Path $Target "alto.exe") -PassThru
+    Start-Sleep -Seconds 8
+    if ($Old.HasExited) { throw "Alto did not stay open for the update test" }
+    $Encoded = & $Py -c "import sys; from pathlib import Path; from alto import selfupdate; print(selfupdate.windows_handoff_command(Path(sys.argv[1]), pid=int(sys.argv[2]), alto=Path(sys.argv[3]))[-1])" $NewerSetup $Old.Id (Join-Path $Target "alto.exe")
+    if ($LASTEXITCODE -ne 0 -or -not $Encoded) { throw "The update step could not be made" }
+    $Step = Start-Process -FilePath "powershell.exe" -ArgumentList @("-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", $Encoded) -PassThru
+    Start-Sleep -Seconds 2
+    if ($Step.HasExited) { throw "The update step ended before Alto had quit" }
+    $Old.Kill()
+    $Old.WaitForExit(30000) | Out-Null
+    if (-not $Step.WaitForExit(240000)) { throw "The update step did not finish" }
+    $Open = $false
+    for ($i = 0; $i -lt 60 -and -not $Open; $i++) {
+        Start-Sleep -Milliseconds 500
+        $Open = [bool](Get-Process -Name alto -ErrorAction SilentlyContinue)
+    }
+    if (-not $Open) { throw "The update did not open Alto again" }
+    $Key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{26F851E3-0F09-45A0-A9C4-13D12F91DA07}_is1"
+    $Now = (Get-ItemProperty -Path $Key).DisplayVersion
+    if ($Now -ne $Newer) { throw "After the update the installed version is $Now, not $Newer" }
+    if (@(Get-Process -Name alto -ErrorAction SilentlyContinue).Count -ne 1) { throw "Alto was opened more than once by the update" }
+}
+finally {
+    Get-Process -Name alto -ErrorAction SilentlyContinue | Stop-Process -Force
+    Remove-Item Env:QT_QPA_PLATFORM, Env:ALTO_HOME -ErrorAction SilentlyContinue
+}
+Write-Host "An update step, built by Alto, waits for Alto to quit, installs the newer version and opens Alto again."
+RunAndWait (Join-Path $Target "unins000.exe") ($Quiet + @("/PURGE=1"))
+WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 Write-Host "Done: $Setup"

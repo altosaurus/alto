@@ -37,6 +37,11 @@ SAID="$("$FROZEN/alto" --version)"
     echo "The frozen program says '$SAID', not 'Alto $VERSION'." >&2
     exit 1
 }
+# What an update needs (the certificate list and the signature check) must be inside the folder.
+[ "$("$FROZEN/alto" --self-test)" = "ok" ] || {
+    echo "The frozen program's self-test failed: $("$FROZEN/alto" --self-test)" >&2
+    exit 1
+}
 STATUS=0
 QT_QPA_PLATFORM=offscreen ALTO_HOME="$WORK/home" timeout 10 "$FROZEN/alto" >/dev/null 2>&1 || STATUS=$?
 [ "$STATUS" -eq 124 ] || {

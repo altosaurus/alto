@@ -12,6 +12,8 @@ from pathlib import Path
 
 import pytest
 
+from alto import selfupdate
+
 ROOT = Path(__file__).resolve().parent.parent
 WORKFLOWS = ROOT / ".github" / "workflows"
 INSTALLER = ROOT / "packaging" / "windows" / "alto.iss"
@@ -102,3 +104,46 @@ def test_the_windows_build_reads_the_version_from_pyproject_and_tests_the_instal
     assert "tomllib.load" in script and "pyproject.toml" in script
     assert "/PURGE=1" in script and "/VERYSILENT" in script and "unins000.exe" in script
     assert re.search(r"A silent uninstall removed the practice history", script)
+
+
+def test_the_release_is_signed_and_the_signature_is_published_with_it() -> None:
+    """Check that the workflow signs the list of checksums with the secret key, checks that early, and uploads the signature."""
+    yaml = pytest.importorskip("yaml")
+    data = yaml.safe_load(RELEASE)
+    assert "scripts/sign_release.py dist/SHA256SUMS" in RELEASE and "dist/SHA256SUMS.sig" in RELEASE
+    assert RELEASE.count("secrets.ALTO_SIGNING_KEY") == 2  # the early probe, and the signing itself
+    assert (
+        "scripts/sign_release.py" in RELEASE.split("build:")[0]
+    )  # before anything is built, so a wrong secret costs no build time
+    check_steps = [step.get("name", "") for step in data["jobs"]["check"]["steps"]]
+    assert "The release can be signed" in check_steps
+    assert "SHA256SUMS.sig" in RELEASE and (ROOT / "scripts" / "sign_release.py").is_file()
+
+
+def test_the_build_scripts_run_the_self_test_on_the_frozen_program() -> None:
+    """Check that both build scripts run `--self-test`, which shows the certificate list and the signature check are in."""
+    assert "--self-test" in (ROOT / "scripts" / "build-linux.sh").read_text(encoding="utf-8")
+    assert "--self-test" in (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
+
+
+def test_the_windows_update_arguments_are_the_same_in_alto_the_test_script_and_the_installer() -> None:
+    """
+    Check that the arguments Alto gives the installer suit the installer script, and that the build script runs Alto's own step.
+
+    The installer's own restart must stay off, or Alto would be started twice.
+    """
+    script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
+    assert "selfupdate.windows_handoff_command" in script  # the build script runs the step Alto builds, not a copy of it
+    arguments = ("/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1")
+    assert selfupdate.WINDOWS_INSTALLER_ARGUMENTS == arguments
+    iss = INSTALLER.read_text(encoding="utf-8")
+    assert "Check: ShouldRelaunch" in iss and "{param:RELAUNCH|0}" in iss
+    assert "RestartApplications=no" in iss and "CloseApplications=yes" in iss
+
+
+def test_the_linux_installer_copies_beside_the_old_copy_and_swaps() -> None:
+    """Check that `install.sh` no longer deletes the installed copy before the new one is in place."""
+    script = (ROOT / "packaging" / "linux" / "install.sh").read_text(encoding="utf-8")
+    assert '"$OPT.new"' in script and '"$OPT.old"' in script
+    assert script.index('cp -R "$HERE/alto" "$OPT.new"') < script.index('mv "$OPT.new" "$OPT"')
+    assert 'rm -rf "$OPT"\n    cp -R' not in script

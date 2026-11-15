@@ -5,7 +5,8 @@
 #   sh install.sh uninstall            remove all of that; keep your practice history and settings
 #   sh install.sh uninstall --purge    also delete your practice history and settings
 #
-# To update, unpack the newer download and run `sh install.sh install` again: it replaces the old files and keeps your data.
+# To update, unpack the newer download and run `sh install.sh install` again: it replaces the old files and keeps your data. The new
+# files are copied beside the old and swapped in, so an install that fails leaves the old copy as it was.
 # ALTO_PREFIX (default ~/.local) moves the program to $ALTO_PREFIX/opt/alto and the link to $ALTO_PREFIX/bin/alto.
 set -eu
 
@@ -46,8 +47,26 @@ install)
         }
     fi
     mkdir -p "$BIN" "$(dirname "$OPT")" "$DATA/applications" "$ICONS/256x256/apps" "$ICONS/512x512/apps"
-    rm -rf "$OPT"
-    cp -R "$HERE/alto" "$OPT"
+    rm -rf "$OPT.new" "$OPT.old"
+    cp -R "$HERE/alto" "$OPT.new" || {
+        rm -rf "$OPT.new"
+        echo "The program could not be copied to $OPT.new, so nothing was changed." >&2
+        exit 1
+    }
+    if [ -e "$OPT" ]; then
+        mv "$OPT" "$OPT.old" || {
+            rm -rf "$OPT.new"
+            echo "The installed copy in $OPT could not be moved aside, so nothing was changed." >&2
+            exit 1
+        }
+    fi
+    mv "$OPT.new" "$OPT" || {
+        [ -e "$OPT.old" ] && mv "$OPT.old" "$OPT"
+        rm -rf "$OPT.new"
+        echo "The new copy could not be put in place, so the old one was kept." >&2
+        exit 1
+    }
+    rm -rf "$OPT.old"
     ln -sf "$OPT/alto" "$BIN/alto"
     cp "$HERE/icons/icon-256.png" "$ICONS/256x256/apps/alto.png"
     cp "$HERE/icons/icon.png" "$ICONS/512x512/apps/alto.png"
@@ -77,7 +96,7 @@ uninstall)
             rm -f "$DESKTOP_FILE" "$ICONS/256x256/apps/alto.png" "$ICONS/512x512/apps/alto.png"
             refresh_desktop
         fi
-        [ -n "$OPT" ] && rm -rf "$OPT"
+        [ -n "$OPT" ] && rm -rf "$OPT" "$OPT.new" "$OPT.old"
         echo "Removed Alto from $PREFIX and from the application menu."
     fi
     if [ "${2:-}" = "--purge" ]; then

@@ -29,6 +29,22 @@ jobs:
           fi
           python3 scripts/changelog_section.py "${version}" > /dev/null
 
+      # Alto installs an update only if its signature verifies against the key in alto/updates.py, so a release must not be built
+      # (and a long build must not be waited for) if there is no such key, or the secret is not that key's private half.
+      - uses: actions/setup-python@v5
+        if: github.ref_type == 'tag'
+        with:
+          python-version: "3.13"
+
+      - name: The release can be signed
+        if: github.ref_type == 'tag'
+        env:
+          ALTO_SIGNING_KEY: ${{ secrets.ALTO_SIGNING_KEY }}
+        run: |
+          python -m pip install --quiet pynacl certifi
+          echo "a file to sign" > "${RUNNER_TEMP}/probe"
+          PYTHONPATH=. python scripts/sign_release.py "${RUNNER_TEMP}/probe"
+
   build:
     needs: check
     uses: ./.github/workflows/build-packages.yml
@@ -47,11 +63,20 @@ jobs:
           path: dist
           merge-multiple: true
 
-      - name: Checksums and release notes
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # The signature is what lets a copy of Alto trust the checksums, and the checksums the files: see alto/updates.py.
+      - name: Checksums, their signature and release notes
+        env:
+          ALTO_SIGNING_KEY: ${{ secrets.ALTO_SIGNING_KEY }}
         run: |
+          python -m pip install --quiet pynacl certifi
           cd dist
           sha256sum alto-* > SHA256SUMS
           cd ..
+          PYTHONPATH=. python scripts/sign_release.py dist/SHA256SUMS
           python3 scripts/changelog_section.py "${GITHUB_REF_NAME}" > notes.md
           cat >> notes.md <<'NOTES'
 
@@ -59,12 +84,12 @@ jobs:
 
           - **Linux:** `alto-*-linux-x86_64.tar.gz`. Unpack it and run `sh install.sh install`. `sh install.sh uninstall` removes it and keeps your data; add `--purge` to delete that too.
           - **Windows:** `alto-*-windows-x64-setup.exe`. Windows may say it protects your PC because the publisher is unknown, as the installer is not signed yet: choose **More info**, then **Run anyway**.
-          - `SHA256SUMS` has the checksum of each file.
+          - `SHA256SUMS` has the checksum of each file, and `SHA256SUMS.sig` is its signature. A copy of Alto that updates itself checks the signature first.
           NOTES
 
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/SHA256SUMS \
+          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/SHA256SUMS dist/SHA256SUMS.sig \
             --title "Alto ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag

@@ -28,6 +28,7 @@ from alto.ui.theme import (
     apply_theme,
     saved_theme,
 )
+from alto.updates import self_check
 
 
 def main() -> int:
@@ -39,6 +40,9 @@ def main() -> int:
 
     `alto --version` prints the version and exits without opening anything. A packaged build has no console on Windows, so there
     is nowhere to print to; it still exits with 0, which shows that everything it needs was found.
+
+    `alto --self-test` checks, offline, that what an update needs is there: the certificate list, the signature check and the
+    keys. It prints `ok` and exits with 0, or says what is wrong and exits with 1. The build runs it on a packaged copy.
 
     Returns
     -------
@@ -53,6 +57,11 @@ def main() -> int:
         if sys.stdout is not None:  # a program with no console, such as the Windows build, has none
             print(f"Alto {app_version()}")
         return 0
+    if "--self-test" in sys.argv[1:]:
+        problems = self_check()
+        if sys.stdout is not None:
+            print("ok" if not problems else "\n".join(problems))
+        return 1 if problems else 0
     app = QApplication(sys.argv)
     app.setApplicationName("Alto")
     app.setApplicationDisplayName("Alto - Music Theory" if alto_home() is None else "Alto (dev) - Music Theory")

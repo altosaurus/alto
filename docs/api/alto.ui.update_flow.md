@@ -2,7 +2,7 @@
 title: alto.ui.update_flow
 parent: api
 package: alto.ui
-order: 52
+order: 54
 permalink: /api/alto.ui.update_flow/
 ---
 {% raw %}
@@ -439,6 +439,7 @@ def check_for_updates(
     parent: QWidget,
     *,
     restart: Callable[[], None],
+    quit_app: Callable[[], None] = QApplication.quit,
 ) -> None
 ```
 
@@ -452,6 +453,7 @@ or the main branch, and can install it.
 
 - `parent` (*QWidget*): The window the questions are asked over.
 - `restart` (*Callable*): What to do after a successful update to start the new version in place of this one. Keyword-only.
+- `quit_app` (*Callable, default QApplication.quit*): What to do to close Alto once an update has been handed to the program that installs it, which is how a packaged copy is replaced. Keyword-only.
 
 **Examples**
 
@@ -468,6 +470,7 @@ def check_release(
     kind: InstallKind,
     source: Source | None,
     restart: Callable[[], None],
+    quit_app: Callable[[], None],
 ) -> None
 ```
 
@@ -479,6 +482,7 @@ Ask GitHub for the latest release and compare it with the version that is runnin
 - `kind` (*InstallKind*): What kind of copy is running: a packaged one is offered a download page, and one installed with the script is offered the update. Keyword-only.
 - `source` (*Source or None*): Where the running copy came from; None for a packaged copy. Keyword-only.
 - `restart` (*Callable*): What to do after a successful update. Keyword-only.
+- `quit_app` (*Callable*): What to do to close Alto once an update has been handed to the program that installs it. Keyword-only.
 
 **Examples**
 
@@ -536,5 +540,34 @@ Install a release, or the newest commit of the main branch, showing the progress
 
 ```pycon
 >>> install  # doctest: +SKIP
+```
+
+## update_package
+
+```python
+def update_package(
+    parent: QWidget,
+    *,
+    release: updates.Release,
+    target: selfupdate.Target,
+    installed: str,
+    quit_app: Callable[[], None],
+) -> None
+```
+
+Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.
+
+**Parameters**
+
+- `parent` (*QWidget*): The window the questions are asked over.
+- `release` (*updates.Release*): The newer release. Keyword-only.
+- `target` (*selfupdate.Target*): The copy that will be replaced. Keyword-only.
+- `installed` (*str*): The version that is running. Keyword-only.
+- `quit_app` (*Callable*): What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> update_package  # doctest: +SKIP
 ```
 {% endraw %}

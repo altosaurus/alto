@@ -71,9 +71,16 @@ says so. If not, it asks whether to install the update, shows its progress, and 
 OK.
 
 - **A copy installed with the script** installs the new release itself.
-- **A packaged copy** (the Linux tarball or the Windows installer) cannot replace itself. It tells you that a newer release
-  exists and offers to open the page where it can be downloaded.
+- **A packaged copy** (the Linux tarball installed with `install.sh`, or the Windows installer) replaces itself. It downloads the
+  new release, checks it (see below), tells you that Alto will close, install it and open again when you press OK, and does so.
+  A Linux folder that you only unpacked and ran from is not an install, so it is offered the page where the release can be
+  downloaded, as is a build that has no way to check a download.
 - **A copy you run from a clone** is updated with `git pull`.
+
+**How an update is checked.** Every release has a file of checksums (`SHA256SUMS`) and a signature of it
+(`SHA256SUMS.sig`), made with a private key that only the release workflow has. Alto carries the matching public key. It installs a
+download only if the signature on the list is valid, the signed list names that file, and the file's SHA-256 hash is the one
+listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.
 
 To get changes as soon as they are merged, before they are released, tick **Follow the main branch** in **Settings →
 Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
