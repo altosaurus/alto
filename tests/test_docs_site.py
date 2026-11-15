@@ -386,3 +386,24 @@ def test_the_logos_are_in_the_page_and_credited() -> None:
         assert f'id="{name}"' in icons
     page = (DOCS / "credits.md").read_text(encoding="utf-8")
     assert "Simple Icons" in page and "CC0" in page
+
+
+def test_every_icon_has_its_size_written_on_it_and_the_files_it_needs_are_stamped_with_the_build() -> None:
+    """
+    Check what keeps a page readable when the browser still has an old stylesheet.
+
+    An icon with no size is drawn at the browser's default of 300 by 150 pixels, which filled the screen when a new page met an
+    old, cached stylesheet. Each icon now says how big it is, and the stylesheet and the script are asked for by an address that
+    changes with every build, so a new page does not meet an old file.
+    """
+    pages = {
+        "layout": (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8"),
+        "home": (DOCS / "index.md").read_text(encoding="utf-8"),
+        "script": (DOCS / "assets" / "js" / "downloads.js").read_text(encoding="utf-8"),
+        "switcher": (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8"),
+    }
+    for name, text in pages.items():
+        for tag in re.findall(r"<svg[^>]*>", text):
+            assert "width=" in tag and "height=" in tag, f"an icon in the {name} has no size: {tag}"
+    assert "site.css' | relative_url }}?v={{ site.time" in pages["layout"]
+    assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
