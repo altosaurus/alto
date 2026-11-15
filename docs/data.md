@@ -1,6 +1,7 @@
 ---
 title: Your data
 nav_order: 8
+nav_group: Using Alto
 permalink: /data/
 ---
 Everything Alto stores is on your own computer.

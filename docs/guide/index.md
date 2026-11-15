@@ -1,6 +1,7 @@
 ---
 title: Developer guide
 nav_order: 10
+nav_group: For developers
 children: guide
 permalink: /guide/
 ---

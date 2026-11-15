@@ -1,6 +1,7 @@
 ---
 title: Statistics and database
 nav_order: 5
+nav_group: Using Alto
 permalink: /statistics/
 ---
 ## Statistics

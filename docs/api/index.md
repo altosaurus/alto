@@ -1,6 +1,7 @@
 ---
 title: API reference
 nav_order: 11
+nav_group: For developers
 children: api
 permalink: /api/
 ---

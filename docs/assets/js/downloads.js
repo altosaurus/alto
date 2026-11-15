@@ -40,15 +40,17 @@
     if (text) { node.textContent = text; }
     return node;
   }
-  function logo(id) {
+  // Every icon has its size written on it, so that a page whose stylesheet is old or has not loaded never shows one at the browser's
+  // default size, which is huge.
+  function logo(id, size) {
     var span = el("span", "dl-logo");
     span.setAttribute("aria-hidden", "true");
-    span.innerHTML = '<svg viewBox="0 0 24 24"><use href="#' + id + '"/></svg>';
+    span.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '"><use href="#' + id + '"/></svg>';
     return span;
   }
   function icon(id) {
     var span = document.createElement("span");
-    span.innerHTML = '<svg class="i" aria-hidden="true"><use href="#' + id + '"/></svg>';
+    span.innerHTML = '<svg class="i" width="18" height="18" aria-hidden="true"><use href="#' + id + '"/></svg>';
     return span.firstChild;
   }
 
@@ -70,7 +72,7 @@
   var split = el("div", "dl-split");
   var button = el("a", "dl-solid");
   button.href = main.url;
-  button.appendChild(logo(main.logo));
+  button.appendChild(logo(main.logo, 32));
   var text = el("span", "dl-txt");
   text.appendChild(el("span", "dl-t1", main.title));
   text.appendChild(el("span", "dl-t2", main.note));
@@ -99,7 +101,7 @@
     link.href = item.url || source;
     link.setAttribute("role", "menuitem");
     var tile = el("span", "dl-tile");
-    tile.appendChild(logo(item.logo));
+    tile.appendChild(logo(item.logo, 20));
     var words = document.createElement("span");
     words.appendChild(el("b", null, item.name));
     words.appendChild(el("small", null, item.file ? item.file : "No installer yet, run it from source"));

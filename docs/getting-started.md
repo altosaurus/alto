@@ -1,6 +1,7 @@
 ---
 title: Getting started
 nav_order: 2
+nav_group: Using Alto
 permalink: /getting-started/
 ---
 ## What you need
@@ -33,8 +34,54 @@ Alto to the Start menu, and lists it in Settings → Apps. Windows may say it pr
 installer is not signed yet. Choose **More info**, then **Run anyway**. To update, run the newer installer. To uninstall, use
 Settings → Apps; the uninstaller asks whether to also remove your practice history and settings.
 
-Each release has a `SHA256SUMS` file to check the downloads with. **Check for updates…** in the menu tells a packaged copy when a
-newer release exists and offers to open its download page.
+### Check your download
+
+Each release has a file called `SHA256SUMS` next to the downloads. It lists the SHA-256 fingerprint of every file in the release, so you
+can check that yours arrived complete and unchanged. Download it from the same release page, then:
+
+**Linux.** In the folder that has both files, run:
+
+```bash
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+It prints `OK` after the name of each file it finds.
+
+**Windows.** In PowerShell, in the folder that has the installer, run:
+
+```powershell
+Get-FileHash .\alto-<version>-windows-x64-setup.exe -Algorithm SHA256
+```
+
+The value it prints should be the same as the one on that file's line in `SHA256SUMS`.
+
+The list is signed as well (`SHA256SUMS.sig`). Alto checks that signature itself whenever it updates a packaged copy; see
+[Updating Alto](#updating-alto).
+
+## Updating Alto
+
+Whichever way you installed Alto, you can update from inside it: open the menu (☰) and choose **Check for updates…**. By default Alto asks GitHub for the
+newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
+says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
+OK.
+
+- **A copy installed with the script** installs the new release itself.
+- **A packaged copy** (the Linux tarball installed with `install.sh`, or the Windows installer) replaces itself. It downloads the
+  new release, checks it (see below), tells you that Alto will close, install it and open again when you press OK, and does so.
+  A Linux folder that you only unpacked and ran from is not an install, so it is offered the page where the release can be
+  downloaded, as is a build that has no way to check a download.
+- **A copy you run from a clone** is updated with `git pull`.
+
+**How an update is checked.** Every release has a file of checksums (`SHA256SUMS`) and a signature of it
+(`SHA256SUMS.sig`), made with a private key that only the release workflow has. Alto carries the matching public key. It installs a
+download only if the signature on the list is valid, the signed list names that file, and the file's SHA-256 hash is the one
+listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.
+
+To get changes as soon as they are merged, before they are released, tick **Follow the main branch** in **Settings →
+Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
+script, and may be less stable than a release; a packaged copy always follows releases.
+
+An update from the menu does not refresh the application-menu entry or icon; `sh scripts/alto-install.sh update` does that too.
 
 ## Install and run
 
@@ -62,31 +109,6 @@ sh scripts/alto-install.sh uninstall   # remove the program, the menu entry and 
 
 Uninstalling keeps your practice history and settings (see [Your data]({{ '/data/' | relative_url }})). Add `--purge` to
 delete those too; use **Export backup…** first if you might want them back.
-
-### Updating from the menu
-
-You can also update from inside Alto: open the menu (☰) and choose **Check for updates…**. By default Alto asks GitHub for the
-newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
-says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
-OK.
-
-- **A copy installed with the script** installs the new release itself.
-- **A packaged copy** (the Linux tarball installed with `install.sh`, or the Windows installer) replaces itself. It downloads the
-  new release, checks it (see below), tells you that Alto will close, install it and open again when you press OK, and does so.
-  A Linux folder that you only unpacked and ran from is not an install, so it is offered the page where the release can be
-  downloaded, as is a build that has no way to check a download.
-- **A copy you run from a clone** is updated with `git pull`.
-
-**How an update is checked.** Every release has a file of checksums (`SHA256SUMS`) and a signature of it
-(`SHA256SUMS.sig`), made with a private key that only the release workflow has. Alto carries the matching public key. It installs a
-download only if the signature on the list is valid, the signed list names that file, and the file's SHA-256 hash is the one
-listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.
-
-To get changes as soon as they are merged, before they are released, tick **Follow the main branch** in **Settings →
-Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
-script, and may be less stable than a release; a packaged copy always follows releases.
-
-An update from the menu does not refresh the application-menu entry or icon; `sh scripts/alto-install.sh update` does that too.
 
 ## First launch
 

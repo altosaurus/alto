@@ -1,6 +1,7 @@
 ---
 title: For developers
 nav_order: 9
+nav_group: For developers
 permalink: /development/
 ---
 Alto is a Python application using PySide6. The source is at [github.com/altosaurus/alto](https://github.com/altosaurus/alto).
@@ -300,6 +301,27 @@ current layout over that tag's docs, and the words stay as they were.
 Source to "Deploy from a branch", `gh-pages`, `/ (root)`. Until then GitHub builds a single copy from `main:/docs` as before. Do this
 soon after merging, because the one copy no longer has `robots.txt`, `llms.txt` or the Search Console file, which now live in
 `docs/site-root/`.
+
+### Pages in the sidebar
+
+The sidebar and the "On this page" list are built from the pages themselves. A page is listed by what its front matter says:
+
+| Key | Meaning |
+|---|---|
+| `nav_order` | Where it goes, lowest first. A page without one is not in the sidebar. |
+| `nav_group` | The heading it goes under (Using Alto, For developers, About). The headings open and close, and the pages of one heading must be next to each other in `nav_order`. Home has none. |
+| `children`, `parent` | A page with `children: name` is one row that links to it and opens the pages that say `parent: name`, in their `order`. Those pages can also say `package:` to be grouped under a small heading that opens and closes (the API reference). |
+
+A heading that is also the title of a page (For developers) is that page's link, and the page is not listed again under it. Whatever holds
+the page you are on is open. Which headings you closed is remembered in the browser.
+
+On a wide screen a page with two or more `##` or `###` headings gets an "On this page" list beside it, made in the browser from those
+headings, and on a narrower one a box above the text. Nothing needs to be written for it. `docs/api/index.md` is written by
+`scripts/api_docs.py`, so change its front matter there.
+
+Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar's
+own order: the pages by `nav_order`, each followed by its `children` in their `order`. Nothing needs to be written for them. The first page has
+no previous link and the last no next one.
 
 ### Building the docs
 

@@ -343,7 +343,7 @@ def test_the_file_names_in_the_download_section_are_the_ones_the_release_workflo
     windows = updates.platform_asset_name("1.2.3", system="Windows", machine="AMD64")
     assert linux and windows
     assert linux.replace("1.2.3", "{{ v }}") in home and windows.replace("1.2.3", "{{ v }}") in home
-    assert "https://github.com/altosaurus/alto/releases/download/v" in home and "SHA256SUMS" in home
+    assert "https://github.com/altosaurus/alto/releases/download/v" in home
 
 
 def test_each_build_says_which_release_to_offer_and_a_build_without_a_release_shows_no_download() -> None:
@@ -386,3 +386,208 @@ def test_the_logos_are_in_the_page_and_credited() -> None:
         assert f'id="{name}"' in icons
     page = (DOCS / "credits.md").read_text(encoding="utf-8")
     assert "Simple Icons" in page and "CC0" in page
+
+
+def test_every_icon_has_its_size_written_on_it_and_the_files_it_needs_are_stamped_with_the_build() -> None:
+    """
+    Check what keeps a page readable when the browser still has an old stylesheet.
+
+    An icon with no size is drawn at the browser's default of 300 by 150 pixels, which filled the screen when a new page met an
+    old, cached stylesheet. Each icon now says how big it is, and the stylesheet and the script are asked for by an address that
+    changes with every build, so a new page does not meet an old file.
+    """
+    pages = {
+        "layout": (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8"),
+        "home": (DOCS / "index.md").read_text(encoding="utf-8"),
+        "script": (DOCS / "assets" / "js" / "downloads.js").read_text(encoding="utf-8"),
+        "switcher": (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8"),
+    }
+    for name, text in pages.items():
+        for tag in re.findall(r"<svg[^>]*>", text):
+            assert "width=" in tag and "height=" in tag, f"an icon in the {name} has no size: {tag}"
+    assert "site.css' | relative_url }}?v={{ site.time" in pages["layout"]
+    assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
+
+
+def _brightness(colour: str) -> float:
+    """
+    Give the relative luminance of a colour written as "#rrggbb", as the web accessibility guidelines define it.
+
+    Parameters
+    ----------
+    colour : str
+        The colour.
+
+    Returns
+    -------
+    float
+        0 for black up to 1 for white.
+    """
+    parts = [int(colour[index : index + 2], 16) / 255 for index in (1, 3, 5)]
+    linear = [value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4 for value in parts]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def _contrast(first: str, second: str) -> float:
+    """
+    Give the contrast ratio of two colours, from 1 (the same) to 21 (black on white).
+
+    Parameters
+    ----------
+    first : str
+        One colour, "#rrggbb".
+    second : str
+        The other.
+
+    Returns
+    -------
+    float
+        The ratio.
+    """
+    high, low = sorted((_brightness(first), _brightness(second)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+@pytest.mark.parametrize("block", [":root {", ':root:not([data-theme="light"]) {', ':root[data-theme="dark"] {'])
+def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block: str) -> None:
+    """
+    Check each theme's button colour: its words are readable on it (4.5 to 1) and the button stands out from the page (3 to 1).
+
+    Parameters
+    ----------
+    block : str
+        The start of the block of colours: light, dark by the system's setting, and dark by choice.
+    """
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    start = css.index(block)
+    colours = css[start : css.index("}", start)]
+    button = re.search(r"--button:\s*(#[0-9a-fA-F]{6})", colours)
+    words = re.search(r"--button-text:\s*(#[0-9a-fA-F]{6})", colours)
+    page = re.search(r"--bg:\s*(#[0-9a-fA-F]{6})", colours)
+    assert button and words and page
+    assert _contrast(button.group(1), words.group(1)) >= 4.5
+    assert _contrast(button.group(1), page.group(1)) >= 3.0
+    if "dark" in block or "light" in block:
+        assert button.group(1).lower() == "#2f6bd0"  # royal blue in both ways of getting dark
+
+
+def _nav_pages() -> list[dict[str, str]]:
+    """
+    Read the front matter of every page that is listed in the sidebar, in the order the sidebar lists them.
+
+    Returns
+    -------
+    list of dict of str to str
+        For each page its title, its `nav_order` and its `nav_group` (empty if it has none), by `nav_order`.
+    """
+    pages = []
+    for path in sorted(DOCS.glob("*.md")) + sorted((DOCS / "guide").glob("index.md")) + sorted((DOCS / "api").glob("index.md")):
+        text = path.read_text(encoding="utf-8")
+        found = re.match(r"---\n(.*?)\n---\n", text, re.DOTALL)
+        if not found:
+            continue
+        fields = dict(re.findall(r"^([a-z_]+):\s*(.*)$", found.group(1), re.MULTILINE))
+        if "nav_order" in fields:
+            pages.append({"title": fields["title"], "order": fields["nav_order"], "group": fields.get("nav_group", "")})
+    return sorted(pages, key=lambda page: float(page["order"]))
+
+
+def test_every_page_in_the_sidebar_but_home_has_a_group_and_each_group_is_one_block() -> None:
+    """Check that the pages sort into three headings, each a single run in the order of the sidebar, with Home on its own."""
+    pages = _nav_pages()
+    assert pages[0]["title"] == "Home" and pages[0]["group"] == ""
+    assert all(page["group"] for page in pages[1:])
+    runs = [page["group"] for index, page in enumerate(pages[1:]) if index == 0 or pages[index]["group"] != page["group"]]
+    assert runs == ["Using Alto", "For developers", "About"]  # no heading comes twice
+
+
+def test_no_page_is_listed_twice_and_a_heading_that_is_a_page_is_that_pages_link() -> None:
+    """
+    Check that the sidebar can list each page once: the titles differ, and a heading named like a page stands for that page.
+
+    "For developers" is both a heading and a page. The layout makes the heading the page's link and leaves the page out of the
+    list under it, so it appears once. The developer guide and the API reference are single rows that link to their page and
+    open their chapters, so they appear once as well.
+    """
+    pages = _nav_pages()
+    titles = [page["title"] for page in pages]
+    assert len(titles) == len(set(titles))
+    same = [page for page in pages if page["title"] == page["group"]]
+    assert [page["title"] for page in same] == ["For developers"]
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'where: "title", group' in layout and 'unless group != "" and p.title == group' in layout
+    assert (
+        layout.count("<summary") >= 4
+        and 'class="count"' not in layout
+        and "count" not in layout.split("<nav")[1].split("</nav>")[0].replace("account", "")
+    )
+
+
+def test_the_sidebar_opens_whatever_holds_the_current_page_and_the_groups_are_remembered() -> None:
+    """Check that the current page's group, section and package are open, and that the script keeps only what you closed."""
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert "page.parent == p.children" in layout and "page.package == a.package" in layout and "data-nav-group" in layout
+    script = (DOCS / "assets" / "js" / "nav.js").read_text(encoding="utf-8")
+    assert (
+        "localStorage" in script and "try" in script and '[aria-current="page"]' in script
+    )  # never closes the current page's group
+    assert "fetch(" not in script and "XMLHttpRequest" not in script
+
+
+def test_the_on_this_page_list_is_made_from_the_headings_and_only_for_pages_with_more_than_one() -> None:
+    """Check the contents list script: it reads h2 and h3, skips pages with under two, follows the scroll, and has a fallback."""
+    script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
+    assert '"h2, h3"' in script and "heads.length < 2" in script and "On this page" in script
+    assert "scroll" in script and "toc-inline" in script and "has-toc" in script
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'id="toc"' in layout and 'id="page-grid"' in layout and "toc.js" in layout and "nav.js" in layout
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".page-grid.has-toc" in css and "min-width: 1240px" in css and ".toc-inline" in css
+
+
+def test_the_home_page_keeps_to_the_download_and_leaves_checking_and_updating_to_the_installation_guide() -> None:
+    """Check the home page's links, and that the instructions that moved off it are in Getting started."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    links = home[home.index('<p class="dl-more">') : home.index("</section>")]
+    assert (
+        "Release notes" in links and "Older releases" in links and "/getting-started/" in links and ">Getting started<" in links
+    )
+    assert "Installation guide" not in home and "SHA256SUMS" not in home and "update themselves" not in home
+    guide = (DOCS / "getting-started.md").read_text(encoding="utf-8")
+    assert (
+        "### Check your download" in guide
+        and "sha256sum --check --ignore-missing SHA256SUMS" in guide
+        and "Get-FileHash" in guide
+    )
+    assert "## Updating Alto" in guide and "**Check for updates…**" in guide
+    assert "offers to open its download page" not in guide  # a packaged copy replaces itself now
+    assert guide.index("## Updating Alto") < guide.index(
+        "## Install and run",
+    )  # for everyone, not under the Linux-only script section
+
+
+def test_every_page_in_the_sidebar_ends_with_links_to_the_previous_and_the_next_page() -> None:
+    """Check the layout's links: previous bottom left, next bottom right, in the sidebar's order, children included."""
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'class="page-nav"' in layout and 'rel="prev"' in layout and 'rel="next"' in layout
+    assert 'id="i-prev"' in layout and 'id="i-next"' in layout
+    assert (
+        'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children | sort: "order"' in layout
+    )
+    assert "entries[forloop.index]" in layout and "entries[before]" in layout and "{% break %}" in layout
+    assert "forloop.index0 > 0" in layout  # the first page has no previous one, and must not wrap round to the last
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".page-nav { display: flex; justify-content: space-between;" in css
+    assert (
+        ".page-nav a.prev" in css and ".page-nav a.next" in css and "margin-left: auto" in css
+    )  # a lone next link stays on the right
+
+
+def test_the_home_page_opens_with_the_title_and_the_one_sentence_it_was_asked_to() -> None:
+    """Check the words at the top of the home page, and that the name Alto in the title is marked."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert '<h1>Learn music theory with <span class="hl">Alto</span></h1>' in home
+    assert '<p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>' in home
+    assert "Music theory drills for the desktop" not in home
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".hero h1 .hl { color: var(--accent); }" in css

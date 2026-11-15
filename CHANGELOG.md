@@ -14,6 +14,9 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Changed
 
+- The documentation sidebar sorts the pages under headings that open and close, with the developer guide and the API reference as single
+  rows that open their pages, long pages have an "On this page" list that follows your reading, and every page ends with links to the
+  previous and next pages. The home page leaves checking a download and updating to the Getting started page, which now explains both.
 - The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.
 
 ## [0.0.0] - 2026-11-15

@@ -29,7 +29,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="{{ '/assets/img/icon.png' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -37,6 +37,10 @@
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
   </svg>
   <a class="skip" href="#content">Skip to the content</a>
   <header class="topbar">
@@ -47,11 +51,11 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="{{ site.docs_version }}" data-root="{{ site.site_root }}"><span class="version-name">{{ site.docs_version }}</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
-          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" aria-hidden="true"><use href="#i-check"/></svg></button>
-          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" aria-hidden="true"><use href="#i-check"/></svg></button>
-          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="system"><span class="dd-ico"><svg class="i" aria-hidden="true"><use href="#i-monitor"/></svg></span><span class="dd-text">System</span><svg class="i dd-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="system"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-monitor"/></svg></span><span class="dd-text">System</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
         </div>
       </div>
       <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
@@ -63,41 +67,90 @@
     <aside class="sidebar">
       <details class="menu" id="menu">
         <summary>Contents</summary>
-        <nav aria-label="Documentation">
+        <nav class="nav" aria-label="Documentation">
+          {% comment %}
+            Pages are listed in nav_order. A page with `nav_group` goes under that heading, which opens and closes. A heading that is also the
+            title of a page (For developers) is that page's link, so the page is listed once. A page with `children` is one row that links to
+            it and opens its own pages (the developer guide, the API reference), also listed once. Whatever holds the current page is open.
+          {% endcomment %}
           {% assign pages = site.pages | where_exp: "p", "p.nav_order" | sort: "nav_order" %}
-          <ul>
+          {% assign current_group = page.nav_group %}
+          {% if page.parent %}{% assign owner = pages | where: "children", page.parent | first %}{% assign current_group = owner.nav_group %}{% endif %}
+          {% assign last_group = "" %}
+          <ul class="nav-list">
             {% for p in pages %}
-            <li><a href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a>
-              {% if p.children and page.url contains p.permalink %}
+            {% assign group = p.nav_group | default: "" %}
+            {% if group != last_group %}
+            {% if last_group != "" %}</ul></details></li>{% endif %}
+            {% if group != "" %}
+            {% assign head = pages | where: "nav_group", group | where: "title", group | first %}
+            <li class="nav-group"><details data-nav-group="{{ group }}" open>
+              <summary class="nav-head">{% if head %}<a class="grow" href="{{ head.url | relative_url }}"{% if head.url == page.url %} aria-current="page"{% endif %}>{{ group }}</a>{% else %}<span class="grow">{{ group }}</span>{% endif %}<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            {% endif %}
+            {% assign last_group = group %}
+            {% endif %}
+            {% unless group != "" and p.title == group %}
+            {% if p.children %}
+            <li><details class="nav-section"{% if page.url == p.url or page.parent == p.children %} open{% endif %}>
+              <summary class="nav-row"><a class="row grow" href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
               {% assign child_pages = site.pages | where: "parent", p.children | sort: "order" %}
               {% assign last_package = "" %}
-              <ul class="sub-nav">
+              <ul class="kids">
                 {% for a in child_pages %}
                 {% if a.package and a.package != last_package %}
-                {% unless last_package == "" %}</ul></li>{% endunless %}
-                <li class="sub-group"><span>{{ a.package }}</span>
+                {% unless last_package == "" %}</ul></details></li>{% endunless %}
+                <li><details class="nav-pkg"{% if page.parent == p.children and page.package == a.package %} open{% endif %}>
+                  <summary>{{ a.package }}<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
                 {% assign last_package = a.package %}
                 {% endif %}
-                    <li><a href="{{ a.url | relative_url }}"{% if a.url == page.url %} aria-current="page"{% endif %}>{% if a.package %}{{ a.title | remove_first: a.package | remove_first: "." }}{% else %}{{ a.title }}{% endif %}</a></li>
+                    <li><a class="row sub" href="{{ a.url | relative_url }}"{% if a.url == page.url %} aria-current="page"{% endif %}>{% if a.package %}{{ a.title | remove_first: a.package | remove_first: "." }}{% else %}{{ a.title }}{% endif %}</a></li>
                 {% endfor %}
-                {% if last_package != "" %}
-                  </ul>
-                </li>
-                {% endif %}
+                {% if last_package != "" %}</ul></details></li>{% endif %}
               </ul>
-              {% endif %}
-            </li>
+            </details></li>
+            {% else %}
+            <li><a class="row" href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title }}</a></li>
+            {% endif %}
+            {% endunless %}
             {% endfor %}
+            {% if last_group != "" %}</ul></details></li>{% endif %}
           </ul>
         </nav>
       </details>
     </aside>
     <main id="content" class="content">
-      <article>
-        {% unless page.url == '/' %}<h1>{{ page.title }}</h1>{% endunless %}
-        {{ content }}
-      </article>
+      <div class="page-grid" id="page-grid">
+        <article>
+          {% unless page.url == '/' %}<h1>{{ page.title }}</h1>{% endunless %}
+          {{ content }}
+          {% comment %}
+            The previous and the next page, in the order of the sidebar: the pages by nav_order, each followed by its own pages (children) by
+            order. The first page has no previous one and the last no next one.
+          {% endcomment %}
+          {% assign order_pages = site.pages | where_exp: "p", "p.nav_order" | sort: "nav_order" %}
+          {% capture flat %}{% for p in order_pages %}{{ p.url }}||{{ p.title }}@@{% if p.children %}{% assign kids = site.pages | where: "parent", p.children | sort: "order" %}{% for k in kids %}{{ k.url }}||{{ k.title }}@@{% endfor %}{% endif %}{% endfor %}{% endcapture %}
+          {% assign entries = flat | split: "@@" %}
+          {% assign prev_url = "" %}{% assign prev_title = "" %}{% assign next_url = "" %}{% assign next_title = "" %}
+          {% for e in entries %}
+          {% assign parts = e | split: "||" %}
+          {% if parts[0] == page.url %}
+          {% if forloop.index0 > 0 %}{% assign before = forloop.index0 | minus: 1 %}{% assign earlier = entries[before] | split: "||" %}{% assign prev_url = earlier[0] %}{% assign prev_title = earlier[1] %}{% endif %}
+          {% assign following = entries[forloop.index] | split: "||" %}
+          {% assign next_url = following[0] %}{% assign next_title = following[1] %}
+          {% break %}
+          {% endif %}
+          {% endfor %}
+          {% if prev_url != "" or next_url != "" %}
+          <nav class="page-nav" aria-label="Previous and next pages">
+            {% if prev_url and prev_url != "" %}<a class="prev" href="{{ prev_url | relative_url }}" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>{{ prev_title }}</span></a>{% endif %}
+            {% if next_url and next_url != "" %}<a class="next" href="{{ next_url | relative_url }}" rel="next"><span class="np-label">Next</span><span class="np-title">{{ next_title }}<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>{% endif %}
+          </nav>
+          {% endif %}
+        </article>
+        <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
+      </div>
       <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
     </main>
   </div>
@@ -154,6 +207,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
+  <script src="{{ '/assets/js/nav.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+  <script src="{{ '/assets/js/toc.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
   <script src="{{ site.site_root }}/version-switcher.js" defer></script>
 </body>
 </html>

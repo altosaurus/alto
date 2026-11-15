@@ -1,6 +1,7 @@
 ---
 title: Exercises
 nav_order: 3
+nav_group: Using Alto
 permalink: /exercises/
 ---
 Alto has eleven exercises. Each one has a **?** button with a short explanation, and eight of them have their own

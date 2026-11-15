@@ -1,6 +1,7 @@
 ---
 title: Shortcuts
 nav_order: 7
+nav_group: Using Alto
 permalink: /shortcuts/
 ---
 ## Keyboard

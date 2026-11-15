@@ -1,6 +1,7 @@
 ---
 title: Settings
 nav_order: 6
+nav_group: Using Alto
 permalink: /settings/
 ---
 There are two kinds of settings. **App settings** apply everywhere. **Exercise settings** belong to one exercise.
