@@ -18,6 +18,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
+| [alto.updates](alto.updates/) | Whether an installed copy of Alto can update itself, and the commands that check for a newer version and install it. |
 
 ## alto.exercises
 
@@ -99,4 +100,5 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.theme_editor](alto.ui.theme_editor/) | The editor for a theme of the user's own: a name, and a colour for every part of its light and dark versions. |
 | [alto.ui.transition_preview](alto.ui.transition_preview/) | A preview of a transition for the settings. |
 | [alto.ui.transitions](alto.ui.transitions/) | The transitions between the exercises and the lessons on the home page. |
+| [alto.ui.update_flow](alto.ui.update_flow/) | Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards. |
 | [alto.ui.widgets](alto.ui.widgets/) | Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control. |

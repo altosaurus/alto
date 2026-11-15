@@ -2,7 +2,7 @@
 title: alto.ui.main_window
 parent: api
 package: alto.ui
-order: 33
+order: 34
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
@@ -317,6 +317,20 @@ Save a backup of everything: ask where, then write profiles, history and setting
 
 ```pycon
 >>> MainWindow().export_backup()  # does nothing without a profile
+```
+
+### MainWindow.check_for_updates
+
+```python
+def check_for_updates() -> None
+```
+
+Ask whether a newer Alto is available; if so and the person agrees, install it and restart.
+
+**Examples**
+
+```pycon
+>>> MainWindow().check_for_updates()  # doctest: +SKIP
 ```
 
 ### MainWindow.import_backup

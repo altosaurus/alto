@@ -2,7 +2,7 @@
 title: alto.ui.lesson
 parent: api
 package: alto.ui
-order: 31
+order: 32
 permalink: /api/alto.ui.lesson/
 ---
 {% raw %}

@@ -198,9 +198,10 @@ into a clean install through the real window.
 
 ## Privacy
 
-Nothing leaves the machine, and nothing should: do not add network calls, analytics or accounts without making it a very visible
-decision, because [Your data]({{ '/data/' | relative_url }}) promises users that Alto makes no network connections. A profile's name is
-only a label.
+A profile's name is only a label, kept in the local database. A network call, analytics or an account is a decision to make
+deliberately, and to describe where users will look. The one network feature today is the menu's **Check for updates…**
+(`alto/ui/update_flow.py`), which runs only when the user chooses it and is described in
+[Getting started]({{ '/getting-started/' | relative_url }}).
 
 ## Words to search for
 

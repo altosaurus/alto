@@ -2,7 +2,7 @@
 title: alto.lessons.circle_of_fifths
 parent: api
 package: alto.lessons
-order: 13
+order: 14
 permalink: /api/alto.lessons.circle_of_fifths/
 ---
 {% raw %}

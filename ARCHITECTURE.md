@@ -36,6 +36,7 @@ flowchart TD
 | `alto/exercises/` | no | `theory`, `settings` |
 | `alto/learning/` | no | `exercises` (to store and replay `Question`s) |
 | `alto/audio.py` | yes (`QSoundEffect`) | `theory` |
+| `alto/updates.py` | no | nothing else |
 | `alto/ui/` | yes | everything |
 
 Nothing below `ui` imports `ui`. That is what lets the theory, the exercises and the scheduler be tested without a display,
@@ -137,6 +138,12 @@ flowchart TD
 `ExerciseView` per opened exercise, and the statistics or database page shown over them. `__main__.main()` creates the
 `QApplication`, applies the saved theme, opens the database in the user's data folder, asks for a profile name the first time,
 and runs the event loop.
+
+The menu's **Check for updates…** (`alto/ui/update_flow.py`) is the one place Alto starts other programs and goes online.
+`alto/updates.py`, which has no Qt, decides whether this copy can update itself, from the git address and commit that the
+installer recorded for the package, and says what to run. The flow asks `git ls-remote` for the newest commit; if there is a newer
+one and the person agrees, it runs `uv tool upgrade alto` with the output on screen, and restarts through
+`MainWindow.restart_app()` once OK is pressed.
 
 ### One question, start to finish
 
