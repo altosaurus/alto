@@ -234,12 +234,6 @@ class MainWindow(QMainWindow):
         menu.setWindowFlags(menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
         menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text colour
-        home = menu.addAction(svg_icon(icons.HOME, color=glyph, size=18), "Home")
-        home.triggered.connect(self.show_home)
-        menu.addSeparator()
-        restart = menu.addAction(svg_icon(icons.RESTART, color=glyph, size=18), "Restart")
-        restart.setShortcut(QKeySequence("Ctrl+R"))
-        restart.triggered.connect(self.restart_app)
         stats_action = menu.addAction(svg_icon(icons.CHART, color=glyph, size=18), "Statistics")
         stats_action.triggered.connect(self.open_stats)
         database_action = menu.addAction(svg_icon(icons.DATABASE, color=glyph, size=18), "Browse database")
@@ -263,6 +257,9 @@ class MainWindow(QMainWindow):
         self.update_action.setToolTip("See whether a newer Alto is available, and install it")
         self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
         menu.addSeparator()
+        restart = menu.addAction(svg_icon(icons.RESTART, color=glyph, size=18), "Restart")
+        restart.setShortcut(QKeySequence("Ctrl+R"))
+        restart.triggered.connect(self.restart_app)
         quit_action = menu.addAction(svg_icon(icons.QUIT, color=glyph, size=18), "Quit")
         quit_action.setShortcut(QKeySequence.StandardKey.Quit)
         quit_action.triggered.connect(QApplication.quit)

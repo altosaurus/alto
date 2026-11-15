@@ -80,5 +80,5 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 
 ## The menu
 
-The ☰ button at the top left holds **Home**, **Restart**, **Statistics**, **Browse database**, **Profile**,
-**Settings…** and **Quit**.
+The ☰ button at the top left holds **Statistics**, **Browse database**, **Lessons**, **Profile**, **Settings…**,
+**Export backup…**, **Import backup…**, **Check for updates…**, **Restart** and **Quit**.
