@@ -1,0 +1,151 @@
+name: Docs
+
+# Builds the docs with Jekyll, one folder for each version, and keeps them on the branch gh-pages, which GitHub Pages serves
+# (Settings -> Pages -> Deploy from a branch -> gh-pages, / (root)). The site then looks like this:
+#
+#   /alto/dev/         the development version, rebuilt when a change to the docs is merged into main
+#   /alto/v0.1.0/      one folder for each release, built once when its tag is pushed and never changed afterwards
+#   /alto/latest/      a second build of the newest release, so that links and the sitemap point at /latest/
+#   /alto/             a redirect to latest, versions.json for the dropdown, version-switcher.js, robots.txt, sitemap.xml, 404.html
+#
+# By hand, `ref` builds (or rebuilds) one release, for a tag made before the docs had a dropdown: the layout, includes and styles
+# of main are laid over that tag's docs, and the words stay the tag's own.
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "A release tag to build, such as v0.0.0 (default: the development docs, from main)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write # to save the site on the branch gh-pages
+
+# One run at a time, so that two quick merges do not both push to gh-pages.
+concurrency:
+  group: docs
+  cancel-in-progress: false
+
+jobs:
+  # A merge into main is built only if it touched the docs or what builds them; a tag and a run by hand always are. (Checked here
+  # and not with a `paths` filter, which does not mix with tags.)
+  changed:
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.decide.outputs.build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: decide
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          build=true
+          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
+            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
+              | grep -qE '^(docs/|scripts/docs_site\.py$|\.github/workflows/docs\.yml$)'; then
+              build=false
+            fi
+          fi
+          echo "build=${build}" >> "$GITHUB_OUTPUT"
+          echo "Build: ${build}"
+
+  build:
+    needs: changed
+    if: needs.changed.outputs.build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SITE_URL: https://altosaurus.github.io/alto
+      SITE_PATH: /alto
+    steps:
+      # What is built: the tag that was pushed, the tag asked for by hand, or main.
+      - name: Say what to build
+        id: what
+        env:
+          INPUT_REF: ${{ inputs.ref }}
+        run: |
+          version=dev
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then version="${GITHUB_REF_NAME}"; fi
+          if [ -n "${INPUT_REF}" ]; then version="${INPUT_REF}"; fi
+          if [ "${version}" != dev ] && ! echo "${version}" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "${version} is not a release tag such as v0.1.0." >&2
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          if [ -n "${INPUT_REF}" ]; then echo "overlay=true" >> "$GITHUB_OUTPUT"; else echo "overlay=false" >> "$GITHUB_OUTPUT"; fi
+
+      # The docs to build: those of the version (main for dev).
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.what.outputs.version == 'dev' && 'main' || steps.what.outputs.version }}
+          path: source
+
+      # The tools and the layout always come from main, so that a fix reaches every build from now on.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: tooling
+
+      - name: Lay the current layout over a release made before it had a dropdown
+        if: steps.what.outputs.overlay == 'true'
+        run: |
+          cp -R tooling/docs/_layouts/. source/docs/_layouts/
+          mkdir -p source/docs/_includes source/docs/assets/css
+          cp -R tooling/docs/_includes/. source/docs/_includes/
+          cp tooling/docs/assets/css/site.css source/docs/assets/css/site.css
+          cp tooling/docs/_config.yml source/docs/_config.yml
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: tooling/docs
+
+      - name: Get the site as it is
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$url" gh-pages > /dev/null; then
+            git clone --quiet --branch gh-pages "$url" site
+          else
+            mkdir site
+            git -C site init --quiet --initial-branch gh-pages
+            git -C site remote add origin "$url"
+          fi
+
+      - name: Build the version
+        env:
+          VERSION: ${{ steps.what.outputs.version }}
+          BUNDLE_GEMFILE: ${{ github.workspace }}/tooling/docs/Gemfile
+        run: |
+          build() { # build FOLDER LABEL: the docs in source/ into site/FOLDER, which a page knows as LABEL
+            rm -rf "site/$1"
+            printf 'baseurl: %s/%s\ndocs_version: %s\n' "$SITE_PATH" "$1" "$2" > version.yml
+            bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
+          }
+          build "$VERSION" "$VERSION"
+          # The newest release is built a second time as latest, with the addresses of latest in its links and its sitemap.
+          if [ "$VERSION" != dev ]; then
+            newest=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))
+            if [ "$newest" = "$VERSION" ]; then build latest latest; fi
+          fi
+
+      - name: Write the list of versions, the home page and the shared files
+        run: python3 tooling/scripts/docs_site.py finish site --root-files tooling/docs/site-root --site-url "$SITE_URL"
+
+      - name: Keep the site
+        run: |
+          cd site
+          git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name=github-actions -c user.email=actions@github.com commit --quiet -m "Docs for ${{ steps.what.outputs.version }} at ${GITHUB_SHA}"
+          git push --quiet origin HEAD:gh-pages

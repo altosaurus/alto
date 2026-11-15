@@ -5,6 +5,11 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The documentation has a version for each release and one for the development version, with a dropdown in the top bar to switch
+  between them. A page of an older release says so and links to the latest.
+
 ## [0.0.0] - 2026-11-15
 
 The first release.

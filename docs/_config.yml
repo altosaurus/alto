@@ -3,10 +3,25 @@ description: Alto is a free desktop music theory trainer for Linux and Windows. 
 plugins:
   - jekyll-sitemap
 url: https://altosaurus.github.io
+# Each version is built under its own folder of the site, and the Docs workflow gives its `baseurl` and `docs_version` in a second
+# config file (see .github/workflows/docs.yml and "Building the docs" in docs/development.md). The values here are those of the
+# single copy that GitHub Pages builds by itself from main until its source is switched to the gh-pages branch.
+site_root: /alto
 baseurl: /alto
+docs_version: dev
+# Every page uses the one layout. (GitHub's own builder does this by itself; saying it here makes a build anywhere the same.)
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
 markdown: kramdown
 kramdown:
   input: GFM
   hard_wrap: false
 exclude:
   - README.md
+  - site-root
+  - Gemfile
+  - Gemfile.lock
+  - vendor
