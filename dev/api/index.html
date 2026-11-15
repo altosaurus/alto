@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794773680">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -237,6 +237,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -328,6 +331,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -487,6 +493,10 @@
       <td>Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes.</td>
     </tr>
     <tr>
+      <td><a href="alto.circle_schemes/">alto.circle_schemes</a></td>
+      <td>The colour schemes of the circle of fifths: the presets, and the schemes a user makes.</td>
+    </tr>
+    <tr>
       <td><a href="alto.instrument_info/">alto.instrument_info</a></td>
       <td>What is known about each instrument’s recordings, for the summary shown in the instrument settings.</td>
     </tr>
@@ -644,6 +654,10 @@
     <tr>
       <td><a href="alto.ui.circle/">alto.ui.circle</a></td>
       <td>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.circle_colours/">alto.ui.circle_colours</a></td>
+      <td>The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.colors/">alto.ui.colors</a></td>
@@ -929,8 +943,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794773680" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794773680" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

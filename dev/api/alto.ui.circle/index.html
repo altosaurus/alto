@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794773680">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -237,6 +237,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -328,6 +331,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/" aria-current="page">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -559,17 +565,19 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">inner</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">lift</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">scheme</span><span class="p">:</span> <span class="n">Scheme</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QColor</span>
 </code></pre></div></div>
 
-<p>Return the colour of a wedge: its own hue, dark when quiet and bright when it is being talked about.</p>
+<p>Return the colour of a wedge in a colour scheme: quiet when it is not being talked about and bright when it is.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): Which wedge: its hue goes round the colour wheel once, from red at the top.</li>
-  <li><code class="language-plaintext highlighter-rouge">inner</code> (<em>bool</em>): Whether it is in the inner ring, which is a little darker than the outer one. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): Which wedge, clockwise from the top.</li>
+  <li><code class="language-plaintext highlighter-rouge">inner</code> (<em>bool</em>): Whether it is in the inner ring. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">lift</code> (<em>float, default 0.0</em>): How bright it is, from 0 (quiet) to 1 (lit). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>Scheme or None, default None</em>): The colour scheme; the one chosen in the circle of fifths settings if None. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -580,12 +588,16 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; wedge_color(0, inner=False, lift=1.0).hue(), wedge_color(6, inner=False).hue()  # red at the top, cyan at the bottom
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
+&gt;&gt;&gt; spectrum = preset("spectrum")
+&gt;&gt;&gt; wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
 (0, 180)
-&gt;&gt;&gt; wedge_color(0, inner=False, lift=1.0).lightness() &gt; wedge_color(0, inner=False).lightness()
+&gt;&gt;&gt; lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
+&gt;&gt;&gt; lit.lightness() &gt; quiet.lightness()
 True
-&gt;&gt;&gt; lit = [wedge_color(i, inner=False, lift=1.0) for i in range(12)]  # none looks brighter than white text can stand
-&gt;&gt;&gt; all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() &lt;= 0.44 for c in lit)
+&gt;&gt;&gt; # no wedge looks too bright for white names
+&gt;&gt;&gt; every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
+&gt;&gt;&gt; all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() &lt;= 0.44 for c in every)
 True
 </code></pre>
 
@@ -1057,9 +1069,12 @@ False
           
           
           
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.charts/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.charts</span></a>
-            <a class="next" href="/alto/dev/api/alto.ui.colors/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.colors<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/dev/api/alto.ui.circle_colours/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.circle_colours<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -1121,8 +1136,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794773680" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794773680" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

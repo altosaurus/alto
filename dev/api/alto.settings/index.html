@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794773680">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -237,6 +237,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -328,6 +331,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -1105,7 +1111,11 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <h2 id="circlesettings">CircleSettings</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">CIRCLE_QUESTIONS</span><span class="p">)))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettings</span><span class="p">(</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">CIRCLE_QUESTIONS</span><span class="p">)),</span>
+    <span class="n">scheme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_SCHEME</span><span class="p">,</span>
+    <span class="n">customs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">CustomRecord</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
+<span class="p">)</span>
 </code></pre></div></div>
 
 <p>The settings of the circle of fifths exercise.</p>
@@ -1114,6 +1124,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>set of str</em>): The kinds of question to ask, keys of <code class="language-plaintext highlighter-rouge">CIRCLE_QUESTIONS</code>: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.</li>
+  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>str</em>): The key of the colour scheme the circle is drawn in: a preset of <code class="language-plaintext highlighter-rouge">alto.circle_schemes</code> or one of <code class="language-plaintext highlighter-rouge">customs</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">customs</code> (<em>list of CustomRecord</em>): The colour schemes the user made.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1122,6 +1134,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 ['major', 'minor', 'numeral']
 &gt;&gt;&gt; CircleSettings(questions={"numeral"}).active_questions()
 ['numeral']
+&gt;&gt;&gt; CircleSettings().active_scheme().name
+'Cyan to indigo'
 </code></pre>
 
 <h3 id="circlesettingsactive_questions">CircleSettings.active_questions</h3>
@@ -1145,7 +1159,31 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 ['minor']
 </code></pre>
 
+<h3 id="circlesettingsactive_scheme">CircleSettings.active_scheme</h3>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_scheme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Scheme</span>
+</code></pre></div></div>
+
+<p>Return the colour scheme to draw the circle in.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Scheme</em>: The chosen scheme, or the default one if the choice is not a scheme any more (a deleted one of the user’s own).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings(scheme="midnight").active_scheme().name
+'Midnight'
+&gt;&gt;&gt; CircleSettings(scheme="deleted").active_scheme().key
+'cyan-indigo'
+</code></pre>
+
+
+          
+          
+          
           
           
           
@@ -1310,8 +1348,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794773680" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794773680" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

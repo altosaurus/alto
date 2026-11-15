@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794773680">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -237,6 +237,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -328,6 +331,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -709,8 +715,9 @@ green with the notes as the right scale plays.</p>
 
 <p>A circle of fifths, drawn as two rings of twelve wedges. The outer ring holds the major keys, with C at the top and each
 step clockwise a fifth higher: G, D, A, E, B, then F♯ at the bottom, and round through the flats back to F. The inner ring
-holds their relative minors, so A minor sits under C major, E minor under G major, and so on. Each wedge has its own colour.
-The disc in the middle shows the staff.</p>
+holds their relative minors, so A minor sits under C major, E minor under G major, and so on. The wedges are coloured by
+key signature: cyan for the flat keys on the left, through royal blue at C, to indigo for the sharp keys on the right (the
+<a href="#colours">colours</a> can be changed). The disc in the middle, which is the colour of the window, shows the staff.</p>
 
 <p>Every question lights one cell and leaves its answer blank. There are three kinds, and the exercise settings (the sliders
 button) switch each on or off:</p>
@@ -726,6 +733,28 @@ circle are lit. One of them is outlined. Press its Roman numeral.</li>
 <p>All of them are on buttons at the bottom, laid out like the Keyboard Identification screen: the letters in the middle row,
 the sharps above them and the flats below. For the minor keys the buttons read Am, F♯m and so on. You can also type: a letter,
 <kbd>Shift</kbd> and a letter for a sharp, or <kbd>Ctrl</kbd> and a letter for a flat. The numerals are on <kbd>1</kbd> to <kbd>6</kbd>.</p>
+
+<h3 id="colours">Colours</h3>
+
+<p>The <strong>Colours</strong> row of the exercise settings (the sliders button) chooses how the circle is coloured. Pick one of fourteen
+presets, or press <strong>Create your own…</strong> to make one.</p>
+
+<ul>
+  <li><strong>Cyan to indigo</strong> is the default. Cyan runs through the flat keys, royal blue marks C and indigo the sharp keys, so a
+key’s colour tells you how far it is from C.</li>
+  <li><strong>Midnight, Deepening, Two blues, Chequer and Glacier</strong> are other blues to go with this site. Glacier, like Paper, has pale
+wedges with dark names, for a light window.</li>
+  <li><strong>Sharps and flats, Major and minor, Spectrum, After Scriabin, Ink, Ember, Colour-blind safe and Paper</strong> are the other
+presets. Colour-blind safe uses six hues from the Okabe and Ito palette.</li>
+</ul>
+
+<p>A scheme of your own is made in one of five ways: <strong>One colour</strong>, <strong>Two rings</strong> (one colour for the major keys and one for the
+minor), <strong>By key signature</strong> (a colour for the flat keys, for C and for the sharp keys, blended between), <strong>Distance from C</strong>
+(a colour for C and one for F♯, mirrored on both sides) and <strong>Round the circle</strong> (one colour, turned a twelfth of the wheel
+for each step). The colours you choose are what a cell looks like when it is lit; the quiet cells are made from them. You can
+choose dark wedges with light names or light wedges with dark names, name the scheme, edit it later and delete it. Your schemes are saved with your other
+settings, up to 24 of them. The colours apply to every picture of the circle: the exercise, the lessons and the reference.
+Changing them keeps the question you are on.</p>
 
 <h3 id="keys-with-two-names">Keys with two names</h3>
 
@@ -909,8 +938,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794773680" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794773680" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
