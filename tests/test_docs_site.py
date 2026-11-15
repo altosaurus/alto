@@ -216,6 +216,26 @@ def test_the_layout_has_the_dropdown_slot_and_sends_search_engines_to_latest() -
     assert "site.docs_version == 'latest'" in layout  # the structured data is for the latest release only
 
 
+def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is_only_a_picture_until_clicked() -> None:
+    """Check the order of the top bar, that the theme button has no words of its own, and that the words are in its menu."""
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    bar = layout[layout.index('<div class="top-actions">') : layout.index("</header>")]
+    assert bar.index('id="version-slot"') < bar.index('id="theme-button"') < bar.index('class="icon-link"')
+    button = bar[bar.index('id="theme-button"') : bar.index("</button>", bar.index('id="theme-button"'))]
+    assert 'aria-label="Colour theme"' in button and 'aria-haspopup="menu"' in button
+    assert ">Light<" not in button and ">Dark<" not in button  # no words on the button itself
+    menu = bar[bar.index('id="theme-menu"') : bar.index('class="icon-link"')]
+    assert "hidden>" in menu and ">Light<" in menu and ">Dark<" in menu and ">System<" in menu
+    assert "theme-toggle" not in layout  # the old button with words is gone
+    assert 'removeAttribute("data-theme")' in layout and "Escape" in layout  # System forgets the choice; Escape closes the menu
+
+
+def test_the_dropdown_names_dev_plainly() -> None:
+    """Check that the entry for the development docs says "dev" and nothing more."""
+    script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
+    assert "unreleased)" not in script and "label: name" in script
+
+
 def test_the_config_builds_dev_by_default_and_keeps_the_shared_files_out_of_every_version() -> None:
     """Check that a plain build is the dev docs, at the address GitHub Pages used before, and that root files are not built in."""
     config = (DOCS / "_config.yml").read_text(encoding="utf-8")
