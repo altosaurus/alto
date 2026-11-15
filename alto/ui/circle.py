@@ -268,7 +268,10 @@ def write_text(
             for sign in set(runs) & set(SIGNS):
                 signs[sign] = accidental_width(font=notation, sign=SIGNS[sign], gap=sign_gap) + 2 * sign_pad
         font_metrics = QFontMetricsF(font)
-        return font_metrics, sign_gap, sign_pad, [signs.get(part, font_metrics.horizontalAdvance(part)) for part in runs]
+        # Only measure what is not a notation sign: the text font has no ♯ or ♭, so Qt searches other fonts for them at every
+        # size, about 40 ms each time, for a width that would not be used.
+        runs_width = [signs[part] if part in signs else font_metrics.horizontalAdvance(part) for part in runs]
+        return font_metrics, sign_gap, sign_pad, runs_width
 
     metrics, gap, pad, widths = measure(pixels)
     if max_width is not None and sum(widths) > max_width:  # too wide: write it smaller, so that it fits
