@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794771922">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794773680">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -529,6 +529,26 @@ change that adds code should add a test for it; <code class="language-plaintext 
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pytest <span class="nt">--cov</span> <span class="nt">--cov-report</span><span class="o">=</span>term-missing
 </code></pre></div></div>
+
+<h3 id="which-checks-run-for-which-change">Which checks run for which change</h3>
+
+<p>Neither the workflows nor the pre-push hook run everything for every change. <code class="language-plaintext highlighter-rouge">scripts/changed_tests.py</code> looks at the files that
+changed and decides, and anything it does not recognise is a reason to run everything:</p>
+
+<ul>
+  <li><strong>Only docs</strong> (<code class="language-plaintext highlighter-rouge">docs/**</code> and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
+with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.</li>
+  <li><strong>A change to <code class="language-plaintext highlighter-rouge">alto/</code> or to a test:</strong> the tests that import the changed module, directly or through others, their doctests, and
+the tests that read every module or page. The pre-push hook runs exactly these, so a small change is checked in seconds;
+<code class="language-plaintext highlighter-rouge">ALTO_TEST_ALL=1 git push</code> runs the whole suite. The workflows run the whole suite.</li>
+  <li><strong>Anything else</strong> (a script, a workflow, <code class="language-plaintext highlighter-rouge">pyproject.toml</code>, a <code class="language-plaintext highlighter-rouge">conftest.py</code>, the packaging files, a picture): everything.</li>
+</ul>
+
+<p>In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
+and a push to <code class="language-plaintext highlighter-rouge">main</code> runs every supported version. A new push to a pull request cancels the runs still going for the old one.
+Nothing requires these checks to pass before a merge, so the ones a change skips do not leave it waiting; if you add required
+checks to the <code class="language-plaintext highlighter-rouge">main</code> ruleset, change the <code class="language-plaintext highlighter-rouge">paths-ignore</code> rules to job-level <code class="language-plaintext highlighter-rouge">if</code> conditions first, because a workflow that is skipped
+never reports and a required check would wait for it.</p>
 
 <h2 id="keeping-alto-fast">Keeping Alto fast</h2>
 
@@ -1103,8 +1123,8 @@ use, and which exercise you were in.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794771922" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794771922" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794773680" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794773680" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
