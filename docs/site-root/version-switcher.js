@@ -3,6 +3,9 @@
 // Every version of the docs loads this one file from the root of the site, and reads the list of versions from versions.json
 // there, so a page of an old release still offers the newer ones, and a fix here reaches every version. A page that is not served
 // from a site with that list (a local preview) keeps the plain text it was built with.
+//
+// A version's stylesheet is frozen with it, so this file brings its own styles (the `avs-` classes below) instead of relying on
+// the page's. They use the page's colours where it defines them, with plain fallbacks, and the icons have their size written on them.
 (function () {
   "use strict";
   var slot = document.getElementById("version-slot");
@@ -48,12 +51,49 @@
     check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>'
   };
   function icon(name, extra) {
-    return '<svg class="i ' + (extra || "") + '" viewBox="0 0 24 24" aria-hidden="true">' + SVG[name] + "</svg>";
+    return '<svg class="' + (extra || "") + '" width="' + (extra === "avs-chev" ? 14 : extra === "avs-check" ? 16 : 18) + '" height="' + (extra === "avs-chev" ? 14 : extra === "avs-check" ? 16 : 18) +
+      '" viewBox="0 0 24 24" aria-hidden="true">' + SVG[name] + "</svg>";
+  }
+
+  var STYLE = [
+    ".avs { position: relative; }",
+    ".avs svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }",
+    ".avs-btn { font: inherit; font-size: .92rem; color: var(--fg, #1d2326); background: var(--panel, #f1f2f1); border: 0; cursor: pointer;",
+    "  display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 10px; border-radius: 8px; white-space: nowrap; }",
+    ".avs-btn:hover, .avs-btn[aria-expanded=true] { background: var(--accent-soft, #e3eef8); }",
+    ".avs-btn:focus-visible, .avs-item:focus-visible { outline: 2px solid var(--accent, #1f6fb5); outline-offset: 2px; }",
+    ".avs .avs-chev { color: var(--muted, #5b676c); transition: transform .12s; }",
+    ".avs-btn[aria-expanded=true] .avs-chev { transform: rotate(180deg); }",
+    ".avs-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 20; min-width: 296px; max-width: calc(100vw - 24px); padding: 6px;",
+    "  display: flex; flex-direction: column; gap: 2px; background: var(--bg, #fbfbfa); border: 1px solid var(--line, #dadfe0);",
+    "  border-radius: 10px; box-shadow: 0 8px 24px rgba(20, 30, 40, .16); }",
+    ".avs-menu[hidden] { display: none; }",
+    ".avs-item { font: inherit; font-size: .92rem; color: var(--fg, #1d2326); background: transparent; border: 0; cursor: pointer; text-align: left;",
+    "  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; width: 100%; }",
+    ".avs-item:hover { background: var(--accent-soft, #e3eef8); }",
+    ".avs-ico { width: 30px; height: 30px; border-radius: 7px; background: var(--panel, #f1f2f1); display: inline-flex; align-items: center; justify-content: center; flex: none; }",
+    ".avs-item[aria-checked=true] .avs-ico { background: var(--accent-soft, #e3eef8); color: var(--accent, #1f6fb5); }",
+    ".avs-item:hover .avs-ico { background: var(--bg, #fbfbfa); }",
+    ".avs-text { flex: 1; min-width: 0; }",
+    ".avs-text b { font-weight: 600; }",
+    ".avs-text small { display: block; color: var(--muted, #5b676c); font-size: .78rem; line-height: 1.3; }",
+    ".avs .avs-check { margin-left: auto; color: var(--accent, #1f6fb5); visibility: hidden; }",
+    ".avs-item[aria-checked=true] .avs-check { visibility: visible; }",
+    "@media (max-width: 480px) { .avs-menu { right: auto; left: 0; } }",
+    "@media (prefers-reduced-motion: reduce) { .avs .avs-chev { transition: none; } }"
+  ].join("\n");
+  function addStyle() {
+    if (document.getElementById("avs-style")) { return; }
+    var style = document.createElement("style");
+    style.id = "avs-style";
+    style.textContent = STYLE;
+    document.head.appendChild(style);
   }
 
   fetch(root + "/versions.json", { cache: "no-cache" })
     .then(function (answer) { return answer.json(); })
     .then(function (data) {
+      addStyle();
       var latest = data.latest;
       var entries = [];
       if (latest) { entries.push({ value: "latest", name: "latest", note: latest + ", the newest release", ico: "tag", label: "latest (" + latest + ")" }); }
@@ -66,27 +106,27 @@
       var shown = entries.filter(function (entry) { return entry.value === current; })[0] || { label: current };
 
       var wrap = document.createElement("div");
-      wrap.className = "dd";
+      wrap.className = "avs";
       var button = document.createElement("button");
       button.type = "button";
-      button.className = "dd-btn";
+      button.className = "avs-btn";
       button.id = "version-button";
       button.setAttribute("aria-haspopup", "menu");
       button.setAttribute("aria-expanded", "false");
       button.setAttribute("aria-label", "Version of the docs");
-      button.innerHTML = "<span>" + shown.label + "</span>" + icon("chev", "chev");
+      button.innerHTML = "<span>" + shown.label + "</span>" + icon("chev", "avs-chev");
       var menu = document.createElement("div");
-      menu.className = "dd-menu";
+      menu.className = "avs-menu";
       menu.setAttribute("role", "menu");
       menu.hidden = true;
       var items = entries.map(function (entry) {
         var item = document.createElement("button");
         item.type = "button";
-        item.className = "dd-item";
+        item.className = "avs-item";
         item.setAttribute("role", "menuitemradio");
         item.setAttribute("aria-checked", entry.value === current ? "true" : "false");
-        item.innerHTML = '<span class="dd-ico">' + icon(entry.ico) + '</span><span class="dd-text"><b>' + entry.name + "</b>" +
-          (entry.note ? "<small>" + entry.note + "</small>" : "") + "</span>" + icon("check", "dd-check");
+        item.innerHTML = '<span class="avs-ico">' + icon(entry.ico) + '</span><span class="avs-text"><b>' + entry.name + "</b>" +
+          (entry.note ? "<small>" + entry.note + "</small>" : "") + "</span>" + icon("check", "avs-check");
         item.addEventListener("click", function () { setOpen(false); if (entry.value !== current) { go(entry.value); } });
         menu.appendChild(item);
         return item;

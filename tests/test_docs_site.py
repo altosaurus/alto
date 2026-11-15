@@ -11,6 +11,7 @@ from __future__ import annotations
 import doctest
 import importlib.util
 import json
+import re
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -235,12 +236,31 @@ def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is
 def test_the_version_dropdown_is_made_like_the_theme_menu_with_dev_last_and_named_plainly() -> None:
     """Check the version dropdown: a menu with icon tiles and not a native select, dev after the releases, and called "dev"."""
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
-    assert 'createElement("select")' not in script and 'class="dd-ico"' in script and "dd-menu" in script
+    assert 'createElement("select")' not in script and 'class="avs-ico"' in script and "avs-menu" in script
     assert "unreleased)" not in script and "label: name" in script  # the entry for the development docs says "dev" and no more
     assert 'concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : [])' in script  # releases first, then dev
     assert "Match your computer" not in script
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
-    assert ".dd-menu {" in css and ".dd-item" in css and ".version select" not in css
+    assert ".dd-menu {" in css and ".dd-item" in css and ".version select" not in css  # the theme menu in the layout uses these
+
+
+def test_the_version_dropdown_brings_its_own_styles_because_a_versions_stylesheet_is_frozen() -> None:
+    """
+    Check that the dropdown does not depend on the stylesheet of the page it is in.
+
+    Each version of the docs keeps the stylesheet it was built with, so a page built before the dropdown was restyled has none of
+    its rules. Without styles of their own the icons had no size, and the menu showed as a giant arrow over unreadable text.
+    """
+    script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
+    start = script.index("var STYLE = [")
+    style = script[start : script.index('].join("\\n");', start)]
+    classes = set(re.findall(r"avs(?:-[a-z]+)?", script[:start] + script[script.index('].join("\\n");', start) :]))
+    classes.discard("avs-style")  # the id of the style element, not a class
+    assert "avs" in classes and 'id = "avs-style"' in script and "addStyle();" in script
+    for name in classes:
+        assert f".{name}" in style, f"the class {name} is used but not styled"
+    assert "width=" in script and "height=" in script  # an icon has its size written on it, in case no rule reaches it
+    assert "dd-" not in script  # none of the classes of the page's own stylesheet
 
 
 def test_the_config_builds_dev_by_default_and_keeps_the_shared_files_out_of_every_version() -> None:
