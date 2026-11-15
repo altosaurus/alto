@@ -16,6 +16,7 @@ from alto.learning import (
     Database,
     Learner,
 )
+from alto.learning.backup import app_version
 from alto.location import (
     alto_home,
     database_path,
@@ -36,15 +37,22 @@ def main() -> int:
     Opens the database in the user's data folder (or in `ALTO_HOME`, if that is set), asks for a profile name the first time,
     shows the main window and runs the event loop until the window is closed.
 
+    `alto --version` prints the version and exits without opening anything. A packaged build has no console on Windows, so there
+    is nowhere to print to; it still exits with 0, which shows that everything it needs was found.
+
     Returns
     -------
     int
-        The exit code: 0 if the profile dialog was cancelled, otherwise what the event loop returned.
+        The exit code: 0 if the profile dialog was cancelled or the version was asked for, otherwise what the event loop returned.
 
     Examples
     --------
     >>> raise SystemExit(main())  # doctest: +SKIP
     """
+    if "--version" in sys.argv[1:]:
+        if sys.stdout is not None:  # a program with no console, such as the Windows build, has none
+            print(f"Alto {app_version()}")
+        return 0
     app = QApplication(sys.argv)
     app.setApplicationName("Alto")
     app.setApplicationDisplayName("Alto - Music Theory" if alto_home() is None else "Alto (dev) - Music Theory")

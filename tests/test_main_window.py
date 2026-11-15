@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+import sys
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -39,6 +40,7 @@ from alto.learning import (
     Database,
     Learner,
 )
+from alto.learning.backup import app_version
 from alto.ui import main_window as mw
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -809,6 +811,51 @@ def test_the_app_opens_a_window_for_the_chosen_profile(
     assert entry.main() == 0
     assert len(shown) == 1 and isinstance(shown[0].learner, Learner) and shown[0].learner.profile == db_profile
     shown[0].close()
+
+
+def test_asking_for_the_version_prints_it_and_opens_nothing(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """
+    Check that `alto --version` prints the version and exits with 0 without making an application or a window.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the command line and the application.
+    capsys : pytest.CaptureFixture
+        Captures what is printed.
+    """
+
+    def refuse(*_args: object) -> None:
+        """
+        Fail the test: nothing should be built.
+
+        Parameters
+        ----------
+        *_args : object
+            Whatever was asked for.
+
+        Raises
+        ------
+        AssertionError
+            Always.
+        """
+        raise AssertionError("--version must not open anything")
+
+    monkeypatch.setattr(sys, "argv", ["alto", "--version"])
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(entry, "QApplication", refuse)
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(entry, "startup_profile", refuse)
+    assert entry.main() == 0
+    assert capsys.readouterr().out == f"Alto {app_version()}\n"
+    monkeypatch.setattr(sys, "stdout", None)  # a program with no console, as the Windows build is
+    assert entry.main() == 0
 
 
 def test_the_app_quits_quietly_if_no_profile_is_chosen(

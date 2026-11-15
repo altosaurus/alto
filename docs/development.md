@@ -272,6 +272,24 @@ GitHub Pages cannot run the script, so the generated pages are committed. When y
 run it and commit the pages with the change. `tests/test_api_docs.py` fails when they are out of date, so a forgotten run is
 caught by the tests, the pre-push hook and the pull request.
 
+## Changelog and releases
+
+`CHANGELOG.md` lists what changed for the people who use Alto, newest first, in the
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) layout. A change a user would notice (a new exercise, a changed menu, a
+fixed bug) adds a line under **Unreleased** in the same pull request. Internal tidying does not need one.
+
+To make a release:
+
+1. Choose the version. Alto uses [semantic versioning](https://semver.org/): a new feature raises the middle number, a fix
+   raises the last.
+2. In `CHANGELOG.md`, rename **Unreleased** to the version with today's date (`## [0.1.0] - 2026-12-01`), add a new empty
+   **Unreleased** above it, and update the two links at the bottom.
+3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
+4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`.
+
+`python scripts/changelog_section.py 0.1.0` prints the notes of one version, which is what a GitHub release shows. `alto --version`
+prints the version of the copy you run.
+
 ## Reporting problems
 
 Open an issue on [GitHub](https://github.com/genedan/alto/issues). Say which operating system and Python version you
