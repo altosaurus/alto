@@ -535,7 +535,9 @@ def windows_handoff_command(
         [
             "$ErrorActionPreference = 'Continue'",
             f"try {{ Wait-Process -Id {int(pid)} -Timeout 60 -ErrorAction Stop }} catch {{ }}",
-            f"$run = Start-Process -FilePath {literal(str(installer))} -ArgumentList {arguments} -Wait -PassThru",
+            f"$run = Start-Process -FilePath {literal(str(installer))} -ArgumentList {arguments} -PassThru",
+            # not `-Wait`, which also waits for what the installer starts: the Alto it opens again
+            "if ($null -ne $run) { $run.WaitForExit() }",
             f"if ($null -eq $run -or $run.ExitCode -ne 0) {{ Start-Process -FilePath {literal(str(alto))} }}",
         ],
     )

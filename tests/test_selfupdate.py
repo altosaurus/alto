@@ -715,10 +715,15 @@ def test_on_windows_a_step_waits_for_alto_to_end_then_runs_the_installer_and_res
     assert command[:-1] == ["powershell.exe", "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand"]
     script = decoded(command).splitlines()
     assert script[1] == "try { Wait-Process -Id 4242 -Timeout 60 -ErrorAction Stop } catch { }"
-    assert script[2].startswith("$run = Start-Process -FilePath 'C:") and script[2].endswith("-Wait -PassThru")
+    assert (
+        script[2].startswith("$run = Start-Process -FilePath 'C:")
+        and script[2].endswith("-PassThru")
+        and "-Wait" not in script[2]
+    )
     for argument in ("/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/RELAUNCH=1"):
         assert f"'{argument}'" in script[2]
-    assert "$run.ExitCode -ne 0" in script[3] and "alto.exe" in script[3] and "Start-Process" in script[3]
+    assert script[3] == "if ($null -ne $run) { $run.WaitForExit() }"  # the installer only, not the Alto it opens again
+    assert "$run.ExitCode -ne 0" in script[4] and "alto.exe" in script[4] and "Start-Process" in script[4]
 
 
 def test_a_path_with_a_quote_in_it_cannot_end_the_powershell_string_early() -> None:
