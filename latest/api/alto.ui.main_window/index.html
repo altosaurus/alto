@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.main_window · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.main_window/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.main_window · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.main_window/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.main_window/" aria-current="page">main_window</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.main_window</h1>
+        
+<p>The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.</p>
+
+<p>The page is the start screen, an exercise, or (while it is open) the statistics or the database browser.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.title_label.text()
+'Alto - Music Theory'
+</code></pre>
+
+<h2 id="default_size">default_size</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">default_size</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the size a new window opens at.</p>
+
+<p>It is big enough for a lesson step, with its circle, to show without scrolling, but never more than most of the screen.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (int, int)</em>: The width and height in pixels.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; width, height = default_size()
+&gt;&gt;&gt; 0 &lt; width &lt;= DEFAULT_WIDTH and 0 &lt; height &lt;= DEFAULT_HEIGHT
+True
+</code></pre>
+
+<h2 id="mainwindow">MainWindow</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MainWindow</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QMainWindow</code></p>
+
+<p>The application window.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SIDEBAR_MIN</code> (<em>int</em>): The narrowest the exercise list can be before it collapses, in pixels.</li>
+  <li><code class="language-plaintext highlighter-rouge">SIDEBAR_DEFAULT</code> (<em>int</em>): The list’s width the first time.</li>
+  <li><code class="language-plaintext highlighter-rouge">APP_TITLE</code> (<em>str</em>): The title shown on the start screen.</li>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None</em>): Who is practising, and their history; None practises without recording.</li>
+  <li><code class="language-plaintext highlighter-rouge">nav</code> (<em>QListWidget</em>): The exercise list.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>QStackedWidget</em>): The pages: the start screen, then exercises and the statistics or database while they are open.</li>
+  <li><code class="language-plaintext highlighter-rouge">home</code> (<em>HomePage</em>): The start screen.</li>
+  <li><code class="language-plaintext highlighter-rouge">splitter</code> (<em>QSplitter</em>): Holds the list and the pages, so the list can be dragged narrower or wider.</li>
+  <li><code class="language-plaintext highlighter-rouge">title_label</code> (<em>QLabel</em>): The title in the top bar.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.open_exercise(NoteNames)
+&gt;&gt;&gt; window.title_label.text()
+'Note Identification'
+&gt;&gt;&gt; window.show_home()
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the window and load every saved setting.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None, default None</em>): Who is practising. Without one, nothing is recorded and the statistics buttons are hidden.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
+&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; window_ = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+&gt;&gt;&gt; window_.stats_button.isVisibleTo(window_)
+True
+&gt;&gt;&gt; MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
+False
+</code></pre>
+
+<h3 id="mainwindowsidebar_width">MainWindow.sidebar_width</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sidebar_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return how wide the exercise list is.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The width in pixels; 0 when the list is collapsed, as it always is on the start screen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().sidebar_width()
+0
+</code></pre>
+
+<h3 id="mainwindowtoggle_sidebar">MainWindow.toggle_sidebar</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">toggle_sidebar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Slide the list closed, or back open, for the user’s button. The choice is remembered for next time.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.toggle_sidebar()
+&gt;&gt;&gt; window._sidebar_pref
+True
+</code></pre>
+
+<h3 id="mainwindowopen_exercise">MainWindow.open_exercise</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_exercise</span><span class="p">(</span><span class="n">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Exercise</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show an exercise.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cls</code> (<em>type of Exercise or None</em>): The exercise class; None (a category heading in the list, which has no class) does nothing.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeySignatures
+&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.open_exercise(KeySignatures)
+&gt;&gt;&gt; window.title_label.text()
+'Key Signature Identification'
+</code></pre>
+
+<h3 id="mainwindowopen_settings">MainWindow.open_settings</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Open the application settings without blocking the window, or bring them forward if they are already open.</p>
+
+<p>If the theme was changed, the window is rebuilt in it once the settings are closed.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.open_settings()
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; window._settings is not None and not window._settings.isModal()
+True
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; window._settings.close()
+True
+</code></pre>
+
+<h3 id="mainwindowrebuild">MainWindow.rebuild</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rebuild</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Open a fresh window in the same place, so every icon and colour is drawn in the new theme.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().rebuild()  # doctest: +SKIP
+</code></pre>
+
+<h3 id="mainwindowopen_stats">MainWindow.open_stats</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_stats</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the statistics in place of the current page. Nothing happens without a profile.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
+&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+&gt;&gt;&gt; window.open_stats()
+&gt;&gt;&gt; window.title_label.text()
+'Statistics'
+&gt;&gt;&gt; window.close_overlay()
+</code></pre>
+
+<h3 id="mainwindowshow_lessons">MainWindow.show_lessons</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_lessons</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Go to the start screen showing the lessons.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.show_lessons()
+&gt;&gt;&gt; window.home.mode
+'lessons'
+&gt;&gt;&gt; window.home.set_mode("exercises")
+</code></pre>
+
+<h3 id="mainwindowopen_lessons">MainWindow.open_lessons</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_lessons</span><span class="p">(</span><span class="n">lesson</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Open a lesson in place of the current page, at the step it was left at, with the lesson list on the left.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lesson</code> (<em>str</em>): The key of the lesson.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.open_lessons("circle-of-fifths")
+&gt;&gt;&gt; window.title_label.text(), window.nav_stack.currentWidget() is window.lesson_nav
+('The Circle of Fifths', True)
+&gt;&gt;&gt; window.close_overlay()
+</code></pre>
+
+<h3 id="mainwindowopen_database">MainWindow.open_database</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_database</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the database browser in place of the current page. Nothing happens without a profile.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
+&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+&gt;&gt;&gt; window.open_database()
+&gt;&gt;&gt; window.title_label.text()
+'Database'
+&gt;&gt;&gt; window.close_overlay()
+</code></pre>
+
+<h3 id="mainwindowclose_overlay">MainWindow.close_overlay</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">close_overlay</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Leave the statistics or database page and show the page that was open before it.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
+&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
+&gt;&gt;&gt; window.open_stats()
+&gt;&gt;&gt; window.close_overlay()
+&gt;&gt;&gt; window.title_label.text()
+'Alto - Music Theory'
+</code></pre>
+
+<h3 id="mainwindowswitch_profile">MainWindow.switch_profile</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">switch_profile</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose or add a profile.</p>
+
+<p>Their history and questions are kept apart; the next question comes from theirs.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.switch_profile()  # without a profile there is nothing to switch
+</code></pre>
+
+<h3 id="mainwindowexport_backup">MainWindow.export_backup</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">export_backup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save a backup of everything: ask where, then write profiles, history and settings to one file.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().export_backup()  # does nothing without a profile
+</code></pre>
+
+<h3 id="mainwindowcheck_for_updates">MainWindow.check_for_updates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_for_updates</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask whether a newer Alto is available; if so and the person agrees, install it and restart.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().check_for_updates()  # doctest: +SKIP
+</code></pre>
+
+<h3 id="mainwindowimport_backup">MainWindow.import_backup</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">import_backup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Replace everything with a backup: ask for the file, check it, ask again, and reload the whole window from it.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().import_backup()  # does nothing without a profile
+</code></pre>
+
+<h3 id="mainwindowshow_home">MainWindow.show_home</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Go back to the start screen, closing the statistics or database and hiding the exercise list.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.open_exercise(NoteNames)
+&gt;&gt;&gt; window.show_home()
+&gt;&gt;&gt; window.title_label.text()
+'Alto - Music Theory'
+</code></pre>
+
+<h3 id="mainwindowrestart_app">MainWindow.restart_app</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restart_app</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Launch a fresh copy of the app, then close this one.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().restart_app()  # doctest: +SKIP
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

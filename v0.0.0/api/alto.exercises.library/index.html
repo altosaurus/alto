@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.exercises.library · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.exercises.library · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/" aria-current="page">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.exercises.library</h1>
+        
+<p>The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction.</p>
+
+<p>Each class makes one kind of <code class="language-plaintext highlighter-rouge">Question</code> and registers itself with <code class="language-plaintext highlighter-rouge">@register</code>, so importing this module is what adds
+the exercises to the home screen.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises import REGISTRY
+&gt;&gt;&gt; [cls.name for cls in REGISTRY][:3]
+['Note Identification', 'Keyboard Identification', 'Note Construction']
+</code></pre>
+
+<h2 id="notenames">NoteNames</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">Exercise</code></p>
+
+<p>Name the note shown on a staff.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteNames().generate(random.Random(1))
+&gt;&gt;&gt; len(q.staff), q.answer in q.choices
+(1, True)
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the exercise.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Ask notes with explicit sharps, flats and naturals, whatever the settings say.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames(accidentals=True).accidentals
+True
+</code></pre>
+
+<h3 id="notenamessettings_signature">NoteNames.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The clefs, ranges, key signatures, note values and naming in force, and whether accidentals are asked.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().settings_signature() != NoteNames(accidentals=True).settings_signature()
+True
+</code></pre>
+
+<h3 id="notenamesinstructions">NoteNames.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Press the button with its name" in NoteNames().instructions()
+True
+</code></pre>
+
+<h3 id="notenamesgenerate">NoteNames.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a note to name, on one of the chosen clefs, in a chosen key.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The note drawn on a staff, with one button for each name that could be the answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteNames().generate(random.Random(2))
+&gt;&gt;&gt; q.clef in ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone", "grand")
+True
+</code></pre>
+
+<h2 id="intervalnames">IntervalNames</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Name the interval between two notes, up to an octave.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">QUALITIES</code> (<em>dict of int to str</em>): For each interval number, the qualities that can occur, separated by spaces.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(3))
+&gt;&gt;&gt; len(q.staff), q.answer in q.choices
+(2, True)
+</code></pre>
+
+<h3 id="intervalnamesinstructions">IntervalNames.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "quality followed by a number" in IntervalNames().instructions()
+True
+</code></pre>
+
+<h3 id="intervalnamesgenerate">IntervalNames.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make two notes whose interval is to be named.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The lower and higher note on a staff, and the interval (such as ‘M3’ or ‘P5’) as the answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(4))
+&gt;&gt;&gt; q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
+True
+</code></pre>
+
+<h2 id="keysignatures">KeySignatures</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Read a key signature drawn on a staff and name the key it belongs to.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatures().generate(random.Random(5))
+&gt;&gt;&gt; q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="keysignaturessettings_signature">KeySignatures.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The kinds of question, clefs, scales and key signatures in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatures().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="keysignaturesinstructions">KeySignatures.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Key Signature Identification" in KeySignatures().instructions()
+True
+</code></pre>
+
+<h3 id="keysignaturesrefresh">KeySignatures.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Give a stored signature question the caption on its staff that older versions did not write.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question as it was stored.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The same question, captioned ‘_ Major’ (or ‘_ minor’, ‘_ Dorian’ and so on) if it shows a staff and had no caption.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
+&gt;&gt;&gt; KeySignatures().refresh(old).caption
+'_ minor'
+</code></pre>
+
+<h3 id="keysignaturesgenerate">KeySignatures.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a key signature to read.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A signature on a staff; the answer is the tonic of the scale that has it.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatures().generate(random.Random(6))
+&gt;&gt;&gt; q.show_staff and q.answer in q.choices
+True
+</code></pre>
+
+<h2 id="keysignatureconstruction">KeySignatureConstruction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatureConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Build the key signature of a named key on a blank staff, with the fork.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatureConstruction().generate(random.Random(5))
+&gt;&gt;&gt; q.build_key, q.staff, q.choices
+(True, [], [])
+</code></pre>
+
+<h3 id="keysignatureconstructionsettings_signature">KeySignatureConstruction.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The clefs, scales and key signatures in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureConstruction().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="keysignatureconstructioninstructions">KeySignatureConstruction.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Key Signature Construction" in KeySignatureConstruction().instructions()
+True
+</code></pre>
+
+<h3 id="keysignatureconstructiongenerate">KeySignatureConstruction.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Name a key whose signature is to be built.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A blank staff captioned with the key, such as ‘D Major’; the answer is its sharps or flats.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatureConstruction().generate(random.Random(1))
+&gt;&gt;&gt; q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
+True
+&gt;&gt;&gt; q.answer == format_key_signature(q.key)
+True
+</code></pre>
+
+<h2 id="scaledegrees">ScaleDegrees</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleDegrees</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Spell a note of a scale or mode from its tonic.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(7))
+&gt;&gt;&gt; q.prompt.startswith("In ") and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="scaledegreesinstructions">ScaleDegrees.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "degree" in ScaleDegrees().instructions()
+True
+</code></pre>
+
+<h3 id="scaledegreesgenerate">ScaleDegrees.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a question asking for one degree of a scale.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: For example ‘In E♭ Dorian, what is scale degree 6?’, answered ‘C’.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(8))
+&gt;&gt;&gt; "scale degree" in q.prompt
+True
+</code></pre>
+
+<h2 id="scaleconstruction">ScaleConstruction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Place the notes of a named scale on a blank staff, one after another.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleConstruction().generate(random.Random(5))
+&gt;&gt;&gt; len(q.construct_scale or []), q.choices, q.key
+(8, [], 0)
+</code></pre>
+
+<h3 id="scaleconstructionsettings_signature">ScaleConstruction.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The clefs, scales and key signatures in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleConstruction().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="scaleconstructioninstructions">ScaleConstruction.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Scale Construction" in ScaleConstruction().instructions()
+True
+</code></pre>
+
+<h3 id="scaleconstructiongenerate">ScaleConstruction.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Name a scale to be placed on the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A blank staff captioned with the scale, such as ‘D Major’; <code class="language-plaintext highlighter-rouge">construct_scale</code> is its eight notes, going up an octave.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleConstruction().generate(random.Random(1))
+&gt;&gt;&gt; scale = q.construct_scale or []
+&gt;&gt;&gt; scale[0].name == scale[-1].name and q.accidentals
+True
+&gt;&gt;&gt; q.check_scale(scale)
+True
+</code></pre>
+
+<h2 id="circleoffifths">CircleOfFifths</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = CircleOfFifths().generate(random.Random(3))
+&gt;&gt;&gt; q.circle is not None and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="circleoffifthssettings_signature">CircleOfFifths.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The kinds of question in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleOfFifths().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="circleoffifthsinstructions">CircleOfFifths.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML, with a paragraph for each kind of question that is switched on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "circle of fifths" in CircleOfFifths().instructions()
+True
+</code></pre>
+
+<h3 id="circleoffifthsgenerate">CircleOfFifths.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Pick a kind of question that is switched on, and ask it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A question on the circle: <code class="language-plaintext highlighter-rouge">circle_kind</code> says which kind.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings.circle.questions = {"minor"}
+&gt;&gt;&gt; q = CircleOfFifths().generate(random.Random(5))
+&gt;&gt;&gt; q.circle_kind, q.prompt
+('minor', 'Which minor key is the relative minor of F major?')
+&gt;&gt;&gt; settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+</code></pre>
+
+<h2 id="chordqualities">ChordQualities</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Identify the quality of a triad or seventh chord in root position.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ChordQualities().generate(random.Random(9))
+&gt;&gt;&gt; len(q.staff[0]) in (3, 4) and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="chordqualitiesinstructions">ChordQualities.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "root position" in ChordQualities().instructions()
+True
+</code></pre>
+
+<h3 id="chordqualitiesgenerate">ChordQualities.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a chord in root position whose quality is to be named.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The chord drawn as one stack of notes, with its type (such as ‘minor 7th’) as the answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ChordQualities().generate(random.Random(10))
+&gt;&gt;&gt; q.answer in CHORDS
+True
+</code></pre>
+
+<h2 id="arpeggionames">ArpeggioNames</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Name the type and the inversion of a broken chord.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ArpeggioNames().generate(random.Random(11))
+&gt;&gt;&gt; q.octaves is not None and len(q.staff) &gt;= 4
+True
+</code></pre>
+
+<h3 id="arpeggionamessettings_signature">ArpeggioNames.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The clefs, chord types, inversions and key signatures in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioNames().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="arpeggionamesinstructions">ArpeggioNames.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "inversion" in ArpeggioNames().instructions()
+True
+</code></pre>
+
+<h3 id="arpeggionamesgenerate">ArpeggioNames.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make an arpeggio on one of the chosen clefs, in a chosen position.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The arpeggio’s notes one after another on a staff; the answer is the chord type and inversion, such as ‘major · 1st inversion’.</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>RuntimeError</em>: If no arpeggio fits the chosen clefs, chord types and inversions.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ArpeggioNames().generate(random.Random(12))
+&gt;&gt;&gt; " · " in q.answer
+True
+</code></pre>
+
+<h2 id="keyboardnotes">KeyboardNotes</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Name the highlighted key on a piano keyboard.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardNotes().generate(random.Random(13))
+&gt;&gt;&gt; q.keyboard is not None and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="keyboardnotessettings_signature">KeyboardNotes.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The keyboard range, black keys, octave and key signature settings, and the naming in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardNotes().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="keyboardnotesinstructions">KeyboardNotes.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML, with paragraphs added for the octave and key signature settings that are on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "highlighted" in KeyboardNotes().instructions()
+True
+</code></pre>
+
+<h3 id="keyboardnotesgenerate">KeyboardNotes.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a keyboard with one key highlighted.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The keyboard, a grid of name buttons (and a row of octave buttons if octaves are asked), and the key’s name as the answer, with the other spelling of a black key accepted.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardNotes().generate(random.Random(14))
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; q.keyboard_range[0] &lt;= q.keyboard.midi &lt;= q.keyboard_range[1]
+True
+</code></pre>
+
+<h2 id="noteconstruction">NoteConstruction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NoteConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Place a named note on the staff.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteConstruction().generate(random.Random(15))
+&gt;&gt;&gt; q.construct is not None and q.prompt.startswith("Place ")
+True
+</code></pre>
+
+<h3 id="noteconstructionsettings_signature">NoteConstruction.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape these questions.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The clefs, accidentals and key signature settings, and the naming in force.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="noteconstructioninstructions">NoteConstruction.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text for the exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML, with paragraphs added for the key signature and accidental settings that are on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Click the staff" in NoteConstruction().instructions()
+True
+</code></pre>
+
+<h3 id="noteconstructiongenerate">NoteConstruction.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make a note name to be placed on the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A prompt such as ‘Place F♯4 on the staff.’; the answer is the note’s name, and <code class="language-plaintext highlighter-rouge">construct</code> is the note to place.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteConstruction().generate(random.Random(16))
+&gt;&gt;&gt; q.answer in q.prompt
+True
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

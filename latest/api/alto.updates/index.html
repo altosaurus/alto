@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.updates · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.updates/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.updates · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.updates/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.updates/" aria-current="page">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.updates</h1>
+        
+<p>What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves.</p>
+
+<p>A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> is a <code class="language-plaintext highlighter-rouge">uv tool</code> install from a git address. The installed package records that
+address and the commit it was built from, so it can follow the newest release (a tag) or the newest commit on the main branch.
+A packaged copy (a PyInstaller build) cannot replace itself, so it can only be told that a newer release exists. This module
+decides and describes; <code class="language-plaintext highlighter-rouge">alto.ui.update_flow</code> runs the commands and asks the questions.</p>
+
+<p>A packaged copy replaces itself with a downloaded release. What makes that safe is here: a release carries <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> and a
+signature of it (<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>, Ed25519, made with a private key that only the release workflow has), and a copy of Alto
+trusts only the public keys in <code class="language-plaintext highlighter-rouge">UPDATE_PUBLIC_KEYS</code>. It installs a file only if the signature verifies, the signed list names the
+file, and the file’s hash is the one listed.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
+'b6e2091'
+</code></pre>
+
+<h2 id="source">Source</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Source</span><span class="p">(</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">commit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'HEAD'</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Where an installed copy of Alto came from.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">url</code> (<em>str</em>): The git address it was installed from.</li>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> (<em>str</em>): The commit it was built from.</li>
+  <li><code class="language-plaintext highlighter-rouge">ref</code> (<em>str</em>): The branch or tag it follows; “HEAD”, the address’s default branch, unless the install named one.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Source("https://github.com/altosaurus/alto.git", commit="b6e2091").ref
+'HEAD'
+</code></pre>
+
+<h2 id="short">short</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short</span><span class="p">(</span><span class="n">commit</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Shorten a commit id to the seven characters people use for it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> (<em>str</em>): The full commit id.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Its first seven characters.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
+'b6e2091'
+</code></pre>
+
+<h2 id="parse_direct_url">parse_direct_url</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_direct_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Read where a package was installed from, out of the <code class="language-plaintext highlighter-rouge">direct_url.json</code> that the installer leaves with it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The contents of the file.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Source or None</em>: The git address, the commit and the ref, or None if the package was not installed from a git address (a copy that runs from a source folder has a folder there instead).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; parse_direct_url('{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}')
+Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
+&gt;&gt;&gt; named = '{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; parse_direct_url(named).ref
+'dev'
+&gt;&gt;&gt; parse_direct_url('{"url": "file:///home/me/alto", "dir_info": {"editable": true}}') is None
+True
+&gt;&gt;&gt; parse_direct_url("not json") is None
+True
+</code></pre>
+
+<h2 id="installed_source">installed_source</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_source</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Say where the Alto that is running was installed from.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Source or None</em>: Its git address and commit, or None if it was not installed from a git address.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; source = installed_source()
+&gt;&gt;&gt; source is None or len(source.commit) == COMMIT_LENGTH
+True
+</code></pre>
+
+<h2 id="is_tool_install">is_tool_install</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_tool_install</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether Alto is running from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made, which is what the install script makes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>Path or None, default None</em>): The environment to look at; the one that is running if None. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the environment has the receipt that <code class="language-plaintext highlighter-rouge">uv tool install</code> leaves in it.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; is_tool_install(prefix=Path("/nowhere"))
+False
+</code></pre>
+
+<h2 id="installkind">InstallKind</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InstallKind</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>How the running copy of Alto got where it is, which decides how it can be updated.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SCRIPT</code> (<em>InstallKind</em>): Installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code>: it can replace itself, from a release or from the main branch.</li>
+  <li><code class="language-plaintext highlighter-rouge">PACKAGE</code> (<em>InstallKind</em>): A packaged build (a tarball or the Windows installer): it can only be told that a newer release exists.</li>
+  <li><code class="language-plaintext highlighter-rouge">OTHER</code> (<em>InstallKind</em>): Installed from a git address some other way, so there is no <code class="language-plaintext highlighter-rouge">uv tool</code> to update it with.</li>
+  <li><code class="language-plaintext highlighter-rouge">SOURCE</code> (<em>InstallKind</em>): Run from a source folder, which is updated with git.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; InstallKind.SCRIPT.name
+'SCRIPT'
+</code></pre>
+
+<h2 id="is_frozen">is_frozen</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_frozen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether Alto is running as a packaged build, made with PyInstaller, rather than from Python.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True for a packaged build.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; is_frozen()
+False
+</code></pre>
+
+<h2 id="install_kind">install_kind</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_kind</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">tool</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">frozen</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstallKind</span>
+</code></pre></div></div>
+
+<p>Decide what kind of copy of Alto this is.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source or None</em>): Where it was installed from, if it was installed from a git address.</li>
+  <li><code class="language-plaintext highlighter-rouge">tool</code> (<em>bool</em>): Whether it runs from an environment that <code class="language-plaintext highlighter-rouge">uv tool</code> made. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">frozen</code> (<em>bool</em>): Whether it is a packaged build. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>InstallKind</em>: The kind.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/a.git", commit="abc1234")
+&gt;&gt;&gt; install_kind(here, tool=True, frozen=False).name
+'SCRIPT'
+&gt;&gt;&gt; install_kind(here, tool=False, frozen=False).name, install_kind(None, tool=False, frozen=False).name
+('OTHER', 'SOURCE')
+&gt;&gt;&gt; install_kind(None, tool=False, frozen=True).name
+'PACKAGE'
+</code></pre>
+
+<h2 id="cannot_update">cannot_update</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cannot_update</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Say why a kind of copy cannot update itself at all, if it cannot.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">kind</code> (<em>InstallKind</em>): The kind of copy.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str or None</em>: A sentence for a copy run from a source folder or installed some other way; None for one that can be told about updates.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER, cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
+(True, True)
+&gt;&gt;&gt; cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
+True
+</code></pre>
+
+<h2 id="find_program">find_program</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_program</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">home</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Find a program to run, also in the places the installers put them, which a program started from the dock may not search.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The program’s name, such as “git” or “uv”.</li>
+  <li><code class="language-plaintext highlighter-rouge">home</code> (<em>Path or None, default None</em>): The home folder to look in besides the search path; the user’s own if None. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str or None</em>: Its path, or None if it is nowhere to be found.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; find_program("no-such-program-anywhere") is None
+True
+</code></pre>
+
+<h2 id="check_command">check_command</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_command</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">git</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Give the command that asks the address Alto came from for the commit at the end of a branch or tag.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source</em>): Where the running copy came from.</li>
+  <li><code class="language-plaintext highlighter-rouge">git</code> (<em>str</em>): The path of the <code class="language-plaintext highlighter-rouge">git</code> program. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of str and list of str</em>: The program and its arguments.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; check_command(Source("https://example.org/a.git", commit="abc1234"), git="git")
+('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
+</code></pre>
+
+<h2 id="install_command">install_command</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install_command</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">uv</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Give the command that installs Alto over the installed copy: a release, or the newest commit of the address.</p>
+
+<p><code class="language-plaintext highlighter-rouge">uv tool install --force</code> is used rather than <code class="language-plaintext highlighter-rouge">uv tool upgrade</code>, because an upgrade stays on the tag or branch the copy was
+installed from, and a copy that follows a release must be able to move to the main branch and back.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source</em>): Where the running copy came from.</li>
+  <li><code class="language-plaintext highlighter-rouge">uv</code> (<em>str</em>): The path of the <code class="language-plaintext highlighter-rouge">uv</code> program. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">tag</code> (<em>str or None, default None</em>): The release to install, such as “v0.1.0”; the address’s default branch if None. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of str and list of str</em>: The program and its arguments.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/alto.git", commit="abc1234")
+&gt;&gt;&gt; install_command(here, uv="uv", tag="v0.1.0")
+('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
+&gt;&gt;&gt; install_command(here, uv="uv")
+('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
+</code></pre>
+
+<h2 id="parse_ls_remote">parse_ls_remote</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_ls_remote</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Read the commit id out of what <code class="language-plaintext highlighter-rouge">git ls-remote</code> printed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The output: a line for each ref, each a commit id, a tab and the ref’s name.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str or None</em>: The commit id on the first line, or None if there is none (the ref does not exist, or git printed an error).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; parse_ls_remote("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe\tHEAD\n")
+'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
+&gt;&gt;&gt; parse_ls_remote("") is None, parse_ls_remote("fatal: repository not found") is None
+(True, True)
+</code></pre>
+
+<h2 id="asset">Asset</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Asset</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A file of a release: the installer, the tarball, the checksums or their signature.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): Its name, such as “alto-0.1.0-linux-x86_64.tar.gz”.</li>
+  <li><code class="language-plaintext highlighter-rouge">url</code> (<em>str</em>): The address it is downloaded from.</li>
+  <li><code class="language-plaintext highlighter-rouge">size</code> (<em>int</em>): Its size in bytes, as GitHub states it; 0 if it does not.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Asset("SHA256SUMS", url="https://example.org/s", size=300).size
+300
+</code></pre>
+
+<h2 id="release">Release</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Release</span><span class="p">(</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">assets</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Asset</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">()),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A release of Alto, as published on GitHub.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">version</code> (<em>str</em>): Its version, such as “0.1.0”.</li>
+  <li><code class="language-plaintext highlighter-rouge">tag</code> (<em>str</em>): The tag it is made from, such as “v0.1.0”.</li>
+  <li><code class="language-plaintext highlighter-rouge">url</code> (<em>str</em>): The page where it and its downloads are.</li>
+  <li><code class="language-plaintext highlighter-rouge">assets</code> (<em>tuple of Asset</em>): Its files.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Release("0.1.0", tag="v0.1.0", url="https://example.org/r").version
+'0.1.0'
+</code></pre>
+
+<h2 id="version_key">version_key</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">version_key</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="p">...]</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Turn a version, with or without the “v” of a tag, into numbers that can be compared.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The version, such as “0.10.2” or “v1.0”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of int or None</em>: Its numbers; None if it is not made only of numbers and dots, as a pre-release such as “1.0.0rc1” is not.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; version_key("v0.10.2"), version_key("1.0")
+((0, 10, 2), (1, 0))
+&gt;&gt;&gt; version_key("1.0.0rc1") is None, version_key("") is None, version_key("unknown") is None
+(True, True, True)
+</code></pre>
+
+<h2 id="is_newer">is_newer</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_newer</span><span class="p">(</span>
+    <span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">installed</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether one version is newer than another, comparing numbers and not text, so 0.10.0 is newer than 0.9.0.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">candidate</code> (<em>str</em>): The version that may be newer.</li>
+  <li><code class="language-plaintext highlighter-rouge">installed</code> (<em>str</em>): The version to compare it with. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the candidate is newer. False if it is the same or older, or if either is not a plain version.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; is_newer("0.10.0", installed="0.9.0"), is_newer("v0.1.0", installed="0.0.0")
+(True, True)
+&gt;&gt;&gt; is_newer("1.0", installed="1.0.0"), is_newer("0.0.0", installed="0.1.0")
+(False, False)
+&gt;&gt;&gt; is_newer("1.0.0", installed="unknown")
+False
+</code></pre>
+
+<h2 id="installed_version">installed_version</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">installed_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Give the version of Alto that is running.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The installed version, or “unknown” if Alto was not installed as a package.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; installed_version().count(".") &gt;= 1
+True
+</code></pre>
+
+<h2 id="parse_latest_release">parse_latest_release</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_latest_release</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Read GitHub’s answer about the latest release.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The JSON that <code class="language-plaintext highlighter-rouge">releases/latest</code> answers with.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Release or None</em>: The release, or None if the answer is not one, is a draft or a pre-release, or has a tag that is not a plain version.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
+&gt;&gt;&gt; parse_latest_release(answer)
+Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
+&gt;&gt;&gt; parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
+True
+&gt;&gt;&gt; parse_latest_release("not json") is None
+True
+</code></pre>
+
+<h2 id="release_answer">release_answer</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">release_answer</span><span class="p">(</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Make sense of what came back when the latest release was asked for.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">status</code> (<em>int</em>): The HTTP status, or 0 if no answer came at all.</li>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The body of the answer, or the reason there was none. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Release or str</em>: The release, or a sentence that says why there is none to offer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; release_answer(404, text="") == NO_RELEASE
+True
+&gt;&gt;&gt; release_answer(0, text="Name or service not known")
+'Alto could not reach GitHub: Name or service not known'
+&gt;&gt;&gt; release_answer(403, text="rate limit exceeded")
+'GitHub answered with an error (403): rate limit exceeded'
+</code></pre>
+
+<h2 id="fetch_text">fetch_text</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fetch_text</span><span class="p">(</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Fetch a web address, waiting at most a number of seconds. It blocks, so the interface runs it on another thread.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">url</code> (<em>str</em>): The address.</li>
+  <li><code class="language-plaintext highlighter-rouge">seconds</code> (<em>int</em>): How long to wait for the server. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of int and str</em>: The HTTP status and the body. If the server was not reached, 0 and the reason.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
+0
+</code></pre>
+
+<h2 id="ssl_context">ssl_context</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ssl_context</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ssl</span><span class="p">.</span><span class="n">SSLContext</span>
+</code></pre></div></div>
+
+<p>Make the settings for a secure connection, trusting the certificate authorities that come with Alto.</p>
+
+<p>A packaged copy cannot count on the system’s: the Python inside it may look for them where the computer it was built on keeps
+them, and a connection would then fail on a distribution that keeps them somewhere else.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>ssl.SSLContext</em>: A context that checks the server’s certificate and name against certifi’s list.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) &gt; 100
+(True, True)
+</code></pre>
+
+<h2 id="platform_asset_name">platform_asset_name</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">platform_asset_name</span><span class="p">(</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">machine</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Give the name of the file that updates a packaged copy on this system, as the release workflow names it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">version</code> (<em>str</em>): The version, such as “0.1.0”. Keyword-only after the first.</li>
+  <li><code class="language-plaintext highlighter-rouge">system</code> (<em>str</em>): The operating system, as <code class="language-plaintext highlighter-rouge">platform.system()</code> says it (“Linux”, “Windows”). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">machine</code> (<em>str</em>): The processor, as <code class="language-plaintext highlighter-rouge">platform.machine()</code> says it (“x86_64”, “AMD64”). Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str or None</em>: The name, or None if there is no package for this system.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="x86_64")
+'alto-0.1.0-linux-x86_64.tar.gz'
+&gt;&gt;&gt; platform_asset_name("0.1.0", system="Windows", machine="AMD64")
+'alto-0.1.0-windows-x64-setup.exe'
+&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="aarch64") is None
+True
+</code></pre>
+
+<h2 id="find_asset">find_asset</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_asset</span><span class="p">(</span>
+    <span class="n">release</span><span class="p">:</span> <span class="n">Release</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DOWNLOAD_BASE</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Asset</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Find a file of a release by its name, if it is at the address where a release keeps its files.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">release</code> (<em>Release</em>): The release.</li>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The file’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">base</code> (<em>str, default DOWNLOAD_BASE</em>): What the address must start with. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Asset or None</em>: The file, or None if the release has none by that name or it is somewhere else.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
+&gt;&gt;&gt; found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
+&gt;&gt;&gt; found.name if found else None
+'a'
+&gt;&gt;&gt; find_asset(Release("1", tag="v1", url="", assets=files), name="b") is None
+True
+</code></pre>
+
+<h2 id="parse_checksums">parse_checksums</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_checksums</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Read a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file: a line for each file, with its SHA-256 hash and its name.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The file’s contents, as <code class="language-plaintext highlighter-rouge">sha256sum</code> writes them.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str</em>: The hash of each named file, in lower case. Lines that are not a hash and a plain file name are left out.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
+&gt;&gt;&gt; parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
+{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
+</code></pre>
+
+<h2 id="verify_signature">verify_signature</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">verify_signature</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">signature</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether an Ed25519 signature of some data was made with one of the keys.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">data</code> (<em>bytes</em>): What was signed.</li>
+  <li><code class="language-plaintext highlighter-rouge">signature</code> (<em>str</em>): The signature, base64. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>tuple of str</em>): The public keys (base64) that are trusted. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True only if the signature is well formed and one of the keys made it. No key, a key that is not a key, and a signature that is not one all give False.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from nacl.signing import SigningKey
+&gt;&gt;&gt; pair = SigningKey.generate()
+&gt;&gt;&gt; public = base64.b64encode(bytes(pair.verify_key)).decode()
+&gt;&gt;&gt; signed = base64.b64encode(pair.sign(b"the list").signature).decode()
+&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=(public,))
+True
+&gt;&gt;&gt; verify_signature(b"another list", signature=signed, keys=(public,))
+False
+&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=())
+False
+</code></pre>
+
+<h2 id="self_check">self_check</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">self_check</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Check, without any network, that what a copy needs to check an update is there and works.</p>
+
+<p>It is what <code class="language-plaintext highlighter-rouge">alto --self-test</code> runs, so that the build can tell that a packaged copy carries the certificate list and the
+signature library (which PyInstaller must be told about), and that the keys in the code are keys.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: What is wrong, one sentence each; empty if all is well.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; self_check()
+[]
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.instrument_picker · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.instrument_picker/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.instrument_picker · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.instrument_picker/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.instrument_picker/" aria-current="page">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.instrument_picker</h1>
+        
+<p>Choosing the instrument that plays notes, with a summary of what each one is made from.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; format_size(2_500_000)
+'2.5 MB'
+&gt;&gt;&gt; sorted(PREVIEW)
+[60, 64, 67]
+</code></pre>
+
+<h2 id="load_instrument">load_instrument</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_instrument</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Apply the saved instrument.</p>
+
+<p>The piano is used if nothing is saved or the saved key is not an instrument.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("audio/instrument", "flute")
+&gt;&gt;&gt; load_instrument()
+&gt;&gt;&gt; sounds.instrument
+'flute'
+&gt;&gt;&gt; store().setValue("audio/instrument", "not an instrument")
+&gt;&gt;&gt; load_instrument()
+&gt;&gt;&gt; sounds.instrument
+'piano'
+</code></pre>
+
+<h2 id="save_instrument">save_instrument</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_instrument</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Remember the instrument in use.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; sounds.instrument = "marimba"
+&gt;&gt;&gt; save_instrument()
+&gt;&gt;&gt; str(store().value("audio/instrument"))
+'marimba'
+&gt;&gt;&gt; sounds.instrument = "piano"
+&gt;&gt;&gt; save_instrument()
+</code></pre>
+
+<h2 id="tokens">tokens</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tokens</span><span class="p">(</span><span class="n">widget</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the summary page’s colours.</p>
+
+<p>All are mixed from the system palette so they follow its light or dark theme.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">widget</code> (<em>QWidget</em>): The widget whose palette to use.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str</em>: Colour name to ‘#rrggbb’: accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a text colour and a soft background (such as good and good_soft).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; colours = tokens(QWidget())
+&gt;&gt;&gt; sorted(colours)[:3]
+['accent', 'accent_soft', 'bad']
+&gt;&gt;&gt; colours["panel"].startswith("#")
+True
+</code></pre>
+
+<h2 id="format_size">format_size</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">format_size</span><span class="p">(</span><span class="n">nbytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Write a file size the way the instrument page shows it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nbytes</code> (<em>int</em>): The size in bytes.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Megabytes with one decimal from a million bytes, otherwise whole kilobytes (at least 1).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; format_size(2_500_000), format_size(500_000), format_size(10)
+('2.5 MB', '500 KB', '1 KB')
+</code></pre>
+
+<h2 id="instrumentpicker">InstrumentPicker</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">InstrumentPicker</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>The instruments in a box on the left; on the right, what the selected one is made from.</p>
+
+<p>An instrument that can be played in more than one way (the viola, arco or pizzicato) is one entry, and its page has a
+‘Use this instrument’ and a ‘Hear it’ for each way. ‘Hear it’ plays a short arpeggio even while sound is muted.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">chosen</code> (<em>Signal</em>): Emitted with the key of the instrument that is now in use.</li>
+  <li><code class="language-plaintext highlighter-rouge">groups</code> (<em>dict of str to list of Instrument</em>): The entries in the list, each with the instruments (ways of playing) it holds.</li>
+  <li><code class="language-plaintext highlighter-rouge">list</code> (<em>QListWidget</em>): The box of entries.</li>
+  <li><code class="language-plaintext highlighter-rouge">shown</code> (<em>str or None</em>): The entry whose page is showing.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; picker.select("viola_plucked")
+&gt;&gt;&gt; picker.shown
+'Viola'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the picker, showing the page of the instrument in use.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the picker.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; picker.list.count() == len(picker.groups)
+True
+</code></pre>
+
+<h3 id="instrumentpickerselect">InstrumentPicker.select</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the page of the entry an instrument belongs to.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): An instrument’s key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; picker.select("marimba")
+&gt;&gt;&gt; picker.shown
+'Marimba'
+</code></pre>
+
+<h3 id="instrumentpickershow_group">InstrumentPicker.show_group</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_group</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Fill the summary page for an entry from what is known about it and what is on disk.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">group</code> (<em>str</em>): An entry in the list, such as “Flute” or “Viola”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; picker.show_group("Flute")
+&gt;&gt;&gt; picker.shown
+'Flute'
+</code></pre>
+
+<h3 id="instrumentpickerchangeevent">InstrumentPicker.changeEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">changeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Redraw the summary page when the palette changes, so its colours follow the theme.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The change.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; picker.show_group("Flute")
+&gt;&gt;&gt; picker.changeEvent(QEvent(QEvent.Type.PaletteChange))
+&gt;&gt;&gt; picker.shown
+'Flute'
+</code></pre>
+
+<h3 id="instrumentpickeruse">InstrumentPicker.use</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Make an instrument the one for notes and the correct-answer chime.</p>
+
+<p>Nothing happens if it has no recordings installed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
+&gt;&gt;&gt; chosen = []
+&gt;&gt;&gt; _ = picker.chosen.connect(chosen.append)
+&gt;&gt;&gt; picker.use("marimba")
+&gt;&gt;&gt; sounds.instrument, chosen
+('marimba', ['marimba'])
+&gt;&gt;&gt; picker.use("piano")
+</code></pre>
+
+<h3 id="instrumentpickerpreview">InstrumentPicker.preview</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Play a short C major arpeggio in an instrument, even if sound is muted.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; InstrumentPicker().preview("flute")  # doctest: +SKIP
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

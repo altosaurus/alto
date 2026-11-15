@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How practice adapts · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/practice/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="How practice adapts · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/practice/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/" aria-current="page">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>How practice adapts</h1>
+        <p>Alto is not a flash-card list that shows every question equally often. It keeps track of how you do on each question
+and decides what to ask next from that.</p>
+
+<h2 id="what-is-recorded">What is recorded</h2>
+
+<p>Every answer is stored under your profile, including wrong ones: which exercise, which question, what you answered,
+whether it was right, which attempt it was, and how long it took. A question that took three tries leaves three rows.</p>
+
+<p>A <strong>question</strong> here is one specific problem, such as “treble clef, F♯4, in D major” or “place B♭2 on the staff”. The note
+value and the order of the answer buttons do not make it a different question.</p>
+
+<h2 id="strain">Strain</h2>
+
+<p>Each question has a score called <strong>strain</strong>, which says how much practice it needs. It starts at 1.5 for a question
+you have not seen, stays between 0 and 6, and changes with each answer.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>What happened</th>
+      <th>Effect on strain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A wrong answer</td>
+      <td><strong>+1.5</strong> each time, so every extra attempt pushes the question higher</td>
+    </tr>
+    <tr>
+      <td>Right first time</td>
+      <td><strong>−0.5</strong></td>
+    </tr>
+    <tr>
+      <td>Right, but only after misses</td>
+      <td><strong>−0.2</strong></td>
+    </tr>
+    <tr>
+      <td>First answer very quick</td>
+      <td>up to <strong>−0.6</strong> more</td>
+    </tr>
+    <tr>
+      <td>First answer very slow</td>
+      <td>up to <strong>+1.0</strong> more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Because of the last two rows, a slow correct answer still counts against a question, and a very quick correct one
+counts strongly in its favour.</p>
+
+<h3 id="how-speed-is-judged">How speed is judged</h3>
+
+<p>Speed is measured on your <strong>first</strong> answer only, from the moment the question appears. It is compared with a “par” time
+for the exercise, since reading a note takes less time than spelling a scale:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Exercise</th>
+      <th>Par time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Note Identification, Keyboard Identification</td>
+      <td>3 s</td>
+    </tr>
+    <tr>
+      <td>Key Signature Identification</td>
+      <td>5 s</td>
+    </tr>
+    <tr>
+      <td>Interval identification, Chord quality, Note Construction, Key Signature Construction</td>
+      <td>6 s</td>
+    </tr>
+    <tr>
+      <td>Circle of Fifths</td>
+      <td>7 s</td>
+    </tr>
+    <tr>
+      <td>Scale spelling</td>
+      <td>8 s</td>
+    </tr>
+    <tr>
+      <td>Scale Construction</td>
+      <td>25 s</td>
+    </tr>
+    <tr>
+      <td>Arpeggio identification</td>
+      <td>9 s</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>At half the par time or quicker you get the full speed bonus. At par there is no effect. At four times par or slower
+you get the full slow penalty. In between it changes smoothly.</p>
+
+<h2 id="what-gets-asked-next">What gets asked next</h2>
+
+<p>Alto builds a small pool of candidates for each question: a handful of newly generated ones, plus questions you have
+been asked before under the same exercise settings (the ones with the highest strain, and a few at random). It then
+picks one at random, but weighted:</p>
+
+<ul>
+  <li>The higher a question’s strain, the more likely it is. Weight grows steeply with strain, so a question you keep
+missing is far more likely than one you know.</li>
+  <li>A question you answered just now is held back for a while. For an easy question this lasts many minutes. For a hard
+one it is short, so what you struggle with returns within about a minute.</li>
+  <li>A question you have never seen is more likely than one you have mastered, so new material keeps arriving.</li>
+  <li>The question you just answered is never asked twice in a row.</li>
+</ul>
+
+<p>Questions from earlier sessions are only replayed when the exercise settings match the ones they were asked under.
+If you change the clefs or key signatures, you will not be given old questions that no longer fit.</p>
+
+<h2 id="your-profile">Your profile</h2>
+
+<p>Each profile has its own history, so two people sharing a computer do not affect each other’s questions. The profile
+name is shown in the menu (☰), where you can switch or add profiles. See <a href="/alto/v0.0.0/statistics/">Statistics</a> to check how a profile is going.</p>
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

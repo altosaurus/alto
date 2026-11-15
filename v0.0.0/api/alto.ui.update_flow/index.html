@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.update_flow · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.update_flow/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.update_flow · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.update_flow/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/" aria-current="page">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.update_flow</h1>
+        
+<p>Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.</p>
+
+<p>The menu’s “Check for updates…” follows one of two channels, chosen in Settings: the newest release (the default), or the
+newest commit on the main branch. A copy installed with <code class="language-plaintext highlighter-rouge">scripts/alto-install.sh</code> can replace itself, from either, with
+<code class="language-plaintext highlighter-rouge">uv tool install</code>, showing its output, and restarts when OK is pressed. A packaged copy cannot replace itself, so it is told
+that a newer release exists and offered the page where it can be downloaded; it always follows releases. A copy run from a
+source folder is told to update with git.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; brief("fatal: unable to access 'https://example.org/': Could not resolve host\n")
+"fatal: unable to access 'https://example.org/': Could not resolve host"
+</code></pre>
+
+<h2 id="brief">brief</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">brief</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Cut what a program printed down to what is worth showing in a message: the end of it, without the blank space around it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): What the program printed.</li>
+  <li><code class="language-plaintext highlighter-rouge">limit</code> (<em>int, default 400</em>): The most characters to keep. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The end of the text, at most <code class="language-plaintext highlighter-rouge">limit</code> characters long.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; brief("  one\ntwo  \n")
+'one\ntwo'
+&gt;&gt;&gt; brief("x" * 10, limit=4)
+'xxxx'
+</code></pre>
+
+<h2 id="commandrunner">CommandRunner</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CommandRunner</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
+
+<p>Run one program without freezing the window, handing on what it prints as it prints it, and how it ended.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">output</code> (<em>Signal</em>): Emitted with each piece of text the program prints, as it arrives. Its errors are mixed in with it.</li>
+  <li><code class="language-plaintext highlighter-rouge">done</code> (<em>Signal</em>): Emitted once, with the exit code and everything the program printed. The exit code is -1 if the program could not be started, was stopped for taking too long, or crashed.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; runner = CommandRunner()
+&gt;&gt;&gt; runner.running
+False
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Make a runner that has not started anything.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QObject or None, default None</em>): The object that owns it.</li>
+</ul>
+
+<h3 id="commandrunnerrunning">CommandRunner.running</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">running</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether a program has been started and has not yet ended.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True while it runs.</li>
+</ul>
+
+<h3 id="commandrunnerstart">CommandRunner.start</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
+    <span class="n">program</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Start a program.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">program</code> (<em>str</em>): The program’s path.</li>
+  <li><code class="language-plaintext highlighter-rouge">arguments</code> (<em>list of str</em>): What to give it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">seconds</code> (<em>int, default 0</em>): Stop it if it has not ended by then; 0 lets it take as long as it takes. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; import sys
+&gt;&gt;&gt; runner = CommandRunner()
+&gt;&gt;&gt; runner.start(sys.executable, arguments=["-c", "import time; time.sleep(30)"])
+&gt;&gt;&gt; runner.stop()
+&gt;&gt;&gt; runner.running
+False
+</code></pre>
+
+<h3 id="commandrunnerstop">CommandRunner.stop</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Stop the program, if it is running, without announcing that it has ended.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CommandRunner().stop()
+</code></pre>
+
+<h2 id="saved_channel">saved_channel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_channel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what the update check follows, as chosen in Settings.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: “releases” for the newest release, or “main” for the newest commit on the main branch; “releases” if nothing valid is saved.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; saved_channel()
+'releases'
+&gt;&gt;&gt; save_channel("main")
+&gt;&gt;&gt; saved_channel()
+'main'
+&gt;&gt;&gt; save_channel("releases")
+</code></pre>
+
+<h2 id="save_channel">save_channel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_channel</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Remember what the update check follows.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">channel</code> (<em>str</em>): “releases” or “main”. Anything else is saved as “releases”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_channel("nonsense")
+&gt;&gt;&gt; saved_channel()
+'releases'
+</code></pre>
+
+<h2 id="waitdialog">WaitDialog</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">WaitDialog</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
+
+<p>A small window with a bar that keeps moving and a Cancel button, shown while something is asked for.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ended</code> (<em>bool</em>): Whether the asking has ended, by an answer, a failure or a cancel.</li>
+  <li><code class="language-plaintext highlighter-rouge">cancelled</code> (<em>bool</em>): Whether the person cancelled it.</li>
+</ul>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the window.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None</em>): The window it belongs to.</li>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): What is being asked for. Keyword-only.</li>
+</ul>
+
+<h3 id="waitdialogreject">WaitDialog.reject</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Cancel the asking.</p>
+
+<h2 id="checkdialog">CheckDialog</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CheckDialog</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="n">git</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">WaitDialog</code></p>
+
+<p>A waiting window while the address Alto came from is asked for the newest commit of its main branch.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> (<em>str</em>): The newest commit, once it is known; empty if it could not be found out.</li>
+  <li><code class="language-plaintext highlighter-rouge">error</code> (<em>str</em>): What went wrong, if there is no commit.</li>
+  <li><code class="language-plaintext highlighter-rouge">runner</code> (<em>CommandRunner</em>): The program that does the asking.</li>
+</ul>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the window; it asks nothing until <code class="language-plaintext highlighter-rouge">run</code> is called.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None</em>): The window it belongs to.</li>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source</em>): Where the running copy of Alto came from. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">git</code> (<em>str</em>): The path of the <code class="language-plaintext highlighter-rouge">git</code> program. Keyword-only.</li>
+</ul>
+
+<h3 id="checkdialogrun">CheckDialog.run</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask, showing the window until there is an answer.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
+&gt;&gt;&gt; CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").cancelled
+False
+</code></pre>
+
+<h2 id="releasefetcher">ReleaseFetcher</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseFetcher</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QObject</code></p>
+
+<p>Ask GitHub for the latest release on another thread, so that the window never freezes while it waits.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">done</code> (<em>Signal</em>): Emitted once, with the HTTP status (0 if GitHub was not reached) and the answer or the reason there was none.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ReleaseFetcher().cancel()
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Make a fetcher that has not asked anything.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QObject or None, default None</em>): The object that owns it.</li>
+</ul>
+
+<h3 id="releasefetcherstart">ReleaseFetcher.start</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Start asking.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">seconds</code> (<em>int</em>): How long to wait for GitHub. Keyword-only.</li>
+</ul>
+
+<h3 id="releasefetchercancel">ReleaseFetcher.cancel</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">cancel</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.</p>
+
+<h2 id="releasedialog">ReleaseDialog</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">WaitDialog</code></p>
+
+<p>A waiting window while GitHub is asked for the latest release.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">release</code> (<em>Release or None</em>): The latest release, once it is known; None if it could not be found out.</li>
+  <li><code class="language-plaintext highlighter-rouge">error</code> (<em>str</em>): What went wrong, if there is no release.</li>
+  <li><code class="language-plaintext highlighter-rouge">fetcher</code> (<em>ReleaseFetcher</em>): What does the asking.</li>
+</ul>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the window; it asks nothing until <code class="language-plaintext highlighter-rouge">run</code> is called.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None</em>): The window it belongs to.</li>
+</ul>
+
+<h3 id="releasedialogrun">ReleaseDialog.run</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask, showing the window until there is an answer.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
+&gt;&gt;&gt; ReleaseDialog(None).cancelled
+False
+</code></pre>
+
+<h2 id="updatedialog">UpdateDialog</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">UpdateDialog</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">command</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QDialog</code></p>
+
+<p>The window that shows an update being installed: a bar that keeps moving, what <code class="language-plaintext highlighter-rouge">uv</code> prints, and then what comes next.</p>
+
+<p>It cannot be closed while the update runs, because stopping it half way could leave the installed copy broken. When it has
+finished it says so, and its one button closes it. After a successful update the caller restarts Alto.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">status</code> (<em>QLabel</em>): What is happening.</li>
+  <li><code class="language-plaintext highlighter-rouge">bar</code> (<em>QProgressBar</em>): A bar that keeps moving while the update runs, and fills when it has succeeded.</li>
+  <li><code class="language-plaintext highlighter-rouge">log</code> (<em>QPlainTextEdit</em>): What <code class="language-plaintext highlighter-rouge">uv</code> prints, as it prints it.</li>
+  <li><code class="language-plaintext highlighter-rouge">button</code> (<em>QPushButton</em>): Enabled when the update has ended.</li>
+  <li><code class="language-plaintext highlighter-rouge">ended</code> (<em>bool</em>): Whether the update has ended.</li>
+  <li><code class="language-plaintext highlighter-rouge">succeeded</code> (<em>bool</em>): Whether it ended well.</li>
+  <li><code class="language-plaintext highlighter-rouge">runner</code> (<em>CommandRunner</em>): The program that does the update.</li>
+</ul>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the window; the update does not start until <code class="language-plaintext highlighter-rouge">run</code> is called.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None</em>): The window it belongs to.</li>
+  <li><code class="language-plaintext highlighter-rouge">command</code> (<em>tuple of str and list of str</em>): The program that installs the update and its arguments. Keyword-only.</li>
+</ul>
+
+<h3 id="updatedialogrun">UpdateDialog.run</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Install the update, showing the window until the person has read how it went.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if it succeeded and OK was pressed, so Alto should restart.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
+&gt;&gt;&gt; UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
+False
+</code></pre>
+
+<h3 id="updatedialogreject">UpdateDialog.reject</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Close the window, but not while the update is running.</p>
+
+<h3 id="updatedialogcloseevent">UpdateDialog.closeEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Refuse to close while the update is running.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QCloseEvent</em>): The request to close.</li>
+</ul>
+
+<h2 id="check_for_updates">check_for_updates</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_for_updates</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+    <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">.</span><span class="n">quit</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask whether a newer Alto is available and, if the person agrees, install it and restart.</p>
+
+<p>What is asked depends on the copy: one run from a source folder is told how it is updated; a packaged copy asks for the
+latest release and is offered its download page; one installed with the script follows what Settings says, the latest release
+or the main branch, and can install it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the questions are asked over.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code> (<em>Callable</em>): What to do after a successful update to start the new version in place of this one. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">quit_app</code> (<em>Callable, default QApplication.quit</em>): What to do to close Alto once an update has been handed to the program that installs it, which is how a packaged copy is replaced. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; check_for_updates  # doctest: +SKIP
+</code></pre>
+
+<h2 id="check_release">check_release</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_release</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+    <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask GitHub for the latest release and compare it with the version that is running.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the questions are asked over.</li>
+  <li><code class="language-plaintext highlighter-rouge">kind</code> (<em>InstallKind</em>): What kind of copy is running: a packaged one is offered a download page, and one installed with the script is offered the update. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source or None</em>): Where the running copy came from; None for a packaged copy. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code> (<em>Callable</em>): What to do after a successful update. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">quit_app</code> (<em>Callable</em>): What to do to close Alto once an update has been handed to the program that installs it. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; check_release  # doctest: +SKIP
+</code></pre>
+
+<h2 id="check_main">check_main</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_main</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask the address Alto came from for the newest commit on its main branch and compare it with the one that is running.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the questions are asked over.</li>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source</em>): Where the running copy came from. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code> (<em>Callable</em>): What to do after a successful update. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; check_main  # doctest: +SKIP
+</code></pre>
+
+<h2 id="install">install</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">install</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Install a release, or the newest commit of the main branch, showing the progress, and restart if it worked.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the progress is shown over.</li>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source</em>): Where the running copy came from. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">tag</code> (<em>str or None</em>): The release to install, such as “v0.1.0”; None for the newest commit of the main branch. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code> (<em>Callable</em>): What to do after a successful update. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; install  # doctest: +SKIP
+</code></pre>
+
+<h2 id="update_package">update_package</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_package</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">release</span><span class="p">:</span> <span class="n">updates</span><span class="p">.</span><span class="n">Release</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">selfupdate</span><span class="p">.</span><span class="n">Target</span><span class="p">,</span>
+    <span class="n">installed</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the questions are asked over.</li>
+  <li><code class="language-plaintext highlighter-rouge">release</code> (<em>updates.Release</em>): The newer release. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">target</code> (<em>selfupdate.Target</em>): The copy that will be replaced. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">installed</code> (<em>str</em>): The version that is running. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">quit_app</code> (<em>Callable</em>): What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; update_package  # doctest: +SKIP
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

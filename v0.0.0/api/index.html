@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API reference · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="API reference · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/" aria-current="page">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>API reference</h1>
+        <p>Every public module, class and function in Alto, with its signature and docstring. Names that begin with an underscore are internal and are left out. The pages are written from the docstrings by <code class="language-plaintext highlighter-rouge">scripts/api_docs.py</code>, so they match the code.</p>
+
+<h2 id="alto">alto</h2>
+
+<p>Alto: a music theory trainer that learns what you find hard and asks it more often.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.audio/">alto.audio</a></td>
+      <td>Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.instrument_info/">alto.instrument_info</a></td>
+      <td>What is known about each instrument’s recordings, for the summary shown in the instrument settings.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.location/">alto.location</a></td>
+      <td>Where Alto keeps its practice history and its settings, and how to keep them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.selfupdate/">alto.selfupdate</a></td>
+      <td>Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.settings/">alto.settings</a></td>
+      <td>User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.updates/">alto.updates</a></td>
+      <td>What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="altoexercises">alto.exercises</h2>
+
+<p>The exercises and the framework they are built on.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.exercises.base/">alto.exercises.base</a></td>
+      <td>Exercise framework. To add an exercise: subclass Exercise, decorate with @register.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.exercises.library/">alto.exercises.library</a></td>
+      <td>The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="altolearning">alto.learning</h2>
+
+<p>Spaced repetition: who is learning (profiles), what they answered (a database) and what to ask next.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.learning.backup/">alto.learning.backup</a></td>
+      <td>Backup files: everything Alto keeps, in one file that can be read back into a clean install. Pure Python (no Qt).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.learning.database/">alto.learning.database</a></td>
+      <td>The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.learning.learner/">alto.learning.learner</a></td>
+      <td>Ties the profile, the database and the scheduler together for the exercise screen.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.learning.scheduler/">alto.learning.scheduler</a></td>
+      <td>How a question’s history turns into how soon it comes back. Pure Python, no database and no Qt.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.learning.stats/">alto.learning.stats</a></td>
+      <td>Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="altolessons">alto.lessons</h2>
+
+<p>The lessons: guided walks through a topic, with small exercises along the way.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.lessons.base/">alto.lessons.base</a></td>
+      <td>What a lesson is made of: steps, and the small tasks inside them.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.circle_of_fifths/">alto.lessons.circle_of_fifths</a></td>
+      <td>The lesson on the circle of fifths, taught from nothing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="altotheory">alto.theory</h2>
+
+<p>Music theory, with no user interface.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.theory.fifths/">alto.theory.fifths</a></td>
+      <td>The circle of fifths: the twelve keys in order, each major with its relative minor.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.theory.pitch/">alto.theory.pitch</a></td>
+      <td>Pitches and intervals, spelled correctly (C# is not Db).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.theory.scales/">alto.theory.scales</a></td>
+      <td>Scales, modes, key signatures and chords, built from spelled intervals.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="altoui">alto.ui</h2>
+
+<p>The windows, widgets and drawing code. Everything that needs Qt is in here.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="alto.ui.app_settings/">alto.ui.app_settings</a></td>
+      <td>The application-wide settings dialog.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.backup_flow/">alto.ui.backup_flow</a></td>
+      <td>Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.charts/">alto.ui.charts</a></td>
+      <td>Small charts drawn with QPainter, in the application’s theme colours.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.circle/">alto.ui.circle</a></td>
+      <td>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.colors/">alto.ui.colors</a></td>
+      <td>Mixing colours. The interface blends palette colours to get its soft tints and highlights.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.database_page/">alto.ui.database_page</a></td>
+      <td>A read-only look at what is stored: every answer, every question’s record, and the profiles.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.engraving/">alto.ui.engraving</a></td>
+      <td>Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.exercise_view/">alto.ui.exercise_view</a></td>
+      <td>The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.home/">alto.ui.home</a></td>
+      <td>The start screen: a card for every exercise, or for every lesson, in rows.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.icons/">alto.ui.icons</a></td>
+      <td>Small monochrome icons drawn from SVG, tinted with the current theme’s text colour.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.instrument_picker/">alto.ui.instrument_picker</a></td>
+      <td>Choosing the instrument that plays notes, with a summary of what each one is made from.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.key_fork/">alto.ui.key_fork</a></td>
+      <td>The fork: a picker for a key signature, shaped like a tuning fork lying on its side.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.keyboard/">alto.ui.keyboard</a></td>
+      <td>The on-screen piano keyboard, drawn to real proportions, and a miniature of the whole piano for choosing a span of keys.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.keyboard_styles/">alto.ui.keyboard_styles</a></td>
+      <td>Keyboard styles: the colours and materials the on-screen piano keys are drawn in.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.lesson/">alto.ui.lesson</a></td>
+      <td>The lesson pages: a page that walks through one lesson step by step.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.lesson_nav/">alto.ui.lesson_nav</a></td>
+      <td>The list on the left in lesson mode: the lessons, and the steps of the one that is open.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.main_window/">alto.ui.main_window</a></td>
+      <td>The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.notation/">alto.ui.notation</a></td>
+      <td>Notation styles: which music font the staff, clefs, notes and accidentals are engraved in.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.notes/">alto.ui.notes</a></td>
+      <td>Engraved notes built from the Noto Music font’s glyphs, the way notation software draws them.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.package_update/">alto.ui.package_update</a></td>
+      <td>The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.pictures/">alto.ui.pictures</a></td>
+      <td>Small pictures of musical things (clefs, note values, key signatures, note ranges …) for the settings panes.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.profile_dialog/">alto.ui.profile_dialog</a></td>
+      <td>Choosing who is practising. There is no password: a profile is just a name that keeps its own history.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.question_preview/">alto.ui.question_preview</a></td>
+      <td>A popup showing a stored question the way the exercise showed it, with its answer.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.reference/">alto.ui.reference</a></td>
+      <td>The reference pane: an interactive circle of fifths to look things up on, with an explanation under it.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.settings_panel/">alto.ui.settings_panel</a></td>
+      <td>The settings panels that slide in beside an exercise, and the small widgets they are built from.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.staff/">alto.ui.staff</a></td>
+      <td>The staff: lines, clefs, key signatures and notes, drawn on a rounded white “paper”.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.staff_input/">alto.ui.staff_input</a></td>
+      <td>The staffs you click to place notes: one note for the note construction exercise, a row of them for scale construction.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.stats_dialog/">alto.ui.stats_dialog</a></td>
+      <td>The statistics screen: a few numbers and charts about how practice is going.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.store/">alto.ui.store</a></td>
+      <td>The application’s saved settings (a thin layer over <code class="language-plaintext highlighter-rouge">QSettings</code>).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.style/">alto.ui.style</a></td>
+      <td>Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.theme/">alto.ui.theme</a></td>
+      <td>The colour theme: follow the system, force light or dark, or use a theme with colours of its own.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.theme_cards/">alto.ui.theme_cards</a></td>
+      <td>The card of a theme in the settings.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.theme_editor/">alto.ui.theme_editor</a></td>
+      <td>The editor for a theme of the user’s own: a name, and a colour for every part of its light and dark versions.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.transition_preview/">alto.ui.transition_preview</a></td>
+      <td>A preview of a transition for the settings.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.transitions/">alto.ui.transitions</a></td>
+      <td>The transitions between the exercises and the lessons on the home page.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.update_flow/">alto.ui.update_flow</a></td>
+      <td>Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.widgets/">alto.ui.widgets</a></td>
+      <td>Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.</td>
+    </tr>
+  </tbody>
+</table>
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

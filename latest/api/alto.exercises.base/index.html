@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.exercises.base · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.exercises.base · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.base/" aria-current="page">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.exercises.base</h1>
+        
+<p>Exercise framework. To add an exercise: subclass Exercise, decorate with @register.</p>
+
+<p>An <code class="language-plaintext highlighter-rouge">Exercise</code> makes <code class="language-plaintext highlighter-rouge">Question</code> objects. The <code class="language-plaintext highlighter-rouge">Question</code> says what to show (a staff, a keyboard or only text), which
+buttons to offer and which answer is right. The exercise screen and the scheduler work with those two classes only, so
+a new exercise needs no new interface code.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; question = Question("Name this note.", choices=["C", "D", "E"], answer="D")
+&gt;&gt;&gt; question.check("D"), question.check("E")
+(True, False)
+</code></pre>
+
+<h2 id="question">Question</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Question</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">staff</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'treble'</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">keyboard</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">key_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">keyboard_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">octaves</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">second_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Octave'</span><span class="p">,</span>
+    <span class="n">joiner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">construct</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">accept</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">show_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">build_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">construct_scale</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">construct_steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">exact_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">circle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">circle_kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">circle_ring</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'outer'</span><span class="p">,</span>
+    <span class="n">circle_key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">required</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>One question, with what to show for it and which answer is right.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">prompt</code> (<em>str</em>): The text shown above the question; may be empty.</li>
+  <li><code class="language-plaintext highlighter-rouge">choices</code> (<em>list of str</em>): The answer buttons, in the order they should be offered. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">answer</code> (<em>str</em>): The right answer, one of <code class="language-plaintext highlighter-rouge">choices</code> (or the note name for a “place this note” question). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff</code> (<em>list of list of Note</em>): What to draw on the staff: each inner list is one chord or note. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str, default “treble”</em>): The clef to draw on. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">explanation</code> (<em>str, default ““</em>): Text shown after the answer to say why it is right. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (single notes only). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">grid</code> (<em>dict of str to tuple of (int, int) or None</em>): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keyboard</code> (<em>Note or None</em>): A piano key to highlight, instead of drawing a staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_staff</code> (<em>bool, default False</em>): Draw <code class="language-plaintext highlighter-rouge">key</code> as a small key-signature staff above the keyboard. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keyboard_range</code> (<em>tuple of (int, int) or None</em>): The keys (MIDI numbers, inclusive) the keyboard picture should show. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octaves</code> (<em>list of str or None</em>): When set, the answer is a choice button plus one of these second-row buttons. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">second_label</code> (<em>str, default “Octave”</em>): What the second row of buttons is called. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">joiner</code> (<em>str, default ““</em>): Put between the two parts to make the answer (“” for a note and its octave: C + 4 gives C4). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">construct</code> (<em>Note or None</em>): The note to place on the staff: the answer is a position, not a button. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Show the sharp, natural and flat buttons for a construct question. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accept</code> (<em>tuple of str</em>): Other answers that count as right, such as the enharmonic name of a black key. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">show_staff</code> (<em>bool, default False</em>): Draw the staff even with no notes on it, to show only its clef and key signature. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text written on the staff itself, under the music, in place of the prompt above it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">build_key</code> (<em>bool, default False</em>): The learner builds the key signature <code class="language-plaintext highlighter-rouge">key</code> on a blank staff with the fork widget, instead of pressing a button. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">construct_scale</code> (<em>list of Note or None</em>): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">construct_steps</code> (<em>list of str or None</em>): The steps between the notes of <code class="language-plaintext highlighter-rouge">construct_scale</code>, each “W” (whole) or “H” (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">exact_octave</code> (<em>bool, default False</em>): The scale has to be placed in the octave asked, not in any octave. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">circle</code> (<em>int or None</em>): A question on the circle of fifths: the place asked about, clockwise from C at 0. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">circle_kind</code> (<em>str, default ““</em>): What the circle asks: “major” (the relative major of a minor key), “minor” (the relative minor of a major key) or “numeral” (the Roman numeral of a chord of a key). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">circle_ring</code> (<em>str, default “outer”</em>): Which ring the cell asked about is in: “outer” for the major keys or “inner” for the minor ones. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">circle_key</code> (<em>int or None</em>): For a Roman numeral question, the place of the key whose chords they are. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">required</code> (<em>tuple of str</em>): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Which note is this?", choices=["C", "D", "E"], answer="D", staff=[[Note.parse("D4")]])
+&gt;&gt;&gt; q.check("D")
+True
+&gt;&gt;&gt; Question.from_dict(q.to_dict()) == q  # a question can be stored and asked again
+True
+</code></pre>
+
+<h3 id="questioncheck_placed">Question.check_placed</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_placed</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether a note placed on the staff is the one asked for.</p>
+
+<p>The spelling and octave must match exactly, so G♯4 is not A♭4.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note</em>): The note the learner placed.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if it equals the note in <code class="language-plaintext highlighter-rouge">construct</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Place C4", choices=[], answer="C4", construct=Note.parse("C4"))
+&gt;&gt;&gt; q.check_placed(Note.parse("C4"))
+True
+&gt;&gt;&gt; q.check_placed(Note.parse("B#3"))  # sounds the same, but is spelled differently
+False
+</code></pre>
+
+<h3 id="questioncheck_scale">Question.check_scale</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_scale</span><span class="p">(</span><span class="n">notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether the notes placed on the staff are the scale asked for.</p>
+
+<p>The spelling and the order of the notes must match, so a G♯ is not an A♭. Unless <code class="language-plaintext highlighter-rouge">exact_octave</code> is set the octave
+does not matter, as long as the whole scale is in the same one: the same scale an octave higher or lower is right,
+but a scale with one note in the wrong octave is not. With <code class="language-plaintext highlighter-rouge">exact_octave</code> the scale has to be in the octave asked.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">notes</code> (<em>list of Note</em>): The notes the learner placed, left to right.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if they are the notes of <code class="language-plaintext highlighter-rouge">construct_scale</code>, all moved by the same whole number of octaves (or, with <code class="language-plaintext highlighter-rouge">exact_octave</code>, not moved at all).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; asked = [Note.parse("C4"), Note.parse("D4")]
+&gt;&gt;&gt; q = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked)
+&gt;&gt;&gt; q.check_scale([Note.parse("C4"), Note.parse("D4")])
+True
+&gt;&gt;&gt; q.check_scale([Note.parse("C5"), Note.parse("D5")])  # the same scale, an octave higher
+True
+&gt;&gt;&gt; q.check_scale([Note.parse("C4"), Note.parse("D5")])  # one note in another octave
+False
+&gt;&gt;&gt; q.check_scale([Note.parse("C4"), Note.parse("D4"), Note.parse("E4")])
+False
+&gt;&gt;&gt; exact = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked, exact_octave=True)
+&gt;&gt;&gt; exact.check_scale([Note.parse("C4"), Note.parse("D4")]), exact.check_scale([Note.parse("C5"), Note.parse("D5")])
+(True, False)
+</code></pre>
+
+<h3 id="questioncheck_steps">Question.check_steps</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_steps</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether the steps marked between the notes of a scale are the right ones.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>list of str</em>): The steps the learner marked, left to right, each “W” or “H”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the steps are not asked, or if they are those of <code class="language-plaintext highlighter-rouge">construct_steps</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Mark the steps.", choices=[], answer="W H", construct_steps=["W", "H"])
+&gt;&gt;&gt; q.check_steps(["W", "H"]), q.check_steps(["H", "W"]), q.check_steps(["W"])
+(True, False, False)
+&gt;&gt;&gt; Question("No steps.", choices=[], answer="").check_steps([])
+True
+</code></pre>
+
+<h3 id="questioncheck_built">Question.check_built</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_built</span><span class="p">(</span><span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether a key signature built with the fork is the one asked for.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">count</code> (<em>int</em>): The signature the learner built: that many sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if it equals <code class="language-plaintext highlighter-rouge">key</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
+&gt;&gt;&gt; q.check_built(2), q.check_built(-2)
+(True, False)
+</code></pre>
+
+<h3 id="questioncheck">Question.check</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">choice</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether a chosen answer is right.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">choice</code> (<em>str</em>): The text of the button that was pressed.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if it is the answer or one of the other accepted answers.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("", choices=["F♯", "G♭"], answer="F♯", accept=("G♭",))
+&gt;&gt;&gt; q.check("F♯"), q.check("G♭"), q.check("A")
+(True, True, False)
+&gt;&gt;&gt; both = Question("", choices=["B", "C♭", "D"], answer="B", required=("B", "C♭"))
+&gt;&gt;&gt; both.check("B"), both.check("C♭"), both.check("D")  # each is right, but both are needed: see `complete`
+(True, True, False)
+</code></pre>
+
+<h3 id="questioncomplete">Question.complete</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">complete</span><span class="p">(</span><span class="n">given</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether the answers given so far are all of those needed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">given</code> (<em>set of str</em>): The right answers given so far.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: For an ordinary question, whether the answer has been given; for one with several <code class="language-plaintext highlighter-rouge">required</code>, whether all have.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; both = Question("", choices=["B", "C♭"], answer="B", required=("B", "C♭"))
+&gt;&gt;&gt; both.complete({"B"}), both.complete({"C♭", "B"})
+(False, True)
+&gt;&gt;&gt; Question("", choices=["C"], answer="C").complete({"C"})
+True
+</code></pre>
+
+<h3 id="questionitem_key">Question.item_key</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">item_key</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return a stable identity for the question, so the same one can be recognised when it comes round again.</p>
+
+<p>It covers what is asked and where it is drawn, but not the note value or the order of the buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: A 20-character hexadecimal string.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; a = Question("Name it.", choices=["C", "D"], answer="C")
+&gt;&gt;&gt; b = Question("Name it.", choices=["D", "C"], answer="C")  # the same question, buttons in another order
+&gt;&gt;&gt; a.item_key() == b.item_key()
+True
+&gt;&gt;&gt; len(a.item_key())
+20
+</code></pre>
+
+<h3 id="questionto_dict">Question.to_dict</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">to_dict</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Return the question as plain data, so it can be stored and asked again.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict</em>: The fields of the question, with notes as dictionaries and tuples as lists.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; data = Question("Name it.", choices=["C"], answer="C", staff=[[Note.parse("C4")]]).to_dict()
+&gt;&gt;&gt; data["answer"], data["staff"]
+('C', [[{'octave': 4, 'letter': 0, 'accidental': 0}]])
+</code></pre>
+
+<h3 id="questionfrom_dict">Question.from_dict</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Rebuild a question from the data that <code class="language-plaintext highlighter-rouge">to_dict</code> made.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">d</code> (<em>dict</em>): The stored data. Questions saved by older versions, which may carry a <code class="language-plaintext highlighter-rouge">play</code> field, are accepted.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The question.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Name it.", choices=["C", "D"], answer="C", key=2, accept=("D",))
+&gt;&gt;&gt; Question.from_dict(q.to_dict()) == q
+True
+</code></pre>
+
+<h2 id="note_from">note_from</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_from</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Rebuild a note from stored data.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">v</code> (<em>dict or None</em>): A note as the dictionary <code class="language-plaintext highlighter-rouge">to_dict</code> stores, or None.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note or None</em>: The note, or None if <code class="language-plaintext highlighter-rouge">v</code> was None.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; note_from({"octave": 4, "letter": 0, "accidental": 0})
+Note(octave=4, letter=0, accidental=0)
+&gt;&gt;&gt; note_from(None) is None
+True
+</code></pre>
+
+<h2 id="signature">signature</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Describe the exercise settings in force, so a stored question is only asked again under the settings it was made for.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">*parts</code> (<em>object</em>): The settings to describe: dataclasses, dictionaries, lists, sets and plain values, nested as needed.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: A JSON string that is the same for equal settings, however their sets and dictionaries happen to be ordered.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; signature({"clefs": {"bass", "treble"}}, 3)
+'[{"clefs": ["bass", "treble"]}, 3]'
+&gt;&gt;&gt; signature({"clefs": {"treble", "bass"}}, 3) == signature({"clefs": {"bass", "treble"}}, 3)
+True
+</code></pre>
+
+<h2 id="exercise">Exercise</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Exercise</span><span class="p">(</span><span class="n">ABC</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>What every exercise provides: its name, how it makes questions and how long a good answer takes.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The title shown on the home screen and in the exercise list.</li>
+  <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str</em>): The heading it is listed under.</li>
+  <li><code class="language-plaintext highlighter-rouge">description</code> (<em>str</em>): One line saying what the exercise is for.</li>
+  <li><code class="language-plaintext highlighter-rouge">par_seconds</code> (<em>float, default 5.0</em>): How long a good first answer takes; much quicker earns credit and much slower counts against the question.</li>
+  <li><code class="language-plaintext highlighter-rouge">has_sound</code> (<em>bool, default True</em>): False for an exercise that makes no sound at all, whatever the sound button says.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(Exercise):
+...     name = "Demo"
+...     def generate(self, rng):
+...         return Question("Pick A.", choices=["A", "B"], answer="A")
+&gt;&gt;&gt; Demo().generate(random.Random(0)).answer
+'A'
+</code></pre>
+
+<h3 id="exercisesettings_signature">Exercise.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return what identifies the settings that shape the questions.</p>
+
+<p>A stored question is only asked again while this is unchanged. Exercises with settings override it.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: An identifier; empty for an exercise with no settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(Exercise):
+...     def generate(self, rng):
+...         return Question("?", choices=["A"], answer="A")
+&gt;&gt;&gt; Demo().settings_signature()
+''
+</code></pre>
+
+<h3 id="exerciserefresh">Exercise.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Bring a stored question up to date with how the exercise draws its questions now.</p>
+
+<p>A question that is asked again comes from the copy stored when it was first asked, which an older version may
+have drawn differently. The default leaves it as it is.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question as it was stored.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The question as the exercise would draw it today.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(Exercise):
+...     def generate(self, rng):
+...         return Question("?", choices=["A"], answer="A")
+&gt;&gt;&gt; q = Question("?", choices=["A"], answer="A")
+&gt;&gt;&gt; Demo().refresh(q) is q
+True
+</code></pre>
+
+<h3 id="exerciseinstructions">Exercise.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the help text shown from the exercise’s help button.</p>
+
+<p>Exercises override it to describe themselves.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML; by default the one-line description.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(Exercise):
+...     description = "Spot the note."
+...     def generate(self, rng):
+...         return Question("?", choices=["A"], answer="A")
+&gt;&gt;&gt; Demo().instructions()
+'Spot the note.'
+</code></pre>
+
+<h3 id="exercisegenerate">Exercise.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Make one new question.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator to use, so tests can ask for a repeatable question.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The question.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; q = NoteNames().generate(random.Random(1))
+&gt;&gt;&gt; q.answer in q.choices
+True
+</code></pre>
+
+<h2 id="register">register</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">register</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">Exercise</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Add an exercise to <code class="language-plaintext highlighter-rouge">REGISTRY</code>, next to the others of its category.</p>
+
+<p>The categories come in the order they first appear, so the home screen and the exercise list can show each category
+once, with all its exercises under it. Used as a class decorator.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cls</code> (<em>type of Exercise</em>): The exercise class.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>type of Exercise</em>: The same class, so the decorator can be applied to a class definition.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; @register
+... class Demo(Exercise):
+...     name = "Demo"
+...     category = "A category no other exercise has"
+...     def generate(self, rng):
+...         return Question("?", choices=["A"], answer="A")
+&gt;&gt;&gt; REGISTRY[-1] is Demo
+True
+&gt;&gt;&gt; REGISTRY.remove(Demo)
+</code></pre>
+
+<h2 id="pick_distractors">pick_distractors</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">pick_distractors</span><span class="p">(</span>
+    <span class="n">correct</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">pool</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Choose wrong answers to offer alongside the right one, and shuffle them all.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>str</em>): The right answer. It is always in the result.</li>
+  <li><code class="language-plaintext highlighter-rouge">pool</code> (<em>list of str</em>): Where the wrong answers come from; repeats and the right answer are ignored. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">n</code> (<em>int</em>): How many wrong answers to include (fewer if the pool has fewer). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator used to choose and shuffle. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The right answer and up to <code class="language-plaintext highlighter-rouge">n</code> others, in a random order.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; choices_ = pick_distractors("C", pool=["C", "D", "E", "F"], n=2, rng=random.Random(0))
+&gt;&gt;&gt; len(choices_), "C" in choices_
+(3, True)
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

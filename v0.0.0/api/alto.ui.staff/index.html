@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.staff · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.staff/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.staff · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.staff/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/" aria-current="page">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.staff</h1>
+        
+<p>The staff: lines, clefs, key signatures and notes, drawn on a rounded white “paper”.</p>
+
+<p><code class="language-plaintext highlighter-rouge">StaffWidget</code> draws one staff, or a grand staff with a brace, in any of the seven clefs. Notes and key signatures are
+placed by their staff step (<code class="language-plaintext highlighter-rouge">Note.diatonic</code>) measured from the bottom line of the clef, and are engraved in the notation
+font chosen in the settings.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; key_signature_positions("treble", sign=1)
+['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
+&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="treble", key=2)
+&gt;&gt;&gt; staff.clef, staff.key
+('treble', 2)
+</code></pre>
+
+<h2 id="key_signature_positions">key_signature_positions</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_signature_positions</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">sign</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the notes the sharps or flats of a key signature are written on, in a clef.</p>
+
+<p>Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
+pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
+the treble, bass, alto and tenor clefs, and works out the rest.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">BOTTOM_LINE</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">sign</code> (<em>int</em>): 1 for sharps, -1 for flats. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: Seven note names with octaves, in the order the accidentals appear.</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>ValueError</em>: If no placement keeps all seven accidentals on the staff.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; key_signature_positions("treble", sign=1)
+['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
+&gt;&gt;&gt; key_signature_positions("bass", sign=-1)
+['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
+</code></pre>
+
+<h2 id="draw_key_signature">draw_key_signature</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_key_signature</span><span class="p">(</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">bottom</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
+    <span class="n">step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">KEY_STEP</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">font</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the sharps or flats of a key signature, left to right.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">p</code> (<em>QPainter</em>): The painter to draw with.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef, which decides where on the staff each accidental goes. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): The key signature: that many sharps if positive, flats if negative; nothing is drawn for 0. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">x</code> (<em>float</em>): The left edge of the first accidental, in pixels. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">bottom</code> (<em>float</em>): The y position of the staff’s bottom line, in pixels. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">gap</code> (<em>float</em>): The distance between staff lines, in pixels. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): The colour to draw in. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">step</code> (<em>float, default KEY_STEP</em>): The horizontal spacing between accidentals. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">size</code> (<em>float, default 2.0</em>): The size of the built-in characters, in staff gaps. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">font</code> (<em>str or None, default None</em>): A SMuFL font to engrave them in; None uses the built-in sharp and flat characters. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
+&gt;&gt;&gt; image = QImage(200, 120, QImage.Format.Format_ARGB32)
+&gt;&gt;&gt; image.fill(QColor("white"))
+&gt;&gt;&gt; painter = QPainter(image)
+&gt;&gt;&gt; draw_key_signature(painter, clef="treble", key=3, x=10, bottom=80, gap=12, color=QColor("black"), font="bravura")
+&gt;&gt;&gt; painter.end()
+True
+&gt;&gt;&gt; any(image.pixelColor(x_, y_).lightness() &lt; 128 for x_ in range(10, 60) for y_ in range(20, 100))
+True
+</code></pre>
+
+<h2 id="staffwidget">StaffWidget</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffWidget</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">16.0</span><span class="p">,</span>
+    <span class="n">side</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span>
+    <span class="n">note_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.0</span><span class="p">,</span>
+    <span class="n">compact</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">max_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>A staff with notes, a clef, a key signature and, optionally, a caption.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GAP</code> (<em>float</em>): The distance between staff lines, in pixels.</li>
+  <li><code class="language-plaintext highlighter-rouge">side</code> (<em>float</em>): The space at the left and right edges.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_offset</code> (<em>float</em>): Where the notes start, from the left edge.</li>
+  <li><code class="language-plaintext highlighter-rouge">margin</code> (<em>float</em>): The space kept above and below the staff for ledger lines, in gaps.</li>
+  <li><code class="language-plaintext highlighter-rouge">compact</code> (<em>bool</em>): Size the widget to fit instead of the 220 px default.</li>
+  <li><code class="language-plaintext highlighter-rouge">max_step</code> (<em>float or None</em>): The most width each column of notes may take.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef being drawn (“treble”, “bass”, “alto”, “tenor”, “soprano”, “mezzo”, “baritone” or “grand”).</li>
+  <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>list of list of Note</em>): The notes drawn; each inner list is one chord or note.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_color</code> (<em>QColor or None</em>): The colour of the notes; None draws them in the notation style’s ink.</li>
+  <li><code class="language-plaintext highlighter-rouge">column_colors</code> (<em>dict of int to QColor</em>): The colour of particular columns of notes, by position from 0; they are drawn in these instead of <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">wedges</code> (<em>list of str</em>): The step between each column and the next, such as “W” or “H”, drawn as two lines rising from the notes to a point above them, with the letter over the point; “” for none there.</li>
+  <li><code class="language-plaintext highlighter-rouge">wedge_colors</code> (<em>dict of int to QColor</em>): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_style</code> (<em>NotationStyle or None</em>): A style to use instead of the one chosen in the settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): The key signature drawn: sharps if positive, flats if negative.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_room</code> (<em>int</em>): How many sharps or flats’ worth of room to keep for the signature at least, so that a capped staff does not change width as the signature does. 0 keeps room only for the one drawn.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str</em>): The note value drawn.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str</em>): Text written under the staff, inside the paper.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.show_notes([[Note.parse("E4")], [Note.parse("G4")]], clef="treble")
+&gt;&gt;&gt; len(staff.columns)
+2
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create an empty treble staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">gap</code> (<em>float, default 16.0</em>): The distance between staff lines, in pixels. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">side</code> (<em>float, default 20.0</em>): The space at the left and right edges. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_offset</code> (<em>float, default 100.0</em>): Where the notes start, from the left edge. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">margin</code> (<em>float, default 8.0</em>): The space kept above and below the staff for ledger lines, in gaps. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">compact</code> (<em>bool, default False</em>): Size the widget to fit instead of the 220 px default. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">max_step</code> (<em>float or None, default None</em>): The most width each column of notes may take: the staff then stops growing once its notes would be spread wider than that, so a few notes stay easy to read in a wide window. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget(gap=8.0, compact=True).GAP
+8.0
+</code></pre>
+
+<h3 id="staffwidgetshow_notes">StaffWidget.show_notes</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_notes</span><span class="p">(</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'treble'</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show some notes, with a clef and a key signature.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>list of list of Note</em>): The notes: each inner list is one note or chord, drawn left to right.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str, default “treble”</em>): The clef, or “grand” for a grand staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (stems are only drawn for single notes). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text to write under the staff. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="bass", key=-1, value="quarter", caption="_ Major")
+&gt;&gt;&gt; staff.clef, staff.key, staff.value, staff.caption
+('bass', -1, 'quarter', '_ Major')
+</code></pre>
+
+<h3 id="staffwidgetsizehint">StaffWidget.sizeHint</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
+</code></pre></div></div>
+
+<p>Return the size the staff would like.</p>
+
+<p>A capped staff asks for its full capped width, so a layout that centres it gives it that much.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QSize</em>: The capped width and the minimum height for a staff with a <code class="language-plaintext highlighter-rouge">max_step</code>; otherwise Qt’s default.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget(max_step=120.0)
+&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]])
+&gt;&gt;&gt; staff.sizeHint().width()
+500
+</code></pre>
+
+<h3 id="staffwidgetset_note_color">StaffWidget.set_note_color</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_note_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the notes in a colour, for feedback, or back in the style’s ink.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The colour; None to use the notation style’s ink.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.set_note_color(QColor("#2e7d32"))
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; staff.note_color.name()
+'#2e7d32'
+&gt;&gt;&gt; staff.set_note_color(None)
+&gt;&gt;&gt; staff.note_color is None
+True
+</code></pre>
+
+<h3 id="staffwidgetstaff_bottoms">StaffWidget.staff_bottoms</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_bottoms</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return where each staff is drawn.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to float</em>: Clef name to the y position of that staff’s bottom line, in pixels. A grand staff has a “treble” and a “bass”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.resize(400, 400)
+&gt;&gt;&gt; staff.staff_bottoms()
+{'treble': 232.0}
+</code></pre>
+
+<h3 id="staffwidgetpaintevent">StaffWidget.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the paper, the staff lines, the clef, the key signature, the notes and the caption.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.resize(400, 400)
+&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="treble")
+&gt;&gt;&gt; staff.grab().toImage().pixelColor(200, 5).name()  # the white paper
+'#ffffff'
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

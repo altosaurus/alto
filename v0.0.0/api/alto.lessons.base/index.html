@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.lessons.base · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.lessons.base/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.lessons.base · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.lessons.base/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/" aria-current="page">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.lessons.base</h1>
+        
+<p>What a lesson is made of: steps, and the small tasks inside them.</p>
+
+<p>A task is a soft exercise. It cannot be failed: a wrong answer gets a hint, a second wrong answer gets the answer, and nothing is
+scored or recorded.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; task = Task(prompt="Click the key.", cells=frozenset({("outer", 1)}), hint="Count.", explanation="One step.")
+&gt;&gt;&gt; task.check(("outer", 1)), task.check(("outer", 2))
+(True, False)
+</code></pre>
+
+<h2 id="task">Task</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Task</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">hint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(),</span>
+    <span class="n">choices</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">correct</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>One small question inside a lesson step.</p>
+
+<p>It is answered either by clicking a cell of the circle (<code class="language-plaintext highlighter-rouge">cells</code>) or by pressing one of <code class="language-plaintext highlighter-rouge">choices</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">prompt</code> (<em>str</em>): The question, as simple HTML.</li>
+  <li><code class="language-plaintext highlighter-rouge">hint</code> (<em>str</em>): What to say after a wrong answer.</li>
+  <li><code class="language-plaintext highlighter-rouge">explanation</code> (<em>str</em>): What to say after the right answer, or once the answer has been given away.</li>
+  <li><code class="language-plaintext highlighter-rouge">cells</code> (<em>frozenset of tuple of (str, int)</em>): The cells that are right, each a ring (“outer” or “inner”) and a place clockwise from the top.</li>
+  <li><code class="language-plaintext highlighter-rouge">choices</code> (<em>tuple of str</em>): The buttons to choose from, for a question that is not answered on the circle.</li>
+  <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>str</em>): The right button, if there are choices.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Task(prompt="Which?", hint="Count.", explanation="Five.", choices=("A", "B"), correct="B").check("B")
+True
+</code></pre>
+
+<h3 id="taskcheck">Task.check</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether an answer is right.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">answer</code> (<em>tuple of (str, int) or str</em>): A cell that was clicked, or the text of a button that was pressed.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True for a right answer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Task(prompt="?", hint="", explanation="", cells=frozenset({("inner", 0)})).check(("inner", 0))
+True
+&gt;&gt;&gt; Task(prompt="?", hint="", explanation="", choices=("A", "B"), correct="A").check(("outer", 0))
+False
+</code></pre>
+
+<h2 id="step">Step</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Step</span><span class="p">(</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">circle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'none'</span><span class="p">,</span>
+    <span class="n">hear</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...],</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">hear_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Hear it'</span><span class="p">,</span>
+    <span class="n">make_task</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">],</span> <span class="n">Task</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+    <span class="n">closing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>One page of a lesson.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">title</code> (<em>str</em>): The heading.</li>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): What to read, as simple HTML.</li>
+  <li><code class="language-plaintext highlighter-rouge">circle</code> (<em>str</em>): How the circle of fifths is shown: “none” for no circle, “rest” for a picture that does not respond, “explore” for one that can be clicked, or “walk” for one that can also be walked round with two buttons.</li>
+  <li><code class="language-plaintext highlighter-rouge">hear</code> (<em>tuple of tuple of str</em>): Notes to play from a Hear it button, as columns of note names such as “C4”; empty for no button.</li>
+  <li><code class="language-plaintext highlighter-rouge">hear_label</code> (<em>str</em>): What the Hear it button says.</li>
+  <li><code class="language-plaintext highlighter-rouge">make_task</code> (<em>callable or None</em>): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.</li>
+  <li><code class="language-plaintext highlighter-rouge">closing</code> (<em>bool</em>): True for the last step, which offers to practise.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Step(title="Hello", text="&lt;p&gt;Hi.&lt;/p&gt;").circle
+'none'
+</code></pre>
+
+<h2 id="lesson">Lesson</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Lesson</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">about</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Step</span><span class="p">,</span> <span class="p">...],</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A lesson: a title, a line about it, and its steps.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): A short name to save progress under.</li>
+  <li><code class="language-plaintext highlighter-rouge">title</code> (<em>str</em>): The title.</li>
+  <li><code class="language-plaintext highlighter-rouge">about</code> (<em>str</em>): A line or two saying what the lesson covers.</li>
+  <li><code class="language-plaintext highlighter-rouge">summary</code> (<em>str</em>): A short line for its card.</li>
+  <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str</em>): The group it belongs to on the list, such as “Scales &amp; Keys”.</li>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>tuple of Step</em>): The pages, in order.</li>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): The class name of the exercise that practises it, which the last page offers.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; steps = (Step(title="One", text=""),)
+&gt;&gt;&gt; lesson = Lesson(
+...     key="demo",
+...     title="Demo",
+...     about="A demo.",
+...     summary="Demo.",
+...     category="Demos",
+...     steps=steps,
+...     exercise="NoteNames",
+... )
+&gt;&gt;&gt; lesson.steps[0].title
+'One'
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

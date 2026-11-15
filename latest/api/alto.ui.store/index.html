@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.store · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.store/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.store · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.store/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.store/" aria-current="page">store</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/latest/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.store</h1>
+        
+<p>The application’s saved settings (a thin layer over <code class="language-plaintext highlighter-rouge">QSettings</code>).</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings = store()
+&gt;&gt;&gt; settings.setValue("demo/count", 3)
+&gt;&gt;&gt; int_value(settings, key="demo/count", default=0)
+3
+&gt;&gt;&gt; settings.remove("demo")
+</code></pre>
+
+<h2 id="store">store</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">store</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSettings</span>
+</code></pre></div></div>
+
+<p>Return the app’s saved settings.</p>
+
+<p>The first time it is opened under the name “alto” it brings across anything saved under the old name (“mtheory”), so a
+rename does not reset anyone’s preferences. If <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> is set the settings are kept in a file in that folder instead,
+and nothing is brought across from the system’s own.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QSettings</em>: The settings, kept in the user’s configuration folder or in <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings = store()
+&gt;&gt;&gt; settings.setValue("demo/name", "Ada")
+&gt;&gt;&gt; str(store().value("demo/name"))
+'Ada'
+&gt;&gt;&gt; settings.remove("demo")
+</code></pre>
+
+<h2 id="int_value">int_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">int_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Read an integer setting.</p>
+
+<p><code class="language-plaintext highlighter-rouge">QSettings</code> hands back whatever was saved, which may be a number or its text.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">default</code> (<em>int</em>): What to return if nothing is saved. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The saved value, or <code class="language-plaintext highlighter-rouge">default</code> if there is none (or it is not a number, text or similar).</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>ValueError</em>: If the saved text is not a whole number.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/count", "42")
+&gt;&gt;&gt; int_value(settings_, key="demo/count", default=0)
+42
+&gt;&gt;&gt; int_value(settings_, key="demo/missing", default=7)
+7
+&gt;&gt;&gt; settings_.setValue("demo/count", "many")
+&gt;&gt;&gt; int_value(settings_, key="demo/count", default=0)
+Traceback (most recent call last):
+    ...
+ValueError: invalid literal for int() with base 10: 'many'
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="text_value">text_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">text_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Read a saved setting as text.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">default</code> (<em>str</em>): What to return if nothing is saved. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The saved text, or <code class="language-plaintext highlighter-rouge">default</code> if there is none (or it is not text).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/name", "viola")
+&gt;&gt;&gt; text_value(settings_, key="demo/name", default="piano")
+'viola'
+&gt;&gt;&gt; text_value(settings_, key="demo/missing", default="piano")
+'piano'
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="export_settings">export_settings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">export_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return every saved preference, by key, for a backup.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to object</em>: Each key Alto has saved and its value. Qt byte arrays come back as <code class="language-plaintext highlighter-rouge">bytes</code> and lists as lists.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/name", "Ada")
+&gt;&gt;&gt; export_settings()["demo/name"]
+'Ada'
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="import_settings">import_settings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">import_settings</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Replace every saved preference with the ones from a backup, so the preferences are exactly as they were.</p>
+
+<p>Preferences saved now that the backup does not have are removed. The marker that stops old “mtheory” preferences being
+brought across again is kept, so an old installation’s leftovers cannot leak back in.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>mapping of str to object</em>): The preferences, by key, as <code class="language-plaintext highlighter-rouge">export_settings</code> returned them.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; import_settings({"demo/name": "Ada", "demo/count": 3})
+&gt;&gt;&gt; store().value("demo/name"), int_value(store(), key="demo/count", default=0)
+('Ada', 3)
+&gt;&gt;&gt; store().remove("demo")
+&gt;&gt;&gt; store().remove("")
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

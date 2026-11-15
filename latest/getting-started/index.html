@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting started · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/getting-started/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="Getting started · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/getting-started/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/latest/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/latest/">
+      <img src="/alto/latest/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/latest/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/getting-started/" aria-current="page">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/api/">API reference</a>
+              
+            </li>
+            
+            <li><a href="/alto/latest/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>Getting started</h1>
+        <h2 id="what-you-need">What you need</h2>
+
+<ul>
+  <li>Python 3.11 or newer.</li>
+  <li>A desktop operating system that runs Qt 6: Linux, macOS or Windows.</li>
+  <li>Alto installs <a href="https://doc.qt.io/qtforpython-6/">PySide6</a> (6.8 or newer) and numpy for you.</li>
+</ul>
+
+<p>The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs installing. Only the
+“Noto Music” style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
+change the notation style in <a href="/alto/latest/settings/">Settings</a>.</p>
+
+<h2 id="download-and-install">Download and install</h2>
+
+<p>Each release on the <a href="https://github.com/altosaurus/alto/releases">Releases page</a> has a Linux download and a Windows installer. They
+carry their own Python and Qt, so nothing else needs installing.</p>
+
+<p><strong>Linux.</strong> Download <code class="language-plaintext highlighter-rouge">alto-&lt;version&gt;-linux-x86_64.tar.gz</code>, unpack it, and in the folder it makes run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh install.sh <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>This copies Alto to <code class="language-plaintext highlighter-rouge">~/.local/opt/alto</code>, links it as <code class="language-plaintext highlighter-rouge">~/.local/bin/alto</code>, and adds Alto to your application menu, for you only, with no
+root. To update, unpack the newer download and run the same command. <code class="language-plaintext highlighter-rouge">sh install.sh uninstall</code> removes Alto and keeps your practice
+history and settings; add <code class="language-plaintext highlighter-rouge">--purge</code> to delete those too (use <strong>Export backup…</strong> first if you might want them back).</p>
+
+<p><strong>Windows.</strong> Download <code class="language-plaintext highlighter-rouge">alto-&lt;version&gt;-windows-x64-setup.exe</code> and run it. It installs for you only, with no administrator prompt, adds
+Alto to the Start menu, and lists it in Settings → Apps. Windows may say it protects your PC because the publisher is unknown: the
+installer is not signed yet. Choose <strong>More info</strong>, then <strong>Run anyway</strong>. To update, run the newer installer. To uninstall, use
+Settings → Apps; the uninstaller asks whether to also remove your practice history and settings.</p>
+
+<p>Each release has a <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> file to check the downloads with. <strong>Check for updates…</strong> in the menu tells a packaged copy when a
+newer release exists and offers to open its download page.</p>
+
+<h2 id="install-and-run">Install and run</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/genedan/alto.git
+<span class="nb">cd </span>alto
+python <span class="nt">-m</span> venv .venv
+.venv/bin/pip <span class="nb">install</span> <span class="nt">-e</span> <span class="nb">.</span>
+.venv/bin/python <span class="nt">-m</span> alto
+</code></pre></div></div>
+
+<p>On Windows the virtual environment’s programs are in <code class="language-plaintext highlighter-rouge">.venv\Scripts\</code> instead of <code class="language-plaintext highlighter-rouge">.venv/bin/</code>. After installing, the
+command <code class="language-plaintext highlighter-rouge">alto</code> also starts the app from inside the environment.</p>
+
+<h2 id="install-as-a-program-linux">Install as a program (Linux)</h2>
+
+<p>To have Alto in your application menu, separate from a clone you are working in, use the install script. It needs
+<a href="https://docs.astral.sh/uv/">uv</a>. It installs the newest version from GitHub into its own environment.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh scripts/alto-install.sh <span class="nb">install</span>     <span class="c"># install, and add Alto to the application menu</span>
+sh scripts/alto-install.sh update      <span class="c"># fetch the newest version</span>
+sh scripts/alto-install.sh uninstall   <span class="c"># remove the program, the menu entry and the icon</span>
+</code></pre></div></div>
+
+<p>Uninstalling keeps your practice history and settings (see <a href="/alto/latest/data/">Your data</a>). Add <code class="language-plaintext highlighter-rouge">--purge</code> to
+delete those too; use <strong>Export backup…</strong> first if you might want them back.</p>
+
+<h3 id="updating-from-the-menu">Updating from the menu</h3>
+
+<p>You can also update from inside Alto: open the menu (☰) and choose <strong>Check for updates…</strong>. By default Alto asks GitHub for the
+newest <strong>release</strong> and compares it with the version you have (<strong>Settings → Updates</strong> shows it). If yours is the newest, it
+says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
+OK.</p>
+
+<ul>
+  <li><strong>A copy installed with the script</strong> installs the new release itself.</li>
+  <li><strong>A packaged copy</strong> (the Linux tarball installed with <code class="language-plaintext highlighter-rouge">install.sh</code>, or the Windows installer) replaces itself. It downloads the
+new release, checks it (see below), tells you that Alto will close, install it and open again when you press OK, and does so.
+A Linux folder that you only unpacked and ran from is not an install, so it is offered the page where the release can be
+downloaded, as is a build that has no way to check a download.</li>
+  <li><strong>A copy you run from a clone</strong> is updated with <code class="language-plaintext highlighter-rouge">git pull</code>.</li>
+</ul>
+
+<p><strong>How an update is checked.</strong> Every release has a file of checksums (<code class="language-plaintext highlighter-rouge">SHA256SUMS</code>) and a signature of it
+(<code class="language-plaintext highlighter-rouge">SHA256SUMS.sig</code>), made with a private key that only the release workflow has. Alto carries the matching public key. It installs a
+download only if the signature on the list is valid, the signed list names that file, and the file’s SHA-256 hash is the one
+listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.</p>
+
+<p>To get changes as soon as they are merged, before they are released, tick <strong>Follow the main branch</strong> in <strong>Settings →
+Updates</strong>. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
+script, and may be less stable than a release; a packaged copy always follows releases.</p>
+
+<p>An update from the menu does not refresh the application-menu entry or icon; <code class="language-plaintext highlighter-rouge">sh scripts/alto-install.sh update</code> does that too.</p>
+
+<h2 id="first-launch">First launch</h2>
+
+<p>The first time you open Alto it asks you to create a profile.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/home.png" alt="The home screen after creating a profile" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/home-dark.png" alt="The home screen after creating a profile" loading="lazy" />
+  
+</figure>
+
+<p>Type a name and press <strong>Create profile</strong>. There is no password, and the name is only a label that keeps your history
+separate from anyone else who uses the same computer. Next time Alto opens straight into the profile you used last.</p>
+
+<p>To switch to someone else, or add another profile, open the menu (☰) and choose <strong>Profile</strong>.</p>
+
+<h2 id="your-first-session">Your first session</h2>
+
+<ol>
+  <li>Click an exercise on the home screen.</li>
+  <li>Answer by clicking a button, or by pressing the number key shown in its tooltip.</li>
+  <li>A correct answer turns green and plays the note. A wrong one turns red. Try again until you get it.</li>
+  <li>The counter at the top shows how many you have right and your current streak.</li>
+</ol>
+
+<p>The sidebar on the left switches between exercises. The button at the top left of the exercise hides and shows it. The sliders button at the top right opens the
+exercise’s own settings, and the <strong>?</strong> button explains the exercise.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/note-identification-dark.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
+  <figcaption>An exercise screen. The row of buttons below the staff holds the possible answers.</figcaption>
+</figure>
+
+<h2 id="running-the-tests">Running the tests</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.venv/bin/pip <span class="nb">install</span> <span class="nt">-e</span> <span class="s2">".[dev]"</span>
+.venv/bin/pytest
+</code></pre></div></div>
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.settings_panel · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.settings_panel/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.settings_panel · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.settings_panel/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.0/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.0/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.0/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.0/">
+      <img src="/alto/v0.0.0/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.0" data-root="/alto"><span class="version-name">v0.0.0</span></div>
+      <div class="theme">
+        <button type="button" class="icon-button" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><span class="icon" aria-hidden="true"></span></button>
+        <div class="theme-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="light">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="dark">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-choice="system">System</button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/v0.0.0/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.settings_panel/" aria-current="page">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/v0.0.0/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/v0.0.0/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.settings_panel</h1>
+        
+<p>The settings panels that slide in beside an exercise, and the small widgets they are built from.</p>
+
+<p>Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures …) that each lead to a page. Edits
+are live: they change the shared settings object, are saved, and a <code class="language-plaintext highlighter-rouge">changed</code> signal tells the exercise to ask a new
+question. This module also loads and saves each exercise’s settings.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; _key_label(2)
+'D  ·  2♯'
+&gt;&gt;&gt; row = _Row("Clefs")
+&gt;&gt;&gt; row.title.text()
+'&lt;b&gt;Clefs&lt;/b&gt;'
+</code></pre>
+
+<h2 id="load_note_names">load_note_names</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_note_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved note identification settings into the shared settings object.</p>
+
+<p>Settings saved by an older version, which had a switch between the grand staff and single clefs, are converted. Anything
+in the saved data that is not valid is ignored.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.note_names
+&gt;&gt;&gt; cfg_.clefs = {"alto"}
+&gt;&gt;&gt; save_note_names()
+&gt;&gt;&gt; cfg_.clefs = {"treble"}
+&gt;&gt;&gt; load_note_names()
+&gt;&gt;&gt; cfg_.clefs
+{'alto'}
+&gt;&gt;&gt; cfg_.clefs = {"treble", "bass"}
+&gt;&gt;&gt; save_note_names()
+</code></pre>
+
+<h2 id="save_note_names">save_note_names</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_note_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the note identification settings.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.note_names
+&gt;&gt;&gt; cfg_.naming = "solfege"
+&gt;&gt;&gt; save_note_names()
+&gt;&gt;&gt; str(store().value("noteNames/naming"))
+'solfege'
+&gt;&gt;&gt; cfg_.naming = "letters"
+&gt;&gt;&gt; save_note_names()
+</code></pre>
+
+<h2 id="rangeeditor">RangeEditor</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RangeEditor</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">low</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">high</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>A staff showing the lowest and highest note asked for a clef.</p>
+
+<p>Arrows on the left move the lower bound, arrows on the right move the upper bound.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">edited</code> (<em>Signal</em>): Emitted with the clef key, the lowest note and the highest note (as staff steps) after a change.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The clef.</li>
+  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest note asked, as a staff step (<code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest note asked.</li>
+  <li><code class="language-plaintext highlighter-rouge">limits</code> (<em>tuple of (int, int)</em>): The furthest the bounds may go.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff</code> (<em>StaffWidget</em>): Shows the two notes.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; editor = RangeEditor("treble", low=28, high=34)
+&gt;&gt;&gt; editor.caption_text.text()
+'&lt;b&gt;C4 – B4&lt;/b&gt;'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the editor for a clef’s range.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The clef, a key of <code class="language-plaintext highlighter-rouge">RANGE_LIMITS</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest note asked, as a staff step. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest note asked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the editor. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
+True
+</code></pre>
+
+<h2 id="keydiagram">KeyDiagram</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyDiagram</span><span class="p">(</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>A small fork showing which key signatures are selected.</p>
+
+<p>C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
+Selected keys are filled, the rest are hollow.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">DOT, PITCH, ROW_GAP, PAD</code> (<em>float</em>): The dot radius and the spacing, in pixels.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The selected key signatures: sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 2}).toolTip()
+'C, D'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the diagram.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int or None, default None</em>): The key signatures to show as selected.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram().keys
+set()
+</code></pre>
+
+<h3 id="keydiagramset_keys">KeyDiagram.set_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose which key signatures are shown as selected.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): Sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; diagram = KeyDiagram()
+&gt;&gt;&gt; diagram.set_keys({2, -1, 0})
+&gt;&gt;&gt; diagram.toolTip()
+'C, D, F'
+</code></pre>
+
+<h3 id="keydiagrampaintevent">KeyDiagram.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw a dot for each key signature, filled when selected.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 1, -1}).grab().isNull()
+False
+</code></pre>
+
+<h2 id="switch">Switch</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Switch</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QAbstractButton</code></p>
+
+<p>A pill-shaped on/off switch whose knob slides across when toggled.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">W, H</code> (<em>int</em>): The switch’s size, in pixels.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
+&gt;&gt;&gt; switch.setChecked(True)
+&gt;&gt;&gt; switch.isChecked()
+True
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create a switch that is off.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Switch().isChecked()
+False
+</code></pre>
+
+<h3 id="switchsetchecked">Switch.setChecked</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">setChecked</span><span class="p">(</span><span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Turn the switch on or off without animating, as when a setting is loaded.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">on</code> (<em>bool</em>): The new state.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
+&gt;&gt;&gt; switch.setChecked(True)
+&gt;&gt;&gt; switch._pos
+1.0
+</code></pre>
+
+<h3 id="switchpaintevent">Switch.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the track, tinted between off and on, and the knob.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Switch().grab().isNull()
+False
+</code></pre>
+
+<h3 id="switchsizehint">Switch.sizeHint</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
+</code></pre></div></div>
+
+<p>Return the switch’s fixed size.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QSize</em>: <code class="language-plaintext highlighter-rouge">W</code> by <code class="language-plaintext highlighter-rouge">H</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Switch().sizeHint()
+PySide6.QtCore.QSize(42, 24)
+</code></pre>
+
+<h2 id="slidestack">SlideStack</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SlideStack</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QStackedWidget</code></p>
+
+<p>A stacked widget whose pages slide in from the right (going deeper) or the left (going back).</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
+&gt;&gt;&gt; _ = stack.addWidget(QWidget())
+&gt;&gt;&gt; _ = stack.addWidget(QWidget())
+&gt;&gt;&gt; stack.sliding
+False
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create an empty stack.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().count()
+0
+</code></pre>
+
+<h3 id="slidestacksliding">SlideStack.sliding</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">sliding</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether a page is sliding in.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True from the start of a slide until it finishes.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().sliding
+False
+</code></pre>
+
+<h3 id="slidestackslide_to">SlideStack.slide_to</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide_to</span><span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Slide to another page.</p>
+
+<p>Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
+slide, or for the page already showing, is ignored.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): The page to go to.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
+&gt;&gt;&gt; _ = stack.addWidget(QWidget())
+&gt;&gt;&gt; _ = stack.addWidget(QWidget())
+&gt;&gt;&gt; stack.slide_to(1)
+&gt;&gt;&gt; stack.sliding
+True
+</code></pre>
+
+<h2 id="exercisesettingspanel">ExerciseSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ExerciseSettingsPanel</span><span class="p">(</span><span class="n">QWidget</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>What every exercise’s settings pane has in common: it says when a setting has been edited.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after any setting is edited.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = ExerciseSettingsPanel()
+&gt;&gt;&gt; got = []
+&gt;&gt;&gt; _ = panel.changed.connect(lambda: got.append(1))
+&gt;&gt;&gt; panel.changed.emit()
+True
+&gt;&gt;&gt; got
+[1]
+</code></pre>
+
+<h2 id="notenamesettingspanel">NoteNameSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">NoteNameSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the note identification exercise: a menu leading to a page for each group of settings.</p>
+
+<p>Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names and an Accidentals switch) and a page for each.
+Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>NoteNameSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_boxes</code> (<em>dict of int to QCheckBox</em>): The key signature checkboxes.</li>
+  <li><code class="language-plaintext highlighter-rouge">value_boxes</code> (<em>dict of str to QCheckBox</em>): The note value checkboxes.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming_radios</code> (<em>dict of str to QRadioButton</em>): The letters and solfège choices.</li>
+  <li><code class="language-plaintext highlighter-rouge">range_editors</code> (<em>dict of str to RangeEditor</em>): The range editor of each clef in use, built when the Range page opens.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteNameSettingsPanel(NoteNameSettings())
+&gt;&gt;&gt; panel.cfg.active_clefs()
+['treble', 'bass']
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>NoteNameSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteNameSettingsPanel(NoteNameSettings())
+&gt;&gt;&gt; panel.stack.count()  # the menu and five pages
+6
+</code></pre>
+
+<h2 id="load_keyboard">load_keyboard</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_keyboard</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved keyboard exercise settings into the shared settings object.</p>
+
+<p>A saved range that is not a valid span of keys, or a key list with nothing usable in it, is ignored.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.keyboard
+&gt;&gt;&gt; cfg_.require_octave = True
+&gt;&gt;&gt; save_keyboard()
+&gt;&gt;&gt; cfg_.require_octave = False
+&gt;&gt;&gt; load_keyboard()
+&gt;&gt;&gt; cfg_.require_octave
+True
+&gt;&gt;&gt; cfg_.require_octave = False
+&gt;&gt;&gt; save_keyboard()
+</code></pre>
+
+<h2 id="save_keyboard">save_keyboard</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_keyboard</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the keyboard exercise settings.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.keyboard
+&gt;&gt;&gt; save_keyboard()
+&gt;&gt;&gt; int(store().value("keyboard/low")) == cfg_.low
+True
+</code></pre>
+
+<h2 id="keychecklist">KeyChecklist</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyChecklist</span><span class="p">(</span>
+    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>Checkboxes for the 15 major keys, flats on the left and sharps on the right.</p>
+
+<p>At least one stays checked. Each is labelled with a picture of its signature.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is ticked or unticked.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of int to QCheckBox</em>): The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({0, 2}).selected() == {0, 2}
+True
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the checklist.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to tick at first.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; len(KeyChecklist({0}).boxes)
+15
+</code></pre>
+
+<h3 id="keychecklistselected">KeyChecklist.selected</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the ticked key signatures.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set of int</em>: Sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({-3, 1}).selected() == {-3, 1}
+True
+</code></pre>
+
+<h2 id="keysignaturepage">KeySignaturePage</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignaturePage</span><span class="p">(</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after the switch or a key is changed.</li>
+  <li><code class="language-plaintext highlighter-rouge">switch_row</code> (<em>_ToggleRow</em>): The “Use key signatures” switch.</li>
+  <li><code class="language-plaintext highlighter-rouge">checklist</code> (<em>KeyChecklist</em>): The keys; only enabled while the switch is on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(True, selected={0, 1})
+&gt;&gt;&gt; page.enabled(), page.selected() == {0, 1}
+(True, True)
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the page.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">enabled</code> (<em>bool</em>): Whether key signatures are on.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to tick at first. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(False, selected={0})
+&gt;&gt;&gt; page.checklist.isEnabled()
+False
+</code></pre>
+
+<h3 id="keysignaturepageenabled">KeySignaturePage.enabled</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">enabled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether key signatures are switched on.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the switch is on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={0}).enabled()
+True
+</code></pre>
+
+<h3 id="keysignaturepageselected">KeySignaturePage.selected</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the ticked key signatures.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set of int</em>: Sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
+True
+</code></pre>
+
+<h2 id="keyboardsettingspanel">KeyboardSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the keyboard exercise: a menu with a page for the range of keys.</p>
+
+<p>The menu has Range, Black keys, Octave number and Key signatures. Edits are live: each changes the settings, saves them
+and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">span</code> (<em>KeyboardSpan</em>): The miniature piano on the Range page, which can be dragged to choose the keys.</li>
+  <li><code class="language-plaintext highlighter-rouge">low_label, high_label</code> (<em>QLabel</em>): The names of the lowest and highest key asked.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_page</code> (<em>KeySignaturePage</em>): The key signature sub-page.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardSettingsPanel(settings.KeyboardSettings())
+&gt;&gt;&gt; panel.low_label.text(), panel.high_label.text()
+('C3', 'C5')
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettingsPanel(settings.KeyboardSettings()).stack.count()  # the menu, the range and the keys
+3
+</code></pre>
+
+<h2 id="load_construction">load_construction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved note construction settings into the shared settings object.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("construction/accidentals", "true")
+&gt;&gt;&gt; load_construction()
+&gt;&gt;&gt; settings.construction.accidentals
+True
+&gt;&gt;&gt; store().setValue("construction/accidentals", "false")
+&gt;&gt;&gt; load_construction()
+</code></pre>
+
+<h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ConstructionSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the note construction exercise: a menu with a page for the staff and one for the keys.</p>
+
+<p>The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ConstructionSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes, including the grand staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_page</code> (<em>KeySignaturePage</em>): The key signature sub-page.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+&gt;&gt;&gt; sorted(panel.boxes)[:3]
+['alto', 'baritone', 'bass']
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ConstructionSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
+3
+</code></pre>
+
+<h2 id="load_arpeggio">load_arpeggio</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_arpeggio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved arpeggio settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("arpeggio/types", "major")
+&gt;&gt;&gt; load_arpeggio()
+&gt;&gt;&gt; settings.arpeggio.types
+{'major'}
+&gt;&gt;&gt; settings.arpeggio.types = {"major", "minor", "dominant 7th", "diminished 7th"}
+&gt;&gt;&gt; store().setValue("arpeggio/types", ",".join(settings.arpeggio.active_types()))
+</code></pre>
+
+<h2 id="choicechecklist">ChoiceChecklist</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ChoiceChecklist</span><span class="p">(</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>Checkboxes for a list of choices, optionally under small headings. At least one stays checked.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is ticked or unticked.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict</em>): The checkbox of each choice, by its key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
+&gt;&gt;&gt; checklist = ChoiceChecklist(groups, selected={"major"})
+&gt;&gt;&gt; checklist.selected()
+{'major'}
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the checklist.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">groups</code> (<em>list of tuple of (str, list of tuple of (object, str))</em>): The headings and, under each, the choices as (key, label); an empty heading shows none.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set</em>): The keys to tick at first. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
+&gt;&gt;&gt; # noinspection PyTypeChecker
+&gt;&gt;&gt; sorted(checklist.boxes)
+[0, 1]
+</code></pre>
+
+<h3 id="choicechecklistselected">ChoiceChecklist.selected</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span>
+</code></pre></div></div>
+
+<p>Return the ticked choices.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set</em>: The keys of the ticked boxes.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
+{0, 1}
+</code></pre>
+
+<h2 id="arpeggiosettingspanel">ArpeggioSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArpeggioSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ArpeggioSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the arpeggio exercise: a menu with a page for each group of settings.</p>
+
+<p>The menu has Clefs, Arpeggio types, Inversions and Key signatures. Edits are live: each changes the settings, saves them
+and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ArpeggioSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes.</li>
+  <li><code class="language-plaintext highlighter-rouge">types</code> (<em>ChoiceChecklist</em>): The chord types.</li>
+  <li><code class="language-plaintext highlighter-rouge">inversions</code> (<em>ChoiceChecklist</em>): The inversions.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_page</code> (<em>KeySignaturePage</em>): The key signature sub-page.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = ArpeggioSettingsPanel(settings.ArpeggioSettings())
+&gt;&gt;&gt; panel.types_row.value.text()
+'4 of 9'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ArpeggioSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettingsPanel(settings.ArpeggioSettings()).stack.count()  # the menu and four pages
+5
+</code></pre>
+
+<h2 id="load_key_signatures">load_key_signatures</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_key_signatures</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved key signature identification settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("keySignatures/clefs", "alto")
+&gt;&gt;&gt; load_key_signatures()
+&gt;&gt;&gt; settings.key_signatures.clefs
+{'alto'}
+&gt;&gt;&gt; settings.key_signatures.clefs = {"treble", "bass"}
+&gt;&gt;&gt; store().setValue("keySignatures/clefs", "treble,bass")
+</code></pre>
+
+<h2 id="load_key_construction">load_key_construction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_key_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved key signature construction settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("keyConstruction/keys", "-3,4")
+&gt;&gt;&gt; load_key_construction()
+&gt;&gt;&gt; settings.key_construction.active_keys()
+[-3, 4]
+&gt;&gt;&gt; settings.key_construction.keys = set(range(-7, 8))
+&gt;&gt;&gt; store().remove("keyConstruction")
+</code></pre>
+
+<h2 id="load_scale_construction">load_scale_construction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved scale construction settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("scaleConstruction/keys", "1,-1")
+&gt;&gt;&gt; store().setValue("scaleConstruction/steps", "true")
+&gt;&gt;&gt; store().setValue("scaleConstruction/octave", "true")
+&gt;&gt;&gt; load_scale_construction()
+&gt;&gt;&gt; settings.scale_construction.active_keys(), settings.scale_construction.steps, settings.scale_construction.octave
+([-1, 1], True, True)
+&gt;&gt;&gt; settings.scale_construction.keys, settings.scale_construction.steps = set(range(-7, 8)), False
+&gt;&gt;&gt; settings.scale_construction.octave = False
+&gt;&gt;&gt; store().remove("scaleConstruction")
+</code></pre>
+
+<h2 id="keysignaturesettingspanel">KeySignatureSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'keySignatures'</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of a key signature exercise: a menu with a page for each group of settings.</p>
+
+<p>The same panel serves key signature identification, key signature construction and scale construction, each saving
+under its own name.</p>
+
+<p>The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
+the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
+changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeySignatureSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): What the settings are saved under, such as “keySignatures”.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes.</li>
+  <li><code class="language-plaintext highlighter-rouge">modes</code> (<em>ChoiceChecklist</em>): The scales (major, minor and the modes).</li>
+  <li><code class="language-plaintext highlighter-rouge">key_list</code> (<em>KeyChecklist</em>): The key signatures (of the scales, in scale construction).</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_key_list</code> (<em>KeyChecklist or None</em>): The key signatures that may be drawn on the staff; only scale construction has it.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
+&gt;&gt;&gt; panel.modes_row.value.text()
+'2 of 7'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeySignatureSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str, default “keySignatures”</em>): What the settings are saved under. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
+4
+</code></pre>
+
+<h2 id="settings_inversion_names">settings_inversion_names</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_inversion_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
+</code></pre></div></div>
+
+<p>Return the inversions as they are written in the settings.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of str</em>: ‘Root position’, ‘1st inversion’, ‘2nd inversion’ and ‘3rd inversion’.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_inversion_names()
+('Root position', '1st inversion', '2nd inversion', '3rd inversion')
+</code></pre>
+
+<h2 id="load_circle">load_circle</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_circle</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved circle of fifths settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("circle/questions", "numeral,nonsense")
+&gt;&gt;&gt; load_circle()
+&gt;&gt;&gt; settings.circle.questions
+{'numeral'}
+&gt;&gt;&gt; settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+&gt;&gt;&gt; store().remove("circle")
+</code></pre>
+
+<h2 id="circlesettingspanel">CircleSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the circle of fifths exercise: which kinds of question to ask.</p>
+
+<p>The menu has one row, Questions, which opens a page of switches. Edits are live: each changes the settings, saves them and
+emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its page.</li>
+  <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>_Row</em>): The menu row.</li>
+  <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>ChoiceChecklist</em>): The kinds of question: relative major, relative minor and Roman numerals.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = CircleSettingsPanel(settings.CircleSettings())
+&gt;&gt;&gt; panel.questions_row.value.text()
+'3 of 3'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu and one page
+2
+</code></pre>
+
+<h2 id="settings_panel_for">settings_panel_for</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Return the settings panel for an exercise.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): The exercise.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>ExerciseSettingsPanel or None</em>: A panel with a <code class="language-plaintext highlighter-rouge">changed</code> signal, or None for an exercise with no settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import IntervalNames, NoteNames
+&gt;&gt;&gt; type(settings_panel_for(NoteNames())).__name__
+'NoteNameSettingsPanel'
+&gt;&gt;&gt; settings_panel_for(IntervalNames()) is None
+True
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector(".icon").textContent = effective() === "dark" ? "\u263E" : "\u2600";
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest(".theme")) { open(false); } });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !menu.hidden) { open(false); button.focus(); } });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>
