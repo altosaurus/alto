@@ -99,7 +99,7 @@ def test_the_python_versions_in_the_readme_badge_are_the_ones_the_tests_run_on()
 
 def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_picture() -> None:
     """
-    Check the five badges with a logo: each names a real workflow (or the Python versions) and carries its picture in its address.
+    Check the six badges with a logo: each names a real workflow (or the Python versions) and carries its picture in its address.
 
     Shields has a one-colour pytest and Python logo of its own, but the colour ones, and the pictures for Pyright,
     ASV and Jekyll, are not in its set. So each picture is carried in the badge's address. They must stay small,
@@ -108,6 +108,7 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     for label, workflow in (
         ("Tests", "tests.yml"),
+        ("Ruff", "ruff.yml"),
         ("Pyright", "pyright.yml"),
         ("ASV", "performance.yml"),
         ("Docs", "docs.yml"),
@@ -117,7 +118,7 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
         badge, link = found.groups()
         assert f"/{workflow}?" in badge and (ROOT / ".github" / "workflows" / workflow).is_file()
         assert f"/actions/workflows/{workflow}" in link or label == "Docs"
-    for label in ("Tests", "Pyright", "ASV", "Docs", "Python"):
+    for label in ("Tests", "Ruff", "Pyright", "ASV", "Docs", "Python"):
         badge = re.search(rf"\[!\[{label}]\((https://img\.shields\.io/[^)]+)\)]", readme)
         assert badge is not None, f"the README has no {label} badge"
         logo = re.search(r"[?&]logo=([^&)\s]+)", badge.group(1))
@@ -127,3 +128,16 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
         data = base64.b64decode(image.split(",", 1)[1])
         assert data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) < 2000
         assert len(logo.group(1)) < 2000  # the whole address stays short enough for GitHub to fetch it
+
+
+def test_the_ruff_workflow_runs_the_version_of_the_pre_commit_hook_on_every_change() -> None:
+    """Check that the Ruff workflow pins the hook's version, checks the formatting and the rules, and runs on pull requests."""
+    workflow = (ROOT / ".github" / "workflows" / "ruff.yml").read_text(encoding="utf-8")
+    hook = re.search(
+        r"astral-sh/ruff-pre-commit\s+rev: v([0-9.]+)",
+        (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8"),
+    )
+    assert hook is not None
+    assert f'pip install "ruff=={hook.group(1)}"' in workflow  # the hook and the workflow hold the code to the same rules
+    assert "ruff format --check ." in workflow and "ruff check ." in workflow
+    assert "pull_request:" in workflow and "branches: [main]" in workflow

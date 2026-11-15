@@ -1,0 +1,31 @@
+name: Ruff
+
+# Checks the code with Ruff, its formatting and then its rules, on every pull request and every push to main. Until now Ruff only ran in the
+# pre-commit hook, so a change made without the hook installed was not checked. The version is the one of the hook (.pre-commit-config.yaml),
+# so that both hold the code to the same rules; a test keeps the two the same.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Ruff
+        run: python -m pip install "ruff==0.17.5"
+
+      - name: Check the formatting
+        run: ruff format --check .
+
+      - name: Check the code
+        run: ruff check .
