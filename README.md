@@ -64,7 +64,7 @@ Every answer goes into a local database under your profile. Alto scores each que
 
 ## Free and open source
 
-Alto is released under the [MIT License](LICENSE). There are no accounts, no tracking and no network connections.
+Alto is released under the [MIT License](LICENSE). There are no accounts and no tracking.
 Your history is one SQLite file on your computer that you can back up, move or open with any SQLite tool. The bundled
 music fonts and recordings all come with their licences, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

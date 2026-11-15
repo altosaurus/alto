@@ -2,7 +2,7 @@
 title: alto.ui.circle
 parent: api
 package: alto.ui
-order: 20
+order: 21
 permalink: /api/alto.ui.circle/
 ---
 {% raw %}

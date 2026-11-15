@@ -40,6 +40,15 @@ sh scripts/alto-install.sh uninstall   # remove the program, the menu entry and 
 Uninstalling keeps your practice history and settings (see [Your data]({{ '/data/' | relative_url }})). Add `--purge` to
 delete those too; use **Export backup…** first if you might want them back.
 
+### Updating from the menu
+
+You can also update from inside Alto: open the menu (☰) and choose **Check for updates…**. Alto asks GitHub, the address it
+was installed from, for the newest version. If yours is the newest, it says so. If not, it asks whether to install the update,
+shows its progress, and tells you that Alto will restart when you press OK.
+
+This works for a copy installed with the script. A copy you run from a clone is updated with `git pull`. The menu entry and icon
+are not refreshed by an update from the menu; `sh scripts/alto-install.sh update` does that too.
+
 ## First launch
 
 The first time you open Alto it asks you to create a profile.

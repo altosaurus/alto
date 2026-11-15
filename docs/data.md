@@ -5,7 +5,7 @@ permalink: /data/
 ---
 Everything Alto stores is on your own computer.
 
-- Alto makes **no network connections**. It has no accounts, no sync and no analytics.
+- Alto has no accounts, no sync and no analytics.
 - Your name is only a label for a profile in a local file.
 
 ## Where it is

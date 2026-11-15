@@ -49,6 +49,7 @@ from alto.lessons import LESSONS
 from alto.ui import (
     backup_flow,
     icons,
+    update_flow,
 )
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.database_page import DatabasePage
@@ -258,6 +259,9 @@ class MainWindow(QMainWindow):
         self.import_action.setToolTip("Replace everything with a backup made earlier")
         self.import_action.triggered.connect(self.import_backup)
         self._show_profile()  # shows or hides the three actions that need a profile
+        self.update_action = menu.addAction(svg_icon(icons.UPDATE, color=glyph, size=18), "Check for updates…")
+        self.update_action.setToolTip("See whether a newer Alto is available, and install it")
+        self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
         menu.addSeparator()
         quit_action = menu.addAction(svg_icon(icons.QUIT, color=glyph, size=18), "Quit")
         quit_action.setShortcut(QKeySequence.StandardKey.Quit)
@@ -930,6 +934,16 @@ class MainWindow(QMainWindow):
         """
         if self.learner:
             backup_flow.export_backup(self, db=self.learner.db)
+
+    def check_for_updates(self) -> None:
+        """
+        Ask whether a newer Alto is available; if so and the person agrees, install it and restart.
+
+        Examples
+        --------
+        >>> MainWindow().check_for_updates()  # doctest: +SKIP
+        """
+        update_flow.check_for_updates(self, restart=self.restart_app)
 
     def import_backup(self) -> None:
         """

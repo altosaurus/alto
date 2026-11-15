@@ -1,0 +1,586 @@
+r"""
+Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.
+
+The menu's "Check for updates…" asks the address Alto was installed from for its newest commit. If there is a newer one and the
+person agrees, `uv tool upgrade alto` installs it while its output is shown, and when it has finished Alto says that it will
+restart and does so after OK is pressed. Only a copy that was installed with `scripts/alto-install.sh` can do this; a copy run
+from a source folder is told to update with git.
+
+Examples
+--------
+>>> brief("fatal: unable to access 'https://example.org/': Could not resolve host\n")
+"fatal: unable to access 'https://example.org/': Could not resolve host"
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from PySide6.QtCore import (
+    QObject,
+    QProcess,
+    QProcessEnvironment,
+    Qt,
+    QTimer,
+    Signal,
+)
+from PySide6.QtGui import (
+    QCloseEvent,
+    QFontDatabase,
+    QTextCursor,
+)
+from PySide6.QtWidgets import (
+    QDialog,
+    QLabel,
+    QMessageBox,
+    QPlainTextEdit,
+    QProgressBar,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
+
+from alto import updates
+from alto.updates import (
+    Source,
+    parse_ls_remote,
+    short,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+CHECK_TITLE, UPDATE_TITLE = "Check for updates", "Update Alto"
+CHECK_SECONDS = 20
+QUIET = {
+    "UV_NO_PROGRESS": "1",  # plain lines of text, not a progress bar drawn with control characters
+    "NO_COLOR": "1",
+    "GIT_TERMINAL_PROMPT": "0",  # never wait for a password that nobody can type
+}
+NO_GIT = "Git is needed to check for updates, and it was not found. Install it, then try again."
+NO_UV = "uv is needed to install the update, and it was not found. Install it (https://docs.astral.sh/uv/), then try again."
+
+
+def brief(
+    text: str,
+    *,
+    limit: int = 400,
+) -> str:
+    r"""
+    Cut what a program printed down to what is worth showing in a message: the end of it, without the blank space around it.
+
+    Parameters
+    ----------
+    text : str
+        What the program printed.
+    limit : int, default 400
+        The most characters to keep. Keyword-only.
+
+    Returns
+    -------
+    str
+        The end of the text, at most `limit` characters long.
+
+    Examples
+    --------
+    >>> brief("  one\ntwo  \n")
+    'one\ntwo'
+    >>> brief("x" * 10, limit=4)
+    'xxxx'
+    """
+    kept = text.strip()
+    return kept[-limit:]
+
+
+class CommandRunner(QObject):
+    """
+    Run one program without freezing the window, handing on what it prints as it prints it, and how it ended.
+
+    Attributes
+    ----------
+    output : Signal
+        Emitted with each piece of text the program prints, as it arrives. Its errors are mixed in with it.
+    done : Signal
+        Emitted once, with the exit code and everything the program printed. The exit code is -1 if the program could not be
+        started, was stopped for taking too long, or crashed.
+
+    Examples
+    --------
+    >>> runner = CommandRunner()
+    >>> runner.running
+    False
+    """
+
+    output = Signal(str)
+    done = Signal(int, str)
+
+    def __init__(self, parent: QObject | None = None) -> None:
+        """
+        Make a runner that has not started anything.
+
+        Parameters
+        ----------
+        parent : QObject or None, default None
+            The object that owns it.
+        """
+        super().__init__(parent)
+        self._text = ""
+        self._ended = False
+        self._program = ""
+        self._seconds = 0
+        self._process = QProcess(self)
+        self._process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+        environment = QProcessEnvironment.systemEnvironment()
+        for name, value in QUIET.items():
+            environment.insert(name, value)
+        self._process.setProcessEnvironment(environment)
+        self._process.readyReadStandardOutput.connect(self._read)
+        self._process.finished.connect(self._finished)
+        self._process.errorOccurred.connect(self._failed)
+        self._timer = QTimer(self)
+        self._timer.setSingleShot(True)
+        self._timer.timeout.connect(self._timed_out)
+
+    @property
+    def running(self) -> bool:
+        """
+        Say whether a program has been started and has not yet ended.
+
+        Returns
+        -------
+        bool
+            True while it runs.
+        """
+        return self._process.state() != QProcess.ProcessState.NotRunning
+
+    def start(
+        self,
+        program: str,
+        *,
+        arguments: list[str],
+        seconds: int = 0,
+    ) -> None:
+        """
+        Start a program.
+
+        Parameters
+        ----------
+        program : str
+            The program's path.
+        arguments : list of str
+            What to give it. Keyword-only.
+        seconds : int, default 0
+            Stop it if it has not ended by then; 0 lets it take as long as it takes. Keyword-only.
+
+        Examples
+        --------
+        >>> import sys
+        >>> runner = CommandRunner()
+        >>> runner.start(sys.executable, arguments=["-c", "import time; time.sleep(30)"])
+        >>> runner.stop()
+        >>> runner.running
+        False
+        """
+        self._program, self._text, self._ended, self._seconds = program, "", False, seconds
+        self._process.start(program, arguments)
+        if seconds and not self._ended:
+            self._timer.start(seconds * 1000)
+
+    def stop(self) -> None:
+        """
+        Stop the program, if it is running, without announcing that it has ended.
+
+        Examples
+        --------
+        >>> CommandRunner().stop()
+        """
+        self._ended = True
+        self._timer.stop()
+        if self.running:
+            self._process.kill()
+            self._process.waitForFinished(2000)
+
+    def _read(self) -> None:
+        """Pass on what the program has printed since the last time."""
+        chunk = bytes(self._process.readAllStandardOutput().data()).decode(errors="replace")
+        if chunk and not self._ended:
+            self._text += chunk
+            self.output.emit(chunk)
+
+    def _finished(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        self,
+        code: int,
+        status: QProcess.ExitStatus,
+    ) -> None:
+        """
+        Note that the program has ended.
+
+        Parameters
+        ----------
+        code : int
+            Its exit code.
+        status : QProcess.ExitStatus
+            Whether it ended by itself or crashed.
+        """
+        self._read()
+        self._end(code if status == QProcess.ExitStatus.NormalExit else -1)
+
+    def _failed(self, error: QProcess.ProcessError) -> None:
+        """
+        Note that the program could not be started.
+
+        Parameters
+        ----------
+        error : QProcess.ProcessError
+            What went wrong. Only a program that does not start is dealt with here; one that crashes ends through `_finished`.
+        """
+        if error == QProcess.ProcessError.FailedToStart:
+            self._say(f"Could not start {self._program}.")
+            self._end(-1)
+
+    def _timed_out(self) -> None:
+        """Stop a program that has taken too long, and say so."""
+        if self._ended:
+            return
+        self._process.kill()
+        self._say(f"There was no answer after {self._seconds} seconds.")
+        self._end(-1)
+
+    def _say(self, message: str) -> None:
+        """
+        Add a line of our own to what the program printed.
+
+        Parameters
+        ----------
+        message : str
+            The line.
+        """
+        if not self._ended:
+            self._text += message + "\n"
+            self.output.emit(message + "\n")
+
+    def _end(self, code: int) -> None:
+        """
+        Announce the end, once.
+
+        Parameters
+        ----------
+        code : int
+            The exit code to announce.
+        """
+        if self._ended:
+            return
+        self._ended = True
+        self._timer.stop()
+        self.done.emit(code, self._text)
+
+
+class CheckDialog(QDialog):
+    """
+    A small window that waits while the address Alto came from is asked for its newest commit.
+
+    Attributes
+    ----------
+    commit : str
+        The newest commit, once it is known; empty if it could not be found out.
+    error : str
+        What went wrong, if there is no commit.
+    ended : bool
+        Whether the asking has ended, by an answer, a failure or a cancel.
+    cancelled : bool
+        Whether the person cancelled it.
+    runner : CommandRunner
+        The program that does the asking.
+    """
+
+    def __init__(
+        self,
+        parent: QWidget | None,
+        *,
+        source: Source,
+        git: str,
+    ) -> None:
+        """
+        Build the window; it asks nothing until `run` is called.
+
+        Parameters
+        ----------
+        parent : QWidget or None
+            The window it belongs to.
+        source : Source
+            Where the running copy of Alto came from. Keyword-only.
+        git : str
+            The path of the `git` program. Keyword-only.
+        """
+        super().__init__(parent)
+        self.setWindowTitle(CHECK_TITLE)
+        self.setModal(True)
+        self.commit = ""
+        self.error = ""
+        self.ended = False
+        self.cancelled = False
+        self._command = updates.check_command(source, git=git)
+        lay = QVBoxLayout(self)
+        lay.addWidget(QLabel("Asking for the newest version…"))
+        bar = QProgressBar()
+        bar.setRange(0, 0)
+        bar.setTextVisible(False)
+        bar.setMinimumWidth(320)
+        lay.addWidget(bar)
+        cancel = QPushButton("Cancel")
+        cancel.clicked.connect(self.reject)
+        lay.addWidget(cancel, alignment=Qt.AlignmentFlag.AlignRight)
+        self.runner = CommandRunner(self)
+        self.runner.done.connect(self._answered)
+
+    def run(self) -> None:
+        """
+        Ask, showing the window until there is an answer.
+
+        Examples
+        --------
+        >>> # noinspection PyTypeChecker
+        >>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").cancelled
+        False
+        """
+        program, arguments = self._command
+        self.runner.start(program, arguments=arguments, seconds=CHECK_SECONDS)
+        if not self.ended:
+            self.exec()
+
+    def reject(self) -> None:
+        """Cancel the asking."""
+        if not self.ended:
+            self.cancelled = True
+            self.ended = True
+            self.runner.stop()
+        super().reject()
+
+    def _answered(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        self,
+        code: int,
+        text: str,
+    ) -> None:
+        """
+        Take the answer and close the window.
+
+        Parameters
+        ----------
+        code : int
+            The program's exit code.
+        text : str
+            What it printed.
+        """
+        self.ended = True
+        self.commit = (parse_ls_remote(text) if code == 0 else None) or ""
+        if not self.commit:
+            self.error = brief(text) or "The address did not answer."
+        self.accept()
+
+
+class UpdateDialog(QDialog):
+    """
+    The window that shows an update being installed: a bar that keeps moving, what `uv` prints, and then what comes next.
+
+    It cannot be closed while the update runs, because stopping it half way could leave the installed copy broken. When it has
+    finished it says so, and its one button closes it. After a successful update the caller restarts Alto.
+
+    Attributes
+    ----------
+    status : QLabel
+        What is happening.
+    bar : QProgressBar
+        A bar that keeps moving while the update runs, and fills when it has succeeded.
+    log : QPlainTextEdit
+        What `uv` prints, as it prints it.
+    button : QPushButton
+        Enabled when the update has ended.
+    ended : bool
+        Whether the update has ended.
+    succeeded : bool
+        Whether it ended well.
+    runner : CommandRunner
+        The program that does the update.
+    """
+
+    def __init__(
+        self,
+        parent: QWidget | None,
+        *,
+        uv: str,
+    ) -> None:
+        """
+        Build the window; the update does not start until `run` is called.
+
+        Parameters
+        ----------
+        parent : QWidget or None
+            The window it belongs to.
+        uv : str
+            The path of the `uv` program. Keyword-only.
+        """
+        super().__init__(parent)
+        self.setWindowTitle(UPDATE_TITLE)
+        self.setModal(True)
+        self.ended = False
+        self.succeeded = False
+        self._command = updates.upgrade_command(uv=uv)
+        lay = QVBoxLayout(self)
+        self.status = QLabel("Updating Alto. This can take a minute.")
+        self.status.setWordWrap(True)
+        lay.addWidget(self.status)
+        self.bar = QProgressBar()
+        self.bar.setRange(0, 0)
+        self.bar.setTextVisible(False)
+        lay.addWidget(self.bar)
+        self.log = QPlainTextEdit()
+        self.log.setReadOnly(True)
+        self.log.setMaximumBlockCount(500)
+        self.log.setFont(QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont))
+        self.log.setAccessibleName("Update details")
+        self.log.setMinimumSize(520, 180)
+        lay.addWidget(self.log, 1)
+        self.button = QPushButton("OK")
+        self.button.setEnabled(False)
+        self.button.clicked.connect(self._pressed)
+        lay.addWidget(self.button, alignment=Qt.AlignmentFlag.AlignRight)
+        self.runner = CommandRunner(self)
+        self.runner.output.connect(self._show)
+        self.runner.done.connect(self._ended)
+
+    def run(self) -> bool:
+        """
+        Install the update, showing the window until the person has read how it went.
+
+        Returns
+        -------
+        bool
+            True if it succeeded and OK was pressed, so Alto should restart.
+
+        Examples
+        --------
+        >>> # noinspection PyTypeChecker
+        >>> UpdateDialog(None, uv="uv").succeeded
+        False
+        """
+        program, arguments = self._command
+        self.runner.start(program, arguments=arguments)
+        return self.exec() == QDialog.DialogCode.Accepted and self.succeeded
+
+    def reject(self) -> None:
+        """Close the window, but not while the update is running."""
+        if self.ended:
+            super().reject()
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        """
+        Refuse to close while the update is running.
+
+        Parameters
+        ----------
+        event : QCloseEvent
+            The request to close.
+        """
+        if self.ended:
+            super().closeEvent(event)
+        else:
+            event.ignore()
+
+    def _show(self, chunk: str) -> None:
+        """
+        Add what `uv` printed to the log.
+
+        Parameters
+        ----------
+        chunk : str
+            The text.
+        """
+        self.log.moveCursor(QTextCursor.MoveOperation.End)
+        self.log.insertPlainText(chunk)
+        self.log.ensureCursorVisible()
+
+    def _ended(self, code: int) -> None:
+        """
+        Say how the update went, and let the window be closed.
+
+        Parameters
+        ----------
+        code : int
+            The exit code of `uv`. What it printed is already in the log.
+        """
+        self.ended = True
+        self.succeeded = code == 0
+        self.bar.setRange(0, 1)
+        self.bar.setValue(1 if self.succeeded else 0)
+        if self.succeeded:
+            self.status.setText("Alto has been updated.\n\nIt will restart when you press OK.")
+        else:
+            self.status.setText(
+                "The update did not finish, and Alto will not restart. The details are below. "
+                "You can try again from the menu, or run: sh scripts/alto-install.sh update",
+            )
+            self.button.setText("Close")
+        self.button.setEnabled(True)
+        self.button.setFocus()
+
+    def _pressed(self) -> None:
+        """Close the window: with success if the update worked, so that Alto restarts."""
+        if self.succeeded:
+            self.accept()
+        else:
+            self.reject()
+
+
+def check_for_updates(
+    parent: QWidget,
+    *,
+    restart: Callable[[], None],
+) -> None:
+    """
+    Ask whether a newer Alto is available and, if the person agrees, install it and restart.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The window the questions are asked over.
+    restart : Callable
+        What to do after a successful update to start the new version in place of this one. Keyword-only.
+
+    Examples
+    --------
+    >>> check_for_updates  # doctest: +SKIP
+    """
+    found = updates.updatable(updates.installed_source(), tool=updates.is_tool_install())
+    if not isinstance(found, Source):
+        QMessageBox.information(parent, CHECK_TITLE, found)
+        return
+    git = updates.find_program("git")
+    if git is None:
+        QMessageBox.warning(parent, CHECK_TITLE, NO_GIT)
+        return
+    check = CheckDialog(parent, source=found, git=git)
+    check.run()
+    if check.cancelled:
+        return
+    latest = check.commit
+    if not latest:
+        QMessageBox.warning(parent, CHECK_TITLE, f"Alto could not find out whether there is a newer version.\n\n{check.error}")
+        return
+    if latest == found.commit:
+        QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({short(found.commit)}).")
+        return
+    asked = QMessageBox.question(
+        parent,
+        CHECK_TITLE,
+        f"An update is available ({short(found.commit)} \u2192 {short(latest)}).\n\nUpdate now?",
+        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        QMessageBox.StandardButton.Yes,
+    )
+    if asked != QMessageBox.StandardButton.Yes:
+        return
+    uv = updates.find_program("uv")
+    if uv is None:
+        QMessageBox.warning(parent, UPDATE_TITLE, NO_UV)
+        return
+    if UpdateDialog(parent, uv=uv).run():
+        restart()
