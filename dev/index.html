@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794758985">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794771922">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -447,6 +447,14 @@
             
             
             
+            <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/dev/credits/">License and credits</a></li>
             
             
@@ -457,7 +465,7 @@
       </details>
     </aside>
     <main id="content" class="content">
-      <div class="page-grid" id="page-grid">
+      <div class="page-grid" id="page-grid" data-no-toc>
         <article>
           
           
@@ -471,6 +479,20 @@
   <symbol id="i-chev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" /></symbol>
 </svg>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="ex-NoteNames" viewBox="0 0 24 24"><path d="M2 6H22M2 9.5H22M2 13H22M2 16.5H22M2 20H22" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5" /><ellipse cx="12" cy="11.25" rx="3.4" ry="2.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-KeyboardNotes" viewBox="0 0 24 24"><path d="M5.20 1.46H8.60V21.94Q8.60 22.54 8.00 22.54H5.80Q5.20 22.54 5.20 21.94Z" fill="#ffffff" stroke="#5c5c64" stroke-width="0.7" stroke-linejoin="miter" /><path d="M8.60 1.46H12.00V21.94Q12.00 22.54 11.40 22.54H9.20Q8.60 22.54 8.60 21.94Z" fill="#ffffff" stroke="#5c5c64" stroke-width="0.7" stroke-linejoin="miter" /><path d="M12.00 1.46H15.40V21.94Q15.40 22.54 14.80 22.54H12.60Q12.00 22.54 12.00 21.94Z" fill="#ffffff" stroke="#5c5c64" stroke-width="0.7" stroke-linejoin="miter" /><path d="M15.40 1.46H18.80V21.94Q18.80 22.54 18.20 22.54H16.00Q15.40 22.54 15.40 21.94Z" fill="#ffffff" stroke="#5c5c64" stroke-width="0.7" stroke-linejoin="miter" /><rect x="7.38" y="1.46" width="1.97" height="13.28" rx="0.25" fill="#1a1a1a" /><rect x="11.25" y="1.46" width="1.97" height="13.28" rx="0.25" fill="#1a1a1a" /><rect x="14.41" y="1.46" width="1.97" height="13.28" rx="0.25" fill="#1a1a1a" /></symbol>
+  <symbol id="ex-NoteConstruction" viewBox="0 0 24 24"><path d="M2 11.5H22M2 14.3H22M2 17.1H22M2 19.9H22M2 22.7H22" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5" /><ellipse cx="13" cy="18.5" rx="3.3" ry="1.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><path d="M13 1.6V8M10.2 5.2L13 8L15.8 5.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-IntervalNames" viewBox="0 0 24 24"><ellipse cx="7" cy="6" rx="3.2" ry="2.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="7" cy="18" rx="3.2" ry="2.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><path d="M15.5 6h4v12h-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-KeySignatures" viewBox="0 0 24 24"><path d="M9 4v16M15 3.5v16M5 9.5l14-3M5 16.5l14-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-KeySignatureConstruction" viewBox="0 0 24 24"><path d="M2.5 12H8M8 6.5v11M8 6.5h13M8 17.5h13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><circle cx="15" cy="6.5" r="2.6" fill="currentColor" /></symbol>
+  <symbol id="ex-ScaleDegrees" viewBox="0 0 24 24"><ellipse cx="4.5" cy="18.5" rx="2.4" ry="1.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="9.5" cy="14.8" rx="2.4" ry="1.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="14.5" cy="11.1" rx="2.4" ry="1.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="19.5" cy="7.4" rx="2.4" ry="1.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-ScaleConstruction" viewBox="0 0 24 24"><path d="M2 6.5H22M2 10H22M2 13.5H22M2 17H22" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5" /><ellipse cx="4.5" cy="18.8" rx="2.2" ry="1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="9.5" cy="14.8" rx="2.2" ry="1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="14.5" cy="10.8" rx="2.2" ry="1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="19.5" cy="6.8" rx="2.2" ry="1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-CircleOfFifths" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-dasharray="3.71 1.0" transform="rotate(-93.18 12 12)" /><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-dasharray="1.82 0.8" transform="rotate(-94.58 12 12)" /></symbol>
+  <symbol id="ex-ChordQualities" viewBox="0 0 24 24"><ellipse cx="12" cy="18.5" rx="3.6" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="12" cy="12" rx="3.6" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="12" cy="5.5" rx="3.6" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="ex-ArpeggioNames" viewBox="0 0 24 24"><ellipse cx="4.6" cy="19.0" rx="2.7" ry="1.9" transform="rotate(-20 4.6 19.0)" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" /><path d="M7.0 18.7V6.20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="11.8" cy="15.0" rx="2.7" ry="1.9" transform="rotate(-20 11.8 15.0)" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" /><path d="M14.200000000000001 14.7V4.23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><ellipse cx="19.0" cy="11.0" rx="2.7" ry="1.9" transform="rotate(-20 19.0 11.0)" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" /><path d="M21.4 10.7V2.25" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /><path d="M7.0 6.2L21.6 2.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="butt" fill="none" /></symbol>
+</svg>
+
 <div class="hero">
   <h1>Learn music theory with <span class="hl">Alto</span></h1>
   <p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>
@@ -478,25 +500,25 @@
 </div>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/home.png" alt="Alto's home screen with a card for each exercise" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/home-dark.png" alt="Alto's home screen with a card for each exercise" loading="lazy" />
-  <figcaption>The home screen. Pick an exercise to start.</figcaption>
+  <img class="for-light" src="/alto/dev/assets/img/circle-of-fifths.png" alt="The Circle of Fifths exercise, with the list of exercises open on the left" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/circle-of-fifths-dark.png" alt="The Circle of Fifths exercise, with the list of exercises open on the left" loading="lazy" />
+  <figcaption>An exercise, here the circle of fifths. The list on the left switches between exercises.</figcaption>
 </figure>
 
 <h2 id="what-you-can-practise">What you can practise</h2>
 
 <ul class="cards">
-  <li><strong>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
-  <li><strong>Keyboard Identification</strong>Name the highlighted key on a piano keyboard.</li>
-  <li><strong>Note Construction</strong>Click the staff where a named note belongs.</li>
-  <li><strong>Interval identification</strong>Name the interval between two notes.</li>
-  <li><strong>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
-  <li><strong>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
-  <li><strong>Scale spelling</strong>Spell a degree of a scale or mode.</li>
-  <li><strong>Scale Construction</strong>Place the notes of a named scale on a blank staff, one after another.</li>
-  <li><strong>Circle of Fifths</strong>Find relative majors and minors, and the Roman numerals of a key, on the circle of fifths.</li>
-  <li><strong>Chord quality</strong>Tell triads and seventh chords apart.</li>
-  <li><strong>Arpeggio identification</strong>Name the type and the inversion of a broken chord.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteNames" /></svg>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardNotes" /></svg>Keyboard Identification</strong>Name the highlighted key on a piano keyboard.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteConstruction" /></svg>Note Construction</strong>Click the staff where a named note belongs.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-IntervalNames" /></svg>Interval Identification</strong>Name the interval between two notes.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatures" /></svg>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatureConstruction" /></svg>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleDegrees" /></svg>Scale Spelling</strong>Spell a degree of a scale or mode.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleConstruction" /></svg>Scale Construction</strong>Place the notes of a named scale on a blank staff, one after another.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-CircleOfFifths" /></svg>Circle of Fifths</strong>Find relative majors and minors, and the Roman numerals of a key, on the circle of fifths.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ChordQualities" /></svg>Chord Quality</strong>Tell triads and seventh chords apart.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ArpeggioNames" /></svg>Arpeggio Identification</strong>Name the type and the inversion of a broken chord.</li>
 </ul>
 
 <h2 id="what-makes-it-different">What makes it different</h2>
@@ -542,9 +564,9 @@
       <div class="dl-act"><a class="dl-pill" href="/alto/dev/getting-started/#install-and-run">Run from source</a></div>
     </div>
   </div>
-  <p class="dl-more"><a href="https://github.com/altosaurus/alto/releases/tag/v0.0.0">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="/alto/dev/getting-started/">Getting started</a></p>
+  <p class="dl-more"><a href="/alto/dev/release-notes/">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="/alto/dev/getting-started/">Getting started</a></p>
 </section>
-<script src="/alto/dev/assets/js/downloads.js?v=1794758985" defer=""></script>
+<script src="/alto/dev/assets/js/downloads.js?v=1794771922" defer=""></script>
 
 
           
@@ -624,8 +646,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794758985" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794758985" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794771922" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794771922" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

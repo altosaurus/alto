@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794758985">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794771922">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -447,6 +447,14 @@
             
             
             
+            <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/dev/credits/">License and credits</a></li>
             
             
@@ -827,7 +835,8 @@ soon after merging, because the one copy no longer has <code class="language-pla
 the page you are on is open. Which headings you closed is remembered in the browser.</p>
 
 <p>On a wide screen a page with two or more <code class="language-plaintext highlighter-rouge">##</code> or <code class="language-plaintext highlighter-rouge">###</code> headings gets an “On this page” list beside it, made in the browser from those
-headings, and on a narrower one a box above the text. Nothing needs to be written for it. <code class="language-plaintext highlighter-rouge">docs/api/index.md</code> is written by
+headings, and on a narrower one a box above the text. Nothing needs to be written for it. A page that should not have one, such as the
+home page, says <code class="language-plaintext highlighter-rouge">toc: false</code> in its front matter. <code class="language-plaintext highlighter-rouge">docs/api/index.md</code> is written by
 <code class="language-plaintext highlighter-rouge">scripts/api_docs.py</code>, so change its front matter there.</p>
 
 <p>Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar’s
@@ -891,7 +900,9 @@ fixed bug) adds a line under <strong>Unreleased</strong> in the same pull reques
   <li>Choose the version. Alto uses <a href="https://semver.org/">semantic versioning</a>: a new feature raises the middle number, a fix
 raises the last.</li>
   <li>In <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>, rename <strong>Unreleased</strong> to the version with today’s date (<code class="language-plaintext highlighter-rouge">## [0.1.0] - 2026-12-01</code>), add a new empty
-<strong>Unreleased</strong> above it, and update the two links at the bottom.</li>
+<strong>Unreleased</strong> above it, and update the two links at the bottom. Then run <code class="language-plaintext highlighter-rouge">python scripts/release_notes.py</code>, which rewrites
+the Release notes page of the docs (<code class="language-plaintext highlighter-rouge">docs/release-notes.md</code>) from the changelog; <code class="language-plaintext highlighter-rouge">--check</code> says whether it is up to date, and a
+test fails when it is not, so a changelog line always arrives with its page.</li>
   <li>Set the same version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. <code class="language-plaintext highlighter-rouge">tests/test_changelog.py</code> fails if the changelog has no notes for it.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
@@ -1092,8 +1103,8 @@ use, and which exercise you were in.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794758985" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794758985" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794771922" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794771922" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

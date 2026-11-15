@@ -7,8 +7,11 @@
   var rail = document.getElementById("toc");
   var grid = document.getElementById("page-grid");
   if (!article || !rail || !grid) { return; }
+  if (grid.hasAttribute("data-no-toc")) { return; }  // a page can opt out with `toc: false` in its front matter
 
-  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3"));
+  var heads = Array.prototype.slice.call(article.querySelectorAll("h2, h3")).filter(function (h) {
+    return !h.classList.contains("no-toc");  // a heading can opt out with `{: .no-toc}` under it
+  });
   if (heads.length < 2) { return; }
 
   var used = {};
