@@ -2,7 +2,7 @@
 title: alto.theory.fifths
 parent: api
 package: alto.theory
-order: 16
+order: 17
 permalink: /api/alto.theory.fifths/
 ---
 {% raw %}

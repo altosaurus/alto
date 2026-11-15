@@ -2,7 +2,7 @@
 title: alto.settings
 parent: api
 package: alto
-order: 5
+order: 6
 permalink: /api/alto.settings/
 ---
 {% raw %}
@@ -634,7 +634,11 @@ Return the key signatures that may be drawn on the staff, lowest first.
 ## CircleSettings
 
 ```python
-CircleSettings(questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS)))
+CircleSettings(
+    questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS)),
+    scheme: str = DEFAULT_SCHEME,
+    customs: list[CustomRecord] = field(default_factory=list),
+)
 ```
 
 The settings of the circle of fifths exercise.
@@ -642,6 +646,8 @@ The settings of the circle of fifths exercise.
 **Attributes**
 
 - `questions` (*set of str*): The kinds of question to ask, keys of `CIRCLE_QUESTIONS`: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.
+- `scheme` (*str*): The key of the colour scheme the circle is drawn in: a preset of `alto.circle_schemes` or one of `customs`.
+- `customs` (*list of CustomRecord*): The colour schemes the user made.
 
 **Examples**
 
@@ -650,6 +656,8 @@ The settings of the circle of fifths exercise.
 ['major', 'minor', 'numeral']
 >>> CircleSettings(questions={"numeral"}).active_questions()
 ['numeral']
+>>> CircleSettings().active_scheme().name
+'Cyan to indigo'
 ```
 
 ### CircleSettings.active_questions
@@ -671,5 +679,26 @@ Return the kinds of question to ask, in the order they are listed.
 ['major', 'minor', 'numeral']
 >>> CircleSettings(questions={"minor", "nonsense"}).active_questions()
 ['minor']
+```
+
+### CircleSettings.active_scheme
+
+```python
+def active_scheme() -> Scheme
+```
+
+Return the colour scheme to draw the circle in.
+
+**Returns**
+
+- *Scheme*: The chosen scheme, or the default one if the choice is not a scheme any more (a deleted one of the user's own).
+
+**Examples**
+
+```pycon
+>>> CircleSettings(scheme="midnight").active_scheme().name
+'Midnight'
+>>> CircleSettings(scheme="deleted").active_scheme().key
+'cyan-indigo'
 ```
 {% endraw %}

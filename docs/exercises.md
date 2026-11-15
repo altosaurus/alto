@@ -207,8 +207,9 @@ green with the notes as the right scale plays.
 
 A circle of fifths, drawn as two rings of twelve wedges. The outer ring holds the major keys, with C at the top and each
 step clockwise a fifth higher: G, D, A, E, B, then F♯ at the bottom, and round through the flats back to F. The inner ring
-holds their relative minors, so A minor sits under C major, E minor under G major, and so on. Each wedge has its own colour.
-The disc in the middle shows the staff.
+holds their relative minors, so A minor sits under C major, E minor under G major, and so on. The wedges are coloured by
+key signature: cyan for the flat keys on the left, through royal blue at C, to indigo for the sharp keys on the right (the
+[colours](#colours) can be changed). The disc in the middle, which is the colour of the window, shows the staff.
 
 Every question lights one cell and leaves its answer blank. There are three kinds, and the exercise settings (the sliders
 button) switch each on or off:
@@ -222,6 +223,26 @@ button) switch each on or off:
 All of them are on buttons at the bottom, laid out like the Keyboard Identification screen: the letters in the middle row,
 the sharps above them and the flats below. For the minor keys the buttons read Am, F♯m and so on. You can also type: a letter,
 <kbd>Shift</kbd> and a letter for a sharp, or <kbd>Ctrl</kbd> and a letter for a flat. The numerals are on <kbd>1</kbd> to <kbd>6</kbd>.
+
+### Colours
+
+The **Colours** row of the exercise settings (the sliders button) chooses how the circle is coloured. Pick one of fourteen
+presets, or press **Create your own…** to make one.
+
+- **Cyan to indigo** is the default. Cyan runs through the flat keys, royal blue marks C and indigo the sharp keys, so a
+  key's colour tells you how far it is from C.
+- **Midnight, Deepening, Two blues, Chequer and Glacier** are other blues to go with this site. Glacier, like Paper, has pale
+  wedges with dark names, for a light window.
+- **Sharps and flats, Major and minor, Spectrum, After Scriabin, Ink, Ember, Colour-blind safe and Paper** are the other
+  presets. Colour-blind safe uses six hues from the Okabe and Ito palette.
+
+A scheme of your own is made in one of five ways: **One colour**, **Two rings** (one colour for the major keys and one for the
+minor), **By key signature** (a colour for the flat keys, for C and for the sharp keys, blended between), **Distance from C**
+(a colour for C and one for F♯, mirrored on both sides) and **Round the circle** (one colour, turned a twelfth of the wheel
+for each step). The colours you choose are what a cell looks like when it is lit; the quiet cells are made from them. You can
+choose dark wedges with light names or light wedges with dark names, name the scheme, edit it later and delete it. Your schemes are saved with your other
+settings, up to 24 of them. The colours apply to every picture of the circle: the exercise, the lessons and the reference.
+Changing them keeps the question you are on.
 
 ### Keys with two names
 

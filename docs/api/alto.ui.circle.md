@@ -2,7 +2,7 @@
 title: alto.ui.circle
 parent: api
 package: alto.ui
-order: 22
+order: 23
 permalink: /api/alto.ui.circle/
 ---
 {% raw %}
@@ -94,16 +94,18 @@ def wedge_color(
     *,
     inner: bool,
     lift: float = 0.0,
+    scheme: Scheme | None = None,
 ) -> QColor
 ```
 
-Return the colour of a wedge: its own hue, dark when quiet and bright when it is being talked about.
+Return the colour of a wedge in a colour scheme: quiet when it is not being talked about and bright when it is.
 
 **Parameters**
 
-- `index` (*int*): Which wedge: its hue goes round the colour wheel once, from red at the top.
-- `inner` (*bool*): Whether it is in the inner ring, which is a little darker than the outer one. Keyword-only.
+- `index` (*int*): Which wedge, clockwise from the top.
+- `inner` (*bool*): Whether it is in the inner ring. Keyword-only.
 - `lift` (*float, default 0.0*): How bright it is, from 0 (quiet) to 1 (lit). Keyword-only.
+- `scheme` (*Scheme or None, default None*): The colour scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
 
 **Returns**
 
@@ -112,12 +114,16 @@ Return the colour of a wedge: its own hue, dark when quiet and bright when it is
 **Examples**
 
 ```pycon
->>> wedge_color(0, inner=False, lift=1.0).hue(), wedge_color(6, inner=False).hue()  # red at the top, cyan at the bottom
+>>> from alto.circle_schemes import preset
+>>> spectrum = preset("spectrum")
+>>> wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
 (0, 180)
->>> wedge_color(0, inner=False, lift=1.0).lightness() > wedge_color(0, inner=False).lightness()
+>>> lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
+>>> lit.lightness() > quiet.lightness()
 True
->>> lit = [wedge_color(i, inner=False, lift=1.0) for i in range(12)]  # none looks brighter than white text can stand
->>> all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44 for c in lit)
+>>> # no wedge looks too bright for white names
+>>> every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
+>>> all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44 for c in every)
 True
 ```
 

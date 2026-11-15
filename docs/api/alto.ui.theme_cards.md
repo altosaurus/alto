@@ -2,7 +2,7 @@
 title: alto.ui.theme_cards
 parent: api
 package: alto.ui
-order: 50
+order: 52
 permalink: /api/alto.ui.theme_cards/
 ---
 {% raw %}

@@ -2,7 +2,7 @@
 title: alto.ui.colors
 parent: api
 package: alto.ui
-order: 23
+order: 25
 permalink: /api/alto.ui.colors/
 ---
 {% raw %}
