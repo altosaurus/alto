@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testing, quality and release · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/quality/">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="Testing, quality and release · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/quality/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/dev/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/dev/">
+      <img src="/alto/dev/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span class="icon" aria-hidden="true"></span><span class="label"></span></button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/dev/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/guide/">Developer guide</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                    <li><a href="/alto/dev/guide/orientation/">Getting oriented</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/python/">Python beyond the basics</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/qt/">Qt and PySide6</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/styling/">Styling beyond QtWidgets</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/notation/">Rendering music notation</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/audio/">Computer audio</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/spaced-repetition/">Spaced repetition and adaptive practice</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/animation/">Animation</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/exercises/">Building an exercise</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/data/">Data and persistence</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/quality/" aria-current="page">Testing, quality and release</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/pitfalls/">Pitfalls and debugging</a></li>
+                
+                
+                    <li><a href="/alto/dev/guide/reading/">Glossary and further reading</a></li>
+                
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/dev/api/">API reference</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>Testing, quality and release</h1>
+        <p>This chapter is about how Alto stays correct as it changes: what the tests are, how the automated checks fit together, how
+the documentation is kept honest, and how to release a version. The commands are collected in
+<a href="/alto/dev/guide/orientation/">Getting oriented</a> and <a href="/alto/dev/development/">For developers</a>; here
+is the reasoning.</p>
+
+<h2 id="the-safety-net-in-layers">The safety net, in layers</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>Catches</th>
+      <th>Where</th>
+      <th>When it runs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Doctests</strong></td>
+      <td>a docstring example that no longer matches the code</td>
+      <td>every <code class="language-plaintext highlighter-rouge">&gt;&gt;&gt;</code> line under <code class="language-plaintext highlighter-rouge">alto/</code></td>
+      <td>with <code class="language-plaintext highlighter-rouge">pytest</code></td>
+    </tr>
+    <tr>
+      <td><strong>Unit and widget tests</strong></td>
+      <td>wrong behaviour</td>
+      <td><code class="language-plaintext highlighter-rouge">tests/</code></td>
+      <td>with <code class="language-plaintext highlighter-rouge">pytest</code></td>
+    </tr>
+    <tr>
+      <td><strong>Docstring check</strong></td>
+      <td>missing or incomplete documentation</td>
+      <td><code class="language-plaintext highlighter-rouge">tests/test_docstrings.py</code></td>
+      <td>with <code class="language-plaintext highlighter-rouge">pytest</code></td>
+    </tr>
+    <tr>
+      <td><strong>Docs checks</strong></td>
+      <td>a screenshot or API page out of date</td>
+      <td><code class="language-plaintext highlighter-rouge">tests/test_docs.py</code>, <code class="language-plaintext highlighter-rouge">tests/test_api_docs.py</code>, <code class="language-plaintext highlighter-rouge">scripts/check-docs.sh</code></td>
+      <td>with <code class="language-plaintext highlighter-rouge">pytest</code>, and on push</td>
+    </tr>
+    <tr>
+      <td><strong>Ruff</strong></td>
+      <td>style, unused code, import order, many bugs</td>
+      <td><code class="language-plaintext highlighter-rouge">ruff format</code>, <code class="language-plaintext highlighter-rouge">ruff check</code></td>
+      <td>on commit, in CI</td>
+    </tr>
+    <tr>
+      <td><strong>Pyright</strong></td>
+      <td>type errors</td>
+      <td><code class="language-plaintext highlighter-rouge">scripts/typecheck.sh</code></td>
+      <td>on push, in CI</td>
+    </tr>
+    <tr>
+      <td><strong>PyCharm inspections</strong></td>
+      <td>more type and style warnings</td>
+      <td>the IDE</td>
+      <td>while you edit</td>
+    </tr>
+    <tr>
+      <td><strong>CI</strong></td>
+      <td>all of the above on a clean machine and on every supported Python</td>
+      <td><code class="language-plaintext highlighter-rouge">.github/workflows/</code></td>
+      <td>on every pull request</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A change is done when every layer is green. None of them needs a person to remember anything.</p>
+
+<h2 id="the-tests">The tests</h2>
+
+<p><code class="language-plaintext highlighter-rouge">pytest</code> is configured in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>: it looks in <code class="language-plaintext highlighter-rouge">tests/</code> and <code class="language-plaintext highlighter-rouge">alto/</code>, and runs docstring examples as tests
+(<code class="language-plaintext highlighter-rouge">--doctest-modules</code>), ignoring differences in whitespace and allowing <code class="language-plaintext highlighter-rouge">...</code> as a wildcard in expected output. A run takes about
+a minute and covers every line of <code class="language-plaintext highlighter-rouge">alto/</code>.</p>
+
+<h3 id="layout">Layout</h3>
+
+<p>One file per area: <code class="language-plaintext highlighter-rouge">test_theory.py</code>, <code class="language-plaintext highlighter-rouge">test_exercises.py</code>, <code class="language-plaintext highlighter-rouge">test_learning.py</code>, <code class="language-plaintext highlighter-rouge">test_database.py</code>, <code class="language-plaintext highlighter-rouge">test_exercise_view.py</code>,
+<code class="language-plaintext highlighter-rouge">test_main_window.py</code>, <code class="language-plaintext highlighter-rouge">test_settings_panels.py</code>, <code class="language-plaintext highlighter-rouge">test_rendering.py</code> (every widget draws something) and so on. A test function
+is named as a sentence for what should be true (<code class="language-plaintext highlighter-rouge">test_a_wrong_note_is_shown_then_cleared_for_another_try</code>), so a failing name
+tells you what broke. Each test has a docstring that begins “Check that …”.</p>
+
+<h3 id="fixtures">Fixtures</h3>
+
+<p>Two <code class="language-plaintext highlighter-rouge">conftest.py</code> files set the stage.</p>
+
+<ul>
+  <li><strong>The root <code class="language-plaintext highlighter-rouge">conftest.py</code></strong> serves the doctests: it points the settings and data folders at a temporary directory (so an example
+that saves a setting cannot touch yours), gives every doctest a <code class="language-plaintext highlighter-rouge">QApplication</code> as <code class="language-plaintext highlighter-rouge">app</code>, and, when the run ends, deletes
+leftover widgets so Python’s exit does not crash (see <a href="/alto/dev/guide/pitfalls/">Pitfalls</a>).</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">tests/conftest.py</code></strong> serves the tests: the same isolation, a session-wide <code class="language-plaintext highlighter-rouge">app</code> fixture, and an automatic fixture that, around
+every test, resets the exercise settings to their defaults, resets the keyboard and notation styles, clears the saved settings,
+turns sound off, closes every window and closes every database a test left open. That is why tests do not affect each other:
+each starts from the same state. <code class="language-plaintext highlighter-rouge">practised_learner</code> builds a learner with months of made-up answers for tests that need
+history.</li>
+</ul>
+
+<h3 id="what-to-test">What to test</h3>
+
+<ul>
+  <li><strong>Pure logic</strong> (theory, scheduler, statistics): plain functions with plain asserts; use a seeded <code class="language-plaintext highlighter-rouge">random.Random</code>.</li>
+  <li><strong>Exercises:</strong> the generation tests in <code class="language-plaintext highlighter-rouge">tests/test_exercises.py</code>, which loop over the whole registry.</li>
+  <li><strong>Widgets:</strong> build it, <code class="language-plaintext highlighter-rouge">show()</code> it, act on it with <code class="language-plaintext highlighter-rouge">QTest</code>, assert on state and on signals. Widgets are drawn into memory on the
+offscreen platform, so you can also check a drawing: <code class="language-plaintext highlighter-rouge">widget.grab().toImage()</code> and look at pixels (<code class="language-plaintext highlighter-rouge">tests/test_rendering.py</code>
+counts dark pixels to prove something was drawn).</li>
+  <li><strong>Things with side effects</strong> (audio, dialogs, saved settings): replace them with a recorder, using <code class="language-plaintext highlighter-rouge">monkeypatch</code>. Tests never
+play a sound or open a real dialog.</li>
+</ul>
+
+<h3 id="writing-a-test-well">Writing a test well</h3>
+
+<ol>
+  <li>Write it so that it fails first. A test that has never failed has not been shown to test anything.</li>
+  <li>One reason to fail. If it asserts five unrelated things, you cannot tell which broke.</li>
+  <li>Seed every random source. A flaky test teaches people to ignore red.</li>
+  <li>Do not test private details if a public behaviour says the same thing. The exceptions are private helpers that are hard to
+reach through the public interface (the animations’ final states, for example).</li>
+  <li>Keep durations short: <code class="language-plaintext highlighter-rouge">QTest.qWait</code> costs real time.</li>
+</ol>
+
+<h3 id="coverage">Coverage</h3>
+
+<p><code class="language-plaintext highlighter-rouge">pytest --cov --cov-report=term-missing</code> prints the lines the tests never ran. Alto aims for every line, so a pull request that adds
+code should add its tests. Coverage measures what was <em>executed</em>, not whether the assertions are good, so treat the number as
+a floor, not a goal. Codecov displays it on pull requests but, by design, does not block them (<code class="language-plaintext highlighter-rouge">codecov.yml</code>).</p>
+
+<h2 id="the-automated-checks">The automated checks</h2>
+
+<h3 id="ruff">Ruff</h3>
+
+<p>Ruff is a linter (it finds problems) and a formatter (it lays code out). It replaces several older tools (pycodestyle, pyflakes,
+isort, pyupgrade, flake8 plugins). The rules enabled in <code class="language-plaintext highlighter-rouge">pyproject.toml</code> are named in groups by their letter prefixes, and each
+has a comment saying why: <code class="language-plaintext highlighter-rouge">E</code>/<code class="language-plaintext highlighter-rouge">W</code> style, <code class="language-plaintext highlighter-rouge">F</code> unused names and similar, <code class="language-plaintext highlighter-rouge">I</code> import order, <code class="language-plaintext highlighter-rouge">UP</code> outdated syntax, <code class="language-plaintext highlighter-rouge">B</code> likely bugs,
+<code class="language-plaintext highlighter-rouge">D</code> docstrings, <code class="language-plaintext highlighter-rouge">ANN</code> annotations, <code class="language-plaintext highlighter-rouge">TID252</code> no relative imports, <code class="language-plaintext highlighter-rouge">PLC0415</code> no imports inside functions, <code class="language-plaintext highlighter-rouge">PLR0917</code> only the first
+argument positional, and several more. To see what a rule means, look up its code in the Ruff documentation, or run
+<code class="language-plaintext highlighter-rouge">ruff rule &lt;CODE&gt;</code>.</p>
+
+<h3 id="pyright">Pyright</h3>
+
+<p>Pyright reads the type hints and reports contradictions. It is run through <code class="language-plaintext highlighter-rouge">scripts/typecheck.sh</code> so it uses the project’s
+virtual environment and can read PySide6’s type information. Basic mode, as if for Python 3.11. Tests have two optional-access
+checks relaxed (in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>), because tests deliberately assert on widgets that the application keeps optional.</p>
+
+<h3 id="pre-commit">pre-commit</h3>
+
+<p><code class="language-plaintext highlighter-rouge">.pre-commit-config.yaml</code> installs hooks into Git. On <strong>commit</strong>: trailing whitespace, final newline, YAML and TOML validity,
+large files, <code class="language-plaintext highlighter-rouge">ruff format</code>, <code class="language-plaintext highlighter-rouge">ruff check --fix</code>. On <strong>push</strong>: the whole test suite, the docs freshness check (a warning only) and
+Pyright. If a hook changes a file the commit stops so you can look; commit again.</p>
+
+<h3 id="continuous-integration">Continuous integration</h3>
+
+<p>GitHub Actions workflows in <code class="language-plaintext highlighter-rouge">.github/workflows/</code> run on every pull request and every push to <code class="language-plaintext highlighter-rouge">main</code>:</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">tests.yml</code></strong> runs the suite on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
+version stops being supported, drop it here and in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">pyright.yml</code></strong> runs Pyright.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">codecov.yml</code></strong> runs the tests with coverage and uploads the report. It needs a repository secret, <code class="language-plaintext highlighter-rouge">CODECOV_TOKEN</code>.</li>
+</ul>
+
+<p>The workflows install a few system libraries (<code class="language-plaintext highlighter-rouge">libegl1</code>, <code class="language-plaintext highlighter-rouge">libxkbcommon0</code> and others) because Qt’s offscreen platform needs them
+even though nothing appears on screen. If CI fails on a missing library with a message about <code class="language-plaintext highlighter-rouge">libGL</code> or <code class="language-plaintext highlighter-rouge">xcb</code>, that list is where
+to look.</p>
+
+<h2 id="keeping-the-documentation-true">Keeping the documentation true</h2>
+
+<p>Two things generate documentation, and tests insist they are current.</p>
+
+<ul>
+  <li><strong>Screenshots</strong> (<code class="language-plaintext highlighter-rouge">docs/assets/img/</code>) come from <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code>, which runs the real program against a made-up profile and
+a temporary settings folder, in both themes. <code class="language-plaintext highlighter-rouge">tests/test_docs.py</code> checks every picture a page shows exists in both. The pre-push
+hook runs <code class="language-plaintext highlighter-rouge">scripts/check-docs.sh</code>, which only <em>warns</em> when <code class="language-plaintext highlighter-rouge">alto/ui</code> has changed since the pictures were made. Look at the pictures
+after regenerating: fonts render slightly differently on each machine, so regenerate on the one you normally use.</li>
+  <li><strong>The API reference</strong> (<code class="language-plaintext highlighter-rouge">docs/api/</code>) is generated by <code class="language-plaintext highlighter-rouge">scripts/api_docs.py</code> from the docstrings, and <code class="language-plaintext highlighter-rouge">tests/test_api_docs.py</code> fails if
+it is stale.</li>
+</ul>
+
+<p>The docs site itself is Jekyll, served by GitHub Pages from the <code class="language-plaintext highlighter-rouge">docs/</code> folder. To preview it locally you need Ruby and the
+<code class="language-plaintext highlighter-rouge">github-pages</code> gem, which is outside the Python toolchain; most changes can be checked by reading the Markdown and the layout in
+<code class="language-plaintext highlighter-rouge">docs/_layouts/</code>.</p>
+
+<h2 id="releasing-a-version">Releasing a version</h2>
+
+<p>Alto is installed from source today. When you want to cut a release:</p>
+
+<ol>
+  <li><strong>Decide the version</strong> (<code class="language-plaintext highlighter-rouge">version</code> in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>). Use <em>semantic versioning</em>: <code class="language-plaintext highlighter-rouge">MAJOR.MINOR.PATCH</code>. Bump PATCH for fixes, MINOR for
+new features, MAJOR for changes that break users. For a program with a database, a change that needs a schema migration is at least
+MINOR.</li>
+  <li><strong>Make sure the checks pass on a clean checkout</strong>, in CI, on all Python versions.</li>
+  <li><strong>Migrations.</strong> If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
+copy <code class="language-plaintext highlighter-rouge">alto.db</code> first.</li>
+  <li><strong>Regenerate</strong> screenshots and the API pages, and check <a href="/alto/dev/data/">Your data</a> is still true.</li>
+  <li><strong>Update the licence notices</strong> in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> if you added fonts or recordings, and check their licences allow
+redistribution.</li>
+  <li><strong>Build</strong> the package: <code class="language-plaintext highlighter-rouge">python -m pip install build</code> then <code class="language-plaintext highlighter-rouge">python -m build</code> produces a source distribution and a wheel in <code class="language-plaintext highlighter-rouge">dist/</code>.
+Open the wheel (it is a zip) and check that the fonts and recordings are inside; <code class="language-plaintext highlighter-rouge">pyproject.toml</code> lists them under
+<code class="language-plaintext highlighter-rouge">package-data</code>.</li>
+  <li><strong>Tag</strong> the commit (<code class="language-plaintext highlighter-rouge">git tag v0.2.0</code>, <code class="language-plaintext highlighter-rouge">git push --tags</code>) and write release notes: what changed for users, in plain words.</li>
+  <li><strong>Publish</strong> if you want to: PyPI via <code class="language-plaintext highlighter-rouge">twine upload dist/*</code>, or attach the files to a GitHub release. A GUI program is also often
+distributed as a standalone application (see “Packaging” in the reading list); that is a separate project.</li>
+</ol>
+
+<h2 id="words-to-search-for">Words to search for</h2>
+
+<p><em>Unit test, integration test, end-to-end test.</em> <em>Test double: fake, stub, mock, spy.</em> <em>Fixture.</em> <em>Flaky test.</em> <em>Property-based
+testing</em> (the <code class="language-plaintext highlighter-rouge">hypothesis</code> library, which would suit the theory code). <em>Mutation testing.</em> <em>Continuous integration.</em> <em>Semantic
+versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>Wheel and sdist.</em> <em>Reproducible build.</em> <em>Changelog.</em></p>
+
+<h2 id="further-reading">Further reading</h2>
+
+<ul>
+  <li>Brian Okken, <em>Python Testing with pytest</em>, 2nd ed. (Pragmatic Bookshelf, 2022).</li>
+  <li>Kent Beck, <em>Test-Driven Development: By Example</em> (Addison-Wesley, 2002): the method of writing the failing test first.</li>
+  <li>Michael C. Feathers, <em>Working Effectively with Legacy Code</em> (Prentice Hall, 2004): how to put tests around code that has none.</li>
+  <li>Gerard Meszaros, <em>xUnit Test Patterns</em> (Addison-Wesley, 2007): the vocabulary of test doubles (fake, stub, mock, spy).</li>
+  <li>Jez Humble and David Farley, <em>Continuous Delivery</em> (Addison-Wesley, 2010): why every change goes through the same automated checks.</li>
+  <li>Tom Preston-Werner (and the community), <em>Semantic Versioning 2.0.0</em>, semver.org: the specification.</li>
+  <li>The pytest documentation, docs.pytest.org: fixtures, <code class="language-plaintext highlighter-rouge">monkeypatch</code> and parametrisation.</li>
+  <li>Python Packaging Authority, <em>Python Packaging User Guide</em>, packaging.python.org: building and publishing wheels and <code class="language-plaintext highlighter-rouge">pyproject.toml</code>.</li>
+  <li>The Ruff documentation, docs.astral.sh/ruff, and the Pyright documentation, microsoft.github.io/pyright.</li>
+  <li>The Qt documentation, “Qt Test Overview”, doc.qt.io: the tools behind <code class="language-plaintext highlighter-rouge">QTest</code> and <code class="language-plaintext highlighter-rouge">QSignalSpy</code>.</li>
+</ul>
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Light and dark switch. With no choice made the page follows the system; the button then sets one and remembers it.
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function mode() {
+      return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    function show() {
+      var dark = mode() === "dark";
+      button.setAttribute("aria-pressed", dark ? "true" : "false");
+      button.querySelector(".icon").textContent = dark ? "\u263E" : "\u2600";
+      button.querySelector(".label").textContent = dark ? "Dark mode" : "Light mode";
+      button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+    button.addEventListener("click", function () {
+      var next = mode() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("alto-docs-theme", next); } catch (e) {}
+      show();
+    });
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

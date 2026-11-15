@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.staff_input · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.staff_input/">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.staff_input · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.staff_input/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/dev/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/dev/">
+      <img src="/alto/dev/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span class="icon" aria-hidden="true"></span><span class="label"></span></button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/dev/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff_input/" aria-current="page">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/dev/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.staff_input</h1>
+        
+<p>The staffs you click to place notes: one note for the note construction exercise, a row of them for scale construction.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.accidental is None and not staff.locked
+True
+</code></pre>
+
+<h2 id="staffinput">StaffInput</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffInput</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffWidget</code></p>
+
+<p>A single staff you click to place a note, or place a note on with the keyboard.</p>
+
+<p>The note snaps to the nearest line or space and follows the pointer until you click. Without the mouse, a caret marks
+the note that would be placed: <code class="language-plaintext highlighter-rouge">move_cursor</code> and <code class="language-plaintext highlighter-rouge">jump_to_letter</code> move it, and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">placed</code> (<em>Signal</em>): Emitted with the <code class="language-plaintext highlighter-rouge">Note</code> when you click, using the current <code class="language-plaintext highlighter-rouge">accidental</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidental_cycled</code> (<em>Signal</em>): Emitted on a right click: the owner steps through natural, sharp and flat.</li>
+  <li><code class="language-plaintext highlighter-rouge">caret_moved</code> (<em>Signal</em>): Emitted when the caret moves.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidental</code> (<em>int or None</em>): The sign you chose (-1 flat, 0 natural, 1 sharp); None follows the key signature.</li>
+  <li><code class="language-plaintext highlighter-rouge">locked</code> (<em>bool</em>): Ignore the mouse (while feedback is showing).</li>
+  <li><code class="language-plaintext highlighter-rouge">caret</code> (<em>int or None</em>): The staff step of the note that the keyboard would place, as <code class="language-plaintext highlighter-rouge">Note.diatonic</code> counts them; None until the keyboard or a click has put it somewhere. Once it has a place the note is shown in the preview colour while the pointer is away.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble", key=0)
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; str(staff.note_at(staff.staff_bottoms()["treble"]))  # the bottom line of the treble staff
+'E4'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the staff.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffInput().hasMouseTracking()
+True
+</code></pre>
+
+<h3 id="staffinputreset">StaffInput.reset</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Clear the staff for a new question, drawing a key signature.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef to draw.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text to write under the staff. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.accidental, staff.locked = 1, True
+&gt;&gt;&gt; staff.reset("bass", key=-2)
+&gt;&gt;&gt; staff.accidental is None, staff.locked, staff.key
+(True, False, -2)
+</code></pre>
+
+<h3 id="staffinputnote_at">StaffInput.note_at</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_at</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
+</code></pre></div></div>
+
+<p>Return the note on the line or space nearest to a height on the staff.</p>
+
+<p>The note is kept within five ledger lines of the staff. On a grand staff, a click in the upper half is on the treble
+staff and the lower half on the bass staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">y</code> (<em>float</em>): The height in the widget, in pixels from the top.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note</em>: The note, with the chosen accidental or, if none is chosen, the one the key signature gives it.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble", key=1)  # G major: F is sharp
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; bottom = staff.staff_bottoms()["treble"]
+&gt;&gt;&gt; str(staff.note_at(bottom - 3 * staff.GAP / 2))  # three steps above E4
+'A4'
+&gt;&gt;&gt; str(staff.note_at(bottom - staff.GAP / 2))  # one step above E4: F, sharp in this key
+'F♯4'
+</code></pre>
+
+<h3 id="staffinputnote_for">StaffInput.note_for</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_for</span><span class="p">(</span><span class="n">diatonic</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
+</code></pre></div></div>
+
+<p>Return the note on a staff step, with the chosen sign or the one the key signature gives it.</p>
+
+<p>The step is kept within five ledger lines of the staff, as clicking is.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">diatonic</code> (<em>int</em>): The staff step, as <code class="language-plaintext highlighter-rouge">Note.diatonic</code> counts them.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note</em>: The note.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble", key=1)  # G major: F is sharp
+&gt;&gt;&gt; str(staff.note_for(Note.parse("F4").diatonic))
+'F♯4'
+&gt;&gt;&gt; staff.accidental = 0
+&gt;&gt;&gt; str(staff.note_for(Note.parse("F4").diatonic))
+'F4'
+</code></pre>
+
+<h3 id="staffinputcaret_start">StaffInput.caret_start</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">caret_start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the staff step the caret starts from, when the keyboard first moves it.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The middle line of the staff, or middle C on a grand staff.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))
+'B4'
+&gt;&gt;&gt; staff.reset("grand")
+&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))
+'C4'
+</code></pre>
+
+<h3 id="staffinputcaret_note">StaffInput.caret_note</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">caret_note</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Return the note that the keyboard would place.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note or None</em>: The note at the caret, with the chosen sign; None if the caret has not been put anywhere.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("bass")
+&gt;&gt;&gt; staff.caret_note() is None
+True
+&gt;&gt;&gt; staff.move_cursor(0)
+&gt;&gt;&gt; str(staff.caret_note())
+'D3'
+</code></pre>
+
+<h3 id="staffinputmove_cursor">StaffInput.move_cursor</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move_cursor</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Move the caret up (positive) or down (negative) by staff steps, and show the note there.</p>
+
+<p>The first move starts from <code class="language-plaintext highlighter-rouge">caret_start</code>. The caret stays within the furthest ledger lines.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>int</em>): How many lines and spaces to move; 7 is an octave.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; staff.move_cursor(1)
+&gt;&gt;&gt; str(staff.caret_note())
+'C5'
+&gt;&gt;&gt; staff.move_cursor(-7)
+&gt;&gt;&gt; str(staff.caret_note())
+'C4'
+&gt;&gt;&gt; staff.move_cursor(-500)  # no further than the ledger lines go
+&gt;&gt;&gt; staff.caret == RANGE_LIMITS["treble"][0]
+True
+</code></pre>
+
+<h3 id="staffinputjump_to_letter">StaffInput.jump_to_letter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">jump_to_letter</span><span class="p">(</span><span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Move the caret to the nearest note with a letter name, above or below where it is.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">letter</code> (<em>int</em>): The letter, counting from C as 0: D is 1, E is 2, F is 3, G is 4, A is 5 and B is 6.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; staff.move_cursor(0)  # B4, the middle line
+&gt;&gt;&gt; staff.jump_to_letter(0)
+&gt;&gt;&gt; str(staff.caret_note())  # the nearest C is the one just above
+'C5'
+&gt;&gt;&gt; staff.jump_to_letter(4)
+&gt;&gt;&gt; str(staff.caret_note())  # and the nearest G is the one just below
+'G4'
+</code></pre>
+
+<h3 id="staffinputplace_caret">StaffInput.place_caret</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_caret</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the note at the caret, as a click would.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; placed = []
+&gt;&gt;&gt; _ = staff.placed.connect(placed.append)
+&gt;&gt;&gt; staff.place_caret()  # the first press places the note at the start
+&gt;&gt;&gt; [str(n) for n in placed]
+['B4']
+</code></pre>
+
+<h3 id="staffinputshow_note">StaffInput.show_note</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_note</span><span class="p">(</span>
+    <span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw a single note on the staff, or clear it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): The note to draw; None clears the staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): The colour to draw it in; the notation’s own ink if None. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.show_note(Note.parse("C4"))
+&gt;&gt;&gt; len(staff.columns)
+1
+&gt;&gt;&gt; staff.show_note(None)
+&gt;&gt;&gt; staff.columns
+[]
+</code></pre>
+
+<h3 id="staffinputrefresh_preview">StaffInput.refresh_preview</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_preview</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Redraw the note that would be placed, for example after the accidental changes.</p>
+
+<p>It is the pointer’s note while the pointer is over the staff, and otherwise the note at the caret, once the keyboard
+has put the caret somewhere.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.refresh_preview()  # the pointer is not over the staff, and there is no caret: nothing to redraw
+&gt;&gt;&gt; staff.columns
+[]
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; staff.move_cursor(0)
+&gt;&gt;&gt; len(staff.columns)  # the note at the caret
+1
+</code></pre>
+
+<h3 id="staffinputmousemoveevent">StaffInput.mouseMoveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the note under the pointer, in a lighter colour.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The mouse move.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
+&gt;&gt;&gt; staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
+...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+&gt;&gt;&gt; str(staff.columns[0][0])
+'E4'
+</code></pre>
+
+<h3 id="staffinputleaveevent">StaffInput.leaveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Remove the pointer’s note when the pointer leaves the staff, showing the note at the caret instead if there is one.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The leave event.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.show_note(Note.parse("C4"))
+&gt;&gt;&gt; staff.leaveEvent(QEvent(QEvent.Type.Leave))
+&gt;&gt;&gt; staff.columns
+[]
+</code></pre>
+
+<h3 id="staffinputmousepressevent">StaffInput.mousePressEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the note on a left click, or step through the accidentals on a right click.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The mouse press. Nothing happens while the staff is locked.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
+&gt;&gt;&gt; staff.reset("treble")
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; placed = []
+&gt;&gt;&gt; _ = staff.placed.connect(placed.append)
+&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
+&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
+...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+&gt;&gt;&gt; [str(n) for n in placed]
+['E4']
+</code></pre>
+
+<h2 id="scaleinput">ScaleInput</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleInput</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffInput</code></p>
+
+<p>A staff you click to place the notes of a scale one after another, left to right, and then, if asked, its steps.</p>
+
+<p>The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
+moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.</p>
+
+<p>When steps are asked for, once all the notes are placed two lines rise from each pair of neighbouring notes to a point
+above them (a wedge). The step to be marked next is shown there, in the preview colour, as “W” (whole) or “H” (half).
+The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">notes_changed</code> (<em>Signal</em>): Emitted when a note or a step is placed or taken back.</li>
+  <li><code class="language-plaintext highlighter-rouge">step_selected</code> (<em>Signal</em>): Emitted with “W” or “H” when the step to be marked next changes.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidental_stepped</code> (<em>Signal</em>): Emitted with 1 or -1 for each notch of the mouse wheel while notes are placed: the owner moves on to the next sign (1) or back to the one before (-1).</li>
+  <li><code class="language-plaintext highlighter-rouge">notes</code> (<em>list of Note</em>): The notes placed so far, left to right.</li>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>list of str</em>): The steps marked so far, each “W” or “H”.</li>
+  <li><code class="language-plaintext highlighter-rouge">slots</code> (<em>int</em>): How many notes the scale has.</li>
+  <li><code class="language-plaintext highlighter-rouge">with_steps</code> (<em>bool</em>): Whether the steps are asked for too.</li>
+  <li><code class="language-plaintext highlighter-rouge">pending_step</code> (<em>str</em>): The step that a left click would mark next, “W” or “H”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=8)
+&gt;&gt;&gt; staff.resize(600, 300)
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
+&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
+...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+&gt;&gt;&gt; [str(n) for n in staff.notes], len(staff.columns)
+(['E4'], 8)
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the staff.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleInput().notes
+[]
+</code></pre>
+
+<h3 id="scaleinputreset_scale">ScaleInput.reset_scale</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset_scale</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">slots</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">with_steps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Clear the staff for a new scale: a staff with room for its notes, and the key signature it is to have.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef to draw.</li>
+  <li><code class="language-plaintext highlighter-rouge">slots</code> (<em>int</em>): How many notes the scale has. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): The name of the scale, written under the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">with_steps</code> (<em>bool, default False</em>): Also ask for the steps between the notes. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature drawn on the staff: that many sharps if positive, flats if negative. It is the staff’s, not the scale’s: a note placed without a sign takes the sign the signature gives its letter. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.notes, staff.slots = [Note.parse("C4")], 3
+&gt;&gt;&gt; staff.reset_scale("bass", slots=8, caption="D Major")
+&gt;&gt;&gt; staff.notes, staff.slots, staff.caption, staff.key
+([], 8, 'D Major', 0)
+&gt;&gt;&gt; staff.reset_scale("bass", slots=8, key=-2)
+&gt;&gt;&gt; staff.key
+-2
+</code></pre>
+
+<h3 id="scaleinputcomplete">ScaleInput.complete</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">complete</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether every note of the scale has been placed.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True when there are as many notes as places.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=1)
+&gt;&gt;&gt; staff.complete
+False
+&gt;&gt;&gt; staff.notes.append(Note.parse("C4"))
+&gt;&gt;&gt; staff.complete
+True
+</code></pre>
+
+<h3 id="scaleinputplacing_steps">ScaleInput.placing_steps</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">placing_steps</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether it is the turn of the steps: they are asked for, every note is placed and some step is still to mark.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True while the next click marks a step.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
+&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+&gt;&gt;&gt; staff.placing_steps
+True
+&gt;&gt;&gt; staff.steps.append("W")
+&gt;&gt;&gt; staff.placing_steps
+False
+</code></pre>
+
+<h3 id="scaleinputdone">ScaleInput.done</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">done</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether everything asked for is placed: every note and, if they are asked for, every step.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True when the scale can be handed in.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
+&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+&gt;&gt;&gt; staff.done
+False
+&gt;&gt;&gt; staff.steps.append("W")
+&gt;&gt;&gt; staff.done
+True
+</code></pre>
+
+<h3 id="scaleinputshow_note">ScaleInput.show_note</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_note</span><span class="p">(</span>
+    <span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the pointer’s note in the next place, or take it away.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): The note to show; None shows none.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): Unused: the note under the pointer is always drawn in the preview colour. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=4)
+&gt;&gt;&gt; staff.show_note(Note.parse("G4"))
+&gt;&gt;&gt; staff.columns[0], staff.notes
+([Note(octave=4, letter=4, accidental=0)], [])
+</code></pre>
+
+<h3 id="scaleinputset_pending_step">ScaleInput.set_pending_step</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_pending_step</span><span class="p">(</span><span class="n">step</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose the step that the next click marks.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">step</code> (<em>str</em>): “W” for a whole step or “H” for a half step.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=3, with_steps=True)
+&gt;&gt;&gt; chosen = []
+&gt;&gt;&gt; _ = staff.step_selected.connect(chosen.append)
+&gt;&gt;&gt; staff.set_pending_step("H")
+&gt;&gt;&gt; staff.pending_step, chosen
+('H', ['H'])
+</code></pre>
+
+<h3 id="scaleinputtoggle_step">ScaleInput.toggle_step</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">toggle_step</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Switch the step that the next click marks between whole and half.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=3, with_steps=True)
+&gt;&gt;&gt; staff.toggle_step()
+&gt;&gt;&gt; staff.pending_step
+'H'
+&gt;&gt;&gt; staff.toggle_step()
+&gt;&gt;&gt; staff.pending_step
+'W'
+</code></pre>
+
+<h3 id="scaleinputundo">ScaleInput.undo</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">undo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Take back the last thing placed: the last step if there is one, otherwise the last note.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=4)
+&gt;&gt;&gt; staff.notes.append(Note.parse("C4"))
+&gt;&gt;&gt; staff.undo()
+&gt;&gt;&gt; staff.notes
+[]
+</code></pre>
+
+<h3 id="scaleinputwheelevent">ScaleInput.wheelEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QWheelEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Use the mouse wheel for what comes next: the sign of the note to place, or the step to mark.</p>
+
+<p>While notes are placed each notch asks the owner to move on to the next sign (up) or back to the one before (down).
+While steps are marked each notch switches between whole and half. Once everything is placed it does nothing.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QWheelEvent</em>): The wheel turn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint, QPointF
+&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
+&gt;&gt;&gt; signs = []
+&gt;&gt;&gt; _ = staff.accidental_stepped.connect(signs.append)
+&gt;&gt;&gt; here = QPointF(50, 50)
+&gt;&gt;&gt; turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
+...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+&gt;&gt;&gt; staff.wheelEvent(turn)
+&gt;&gt;&gt; signs, staff.pending_step
+([1], 'W')
+&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
+&gt;&gt;&gt; staff.wheelEvent(turn)
+&gt;&gt;&gt; signs, staff.pending_step
+([1], 'H')
+</code></pre>
+
+<h3 id="scaleinputcaret_start">ScaleInput.caret_start</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">caret_start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the staff step the caret starts from: that of the last note placed, or the middle line.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Where the keyboard’s first move begins.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=8)
+&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))  # the middle line
+'B4'
+&gt;&gt;&gt; staff.notes.append(Note.parse("D4"))
+&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))  # the note before
+'D4'
+</code></pre>
+
+<h3 id="scaleinputplace_next">ScaleInput.place_next</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_next</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the next note, or mark the next step once the notes are placed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None, default None</em>): The note to place; the note at the caret if None. Ignored while steps are marked.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
+&gt;&gt;&gt; staff.place_next(Note.parse("C4"))
+&gt;&gt;&gt; staff.place_next(Note.parse("D4"))
+&gt;&gt;&gt; staff.place_next()  # the notes are placed: this marks the first step
+&gt;&gt;&gt; [str(n) for n in staff.notes], staff.steps
+(['C4', 'D4'], ['W'])
+</code></pre>
+
+<h3 id="scaleinputplace_caret">ScaleInput.place_caret</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_caret</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the next note at the caret, or mark the next step, as a click would.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=2)
+&gt;&gt;&gt; staff.move_cursor(2)
+&gt;&gt;&gt; staff.place_caret()
+&gt;&gt;&gt; [str(n) for n in staff.notes]
+['D5']
+</code></pre>
+
+<h3 id="scaleinputmousepressevent">ScaleInput.mousePressEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the next note or mark the next step on a left click; change the sign or the step on a right click.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The mouse press. Nothing happens while the staff is locked or when everything is placed.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; staff = ScaleInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=1)
+&gt;&gt;&gt; staff.resize(600, 300)
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
+&gt;&gt;&gt; press = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
+...                     Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
+&gt;&gt;&gt; staff.mousePressEvent(press)
+&gt;&gt;&gt; staff.mousePressEvent(press)  # every place is taken
+&gt;&gt;&gt; [str(n) for n in staff.notes]
+['E4']
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Light and dark switch. With no choice made the page follows the system; the button then sets one and remembers it.
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function mode() {
+      return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    function show() {
+      var dark = mode() === "dark";
+      button.setAttribute("aria-pressed", dark ? "true" : "false");
+      button.querySelector(".icon").textContent = dark ? "\u263E" : "\u2600";
+      button.querySelector(".label").textContent = dark ? "Dark mode" : "Light mode";
+      button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+    button.addEventListener("click", function () {
+      var next = mode() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("alto-docs-theme", next); } catch (e) {}
+      show();
+    });
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

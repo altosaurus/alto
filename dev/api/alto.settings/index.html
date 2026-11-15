@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.settings · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.settings/">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.settings · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.settings/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/dev/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/dev/">
+      <img src="/alto/dev/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span class="icon" aria-hidden="true"></span><span class="label"></span></button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/dev/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.settings/" aria-current="page">settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/dev/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.settings</h1>
+        
+<p>User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.</p>
+
+<p>Each exercise with settings has a small dataclass here (<code class="language-plaintext highlighter-rouge">NoteNameSettings</code>, <code class="language-plaintext highlighter-rouge">KeyboardSettings</code> and so on) and one shared
+instance of it (<code class="language-plaintext highlighter-rouge">note_names</code>, <code class="language-plaintext highlighter-rouge">keyboard</code> …) that the exercise and its settings panel both read and write.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings().active_clefs()
+['treble', 'bass']
+&gt;&gt;&gt; spell(Note.parse("F#4"))
+'F♯'
+</code></pre>
+
+<h2 id="spell">spell</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">spell</span><span class="p">(</span>
+    <span class="n">note</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the pitch-class name of a note in the chosen naming system.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note</em>): The note.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, or “solfege” for Do Re Mi. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The name with its accidental, without the octave.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; spell(Note.parse("F#4"))
+'F♯'
+&gt;&gt;&gt; spell(Note.parse("F#4"), naming="solfege")
+'Fa♯'
+</code></pre>
+
+<h2 id="diatonic_name">diatonic_name</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">diatonic_name</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the name and octave of the natural note on a staff step.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">d</code> (<em>int</em>): The staff-step index (see <code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: For example ‘E4’.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; diatonic_name(30)
+'E4'
+</code></pre>
+
+<h2 id="notenamesettings">NoteNameSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettings</span><span class="p">(</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">ranges</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">),</span>
+    <span class="n">key_signatures</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+    <span class="n">note_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'whole'</span><span class="p">}),</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the note identification exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
+  <li><code class="language-plaintext highlighter-rouge">ranges</code> (<em>dict of str to tuple of (int, int)</em>): Overrides of <code class="language-plaintext highlighter-rouge">DEFAULT_RANGES</code>, as inclusive staff-step ranges. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_signatures</code> (<em>set of int</em>): The keys to use, as sharps (positive) or flats (negative). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_values</code> (<em>set of str</em>): The note values to draw, from <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): A key of <code class="language-plaintext highlighter-rouge">NAMINGS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask notes with explicit sharps, flats and naturals. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
+&gt;&gt;&gt; cfg.active_clefs(), cfg.active_keys()
+(['bass'], [2])
+</code></pre>
+
+<h3 id="notenamesettingsactive_clefs">NoteNameSettings.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to draw from, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+['tenor', 'grand']
+&gt;&gt;&gt; NoteNameSettings(clefs=set()).active_clefs()
+['treble']
+</code></pre>
+
+<h3 id="notenamesettingsactive_keys">NoteNameSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(key_signatures={2, -1}).active_keys()
+[-1, 2]
+</code></pre>
+
+<h3 id="notenamesettingsactive_values">NoteNameSettings.active_values</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the note values to draw, from longest to shortest.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen values in the order of <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>, or whole notes if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
+['whole', 'half']
+</code></pre>
+
+<h3 id="notenamesettingsrange_for">NoteNameSettings.range_for</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">range_for</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the range of notes that may be asked on a clef.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">DEFAULT_RANGES</code>.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (int, int)</em>: The lowest and highest staff step, inclusive; the user’s override if there is one, otherwise the default.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings().range_for("treble")
+(22, 52)
+&gt;&gt;&gt; NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given the wrong way round
+(30, 40)
+</code></pre>
+
+<h2 id="key_name">key_name</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_name</span><span class="p">(</span><span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the name of a MIDI note with its octave, black keys as sharps.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">midi</code> (<em>int</em>): The MIDI note number.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: For example ‘C4’ for 60 and ‘C♯4’ for 61.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; key_name(60), key_name(61)
+('C4', 'C♯4')
+</code></pre>
+
+<h2 id="keyboardsettings">KeyboardSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardSettings</span><span class="p">(</span>
+    <span class="n">black_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">require_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">low</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KEYBOARD_DEFAULT</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">high</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KEYBOARD_DEFAULT</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">key_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the keyboard identification exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">black_keys</code> (<em>bool, default True</em>): Also ask the black keys, answered by either enharmonic name.</li>
+  <li><code class="language-plaintext highlighter-rouge">require_octave</code> (<em>bool, default False</em>): The answer must include the octave number as well. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest key asked, as a MIDI number. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest key asked, as a MIDI number, inclusive. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_signature</code> (<em>bool, default False</em>): Show a key signature, and require the name that fits it (no enharmonic spelling). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeyboardSettings()
+&gt;&gt;&gt; key_name(cfg.low), key_name(cfg.high)
+('C3', 'C5')
+</code></pre>
+
+<h3 id="keyboardsettingsactive_keys">KeyboardSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettings().active_keys()
+[-3, -2, -1, 0, 1, 2, 3]
+</code></pre>
+
+<h2 id="constructionsettings">ConstructionSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ConstructionSettings</span><span class="p">(</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the note construction exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask for sharps and flats, which the answer then has to include. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_signature</code> (<em>bool, default False</em>): Draw a key signature; it applies to the note unless the note is given its own sign. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(clefs={"grand"}).active_clefs()
+['grand']
+</code></pre>
+
+<h3 id="constructionsettingsactive_clefs">ConstructionSettings.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to draw from, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings().active_clefs()
+['treble', 'bass']
+</code></pre>
+
+<h3 id="constructionsettingsactive_keys">ConstructionSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(keys={3, -2}).active_keys()
+[-2, 3]
+</code></pre>
+
+<h2 id="arpeggiosettings">ArpeggioSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArpeggioSettings</span><span class="p">(</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">types</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'major'</span><span class="p">,</span> <span class="s">'minor'</span><span class="p">,</span> <span class="s">'dominant 7th'</span><span class="p">,</span> <span class="s">'diminished 7th'</span><span class="p">}),</span>
+    <span class="n">inversions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">INVERSIONS</span><span class="p">)),</span>
+    <span class="n">key_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the arpeggio identification exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to draw on, any of <code class="language-plaintext highlighter-rouge">CLEFS</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">types</code> (<em>set of str</em>): The chord types to ask, from <code class="language-plaintext highlighter-rouge">ARPEGGIO_TYPES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">inversions</code> (<em>set of int</em>): The inversions to ask: 0 for root position up to 3 for the third inversion. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_signature</code> (<em>bool, default False</em>): Draw a key signature, so the arpeggio only gets signs where it differs from it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings().active_types()
+['major', 'minor', 'dominant 7th', 'diminished 7th']
+</code></pre>
+
+<h3 id="arpeggiosettingsactive_clefs">ArpeggioSettings.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to draw from, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
+['alto', 'tenor']
+</code></pre>
+
+<h3 id="arpeggiosettingsactive_types">ArpeggioSettings.active_types</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_types</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the chord types to ask, triads first and then seventh chords.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen types in the order of <code class="language-plaintext highlighter-rouge">ARPEGGIO_TYPES</code>, or “major” if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(types={"minor 7th", "major"}).active_types()
+['major', 'minor 7th']
+</code></pre>
+
+<h3 id="arpeggiosettingsactive_inversions">ArpeggioSettings.active_inversions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_inversions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the inversions to ask, root position first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: The chosen inversions, or root position (0) if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(inversions={2, 0}).active_inversions()
+[0, 2]
+</code></pre>
+
+<h3 id="arpeggiosettingsinversions_for">ArpeggioSettings.inversions_for</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inversions_for</span><span class="p">(</span><span class="n">chord_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the inversions that can be asked for a chord type.</p>
+
+<p>A triad has no third inversion. If none of the chosen inversions applies (only the third, for a triad), root position is
+used.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">chord_type</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">CHORDS</code>, such as “major” or “dominant 7th”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: The inversions to choose from.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ArpeggioSettings()
+&gt;&gt;&gt; cfg.inversions_for("major"), cfg.inversions_for("dominant 7th")
+([0, 1, 2], [0, 1, 2, 3])
+&gt;&gt;&gt; ArpeggioSettings(inversions={3}).inversions_for("major")
+[0]
+</code></pre>
+
+<h3 id="arpeggiosettingsactive_keys">ArpeggioSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(keys={1}).active_keys()
+[1]
+</code></pre>
+
+<h2 id="keysignaturesettings">KeySignatureSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
+    <span class="n">modes</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'Major (Ionian)'</span><span class="p">,</span> <span class="s">'Natural minor (Aeolian)'</span><span class="p">}),</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">))),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the key signature identification exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs a signature is drawn on, any of <code class="language-plaintext highlighter-rouge">CLEFS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">modes</code> (<em>set of str</em>): The scales to ask about, from <code class="language-plaintext highlighter-rouge">KEY_MODES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures asked, as sharps (positive) or flats (negative). Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeySignatureSettings()
+&gt;&gt;&gt; cfg.active_clefs(), len(cfg.active_keys())
+(['treble', 'bass'], 15)
+</code></pre>
+
+<h3 id="keysignaturesettingsactive_clefs">KeySignatureSettings.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to draw signatures on, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings().active_clefs()
+['treble', 'bass']
+</code></pre>
+
+<h3 id="keysignaturesettingsactive_modes">KeySignatureSettings.active_modes</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_modes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the scales to ask about, in the order of <code class="language-plaintext highlighter-rouge">KEY_MODES</code>.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen modes, or major if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings().active_modes()
+['Major (Ionian)', 'Natural minor (Aeolian)']
+</code></pre>
+
+<h3 id="keysignaturesettingsactive_keys">KeySignatureSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to ask about, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings(keys={3, -4}).active_keys()
+[-4, 3]
+</code></pre>
+
+<h2 id="keyconstructionsettings">KeyConstructionSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyConstructionSettings</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
+
+<p>The settings of the key signature construction exercise: the same choices as key signature identification.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs the blank staff is drawn in, any of <code class="language-plaintext highlighter-rouge">CLEFS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">modes</code> (<em>set of str</em>): The scales to ask for, from <code class="language-plaintext highlighter-rouge">KEY_MODES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to build, as sharps (positive) or flats (negative). Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeyConstructionSettings(keys={-2})
+&gt;&gt;&gt; cfg.active_keys(), cfg.active_modes()
+([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
+</code></pre>
+
+<h2 id="scaleconstructionsettings">ScaleConstructionSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleConstructionSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
+
+<p>The settings of the scale construction exercise: the same choices as key signature identification.</p>
+
+<p>Here “keys” chooses the scale by the signature it has: G major and E minor both have one sharp. <code class="language-plaintext highlighter-rouge">staff_keys</code> is a
+separate choice: the key signature drawn on the staff, which need not be the scale’s. On a staff with two flats a C
+major scale has to be placed with naturals where the staff would otherwise flatten the notes.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs the scale is placed on, any of <code class="language-plaintext highlighter-rouge">CLEFS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">modes</code> (<em>set of str</em>): The kinds of scale to ask for, from <code class="language-plaintext highlighter-rouge">KEY_MODES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures the scales have, as sharps (positive) or flats (negative). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>bool, default False</em>): Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int</em>): The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Name the octave of the first note, such as “G2 Major”, and require the scale to start there; any scale asked then fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ScaleConstructionSettings(keys={3})
+&gt;&gt;&gt; cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
+([3], ['treble', 'bass'], False, False, [0])
+</code></pre>
+
+<h3 id="scaleconstructionsettingsactive_staff_keys">ScaleConstructionSettings.active_staff_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_staff_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures that may be drawn on the staff, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
+[-2, 3]
+&gt;&gt;&gt; ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
+[0]
+</code></pre>
+
+<h2 id="circlesettings">CircleSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">CIRCLE_QUESTIONS</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>The settings of the circle of fifths exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>set of str</em>): The kinds of question to ask, keys of <code class="language-plaintext highlighter-rouge">CIRCLE_QUESTIONS</code>: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings().active_questions()
+['major', 'minor', 'numeral']
+&gt;&gt;&gt; CircleSettings(questions={"numeral"}).active_questions()
+['numeral']
+</code></pre>
+
+<h3 id="circlesettingsactive_questions">CircleSettings.active_questions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_questions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the kinds of question to ask, in the order they are listed.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen kinds, or all of them if none is chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings(questions=set()).active_questions()
+['major', 'minor', 'numeral']
+&gt;&gt;&gt; CircleSettings(questions={"minor", "nonsense"}).active_questions()
+['minor']
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Light and dark switch. With no choice made the page follows the system; the button then sets one and remembers it.
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function mode() {
+      return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    function show() {
+      var dark = mode() === "dark";
+      button.setAttribute("aria-pressed", dark ? "true" : "false");
+      button.querySelector(".icon").textContent = dark ? "\u263E" : "\u2600";
+      button.querySelector(".label").textContent = dark ? "Dark mode" : "Light mode";
+      button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+    button.addEventListener("click", function () {
+      var next = mode() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("alto-docs-theme", next); } catch (e) {}
+      show();
+    });
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

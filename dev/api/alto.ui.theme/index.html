@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.theme · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.theme/">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.theme · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.theme/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/dev/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/dev/">
+      <img src="/alto/dev/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span class="icon" aria-hidden="true"></span><span class="label"></span></button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/dev/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme/" aria-current="page">theme</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/dev/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.ui.theme</h1>
+        
+<p>The colour theme: follow the system, force light or dark, or use a theme with colours of its own.</p>
+
+<p>A theme with colours of its own is a <code class="language-plaintext highlighter-rouge">CustomTheme</code>: a fixed palette that is light or dark whatever the desktop is set to.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; [key for key, label in THEMES][:4]
+['system', 'light', 'dark', 'studio']
+</code></pre>
+
+<h2 id="customtheme">CustomTheme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CustomTheme</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">dark</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">window</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">panel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ink</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">muted</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">accent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">track</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A theme with colours of its own.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): What it is saved as.</li>
+  <li><code class="language-plaintext highlighter-rouge">family</code> (<em>str</em>): The key of the light version of the theme, which its dark version shares.</li>
+  <li><code class="language-plaintext highlighter-rouge">label</code> (<em>str</em>): What the settings call it.</li>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>str</em>): A short line about it, shown under its picture.</li>
+  <li><code class="language-plaintext highlighter-rouge">dark</code> (<em>bool</em>): True if it is a dark theme, so that Qt draws its own parts (such as the title bar) to match.</li>
+  <li><code class="language-plaintext highlighter-rouge">window</code> (<em>str</em>): The colour of the window.</li>
+  <li><code class="language-plaintext highlighter-rouge">panel</code> (<em>str</em>): The colour of lists, boxes and buttons.</li>
+  <li><code class="language-plaintext highlighter-rouge">ink</code> (<em>str</em>): The colour of text.</li>
+  <li><code class="language-plaintext highlighter-rouge">muted</code> (<em>str</em>): The colour of quiet text.</li>
+  <li><code class="language-plaintext highlighter-rouge">line</code> (<em>str</em>): The colour of outlines.</li>
+  <li><code class="language-plaintext highlighter-rouge">accent</code> (<em>str</em>): The colour of what is chosen, and of links.</li>
+  <li><code class="language-plaintext highlighter-rouge">track</code> (<em>str</em>): The colour of the track behind a switch or a slider, a little off the window’s own.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CUSTOM_THEMES[0].key, CUSTOM_THEMES[0].dark, len(CUSTOM_THEMES)
+('studio', False, 50)
+</code></pre>
+
+<h2 id="hsl_hex">hsl_hex</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hsl_hex</span><span class="p">(</span>
+    <span class="n">hue</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">saturation</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">lightness</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Turn a colour given as hue, saturation and lightness into “#rrggbb”.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">hue</code> (<em>float</em>): The hue, in degrees.</li>
+  <li><code class="language-plaintext highlighter-rouge">saturation</code> (<em>float</em>): The saturation, from 0 to 100. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">lightness</code> (<em>float</em>): The lightness, from 0 to 100. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The colour in hexadecimal.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; hsl_hex(0, saturation=100, lightness=50), hsl_hex(210, saturation=0, lightness=100)
+('#ff0000', '#ffffff')
+</code></pre>
+
+<h2 id="seeded_themes">seeded_themes</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">seeded_themes</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CustomTheme</span><span class="p">,</span> <span class="n">CustomTheme</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Make the light and the dark theme of a seed: neutrals tinted by one hue, and an accent of another.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">seed</code> (<em>tuple</em>): The key, name and note, then the neutral hue and saturation and the accent hue and saturation.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (CustomTheme, CustomTheme)</em>: The light theme and the dark theme.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pale, deep = seeded_themes(SEEDS[0])
+&gt;&gt;&gt; pale.key, deep.key, pale.dark, deep.dark
+('parchment', 'parchment_dark', False, True)
+</code></pre>
+
+<h2 id="family_of">family_of</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">family_of</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Split a theme’s key into its family and which version of it that is.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The key of any theme.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (str, str)</em>: The family’s key and “light”, “dark” or “system”. “system”, “light” and “dark” belong to the family “default”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; family_of("sage_dark"), family_of("sage"), family_of("sage_auto"), family_of("dark"), family_of("system")
+(('sage', 'dark'), ('sage', 'light'), ('sage', 'system'), ('default', 'dark'), ('default', 'system'))
+</code></pre>
+
+<h2 id="variant_key">variant_key</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">variant_key</span><span class="p">(</span>
+    <span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Give the key of one version of a family.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">family</code> (<em>str</em>): The family’s key.</li>
+  <li><code class="language-plaintext highlighter-rouge">version</code> (<em>str</em>): “light”, “dark” or “system”. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; variant_key("sage", version="dark"), variant_key("sage", version="system"), variant_key("default", version="dark")
+('sage_dark', 'sage_auto', 'dark')
+</code></pre>
+
+<h2 id="themerecord">ThemeRecord</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ThemeRecord</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A theme the user made, as it is saved: its key, its name, and the colours of its light and dark versions.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ThemeRecord(id="my_1", name="Mine", light={}, dark={})["name"]
+'Mine'
+</code></pre>
+
+<h2 id="user_records">user_records</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">user_records</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ThemeRecord</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Read the themes the user has made, as they are saved.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of ThemeRecord</em>: One record for each theme: its “id”, its “name”, and its “light” and “dark” colours. A saved list that cannot be read, or has something else in it, gives only the records that can be used.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/userThemes")
+&gt;&gt;&gt; user_records()
+[]
+</code></pre>
+
+<h2 id="save_user_records">save_user_records</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_user_records</span><span class="p">(</span><span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ThemeRecord</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the themes the user has made.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">records</code> (<em>list of ThemeRecord</em>): The records, as <code class="language-plaintext highlighter-rouge">user_records</code> gives them.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_user_records([])
+&gt;&gt;&gt; user_records()
+[]
+</code></pre>
+
+<h2 id="new_family_id">new_family_id</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">new_family_id</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Make the key for a new theme of the user’s.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: A key that starts with “my_” and is not one that is in use.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; new_family_id().startswith("my_")
+True
+</code></pre>
+
+<h2 id="upsert_user_theme">upsert_user_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">upsert_user_theme</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">ThemeRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save a theme the user made, replacing the one with the same key if there is one.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">record</code> (<em>ThemeRecord</em>): The theme.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/userThemes")
+&gt;&gt;&gt; colours = {part: "#112233" for part in PARTS}
+&gt;&gt;&gt; upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colours, dark=colours))
+&gt;&gt;&gt; upsert_user_theme(ThemeRecord(id="my_a", name="Renamed", light=colours, dark=colours))
+&gt;&gt;&gt; [(r["id"], r["name"]) for r in user_records()]
+[('my_a', 'Renamed')]
+&gt;&gt;&gt; store().remove("ui/userThemes")
+</code></pre>
+
+<h2 id="delete_user_theme">delete_user_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">delete_user_theme</span><span class="p">(</span><span class="n">family</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Remove a theme the user made.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">family</code> (<em>str</em>): The theme’s key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/userThemes")
+&gt;&gt;&gt; colours = {part: "#112233" for part in PARTS}
+&gt;&gt;&gt; upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colours, dark=colours))
+&gt;&gt;&gt; delete_user_theme("my_a")
+&gt;&gt;&gt; user_records()
+[]
+</code></pre>
+
+<h2 id="user_themes">user_themes</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">user_themes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CustomTheme</span><span class="p">,</span> <span class="p">...]</span>
+</code></pre></div></div>
+
+<p>Give the themes the user has made, light and dark versions of each.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of CustomTheme</em>: The light theme and then the dark theme of each record.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/userThemes")
+&gt;&gt;&gt; user_themes()
+()
+</code></pre>
+
+<h2 id="families">families</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">families</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="p">...]</span>
+</code></pre></div></div>
+
+<p>List every theme there is to choose, the user’s own first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of tuple of (str, str, str)</em>: The key of each theme’s family, its name and a line about it.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/userThemes")
+&gt;&gt;&gt; families() == FAMILIES
+True
+</code></pre>
+
+<h2 id="custom_theme">custom_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">custom_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomTheme</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Find a theme with colours of its own, one of the built-in ones or one the user made.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The theme’s key.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>CustomTheme or None</em>: The theme, or None for “system”, “light”, “dark” or anything that is not one.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; custom_theme("studio_dark") is CUSTOM_THEMES[1], custom_theme("dark")
+(True, None)
+</code></pre>
+
+<h2 id="scheme_of">scheme_of</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">scheme_of</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ColorScheme</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Say which colour scheme a theme uses: light, dark, or the desktop’s own.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The theme’s key.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Qt.ColorScheme or None</em>: The scheme; None if there is no theme with that key.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; scheme_of("dark") == Qt.ColorScheme.Dark, scheme_of("sage_auto") == Qt.ColorScheme.Unknown, scheme_of("nonsense")
+(True, True, None)
+</code></pre>
+
+<h2 id="preview_colours">preview_colours</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preview_colours</span><span class="p">(</span><span class="n">theme</span><span class="p">:</span> <span class="n">CustomTheme</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Pick the colours for the small picture of a theme in the settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">theme</code> (<em>CustomTheme</em>): The theme.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str</em>: The window, panel, outline, text, faint and chosen colours, and a tint for the chosen row.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; preview_colours(CUSTOM_THEMES[0])["window"], sorted(preview_colours(CUSTOM_THEMES[0]))[:3]
+('#eceef1', ['accent', 'faint', 'ink'])
+</code></pre>
+
+<h2 id="theme_palette">theme_palette</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">theme_palette</span><span class="p">(</span><span class="n">theme</span><span class="p">:</span> <span class="n">CustomTheme</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPalette</span>
+</code></pre></div></div>
+
+<p>Build the Qt palette of a theme with colours of its own.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">theme</code> (<em>CustomTheme</em>): The theme.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QPalette</em>: The palette: the window, lists and buttons, text, the chosen row and links in the theme’s colours, with quiet text for what is switched off.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; colours = theme_palette(CUSTOM_THEMES[0])
+&gt;&gt;&gt; colours.color(QPalette.ColorRole.Window).name(), colours.color(QPalette.ColorRole.Highlight).name()
+('#eceef1', '#2f7fc1')
+</code></pre>
+
+<h2 id="saved_theme">saved_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">saved_theme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the theme the user chose.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The key of the theme: “system”, “light”, “dark” or one of the themes with colours of its own; “system” if nothing valid is saved.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_theme("dark")
+&gt;&gt;&gt; saved_theme()
+'dark'
+&gt;&gt;&gt; save_theme("system")
+</code></pre>
+
+<h2 id="save_theme">save_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Remember the theme the user chose.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): “system”, “light”, “dark” or the key of a theme with colours of its own.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_theme("light")
+&gt;&gt;&gt; saved_theme()
+'light'
+&gt;&gt;&gt; save_theme("system")
+</code></pre>
+
+<h2 id="system_is_dark">system_is_dark</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">system_is_dark</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether the desktop is set to dark, as long as the app is not forcing a colour scheme of its own.</p>
+
+<p>A theme that follows the desktop does not force one, so this is what it asks.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the colour scheme in use is dark.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; system_is_dark() in {True, False}
+True
+</code></pre>
+
+<h2 id="apply_theme">apply_theme</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">apply_theme</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Switch the application’s colour scheme and rebuild the stylesheet from the new palette.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): “system” to follow the desktop, “light” or “dark”, or the key of a theme with colours of its own. Anything else follows the system.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; apply_theme("system")
+&gt;&gt;&gt; # noinspection PyUnresolvedReferences
+&gt;&gt;&gt; app.styleSheet() != ""
+True
+&gt;&gt;&gt; apply_theme("studio")
+&gt;&gt;&gt; QApplication.palette().color(QPalette.ColorRole.Window).name()
+'#eceef1'
+&gt;&gt;&gt; apply_theme("system")
+&gt;&gt;&gt; QApplication.palette().color(QPalette.ColorRole.Window).name() != "#eceef1"
+True
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Light and dark switch. With no choice made the page follows the system; the button then sets one and remembers it.
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function mode() {
+      return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    function show() {
+      var dark = mode() === "dark";
+      button.setAttribute("aria-pressed", dark ? "true" : "false");
+      button.querySelector(".icon").textContent = dark ? "\u263E" : "\u2600";
+      button.querySelector(".label").textContent = dark ? "Dark mode" : "Light mode";
+      button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+    button.addEventListener("click", function () {
+      var next = mode() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("alto-docs-theme", next); } catch (e) {}
+      show();
+    });
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

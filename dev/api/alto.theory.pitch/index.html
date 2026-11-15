@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.theory.pitch · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.theory.pitch/">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.theory.pitch · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.theory.pitch/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/dev/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/dev/">
+      <img src="/alto/dev/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span class="icon" aria-hidden="true"></span><span class="label"></span></button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav aria-label="Documentation">
+          
+          <ul>
+            
+            <li><a href="/alto/dev/">Home</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/getting-started/">Getting started</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/exercises/">Exercises</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/practice/">How practice adapts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/statistics/">Statistics and database</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/lessons/">Lessons</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/settings/">Settings</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/shortcuts/">Shortcuts</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/data/">Your data</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/development/">For developers</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/guide/">Developer guide</a>
+              
+            </li>
+            
+            <li><a href="/alto/dev/api/">API reference</a>
+              
+              
+              
+              <ul class="sub-nav">
+                
+                
+                
+                <li class="sub-group"><span>alto</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.exercises</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.learning</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.lessons</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.theory</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.pitch/" aria-current="page">pitch</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></li>
+                <li class="sub-group"><span>alto.ui</span>
+                  <ul>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
+                
+                
+                  </ul>
+                </li>
+                
+              </ul>
+              
+            </li>
+            
+            <li><a href="/alto/dev/credits/">License and credits</a>
+              
+            </li>
+            
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <article>
+        <h1>alto.theory.pitch</h1>
+        
+<p>Pitches and intervals, spelled correctly (C# is not Db).</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">Note</code> is a pitch with its spelling (a letter, an accidental and an octave), so C♯4 and D♭4 are different notes even
+though they sound the same. An <code class="language-plaintext highlighter-rouge">Interval</code> is a distance between two spelled notes, such as a major third or a perfect
+fifth. Together they can transpose a note by an interval and work out the interval between two notes.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; c4 = Note.parse("C4")
+&gt;&gt;&gt; str(c4.transpose(Interval.parse("M3")))
+'E4'
+&gt;&gt;&gt; Interval.between(c4, high=Note.parse("G4"))
+Interval(number=5, quality='P')
+</code></pre>
+
+<h2 id="note">Note</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Note</span><span class="p">(</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">accidental</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A spelled pitch: a letter name, an accidental and an octave.</p>
+
+<p>The spelling matters. C♯4 and D♭4 sound the same (they share a MIDI number) but are different notes, because they sit on
+different lines of the staff.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>int</em>): The octave in scientific pitch notation, where middle C is C4.</li>
+  <li><code class="language-plaintext highlighter-rouge">letter</code> (<em>int</em>): An index into <code class="language-plaintext highlighter-rouge">LETTERS</code>: 0 is C, 1 is D, 2 is E, 3 is F, 4 is G, 5 is A and 6 is B. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidental</code> (<em>int, default 0</em>): -2 for a double flat, -1 for a flat, 0 for a natural, 1 for a sharp and 2 for a double sharp. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; middle_c = Note(4, letter=0)
+&gt;&gt;&gt; middle_c.midi
+60
+&gt;&gt;&gt; str(Note(4, letter=3, accidental=1))
+'F♯4'
+&gt;&gt;&gt; Note(4, letter=0) &lt; Note(4, letter=1)
+True
+</code></pre>
+
+<h3 id="notemidi">Note.midi</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">midi</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the MIDI note number, where middle C (C4) is 60.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The number of semitones above C-1.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note(4, letter=0).midi
+60
+&gt;&gt;&gt; Note(4, letter=1, accidental=-1).midi  # D♭4 sounds like C♯4
+61
+</code></pre>
+
+<h3 id="notediatonic">Note.diatonic</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">diatonic</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the absolute staff-step index of the note, ignoring its accidental.</p>
+
+<p>Counting from C0 as 0, D0 as 1 and so on, each line or space of the staff is one step. The distance between two notes in
+staff steps is the difference of their indexes.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: <code class="language-plaintext highlighter-rouge">octave * 7 + letter</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note(4, letter=0).diatonic  # C4
+28
+&gt;&gt;&gt; Note(4, letter=2, accidental=1).diatonic  # E♯4 is on the same step as E4
+30
+</code></pre>
+
+<h3 id="notepitch_class">Note.pitch_class</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">pitch_class</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the pitch class: the note’s MIDI number modulo 12.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: A number from 0 (C) to 11 (B), the same for every octave and for enharmonic spellings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note(4, letter=0, accidental=1).pitch_class  # C♯4
+1
+&gt;&gt;&gt; Note(3, letter=6, accidental=1).pitch_class  # B♯3 sounds like C
+0
+</code></pre>
+
+<h3 id="notename">Note.name</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the pitch-class name with Unicode accidentals, without the octave.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The letter followed by ♭, ♯, 𝄫 or 𝄪 where the note has an accidental.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note(4, letter=3, accidental=1).name
+'F♯'
+&gt;&gt;&gt; Note(4, letter=3).name
+'F'
+</code></pre>
+
+<h3 id="notefrom_diatonic">Note.from_diatonic</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">from_diatonic</span><span class="p">(</span>
+    <span class="n">diatonic</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">accidental</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
+</code></pre></div></div>
+
+<p>Build a note from an absolute staff-step index.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">diatonic</code> (<em>int</em>): The index, counting C0 as 0 (see <code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">accidental</code> (<em>int, default 0</em>): The accidental to give the note. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note</em>: The note on that staff step with that accidental.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note.from_diatonic(30)
+Note(octave=4, letter=2, accidental=0)
+&gt;&gt;&gt; str(Note.from_diatonic(30, accidental=-1))
+'E♭4'
+</code></pre>
+
+<h3 id="noteparse">Note.parse</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
+</code></pre></div></div>
+
+<p>Parse a note written in plain text, such as ‘F#4’, ‘Bb3’ or ‘Ebb2’.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): A letter A-G (either case), then an accidental (‘#’ for a sharp, ‘b’ for a flat, ‘bb’ for a double flat, ‘x’ for a double sharp, or nothing for a natural), then the octave number.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note</em>: The spelled note.</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>ValueError</em>: If the letter is not A-G, or the octave is missing.</li>
+  <li><em>KeyError</em>: If the accidental is not one of ‘’, ‘#’, ‘b’, ‘bb’ or ‘x’.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Note.parse("F#4")
+Note(octave=4, letter=3, accidental=1)
+&gt;&gt;&gt; Note.parse("Bb3")
+Note(octave=3, letter=6, accidental=-1)
+&gt;&gt;&gt; Note.parse("H4")
+Traceback (most recent call last):
+    ...
+ValueError: substring not found
+</code></pre>
+
+<h3 id="notetranspose">Note.transpose</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span>
+    <span class="n">interval</span><span class="p">:</span> <span class="n">Interval</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">descending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
+</code></pre></div></div>
+
+<p>Move the note up or down by an interval, keeping the spelling correct.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">interval</code> (<em>Interval</em>): How far to move. Its number decides the letter and its quality decides the accidental.</li>
+  <li><code class="language-plaintext highlighter-rouge">descending</code> (<em>bool, default False</em>): Move down instead of up. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Note</em>: The new note. For example a major third above C is E, and a minor third above C is E♭, never D♯.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; str(Note.parse("C4").transpose(Interval.parse("M3")))
+'E4'
+&gt;&gt;&gt; str(Note.parse("C4").transpose(Interval.parse("m3")))
+'E♭4'
+&gt;&gt;&gt; str(Note.parse("C4").transpose(Interval.parse("P5"), descending=True))
+'F3'
+</code></pre>
+
+<h2 id="interval">Interval</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Interval</span><span class="p">(</span>
+    <span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A simple or compound interval between two spelled notes.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">number</code> (<em>int</em>): The size counting both end notes: 1 is a unison, 3 a third, 8 an octave, 9 a ninth and so on.</li>
+  <li><code class="language-plaintext highlighter-rouge">quality</code> (<em>str</em>): One of ‘dd’ (doubly diminished), ‘d’ (diminished), ‘m’ (minor), ‘M’ (major), ‘P’ (perfect), ‘A’ (augmented) and ‘AA’ (doubly augmented). Keyword-only. Unisons, fourths, fifths and octaves are perfect, the others major or minor.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval(3, quality="M").semitones
+4
+&gt;&gt;&gt; str(Interval.parse("P5"))
+'P5'
+</code></pre>
+
+<h3 id="intervalis_perfect_type">Interval.is_perfect_type</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">is_perfect_type</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether this size of interval is “perfect type” (unison, fourth, fifth, octave) rather than major or minor type.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True for unisons, fourths, fifths and octaves (and their compounds), False for seconds, thirds, sixths and sevenths.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval.parse("P5").is_perfect_type
+True
+&gt;&gt;&gt; Interval.parse("M3").is_perfect_type
+False
+</code></pre>
+
+<h3 id="intervalsemitones">Interval.semitones</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">semitones</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the size of the interval in semitones.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The distance in half steps, including whole octaves for compound intervals.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval.parse("M3").semitones
+4
+&gt;&gt;&gt; Interval.parse("d5").semitones
+6
+&gt;&gt;&gt; Interval.parse("m9").semitones  # a minor ninth is an octave plus a minor second
+13
+</code></pre>
+
+<h3 id="intervalshort">Interval.short</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">short</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the interval in short form: its quality followed by its number.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: For example ‘M3’, ‘P5’ or ‘d7’.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval(7, quality="m").short
+'m7'
+</code></pre>
+
+<h3 id="intervalbetween">Interval.between</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">between</span><span class="p">(</span>
+    <span class="n">low</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">high</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
+</code></pre></div></div>
+
+<p>Work out the interval from one note up to a higher one.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>Note</em>): The lower note.</li>
+  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>Note</em>): The higher note. It must not be below <code class="language-plaintext highlighter-rouge">low</code>. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Interval</em>: The spelled interval, such as a major third (C4 up to E4) or an augmented fourth (C4 up to F♯4).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval.between(Note.parse("C4"), high=Note.parse("E4"))
+Interval(number=3, quality='M')
+&gt;&gt;&gt; Interval.between(Note.parse("C4"), high=Note.parse("F#4")).short
+'A4'
+</code></pre>
+
+<h3 id="intervalparse">Interval.parse</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Interval</span>
+</code></pre></div></div>
+
+<p>Parse an interval written in short form, such as ‘M3’, ‘P5’ or ‘d7’.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): The quality (one of dd, d, m, M, P, A, AA) followed by the number.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Interval</em>: The interval.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Interval.parse("m7")
+Interval(number=7, quality='m')
+&gt;&gt;&gt; Interval.parse("P8").semitones
+12
+</code></pre>
+
+<h2 id="key_accidental">key_accidental</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_accidental</span><span class="p">(</span>
+    <span class="n">letter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the accidental a key signature applies to a letter.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">letter</code> (<em>int</em>): An index into <code class="language-plaintext highlighter-rouge">LETTERS</code> (0 is C, 6 is B).</li>
+  <li><code class="language-plaintext highlighter-rouge">count</code> (<em>int</em>): The key signature: that many sharps if positive, that many flats if negative. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: 1 if the signature sharpens the letter, -1 if it flattens it, 0 if it leaves it natural.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; key_accidental(3, count=1)  # F in G major
+1
+&gt;&gt;&gt; key_accidental(6, count=-1)  # B in F major
+-1
+&gt;&gt;&gt; key_accidental(0, count=1)  # C in G major
+0
+</code></pre>
+
+
+      </article>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Light and dark switch. With no choice made the page follows the system; the button then sets one and remembers it.
+    var root = document.documentElement, button = document.getElementById("theme-toggle");
+    function mode() {
+      return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+    function show() {
+      var dark = mode() === "dark";
+      button.setAttribute("aria-pressed", dark ? "true" : "false");
+      button.querySelector(".icon").textContent = dark ? "\u263E" : "\u2600";
+      button.querySelector(".label").textContent = dark ? "Dark mode" : "Light mode";
+      button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+    button.addEventListener("click", function () {
+      var next = mode() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("alto-docs-theme", next); } catch (e) {}
+      show();
+    });
+    show();
+  </script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>
