@@ -14,7 +14,7 @@ You need Python 3.11 or newer. Alto supports every Python version that has not r
 `.github/workflows/tests.yml`), so do not use syntax newer than 3.11.
 
 ```bash
-git clone https://github.com/genedan/alto.git
+git clone https://github.com/altosaurus/alto.git
 cd alto
 python -m venv .venv
 .venv/bin/pip install -e ".[dev]"
