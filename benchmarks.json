@@ -1,0 +1,96 @@
+{
+    "suite.TimeOperation.time_operation": {
+        "code": "class TimeOperation:\n    def time_operation(self, name: str) -> None:\n        \"\"\"\n        Do the operation.\n    \n        Parameters\n        ----------\n        name : str\n            The operation's name.\n        \"\"\"\n        assert self.operation.name == name  # the one that `setup` prepared\n        self.operation.run()\n\n    def setup(self, name: str) -> None:\n        \"\"\"\n        Put the app in the state the operation starts from.\n    \n        Parameters\n        ----------\n        name : str\n            The operation's name.\n        \"\"\"\n        self.operation = workbench().operations[name]\n        self.operation.setup()",
+        "min_run_count": 2,
+        "name": "suite.TimeOperation.time_operation",
+        "number": 1,
+        "param_names": [
+            "operation"
+        ],
+        "params": [
+            [
+                "'resize:circle'",
+                "'page:home'",
+                "'page:lesson'",
+                "'page:lesson-step'",
+                "'page:lesson-to-exercise'",
+                "'page:exercise-to-lesson'",
+                "'page:statistics'",
+                "'page:settings'",
+                "'answer:right'",
+                "'answer:wrong'",
+                "'data:count'",
+                "'data:attempt-rows'",
+                "'data:item-rows'",
+                "'data:attempts-in'",
+                "'data:strained'",
+                "'data:snapshot'",
+                "'learner:pick'",
+                "'learner:record'",
+                "'page:NoteNames'",
+                "'paint:NoteNames'",
+                "'question:NoteNames'",
+                "'page:KeyboardNotes'",
+                "'paint:KeyboardNotes'",
+                "'question:KeyboardNotes'",
+                "'page:NoteConstruction'",
+                "'paint:NoteConstruction'",
+                "'question:NoteConstruction'",
+                "'page:IntervalNames'",
+                "'paint:IntervalNames'",
+                "'question:IntervalNames'",
+                "'page:KeySignatures'",
+                "'paint:KeySignatures'",
+                "'question:KeySignatures'",
+                "'page:KeySignatureConstruction'",
+                "'paint:KeySignatureConstruction'",
+                "'question:KeySignatureConstruction'",
+                "'page:ScaleDegrees'",
+                "'paint:ScaleDegrees'",
+                "'question:ScaleDegrees'",
+                "'page:ScaleConstruction'",
+                "'paint:ScaleConstruction'",
+                "'question:ScaleConstruction'",
+                "'page:CircleOfFifths'",
+                "'paint:CircleOfFifths'",
+                "'question:CircleOfFifths'",
+                "'page:ChordQualities'",
+                "'paint:ChordQualities'",
+                "'question:ChordQualities'",
+                "'page:ArpeggioNames'",
+                "'paint:ArpeggioNames'",
+                "'question:ArpeggioNames'"
+            ]
+        ],
+        "rounds": 2,
+        "sample_time": 0.01,
+        "timeout": 120.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "bc795c0fb2d7ab2f4445598942268791faa3459c1a2a6249dcf7f65e62df6c9b",
+        "warmup_time": 0.0
+    },
+    "suite.TrackFirstUse.track_first_use": {
+        "code": "class TrackFirstUse:\n    def track_first_use(self, name: str) -> float:\n        \"\"\"\n        Give the time of the first use, in seconds.\n    \n        Parameters\n        ----------\n        name : str\n            \"startup\", or the name of an operation.\n    \n        Returns\n        -------\n        float\n            The median of three new processes.\n        \"\"\"\n        return measure_cold_in_new_process(name)",
+        "name": "suite.TrackFirstUse.track_first_use",
+        "param_names": [
+            "operation"
+        ],
+        "params": [
+            [
+                "'startup'",
+                "'resize:circle'",
+                "'page:KeySignatures'",
+                "'page:CircleOfFifths'",
+                "'page:lesson'",
+                "'page:statistics'",
+                "'page:settings'"
+            ]
+        ],
+        "timeout": 300.0,
+        "type": "track",
+        "unit": "s",
+        "version": "65fd521555fd1a6d67da8f819450331a2e6acbf089b776022c13517f007b07b2"
+    },
+    "version": 2
+}
