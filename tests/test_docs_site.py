@@ -227,13 +227,20 @@ def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is
     menu = bar[bar.index('id="theme-menu"') : bar.index('class="icon-link"')]
     assert "hidden>" in menu and ">Light<" in menu and ">Dark<" in menu and ">System<" in menu
     assert "theme-toggle" not in layout  # the old button with words is gone
+    assert "Match your computer" not in layout  # System has no note under it
+    assert layout.count('class="dd-ico"') == 3  # an icon tile beside each of Light, Dark and System
     assert 'removeAttribute("data-theme")' in layout and "Escape" in layout  # System forgets the choice; Escape closes the menu
 
 
-def test_the_dropdown_names_dev_plainly() -> None:
-    """Check that the entry for the development docs says "dev" and nothing more."""
+def test_the_version_dropdown_is_made_like_the_theme_menu_with_dev_last_and_named_plainly() -> None:
+    """Check the version dropdown: a menu with icon tiles and not a native select, dev after the releases, and called "dev"."""
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
-    assert "unreleased)" not in script and "label: name" in script
+    assert 'createElement("select")' not in script and 'class="dd-ico"' in script and "dd-menu" in script
+    assert "unreleased)" not in script and "label: name" in script  # the entry for the development docs says "dev" and no more
+    assert 'concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : [])' in script  # releases first, then dev
+    assert "Match your computer" not in script
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".dd-menu {" in css and ".dd-item" in css and ".version select" not in css
 
 
 def test_the_config_builds_dev_by_default_and_keeps_the_shared_files_out_of_every_version() -> None:

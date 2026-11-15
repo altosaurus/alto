@@ -40,28 +40,75 @@
     if (layout && layout.parentNode) { layout.parentNode.insertBefore(bar, layout); }
   }
 
+  // The icons are drawn here, so that this file works in a page of any version, whatever icons that page carries.
+  var SVG = {
+    tag: '<path d="M3 12.2V4h8.2L21 13.8 13.8 21z"/><circle cx="7.5" cy="8.5" r="1"/>',
+    branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10c0 4-6 3-12 7"/>',
+    chev: '<path d="M6 9l6 6 6-6"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+  };
+  function icon(name, extra) {
+    return '<svg class="i ' + (extra || "") + '" viewBox="0 0 24 24" aria-hidden="true">' + SVG[name] + "</svg>";
+  }
+
   fetch(root + "/versions.json", { cache: "no-cache" })
     .then(function (answer) { return answer.json(); })
     .then(function (data) {
       var latest = data.latest;
-      var select = document.createElement("select");
-      select.id = "version-select";
-      select.setAttribute("aria-label", "Version of the docs");
       var entries = [];
-      if (latest) { entries.push({ value: "latest", label: "latest (" + latest + ")" }); }
-      data.versions.forEach(function (name) {
-        entries.push({ value: name, label: name });
+      if (latest) { entries.push({ value: "latest", name: "latest", note: latest + ", the newest release", ico: "tag", label: "latest (" + latest + ")" }); }
+      // The releases, newest first as in the list, and the development version after them.
+      var ordered = data.versions.filter(function (name) { return name !== "dev"; }).concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : []);
+      ordered.forEach(function (name) {
+        var isDev = name === "dev";
+        entries.push({ value: name, name: name, note: isDev ? "changes not yet in a release" : "", ico: isDev ? "branch" : "tag", label: name });
       });
-      entries.forEach(function (entry) {
-        var option = document.createElement("option");
-        option.value = entry.value;
-        option.textContent = entry.label;
-        option.selected = entry.value === current;
-        select.appendChild(option);
+      var shown = entries.filter(function (entry) { return entry.value === current; })[0] || { label: current };
+
+      var wrap = document.createElement("div");
+      wrap.className = "dd";
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "dd-btn";
+      button.id = "version-button";
+      button.setAttribute("aria-haspopup", "menu");
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Version of the docs");
+      button.innerHTML = "<span>" + shown.label + "</span>" + icon("chev", "chev");
+      var menu = document.createElement("div");
+      menu.className = "dd-menu";
+      menu.setAttribute("role", "menu");
+      menu.hidden = true;
+      var items = entries.map(function (entry) {
+        var item = document.createElement("button");
+        item.type = "button";
+        item.className = "dd-item";
+        item.setAttribute("role", "menuitemradio");
+        item.setAttribute("aria-checked", entry.value === current ? "true" : "false");
+        item.innerHTML = '<span class="dd-ico">' + icon(entry.ico) + '</span><span class="dd-text"><b>' + entry.name + "</b>" +
+          (entry.note ? "<small>" + entry.note + "</small>" : "") + "</span>" + icon("check", "dd-check");
+        item.addEventListener("click", function () { setOpen(false); if (entry.value !== current) { go(entry.value); } });
+        menu.appendChild(item);
+        return item;
       });
-      select.addEventListener("change", function () { go(select.value); });
+      function setOpen(isOpen) {
+        menu.hidden = !isOpen;
+        button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        if (isOpen) { (menu.querySelector('[aria-checked="true"]') || items[0]).focus(); }
+      }
+      button.addEventListener("click", function () { setOpen(menu.hidden); });
+      document.addEventListener("click", function (event) { if (!menu.hidden && !wrap.contains(event.target)) { setOpen(false); } });
+      document.addEventListener("keydown", function (event) {
+        if (menu.hidden) { return; }
+        if (event.key === "Escape") { setOpen(false); button.focus(); }
+        var at = items.indexOf(document.activeElement);
+        if (event.key === "ArrowDown") { event.preventDefault(); items[(at + 1) % items.length].focus(); }
+        if (event.key === "ArrowUp") { event.preventDefault(); items[(at + items.length - 1) % items.length].focus(); }
+      });
+      wrap.appendChild(button);
+      wrap.appendChild(menu);
       slot.textContent = "";
-      slot.appendChild(select);
+      slot.appendChild(wrap);
 
       if (current === "dev") {
         banner("This is the development version, which has changes that are not in a release.", latest ? root + "/latest/" : "", "See the latest release.");
