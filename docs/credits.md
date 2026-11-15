@@ -42,6 +42,11 @@ The flute, French horn, viola, marimba and vibraphone use recordings from the
 [Musical Instrument Samples](https://theremin.music.uiowa.edu/MIS.html) of the University of Iowa Electronic Music
 Studios, which the studio makes freely available for any project. Alto converted them to mono, trimmed and faded them.
 
+## Platform logos
+
+The Linux and Apple marks in the download section of the home page are from [Simple Icons](https://simpleicons.org) (CC0 1.0). The
+Windows mark is four squares. The marks belong to their owners and are shown only to say which systems Alto is for.
+
 ## Software
 
 Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0) and [numpy](https://numpy.org/) (BSD-3-Clause).

@@ -127,9 +127,15 @@ jobs:
           VERSION: ${{ steps.what.outputs.version }}
           BUNDLE_GEMFILE: ${{ github.workspace }}/tooling/docs/Gemfile
         run: |
+          # The release the download section offers: a release's own version, and for dev the newest release (empty if there is none).
+          if [ "$VERSION" = dev ]; then
+            APP_VERSION=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*') | sed 's/^v//')
+          else
+            APP_VERSION="${VERSION#v}"
+          fi
           build() { # build FOLDER LABEL: the docs in source/ into site/FOLDER, which a page knows as LABEL
             rm -rf "site/$1"
-            printf 'baseurl: %s/%s\ndocs_version: %s\n' "$SITE_PATH" "$1" "$2" > version.yml
+            printf 'baseurl: %s/%s\ndocs_version: %s\napp_version: "%s"\n' "$SITE_PATH" "$1" "$2" "$APP_VERSION" > version.yml
             bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
           }
           build "$VERSION" "$VERSION"
