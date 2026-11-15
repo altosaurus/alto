@@ -2,7 +2,7 @@
 title: alto.ui.instrument_picker
 parent: api
 package: alto.ui
-order: 29
+order: 31
 permalink: /api/alto.ui.instrument_picker/
 ---
 {% raw %}

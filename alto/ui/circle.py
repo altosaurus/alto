@@ -34,6 +34,7 @@ from PySide6.QtGui import (
     QPainter,
     QPainterPath,
     QPaintEvent,
+    QPalette,
     QPen,
 )
 from PySide6.QtWidgets import (
@@ -41,6 +42,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto import settings
+from alto.circle_schemes import (
+    Scheme,
+)
 from alto.theory.fifths import (
     MAJORS,
     MINORS,
@@ -49,6 +54,7 @@ from alto.theory.fifths import (
     cells_of_key,
 )
 from alto.theory.scales import format_key_signature
+from alto.ui.colors import blend
 from alto.ui.engraving import (
     accidental_width,
     draw_accidental,
@@ -62,7 +68,6 @@ from alto.ui.staff import (
 OUTER_FROM = 0.746  # where the outer ring starts, as a fraction of the circle's radius
 DISC = 0.485  # the radius of the disc in the middle
 WEDGE = 30.0  # the angle of one wedge, in degrees
-BASE = QColor(34, 36, 42)  # the colour of the disc, and the gaps between the wedges
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -161,18 +166,21 @@ def wedge_color(
     *,
     inner: bool,
     lift: float = 0.0,
+    scheme: Scheme | None = None,
 ) -> QColor:
     """
-    Return the colour of a wedge: its own hue, dark when quiet and bright when it is being talked about.
+    Return the colour of a wedge in a colour scheme: quiet when it is not being talked about and bright when it is.
 
     Parameters
     ----------
     index : int
-        Which wedge: its hue goes round the colour wheel once, from red at the top.
+        Which wedge, clockwise from the top.
     inner : bool
-        Whether it is in the inner ring, which is a little darker than the outer one. Keyword-only.
+        Whether it is in the inner ring. Keyword-only.
     lift : float, default 0.0
         How bright it is, from 0 (quiet) to 1 (lit). Keyword-only.
+    scheme : Scheme or None, default None
+        The colour scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
 
     Returns
     -------
@@ -181,20 +189,21 @@ def wedge_color(
 
     Examples
     --------
-    >>> wedge_color(0, inner=False, lift=1.0).hue(), wedge_color(6, inner=False).hue()  # red at the top, cyan at the bottom
+    >>> from alto.circle_schemes import preset
+    >>> spectrum = preset("spectrum")
+    >>> wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
     (0, 180)
-    >>> wedge_color(0, inner=False, lift=1.0).lightness() > wedge_color(0, inner=False).lightness()
+    >>> lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
+    >>> lit.lightness() > quiet.lightness()
     True
-    >>> lit = [wedge_color(i, inner=False, lift=1.0) for i in range(12)]  # none looks brighter than white text can stand
-    >>> all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44 for c in lit)
+    >>> # no wedge looks too bright for white names
+    >>> every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
+    >>> all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() <= 0.44 for c in every)
     True
     """
-    hue, saturation, lightness = (index * WEDGE / 360.0) % 1.0, 0.34 + 0.46 * lift, (0.17 if inner else 0.24) + 0.28 * lift
-    colour = QColor.fromHslF(hue, saturation, lightness)
-    seen = (0.299 * colour.redF() + 0.587 * colour.greenF() + 0.114 * colour.blueF()) / MAX_BRIGHTNESS
-    if seen > 1.0:  # yellows and greens look far brighter than blues of the same lightness: bring them down to the same level
-        colour = QColor.fromHslF(hue, saturation, lightness / seen)
-    return colour
+    chosen = scheme or settings.circle.active_scheme()
+    red, green, blue = chosen.colour("inner" if inner else "outer", place=index, lift=lift)
+    return QColor.fromRgbF(red, green, blue)
 
 
 def write_text(
@@ -761,11 +770,14 @@ class FifthsCircle(QWidget):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         centre, radius = self.geometry_of()
+        scheme = settings.circle.active_scheme()
         rings = {"outer": (OUTER_FROM * radius, radius), "inner": (DISC * radius, OUTER_FROM * radius)}
-        p.setPen(QPen(BASE, max(radius / 160, 1.0)))
+        p.setPen(
+            QPen(self.palette().color(QPalette.ColorRole.Window), max(radius / 160, 1.0)),
+        )  # the gaps are the app's own background
         for index in range(12):
             for ring, (inner, outer) in rings.items():
-                shade = wedge_color(index, inner=ring == "inner", lift=self.lift_of(ring, place=index))
+                shade = wedge_color(index, inner=ring == "inner", lift=self.lift_of(ring, place=index), scheme=scheme)
                 shape = wedge_path(centre=centre, inner=inner, outer=outer, index=index)
                 p.setBrush(shade)
                 p.drawPath(shape)
@@ -782,9 +794,11 @@ class FifthsCircle(QWidget):
             ring, place = self.target
             inner, outer = rings[ring]
             p.setBrush(Qt.BrushStyle.NoBrush)
-            p.setPen(QPen(QColor("#2f6fe4"), max(radius / 90, 2.0)))
+            p.setPen(
+                QPen(self.palette().color(QPalette.ColorRole.WindowText), max(radius / 100, 2.0)),
+            )  # the text colour shows in either theme
             p.drawPath(wedge_path(centre=centre, inner=inner, outer=outer, index=place))
-        self._draw_labels(p, centre=centre, radius=radius)
+        self._draw_labels(p, centre=centre, radius=radius, scheme=scheme)
         self._draw_disc(p, centre=centre, radius=radius)
 
     def _draw_labels(
@@ -793,6 +807,7 @@ class FifthsCircle(QWidget):
         *,
         centre: QPointF,
         radius: float,
+        scheme: Scheme,
     ) -> None:
         """
         Write the names of the keys that are shown, with the Roman numeral of any chord that has one.
@@ -805,13 +820,16 @@ class FifthsCircle(QWidget):
             The middle of the circle. Keyword-only.
         radius : float
             The radius of the circle, in pixels. Keyword-only.
+        scheme : Scheme
+            The colour scheme, which says what colour the names are. Keyword-only.
 
         Examples
         --------
         >>> from PySide6.QtGui import QImage
         >>> image = QImage(300, 300, QImage.Format.Format_ARGB32)
         >>> painter = QPainter(image)
-        >>> FifthsCircle()._draw_labels(painter, centre=QPointF(150, 150), radius=140)
+        >>> from alto.circle_schemes import preset
+        >>> FifthsCircle()._draw_labels(painter, centre=QPointF(150, 150), radius=140, scheme=preset("midnight"))
         >>> painter.end()
         True
         """
@@ -830,6 +848,7 @@ class FifthsCircle(QWidget):
                     numeral=self.numerals.get((ring, index), ""),
                     size=radius * size,
                     weight=QFont.Weight.Bold if ring == "outer" or asked else QFont.Weight.Medium,
+                    colours=scheme.names(),
                 )
 
     @staticmethod
@@ -841,6 +860,7 @@ class FifthsCircle(QWidget):
         numeral: str,
         size: float,
         weight: QFont.Weight,
+        colours: dict[str, str],
     ) -> None:
         """
         Write what a cell says, stacked and centred: the key's name, its other name smaller and greyer, and its numeral.
@@ -859,21 +879,27 @@ class FifthsCircle(QWidget):
             The size of the main name's letters, in pixels. Keyword-only.
         weight : QFont.Weight
             How heavy the main name is. Keyword-only.
+        colours : dict of str to str
+            The colours of the writing, from `Scheme.text`: "ink" for the name, "muted" for the rest. Keyword-only.
 
         Examples
         --------
         >>> from PySide6.QtGui import QImage
         >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
         >>> painter = QPainter(image)
-        >>> FifthsCircle._write(painter, at=QPointF(50, 50), names=("B", "C♭"), numeral="V", size=14, weight=QFont.Weight.Bold)
+        >>> from alto.circle_schemes import preset
+        >>> inks = preset("spectrum").names()
+        >>> FifthsCircle._write(
+        ...     painter, at=QPointF(50, 50), names=("B", "C♭"), numeral="V", size=14, weight=QFont.Weight.Bold, colours=inks
+        ... )
         >>> painter.end()
         True
         """
-        lines = [(names[0], size, weight, QColor(245, 245, 245))]
+        lines = [(names[0], size, weight, QColor(colours["ink"]))]
         if len(names) > 1:
-            lines.append((f"/{names[1]}", size * 0.78, QFont.Weight.Normal, QColor(178, 178, 186)))
+            lines.append((f"/{names[1]}", size * 0.78, QFont.Weight.Normal, QColor(colours["muted"])))
         if numeral:
-            lines.append((numeral, size * 0.85, QFont.Weight.Normal, QColor(172, 172, 180)))
+            lines.append((numeral, size * 0.85, QFont.Weight.Normal, QColor(colours["muted"])))
         heights = [pixels * 1.3 for _, pixels, _, _ in lines]
         top = at.y() - sum(heights) / 2
         for (text, pixels, heavy, colour), height in zip(lines, heights, strict=True):
@@ -909,14 +935,15 @@ class FifthsCircle(QWidget):
         True
         """
         r = DISC * radius
-        p.setPen(QPen(QColor(60, 63, 72), max(radius / 160, 1.0)))
-        p.setBrush(BASE)
+        window, text = self.palette().color(QPalette.ColorRole.Window), self.palette().color(QPalette.ColorRole.WindowText)
+        p.setPen(QPen(blend(window, b=text, t=0.2), max(radius / 160, 1.0)))
+        p.setBrush(window)  # the disc is the app's own background, light or dark
         p.drawEllipse(centre, r, r)
-        pale = QColor(225, 225, 230)
+        pale = text
         if self.signature is not None:
             gap = r * 0.115
             bottom = centre.y() + gap * 1.0 - r * 0.2
-            p.setPen(QPen(QColor(120, 122, 130), 1.2))
+            p.setPen(QPen(blend(window, b=text, t=0.5), 1.2))
             for line in range(5):
                 y = bottom - line * gap
                 p.drawLine(QPointF(centre.x() - r * 0.62, y), QPointF(centre.x() + r * 0.62, y))
@@ -951,6 +978,6 @@ class FifthsCircle(QWidget):
             text=self.subtitle,
             pixels=r * 0.14,
             weight=QFont.Weight.Normal,
-            colour=QColor(170, 172, 180),
+            colour=blend(window, b=text, t=0.65),
             max_width=r * 1.45,
         )

@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 43
+order: 45
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -393,7 +393,8 @@ What every exercise's settings pane has in common: it says when a setting has be
 
 **Attributes**
 
-- `changed` (*Signal*): Emitted after any setting is edited.
+- `changed` (*Signal*): Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.
+- `restyled` (*Signal*): Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is drawn again.
 
 **Examples**
 
@@ -1052,16 +1053,40 @@ def load_circle() -> None
 
 Load the saved circle of fifths settings into the shared settings object.
 
-Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
+saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
 
 **Examples**
 
 ```pycon
 >>> store().setValue("circle/questions", "numeral,nonsense")
+>>> store().setValue("circle/scheme", "midnight")
 >>> load_circle()
->>> settings.circle.questions
-{'numeral'}
+>>> settings.circle.questions, settings.circle.scheme
+({'numeral'}, 'midnight')
 >>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+>>> settings.circle.scheme = DEFAULT_SCHEME
+>>> store().remove("circle")
+```
+
+## save_circle
+
+```python
+def save_circle(cfg: settings.CircleSettings) -> None
+```
+
+Save the circle of fifths settings.
+
+**Parameters**
+
+- `cfg` (*CircleSettings*): The settings to save.
+
+**Examples**
+
+```pycon
+>>> save_circle(settings.CircleSettings(scheme="ink"))
+>>> store().value("circle/scheme")
+'ink'
 >>> store().remove("circle")
 ```
 
@@ -1077,24 +1102,28 @@ CircleSettingsPanel(
 
 Bases: `ExerciseSettingsPanel`
 
-The settings of the circle of fifths exercise: which kinds of question to ask.
+The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.
 
-The menu has one row, Questions, which opens a page of switches. Edits are live: each changes the settings, saves them and
-emits `changed`.
+The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
+of question emits `changed`, and a new colour scheme emits `restyled`, which keeps the question.
 
 **Attributes**
 
 - `cfg` (*CircleSettings*): The settings being edited.
-- `stack` (*SlideStack*): The menu and its page.
-- `questions_row` (*_Row*): The menu row.
+- `stack` (*SlideStack*): The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.
+- `questions_row` (*_Row*): The menu row for the questions.
+- `colours_row` (*_Row*): The menu row for the colours; its value is the name of the chosen scheme.
 - `questions` (*ChoiceChecklist*): The kinds of question: relative major, relative minor and Roman numerals.
+- `schemes` (*SchemePage*): The colour schemes.
+- `editor` (*SchemeEditor*): The editor of a scheme of your own.
 
 **Examples**
 
 ```pycon
 >>> panel = CircleSettingsPanel(settings.CircleSettings())
->>> panel.questions_row.value.text()
-'3 of 3'
+>>> panel.questions_row.value.text(), panel.colours_row.value.text()
+('3 of 3', 'Cyan to indigo')
 ```
 
 **Constructor**
@@ -1109,8 +1138,8 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```pycon
->>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu and one page
-2
+>>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+4
 ```
 
 ## settings_panel_for

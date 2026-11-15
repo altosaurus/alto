@@ -58,6 +58,13 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
+from alto.circle_schemes import (
+    DEFAULT_SCHEME,
+    PRESETS,
+    CustomRecord,
+    dump_customs,
+    load_customs,
+)
 from alto.exercises.base import Exercise
 from alto.exercises.library import (
     ArpeggioNames,
@@ -86,6 +93,10 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import INVERSION_NAMES
+from alto.ui.circle_colours import (
+    SchemeEditor,
+    SchemePage,
+)
 from alto.ui.colors import blend
 from alto.ui.keyboard import KeyboardSpan
 from alto.ui.pictures import (
@@ -1436,7 +1447,10 @@ class ExerciseSettingsPanel(QWidget):
     Attributes
     ----------
     changed : Signal
-        Emitted after any setting is edited.
+        Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.
+    restyled : Signal
+        Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is
+        drawn again.
 
     Examples
     --------
@@ -1450,6 +1464,7 @@ class ExerciseSettingsPanel(QWidget):
     """
 
     changed = Signal()
+    restyled = Signal()
 
 
 class NoteNameSettingsPanel(ExerciseSettingsPanel):
@@ -3707,15 +3722,18 @@ def load_circle() -> None:
     """
     Load the saved circle of fifths settings into the shared settings object.
 
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
+    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
+    saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
 
     Examples
     --------
     >>> store().setValue("circle/questions", "numeral,nonsense")
+    >>> store().setValue("circle/scheme", "midnight")
     >>> load_circle()
-    >>> settings.circle.questions
-    {'numeral'}
+    >>> settings.circle.questions, settings.circle.scheme
+    ({'numeral'}, 'midnight')
     >>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+    >>> settings.circle.scheme = DEFAULT_SCHEME
     >>> store().remove("circle")
     """
     saved_settings = store()
@@ -3724,31 +3742,93 @@ def load_circle() -> None:
         settings.circle.questions = {
             q for q in questions.split(",") if q in settings.CIRCLE_QUESTIONS
         } or settings.circle.questions
+    settings.circle.customs = load_customs(text_value(saved_settings, key="circle/customSchemes", default="[]"))
+    wanted = text_value(saved_settings, key="circle/scheme", default=DEFAULT_SCHEME)
+    known = set(PRESETS) | {record["id"] for record in settings.circle.customs}
+    settings.circle.scheme = wanted if wanted in known else DEFAULT_SCHEME
+
+
+def _scrolling(body: QWidget) -> QScrollArea:
+    """
+    Put a page's body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.
+
+    Parameters
+    ----------
+    body : QWidget
+        What the page shows.
+
+    Returns
+    -------
+    QScrollArea
+        The scroll area that holds it, with no frame and no sideways scrolling.
+
+    Examples
+    --------
+    >>> page = QWidget()
+    >>> _scrolling(page).widget() is page
+    True
+    """
+    scroll = QScrollArea()
+    scroll.setWidget(body)
+    scroll.setWidgetResizable(True)
+    scroll.setFrameShape(QFrame.Shape.NoFrame)
+    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+    scroll.setMinimumHeight(0)
+    return scroll
+
+
+def save_circle(cfg: settings.CircleSettings) -> None:
+    """
+    Save the circle of fifths settings.
+
+    Parameters
+    ----------
+    cfg : CircleSettings
+        The settings to save.
+
+    Examples
+    --------
+    >>> save_circle(settings.CircleSettings(scheme="ink"))
+    >>> store().value("circle/scheme")
+    'ink'
+    >>> store().remove("circle")
+    """
+    saved_settings = store()
+    saved_settings.setValue("circle/questions", ",".join(cfg.active_questions()))
+    saved_settings.setValue("circle/scheme", cfg.scheme)
+    saved_settings.setValue("circle/customSchemes", dump_customs(cfg.customs))
 
 
 class CircleSettingsPanel(ExerciseSettingsPanel):
     """
-    The settings of the circle of fifths exercise: which kinds of question to ask.
+    The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.
 
-    The menu has one row, Questions, which opens a page of switches. Edits are live: each changes the settings, saves them and
-    emits `changed`.
+    The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+    button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
+    of question emits `changed`, and a new colour scheme emits `restyled`, which keeps the question.
 
     Attributes
     ----------
     cfg : CircleSettings
         The settings being edited.
     stack : SlideStack
-        The menu and its page.
+        The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.
     questions_row : _Row
-        The menu row.
+        The menu row for the questions.
+    colours_row : _Row
+        The menu row for the colours; its value is the name of the chosen scheme.
     questions : ChoiceChecklist
         The kinds of question: relative major, relative minor and Roman numerals.
+    schemes : SchemePage
+        The colour schemes.
+    editor : SchemeEditor
+        The editor of a scheme of your own.
 
     Examples
     --------
     >>> panel = CircleSettingsPanel(settings.CircleSettings())
-    >>> panel.questions_row.value.text()
-    '3 of 3'
+    >>> panel.questions_row.value.text(), panel.colours_row.value.text()
+    ('3 of 3', 'Cyan to indigo')
     """
 
     def __init__(
@@ -3769,8 +3849,8 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
         Examples
         --------
-        >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu and one page
-        2
+        >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+        4
         """
         super().__init__(parent)
         self.cfg = cfg
@@ -3795,6 +3875,9 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self.questions_row = _Row("Questions")
         self.questions_row.clicked.connect(lambda: self._go(1))
         mlay.addWidget(self.questions_row)
+        self.colours_row = _Row("Colours")
+        self.colours_row.clicked.connect(lambda: self._go(2))
+        mlay.addWidget(self.colours_row)
         mlay.addStretch()
         self.questions = ChoiceChecklist([("", list(settings.CIRCLE_QUESTIONS.items()))], selected=cfg.questions)
         self.questions.changed.connect(self._questions_edited)
@@ -3815,18 +3898,33 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         )
         blay.addWidget(self.questions)
         blay.addWidget(note)
-        for page in (menu, _subpage("Questions", body=body, back=lambda: self._go(0))):
+        self.schemes = SchemePage()
+        self.schemes.chosen.connect(self._scheme_chosen)
+        self.schemes.new.connect(self._new_scheme)
+        self.schemes.edit_asked.connect(self._edit_scheme)
+        self.editor = SchemeEditor()
+        self.editor.saved.connect(self._scheme_saved)
+        self.editor.deleted.connect(self._scheme_deleted)
+        self.editor.cancelled.connect(lambda: self._go(2))
+        pages = (
+            menu,
+            _subpage("Questions", body=body, back=lambda: self._go(0)),
+            _subpage("Colours", body=_scrolling(self.schemes), back=lambda: self._go(0), fill=True),
+            _subpage("Your colours", body=_scrolling(self.editor), back=lambda: self._go(2), fill=True),
+        )
+        for page in pages:
             self.stack.addWidget(page)
+        self.schemes.load(current=cfg.scheme, customs=cfg.customs)
         self._refresh_summaries()
 
     def _go(self, index: int) -> None:
         """
-        Slide to a page, refreshing the menu's summary when going back to it.
+        Slide to a page, refreshing the menu's summaries when going back to it.
 
         Parameters
         ----------
         index : int
-            0 for the menu, 1 for the questions.
+            0 for the menu, 1 for the questions, 2 for the colour schemes and 3 for the editor of a scheme.
 
         Examples
         --------
@@ -3843,16 +3941,17 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
     def _refresh_summaries(self) -> None:
         """
-        Update the menu's summary: how many kinds of question are on.
+        Update the menu's summaries: how many kinds of question are on, and the name of the colour scheme.
 
         Examples
         --------
-        >>> panel = CircleSettingsPanel(settings.CircleSettings(questions={"minor"}))
+        >>> panel = CircleSettingsPanel(settings.CircleSettings(questions={"minor"}, scheme="midnight"))
         >>> panel._refresh_summaries()
-        >>> panel.questions_row.value.text()
-        '1 of 3'
+        >>> panel.questions_row.value.text(), panel.colours_row.value.text()
+        ('1 of 3', 'Midnight')
         """
         self.questions_row.value.setText(f"{len(self.cfg.active_questions())} of {len(settings.CIRCLE_QUESTIONS)}")
+        self.colours_row.value.setText(self.cfg.active_scheme().name)
 
     def _questions_edited(self) -> None:
         """
@@ -3868,8 +3967,128 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         >>> store().remove("circle")
         """
         self.cfg.questions = self.questions.selected()
-        store().setValue("circle/questions", ",".join(self.cfg.active_questions()))
+        save_circle(self.cfg)
         self.changed.emit()
+
+    def _scheme_chosen(self, key: str) -> None:
+        """
+        Use a colour scheme: take it into the settings, save it and say so.
+
+        Parameters
+        ----------
+        key : str
+            The key of the scheme that was clicked.
+
+        Examples
+        --------
+        >>> cfg = settings.CircleSettings()
+        >>> panel = CircleSettingsPanel(cfg)
+        >>> panel._scheme_chosen("ember")
+        >>> cfg.scheme, panel.schemes.thumbs["ember"].isChecked(), panel.colours_row.value.text()
+        ('ember', True, 'Ember')
+        >>> store().remove("circle")
+        """
+        self.cfg.scheme = key
+        save_circle(self.cfg)
+        self.schemes.load(current=key, customs=self.cfg.customs)
+        self._refresh_summaries()
+        self.restyled.emit()
+
+    def _new_scheme(self) -> None:
+        """
+        Open the editor on a new scheme of your own.
+
+        Examples
+        --------
+        >>> panel = CircleSettingsPanel(settings.CircleSettings())
+        >>> panel._new_scheme()
+        >>> panel.editor.record()["id"], panel.editor.delete_button.isHidden()
+        ('custom-1', True)
+        """
+        self.editor.load(None, taken=self.cfg.customs)
+        self._go(3)
+
+    def _edit_scheme(self, key: str) -> None:
+        """
+        Open the editor on one of your schemes.
+
+        Parameters
+        ----------
+        key : str
+            Its key.
+
+        Examples
+        --------
+        >>> from alto.circle_schemes import record_of
+        >>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+        >>> panel = CircleSettingsPanel(settings.CircleSettings(customs=[mine]))
+        >>> panel._edit_scheme("custom-1")
+        >>> panel.editor.name.text(), panel.editor.delete_button.isHidden()
+        ('Mine', False)
+        """
+        for record in self.cfg.customs:
+            if record["id"] == key:
+                self.editor.load(record, taken=self.cfg.customs)
+                self._go(3)
+                return
+
+    def _scheme_saved(self, record: CustomRecord) -> None:
+        """
+        Keep a scheme of your own, use it, save it and go back to the list.
+
+        Parameters
+        ----------
+        record : CustomRecord
+            The scheme from the editor: a new one is added, one that has the same key is replaced.
+
+        Examples
+        --------
+        >>> cfg = settings.CircleSettings()
+        >>> panel = CircleSettingsPanel(cfg)
+        >>> panel._new_scheme()
+        >>> panel._scheme_saved(panel.editor.record())
+        >>> cfg.scheme, [r["name"] for r in cfg.customs], "custom-1" in panel.schemes.thumbs
+        ('custom-1', ['My colours'], True)
+        >>> store().remove("circle")
+        """
+        others = [existing for existing in self.cfg.customs if existing["id"] != record["id"]]
+        self.cfg.customs = sorted([*others, record], key=lambda item: item["id"])
+        self.cfg.scheme = record["id"]
+        save_circle(self.cfg)
+        self.schemes.load(current=record["id"], customs=self.cfg.customs)
+        self._refresh_summaries()
+        self.restyled.emit()
+        self.stack.setCurrentIndex(3)
+        self._go(2)
+
+    def _scheme_deleted(self, key: str) -> None:
+        """
+        Delete a scheme of your own; if it was the one in use, go back to the default.
+
+        Parameters
+        ----------
+        key : str
+            Its key.
+
+        Examples
+        --------
+        >>> from alto.circle_schemes import record_of
+        >>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+        >>> cfg = settings.CircleSettings(customs=[mine], scheme="custom-1")
+        >>> panel = CircleSettingsPanel(cfg)
+        >>> panel._scheme_deleted("custom-1")
+        >>> cfg.customs, cfg.scheme
+        ([], 'cyan-indigo')
+        >>> store().remove("circle")
+        """
+        self.cfg.customs = [record for record in self.cfg.customs if record["id"] != key]
+        if self.cfg.scheme == key:
+            self.cfg.scheme = DEFAULT_SCHEME
+        save_circle(self.cfg)
+        self.schemes.load(current=self.cfg.scheme, customs=self.cfg.customs)
+        self._refresh_summaries()
+        self.restyled.emit()
+        self._go(2)
 
 
 def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:

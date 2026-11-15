@@ -16,6 +16,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | Module | What it is |
 |---|---|
 | [alto.audio](alto.audio/) | Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes. |
+| [alto.circle_schemes](alto.circle_schemes/) | The colour schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
@@ -72,6 +73,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.backup_flow](alto.ui.backup_flow/) | Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced. |
 | [alto.ui.charts](alto.ui.charts/) | Small charts drawn with QPainter, in the application's theme colours. |
 | [alto.ui.circle](alto.ui.circle/) | The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside. |
+| [alto.ui.circle_colours](alto.ui.circle_colours/) | The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one. |
 | [alto.ui.colors](alto.ui.colors/) | Mixing colours. The interface blends palette colours to get its soft tints and highlights. |
 | [alto.ui.database_page](alto.ui.database_page/) | A read-only look at what is stored: every answer, every question's record, and the profiles. |
 | [alto.ui.engraving](alto.ui.engraving/) | Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others). |

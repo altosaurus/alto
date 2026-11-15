@@ -2,7 +2,7 @@
 title: alto.exercises.library
 parent: api
 package: alto.exercises
-order: 8
+order: 9
 permalink: /api/alto.exercises.library/
 ---
 {% raw %}

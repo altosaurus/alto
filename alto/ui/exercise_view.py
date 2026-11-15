@@ -554,6 +554,7 @@ class ExerciseView(QWidget):
             self._pane_anim.finished.connect(self._pane_settled)
             self.gear.toggled.connect(self._toggle_pane)
             self.settings_panel.changed.connect(self.next_question)  # apply new settings right away
+            self.settings_panel.restyled.connect(self.circle.update)  # a new look keeps the question
         if reference is not None and self.book_btn is not None:
             ref_pane = QFrame()
             ref_pane.setObjectName("settingsPane")

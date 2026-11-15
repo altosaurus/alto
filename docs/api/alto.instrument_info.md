@@ -2,7 +2,7 @@
 title: alto.instrument_info
 parent: api
 package: alto
-order: 2
+order: 3
 permalink: /api/alto.instrument_info/
 ---
 {% raw %}

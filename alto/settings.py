@@ -20,6 +20,12 @@ from dataclasses import (
     field,
 )
 
+from alto.circle_schemes import (
+    DEFAULT_SCHEME,
+    CustomRecord,
+    Scheme,
+    resolve,
+)
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     LETTERS,
@@ -822,6 +828,10 @@ class CircleSettings:
     questions : set of str
         The kinds of question to ask, keys of `CIRCLE_QUESTIONS`: the relative major of a minor key, the relative minor of a
         major key, and the Roman numeral of a chord of a key.
+    scheme : str
+        The key of the colour scheme the circle is drawn in: a preset of `alto.circle_schemes` or one of `customs`.
+    customs : list of CustomRecord
+        The colour schemes the user made.
 
     Examples
     --------
@@ -829,9 +839,13 @@ class CircleSettings:
     ['major', 'minor', 'numeral']
     >>> CircleSettings(questions={"numeral"}).active_questions()
     ['numeral']
+    >>> CircleSettings().active_scheme().name
+    'Cyan to indigo'
     """
 
     questions: set[str] = field(default_factory=lambda: set(CIRCLE_QUESTIONS))  # keys of CIRCLE_QUESTIONS
+    scheme: str = DEFAULT_SCHEME
+    customs: list[CustomRecord] = field(default_factory=list)
 
     def active_questions(self) -> list[str]:
         """
@@ -850,6 +864,24 @@ class CircleSettings:
         ['minor']
         """
         return [q for q in CIRCLE_QUESTIONS if q in self.questions] or list(CIRCLE_QUESTIONS)
+
+    def active_scheme(self) -> Scheme:
+        """
+        Return the colour scheme to draw the circle in.
+
+        Returns
+        -------
+        Scheme
+            The chosen scheme, or the default one if the choice is not a scheme any more (a deleted one of the user's own).
+
+        Examples
+        --------
+        >>> CircleSettings(scheme="midnight").active_scheme().name
+        'Midnight'
+        >>> CircleSettings(scheme="deleted").active_scheme().key
+        'cyan-indigo'
+        """
+        return resolve(self.scheme, customs=self.customs)
 
 
 circle = CircleSettings()

@@ -715,3 +715,13 @@ def test_the_release_notes_script_shows_unreleased_only_while_it_has_notes_and_t
     full = empty.replace("## [Unreleased]\n", "## [Unreleased]\n\n- A change.\n")
     assert "## Unreleased" not in script.render(empty) and "## Unreleased" in script.render(full)
     assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(encoding="utf-8")
+
+
+def test_the_exercises_page_describes_the_circles_colour_schemes_in_words() -> None:
+    """Check the Colours section: the fourteen presets and the five ways to make one. The exercise settings are never pictured."""
+    page = (DOCS / "exercises.md").read_text(encoding="utf-8")
+    colours = " ".join(page[page.index("### Colours") : page.index("### Keys with two names")].split())
+    assert "fourteen presets" in colours and "Cyan to indigo" in colours and "Create your own" in colours
+    for way in ("One colour", "Two rings", "By key signature", "Distance from C", "Round the circle"):
+        assert way in colours, way
+    assert "shot.html" not in colours
