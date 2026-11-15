@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from types import ModuleType
 
+import base64
 import importlib.util
 import re
 from pathlib import Path
@@ -88,9 +89,41 @@ def test_the_python_versions_in_the_readme_badge_are_the_ones_the_tests_run_on()
     matrix = re.search(r"python-version:\s*\[([^]]*)]", workflow)
     assert matrix is not None
     tested = re.findall(r'"([\d.]+)"', matrix.group(1))
-    badge = re.search(r"img\.shields\.io/badge/python-([^)]*?)-\w+\)", (ROOT / "README.md").read_text())
+    badge = re.search(r"img\.shields\.io/badge/python-([^)]*?)-\w+(?:\?[^)]*)?\)", (ROOT / "README.md").read_text())
     assert badge is not None, "the README has no Python versions badge"
     assert unquote(badge.group(1)).split(" | ") == tested
     # and the oldest of them is what pyproject.toml asks for
     minimum = re.search(r'requires-python\s*=\s*">=([\d.]+)"', (ROOT / "pyproject.toml").read_text())
     assert minimum is not None and minimum.group(1) == tested[0]
+
+
+def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_picture() -> None:
+    """
+    Check the five badges with a logo: each names a real workflow (or the Python versions) and carries its picture in its address.
+
+    Shields has a one-colour pytest and Python logo of its own, but the colour ones, and the pictures for Pyright,
+    ASV and Jekyll, are not in its set. So each picture is carried in the badge's address. They must stay small,
+    so that the address does, and be PNG files.
+    """
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for label, workflow in (
+        ("Tests", "tests.yml"),
+        ("Pyright", "pyright.yml"),
+        ("ASV", "performance.yml"),
+        ("Docs", "docs.yml"),
+    ):
+        found = re.search(rf"\[!\[{label}]\((https://img\.shields\.io/[^)]+)\)]\(([^)]+)\)", readme)
+        assert found is not None, f"the README has no {label} badge"
+        badge, link = found.groups()
+        assert f"/{workflow}?" in badge and (ROOT / ".github" / "workflows" / workflow).is_file()
+        assert f"/actions/workflows/{workflow}" in link or label == "Docs"
+    for label in ("Tests", "Pyright", "ASV", "Docs", "Python"):
+        badge = re.search(rf"\[!\[{label}]\((https://img\.shields\.io/[^)]+)\)]", readme)
+        assert badge is not None, f"the README has no {label} badge"
+        logo = re.search(r"[?&]logo=([^&)\s]+)", badge.group(1))
+        assert logo is not None, f"the {label} badge has no logo"
+        image = unquote(logo.group(1))
+        assert image.startswith("data:image/png;base64,")
+        data = base64.b64decode(image.split(",", 1)[1])
+        assert data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) < 2000
+        assert len(logo.group(1)) < 2000  # the whole address stays short enough for GitHub to fetch it
