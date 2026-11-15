@@ -5,6 +5,10 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.
+
 ## [0.0.0] - 2026-11-15
 
 The first release.

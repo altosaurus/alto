@@ -1,0 +1,193 @@
+name: Performance
+
+# Measures how fast Alto's operations are (benchmarks/, with ASV) and keeps the results from release to release, so that a slow
+# creep between versions shows even when no single budget test in the test suite fails.
+#
+# It runs when a version is tagged, when a change to the app or the benchmarks is merged into main, once a month (to notice a new
+# PySide6 or Qt that is slower, which no change of ours causes), and by hand. By hand it can measure an older tag or commit with the
+# benchmarks of main (for the version before the benchmarks existed), so that there is something to compare a release with.
+# The results are kept on the branch asv-results.
+#
+# A change of more than 30% against the previous release is written in the run's summary and opens an issue (or updates the one
+# that is open). The run itself does not fail: a shared build machine is too noisy for a strict gate, which is what the budgets in
+# tests/test_performance.py are for, so an issue is a reason to look and to run it again, not proof.
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  schedule:
+    - cron: "17 4 1 * *"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "A tag or commit to measure, with the benchmarks of main (default: main)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write # to save the results on the branch asv-results
+  issues: write # to open an issue when something got slower
+
+# One run at a time, so that two quick merges do not both push to asv-results.
+concurrency:
+  group: performance
+  cancel-in-progress: false
+
+jobs:
+  # A merge into main is measured only if it touched the app, the benchmarks or the dependencies; a tag, the monthly run and a run
+  # by hand always are. (This is checked here and not with a `paths` filter, which does not mix with tags.)
+  changed:
+    runs-on: ubuntu-latest
+    outputs:
+      measure: ${{ steps.decide.outputs.measure }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: decide
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          measure=true
+          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
+            # The first push of a branch has no earlier commit; measure it.
+            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
+              | grep -qE '^(alto/|benchmarks/|pyproject\.toml$|uv\.lock$|\.github/workflows/performance\.yml$)'; then
+              measure=false
+            fi
+          fi
+          echo "measure=${measure}" >> "$GITHUB_OUTPUT"
+          echo "Measure: ${measure}"
+
+  benchmark:
+    needs: changed
+    if: needs.changed.outputs.measure == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      QT_QPA_PLATFORM: offscreen
+      MACHINE: github-ubuntu
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Use the benchmarks of main on this version
+        if: inputs.ref != ''
+        run: git checkout origin/main -- benchmarks asv.conf.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Qt's system libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon0 libdbus-1-3 libfontconfig1 libpulse0 libpulse-mainloop-glib0
+
+      - name: Install Alto and ASV
+        run: python -m pip install -e . "asv>=0.6"
+
+      - name: Get the results kept so far
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          mkdir -p .asv
+          if git ls-remote --exit-code --heads "$url" asv-results > /dev/null; then
+            git clone --quiet --branch asv-results "$url" .asv/results
+          else
+            mkdir -p .asv/results
+            git -C .asv/results init --quiet --initial-branch asv-results
+            git -C .asv/results remote add origin "$url"
+          fi
+
+      - name: Measure this version
+        run: |
+          asv machine --yes --machine "$MACHINE"
+          # With an existing environment ASV saves results only when told which commit they are for.
+          asv run --machine "$MACHINE" -E "existing:$(which python)" --set-commit-hash "$(git rev-parse HEAD)" --show-stderr
+
+      - name: Compare with the previous release
+        id: compare
+        run: |
+          previous=$(git describe --tags --abbrev=0 --match 'v*' "$(git rev-parse HEAD)^" 2> /dev/null || true)
+          worse=false
+          {
+            echo "### Speed of $(git rev-parse --short HEAD) compared with ${previous:-nothing}"
+            echo
+            if [ -z "$previous" ]; then
+              echo "There is no earlier release to compare with."
+            elif asv compare --machine "$MACHINE" --factor 1.3 --split "$previous" HEAD > compare.txt 2>&1; then
+              echo '```'
+              cat compare.txt
+              echo '```'
+              if grep -q "Benchmarks that have got worse" compare.txt; then worse=true; fi
+            else
+              echo "The earlier release has not been measured yet. Run this workflow by hand with ref set to \`$previous\`."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "previous=$previous" >> "$GITHUB_OUTPUT"
+          echo "worse=$worse" >> "$GITHUB_OUTPUT"
+
+      - name: Open an issue if something got slower
+        if: steps.compare.outputs.worse == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIOUS: ${{ steps.compare.outputs.previous }}
+        run: |
+          title="Performance: slower than ${PREVIOUS}"
+          # Only the table of what got slower: from its heading to the heading of the next group.
+          awk '/^Benchmarks that have got worse/ {on=1; print; next} /^Benchmarks that have/ {on=0} on' compare.txt > worse.txt
+          {
+            echo "Something is more than 30% slower than in ${PREVIOUS}, measured at $(git rev-parse --short HEAD)."
+            echo
+            echo "Shared build machines are noisy, so run the Performance workflow again by hand before acting on this. If it is real,"
+            echo "\`asv find\` or the results on the \`asv-results\` branch show which change did it."
+            echo
+            echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo
+            cat worse.txt
+            echo
+            echo "#### Changes since ${PREVIOUS}"
+            echo
+            git log --no-merges --format='- %h %s' "${PREVIOUS}..HEAD" | head -40
+            echo
+            echo "#### To see it yourself"
+            echo
+            echo '```'
+            echo "python -m benchmarks.survey                          # every operation, slowest first"
+            echo "python -m benchmarks.operations resize:circle        # one operation, the first time in a new process"
+            echo "pytest tests/test_performance.py                     # the budgets"
+            echo '```'
+            echo
+            echo "Where the time goes in one operation, with the table's name in place of this one:"
+            echo
+            echo '```'
+            echo "python -m benchmarks.operations page:lesson --profile"
+            echo '```'
+          } > issue.md
+          gh label create performance --color FBCA04 --description "Alto got slower" --force
+          existing=$(gh issue list --label performance --state open --search "\"${title}\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file issue.md
+          else
+            gh issue create --title "$title" --label performance --body-file issue.md
+          fi
+
+      - name: Keep the results
+        run: |
+          cd .asv/results
+          git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name=github-actions -c user.email=actions@github.com commit --quiet -m "Results for ${GITHUB_SHA}"
+          git push --quiet origin HEAD:asv-results
+
+      - name: Make the pages with the graphs
+        run: asv publish --machine "$MACHINE"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: speed-graphs
+          path: .asv/html
