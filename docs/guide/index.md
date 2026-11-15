@@ -10,7 +10,7 @@ may never have met: how computers make sound, how music notation is drawn, how a
 next, how to make a Qt program look and move the way you want.
 
 It does not replace the shorter pages. [For developers]({{ '/development/' | relative_url }}) is the quick reference for
-commands and tooling, [ARCHITECTURE.md](https://github.com/genedan/alto/blob/main/ARCHITECTURE.md) is a one-page map of the
+commands and tooling, [ARCHITECTURE.md](https://github.com/altosaurus/alto/blob/main/ARCHITECTURE.md) is a one-page map of the
 code, and the [API reference]({{ '/api/' | relative_url }}) lists every public class and function. This guide is the
 explanation that ties them together.
 

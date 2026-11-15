@@ -5,7 +5,7 @@ permalink: /credits/
 ---
 ## License
 
-Alto's own code is released under the [MIT License](https://github.com/genedan/alto/blob/main/LICENSE). You can use,
+Alto's own code is released under the [MIT License](https://github.com/altosaurus/alto/blob/main/LICENSE). You can use,
 change and share it freely, including in other projects.
 
 The fonts and recordings bundled with Alto are not covered by that licence. Each keeps its author's terms.
@@ -47,4 +47,4 @@ Studios, which the studio makes freely available for any project. Alto converted
 Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0) and [numpy](https://numpy.org/) (BSD-3-Clause).
 
 The complete list, with licence texts, is in
-[THIRD_PARTY_NOTICES.md](https://github.com/genedan/alto/blob/main/THIRD_PARTY_NOTICES.md) in the repository.
+[THIRD_PARTY_NOTICES.md](https://github.com/altosaurus/alto/blob/main/THIRD_PARTY_NOTICES.md) in the repository.
