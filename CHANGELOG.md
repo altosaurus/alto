@@ -56,6 +56,9 @@ The first release.
   restarts Alto when you press OK. A packaged copy is offered the release's download page instead, as it cannot replace itself.
 - Settings → Updates shows the version you have, and a choice to follow the main branch instead of releases, for the latest
   changes before they are released.
+- A Linux download: a `.tar.gz` with its own Python and Qt, so nothing else needs installing. `sh install.sh install` installs it
+  for you alone, with an entry in the application menu, and `sh install.sh uninstall` removes it and keeps your data unless
+  `--purge` is given. Installing a newer download over it updates it.
 - `alto --version` prints the version.
 - `ALTO_HOME` keeps a copy of Alto apart, with its own history and settings, and `scripts/dev.sh` runs a clone that way.
 
