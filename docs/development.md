@@ -287,6 +287,9 @@ To make a release:
 3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
 4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`.
 
+Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves
+pre-releases out, and compares version numbers (`0.10.0` is newer than `0.9.0`), so a tag must be plain numbers such as `v0.1.0`.
+
 `python scripts/changelog_section.py 0.1.0` prints the notes of one version, which is what a GitHub release shows. `alto --version`
 prints the version of the copy you run.
 

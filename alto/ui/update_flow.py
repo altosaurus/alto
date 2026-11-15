@@ -1,10 +1,11 @@
 r"""
 Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.
 
-The menu's "Check for updates…" asks the address Alto was installed from for its newest commit. If there is a newer one and the
-person agrees, `uv tool upgrade alto` installs it while its output is shown, and when it has finished Alto says that it will
-restart and does so after OK is pressed. Only a copy that was installed with `scripts/alto-install.sh` can do this; a copy run
-from a source folder is told to update with git.
+The menu's "Check for updates…" follows one of two channels, chosen in Settings: the newest release (the default), or the
+newest commit on the main branch. A copy installed with `scripts/alto-install.sh` can replace itself, from either, with
+`uv tool install`, showing its output, and restarts when OK is pressed. A packaged copy cannot replace itself, so it is told
+that a newer release exists and offered the page where it can be downloaded; it always follows releases. A copy run from a
+source folder is told to update with git.
 
 Examples
 --------
@@ -14,6 +15,7 @@ Examples
 
 from __future__ import annotations
 
+import threading
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import (
@@ -22,10 +24,12 @@ from PySide6.QtCore import (
     QProcessEnvironment,
     Qt,
     QTimer,
+    QUrl,
     Signal,
 )
 from PySide6.QtGui import (
     QCloseEvent,
+    QDesktopServices,
     QFontDatabase,
     QTextCursor,
 )
@@ -41,7 +45,13 @@ from PySide6.QtWidgets import (
 )
 
 from alto import updates
+from alto.ui.store import (
+    store,
+    text_value,
+)
 from alto.updates import (
+    InstallKind,
+    Release,
     Source,
     parse_ls_remote,
     short,
@@ -52,6 +62,7 @@ if TYPE_CHECKING:
 
 CHECK_TITLE, UPDATE_TITLE = "Check for updates", "Update Alto"
 CHECK_SECONDS = 20
+RELEASE_SECONDS = 15
 QUIET = {
     "UV_NO_PROGRESS": "1",  # plain lines of text, not a progress bar drawn with control characters
     "NO_COLOR": "1",
@@ -275,9 +286,106 @@ class CommandRunner(QObject):
         self.done.emit(code, self._text)
 
 
-class CheckDialog(QDialog):
+def saved_channel() -> str:
     """
-    A small window that waits while the address Alto came from is asked for its newest commit.
+    Return what the update check follows, as chosen in Settings.
+
+    Returns
+    -------
+    str
+        "releases" for the newest release, or "main" for the newest commit on the main branch; "releases" if nothing valid is
+        saved.
+
+    Examples
+    --------
+    >>> saved_channel()
+    'releases'
+    >>> save_channel("main")
+    >>> saved_channel()
+    'main'
+    >>> save_channel("releases")
+    """
+    channel = text_value(store(), key="updates/channel", default=updates.RELEASES)
+    return channel if channel in {updates.RELEASES, updates.MAIN} else updates.RELEASES
+
+
+def save_channel(channel: str) -> None:
+    """
+    Remember what the update check follows.
+
+    Parameters
+    ----------
+    channel : str
+        "releases" or "main". Anything else is saved as "releases".
+
+    Examples
+    --------
+    >>> save_channel("nonsense")
+    >>> saved_channel()
+    'releases'
+    """
+    store().setValue("updates/channel", channel if channel in {updates.RELEASES, updates.MAIN} else updates.RELEASES)
+
+
+class WaitDialog(QDialog):
+    """
+    A small window with a bar that keeps moving and a Cancel button, shown while something is asked for.
+
+    Attributes
+    ----------
+    ended : bool
+        Whether the asking has ended, by an answer, a failure or a cancel.
+    cancelled : bool
+        Whether the person cancelled it.
+    """
+
+    def __init__(
+        self,
+        parent: QWidget | None,
+        *,
+        text: str,
+    ) -> None:
+        """
+        Build the window.
+
+        Parameters
+        ----------
+        parent : QWidget or None
+            The window it belongs to.
+        text : str
+            What is being asked for. Keyword-only.
+        """
+        super().__init__(parent)
+        self.setWindowTitle(CHECK_TITLE)
+        self.setModal(True)
+        self.ended = False
+        self.cancelled = False
+        lay = QVBoxLayout(self)
+        lay.addWidget(QLabel(text))
+        bar = QProgressBar()
+        bar.setRange(0, 0)
+        bar.setTextVisible(False)
+        bar.setMinimumWidth(320)
+        lay.addWidget(bar)
+        cancel = QPushButton("Cancel")
+        cancel.clicked.connect(self.reject)
+        lay.addWidget(cancel, alignment=Qt.AlignmentFlag.AlignRight)
+
+    def reject(self) -> None:
+        """Cancel the asking."""
+        if not self.ended:
+            self.cancelled = True
+            self.ended = True
+            self._stop()
+        super().reject()
+
+    def _stop(self) -> None:
+        """Stop what is being asked for. A window that asks for something overrides this."""
+
+
+class CheckDialog(WaitDialog):
+    """
+    A waiting window while the address Alto came from is asked for the newest commit of its main branch.
 
     Attributes
     ----------
@@ -285,10 +393,6 @@ class CheckDialog(QDialog):
         The newest commit, once it is known; empty if it could not be found out.
     error : str
         What went wrong, if there is no commit.
-    ended : bool
-        Whether the asking has ended, by an answer, a failure or a cancel.
-    cancelled : bool
-        Whether the person cancelled it.
     runner : CommandRunner
         The program that does the asking.
     """
@@ -312,24 +416,10 @@ class CheckDialog(QDialog):
         git : str
             The path of the `git` program. Keyword-only.
         """
-        super().__init__(parent)
-        self.setWindowTitle(CHECK_TITLE)
-        self.setModal(True)
+        super().__init__(parent, text="Asking for the newest version…")
         self.commit = ""
         self.error = ""
-        self.ended = False
-        self.cancelled = False
         self._command = updates.check_command(source, git=git)
-        lay = QVBoxLayout(self)
-        lay.addWidget(QLabel("Asking for the newest version…"))
-        bar = QProgressBar()
-        bar.setRange(0, 0)
-        bar.setTextVisible(False)
-        bar.setMinimumWidth(320)
-        lay.addWidget(bar)
-        cancel = QPushButton("Cancel")
-        cancel.clicked.connect(self.reject)
-        lay.addWidget(cancel, alignment=Qt.AlignmentFlag.AlignRight)
         self.runner = CommandRunner(self)
         self.runner.done.connect(self._answered)
 
@@ -348,13 +438,9 @@ class CheckDialog(QDialog):
         if not self.ended:
             self.exec()
 
-    def reject(self) -> None:
-        """Cancel the asking."""
-        if not self.ended:
-            self.cancelled = True
-            self.ended = True
-            self.runner.stop()
-        super().reject()
+    def _stop(self) -> None:
+        """Stop the program that is asking."""
+        self.runner.stop()
 
     def _answered(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
         self,
@@ -375,6 +461,138 @@ class CheckDialog(QDialog):
         self.commit = (parse_ls_remote(text) if code == 0 else None) or ""
         if not self.commit:
             self.error = brief(text) or "The address did not answer."
+        self.accept()
+
+
+class ReleaseFetcher(QObject):
+    """
+    Ask GitHub for the latest release on another thread, so that the window never freezes while it waits.
+
+    Attributes
+    ----------
+    done : Signal
+        Emitted once, with the HTTP status (0 if GitHub was not reached) and the answer or the reason there was none.
+
+    Examples
+    --------
+    >>> ReleaseFetcher().cancel()
+    """
+
+    done = Signal(int, str)
+
+    def __init__(self, parent: QObject | None = None) -> None:
+        """
+        Make a fetcher that has not asked anything.
+
+        Parameters
+        ----------
+        parent : QObject or None, default None
+            The object that owns it.
+        """
+        super().__init__(parent)
+        self._cancelled = False
+
+    def start(self, *, seconds: int) -> None:
+        """
+        Start asking.
+
+        Parameters
+        ----------
+        seconds : int
+            How long to wait for GitHub. Keyword-only.
+        """
+        self._cancelled = False
+        threading.Thread(target=self._work, args=(seconds,), daemon=True).start()
+
+    def cancel(self) -> None:
+        """Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up."""
+        self._cancelled = True
+
+    def _work(self, seconds: int) -> None:
+        """
+        Ask, on the thread, and hand the answer back to the window's thread through the signal.
+
+        Parameters
+        ----------
+        seconds : int
+            How long to wait for GitHub.
+        """
+        status, text = updates.fetch_text(updates.RELEASES_API, seconds=seconds)
+        if not self._cancelled:
+            try:
+                self.done.emit(status, text)
+            except RuntimeError:  # the window was closed, and with it this object, while the thread waited
+                return
+
+
+class ReleaseDialog(WaitDialog):
+    """
+    A waiting window while GitHub is asked for the latest release.
+
+    Attributes
+    ----------
+    release : Release or None
+        The latest release, once it is known; None if it could not be found out.
+    error : str
+        What went wrong, if there is no release.
+    fetcher : ReleaseFetcher
+        What does the asking.
+    """
+
+    def __init__(self, parent: QWidget | None) -> None:
+        """
+        Build the window; it asks nothing until `run` is called.
+
+        Parameters
+        ----------
+        parent : QWidget or None
+            The window it belongs to.
+        """
+        super().__init__(parent, text="Asking GitHub for the latest release…")
+        self.release: Release | None = None
+        self.error = ""
+        self.fetcher = ReleaseFetcher(self)
+        self.fetcher.done.connect(self._answered)
+
+    def run(self) -> None:
+        """
+        Ask, showing the window until there is an answer.
+
+        Examples
+        --------
+        >>> # noinspection PyTypeChecker
+        >>> ReleaseDialog(None).cancelled
+        False
+        """
+        self.fetcher.start(seconds=RELEASE_SECONDS)
+        if not self.ended:
+            self.exec()
+
+    def _stop(self) -> None:
+        """Stop caring about the answer."""
+        self.fetcher.cancel()
+
+    def _answered(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        self,
+        status: int,
+        text: str,
+    ) -> None:
+        """
+        Take the answer and close the window.
+
+        Parameters
+        ----------
+        status : int
+            The HTTP status, or 0 if GitHub was not reached.
+        text : str
+            The answer, or the reason there was none.
+        """
+        self.ended = True
+        answer = updates.release_answer(status, text=text)
+        if isinstance(answer, Release):
+            self.release = answer
+        else:
+            self.error = answer
         self.accept()
 
 
@@ -407,7 +625,7 @@ class UpdateDialog(QDialog):
         self,
         parent: QWidget | None,
         *,
-        uv: str,
+        command: tuple[str, list[str]],
     ) -> None:
         """
         Build the window; the update does not start until `run` is called.
@@ -416,15 +634,15 @@ class UpdateDialog(QDialog):
         ----------
         parent : QWidget or None
             The window it belongs to.
-        uv : str
-            The path of the `uv` program. Keyword-only.
+        command : tuple of str and list of str
+            The program that installs the update and its arguments. Keyword-only.
         """
         super().__init__(parent)
         self.setWindowTitle(UPDATE_TITLE)
         self.setModal(True)
         self.ended = False
         self.succeeded = False
-        self._command = updates.upgrade_command(uv=uv)
+        self._command = command
         lay = QVBoxLayout(self)
         self.status = QLabel("Updating Alto. This can take a minute.")
         self.status.setWordWrap(True)
@@ -460,7 +678,7 @@ class UpdateDialog(QDialog):
         Examples
         --------
         >>> # noinspection PyTypeChecker
-        >>> UpdateDialog(None, uv="uv").succeeded
+        >>> UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
         False
         """
         program, arguments = self._command
@@ -539,6 +757,10 @@ def check_for_updates(
     """
     Ask whether a newer Alto is available and, if the person agrees, install it and restart.
 
+    What is asked depends on the copy: one run from a source folder is told how it is updated; a packaged copy asks for the
+    latest release and is offered its download page; one installed with the script follows what Settings says, the latest release
+    or the main branch, and can install it.
+
     Parameters
     ----------
     parent : QWidget
@@ -550,15 +772,106 @@ def check_for_updates(
     --------
     >>> check_for_updates  # doctest: +SKIP
     """
-    found = updates.updatable(updates.installed_source(), tool=updates.is_tool_install())
-    if not isinstance(found, Source):
-        QMessageBox.information(parent, CHECK_TITLE, found)
+    source = updates.installed_source()
+    kind = updates.install_kind(source, tool=updates.is_tool_install(), frozen=updates.is_frozen())
+    reason = updates.cannot_update(kind)
+    if reason is not None:
+        QMessageBox.information(parent, CHECK_TITLE, reason)
         return
+    if kind is InstallKind.PACKAGE or source is None or saved_channel() == updates.RELEASES:
+        check_release(parent, kind=kind, source=source, restart=restart)
+    else:
+        check_main(parent, source=source, restart=restart)
+
+
+def check_release(
+    parent: QWidget,
+    *,
+    kind: InstallKind,
+    source: Source | None,
+    restart: Callable[[], None],
+) -> None:
+    """
+    Ask GitHub for the latest release and compare it with the version that is running.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The window the questions are asked over.
+    kind : InstallKind
+        What kind of copy is running: a packaged one is offered a download page, and one installed with the script is offered
+        the update. Keyword-only.
+    source : Source or None
+        Where the running copy came from; None for a packaged copy. Keyword-only.
+    restart : Callable
+        What to do after a successful update. Keyword-only.
+
+    Examples
+    --------
+    >>> check_release  # doctest: +SKIP
+    """
+    asking = ReleaseDialog(parent)
+    asking.run()
+    if asking.cancelled:
+        return
+    release = asking.release
+    if release is None:
+        show = QMessageBox.information if asking.error == updates.NO_RELEASE else QMessageBox.warning
+        show(parent, CHECK_TITLE, asking.error)
+        return
+    installed = updates.installed_version()
+    if not updates.is_newer(release.version, installed=installed):
+        QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({installed}).")
+        return
+    if kind is InstallKind.PACKAGE or source is None:
+        asked = QMessageBox.question(
+            parent,
+            CHECK_TITLE,
+            f"Alto {release.version} is available (you have {installed}).\n\nOpen the page where it can be downloaded?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.Yes,
+        )
+        if asked == QMessageBox.StandardButton.Yes:
+            QDesktopServices.openUrl(QUrl(release.url))
+        return
+    asked = QMessageBox.question(
+        parent,
+        CHECK_TITLE,
+        f"An update is available ({installed} \u2192 {release.version}).\n\nUpdate now?",
+        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        QMessageBox.StandardButton.Yes,
+    )
+    if asked == QMessageBox.StandardButton.Yes:
+        install(parent, source=source, tag=release.tag, restart=restart)
+
+
+def check_main(
+    parent: QWidget,
+    *,
+    source: Source,
+    restart: Callable[[], None],
+) -> None:
+    """
+    Ask the address Alto came from for the newest commit on its main branch and compare it with the one that is running.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The window the questions are asked over.
+    source : Source
+        Where the running copy came from. Keyword-only.
+    restart : Callable
+        What to do after a successful update. Keyword-only.
+
+    Examples
+    --------
+    >>> check_main  # doctest: +SKIP
+    """
     git = updates.find_program("git")
     if git is None:
         QMessageBox.warning(parent, CHECK_TITLE, NO_GIT)
         return
-    check = CheckDialog(parent, source=found, git=git)
+    check = CheckDialog(parent, source=Source(source.url, commit=source.commit), git=git)  # the default branch, not a tag
     check.run()
     if check.cancelled:
         return
@@ -566,21 +879,48 @@ def check_for_updates(
     if not latest:
         QMessageBox.warning(parent, CHECK_TITLE, f"Alto could not find out whether there is a newer version.\n\n{check.error}")
         return
-    if latest == found.commit:
-        QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({short(found.commit)}).")
+    if latest == source.commit:
+        QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({short(source.commit)}).")
         return
     asked = QMessageBox.question(
         parent,
         CHECK_TITLE,
-        f"An update is available ({short(found.commit)} \u2192 {short(latest)}).\n\nUpdate now?",
+        f"An update is available on the main branch ({short(source.commit)} \u2192 {short(latest)}).\n\nUpdate now?",
         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         QMessageBox.StandardButton.Yes,
     )
-    if asked != QMessageBox.StandardButton.Yes:
-        return
+    if asked == QMessageBox.StandardButton.Yes:
+        install(parent, source=source, tag=None, restart=restart)
+
+
+def install(
+    parent: QWidget,
+    *,
+    source: Source,
+    tag: str | None,
+    restart: Callable[[], None],
+) -> None:
+    """
+    Install a release, or the newest commit of the main branch, showing the progress, and restart if it worked.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The window the progress is shown over.
+    source : Source
+        Where the running copy came from. Keyword-only.
+    tag : str or None
+        The release to install, such as "v0.1.0"; None for the newest commit of the main branch. Keyword-only.
+    restart : Callable
+        What to do after a successful update. Keyword-only.
+
+    Examples
+    --------
+    >>> install  # doctest: +SKIP
+    """
     uv = updates.find_program("uv")
     if uv is None:
         QMessageBox.warning(parent, UPDATE_TITLE, NO_UV)
         return
-    if UpdateDialog(parent, uv=uv).run():
+    if UpdateDialog(parent, command=updates.install_command(source, uv=uv, tag=tag)).run():
         restart()

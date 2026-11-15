@@ -42,12 +42,21 @@ delete those too; use **Export backup…** first if you might want them back.
 
 ### Updating from the menu
 
-You can also update from inside Alto: open the menu (☰) and choose **Check for updates…**. Alto asks GitHub, the address it
-was installed from, for the newest version. If yours is the newest, it says so. If not, it asks whether to install the update,
-shows its progress, and tells you that Alto will restart when you press OK.
+You can also update from inside Alto: open the menu (☰) and choose **Check for updates…**. By default Alto asks GitHub for the
+newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
+says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
+OK.
 
-This works for a copy installed with the script. A copy you run from a clone is updated with `git pull`. The menu entry and icon
-are not refreshed by an update from the menu; `sh scripts/alto-install.sh update` does that too.
+- **A copy installed with the script** installs the new release itself.
+- **A packaged copy** (the Linux tarball or the Windows installer) cannot replace itself. It tells you that a newer release
+  exists and offers to open the page where it can be downloaded.
+- **A copy you run from a clone** is updated with `git pull`.
+
+To get changes as soon as they are merged, before they are released, tick **Follow the main branch** in **Settings →
+Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
+script, and may be less stable than a release; a packaged copy always follows releases.
+
+An update from the menu does not refresh the application-menu entry or icon; `sh scripts/alto-install.sh update` does that too.
 
 ## First launch
 

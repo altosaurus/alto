@@ -42,6 +42,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto import updates
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
 from alto.learning import Learner
@@ -1028,5 +1029,6 @@ class MainWindow(QMainWindow):
         --------
         >>> MainWindow().restart_app()  # doctest: +SKIP
         """
-        if QProcess.startDetached(sys.executable, ["-m", "alto"]):
+        arguments = [] if updates.is_frozen() else ["-m", "alto"]  # a packaged build is Alto itself, not Python
+        if QProcess.startDetached(sys.executable, arguments):
             QApplication.quit()

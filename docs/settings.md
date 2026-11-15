@@ -134,6 +134,13 @@ only play as the synthesized piano.
 
 {% include shot.html src="settings-sound.png" alt="The Sound page of the settings dialog with a list of instruments and a summary of the selected one" %}
 
+### Updates
+
+Shows the version of Alto you are running, and has one choice: **Follow the main branch**. Off (the default), **Check for
+updates…** in the menu looks for the newest release. On, it looks for the newest change on the main branch instead, so you get
+each change as soon as it is merged, before it has been released. That may be less stable. It applies to a copy installed with
+the install script; a packaged copy always follows releases. See [Getting started]({{ '/getting-started/' | relative_url }}).
+
 ## Exercise settings
 
 Note Identification, Keyboard Identification and Note Construction have a sliders button at the top right of the

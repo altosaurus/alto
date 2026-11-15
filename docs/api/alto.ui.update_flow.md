@@ -8,10 +8,11 @@ permalink: /api/alto.ui.update_flow/
 {% raw %}
 Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.
 
-The menu's "Check for updates…" asks the address Alto was installed from for its newest commit. If there is a newer one and the
-person agrees, `uv tool upgrade alto` installs it while its output is shown, and when it has finished Alto says that it will
-restart and does so after OK is pressed. Only a copy that was installed with `scripts/alto-install.sh` can do this; a copy run
-from a source folder is told to update with git.
+The menu's "Check for updates…" follows one of two channels, chosen in Settings: the newest release (the default), or the
+newest commit on the main branch. A copy installed with `scripts/alto-install.sh` can replace itself, from either, with
+`uv tool install`, showing its output, and restarts when OK is pressed. A packaged copy cannot replace itself, so it is told
+that a newer release exists and offered the page where it can be downloaded; it always follows releases. A copy run from a
+source folder is told to update with git.
 
 **Examples**
 
@@ -138,6 +139,85 @@ Stop the program, if it is running, without announcing that it has ended.
 >>> CommandRunner().stop()
 ```
 
+## saved_channel
+
+```python
+def saved_channel() -> str
+```
+
+Return what the update check follows, as chosen in Settings.
+
+**Returns**
+
+- *str*: "releases" for the newest release, or "main" for the newest commit on the main branch; "releases" if nothing valid is saved.
+
+**Examples**
+
+```pycon
+>>> saved_channel()
+'releases'
+>>> save_channel("main")
+>>> saved_channel()
+'main'
+>>> save_channel("releases")
+```
+
+## save_channel
+
+```python
+def save_channel(channel: str) -> None
+```
+
+Remember what the update check follows.
+
+**Parameters**
+
+- `channel` (*str*): "releases" or "main". Anything else is saved as "releases".
+
+**Examples**
+
+```pycon
+>>> save_channel("nonsense")
+>>> saved_channel()
+'releases'
+```
+
+## WaitDialog
+
+```python
+WaitDialog(
+    parent: QWidget | None,
+    *,
+    text: str,
+)
+```
+
+Bases: `QDialog`
+
+A small window with a bar that keeps moving and a Cancel button, shown while something is asked for.
+
+**Attributes**
+
+- `ended` (*bool*): Whether the asking has ended, by an answer, a failure or a cancel.
+- `cancelled` (*bool*): Whether the person cancelled it.
+
+**Constructor**
+
+Build the window.
+
+**Parameters**
+
+- `parent` (*QWidget or None*): The window it belongs to.
+- `text` (*str*): What is being asked for. Keyword-only.
+
+### WaitDialog.reject
+
+```python
+def reject() -> None
+```
+
+Cancel the asking.
+
 ## CheckDialog
 
 ```python
@@ -149,16 +229,14 @@ CheckDialog(
 )
 ```
 
-Bases: `QDialog`
+Bases: `WaitDialog`
 
-A small window that waits while the address Alto came from is asked for its newest commit.
+A waiting window while the address Alto came from is asked for the newest commit of its main branch.
 
 **Attributes**
 
 - `commit` (*str*): The newest commit, once it is known; empty if it could not be found out.
 - `error` (*str*): What went wrong, if there is no commit.
-- `ended` (*bool*): Whether the asking has ended, by an answer, a failure or a cancel.
-- `cancelled` (*bool*): Whether the person cancelled it.
 - `runner` (*CommandRunner*): The program that does the asking.
 
 **Constructor**
@@ -187,13 +265,96 @@ Ask, showing the window until there is an answer.
 False
 ```
 
-### CheckDialog.reject
+## ReleaseFetcher
 
 ```python
-def reject() -> None
+ReleaseFetcher(parent: QObject | None = None)
 ```
 
-Cancel the asking.
+Bases: `QObject`
+
+Ask GitHub for the latest release on another thread, so that the window never freezes while it waits.
+
+**Attributes**
+
+- `done` (*Signal*): Emitted once, with the HTTP status (0 if GitHub was not reached) and the answer or the reason there was none.
+
+**Examples**
+
+```pycon
+>>> ReleaseFetcher().cancel()
+```
+
+**Constructor**
+
+Make a fetcher that has not asked anything.
+
+**Parameters**
+
+- `parent` (*QObject or None, default None*): The object that owns it.
+
+### ReleaseFetcher.start
+
+```python
+def start(
+    *,
+    seconds: int,
+) -> None
+```
+
+Start asking.
+
+**Parameters**
+
+- `seconds` (*int*): How long to wait for GitHub. Keyword-only.
+
+### ReleaseFetcher.cancel
+
+```python
+def cancel() -> None
+```
+
+Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.
+
+## ReleaseDialog
+
+```python
+ReleaseDialog(parent: QWidget | None)
+```
+
+Bases: `WaitDialog`
+
+A waiting window while GitHub is asked for the latest release.
+
+**Attributes**
+
+- `release` (*Release or None*): The latest release, once it is known; None if it could not be found out.
+- `error` (*str*): What went wrong, if there is no release.
+- `fetcher` (*ReleaseFetcher*): What does the asking.
+
+**Constructor**
+
+Build the window; it asks nothing until `run` is called.
+
+**Parameters**
+
+- `parent` (*QWidget or None*): The window it belongs to.
+
+### ReleaseDialog.run
+
+```python
+def run() -> None
+```
+
+Ask, showing the window until there is an answer.
+
+**Examples**
+
+```pycon
+>>> # noinspection PyTypeChecker
+>>> ReleaseDialog(None).cancelled
+False
+```
 
 ## UpdateDialog
 
@@ -201,7 +362,7 @@ Cancel the asking.
 UpdateDialog(
     parent: QWidget | None,
     *,
-    uv: str,
+    command: tuple[str, list[str]],
 )
 ```
 
@@ -229,7 +390,7 @@ Build the window; the update does not start until `run` is called.
 **Parameters**
 
 - `parent` (*QWidget or None*): The window it belongs to.
-- `uv` (*str*): The path of the `uv` program. Keyword-only.
+- `command` (*tuple of str and list of str*): The program that installs the update and its arguments. Keyword-only.
 
 ### UpdateDialog.run
 
@@ -247,7 +408,7 @@ Install the update, showing the window until the person has read how it went.
 
 ```pycon
 >>> # noinspection PyTypeChecker
->>> UpdateDialog(None, uv="uv").succeeded
+>>> UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
 False
 ```
 
@@ -283,6 +444,10 @@ def check_for_updates(
 
 Ask whether a newer Alto is available and, if the person agrees, install it and restart.
 
+What is asked depends on the copy: one run from a source folder is told how it is updated; a packaged copy asks for the
+latest release and is offered its download page; one installed with the script follows what Settings says, the latest release
+or the main branch, and can install it.
+
 **Parameters**
 
 - `parent` (*QWidget*): The window the questions are asked over.
@@ -292,5 +457,84 @@ Ask whether a newer Alto is available and, if the person agrees, install it and 
 
 ```pycon
 >>> check_for_updates  # doctest: +SKIP
+```
+
+## check_release
+
+```python
+def check_release(
+    parent: QWidget,
+    *,
+    kind: InstallKind,
+    source: Source | None,
+    restart: Callable[[], None],
+) -> None
+```
+
+Ask GitHub for the latest release and compare it with the version that is running.
+
+**Parameters**
+
+- `parent` (*QWidget*): The window the questions are asked over.
+- `kind` (*InstallKind*): What kind of copy is running: a packaged one is offered a download page, and one installed with the script is offered the update. Keyword-only.
+- `source` (*Source or None*): Where the running copy came from; None for a packaged copy. Keyword-only.
+- `restart` (*Callable*): What to do after a successful update. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> check_release  # doctest: +SKIP
+```
+
+## check_main
+
+```python
+def check_main(
+    parent: QWidget,
+    *,
+    source: Source,
+    restart: Callable[[], None],
+) -> None
+```
+
+Ask the address Alto came from for the newest commit on its main branch and compare it with the one that is running.
+
+**Parameters**
+
+- `parent` (*QWidget*): The window the questions are asked over.
+- `source` (*Source*): Where the running copy came from. Keyword-only.
+- `restart` (*Callable*): What to do after a successful update. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> check_main  # doctest: +SKIP
+```
+
+## install
+
+```python
+def install(
+    parent: QWidget,
+    *,
+    source: Source,
+    tag: str | None,
+    restart: Callable[[], None],
+) -> None
+```
+
+Install a release, or the newest commit of the main branch, showing the progress, and restart if it worked.
+
+**Parameters**
+
+- `parent` (*QWidget*): The window the progress is shown over.
+- `source` (*Source*): Where the running copy came from. Keyword-only.
+- `tag` (*str or None*): The release to install, such as "v0.1.0"; None for the newest commit of the main branch. Keyword-only.
+- `restart` (*Callable*): What to do after a successful update. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> install  # doctest: +SKIP
 ```
 {% endraw %}

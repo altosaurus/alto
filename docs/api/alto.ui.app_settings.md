@@ -8,7 +8,7 @@ permalink: /api/alto.ui.app_settings/
 {% raw %}
 The application-wide settings dialog.
 
-It holds the colour theme, the notation font, the keyboard style, the transitions and the instrument.
+It holds the colour theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -18,8 +18,8 @@ Changes apply as soon as they are made. Each style is a card that previews it.
 >>> dialog = AppSettingsDialog()
 >>> dialog.windowTitle()
 'Settings'
->>> dialog.pages.count()  # Appearance and Sound
-2
+>>> dialog.pages.count()  # Appearance, Sound and Updates
+3
 ```
 
 ## StyleCard

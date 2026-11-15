@@ -689,6 +689,29 @@ def test_restarting_starts_a_new_copy_then_quits(
     assert quit_calls == [1]  # if the new copy could not start, this one stays open
 
 
+def test_a_packaged_build_restarts_by_starting_itself_with_no_arguments(
+    window: MainWindow,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that a packaged build, whose executable is Alto itself, is not given `-m alto` as arguments when it restarts.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The main window under test.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces settings, functions or attributes for the length of the test.
+    """
+    started: list[tuple[str, list[str]]] = []
+    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: started.append((program, args)) or True)
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(mw.QApplication, "quit", lambda: None)
+    monkeypatch.setattr(mw.updates, "is_frozen", lambda: True)
+    window.restart_app()
+    assert started == [(sys.executable, [])]
+
+
 def test_the_menu_has_no_home_entry_and_ends_with_restart_above_quit(window: MainWindow) -> None:
     """
     Check that the menu does not offer Home, does not start with a separator, and has Restart directly above Quit.
