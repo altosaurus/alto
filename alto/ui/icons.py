@@ -329,9 +329,8 @@ EXERCISE_CONSTRUCTION = (
     + f'<path d="M13 1.6V8M10.2 5.2L13 8L15.8 5.2" {_LINE}/>'
 )
 
-# Menu icons (24x24, outlined like the others): home, restart and the application's settings.
+# Menu icons (24x24, outlined like the others): restart and the application's settings.
 _MENU = 'fill="none" stroke="COLOR" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
-HOME = f'<path d="M3.5 11.2L12 4l8.5 7.2M6 9.6V20h4.4v-5.2h3.2V20H18V9.6" {_MENU}/>'
 RESTART = f'<path d="M19 12a7 7 0 1 1-2.05-4.95M17.6 3.6v4h-4" {_MENU}/>'
 GEAR = (
     f'<circle cx="12" cy="12" r="3" {_MENU}/><circle cx="12" cy="12" r="6.4" {_MENU}/>'

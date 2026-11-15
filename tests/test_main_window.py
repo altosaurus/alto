@@ -687,6 +687,23 @@ def test_restarting_starts_a_new_copy_then_quits(
     assert quit_calls == [1]  # if the new copy could not start, this one stays open
 
 
+def test_the_menu_has_no_home_entry_and_ends_with_restart_above_quit(window: MainWindow) -> None:
+    """
+    Check that the menu does not offer Home, does not start with a separator, and has Restart directly above Quit.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The main window under test.
+    """
+    entries = window.menu_button.menu().actions()
+    names = [a.text() for a in entries if not a.isSeparator()]
+    assert "Home" not in names and not entries[0].isSeparator()
+    assert names[-2:] == ["Restart", "Quit"]
+    assert entries[-2].text() == "Restart" and entries[-1].text() == "Quit"  # no separator between them
+    assert entries[-3].isSeparator()  # but one above the pair, after Check for updates…
+
+
 def test_the_menu_has_the_shortcuts(window: MainWindow) -> None:
     """
     Check that the menu has the shortcuts.
@@ -700,13 +717,10 @@ def test_the_menu_has_the_shortcuts(window: MainWindow) -> None:
     assert actions["Settings…"].shortcut() == QKeySequence("Ctrl+Alt+S")
     assert actions["Restart"].shortcut() == QKeySequence("Ctrl+R")
     assert {
-        "Home",
         "Statistics",
         "Browse database",
         "Quit",
     } <= set(actions)
-    actions["Home"].trigger()
-    assert window.stack.currentWidget() is window.home
     actions["Statistics"].trigger()
     assert window._overlay is not None
     window.close_overlay()
