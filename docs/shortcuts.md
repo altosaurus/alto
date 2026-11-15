@@ -19,7 +19,7 @@ so its keys work at once. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> mov
 | <kbd>Shift</kbd>+a letter, <kbd>Ctrl</kbd>+a letter | Keyboard Identification and Circle of Fifths: the sharp (<kbd>Shift</kbd>) or the flat (<kbd>Ctrl</kbd>) of that note or key. |
 | <kbd>1</kbd> to <kbd>6</kbd> | Circle of Fifths, Roman numerals: I, ii, iii, IV, V and vi. For a key with two names (such as B and C♭) press the key of each name. |
 | <kbd>1</kbd> to <kbd>9</kbd> | Keyboard Identification with the octave asked: the octave, typed as its number. |
-| <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> | Arpeggio identification: the inversion, which is the second row of buttons. The chord type is on <kbd>1</kbd> to <kbd>4</kbd>. |
+| <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> | Arpeggio Identification: the inversion, which is the second row of buttons. The chord type is on <kbd>1</kbd> to <kbd>4</kbd>. |
 
 ### Placing notes on the staff (Note Construction and Scale Construction)
 

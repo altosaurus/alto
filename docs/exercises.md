@@ -57,7 +57,7 @@ The reverse of note identification. A note name is shown, and you click the staf
 
 {% include shot.html src="note-construction.png" alt="Note Construction asking to place a note on a staff" %}
 
-## Interval identification
+## Interval Identification
 
 Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.
 
@@ -65,7 +65,7 @@ An interval has a quality and a number. The number counts the letter names it sp
 is **P** (perfect), **M** (major), **m** (minor), **A** (augmented) or **d** (diminished). So C to E is M3, and C to E♭
 is m3.
 
-{% include shot.html src="intervals.png" alt="Interval identification showing two notes and the interval buttons" %}
+{% include shot.html src="intervals.png" alt="Interval Identification showing two notes and the interval buttons" %}
 
 ## Key Signature Identification
 
@@ -111,7 +111,7 @@ In the exercise settings you can choose:
 
 The settings are kept apart from those of Key Signature Identification.
 
-## Scale spelling
+## Scale Spelling
 
 A question such as "In B♭ Dorian, what is scale degree 3?" Press the note's name. Each scale uses every letter name
 once, so use a sharp or flat where the pattern needs one. Alto asks about:
@@ -258,7 +258,7 @@ A chord is spelt as its key spells it: in F♯ major the V is C♯, although tha
 
 This exercise makes no sound.
 
-## Chord quality
+## Chord Quality
 
 A chord is drawn in root position on a treble or bass staff. Press its type:
 
@@ -266,7 +266,7 @@ major, minor, diminished, augmented, major 7th, dominant 7th, minor 7th, half-di
 
 Check the size of the intervals stacked above the lowest note to tell the types apart.
 
-## Arpeggio identification
+## Arpeggio Identification
 
 A chord is drawn one note at a time, rising from its lowest note to the same note an octave higher. Press its type, then
 press its inversion. The answer counts once you have chosen both, in either order, and a wrong pair is cleared so you can
@@ -291,4 +291,4 @@ inversion. In the exercise settings you can choose:
 - **Key signatures:** draw a key signature from the keys you pick. The arpeggio then only gets a sign where it differs
   from the signature, so a natural sign appears where the chord needs one.
 
-{% include shot.html src="arpeggios.png" alt="Arpeggio identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" %}
+{% include shot.html src="arpeggios.png" alt="Arpeggio Identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" %}

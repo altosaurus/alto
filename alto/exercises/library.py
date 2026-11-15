@@ -248,7 +248,7 @@ class IntervalNames(Exercise):
     (2, True)
     """
 
-    name = "Interval identification"
+    name = "Interval Identification"
     category = "Intervals"
     description = "Name the interval between two notes (up to an octave)."
     par_seconds = 6.0
@@ -268,7 +268,7 @@ class IntervalNames(Exercise):
         True
         """
         return (
-            "<b>Interval identification</b><br>Two notes are shown. Name the interval from the lower note to the "
+            "<b>Interval Identification</b><br>Two notes are shown. Name the interval from the lower note to the "
             "higher one.<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
             "d (diminished).<br><br>You can press an answer's number instead of the button: 1 is the first."
@@ -668,7 +668,7 @@ class ScaleDegrees(Exercise):
     True
     """
 
-    name = "Scale spelling"
+    name = "Scale Spelling"
     category = "Scales & keys"
     description = "Spell a note of a scale or mode from its tonic."
     par_seconds = 8.0
@@ -688,7 +688,7 @@ class ScaleDegrees(Exercise):
         True
         """
         return (
-            "<b>Scale spelling</b><br>Work out the note at the given degree of the scale or mode and press its name. "
+            "<b>Scale Spelling</b><br>Work out the note at the given degree of the scale or mode and press its name. "
             "Each scale uses every letter name once, so use a sharp or flat where the pattern needs one. You can press an "
             "answer's number instead of the button: 1 is the first."
         )
@@ -1209,7 +1209,7 @@ class ChordQualities(Exercise):
     True
     """
 
-    name = "Chord quality"
+    name = "Chord Quality"
     category = "Chords"
     description = "Identify triads and seventh chords in root position."
     par_seconds = 6.0
@@ -1229,7 +1229,7 @@ class ChordQualities(Exercise):
         True
         """
         return (
-            "<b>Chord quality</b><br>A chord is shown in root position. Press its type. Check the size of the "
+            "<b>Chord Quality</b><br>A chord is shown in root position. Press its type. Check the size of the "
             "intervals stacked above the lowest note to tell the types apart. You can press an answer's number instead "
             "of the button: 1 is the first."
         )
@@ -1302,7 +1302,7 @@ class ArpeggioNames(Exercise):
     True
     """
 
-    name = "Arpeggio identification"
+    name = "Arpeggio Identification"
     category = "Chords"
     description = "Name the type and the inversion of a broken chord."
     par_seconds = 9.0
@@ -1338,7 +1338,7 @@ class ArpeggioNames(Exercise):
         True
         """
         return (
-            "<b>Arpeggio identification</b><br>A chord is played one note at a time, rising from its lowest note to "
+            "<b>Arpeggio Identification</b><br>A chord is played one note at a time, rising from its lowest note to "
             "the same note an octave higher. Press its type, then its inversion. The type is on the number keys, 1 for the "
             "first, and the inversion is on the home row: A for the first, S for the second and so on.<br><br>"
             "Find the chord's root by looking for the notes a third apart. The inversion is which chord tone is "

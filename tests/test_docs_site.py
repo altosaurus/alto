@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from alto import updates
+from alto.exercises import REGISTRY
 
 if TYPE_CHECKING:
     from types import ModuleType
@@ -591,3 +592,126 @@ def test_the_home_page_opens_with_the_title_and_the_one_sentence_it_was_asked_to
     assert "Music theory drills for the desktop" not in home
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".hero h1 .hl { color: var(--accent); }" in css
+
+
+def test_the_home_page_has_no_on_this_page_list_and_a_page_can_opt_out_with_toc_false() -> None:
+    """Check that the home page opts out of the contents list, that the layout passes that on, and that the script respects it."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert re.match(r"---\n(?:[^\n]*\n)*?toc: false\n(?:[^\n]*\n)*?---\n", home)
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert "{% if page.toc == false %} data-no-toc{% endif %}" in layout
+    script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
+    assert 'grid.hasAttribute("data-no-toc")' in script
+    for path in DOCS.glob("*.md"):
+        front = re.match(r"---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.DOTALL)
+        if path.name != "index.md" and front:
+            assert "toc:" not in front.group(1), f"{path.name} opts out of the contents list"  # every other page keeps its list
+
+
+def test_every_exercise_name_has_a_capital_on_each_word_but_of() -> None:
+    """Check that the exercises are named in title case, so that the app, the docs and the pictures agree."""
+    for cls in REGISTRY:
+        for word in cls.name.split():
+            assert word[0].isupper() or word == "of", f"{cls.name!r}: {word!r} should start with a capital"
+
+
+def _icons_script() -> ModuleType:
+    """
+    Load `scripts/exercise_icons.py` as a module, without running it.
+
+    Returns
+    -------
+    ModuleType
+        The loaded module.
+    """
+    spec = importlib.util.spec_from_file_location("exercise_icons", ROOT / "scripts" / "exercise_icons.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_the_exercise_icons_of_the_docs_are_the_ones_the_app_draws() -> None:
+    """Check that the sprite in `docs/_includes` is up to date with `alto/ui/icons.py`, and holds an icon for every exercise."""
+    sprite = (DOCS / "_includes" / "exercise-icons.html").read_text(encoding="utf-8")
+    assert sprite == _icons_script().render()  # run scripts/exercise_icons.py after a change to the icons
+    assert "COLOR" not in sprite and "currentColor" in sprite  # tinted by the page's own colour, so that dark mode works
+    for cls in REGISTRY:
+        assert f'id="ex-{cls.__name__}"' in sprite
+
+
+def test_each_card_on_the_home_page_has_its_exercises_icon_and_name() -> None:
+    """Check the cards under What you can practise: one for each exercise, with its icon before its name, and the icon sized."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert "{% include exercise-icons.html %}" in home
+    cards = home[home.index('<ul class="cards">') : home.index("</ul>", home.index('<ul class="cards">'))]
+    for cls in REGISTRY:
+        picture = '<svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">'
+        icon = f'{picture}<use href="#ex-{cls.__name__}"/></svg>'
+        assert f"<li><strong>{icon}{cls.name}</strong>" in cards, f"no card for {cls.name} with its icon"
+    assert cards.count("<li>") == len(REGISTRY)
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".ex-icon {" in css and ".cards strong { display: flex; align-items: center;" in css
+
+
+def test_the_first_picture_on_the_home_page_is_the_circle_of_fifths_with_the_list_wide_enough_to_read() -> None:
+    """Check that the home page opens with the circle of fifths, and that the script shows the list wide enough to read."""
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    first = re.search(r'\{% include shot\.html src="([^"]+)"', home)
+    assert first is not None and first.group(1) == "circle-of-fifths.png"
+    assert 'alt="The Circle of Fifths exercise, with the list of exercises open on the left"' in home
+    assert "home.png" not in home
+    for suffix in ("", "-dark"):
+        assert (DOCS / "assets" / "img" / f"circle-of-fifths{suffix}.png").is_file()
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "docs/assets/img/circle-of-fifths.png" in readme and "docs/assets/img/circle-of-fifths-dark.png" in readme
+    assert readme.index("circle-of-fifths") < readme.index("settings.png")  # the README opens with it too
+    shots = (ROOT / "scripts" / "screenshots.py").read_text(encoding="utf-8")
+    assert '("CircleOfFifths", "circle-of-fifths")' in shots and 'store().setValue("ui/sidebarWidth"' in shots
+
+
+def _notes_script() -> ModuleType:
+    """
+    Load `scripts/release_notes.py` as a module, without running it.
+
+    Returns
+    -------
+    ModuleType
+        The loaded module.
+    """
+    spec = importlib.util.spec_from_file_location("release_notes", ROOT / "scripts" / "release_notes.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_the_release_notes_page_is_the_changelog_and_is_up_to_date() -> None:
+    """Check that the page is what `scripts/release_notes.py` makes of `CHANGELOG.md`, with a heading per version."""
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
+    assert page == _notes_script().render(changelog)  # run scripts/release_notes.py after a change to the changelog
+    for name, _date, _notes in _notes_script().sections(changelog):
+        if name != "Unreleased":
+            assert f"\n## {name}\n" in page, f"no heading for {name}"
+    assert "[Unreleased]:" not in page and "{% raw %}" in page and "{% endraw %}" in page
+
+
+def test_the_release_notes_are_in_the_sidebar_under_about_and_linked_from_the_home_page() -> None:
+    """Check the page is in the sidebar under About, the home page links to it, and its inner headings stay out of the list."""
+    page = (DOCS / "release-notes.md").read_text(encoding="utf-8")
+    assert "nav_group: About" in page and "permalink: /release-notes/" in page
+    assert "{: .no-toc}" in page
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    assert """<a href="{{ '/release-notes/' | relative_url }}">Release notes</a>""" in home
+    script = (DOCS / "assets" / "js" / "toc.js").read_text(encoding="utf-8")
+    assert 'contains("no-toc")' in script
+
+
+def test_the_release_notes_script_shows_unreleased_only_while_it_has_notes_and_the_release_steps_name_it() -> None:
+    """Check that an empty Unreleased section is left out, and that the developer guide tells a releaser to run the script."""
+    script = _notes_script()
+    empty = "# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-12-01\n\nNotes.\n"
+    full = empty.replace("## [Unreleased]\n", "## [Unreleased]\n\n- A change.\n")
+    assert "## Unreleased" not in script.render(empty) and "## Unreleased" in script.render(full)
+    assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(encoding="utf-8")

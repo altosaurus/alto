@@ -316,7 +316,8 @@ A heading that is also the title of a page (For developers) is that page's link,
 the page you are on is open. Which headings you closed is remembered in the browser.
 
 On a wide screen a page with two or more `##` or `###` headings gets an "On this page" list beside it, made in the browser from those
-headings, and on a narrower one a box above the text. Nothing needs to be written for it. `docs/api/index.md` is written by
+headings, and on a narrower one a box above the text. Nothing needs to be written for it. A page that should not have one, such as the
+home page, says `toc: false` in its front matter. `docs/api/index.md` is written by
 `scripts/api_docs.py`, so change its front matter there.
 
 Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar's
@@ -382,7 +383,9 @@ To make a release:
 1. Choose the version. Alto uses [semantic versioning](https://semver.org/): a new feature raises the middle number, a fix
    raises the last.
 2. In `CHANGELOG.md`, rename **Unreleased** to the version with today's date (`## [0.1.0] - 2026-12-01`), add a new empty
-   **Unreleased** above it, and update the two links at the bottom.
+   **Unreleased** above it, and update the two links at the bottom. Then run `python scripts/release_notes.py`, which rewrites
+   the Release notes page of the docs (`docs/release-notes.md`) from the changelog; `--check` says whether it is up to date, and a
+   test fails when it is not, so a changelog line always arrives with its page.
 3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
 4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
    the tag starts the **Release** workflow (see below), which publishes the downloads.

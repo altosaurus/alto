@@ -121,7 +121,7 @@
       </details>
     </aside>
     <main id="content" class="content">
-      <div class="page-grid" id="page-grid">
+      <div class="page-grid" id="page-grid"{% if page.toc == false %} data-no-toc{% endif %}>
         <article>
           {% unless page.url == '/' %}<h1>{{ page.title }}</h1>{% endunless %}
           {{ content }}

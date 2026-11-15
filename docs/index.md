@@ -2,30 +2,32 @@
 title: Home
 nav_order: 1
 permalink: /
+toc: false
 ---
 {% include os-icons.html %}
+{% include exercise-icons.html %}
 <div class="hero">
   <h1>Learn music theory with <span class="hl">Alto</span></h1>
   <p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>
   {% if site.app_version != "" %}<a class="dl-go" href="#download">Download Alto <svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>{% endif %}
 </div>
 
-{% include shot.html src="home.png" alt="Alto's home screen with a card for each exercise" caption="The home screen. Pick an exercise to start." %}
+{% include shot.html src="circle-of-fifths.png" alt="The Circle of Fifths exercise, with the list of exercises open on the left" caption="An exercise, here the circle of fifths. The list on the left switches between exercises." %}
 
 ## What you can practise
 
 <ul class="cards">
-  <li><strong>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
-  <li><strong>Keyboard Identification</strong>Name the highlighted key on a piano keyboard.</li>
-  <li><strong>Note Construction</strong>Click the staff where a named note belongs.</li>
-  <li><strong>Interval identification</strong>Name the interval between two notes.</li>
-  <li><strong>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
-  <li><strong>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
-  <li><strong>Scale spelling</strong>Spell a degree of a scale or mode.</li>
-  <li><strong>Scale Construction</strong>Place the notes of a named scale on a blank staff, one after another.</li>
-  <li><strong>Circle of Fifths</strong>Find relative majors and minors, and the Roman numerals of a key, on the circle of fifths.</li>
-  <li><strong>Chord quality</strong>Tell triads and seventh chords apart.</li>
-  <li><strong>Arpeggio identification</strong>Name the type and the inversion of a broken chord.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteNames"/></svg>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardNotes"/></svg>Keyboard Identification</strong>Name the highlighted key on a piano keyboard.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteConstruction"/></svg>Note Construction</strong>Click the staff where a named note belongs.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-IntervalNames"/></svg>Interval Identification</strong>Name the interval between two notes.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatures"/></svg>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatureConstruction"/></svg>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleDegrees"/></svg>Scale Spelling</strong>Spell a degree of a scale or mode.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleConstruction"/></svg>Scale Construction</strong>Place the notes of a named scale on a blank staff, one after another.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-CircleOfFifths"/></svg>Circle of Fifths</strong>Find relative majors and minors, and the Roman numerals of a key, on the circle of fifths.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ChordQualities"/></svg>Chord Quality</strong>Tell triads and seventh chords apart.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ArpeggioNames"/></svg>Arpeggio Identification</strong>Name the type and the inversion of a broken chord.</li>
 </ul>
 
 ## What makes it different
@@ -65,7 +67,7 @@ permalink: /
       <div class="dl-act"><a class="dl-pill" href="{{ source }}">Run from source</a></div>
     </div>
   </div>
-  <p class="dl-more"><a href="https://github.com/altosaurus/alto/releases/tag/v{{ v }}">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="{{ '/getting-started/' | relative_url }}">Getting started</a></p>
+  <p class="dl-more"><a href="{{ '/release-notes/' | relative_url }}">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="{{ '/getting-started/' | relative_url }}">Getting started</a></p>
 </section>
 <script src="{{ '/assets/js/downloads.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 {% endif %}
