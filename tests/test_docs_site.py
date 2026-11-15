@@ -564,3 +564,20 @@ def test_the_home_page_keeps_to_the_download_and_leaves_checking_and_updating_to
     assert guide.index("## Updating Alto") < guide.index(
         "## Install and run",
     )  # for everyone, not under the Linux-only script section
+
+
+def test_every_page_in_the_sidebar_ends_with_links_to_the_previous_and_the_next_page() -> None:
+    """Check the layout's links: previous bottom left, next bottom right, in the sidebar's order, children included."""
+    layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
+    assert 'class="page-nav"' in layout and 'rel="prev"' in layout and 'rel="next"' in layout
+    assert 'id="i-prev"' in layout and 'id="i-next"' in layout
+    assert (
+        'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children | sort: "order"' in layout
+    )
+    assert "entries[forloop.index]" in layout and "entries[before]" in layout and "{% break %}" in layout
+    assert "forloop.index0 > 0" in layout  # the first page has no previous one, and must not wrap round to the last
+    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
+    assert ".page-nav { display: flex; justify-content: space-between;" in css
+    assert (
+        ".page-nav a.prev" in css and ".page-nav a.next" in css and "margin-left: auto" in css
+    )  # a lone next link stays on the right

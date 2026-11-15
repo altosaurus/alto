@@ -319,6 +319,10 @@ On a wide screen a page with two or more `##` or `###` headings gets an "On this
 headings, and on a narrower one a box above the text. Nothing needs to be written for it. `docs/api/index.md` is written by
 `scripts/api_docs.py`, so change its front matter there.
 
+Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar's
+own order: the pages by `nav_order`, each followed by its `children` in their `order`. Nothing needs to be written for them. The first page has
+no previous link and the last no next one.
+
 ### Building the docs
 
 You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one version the way the workflow does:
