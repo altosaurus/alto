@@ -1,0 +1,43 @@
+name: Docs check
+
+# Builds the docs with Jekyll on a pull request that changes them, so that a broken page shows before the merge and not when the
+# Docs workflow runs on main. Nothing is published: the Docs workflow does that, from main.
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "CHANGELOG.md"
+      - ".github/workflows/docs-check.yml"
+
+permissions:
+  contents: read
+
+# A new push to a pull request cancels the run still going for the old one.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: docs
+
+      # The same build as the Docs workflow makes for dev: the same configuration, with the version a page knows itself by.
+      - name: Build the docs
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/docs/Gemfile
+        run: |
+          printf 'baseurl: /alto/dev\ndocs_version: dev\napp_version: ""\n' > version.yml
+          bundle exec jekyll build --source docs --destination site --config docs/_config.yml,version.yml
+
+      - name: Check that the pages are there
+        run: |
+          for page in index getting-started release-notes; do test -s "site/${page}.html" || test -s "site/${page}/index.html"; done
