@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794806164">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -482,6 +482,16 @@
 <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>, and Alto uses <a href="https://semver.org/">semantic versioning</a>.
 Each release’s downloads are on its GitHub release.</p>
 
+<h2 id="unreleased">Unreleased</h2>
+
+<p>Changes that are in the development docs and not in a release yet.</p>
+
+<h3 class="no-toc" id="fixed">Fixed</h3>
+
+<ul>
+  <li>Switching themes in Settings is faster, and Settings opens more quickly.</li>
+</ul>
+
 <h2 id="001">0.0.1</h2>
 
 <p>Released 2026-11-15. <a href="https://github.com/altosaurus/alto/releases/tag/v0.0.1">GitHub release</a></p>
@@ -522,7 +532,7 @@ previous and next pages. The home page leaves checking a download and updating t
   <li>The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.</li>
 </ul>
 
-<h3 class="no-toc" id="fixed">Fixed</h3>
+<h3 class="no-toc" id="fixed-1">Fixed</h3>
 
 <ul>
   <li>Instrument previews keep an even rhythm on first playback by rendering the phrase as one audio clip.</li>
@@ -952,8 +962,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794806164" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794806164" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

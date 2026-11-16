@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794806164">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -672,13 +672,15 @@ the Custom style.</p>
 
 <p>Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.</p>
 
+<p>Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.</p>
+
 <p><strong>Attributes</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">theme_changed</code> (<em>bool</em>): True once the theme has been changed, so the window can be rebuilt in it.</li>
-  <li><code class="language-plaintext highlighter-rouge">categories</code> (<em>QListWidget</em>): The list of pages on the left: Appearance and Sound.</li>
+  <li><code class="language-plaintext highlighter-rouge">categories</code> (<em>QListWidget</em>): The list of pages on the left: Appearance, Sound and Updates.</li>
   <li><code class="language-plaintext highlighter-rouge">pages</code> (<em>QStackedWidget</em>): The page for the chosen category.</li>
-  <li><code class="language-plaintext highlighter-rouge">instruments</code> (<em>InstrumentPicker</em>): The instrument chooser on the Sound page.</li>
+  <li><code class="language-plaintext highlighter-rouge">instruments</code> (<em>InstrumentPicker</em>): The instrument chooser, available after the Sound page is first selected.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_list</code> (<em>QListWidget</em>): The themes, on the Theme section, with the one in use in bold.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_items</code> (<em>dict of str to QListWidgetItem</em>): The rows of that list, by the key of the theme’s family.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_pages</code> (<em>QStackedWidget</em>): The card of the theme chosen in the list, or the editor.</li>
@@ -687,7 +689,7 @@ the Custom style.</p>
   <li><code class="language-plaintext highlighter-rouge">theme_cards</code> (<em>dict of str to ThemeCard</em>): The cards built so far, by the key of the theme’s family. A card is built when its row is first chosen, because every widget makes a change of theme slower; use <code class="language-plaintext highlighter-rouge">card</code> to get one.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_scrolls</code> (<em>dict of str to QScrollArea</em>): The scroll area each built card is in, which is what the stack shows; use <code class="language-plaintext highlighter-rouge">scroll</code> to get one.</li>
   <li><code class="language-plaintext highlighter-rouge">theme_thumbs</code> (<em>dict of str to ThemeThumb</em>): The clickable pictures of every built card, by the key of the theme each chooses; use <code class="language-plaintext highlighter-rouge">thumb</code> to get one.</li>
-  <li><code class="language-plaintext highlighter-rouge">transition_list</code> (<em>QListWidget</em>): The choice of transition between the exercises and the lessons, on the Transitions section.</li>
+  <li><code class="language-plaintext highlighter-rouge">transition_list</code> (<em>QListWidget</em>): The choice of transition, available after the Transitions section is first selected.</li>
   <li><code class="language-plaintext highlighter-rouge">transition_items</code> (<em>dict of str to QListWidgetItem</em>): The rows of that list, by the transition’s key.</li>
   <li><code class="language-plaintext highlighter-rouge">transition_preview</code> (<em>TransitionPreview</em>): Plays the transition that is chosen, beside the choices.</li>
 </ul>
@@ -1053,8 +1055,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794806164" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794806164" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
