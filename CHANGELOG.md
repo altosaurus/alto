@@ -24,6 +24,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Changed
 
+- The notation-font previews in Settings use the DSCH motif (D, E♭, C, B) in treble clef.
+- Instrument previews play the same DSCH motif as the notation-font previews.
 - Exercise and lesson icons use consistent musical glyphs and follow the theme colour.
 
 - In Key Signature Construction a number on the fork lights up as the mouse passes over it, the circle can be dragged along the fork, and
@@ -36,6 +38,7 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Fixed
 
+- Instrument previews keep an even rhythm on first playback by rendering the phrase as one audio clip.
 - Changing the theme in the settings no longer sends you back to the exercises home page, or makes the window disappear and grow back
   from a dot. The window stays where it is, showing the exercise, lesson step or page you were on.
 

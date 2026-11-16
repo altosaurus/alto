@@ -10,6 +10,7 @@ Note playback: recorded instrument samples (University of Iowa), with pitch-shif
 
 `Sounds` plays notes through Qt's `QSoundEffect`, one effect per note, created the first time it is needed. A note with
 no recording is made by shifting the nearest recording (or, for the piano outside its sampled range, by synthesis).
+Instrument previews render the phrase as one cached clip, with fixed spacing between its notes.
 The module-level `sounds` is the one the interface uses.
 
 **Examples**
@@ -322,6 +323,7 @@ def preview(
 
 Play notes one after another in an instrument, even while muted, to hear what it sounds like.
 
+The phrase is rendered as one audio clip, so first-use loading cannot change the spacing between notes.
 Starting a preview silences the one before it.
 
 **Parameters**
