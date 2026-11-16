@@ -1108,7 +1108,7 @@ def test_the_home_card_has_the_new_name_and_its_own_icon(app: QApplication) -> N
     app : QApplication
         The shared Qt application.
     """
-    assert EXERCISE_ICONS["CircleOfFifths"] not in {EXERCISE_ICONS["ScaleDegrees"], EXERCISE_ICONS["KeySignatures"]}
+    assert EXERCISE_ICONS["CircleOfFifths"] not in {EXERCISE_ICONS["ScaleIdentification"], EXERCISE_ICONS["KeySignatures"]}
     assert "RelativeMajors" not in EXERCISE_ICONS
     card = ExerciseCard(CircleOfFifths)
     card.show()

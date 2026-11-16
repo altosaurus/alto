@@ -798,7 +798,7 @@ def test_the_home_card_has_its_own_icon_and_its_name_fits(app: QApplication) -> 
     app : QApplication
         The shared Qt application.
     """
-    assert EXERCISE_ICONS["ScaleConstruction"] not in {EXERCISE_ICONS["ScaleDegrees"], EXERCISE_ICONS["NoteConstruction"]}
+    assert EXERCISE_ICONS["ScaleConstruction"] not in {EXERCISE_ICONS["ScaleIdentification"], EXERCISE_ICONS["NoteConstruction"]}
     card = ExerciseCard(ScaleConstruction)
     card.show()
     app.processEvents()
