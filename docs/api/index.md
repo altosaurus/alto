@@ -88,7 +88,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.keyboard_styles](alto.ui.keyboard_styles/) | Keyboard styles: the colours and materials the on-screen piano keys are drawn in. |
 | [alto.ui.lesson](alto.ui.lesson/) | The lesson pages: a page that walks through one lesson step by step. |
 | [alto.ui.lesson_nav](alto.ui.lesson_nav/) | The list on the left in lesson mode: the lessons, and the steps of the one that is open. |
-| [alto.ui.main_window](alto.ui.main_window/) | The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right. |
+| [alto.ui.main_window](alto.ui.main_window/) | The main window: tile browsing or a workspace with an independently selected exercise or lesson list. |
 | [alto.ui.notation](alto.ui.notation/) | Notation styles: which music font the staff, clefs, notes and accidentals are engraved in. |
 | [alto.ui.notes](alto.ui.notes/) | Engraved notes built from the Noto Music font's glyphs, the way notation software draws them. |
 | [alto.ui.package_update](alto.ui.package_update/) | The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next. |

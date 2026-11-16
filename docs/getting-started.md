@@ -128,8 +128,18 @@ To switch to someone else, or add another profile, open the menu (☰) and choos
 3. A correct answer turns green and plays the note. A wrong one turns red. Try again until you get it.
 4. The counter at the top shows how many you have right and your current streak.
 
-The sidebar on the left switches between exercises. The button at the top left of the exercise hides and shows it. The sliders button at the top right opens the
-exercise's own settings, and the **?** button explains the exercise.
+The **Exercises / Lessons** control at the top left selects what to browse. Alto starts with tiles. **Navigation Pane**
+opens the matching list on the left; before you start an activity, the main panel says "Select an exercise to begin." or
+"Select a lesson to begin." Use the separate **Tiles** grid button to return to tiles without losing your place.
+
+The icon-only **Exercises / Lessons** pair sits at the top left, followed by an open/close navigation-pane button, a divider,
+and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
+selected section by name, description or category, and follows the sidebar's width.
+
+During an exercise or lesson, **Exercises / Lessons** switches the list while keeping your activity on screen. Selecting
+an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
+**Statistics** and **Browse database** are at the top right. The sliders button opens the exercise's own settings, and **?**
+explains it.
 
 {% include shot.html src="note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" caption="An exercise screen. The row of buttons below the staff holds the possible answers." %}
 

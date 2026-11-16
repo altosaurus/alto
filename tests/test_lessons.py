@@ -223,11 +223,9 @@ def test_the_switch_has_an_icon_on_each_side(app: QApplication) -> None:
     assert [not button.icon().isNull() for button in page.mode_control.buttons] == [True, True]
 
 
-def test_the_switch_stays_as_icons_inside_an_exercise_or_a_lesson(app: QApplication, clean_lessons: None) -> None:
+def test_the_switch_is_compact_in_the_workspace_and_changes_only_the_list(app: QApplication, clean_lessons: None) -> None:
     """
-    Check that the switch is icons only inside an exercise and a lesson.
-
-    It shows the side you are on, and pressing a side goes back to the start screen on it.
+    Keep the selected list independent of the activity and use compact controls in the workspace.
 
     Parameters
     ----------
@@ -239,18 +237,18 @@ def test_the_switch_stays_as_icons_inside_an_exercise_or_a_lesson(app: QApplicat
     window = MainWindow()
     window.show()
     control = window.home.mode_control
-    assert [button.text() for button in control.buttons] == ["Exercises", "Lessons"]
     window.open_exercise(CircleOfFifths)
+    exercise = window.stack.currentWidget()
     assert control.isVisible() and [button.text() for button in control.buttons] == ["", ""]
-    assert control.current() == 0 and [button.toolTip() for button in control.buttons] == ["Exercises", "Lessons"]
-    window.open_lessons("circle-of-fifths")
-    assert control.isVisible() and control.current() == 1
-    control.buttons[0].click()
-    assert window.stack.currentWidget() is window.home and window.home.mode == "exercises"
-    assert [button.text() for button in control.buttons] == ["Exercises", "Lessons"]
-    window.open_exercise(CircleOfFifths)
     control.buttons[1].click()
-    assert window.stack.currentWidget() is window.home and window.home.mode == "lessons" and control.current() == 1
+    assert window.stack.currentWidget() is exercise and window.nav_stack.currentWidget() is window.lesson_nav
+    window.open_lessons("circle-of-fifths")
+    lesson = window.stack.currentWidget()
+    control.buttons[0].click()
+    assert window.stack.currentWidget() is lesson and window.nav_stack.currentWidget() is window.nav
+    assert [button.text() for button in control.buttons] == ["", ""]
+    window.show_home()
+    assert [button.text() for button in control.buttons] == ["", ""]
 
 
 def test_a_lesson_card_opens_its_lesson_and_leaving_returns_to_the_lessons(app: QApplication, clean_lessons: None) -> None:

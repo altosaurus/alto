@@ -266,6 +266,10 @@ class HomePage(QWidget):
         Where the transition between the exercises and the lessons is drawn.
     mode_control : SegmentedControl
         The switch between the exercises and the lessons. The main window puts it in its top bar.
+    resume_button : QPushButton
+        Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.
+    no_results : QLabel
+        Shown when no tiles match the search.
     mode : str
         "exercises" or "lessons": which cards are showing.
     scroll_area : QScrollArea
@@ -317,6 +321,13 @@ class HomePage(QWidget):
         )
         self.mode_control = SegmentedControl(["Exercises", "Lessons"], icons=[icons.EXERCISES, icons.LESSONS])
         self.mode_control.chosen.connect(lambda number: self.set_mode("lessons" if number else "exercises"))
+        self.resume_button = QPushButton()
+        self.resume_button.hide()
+        lay.addWidget(self.resume_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        self._query = ""
+        self.no_results = QLabel()
+        self.no_results.hide()
+        lay.addWidget(self.no_results, alignment=Qt.AlignmentFlag.AlignCenter)
         self.cards = []
         for cls in registry:
             card = ExerciseCard(cls)
@@ -351,6 +362,31 @@ class HomePage(QWidget):
         self.mode = "lessons" if text_value(store(), key="ui/homeMode", default="exercises") == "lessons" else "exercises"
         self.mode_control.set_current(1 if self.mode == "lessons" else 0)
         self._reflow()
+
+    def set_search(
+        self,
+        text: str,
+    ) -> None:
+        """
+        Show only tiles matching a title, description or category search.
+
+        Parameters
+        ----------
+        text : str
+            Case-insensitive search text; empty text restores all tiles.
+
+        Examples
+        --------
+        >>> from alto.exercises import REGISTRY
+        >>> page = HomePage(REGISTRY)
+        >>> page.set_search("keyboard")
+        >>> page._query
+        'keyboard'
+        """
+        self._query = text.strip().casefold()
+        self.canvas.stop()
+        self._hidden.setEnabled(False)
+        self._reflow(force=True)
 
     def _make_lesson_cards(self) -> None:
         """
@@ -552,6 +588,10 @@ class HomePage(QWidget):
                     old_row.takeAt(0)
                 old_row.deleteLater()
         shown = self.lesson_cards if self.mode == "lessons" else self.cards
+        shown = [card for card in shown if self._query in f"{card.accessibleName()} {card.toolTip()}".casefold()]
+        section = "lessons" if self.mode == "lessons" else "exercises"
+        self.no_results.setText(f"No {section} found.")
+        self.no_results.setVisible(not shown)
         for card in (*self.cards, *self.lesson_cards):
             card.setVisible(False)
         for start in range(0, len(shown), columns):
