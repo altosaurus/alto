@@ -27,19 +27,23 @@ def spell(
     note: Note,
     *,
     naming: str = 'letters',
+    key: int = 0,
+    octave: bool = False,
 ) -> str
 ```
 
-Return the pitch-class name of a note in the chosen naming system.
+Return a note name in the chosen naming system, optionally including its octave.
 
 **Parameters**
 
 - `note` (*Note*): The note.
-- `naming` (*str, default "letters"*): "letters" for C D E, or "solfege" for Do Re Mi. Keyword-only.
+- `naming` (*str, default "letters"*): "letters" for C D E, "solfege" for Do Re Mi, "degrees" for caret scale degrees, or "functions" for function names. Keyword-only.
+- `key` (*int, default 0*): The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.
+- `octave` (*bool, default False*): Include the note's octave, separated from a scale degree by " / ". Keyword-only.
 
 **Returns**
 
-- *str*: The name with its accidental, without the octave.
+- *str*: The name and, if requested, octave. Carets use accidental prefixes; function names use Raised or Lowered prefixes.
 
 **Examples**
 
@@ -48,6 +52,18 @@ Return the pitch-class name of a note in the chosen naming system.
 'F♯'
 >>> spell(Note.parse("F#4"), naming="solfege")
 'Fa♯'
+>>> spell(Note.parse("F#4"), naming="degrees", key=1)
+'7̂'
+>>> spell(Note.parse("F4"), naming="degrees", key=1)
+'♭7̂'
+>>> spell(Note.parse("Eb4"), naming="degrees")
+'♭3̂'
+>>> spell(Note.parse("G4"), naming="functions", key=1)
+'Tonic'
+>>> spell(Note.parse("F4"), naming="functions", key=1)
+'Lowered Leading tone'
+>>> spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
+'1̂ / 4'
 ```
 
 ## diatonic_name

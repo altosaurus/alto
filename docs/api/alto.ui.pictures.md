@@ -2,7 +2,7 @@
 title: alto.ui.pictures
 parent: api
 package: alto.ui
-order: 42
+order: 43
 permalink: /api/alto.ui.pictures/
 ---
 {% raw %}
@@ -485,13 +485,13 @@ NamePicture(
 
 Bases: `_Picture`
 
-How notes are named: C, D and E on a staff, labelled with letters or with solfège syllables.
+How notes are named: C, D and E on a staff, labelled with letters, solfège syllables or scale degrees.
 
 **Attributes**
 
 - `H, W` (*float*): The picture's height and width.
 - `LETTERS, SYLLABLES` (*tuple of str*): The two sets of labels.
-- `naming` (*str*): "letters" or "solfege".
+- `naming` (*str*): "letters", "solfege", "degrees" (caret) or "functions".
 
 **Examples**
 
@@ -506,7 +506,7 @@ Create the picture.
 
 **Parameters**
 
-- `naming` (*str, default "letters"*): "letters" or "solfege".
+- `naming` (*str, default "letters"*): "letters", "solfege", "degrees" (caret) or "functions".
 - `scale` (*float, default 1.0*): How much to enlarge it. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
@@ -527,7 +527,7 @@ Choose which labels are drawn.
 
 **Parameters**
 
-- `naming` (*str*): "letters" for C D E, or "solfege" for Do Re Mi.
+- `naming` (*str*): "letters" for C D E, "solfege" for Do Re Mi, or "degrees" for 1̂ 2̂ 3̂, or "functions" for function names.
 
 **Examples**
 
@@ -553,7 +553,7 @@ Return the picture as an icon.
 
 **Parameters**
 
-- `naming` (*str*): "letters" or "solfege".
+- `naming` (*str*): "letters", "solfege", "degrees" (caret) or "functions".
 - `scale` (*float, default 1.6*): How much to enlarge it. Keyword-only.
 
 **Returns**

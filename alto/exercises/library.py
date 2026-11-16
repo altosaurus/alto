@@ -96,6 +96,45 @@ def _random_note(
     return Note.from_diatonic(d, accidental=rng.choice((-1, 0, 1)) if accidentals else 0)
 
 
+def _degree_choices(
+    pool: set[tuple[int, int]],
+    *,
+    key: int,
+    naming: str = "degrees",
+) -> tuple[list[str], dict[str, tuple[int, int]]]:
+    """
+    Arrange scale-degree answers by degree, with raised degrees above lowered degrees.
+
+    Parameters
+    ----------
+    pool : set of tuple of (int, int)
+        Note spellings as letter index and accidental.
+    key : int
+        The major key signature. Keyword-only.
+    naming : str, default "degrees"
+        Caret notation ("degrees") or function names ("functions"). Keyword-only.
+
+    Returns
+    -------
+    tuple of (list of str, dict of str to tuple of (int, int))
+        Answer labels and their grid positions: seven degree columns for carets, or four wider columns for function names.
+
+    Examples
+    --------
+    >>> _degree_choices({(3, 1)}, key=1)
+    (['7̂'], {'7̂': (0, 6)})
+    """
+    ordered = sorted(pool, key=lambda item: ((item[0] - 4 * key) % 7, item[1]))
+    alterations = [accidental - key_accidental(letter, count=key) for letter, accidental in ordered]
+    rows = {alteration: row for row, alteration in enumerate(sorted(set(alterations), reverse=True))}
+    choices, grid = [], {}
+    for (letter, accidental), alteration in zip(ordered, alterations, strict=True):
+        label = spell(Note(4, letter=letter, accidental=accidental), naming=naming, key=key)
+        choices.append(label)
+        grid[label] = divmod(len(choices) - 1, 4) if naming == "functions" else (rows[alteration], (letter - 4 * key) % 7)
+    return choices, grid
+
+
 @register
 class NoteNames(Exercise):
     """
@@ -143,12 +182,21 @@ class NoteNames(Exercise):
         >>> "Press the button with its name" in NoteNames().instructions()
         True
         """
-        return (
-            "<b>Note Identification</b><br>A note is shown on the staff. Press the button with its name, or press its number "
-            "(1 is the first button).<br><br>"
+        text = (
+            "<b>Note Identification</b><br>A note is shown on the staff. Press the button with its name, or press the "
+            "keys shown on it.<br><br>"
             "Use the sliders button to choose the clefs, the range of notes, key signatures (the name then has to "
-            "match the signature), note values, letter or solfège names, and whether sharps, flats and naturals appear."
+            "match the signature), note values, letter, solfège or scale-degree names, and whether sharps, flats "
+            "and naturals appear."
         )
+        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+            text += (
+                "<br><br>Degrees 1–7 follow the staff's major key signature (C major without a signature). "
+                "A prefix such as ♭3 or ♯4 lowers or "
+                "raises that degree. Type the degree digit; in a chromatic bank, add Shift for a sharp or Ctrl for a flat. "
+                "Add Alt as well for a double alteration."
+            )
+        return text
 
     def __init__(self, accidentals: bool = False) -> None:
         """
@@ -199,21 +247,28 @@ class NoteNames(Exercise):
             acc = rng.choice([a for a in (-1, 0, 1) if a != in_key])
         note = Note.from_diatonic(letter_pos, accidental=acc)
 
-        name = spell(note, naming=cfg.naming)
+        name = spell(note, naming=cfg.naming, key=key)
         # One button for every name that can be the answer under the current settings.
         if with_accidentals:
             pool = {(l, a) for l in range(7) for a in (-1, 0, 1)}
+        elif cfg.naming in settings.DEGREE_NAMINGS:
+            pool = {(l, key_accidental(l, count=key)) for l in range(7)}
         else:
             pool = {(l, key_accidental(l, count=k)) for l in range(7) for k in cfg.active_keys()}
-        ordered = sorted(pool)
-        choices = [spell(Note(4, letter=l, accidental=a), naming=cfg.naming) for l, a in ordered]
-        if len(pool) == 7:  # one name per letter: a single row, one column per letter
-            grid = {c: (0, l) for c, (l, _) in zip(choices, ordered)}
-        else:  # columns are letters; sharps on the top row, then naturals, then flats
-            rows = {a: r for r, a in enumerate(sorted({a for _, a in pool}, reverse=True))}
-            grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
+        if cfg.naming in settings.DEGREE_NAMINGS:
+            choices, grid = _degree_choices(pool, key=key, naming=cfg.naming)
+        else:
+            ordered = sorted(pool)
+            choices = [spell(Note(4, letter=l, accidental=a), naming=cfg.naming) for l, a in ordered]
+            if len(pool) == 7:  # one name per letter: a single row, one column per letter
+                grid = {c: (0, l) for c, (l, _) in zip(choices, ordered)}
+            else:  # columns are letters; sharps on the top row, then naturals, then flats
+                rows = {a: r for r, a in enumerate(sorted({a for _, a in pool}, reverse=True))}
+                grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
 
         expl = []
+        if cfg.naming in settings.DEGREE_NAMINGS:
+            expl.append(f"{note.name} is scale degree {name} in {MAJOR_KEYS[key]} major.")
         if key:
             expl.append(f"{MAJOR_KEYS[key]} major has {format_key_signature(key)}.")
         if acc != in_key:
@@ -1652,10 +1707,19 @@ class KeyboardNotes(Exercise):
                 "the letter for a flat."
             ),
         ]
+        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+            text = [
+                (
+                    "<b>Keyboard Identification</b><br>Name the highlighted key by its scale degree, 1–7, in the major key "
+                    "of the signature. Without a key signature, use C major. Altered degrees have a prefix, such "
+                    "as ♭3 or ♯4. Type the degree digit; add Shift for a sharp or Ctrl for a flat, "
+                    "and Alt for a double alteration."
+                ),
+            ]
         if cfg.require_octave:
             text.append(
-                "Choose its octave too, from the row below, or type its number. Octaves count up from C, so middle C is the "
-                "C in octave 4.",
+                "Choose its octave too, from the row below, using the shortcuts shown on the buttons. "
+                "Octaves count up from C, so middle C is the C in octave 4.",
             )
         if cfg.key_signature:
             text.append(
@@ -1698,7 +1762,7 @@ class KeyboardNotes(Exercise):
 
         spelled = [_spelled(midi, letter=letter, accidental=acc) for letter, acc in _key_spellings(midi % 12, count=count)]
         key = spelled[0]  # the key as the signature spells it (also what plays when you answer correctly)
-        names = [spell(n, naming=naming) for n in spelled]
+        names = [spell(n, naming=naming, key=count or 0) for n in spelled]
         answer, accept = names[0], tuple(names[1:])
         octaves = None
         if cfg.require_octave:
@@ -1712,7 +1776,16 @@ class KeyboardNotes(Exercise):
                     },
                 )
             ]
-            answer, accept = f"{names[0]}{spelled[0].octave}", tuple(f"{n}{sp.octave}" for n, sp in zip(names[1:], spelled[1:]))
+            names_with_octaves = [
+                spell(
+                    n,
+                    naming=naming,
+                    key=count or 0,
+                    octave=True,
+                )
+                for n in spelled
+            ]
+            answer, accept = names_with_octaves[0], tuple(names_with_octaves[1:])
 
         if len(spelled) > 1:
             explanation = f"{names[0]} and {names[1]} are the same black key."
@@ -1729,11 +1802,6 @@ class KeyboardNotes(Exercise):
 
         # One button per name: sharps on the top row, naturals in the middle, flats below, a column per letter.
         # A key signature can need any spelling (E♯, C♭ ...), so it gets the full set.
-        grid, choices = {}, []
-        for letter in range(7):
-            n = spell(Note(4, letter=letter), naming=naming)
-            choices.append(n)
-            grid[n] = (1, letter)
         if cfg.key_signature:
             extra = [(letter, acc, 0 if acc > 0 else 2) for letter in range(7) for acc in (1, -1)]
         elif cfg.black_keys:
@@ -1744,10 +1812,19 @@ class KeyboardNotes(Exercise):
             ]
         else:
             extra = []
-        for letter, acc, row in extra:
-            n = spell(Note(4, letter=letter, accidental=acc), naming=naming)
-            choices.append(n)
-            grid[n] = (row, letter)
+        if naming in settings.DEGREE_NAMINGS:
+            pool = {(letter, 0) for letter in range(7)} | {(letter, acc) for letter, acc, _row in extra}
+            choices, grid = _degree_choices(pool, key=count or 0, naming=naming)
+        else:
+            grid, choices = {}, []
+            for letter in range(7):
+                n = spell(Note(4, letter=letter), naming=naming)
+                choices.append(n)
+                grid[n] = (1, letter)
+            for letter, acc, row in extra:
+                n = spell(Note(4, letter=letter, accidental=acc), naming=naming)
+                choices.append(n)
+                grid[n] = (row, letter)
 
         return Question(
             "",
@@ -1761,6 +1838,7 @@ class KeyboardNotes(Exercise):
             octaves=octaves,
             key=count or 0,
             key_staff=cfg.key_signature,
+            joiner=" / " if naming in settings.DEGREE_NAMINGS else "",
         )
 
 
@@ -1819,6 +1897,12 @@ class NoteConstruction(Exercise):
                 "staff for notes from middle C up and the lower staff for the notes below it."
             ),
         ]
+        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+            text.append(
+                "The question gives a scale degree in the named major key, plus an octave. Degree 1 is the tonic; "
+                "a prefix such as ♭3 or ♯4 lowers or raises the degree. Without a key signature, use C major. "
+                "The octave is the written note's C-to-B octave, not a count from the tonic.",
+            )
         if cfg.key_signature:
             text.append(
                 "A key signature is drawn at the start of the staff. It already applies to every note of that "
@@ -1870,7 +1954,18 @@ class NoteConstruction(Exercise):
         if cfg.accidentals and rng.random() < (0.4 if cfg.key_signature else 0.5):
             accidental = rng.choice([a for a in (-1, 0, 1) if a != implied])  # a sign that differs from the key
         note = Note.from_diatonic(diatonic, accidental=accidental)
-        name = f"{spell(note, naming=settings.note_names.naming)}{note.octave}"
+        naming = settings.note_names.naming
+        name = spell(
+            note,
+            naming=naming,
+            key=count,
+            octave=True,
+        )
+        prompt = f"Place {name} on the staff."
+        if naming in settings.DEGREE_NAMINGS:
+            degree = spell(note, naming=naming, key=count)
+            target = f"the {degree}" if naming == "functions" else f"degree {degree}"
+            prompt = f"Place {target}, octave {note.octave}, in {MAJOR_KEYS[count]} major."
         explanation = ""
         if cfg.key_signature and count:
             key_name = f"{MAJOR_KEYS[count]} major ({format_key_signature(count)})"
@@ -1880,7 +1975,7 @@ class NoteConstruction(Exercise):
             elif accidental != implied:
                 explanation = f"In {key_name} this note needs its own {word[accidental]} sign."
         return Question(
-            f"Place {name} on the staff.",
+            prompt,
             choices=[],
             answer=name,
             clef=clef,
@@ -1888,6 +1983,7 @@ class NoteConstruction(Exercise):
             accidentals=cfg.accidentals,
             key=count,
             explanation=explanation,
+            caption=prompt if naming in settings.DEGREE_NAMINGS else "",
         )
 
 

@@ -41,6 +41,10 @@ from alto.theory.pitch import (
 )
 from alto.ui import engraving
 from alto.ui.colors import blend
+from alto.ui.degree_text import (
+    degree_tooltip,
+    draw_degree_text,
+)
 from alto.ui.notation import current as current_style
 from alto.ui.staff import (
     BOTTOM_LINE,
@@ -1232,7 +1236,7 @@ class RangePictures(_Picture):
 
 class NamePicture(_Picture):
     """
-    How notes are named: C, D and E on a staff, labelled with letters or with solfège syllables.
+    How notes are named: C, D and E on a staff, labelled with letters, solfège syllables or scale degrees.
 
     Attributes
     ----------
@@ -1241,7 +1245,7 @@ class NamePicture(_Picture):
     LETTERS, SYLLABLES : tuple of str
         The two sets of labels.
     naming : str
-        "letters" or "solfege".
+        "letters", "solfege", "degrees" (caret) or "functions".
 
     Examples
     --------
@@ -1265,7 +1269,7 @@ class NamePicture(_Picture):
         Parameters
         ----------
         naming : str, default "letters"
-            "letters" or "solfege".
+            "letters", "solfege", "degrees" (caret) or "functions".
         scale : float, default 1.0
             How much to enlarge it. Keyword-only.
         parent : QWidget or None, default None
@@ -1288,7 +1292,7 @@ class NamePicture(_Picture):
         Parameters
         ----------
         naming : str
-            "letters" for C D E, or "solfege" for Do Re Mi.
+            "letters" for C D E, "solfege" for Do Re Mi, or "degrees" for 1̂ 2̂ 3̂, or "functions" for function names.
 
         Examples
         --------
@@ -1298,7 +1302,7 @@ class NamePicture(_Picture):
         'Solfège (Do Re Mi)'
         """
         self.naming = naming
-        self.setToolTip("Solfège (Do Re Mi)" if naming == "solfege" else "Letters (C D E)")
+        self.setToolTip(degree_tooltip(settings.NAMINGS.get(naming, settings.NAMINGS["letters"])))
         self.update()
 
     @classmethod
@@ -1314,7 +1318,7 @@ class NamePicture(_Picture):
         Parameters
         ----------
         naming : str
-            "letters" or "solfege".
+            "letters", "solfege", "degrees" (caret) or "functions".
         scale : float, default 1.6
             How much to enlarge it. Keyword-only.
 
@@ -1365,7 +1369,12 @@ class NamePicture(_Picture):
             color=text,
             font=current_style().font,
         )
-        names = self.SYLLABLES if self.naming == "solfege" else self.LETTERS
+        names = {
+            "letters": self.LETTERS,
+            "solfege": self.SYLLABLES,
+            "degrees": ("1̂", "2̂", "3̂"),
+            "functions": ("T", "ST", "M"),
+        }[self.naming]
         font = QFont()
         font.setPixelSize(8)
         font.setBold(True)
@@ -1394,13 +1403,13 @@ class NamePicture(_Picture):
                 font=current_style().font,
             )
             p.setPen(QPen(text, 1.0))
-            p.drawText(
-                QRectF(
+            draw_degree_text(
+                p,
+                rect=QRectF(
                     x - 6.5,
                     29.5,
                     13,
                     9,
                 ),
-                Qt.AlignmentFlag.AlignCenter,
-                name,
+                text=name,
             )

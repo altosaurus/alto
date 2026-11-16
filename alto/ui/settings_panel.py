@@ -46,6 +46,7 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QFrame,
     QGridLayout,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QPushButton,
@@ -99,6 +100,7 @@ from alto.ui.circle_colours import (
     SchemePage,
 )
 from alto.ui.colors import blend
+from alto.ui.degree_text import degree_tooltip
 from alto.ui.keyboard import KeyboardSpan
 from alto.ui.pictures import (
     CLEF_NAMES,
@@ -1494,7 +1496,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
     value_boxes : dict of str to QCheckBox
         The note value checkboxes.
     naming_radios : dict of str to QRadioButton
-        The letters and solfège choices.
+        The letters and solfège choices, plus caret and function notation in the Scale degrees group.
     range_editors : dict of str to RangeEditor
         The range editor of each clef in use, built when the Range page opens.
 
@@ -1645,6 +1647,8 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         self.naming_radios = {k: QRadioButton() for k in NAMINGS}
         for k, radio in self.naming_radios.items():
             _label_with_picture(radio, picture=NamePicture(k, scale=1.6), name=NAMINGS[k])
+            radio.setText(NAMINGS[k].split(" (")[0])
+            radio.setToolTip(degree_tooltip(NAMINGS[k]))
         names_body = QWidget()
         nlay = QVBoxLayout(names_body)
         nlay.setContentsMargins(
@@ -1653,12 +1657,18 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
             0,
             0,
         )
+        degree_group = QGroupBox("Scale degrees")
+        degree_layout = QVBoxLayout(degree_group)
         naming_group = QButtonGroup(self)
         for k, radio in self.naming_radios.items():
             naming_group.addButton(radio)
             radio.setChecked(k == cfg.naming)
             radio.toggled.connect(self._names_edited)
-            nlay.addWidget(radio)
+            if k in settings.DEGREE_NAMINGS:
+                degree_layout.addWidget(radio)
+            else:
+                nlay.addWidget(radio)
+        nlay.addWidget(degree_group)
         names_page = _subpage("Note names", body=names_body, back=lambda: self._go(0))
 
         for page in (
@@ -1796,7 +1806,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
 
     def _names_edited(self) -> None:
         """
-        Take the chosen naming (letters or solfège) into the settings, save it and say so.
+        Take the chosen naming (letters, solfège or scale degrees) into the settings, save it and say so.
 
         Examples
         --------

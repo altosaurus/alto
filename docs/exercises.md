@@ -26,7 +26,10 @@ In the exercise settings you can choose:
 - **Range:** the lowest and highest note that can appear, per clef.
 - **Key signatures:** which keys appear. When a key is on, the note's name has to agree with the signature.
 - **Note values:** whole notes up to thirty-second notes, and the breve.
-- **Note names:** letters (C D E) or solfège (Do Re Mi).
+- **Note names:** letters (C D E), solfège (Do Re Mi), or the **Scale degrees** group, with **Caret**
+  (1̂ 2̂ 3̂) and **Function** (Tonic, Supertonic, Mediant, and so on). Every option has a text label beside its preview.
+  Degrees refer to the major key signature (C major without a signature). Caret labels use accidental prefixes,
+  while function labels use words such as **Raised Supertonic** and **Lowered Mediant**.
 - **Accidentals:** whether notes with their own sharp, flat or natural sign appear.
 
 The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
@@ -35,6 +38,9 @@ that option. Changes apply to the next question straight away.
 ## Keyboard Identification
 
 One key on a piano keyboard is highlighted. Press the button with its name.
+
+This exercise uses the **Note names** setting from Note Identification. Scale degrees follow the shown major key,
+or C major when key signatures are off. When octaves are required, degree and octave are separated: **1̂ / 4**.
 
 - **Black keys:** include them. A black key has two names, such as C♯ and D♭, and either one is accepted.
 - **Octave number:** also choose the octave from a second row. Octaves count up from C, so middle C is C4.
@@ -46,6 +52,8 @@ One key on a piano keyboard is highlighted. Press the button with its name.
 ## Note Construction
 
 The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
+It uses the **Note names** setting from Note Identification. With scale degrees selected, the question names the
+major key, degree and octave. Without a key signature, the reference is C major.
 
 - The octave counts: middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.
 - With **Accidentals** on, pick ♭, ♮ or ♯ first, or right-click the staff to step through them.

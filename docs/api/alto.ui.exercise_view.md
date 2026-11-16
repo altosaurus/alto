@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 29
+order: 30
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
@@ -32,7 +32,8 @@ Choose a key for each answer button, so that every answer can be given from the 
 Nine answers or fewer take the digits 1 to 9. More than that, as on the piano keyboard, take the notes' own names: the
 letter for a natural, Shift and the letter for a sharp, Ctrl and the letter for a flat. A minor key, such as F♯m, is
 typed the same way as the major key of its name. Any other long list takes 1 to 9
-and then 0, and the rest can be reached with Tab.
+and then 0, and the rest can be reached with Tab. Scale-degree banks use the degree digit, with Shift for a sharp,
+Ctrl for a flat, and Alt added for double alterations.
 
 **Parameters**
 
@@ -90,7 +91,11 @@ digit takes that digit.
 ## note_name
 
 ```python
-def note_name(note: Note) -> str
+def note_name(
+    note: Note,
+    *,
+    key: int | None = None,
+) -> str
 ```
 
 Return a note's name as it is written, with its octave: F♯4.
@@ -98,6 +103,7 @@ Return a note's name as it is written, with its octave: F♯4.
 **Parameters**
 
 - `note` (*Note*): The note.
+- `key` (*int or None, default None*): The major key signature for scale degrees. Without a key context, degrees fall back to letter names. Keyword-only.
 
 **Returns**
 
@@ -113,7 +119,11 @@ Return a note's name as it is written, with its octave: F♯4.
 ## note_words
 
 ```python
-def note_words(note: Note) -> str
+def note_words(
+    note: Note,
+    *,
+    key: int | None = None,
+) -> str
 ```
 
 Return a note's name in words, for a screen reader: "F sharp 4".
@@ -121,6 +131,7 @@ Return a note's name in words, for a screen reader: "F sharp 4".
 **Parameters**
 
 - `note` (*Note*): The note.
+- `key` (*int or None, default None*): The major key signature for scale degrees. Without a key context, use letter names. Keyword-only.
 
 **Returns**
 
