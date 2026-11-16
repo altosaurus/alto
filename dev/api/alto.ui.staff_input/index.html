@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -300,6 +300,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -475,7 +478,9 @@
         <article>
           <h1>alto.ui.staff_input</h1>
           
-<p>The staffs you click to place notes: one note for the note construction exercise, a row of them for scale construction.</p>
+<p>The staffs you click to place notes or a clef.</p>
+
+<p>One note for the note construction exercise, a row of them for scale construction, and a clef for the clef exercise.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1262,7 +1267,385 @@ While steps are marked each notch switches between whole and half. Once everythi
 ['E4']
 </code></pre>
 
+<h2 id="clefinput">ClefInput</h2>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefInput</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffWidget</code></p>
+
+<p>A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.</p>
+
+<p>The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
+follows the pointer from place to place, in a lighter colour, until you click. Without the mouse, <code class="language-plaintext highlighter-rouge">move_caret</code> moves it,
+<code class="language-plaintext highlighter-rouge">step_symbol</code> switches the symbol and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">placed</code> (<em>Signal</em>): Emitted with the symbol (“G”, “C” or “F”) and its place when you click: 0 is the bottom line, 1 the space above it, up to 8 for the top line, with -6 to 14 allowed.</li>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted when the symbol chosen or the place the keyboard would use changes.</li>
+  <li><code class="language-plaintext highlighter-rouge">options</code> (<em>list of str</em>): The symbols that can be chosen, in the order the wheel goes through them.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>str</em>): The symbol chosen now.</li>
+  <li><code class="language-plaintext highlighter-rouge">locked</code> (<em>bool</em>): Ignore the mouse and the wheel (while feedback is showing).</li>
+  <li><code class="language-plaintext highlighter-rouge">caret</code> (<em>int or None</em>): The place the keyboard would put the symbol; None until the keyboard has moved it.</li>
+  <li><code class="language-plaintext highlighter-rouge">placed_symbol</code> (<em>str or None</em>): The symbol that has been placed and is drawn solid, with <code class="language-plaintext highlighter-rouge">placed_step</code> its place; None until one is.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G", "F"])
+&gt;&gt;&gt; staff.step_symbol(1)
+&gt;&gt;&gt; staff.selected
+'F'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the staff.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefInput().hasMouseTracking()
+True
+</code></pre>
+
+<h3 id="clefinputreset">ClefInput.reset</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+    <span class="n">options</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Clear the staff for a new question and offer some symbols to choose from.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">options</code> (<em>list of str</em>): The symbols the wheel goes through, any of “G”, “C” and “F”; the first is chosen to begin with.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): The question, written under the staff. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["C", "F"], caption="Place the alto clef.")
+&gt;&gt;&gt; staff.selected, staff.placed_symbol, staff.caption
+('C', None, 'Place the alto clef.')
+</code></pre>
+
+<h3 id="clefinputselect">ClefInput.select</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose a symbol.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">symbol</code> (<em>str</em>): “G”, “C” or “F”; one that is not among the options is ignored.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G", "C", "F"])
+&gt;&gt;&gt; staff.select("F")
+&gt;&gt;&gt; staff.selected
+'F'
+</code></pre>
+
+<h3 id="clefinputstep_symbol">ClefInput.step_symbol</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">step_symbol</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose the next symbol of the options, or the one before, going round.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">direction</code> (<em>int</em>): 1 for the next, -1 for the one before.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G", "C", "F"])
+&gt;&gt;&gt; staff.step_symbol(-1)
+&gt;&gt;&gt; staff.selected
+'F'
+</code></pre>
+
+<h3 id="clefinputstep_at">ClefInput.step_at</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">step_at</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the line or space nearest to a height in the widget.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">y</code> (<em>float</em>): The height, in pixels.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The place, 0 for the bottom line and 1 for the space above it, up to 8 for the top line; from the first ledger line below the staff (-6) to the third above it (14).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G"])
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; floor = staff.staff_bottoms()["treble"]
+&gt;&gt;&gt; staff.step_at(floor), staff.step_at(floor - 1.4 * staff.GAP), staff.step_at(0), staff.step_at(10_000)
+(0, 3, 14, -6)
+</code></pre>
+
+<h3 id="clefinputmove_caret">ClefInput.move_caret</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move_caret</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Move the place the keyboard would put the symbol.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>int</em>): How many lines and spaces up (positive) or down, stopping at the last ledger lines; the first move starts from the middle line.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G"])
+&gt;&gt;&gt; staff.move_caret(1)
+&gt;&gt;&gt; staff.caret
+5
+&gt;&gt;&gt; staff.move_caret(20)
+&gt;&gt;&gt; staff.caret
+14
+</code></pre>
+
+<h3 id="clefinputplace">ClefInput.place</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place</span><span class="p">(</span><span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Put the chosen symbol in a place, drawn solid, and say so.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">step</code> (<em>int</em>): The place, 0 for the bottom line, 1 for the space above it and so on.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["F"])
+&gt;&gt;&gt; got = []
+&gt;&gt;&gt; _ = staff.placed.connect(lambda symbol, where: got.append((symbol, where)))
+&gt;&gt;&gt; staff.place(6)
+&gt;&gt;&gt; got, staff.placed_symbol, staff.placed_step
+([('F', 6)], 'F', 6)
+</code></pre>
+
+<h3 id="clefinputplace_caret">ClefInput.place_caret</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">place_caret</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the symbol where the keyboard put it, or on the middle line if it has not moved.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G"])
+&gt;&gt;&gt; staff.move_caret(-2)
+&gt;&gt;&gt; staff.place_caret()
+&gt;&gt;&gt; staff.placed_step
+2
+</code></pre>
+
+<h3 id="clefinputclear_placed">ClefInput.clear_placed</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clear_placed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Take the placed symbol off the staff, so another can be tried.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.place(1)
+&gt;&gt;&gt; staff.clear_placed()
+&gt;&gt;&gt; staff.placed_symbol is None
+True
+</code></pre>
+
+<h3 id="clefinputset_clef_color">ClefInput.set_clef_color</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_clef_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the placed symbol in a colour, for feedback, or back in black.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The colour; None for black.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.set_clef_color(QColor("#2e7d32"))
+&gt;&gt;&gt; staff.clef_color == QColor("#2e7d32")
+True
+</code></pre>
+
+<h3 id="clefinputmousemoveevent">ClefInput.mouseMoveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the symbol in the place under the pointer, in a lighter colour.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The mouse move.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G"])
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"] - 2 * staff.GAP)
+&gt;&gt;&gt; staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
+...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+&gt;&gt;&gt; staff._hover
+4
+</code></pre>
+
+<h3 id="clefinputleaveevent">ClefInput.leaveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Stop following the pointer when it leaves the staff.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The leave event.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff._hover = 2
+&gt;&gt;&gt; staff.leaveEvent(QEvent(QEvent.Type.Leave))
+&gt;&gt;&gt; staff._hover is None
+True
+</code></pre>
+
+<h3 id="clefinputmousepressevent">ClefInput.mousePressEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Place the symbol on a left click, or choose the next symbol on a right click.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The mouse press. Nothing happens while the staff is locked.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G", "F"])
+&gt;&gt;&gt; staff.resize(400, 300)
+&gt;&gt;&gt; from PySide6.QtCore import QPointF
+&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
+&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.RightButton,
+...                                   Qt.MouseButton.RightButton, Qt.KeyboardModifier.NoModifier))
+&gt;&gt;&gt; staff.selected
+'F'
+</code></pre>
+
+<h3 id="clefinputwheelevent">ClefInput.wheelEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QWheelEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose the next symbol for each notch of the wheel turned up, and the one before for each turned down.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QWheelEvent</em>): The wheel turn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint, QPointF
+&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G", "F"])
+&gt;&gt;&gt; here = QPointF(50, 50)
+&gt;&gt;&gt; staff.wheelEvent(QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
+...                              Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
+&gt;&gt;&gt; staff.selected
+'F'
+</code></pre>
+
+<h3 id="clefinputpaintevent">ClefInput.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the staff, then the symbol that was placed or, until one is, the one that would be placed.</p>
+
+<p>A symbol on a ledger line has the ledger lines it needs drawn behind it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
+&gt;&gt;&gt; staff.reset(["G"])
+&gt;&gt;&gt; staff.place(1)
+&gt;&gt;&gt; staff.grab().isNull()
+False
+</code></pre>
+
+
+          
+          
+          
           
           
           
@@ -1553,8 +1936,8 @@ While steps are marked each notch switches between whole and half. Once everythi
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

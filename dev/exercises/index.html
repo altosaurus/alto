@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -300,6 +300,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -474,7 +477,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Exercises</h1>
-          <p>Alto has eleven exercises. Each one has a <strong>?</strong> button with a short explanation, and eight of them have their own
+          <p>Alto has twelve exercises. Each one has a <strong>?</strong> button with a short explanation, and nine of them have their own
 settings (the sliders button). The others use fixed rules, described below.</p>
 
 <p><strong>Every exercise can be done with the keyboard alone, and without clicking on the staff.</strong> The answer buttons have keys,
@@ -541,6 +544,106 @@ space, and <strong>Octave ↑</strong> and <strong>Octave ↓</strong> (<kbd>Pag
   
 </figure>
 
+<h2 id="clef-basics">Clef Basics</h2>
+
+<p>Clef Basics has two kinds of question, chosen with <strong>Question Type</strong> in the exercise settings: <strong>Clef Construction</strong>,
+which
+is described first, and <strong>Clef Identification</strong>, described at the end.</p>
+
+<p>In Clef Construction a blank staff is shown with the question under it, such as “Place the mezzo-soprano clef.” Every
+clef is one of three symbols,
+the <strong>G clef</strong>, the <strong>C clef</strong> or the <strong>F clef</strong>, put on a particular line of the staff:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Clef</th>
+      <th>Symbol and line</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Treble</td>
+      <td>The G clef on the second line</td>
+    </tr>
+    <tr>
+      <td>French violin</td>
+      <td>The G clef on the bottom line</td>
+    </tr>
+    <tr>
+      <td>Bass</td>
+      <td>The F clef on the fourth line</td>
+    </tr>
+    <tr>
+      <td>Subbass</td>
+      <td>The F clef on the top line</td>
+    </tr>
+    <tr>
+      <td>Alto</td>
+      <td>The C clef on the middle line</td>
+    </tr>
+    <tr>
+      <td>Tenor</td>
+      <td>The C clef on the fourth line</td>
+    </tr>
+    <tr>
+      <td>Mezzo-soprano</td>
+      <td>The C clef on the second line</td>
+    </tr>
+    <tr>
+      <td>Soprano</td>
+      <td>The C clef on the bottom line</td>
+    </tr>
+    <tr>
+      <td>Baritone</td>
+      <td>The F clef on the middle line, or the C clef on the top line: both are accepted</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><strong>Choose the symbol</strong> with the three buttons under the music, by turning the mouse wheel, or by right-clicking.</li>
+  <li><strong>Click where it goes.</strong> The symbol follows the pointer, in a lighter colour, and is placed where you click. To mix
+things up it
+can be tried on any line or space of the staff, and on up to three ledger lines and spaces above and below it, but
+only
+the places in the table are right.</li>
+  <li><strong>Without the mouse:</strong> <kbd>←</kbd> and <kbd>→</kbd> choose the symbol, <kbd>↑</kbd> and <kbd>↓</kbd> move it up and
+down a line or
+space, and <kbd>Return</kbd> presses <strong>Answer</strong>.</li>
+</ul>
+
+<p>The right symbol in the wrong place is wrong, and so is another symbol in the right place. A wrong try turns red and
+clears so
+you can try again; only your first try counts towards your score. This exercise makes no sound.</p>
+
+<h3 id="clef-identification">Clef Identification</h3>
+
+<p>A clef is drawn on a staff, with “Which clef is this?” under it. Press the button with its name. There is a button for
+each clef
+that is asked for, and at least two buttons even if only one clef is asked for. A baritone clef is drawn the way you
+chose in
+<a href="/alto/dev/settings/">Settings</a>. Like the other exercises with buttons, the buttons have keys, shown when
+you hover
+over them.</p>
+
+<h3 id="reference-and-lesson">Reference and lesson</h3>
+
+<p>The book button (experimental), beside the help button, opens a reference in a pane on the right: the three symbols and
+a
+picture of each clef with where its symbol goes. A button at the top opens the <a href="/alto/dev/lessons/">Clef Basics lesson</a>.</p>
+
+<h3 id="settings">Settings</h3>
+
+<p>In the exercise settings you can choose:</p>
+
+<ul>
+  <li><strong>Question Type:</strong> Clef Construction or Clef Identification.</li>
+  <li><strong>Clefs:</strong> the clefs that are asked for: the seven clefs of the other exercises, then, at the bottom, the French
+violin and
+subbass clefs, which only this exercise has.</li>
+</ul>
+
 <h2 id="interval-identification">Interval Identification</h2>
 
 <p>Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.</p>
@@ -589,10 +692,14 @@ C major. The stem opens into two tines: the top one has the sharps, 1 to 7, and 
 marks what you have chosen, and the staff shows that many sharps or flats as you move it. To choose:</p>
 
 <ul>
-  <li><strong>Click</strong> a number, or the natural sign.</li>
+  <li><strong>Click</strong> a number, or the natural sign. A number lights up a little as the mouse passes over it.</li>
+  <li><strong>Drag the circle</strong> along the fork. It follows the mouse, round the bend and out along either tine, and slides to the
+nearest number when you let go.</li>
   <li><strong>Turn the mouse wheel</strong> to move the circle along the fork, one number for each notch: up towards more sharps, down
-towards more flats, passing through the natural sign on the way from one side to the other.</li>
-  <li><strong>Press the arrow keys</strong> (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever the
+towards more flats, passing through the natural sign on the way from one side to the other. The wheel works over the
+staff and the Answer button too.</li>
+  <li><strong>Press the arrow keys</strong> (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever
+the
 keyboard is on the exercise screen, and <kbd>Home</kbd> to go back to the natural sign. Then press <kbd>Return</kbd>.</li>
 </ul>
 
@@ -938,8 +1045,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

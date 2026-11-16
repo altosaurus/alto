@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -298,6 +298,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
                 </ul></details></li>
@@ -1109,6 +1112,98 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 [0]
 </code></pre>
 
+<h2 id="clefbasicssettings">ClefBasicsSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefBasicsSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'construction'</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The settings of the clef basics exercise: what kind of question is asked, and which clefs.</p>
+
+<p>Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
+on the second line. The three symbols can always be chosen from.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs that are asked for, any of <code class="language-plaintext highlighter-rouge">CLEF_BASICS_CLEFS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">question_type</code> (<em>str, default “construction”</em>): “construction” to put a named clef on a blank staff, or “identification” to name the clef shown on a staff by pressing a button. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(clefs={"subbass", "alto"}).active_clefs()
+['alto', 'subbass']
+&gt;&gt;&gt; ClefBasicsSettings().question_type
+'construction'
+</code></pre>
+
+<h3 id="clefbasicssettingsactive_clefs">ClefBasicsSettings.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to ask for, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings().active_clefs()
+['treble', 'bass']
+&gt;&gt;&gt; ClefBasicsSettings(clefs=set()).active_clefs()
+['treble']
+</code></pre>
+
+<h3 id="clefbasicssettingsactive_type">ClefBasicsSettings.active_type</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_type</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the kind of question to ask.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: “construction” or “identification”; construction if the setting is anything else.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(question_type="identification").active_type()
+'identification'
+&gt;&gt;&gt; ClefBasicsSettings(question_type="nonsense").active_type()
+'construction'
+</code></pre>
+
+<h3 id="clefbasicssettingsanswer_clefs">ClefBasicsSettings.answer_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">answer_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to offer as buttons when a clef is to be named: those asked for, and enough others to have a choice.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: In canonical order; at least two, the treble and bass clefs being added if only one is asked for.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(clefs={"alto", "tenor"}).answer_clefs()
+['alto', 'tenor']
+&gt;&gt;&gt; ClefBasicsSettings(clefs={"alto"}).answer_clefs()
+['treble', 'alto']
+</code></pre>
+
 <h2 id="circlesettings">CircleSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettings</span><span class="p">(</span>
@@ -1348,8 +1443,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -300,6 +300,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -486,6 +489,13 @@ Each release’s downloads are on its GitHub release.</p>
 <h3 class="no-toc" id="added">Added</h3>
 
 <ul>
+  <li>A new exercise, Clef Basics: a blank staff and the name of a clef. Choose the G, C or F clef symbol with three buttons, the mouse
+wheel or a right click, and put it where it makes that clef: the C clef on the second line is the mezzo-soprano clef. It can be tried
+on lines, spaces and three ledger lines each way. Its settings are Question Type, Clef Construction or Clef Identification (a clef is drawn on a staff and you press the
+button with its name), and Clefs, which chooses which clefs are asked for, including the French violin and subbass clefs. The baritone clef is accepted as the F clef on the middle line or the C clef on the top line.</li>
+  <li>A Clef Basics lesson, in ten short steps with small exercises: what a clef does, the G, C and F clef, the line each puts its symbol
+on, and how to tell them apart. The Clef Basics exercise has a reference pane, opened with the book button, with a table of the clefs
+and a button that opens the lesson.</li>
   <li>The documentation has a version for each release and one for the development version, with a dropdown in the top bar to switch
 between them. A page of an older release says so and links to the latest.</li>
   <li>The documentation home page has a Download Alto button under the first paragraph, and a download section in place of “Get started”. Its
@@ -498,11 +508,23 @@ applies to the exercise, the lessons and the reference.</li>
 <h3 class="no-toc" id="changed">Changed</h3>
 
 <ul>
+  <li>
+    <p>Exercise and lesson icons use consistent musical glyphs and follow the theme colour.</p>
+  </li>
+  <li>In Key Signature Construction a number on the fork lights up as the mouse passes over it, the circle can be dragged along the fork, and
+the mouse wheel works over the staff and the Answer button too.</li>
   <li>The documentation sidebar sorts the pages under headings that open and close, with the developer guide and the API reference as single
 rows that open their pages, long pages have an “On this page” list that follows your reading, and every page ends with links to the
 previous and next pages. The home page leaves checking a download and updating to the Getting started page, which now explains both.</li>
   <li>The circle of fifths is coloured from cyan through blue to indigo by key signature, instead of every colour of the rainbow.</li>
   <li>The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.</li>
+</ul>
+
+<h3 class="no-toc" id="fixed">Fixed</h3>
+
+<ul>
+  <li>Changing the theme in the settings no longer sends you back to the exercises home page, or makes the window disappear and grow back
+from a dot. The window stays where it is, showing the exercise, lesson step or page you were on.</li>
 </ul>
 
 <h2 id="000">0.0.0</h2>
@@ -860,6 +882,9 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
           
           
           
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.widgets/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.widgets</span></a>
             <a class="next" href="/alto/dev/credits/" rel="next"><span class="np-label">Next</span><span class="np-title">License and credits<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -924,8 +949,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

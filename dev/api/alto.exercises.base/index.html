@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -300,6 +300,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -521,6 +524,7 @@ a new exercise needs no new interface code.</p>
     <span class="n">circle_ring</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'outer'</span><span class="p">,</span>
     <span class="n">circle_key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">required</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">place_clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -558,6 +562,7 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">circle_ring</code> (<em>str, default “outer”</em>): Which ring the cell asked about is in: “outer” for the major keys or “inner” for the minor ones. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle_key</code> (<em>int or None</em>): For a Roman numeral question, the place of the key whose chords they are. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">required</code> (<em>tuple of str</em>): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">place_clef</code> (<em>str, default ““</em>): The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button. Empty for any other question. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1256,8 +1261,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

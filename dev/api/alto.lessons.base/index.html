@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794783446">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -300,6 +300,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -496,6 +499,7 @@ scored or recorded.</p>
     <span class="n">cells</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(),</span>
     <span class="n">choices</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -512,6 +516,7 @@ scored or recorded.</p>
   <li><code class="language-plaintext highlighter-rouge">cells</code> (<em>frozenset of tuple of (str, int)</em>): The cells that are right, each a ring (“outer” or “inner”) and a place clockwise from the top.</li>
   <li><code class="language-plaintext highlighter-rouge">choices</code> (<em>tuple of str</em>): The buttons to choose from, for a question that is not answered on the circle.</li>
   <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>str</em>): The right button, if there are choices.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -547,6 +552,31 @@ True
 False
 </code></pre>
 
+<h2 id="staff">Staff</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Staff</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A staff to show beside the words of a step: a clef, and perhaps a note, with a line of words under it.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef to draw, any of <code class="language-plaintext highlighter-rouge">alto.settings.CLEF_BASICS_CLEFS</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>str</em>): A note to write on the staff, such as “C4”; empty for none. Only the seven clefs that have a lowest line for notes can have one, not the French violin and subbass clefs.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str</em>): The words under the staff.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Staff(clef="alto", note="C4", caption="Alto clef").note
+'C4'
+</code></pre>
+
 <h2 id="step">Step</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Step</span><span class="p">(</span>
@@ -557,6 +587,8 @@ False
     <span class="n">hear_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Hear it'</span><span class="p">,</span>
     <span class="n">make_task</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">],</span> <span class="n">Task</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
     <span class="n">closing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">staves</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Staff</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">task_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -572,6 +604,8 @@ False
   <li><code class="language-plaintext highlighter-rouge">hear_label</code> (<em>str</em>): What the Hear it button says.</li>
   <li><code class="language-plaintext highlighter-rouge">make_task</code> (<em>callable or None</em>): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.</li>
   <li><code class="language-plaintext highlighter-rouge">closing</code> (<em>bool</em>): True for the last step, which offers to practise.</li>
+  <li><code class="language-plaintext highlighter-rouge">staves</code> (<em>tuple of Staff</em>): Staves to show beside the words, one above another, instead of the circle; empty for none.</li>
+  <li><code class="language-plaintext highlighter-rouge">task_staff</code> (<em>bool</em>): Show one staff beside the words that follows the task: it draws the task’s clef.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -818,8 +852,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794783446" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794783446" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
