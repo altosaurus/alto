@@ -22,6 +22,10 @@ so its keys work at once. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> mov
 | <kbd>1</kbd> to <kbd>9</kbd>                                                               | Keyboard Identification with the octave asked: the octave, typed as its number.                                                          |
 | <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>                                        | Arpeggio Identification: the inversion, which is the second row of buttons. The chord type is on <kbd>1</kbd> to <kbd>4</kbd>.           |
 
+With scale-degree answers, digits name the degrees. In a bank with more than nine choices, add <kbd>Shift</kbd> for a sharp
+or <kbd>Ctrl</kbd> for a flat; add <kbd>Alt</kbd> as well for a double sharp or double flat. The octave row uses
+<kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>, <kbd>F</kbd> and so on, as shown on its buttons.
+
 ### Placing notes on the staff (Note Construction and Scale Construction)
 
 Clicking the staff is never needed. A pale note, the **caret**, shows the note that would be placed, and the line under the

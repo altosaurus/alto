@@ -60,10 +60,17 @@ from alto.exercises.base import (
 )
 from alto.learning import Learner
 from alto.settings import spell
-from alto.theory.pitch import Note
+from alto.theory.pitch import (
+    ACCIDENTAL_SYMBOLS,
+    Note,
+)
 from alto.theory.scales import format_key_signature
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import blend
+from alto.ui.degree_text import (
+    DegreeButton,
+    DegreeLabel,
+)
 from alto.ui.icons import (
     BOOK,
     SLIDERS,
@@ -105,6 +112,7 @@ SCALE_GAP_MS = 280  # the time between the notes of a scale that plays after a r
 
 
 NOTE_CHOICE = re.compile(r"^[A-G][♯♭]?m?$")  # an answer that is a note or key name: C, F♯, B♭, or a minor key such as F♯m
+DEGREE_CHOICE = re.compile(r"^([♯♭𝄪𝄫]?)([1-7])$")
 
 
 def choice_keys(choices: list[str]) -> list[str]:
@@ -114,7 +122,8 @@ def choice_keys(choices: list[str]) -> list[str]:
     Nine answers or fewer take the digits 1 to 9. More than that, as on the piano keyboard, take the notes' own names: the
     letter for a natural, Shift and the letter for a sharp, Ctrl and the letter for a flat. A minor key, such as F♯m, is
     typed the same way as the major key of its name. Any other long list takes 1 to 9
-    and then 0, and the rest can be reached with Tab.
+    and then 0, and the rest can be reached with Tab. Scale-degree banks use the degree digit, with Shift for a sharp,
+    Ctrl for a flat, and Alt added for double alterations.
 
     Parameters
     ----------
@@ -137,6 +146,20 @@ def choice_keys(choices: list[str]) -> list[str]:
     """
     if len(choices) <= 9:
         return [str(i + 1) for i in range(len(choices))]
+    function_degrees = {name: str(index) for index, name in enumerate(app_settings.DEGREE_FUNCTIONS, start=1)}
+    degrees = []
+    for choice in choices:
+        plain = choice.replace("̂", "")
+        sign = plain[0] if plain and plain[0] in "♯♭𝄪𝄫" else ""
+        label = plain[len(sign) :]
+        for alteration, prefix in app_settings.FUNCTION_ALTERATIONS.items():
+            if prefix and plain.startswith(prefix):
+                sign, label = ACCIDENTAL_SYMBOLS[alteration], plain[len(prefix) :]
+                break
+        degrees.append(DEGREE_CHOICE.fullmatch(sign + function_degrees.get(label, label)))
+    if all(degrees):
+        modifiers = {"": "", "♯": "Shift+", "♭": "Ctrl+", "𝄪": "Alt+Shift+", "𝄫": "Alt+Ctrl+"}
+        return [modifiers[match[1]] + match[2] for match in degrees if match is not None]
     if all(NOTE_CHOICE.match(c) for c in choices):
         keys = []
         for c in choices:
@@ -177,12 +200,16 @@ def second_row_keys(
     >>> second_row_keys(["C", "Shift+C"], labels=["3", "4", "5"])
     ['3', '4', '5']
     """
-    if any(k.isalpha() or "+" in k for k in first):
+    if any(k.split("+")[-1].isalpha() for k in first):
         return [label if label in "123456789" and len(label) == 1 else "" for label in labels]
     return [*"ASDFGHJKL"][: len(labels)] + [""] * max(0, len(labels) - 9)
 
 
-def note_name(note: Note) -> str:
+def note_name(
+    note: Note,
+    *,
+    key: int | None = None,
+) -> str:
     """
     Return a note's name as it is written, with its octave: F♯4.
 
@@ -190,6 +217,8 @@ def note_name(note: Note) -> str:
     ----------
     note : Note
         The note.
+    key : int or None, default None
+        The major key signature for scale degrees. Without a key context, degrees fall back to letter names. Keyword-only.
 
     Returns
     -------
@@ -201,10 +230,22 @@ def note_name(note: Note) -> str:
     >>> note_name(Note.parse("F#4"))
     'F♯4'
     """
-    return f"{spell(note, naming=app_settings.note_names.naming)}{note.octave}"
+    naming = app_settings.note_names.naming
+    if naming in app_settings.DEGREE_NAMINGS and key is None:
+        naming = "letters"
+    return spell(
+        note,
+        naming=naming,
+        key=key or 0,
+        octave=True,
+    )
 
 
-def note_words(note: Note) -> str:
+def note_words(
+    note: Note,
+    *,
+    key: int | None = None,
+) -> str:
     """
     Return a note's name in words, for a screen reader: "F sharp 4".
 
@@ -212,6 +253,8 @@ def note_words(note: Note) -> str:
     ----------
     note : Note
         The note.
+    key : int or None, default None
+        The major key signature for scale degrees. Without a key context, use letter names. Keyword-only.
 
     Returns
     -------
@@ -223,7 +266,17 @@ def note_words(note: Note) -> str:
     >>> note_words(Note.parse("F#4")), note_words(Note.parse("Bb3")), note_words(Note.parse("C4"))
     ('F sharp 4', 'B flat 3', 'C 4')
     """
-    plain = spell(Note(note.octave, letter=note.letter), naming=app_settings.note_names.naming)
+    naming = app_settings.note_names.naming
+    if naming in app_settings.DEGREE_NAMINGS and key is not None:
+        if naming == "functions":
+            return f"{spell(note, naming=naming, key=key).lower()}, octave {note.octave}"
+        degree = spell(note, naming="degrees", key=key).replace("̂", "")
+        signs = {"♯": "sharp ", "♭": "flat ", "𝄪": "double sharp ", "𝄫": "double flat "}
+        label = f"degree {degree[-1]}"
+        return f"{signs.get(degree[0], '')}{label}, octave {note.octave}"
+    if naming in app_settings.DEGREE_NAMINGS:
+        naming = "letters"
+    plain = spell(Note(note.octave, letter=note.letter), naming=naming)
     sign = {-1: " flat", 1: " sharp", 0: ""}.get(note.accidental, "")
     return f"{plain}{sign} {note.octave}"
 
@@ -336,7 +389,7 @@ class ExerciseView(QWidget):
         self._clock = time.monotonic()  # when the last answer was given, or the question appeared
 
         self.score = QLabel()
-        self.prompt = QLabel()
+        self.prompt = DegreeLabel()
         self.prompt.setStyleSheet("font-size: 16pt;")
         self.staff = StaffWidget(max_step=MAX_STEP)
         self.keyboard = KeyboardWidget()
@@ -406,7 +459,7 @@ class ExerciseView(QWidget):
         self.scale_input.accidental_cycled.connect(self._cycle_accidental)
         self.scale_input.accidental_stepped.connect(self._cycle_accidental)  # the mouse wheel steps through them too
         self.scale_input.caret_moved.connect(self._update_placement_status)
-        self.place_status = QLabel()  # says what the next click or key press will do, for those who cannot see the staff
+        self.place_status = DegreeLabel()  # says what the next click or key press will do, for those who cannot see the staff
         self.place_status.setWordWrap(True)
         self.place_status.setAccessibleName("What to do next")
         self.pitch_row = QWidget()  # lower / higher, to move the note on the staff without the mouse
@@ -875,7 +928,7 @@ class ExerciseView(QWidget):
         if clef:
             self.clef_input.reset(list(app_settings.CLEF_SYMBOLS), caption=q.caption)
         if construct:
-            self.input_staff.reset(q.clef, key=q.key)
+            self.input_staff.reset(q.clef, key=q.key, caption=q.caption)
         if q.construct_scale is not None:
             self.scale_input.reset_scale(
                 q.clef,
@@ -909,8 +962,16 @@ class ExerciseView(QWidget):
             self.choice_box.setColumnStretch(col, 0)
         keys = choice_keys(q.choices)
         for i, c in enumerate(q.choices):
-            b = QPushButton(c)
+            b = DegreeButton(c)
             b.setMinimumHeight(40)
+            for function in app_settings.DEGREE_FUNCTIONS:
+                if c.endswith(function):
+                    prefix = c[: -len(function)].rstrip()
+                    if prefix:
+                        b.setText(f"{prefix}\n{function}")
+                    b.setMinimumHeight(56)
+                    b.setAccessibleName(c)
+                    break
             if keys[i]:  # every answer can be given from the keyboard
                 b.setShortcut(keys[i])
                 b.setToolTip(f"Key {keys[i]}")
@@ -1191,7 +1252,7 @@ class ExerciseView(QWidget):
         if not q or q.construct is None or self.answered or self._busy:
             return
         ok = q.check_placed(note)
-        self._record(ok, choice=f"{spell(note, naming=app_settings.note_names.naming)}{note.octave}")
+        self._record(ok, choice=note_name(note, key=q.key))
         self.input_staff.locked = True
         if ok:
             self.answered = True
@@ -1373,7 +1434,8 @@ class ExerciseView(QWidget):
             head = "Note to place"
         caret = staff.caret_note()
         if caret is not None:
-            return f"{head}: {note_name(caret)}", f"{head}: {note_words(caret)}"
+            key = q.key if q.construct is not None else None
+            return f"{head}: {note_name(caret, key=key)}", f"{head}: {note_words(caret, key=key)}"
         if q.construct_scale is None:  # a single note has no number to put in front of the advice
             return (
                 "Press ↑ or ↓ to choose a note, then Return to place it.",
@@ -1568,7 +1630,7 @@ class ExerciseView(QWidget):
         notes, steps, clef, caption = list(self.scale_input.notes), list(self.scale_input.steps), q.clef, q.caption
         with_steps, key = q.construct_steps is not None, q.key
         ok = q.check_scale(notes) and q.check_steps(steps)
-        answer = " ".join(f"{spell(n, naming=app_settings.note_names.naming)}{n.octave}" for n in notes)
+        answer = " ".join(note_name(n) for n in notes)
         self._record(ok, choice=f"{answer} | {' '.join(steps)}" if with_steps else answer)
         self.scale_input.locked = True
         if not ok:

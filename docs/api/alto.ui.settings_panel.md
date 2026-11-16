@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 46
+order: 47
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -432,7 +432,7 @@ Edits are live: each changes the settings, saves them and emits `changed`.
 - `boxes` (*dict of str to QCheckBox*): The clef checkboxes.
 - `key_boxes` (*dict of int to QCheckBox*): The key signature checkboxes.
 - `value_boxes` (*dict of str to QCheckBox*): The note value checkboxes.
-- `naming_radios` (*dict of str to QRadioButton*): The letters and solfège choices.
+- `naming_radios` (*dict of str to QRadioButton*): The letters and solfège choices, plus caret and function notation in the Scale degrees group.
 - `range_editors` (*dict of str to RangeEditor*): The range editor of each clef in use, built when the Range page opens.
 
 **Examples**

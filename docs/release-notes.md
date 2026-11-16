@@ -17,6 +17,13 @@ Each release's downloads are on its GitHub release.
 
 Changes that are in the development docs and not in a release yet.
 
+### Added
+{: .no-toc}
+
+- Scale degrees as a note-name group for Note Identification, Keyboard Identification and Note Construction, with caret
+  notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
+  Note-name previews have visible text labels.
+
 ### Fixed
 {: .no-toc}
 

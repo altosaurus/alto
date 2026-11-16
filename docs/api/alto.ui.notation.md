@@ -2,7 +2,7 @@
 title: alto.ui.notation
 parent: api
 package: alto.ui
-order: 39
+order: 40
 permalink: /api/alto.ui.notation/
 ---
 {% raw %}

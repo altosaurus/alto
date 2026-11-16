@@ -77,6 +77,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.circle_colours](alto.ui.circle_colours/) | The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one. |
 | [alto.ui.colors](alto.ui.colors/) | Mixing colours. The interface blends palette colours to get its soft tints and highlights. |
 | [alto.ui.database_page](alto.ui.database_page/) | A read-only look at what is stored: every answer, every question's record, and the profiles. |
+| [alto.ui.degree_text](alto.ui.degree_text/) | Draw scale-degree carets above their digits without relying on font-specific combining accents. |
 | [alto.ui.engraving](alto.ui.engraving/) | Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others). |
 | [alto.ui.exercise_view](alto.ui.exercise_view/) | The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right. |
 | [alto.ui.home](alto.ui.home/) | The start screen: a card for every exercise, or for every lesson, in rows. |

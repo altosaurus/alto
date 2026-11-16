@@ -44,6 +44,7 @@ from alto.theory.pitch import (
     key_accidental,
 )
 from alto.ui import engraving
+from alto.ui.degree_text import draw_degree_text
 from alto.ui.notation import (
     NotationStyle,
     clef_shape,
@@ -690,15 +691,15 @@ class StaffWidget(QWidget):
             p.setFont(caption_font)
             p.setPen(fg)
             top = max(staves.values()) + 2.5 * gap  # below the lowest staff, clear of its ledger lines
-            p.drawText(
-                QRectF(
+            draw_degree_text(
+                p,
+                rect=QRectF(
                     left,
                     top,
                     right - left,
                     max(self.height() - top - gap, gap * 2),
                 ),
-                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter,
-                self.caption,
+                text=self.caption,
             )
 
         n = max(len(self.columns), 1)

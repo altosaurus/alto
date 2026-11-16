@@ -30,6 +30,7 @@ from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     LETTERS,
     Note,
+    key_accidental,
 )
 
 # The clefs with a single staff. The C clefs differ only in the line the clef sits on: soprano on the bottom line, mezzo-soprano
@@ -92,7 +93,29 @@ NOTE_VALUES = (
     "sixteenth",
     "thirty_second",
 )
-NAMINGS = {"letters": "Letters (C D E)", "solfege": "Solfège (Do Re Mi)"}
+NAMINGS = {
+    "letters": "Letters (C D E)",
+    "solfege": "Solfège (Do Re Mi)",
+    "degrees": "Caret (1̂ 2̂ 3̂)",
+    "functions": "Function (Tonic, Supertonic, Mediant)",
+}
+DEGREE_NAMINGS = ("degrees", "functions")
+FUNCTION_ALTERATIONS = {
+    -2: "Doubly lowered ",
+    -1: "Lowered ",
+    0: "",
+    1: "Raised ",
+    2: "Doubly raised ",
+}
+DEGREE_FUNCTIONS = (
+    "Tonic",
+    "Supertonic",
+    "Mediant",
+    "Subdominant",
+    "Dominant",
+    "Submediant",
+    "Leading tone",
+)
 SOLFEGE = (
     "Do",
     "Re",
@@ -130,21 +153,28 @@ def spell(
     note: Note,
     *,
     naming: str = "letters",
+    key: int = 0,
+    octave: bool = False,
 ) -> str:
     """
-    Return the pitch-class name of a note in the chosen naming system.
+    Return a note name in the chosen naming system, optionally including its octave.
 
     Parameters
     ----------
     note : Note
         The note.
     naming : str, default "letters"
-        "letters" for C D E, or "solfege" for Do Re Mi. Keyword-only.
+        "letters" for C D E, "solfege" for Do Re Mi, "degrees" for caret scale degrees, or "functions" for function names.
+        Keyword-only.
+    key : int, default 0
+        The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.
+    octave : bool, default False
+        Include the note's octave, separated from a scale degree by " / ". Keyword-only.
 
     Returns
     -------
     str
-        The name with its accidental, without the octave.
+        The name and, if requested, octave. Carets use accidental prefixes; function names use Raised or Lowered prefixes.
 
     Examples
     --------
@@ -152,9 +182,30 @@ def spell(
     'F♯'
     >>> spell(Note.parse("F#4"), naming="solfege")
     'Fa♯'
+    >>> spell(Note.parse("F#4"), naming="degrees", key=1)
+    '7̂'
+    >>> spell(Note.parse("F4"), naming="degrees", key=1)
+    '♭7̂'
+    >>> spell(Note.parse("Eb4"), naming="degrees")
+    '♭3̂'
+    >>> spell(Note.parse("G4"), naming="functions", key=1)
+    'Tonic'
+    >>> spell(Note.parse("F4"), naming="functions", key=1)
+    'Lowered Leading tone'
+    >>> spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
+    '1̂ / 4'
     """
+    if naming in DEGREE_NAMINGS:
+        degree = (note.letter - 4 * key) % 7 + 1  # a fifth moves the tonic four letter steps
+        alteration = note.accidental - key_accidental(note.letter, count=key)
+        if naming == "functions":
+            name = FUNCTION_ALTERATIONS[alteration] + DEGREE_FUNCTIONS[degree - 1]
+        else:
+            name = f"{ACCIDENTAL_SYMBOLS[alteration]}{degree}̂"
+        return f"{name} / {note.octave}" if octave else name
     base = SOLFEGE[note.letter] if naming == "solfege" else LETTERS[note.letter]
-    return base + ACCIDENTAL_SYMBOLS[note.accidental]
+    name = base + ACCIDENTAL_SYMBOLS[note.accidental]
+    return f"{name}{note.octave}" if octave else name
 
 
 def diatonic_name(d: int) -> str:

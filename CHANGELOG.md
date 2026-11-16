@@ -5,6 +5,12 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Scale degrees as a note-name group for Note Identification, Keyboard Identification and Note Construction, with caret
+  notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
+  Note-name previews have visible text labels.
+
 ### Fixed
 
 - Switching themes in Settings is faster, and Settings opens more quickly.

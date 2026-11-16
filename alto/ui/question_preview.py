@@ -175,5 +175,10 @@ class QuestionPreview(QDialog):
         """
         q = self.question
         if q.construct is not None:
-            return f"{spell(q.construct, naming=app_settings.note_names.naming)}{q.construct.octave}"
+            return spell(
+                q.construct,
+                naming=app_settings.note_names.naming,
+                key=q.key,
+                octave=True,
+            )
         return q.answer
