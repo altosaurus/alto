@@ -309,6 +309,117 @@ def test_the_mouse_wheel_moves_along_the_fork_through_the_natural_sign(app: QApp
     assert fork.value == 7  # and it stops at the end of the tine
 
 
+def mouse(
+    kind: QEvent.Type,
+    *,
+    point: QPointF,
+    button: Qt.MouseButton,
+    held: Qt.MouseButton,
+) -> QMouseEvent:
+    """
+    Make a mouse event at a point of the fork.
+
+    Parameters
+    ----------
+    kind : QEvent.Type
+        Press, move or release.
+    point : QPointF
+        Where the mouse is. Keyword-only.
+    button : Qt.MouseButton
+        The button that changed. Keyword-only.
+    held : Qt.MouseButton
+        The buttons held down. Keyword-only.
+
+    Returns
+    -------
+    QMouseEvent
+        The event.
+    """
+    return QMouseEvent(
+        kind,
+        point,
+        point,
+        button,
+        held,
+        Qt.KeyboardModifier.NoModifier,
+    )
+
+
+def test_the_circle_can_be_dragged_along_the_fork_and_settles_on_a_number(app: QApplication) -> None:
+    """
+    Check that holding the circle and moving the mouse carries it along the fork, and that letting go slides it to a number.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    fork = KeyFork()
+    seen: list[int] = []
+    fork.changed.connect(seen.append)
+    start = node_position(0)
+    left = Qt.MouseButton.LeftButton
+    none = Qt.MouseButton.NoButton
+    fork.mousePressEvent(mouse(QEvent.Type.MouseButtonPress, point=start, button=left, held=left))
+    for target in (node_position(2) + QPointF(6, -4), node_position(-3) + QPointF(2, 5)):
+        fork.mouseMoveEvent(mouse(QEvent.Type.MouseMove, point=target, button=none, held=left))
+    assert fork.value == -3 and seen[-1] == -3 and 2 in seen
+    assert fork._marker != node_position(-3)  # it follows the mouse, off the number, while held
+    fork.mouseReleaseEvent(mouse(QEvent.Type.MouseButtonRelease, point=start, button=left, held=none))
+    fork._slide.setCurrentTime(fork._slide.duration())
+    assert fork._marker == node_position(-3)
+
+
+def test_a_number_lights_up_under_the_mouse_and_a_locked_fork_does_not(app: QApplication) -> None:
+    """
+    Check that the number under the mouse is lit, that leaving puts it out, and that a locked fork lights nothing.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    fork = KeyFork()
+    none = Qt.MouseButton.NoButton
+    move = mouse(QEvent.Type.MouseMove, point=node_position(4), button=none, held=none)
+    fork.mouseMoveEvent(move)
+    assert fork._hover == 4
+    fork.leaveEvent(QEvent(QEvent.Type.Leave))
+    assert fork._hover is None
+    fork.locked = True
+    fork.mouseMoveEvent(move)
+    assert fork._hover is None
+
+
+def test_the_wheel_over_the_music_or_the_answer_button_moves_the_circle(app: QApplication) -> None:
+    """
+    Check that turning the wheel over the staff or the Answer button moves the fork, and that it does nothing without a fork.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+    view.show()
+    here = QPointF(5, 5)
+    turn = QWheelEvent(
+        here,
+        here,
+        QPoint(0, 0),
+        QPoint(0, 120),
+        Qt.MouseButton.NoButton,
+        Qt.KeyboardModifier.NoModifier,
+        Qt.ScrollPhase.NoScrollPhase,
+        False,
+    )
+    assert view.eventFilter(view.staff, turn) and view.fork.value == 1
+    assert view.eventFilter(view.answer_button, turn) and view.fork.value == 2
+    view.fork.hide()
+    assert not view.eventFilter(view.staff, turn) and view.fork.value == 2
+    view.close()
+
+
 def test_the_arrow_keys_move_the_circle_too(app: QApplication) -> None:
     """
     Check that up and right add a sharp, and down and left a flat.

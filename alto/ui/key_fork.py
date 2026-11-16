@@ -3,7 +3,7 @@ The fork: a picker for a key signature, shaped like a tuning fork lying on its s
 
 The stem on the left ends in a natural sign (no sharps or flats, C major). At the right the stem opens into two tines:
 the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to 7. A circle marks the chosen signature. Click a
-number to choose it, or turn the mouse wheel to move the circle along the fork.
+number to choose it, drag the circle along the fork, or turn the mouse wheel to move it.
 
 Examples
 --------
@@ -18,7 +18,9 @@ from __future__ import annotations
 import math
 
 from PySide6.QtCore import (
+    QAbstractAnimation,
     QEasingCurve,
+    QEvent,
     QPointF,
     QRectF,
     Qt,
@@ -189,6 +191,42 @@ def point_along(points: list[QPointF], *, t: float) -> QPointF:
     return points[-1]
 
 
+def nearest_on_fork(point: QPointF) -> QPointF:
+    """
+    Return the point on the fork's line that is closest to a point.
+
+    Parameters
+    ----------
+    point : QPointF
+        Any position in the widget, such as the mouse while the circle is dragged.
+
+    Returns
+    -------
+    QPointF
+        The closest point on the way from the last sharp, round the U, to the last flat.
+
+    Examples
+    --------
+    >>> nearest_on_fork(QPointF(node_position(2).x(), 0)) == node_position(2)  # straight above the number
+    True
+    >>> nearest_on_fork(QPointF(-50, node_position(0).y())) == node_position(0)  # past the end of the stem
+    True
+    """
+    line = [*reversed(route(MAX_ACCIDENTALS)), *route(-MAX_ACCIDENTALS)[1:]]
+    best, best_distance = line[0], math.inf
+    for a, b in zip(line, line[1:], strict=False):
+        edge = b - a
+        length_squared = edge.x() ** 2 + edge.y() ** 2
+        if length_squared == 0:
+            continue
+        along = max(0.0, min(1.0, ((point.x() - a.x()) * edge.x() + (point.y() - a.y()) * edge.y()) / length_squared))
+        candidate = a + edge * along
+        distance = (candidate - point).manhattanLength()
+        if distance < best_distance:
+            best, best_distance = candidate, distance
+    return best
+
+
 def fork_path() -> QPainterPath:
     """
     Return the outline of the fork: the stem, a half circle for the U, and the two tines.
@@ -300,6 +338,8 @@ class KeyFork(QWidget):
         self.value = 0
         self.locked = False
         self._wheel = 0  # the part of a wheel notch not yet used
+        self._hover: int | None = None  # the number under the mouse, which is lit a little
+        self._dragging = False  # True while the circle is held
         self._marker = node_position(0)  # where the circle is drawn, which lags behind `value` while it slides
         self._marker_color: QColor | None = None  # None for the highlight colour
         self._slide = QVariantAnimation(self)
@@ -312,7 +352,8 @@ class KeyFork(QWidget):
         self.setFixedSize(FORK_W, FORK_H)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.setToolTip("Click a number or turn the mouse wheel: sharps on top, flats below, none at the left")
+        self.setMouseTracking(True)  # numbers light up as the mouse passes over them
+        self.setToolTip("Click a number, drag the circle or turn the mouse wheel: sharps on top, flats below, none at the left")
 
     def set_value(
         self,
@@ -423,7 +464,7 @@ class KeyFork(QWidget):
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         """
-        Choose the number that was clicked.
+        Pick up the circle if it was pressed, or choose the number that was clicked.
 
         Parameters
         ----------
@@ -443,9 +484,108 @@ class KeyFork(QWidget):
         if event.button() != Qt.MouseButton.LeftButton or self.locked:
             return
         self.setFocus()
+        resting = self._slide.state() != QAbstractAnimation.State.Running  # a circle that is still sliding cannot be caught
+        if resting and (event.position() - self._marker).manhattanLength() <= MARKER_R + 4:
+            self._dragging = True
+            self.setCursor(Qt.CursorShape.ClosedHandCursor)
+            return
         value = self.value_at(event.position())
         if value is not None:
             self.set_value(value)
+
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        """
+        Carry the circle along the fork while it is held, and light the number under the mouse otherwise.
+
+        The signature changes to the nearest number as the circle passes it.
+
+        Parameters
+        ----------
+        event : QMouseEvent
+            The move.
+
+        Examples
+        --------
+        >>> from PySide6.QtCore import QEvent
+        >>> fork = KeyFork()
+        >>> here = node_position(0)
+        >>> there = node_position(3)
+        >>> fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, here, here, Qt.MouseButton.LeftButton,
+        ...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+        >>> fork.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, there, there, Qt.MouseButton.NoButton,
+        ...                                 Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+        >>> fork.value
+        3
+        """
+        if self._dragging:
+            self._marker = nearest_on_fork(event.position())
+            nearest = min(
+                range(-MAX_ACCIDENTALS, MAX_ACCIDENTALS + 1),
+                key=lambda value: (node_position(value) - self._marker).manhattanLength(),
+            )
+            if nearest != self.value:
+                self.value = nearest
+                self.changed.emit(nearest)
+            self.update()
+            return
+        hover = None if self.locked else self.value_at(event.position())
+        near_circle = (event.position() - self._marker).manhattanLength() <= MARKER_R + 4
+        if not self.locked and (near_circle or hover is not None):
+            self.setCursor(Qt.CursorShape.OpenHandCursor if near_circle else Qt.CursorShape.PointingHandCursor)
+        else:
+            self.unsetCursor()
+        if hover != self._hover:
+            self._hover = hover
+            self.update()
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        """
+        Let go of the circle, which slides to the number it is nearest.
+
+        Parameters
+        ----------
+        event : QMouseEvent
+            The release.
+
+        Examples
+        --------
+        >>> from PySide6.QtCore import QEvent
+        >>> fork = KeyFork()
+        >>> fork._dragging = True
+        >>> fork._marker = node_position(0) + QPointF(9, 0)
+        >>> fork.mouseReleaseEvent(QMouseEvent(QEvent.Type.MouseButtonRelease, fork._marker, fork._marker,
+        ...                                    Qt.MouseButton.LeftButton, Qt.MouseButton.NoButton,
+        ...                                    Qt.KeyboardModifier.NoModifier))
+        >>> fork._dragging
+        False
+        """
+        if event.button() != Qt.MouseButton.LeftButton or not self._dragging:
+            return
+        self._dragging = False
+        self.unsetCursor()
+        self._path = [self._marker, node_position(self.value)]
+        self._slide.start()
+
+    def leaveEvent(self, event: QEvent) -> None:
+        """
+        Stop lighting a number when the mouse leaves the fork.
+
+        Parameters
+        ----------
+        event : QEvent
+            The leave event.
+
+        Examples
+        --------
+        >>> fork = KeyFork()
+        >>> fork._hover = 3
+        >>> fork.leaveEvent(QEvent(QEvent.Type.Leave))
+        >>> fork._hover is None
+        True
+        """
+        self._hover = None
+        self.update()
+        super().leaveEvent(event)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         """
@@ -533,10 +673,12 @@ class KeyFork(QWidget):
         number_font.setPixelSize(12)
         number_font.setWeight(QFont.Weight.DemiBold)
         paper = palette.color(QPalette.ColorRole.Base)
+        highlight = palette.color(QPalette.ColorRole.Highlight)
         for value in range(-MAX_ACCIDENTALS, MAX_ACCIDENTALS + 1):
             c = node_position(value)
-            p.setPen(QPen(outline, 1.2))
-            p.setBrush(paper)
+            lit = value == self._hover and value != self.value
+            p.setPen(QPen(blend(outline, b=highlight, t=0.7) if lit else outline, 1.6 if lit else 1.2))
+            p.setBrush(blend(paper, b=highlight, t=0.22) if lit else paper)
             p.drawEllipse(c, NODE_R, NODE_R)
             p.setPen(ink)
             if value == 0:
