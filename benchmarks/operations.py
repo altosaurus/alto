@@ -29,6 +29,7 @@ from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
+from PySide6.QtCore import QEvent  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from alto.audio import sounds  # noqa: E402
@@ -146,8 +147,9 @@ class Workbench:
         self.settle()
 
     def settle(self) -> None:
-        """Let Qt do the layout and painting that is waiting."""
+        """Let Qt finish layout, painting and deferred widget deletion, as its event loop normally would."""
         self.app.processEvents()
+        self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
     def _fill(
         self,
@@ -376,7 +378,10 @@ class Workbench:
         """Close the window and the database, and remove the files."""
         if self._circle is not None:
             self._circle.close()
+            self._circle.deleteLater()
         self.window.close()
+        self.window.deleteLater()
+        self.settle()
         self.db.close()
         shutil.rmtree(self.directory, ignore_errors=True)
 

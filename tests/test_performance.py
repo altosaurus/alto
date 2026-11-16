@@ -22,6 +22,32 @@ from PySide6.QtWidgets import QApplication
 pytestmark = pytest.mark.perf
 
 
+def test_benchmark_settling_and_closing_release_widgets(app: QApplication) -> None:
+    """
+    Check that page switches and benchmark teardown destroy widgets instead of accumulating discarded pages.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    bench = Workbench()
+    discarded = []
+    closed = []
+    bench.window.destroyed.connect(lambda: closed.append(True))
+    try:
+        bench.window.open_exercise(bench.exercises[0])
+        previous = bench.window.stack.currentWidget()
+        assert previous is not None
+        previous.destroyed.connect(lambda: discarded.append(True))
+        bench.window.open_exercise(bench.exercises[1])
+        bench.settle()
+        assert discarded == [True]
+    finally:
+        bench.close()
+    assert closed == [True]
+
+
 def test_every_operation_is_listed_by_name_and_has_a_budget(app: QApplication) -> None:
     """
     Check that the names the ASV benchmarks list before running are the operations that exist, and that each has a budget.
