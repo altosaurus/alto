@@ -71,7 +71,7 @@ EXERCISE_ICONS = {
     "IntervalNames": icons.EXERCISE_INTERVALS,
     "KeySignatures": icons.EXERCISE_KEY_SIGNATURES,
     "KeySignatureConstruction": icons.EXERCISE_KEY_CONSTRUCTION,
-    "ScaleDegrees": icons.EXERCISE_SCALES,
+    "ScaleIdentification": icons.EXERCISE_SCALES,
     "ScaleConstruction": icons.EXERCISE_SCALE_CONSTRUCTION,
     "CircleOfFifths": icons.EXERCISE_CIRCLE,
     "ChordQualities": icons.EXERCISE_CHORDS,
@@ -200,7 +200,7 @@ class ExerciseCard(TileCard):
         --------
         >>> from alto.exercises.library import IntervalNames
         >>> ExerciseCard(IntervalNames).toolTip()
-        'Name the interval between two notes (up to an octave).'
+        'Name the interval between two notes.'
         """
         super().__init__(
             icon=EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES),
