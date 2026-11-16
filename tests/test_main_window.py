@@ -776,14 +776,12 @@ def test_the_menu_has_the_shortcuts(window: MainWindow) -> None:
     assert actions["Settings…"].shortcut() == QKeySequence("Ctrl+Alt+S")
     assert actions["Restart"].shortcut() == QKeySequence("Ctrl+R")
     assert {
-        "Statistics",
-        "Browse database",
         "Quit",
     } <= set(actions)
-    actions["Statistics"].trigger()
+    window.stats_button.click()
     assert window._overlay is not None
     window.close_overlay()
-    actions["Browse database"].trigger()
+    window.database_button.click()
     assert window._overlay is not None
     window.close_overlay()
 

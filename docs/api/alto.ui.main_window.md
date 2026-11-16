@@ -105,6 +105,16 @@ def closeEvent(event: QCloseEvent) -> None
 
 Remember the window's size and position when the app closes.
 
+**Parameters**
+
+- `event` (*QCloseEvent*): The window close event.
+
+**Examples**
+
+```pycon
+>>> closeEvent()  # doctest: +SKIP
+```
+
 ### MainWindow.eventFilter
 
 ```python
@@ -244,6 +254,12 @@ def open_glossary() -> None
 ```
 
 Toggle the glossary from its toolbar button.
+
+**Examples**
+
+```pycon
+>>> open_glossary()  # doctest: +SKIP
+```
 
 ### MainWindow.open_stats
 

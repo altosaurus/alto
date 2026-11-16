@@ -779,6 +779,7 @@ class Sounds:
         steps: list[tuple[list[int], float]],
         gap_ms: int,
         force: bool = False,
+        warmup: bool = False,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -791,6 +792,8 @@ class Sounds:
 
         Parameters
         ----------
+        warmup : bool
+            Silently initialize audio streams before starting playback.
         key : str
             The instrument's key.
         steps : list of tuple of (list of int, float)
@@ -811,6 +814,7 @@ class Sounds:
         >>> s._play_sequence("piano", steps=[([60], 1.0)], gap_ms=300)  # muted: only cancels any earlier sequence
         >>> s._sequence_run
         1
+
         """
         if self._melody_sink is not None:
             self.stop_all()
@@ -836,7 +840,7 @@ class Sounds:
             print(f"audio unavailable: {exc}")
             return
         deadline = time.monotonic() + 1.0
-        primed = False
+        primed = not warmup
 
         def loading() -> bool:
             """
@@ -907,8 +911,9 @@ class Sounds:
                     effect.play()
                 QTimer.singleShot(150, wait)
             else:
-                for effect in effects:
-                    effect.stop()
+                if warmup:
+                    for effect in effects:
+                        effect.stop()
                 step(0)
 
         wait()
@@ -972,6 +977,7 @@ class Sounds:
         columns: Iterable[Sequence[Note]],
         *,
         gap_ms: int = 450,
+        warmup: bool = False,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -981,6 +987,8 @@ class Sounds:
 
         Parameters
         ----------
+        warmup : bool
+            Silently initialize audio streams before starting playback.
         columns : iterable of sequence of Note
             The columns of notes, as drawn on a staff.
         gap_ms : int, default 450
@@ -994,11 +1002,13 @@ class Sounds:
         >>> s = Sounds()
         >>> s.enabled = False
         >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
+
         """
         self._play_sequence(
             self.instrument,
             steps=[([n.midi for n in col], min(1.0, 1.4 / len(col) ** 0.5)) for col in columns],
             gap_ms=gap_ms,
+            warmup=warmup,
             on_step=on_step,
         )
 
@@ -1150,7 +1160,6 @@ class Sounds:
         if rate != audio_format.sampleRate():
             positions = np.arange(0, len(samples), rate / audio_format.sampleRate())
             samples = np.interp(positions, np.arange(len(samples)), samples)
-        samples *= 2.0
         samples = np.repeat(np.clip(samples, -1.0, 1.0), audio_format.channelCount())
         kind = audio_format.sampleFormat()
         if kind == QAudioFormat.SampleFormat.Float:

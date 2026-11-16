@@ -241,8 +241,8 @@ Build the dialog with the Appearance page showing.
 
 ```pycon
 >>> dialog = AppSettingsDialog()
->>> dialog.categories.currentItem().text().strip()
-'Theme'
+>>> dialog.categories.currentRow()
+0
 ```
 
 ### AppSettingsDialog.card

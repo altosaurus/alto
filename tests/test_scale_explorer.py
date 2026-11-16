@@ -11,7 +11,14 @@ from alto.ui.scale_explorer import ScaleExplorer
 
 
 def test_transposition_preserves_patterns(app: QApplication) -> None:
-    """Every supported tonic and mode has the expected gaps and closes at the octave."""
+    """
+    Every supported tonic and mode has the expected gaps and closes at the octave.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     explorer = ScaleExplorer()
     for mode, pattern in SCALE_PATTERNS.items():
         explorer.mode.setCurrentText(mode)
@@ -22,7 +29,16 @@ def test_transposition_preserves_patterns(app: QApplication) -> None:
 
 
 def test_gap_selection_plays_and_highlights_the_same_pair(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
-    """A harmonic-minor augmented second highlights the exact notes sent to playback."""
+    """
+    A harmonic-minor augmented second highlights the exact notes sent to playback.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces playback dependencies for this test.
+    """
     played = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(sounds, "preview", lambda key, **kwargs: played.append(kwargs["midis"]))
@@ -35,7 +51,14 @@ def test_gap_selection_plays_and_highlights_the_same_pair(app: QApplication, mon
 
 
 def test_lesson_questions_have_fixed_visible_notation(app: QApplication) -> None:
-    """Quiz diagrams provide notation without displaying the scale-type selector."""
+    """
+    Quiz diagrams provide notation without displaying the scale-type selector.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     for step in SCALE_IDENTIFICATION.steps:
         view = StepView(step)
         assert view.scale_explorer is not None
@@ -47,7 +70,14 @@ def test_lesson_questions_have_fixed_visible_notation(app: QApplication) -> None
 
 
 def test_reference_opens_the_corresponding_lesson(app: QApplication) -> None:
-    """The reference lesson link selects the scale lesson."""
+    """
+    The reference lesson link selects the scale lesson.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     panel = ScaleReferencePanel()
     requested = []
     panel.lesson_requested.connect(requested.append)

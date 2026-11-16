@@ -156,6 +156,7 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         midis: list[list[Note]],
         *,
         gap_ms: int,
+        warmup: bool,
         on_step: Callable[[int | None], object],
     ) -> None:
         """
@@ -163,13 +164,17 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
 
         Parameters
         ----------
+        warmup : bool
+            Silently initialize audio streams before starting playback.
         midis : list of int
             Notes to play.
         gap_ms : int
             The note spacing.
         on_step : callable
             The visual callback.
+
         """
+        assert warmup
         assert gap_ms == 280
         played.extend(note.midi for column in midis for note in column)
         callbacks.append(on_step)

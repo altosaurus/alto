@@ -358,8 +358,6 @@ def test_back_is_offered_by_a_button_and_by_escape(
     """
     page = DatabasePage(practised_learner(3))
     spy = QSignalSpy(page.back)
-    back = next(b for b in page.findChildren(type(page.tabs["answers"])) if b.text().endswith("Back"))
-    back.click()
     escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
     escape[0].activated.emit()
-    assert spy.count() == 2
+    assert spy.count() == 1

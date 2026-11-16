@@ -8,6 +8,7 @@ import time
 import wave
 from collections.abc import Callable
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -54,14 +55,23 @@ def test_melody_highlights_follow_the_audio_clock(
         Replaces the audio clock and output hardware.
     """
     player = Sounds()
-    sink = QAudioSink(QAudioFormat())
+    fmt = QAudioFormat()
+    fmt.setSampleRate(SAMPLE_RATE)
+    fmt.setChannelCount(1)
+    fmt.setSampleFormat(QAudioFormat.SampleFormat.Int16)
+    monkeypatch.setattr(
+        audio_module.QMediaDevices,
+        "defaultAudioOutput",
+        lambda: SimpleNamespace(preferredFormat=lambda: fmt),
+    )
+    sink = QAudioSink(fmt)
     position = [0]
     calls: list[str] = []
     seen: list[int | None] = []
     path = tmp_path / "scale.wav"
     path.write_bytes(to_wav_bytes(np.zeros(SAMPLE_RATE)))
     monkeypatch.setattr(audio_module, "QAudioSink", lambda _format: sink)
-    assert sink.error().value == 0  # use the native enum: Qt's old/new namespace enums need not compare equal
+    monkeypatch.setattr(sink, "error", lambda: type("NoError", (), {"value": 0})())
     monkeypatch.setattr(sink, "processedUSecs", lambda: position[0])
     monkeypatch.setattr(sink, "start", lambda _buffer: calls.append("play"))
     monkeypatch.setattr(sink, "stop", lambda: calls.append("stop"))

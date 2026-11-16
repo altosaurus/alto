@@ -630,8 +630,8 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.currentItem().text().strip()
-        'Theme'
+        >>> dialog.categories.currentRow()
+        0
         """
         super().__init__(parent)
         self.setWindowTitle("Settings")
@@ -690,7 +690,13 @@ class AppSettingsDialog(QDialog):
         lay.addWidget(buttons)
 
     def _restore_defaults(self) -> None:
-        """Confirm restoring application and exercise preferences, then request the reset."""
+        """
+        Confirm restoring application and exercise preferences, then request the reset.
+
+        Examples
+        --------
+        >>> _restore_defaults()  # doctest: +SKIP
+        """
         answer = QMessageBox.question(
             self,
             "Restore defaults",
@@ -832,7 +838,7 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.appearance_pages.count()
-        4
+        5
         """
         page, lay = self._page()
         self.appearance_pages = _LazyPages()
@@ -853,6 +859,10 @@ class AppSettingsDialog(QDialog):
         -------
         QWidget
             The overview with links to the child pages.
+
+        Examples
+        --------
+        >>> _appearance_summary()  # doctest: +SKIP
         """
         page, lay = self._page()
         self._heading(lay, title="Appearance", about="Customize how Alto looks and moves.")
@@ -907,13 +917,37 @@ class AppSettingsDialog(QDialog):
         return page
 
     def _open_appearance_child(self, row: int) -> None:
-        """Expand Appearance and select one of its child pages."""
+        """
+        Expand Appearance and select one of its child pages.
+
+        Parameters
+        ----------
+        row : int
+            The row of the settings navigation list.
+
+
+        Examples
+        --------
+        >>> _open_appearance_child()  # doctest: +SKIP
+        """
         if not self._appearance_expanded:
             self._toggle_category(self.categories.item(0))
         self.categories.setCurrentRow(row)
 
     def _select_category(self, row: int) -> None:
-        """Show the selected settings page and, for Appearance, its selected section."""
+        """
+        Show the selected settings page and, for Appearance, its selected section.
+
+        Parameters
+        ----------
+        row : int
+            The row of the settings navigation list.
+
+
+        Examples
+        --------
+        >>> _select_category()  # doctest: +SKIP
+        """
         item = self.categories.item(row)
         selection = item.data(Qt.ItemDataRole.UserRole) if item is not None else None
         if not isinstance(selection, tuple):
@@ -929,7 +963,19 @@ class AppSettingsDialog(QDialog):
             self.pages.setCurrentIndex(index)
 
     def _toggle_category(self, item: QListWidgetItem) -> None:
-        """Expand or collapse a settings category that contains subitems."""
+        """
+        Expand or collapse a settings category that contains subitems.
+
+        Parameters
+        ----------
+        item : QListWidgetItem
+            The selected category item.
+
+
+        Examples
+        --------
+        >>> _toggle_category()  # doctest: +SKIP
+        """
         if item.data(Qt.ItemDataRole.UserRole) != ("group", 0):
             return
         self._appearance_expanded = not self._appearance_expanded
@@ -942,7 +988,13 @@ class AppSettingsDialog(QDialog):
         self._update_appearance_parent()
 
     def _update_appearance_parent(self) -> None:
-        """Show the category summary and its current expanded state."""
+        """
+        Show the category summary and its current expanded state.
+
+        Examples
+        --------
+        >>> _update_appearance_parent()  # doctest: +SKIP
+        """
         item = self.categories.item(0)
         if item is None:
             return
@@ -1287,7 +1339,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> sorted(dialog.baritone_buttons)
         ['c', 'f']
         """
@@ -1337,7 +1389,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[3].click()
+        >>> dialog.categories.setCurrentRow(4)
         >>> dialog.transition_list.count() == len(TRANSITIONS)
         True
         >>> dialog.transition_preview.transition.key == saved_transition()
@@ -1418,7 +1470,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog._choose_notation("leland")
         >>> notation.current().key
         'leland'
@@ -1434,7 +1486,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog._draw_baritone_icons()
         >>> dialog.baritone_buttons["f"].icon().isNull()
         False
@@ -1456,7 +1508,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[2].click()
+        >>> dialog.categories.setCurrentRow(3)
         >>> keyboard_styles.CUSTOM in dialog.keyboard_cards
         True
         """
@@ -1490,7 +1542,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[2].click()
+        >>> dialog.categories.setCurrentRow(3)
         >>> dialog._custom_edited()
         >>> dialog.keyboard_cards[keyboard_styles.CUSTOM].isChecked()
         True
@@ -1511,7 +1563,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(1)
+        >>> dialog.categories.setCurrentRow(5)
         >>> dialog.instruments.list.count() > 0
         True
         """
@@ -1538,7 +1590,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(2)
+        >>> dialog.categories.setCurrentRow(6)
         >>> dialog.main_channel.isChecked()
         False
         """
@@ -1576,7 +1628,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(2)
+        >>> dialog.categories.setCurrentRow(6)
         >>> dialog.main_channel.setChecked(True)
         >>> saved_channel()
         'main'

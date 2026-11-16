@@ -20,12 +20,19 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- A searchable glossary in the top toolbar, with notation examples, playback, and related exercise and lesson tiles.
+- An interactive Scale Identification reference and lesson, with scale comparisons and note highlighting.
+- An optional octave answer in Note Identification, saved window geometry, and Restore defaults in Settings.
+
 - Scale degrees as a note-name group for Note Identification, Keyboard Identification and Note Construction, with caret
   notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
   Note-name previews have visible text labels.
 
 ### Changed
 {: .no-toc}
+
+- Appearance settings use a hierarchical sidebar and grouped overview. Data pages share the toolbar Back button,
+  and active toolbar icons use the theme accent color.
 
 - Scale Identification replaces Scale Spelling, keeping its icon. Identify an ascending scale on a staff, with selectable
   clefs, scale types, and independent staff and scale key signatures.

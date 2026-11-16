@@ -88,6 +88,7 @@ def test_grid_button_returns_to_the_workspace_after_visiting_tiles(window: MainW
     """
     window.open_exercise(NoteNames)
     activity = window.stack.currentWidget()
+    assert isinstance(activity, ExerciseView)
     question = activity.question
     pane_width = window.sidebar_width()
     window.view_button.click()

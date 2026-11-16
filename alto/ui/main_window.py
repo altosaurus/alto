@@ -265,7 +265,19 @@ class MainWindow(QMainWindow):
         self._build()
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        """Remember the window's size and position when the app closes."""
+        """
+        Remember the window's size and position when the app closes.
+
+        Parameters
+        ----------
+        event : QCloseEvent
+            The window close event.
+
+
+        Examples
+        --------
+        >>> closeEvent()  # doctest: +SKIP
+        """
         store().setValue("ui/windowGeometry", self.saveGeometry())
         super().closeEvent(event)
 
@@ -872,7 +884,13 @@ class MainWindow(QMainWindow):
         dialog.show()
 
     def _restore_defaults(self) -> None:
-        """Restore all preferences while retaining profiles and recorded practice."""
+        """
+        Restore all preferences while retaining profiles and recorded practice.
+
+        Examples
+        --------
+        >>> _restore_defaults()  # doctest: +SKIP
+        """
         saved = store()
         retained = {key: saved.value(key) for key in saved.allKeys() if key.startswith(("profile/", "lessons/"))}
         import_settings(retained)
@@ -1042,7 +1060,13 @@ class MainWindow(QMainWindow):
             self.profile_action.setText(f"Profile: {self.learner.profile.name}…")
 
     def open_glossary(self) -> None:
-        """Toggle the glossary from its toolbar button."""
+        """
+        Toggle the glossary from its toolbar button.
+
+        Examples
+        --------
+        >>> open_glossary()  # doctest: +SKIP
+        """
         if isinstance(self._overlay, GlossaryPage):
             self.close_overlay()
             return
@@ -1165,7 +1189,13 @@ class MainWindow(QMainWindow):
             self.home.resume_button.setToolTip("Back to the previous page")
 
     def _back_from_topbar(self) -> None:
-        """Return from a data page or resume the current activity from the tiles."""
+        """
+        Return from a data page or resume the current activity from the tiles.
+
+        Examples
+        --------
+        >>> _back_from_topbar()  # doctest: +SKIP
+        """
         if isinstance(self._overlay, (StatsPage, DatabasePage, GlossaryPage)):
             self.close_overlay()
         else:

@@ -345,6 +345,7 @@ def play_notes(
     columns: Iterable[Sequence[Note]],
     *,
     gap_ms: int = 450,
+    warmup: bool = False,
     on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
@@ -355,6 +356,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 **Parameters**
 
+- `warmup` (*bool*): Silently initialize audio streams before starting playback.
 - `columns` (*iterable of sequence of Note*): The columns of notes, as drawn on a staff.
 - `gap_ms` (*int, default 450*): The time between columns, in milliseconds. Keyword-only.
 - `on_step` (*callable or None, default None*): Called with the index of each column as it starts, and with None when the last has had its time. It is called while muted too, so a display can follow the music with the sound off. Keyword-only.

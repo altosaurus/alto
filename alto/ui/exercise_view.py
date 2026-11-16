@@ -691,7 +691,7 @@ class ExerciseView(QWidget):
             self.reference_collapse.setAutoRaise(True)
             self.reference_collapse.setToolTip("Collapse reference")
             self.reference_collapse.setAccessibleName("Collapse reference")
-            self.reference_collapse.clicked.connect(lambda: self.book_btn.setChecked(False))
+            self.reference_collapse.clicked.connect(lambda: book.setChecked(False))
             reference_header.addWidget(self.reference_collapse)
             book_lay.addLayout(reference_header)
             reference.setFixedWidth(self.REFERENCE_WIDTH - 2 * 9)
@@ -1716,6 +1716,7 @@ class ExerciseView(QWidget):
                 sounds.play_notes(
                     [[n] for n in notes],  # as the learner placed it, in whichever octave that was
                     gap_ms=SCALE_GAP_MS,
+                    warmup=True,
                     on_step=lambda i: self._light_scale_note(i, token=token),
                 )
             self._advance.start(SCALE_GAP_MS * len(notes) + 400)  # on to the next question once the scale has played
@@ -2220,6 +2221,7 @@ class ExerciseView(QWidget):
                 sounds.play_notes(
                     [[note] for column in q.staff for note in column],
                     gap_ms=SCALE_GAP_MS,
+                    warmup=True,
                     on_step=lambda index: self._light_identified_note(index, token=token),
                 )
             elif not self.exercise.has_sound:
