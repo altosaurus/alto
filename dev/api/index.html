@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -303,6 +303,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -354,6 +357,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.home/">home</a></li>
                 
                 
@@ -400,6 +406,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -607,6 +616,10 @@
       <td><a href="alto.lessons.clef_basics/">alto.lessons.clef_basics</a></td>
       <td>The lesson on clefs, taught from nothing.</td>
     </tr>
+    <tr>
+      <td><a href="alto.lessons.scale_identification/">alto.lessons.scale_identification</a></td>
+      <td>Reading scales and recognizing their interval patterns.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -690,6 +703,10 @@
       <td>The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.glossary/">alto.ui.glossary</a></td>
+      <td>A searchable glossary of the notation terms used in Alto.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.home/">alto.ui.home</a></td>
       <td>The start screen: a card for every exercise, or for every lesson, in rows.</td>
     </tr>
@@ -752,6 +769,10 @@
     <tr>
       <td><a href="alto.ui.reference/">alto.ui.reference</a></td>
       <td>The reference pane: an interactive circle of fifths to look things up on, with an explanation under it.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.scale_explorer/">alto.ui.scale_explorer</a></td>
+      <td>Interactive notation and step patterns for learning scales.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.settings_panel/">alto.ui.settings_panel</a></td>
@@ -957,8 +978,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

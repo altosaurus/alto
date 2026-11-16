@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -303,6 +303,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -354,6 +357,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.home/">home</a></li>
                 
                 
@@ -400,6 +406,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -825,6 +834,7 @@ Starting a preview silences the one before it.</p>
     <span class="n">columns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">450</span><span class="p">,</span>
+    <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
@@ -836,6 +846,7 @@ Starting a preview silences the one before it.</p>
 <p><strong>Parameters</strong></p>
 
 <ul>
+  <li><code class="language-plaintext highlighter-rouge">warmup</code> (<em>bool</em>): Silently initialize audio streams before starting playback.</li>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>iterable of sequence of Note</em>): The columns of notes, as drawn on a staff.</li>
   <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int, default 450</em>): The time between columns, in milliseconds. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable or None, default None</em>): Called with the index of each column as it starts, and with None when the last has had its time. It is called while muted too, so a display can follow the music with the sound off. Keyword-only.</li>
@@ -846,6 +857,39 @@ Starting a preview silences the one before it.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; s = Sounds()
 &gt;&gt;&gt; s.enabled = False
 &gt;&gt;&gt; s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
+</code></pre>
+
+<h3 id="soundsplay_melody">Sounds.play_melody</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_melody</span><span class="p">(</span>
+    <span class="n">midis</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Play a melody as one clip and synchronize highlights with processed audio frames.</p>
+
+<p>Rendering fixes the note onsets even on first use, before samples have been loaded. Muted or unavailable audio
+still walks the visual steps. The last note sustains for an extra 200 ms. A newer playback cancels visual callbacks.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">midis</code> (<em>iterable of int</em>): MIDI notes in playback order.</li>
+  <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int</em>): Milliseconds between note onsets. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable</em>): Receives each sounding note’s index, then None after the last note’s time. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; player = Sounds()
+&gt;&gt;&gt; player.enabled = False
+&gt;&gt;&gt; seen = []
+&gt;&gt;&gt; player.play_melody([60], gap_ms=300, on_step=seen.append)
+&gt;&gt;&gt; seen
+[0]
 </code></pre>
 
 <h3 id="soundsplay_correct">Sounds.play_correct</h3>
@@ -1021,8 +1065,8 @@ Starting a preview silences the one before it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

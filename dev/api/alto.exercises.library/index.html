@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -303,6 +303,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -354,6 +357,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.home/">home</a></li>
                 
                 
@@ -400,6 +406,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -838,45 +847,64 @@ True
 True
 </code></pre>
 
-<h2 id="scaledegrees">ScaleDegrees</h2>
+<h2 id="scaleidentification">ScaleIdentification</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleDegrees</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Spell a note of a scale or mode from its tonic.</p>
+<p>Identify the tonic and type of an ascending scale drawn on a staff.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(7))
-&gt;&gt;&gt; q.prompt.startswith("In ") and q.answer in q.choices
-True
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(7))
+&gt;&gt;&gt; len(q.staff), q.answer in q.choices
+(8, True)
 </code></pre>
 
-<h3 id="scaledegreesinstructions">ScaleDegrees.instructions</h3>
+<h3 id="scaleidentificationsettings_signature">ScaleIdentification.settings_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the help text for the exercise.</p>
+<p>Identify the clefs, scale types and staff and scale signatures in force.</p>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>str</em>: Simple HTML.</li>
+  <li><em>str</em>: The serialized question settings.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "degree" in ScaleDegrees().instructions()
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleIdentification().settings_signature().startswith("[")
 True
 </code></pre>
 
-<h3 id="scaledegreesgenerate">ScaleDegrees.generate</h3>
+<h3 id="scaleidentificationinstructions">ScaleIdentification.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to identify the scale, including a staff with a different signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML help text.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Scale Identification" in ScaleIdentification().instructions()
+True
+</code></pre>
+
+<h3 id="scaleidentificationgenerate">ScaleIdentification.generate</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Make a question asking for one degree of a scale.</p>
+<p>Draw an ascending octave and offer scale names without revealing the answer on the staff.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -887,13 +915,13 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Question</em>: For example ‘In E♭ Dorian, what is scale degree 6?’, answered ‘C’.</li>
+  <li><em>Question</em>: Eight staff notes and a choice of tonic and scale type.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(8))
-&gt;&gt;&gt; "scale degree" in q.prompt
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(8))
+&gt;&gt;&gt; q.staff[0][0].name == q.staff[-1][0].name and not q.caption
 True
 </code></pre>
 
@@ -1618,8 +1646,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

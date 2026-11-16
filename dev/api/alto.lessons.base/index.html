@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -303,6 +303,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -354,6 +357,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.home/">home</a></li>
                 
                 
@@ -400,6 +406,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -592,6 +601,9 @@ False
     <span class="n">closing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">staves</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Staff</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">task_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">scale_tonic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'C4'</span><span class="p">,</span>
+    <span class="n">scale_explore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -609,6 +621,9 @@ False
   <li><code class="language-plaintext highlighter-rouge">closing</code> (<em>bool</em>): True for the last step, which offers to practise.</li>
   <li><code class="language-plaintext highlighter-rouge">staves</code> (<em>tuple of Staff</em>): Staves to show beside the words, one above another, instead of the circle; empty for none.</li>
   <li><code class="language-plaintext highlighter-rouge">task_staff</code> (<em>bool</em>): Show one staff beside the words that follows the task: it draws the task’s clef.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>str</em>): Scale type for an interactive notation diagram; empty for none.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale_tonic</code> (<em>str</em>): Starting note of the diagram, including its octave.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale_explore</code> (<em>bool</em>): Allow changing the example. False hides the selectors for identification tasks.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -855,8 +870,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

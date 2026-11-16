@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -303,6 +303,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -354,6 +357,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.home/">home</a></li>
                 
                 
@@ -400,6 +406,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/" aria-current="page">settings_panel</a></li>
@@ -893,8 +902,8 @@ True
 
 <p>The settings of the note identification exercise: a menu leading to a page for each group of settings.</p>
 
-<p>Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names and an Accidentals switch) and a page for each.
-Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names, Accidentals and Octave) and a page for
+each. Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -905,6 +914,7 @@ Edits are live: each changes the settings, saves them and emits <code class="lan
   <li><code class="language-plaintext highlighter-rouge">key_boxes</code> (<em>dict of int to QCheckBox</em>): The key signature checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">value_boxes</code> (<em>dict of str to QCheckBox</em>): The note value checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">naming_radios</code> (<em>dict of str to QRadioButton</em>): The letters and solfège choices, plus caret and function notation in the Scale degrees group.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>_ToggleRow</em>): Whether the answer must include the written octave.</li>
   <li><code class="language-plaintext highlighter-rouge">range_editors</code> (<em>dict of str to RangeEditor</em>): The range editor of each clef in use, built when the Range page opens.</li>
 </ul>
 
@@ -1412,6 +1422,20 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 &gt;&gt;&gt; store().remove("keyConstruction")
 </code></pre>
 
+<h2 id="load_scale_identification">load_scale_identification</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_identification</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved scale identification options independently of scale construction.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_scale_identification()
+&gt;&gt;&gt; settings.scale_identification.active_staff_keys()
+[0]
+</code></pre>
+
 <h2 id="load_scale_construction">load_scale_construction</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1448,12 +1472,11 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p>The settings of a key signature exercise: a menu with a page for each group of settings.</p>
 
-<p>The same panel serves key signature identification, key signature construction and scale construction, each saving
+<p>The same panel serves key signature identification, key signature construction and both scale exercises, each saving
 under its own name.</p>
 
-<p>The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
-the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
-changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>The menu has Clefs, Scales and Key signatures. Both scale exercises have independent staff and scale key choices;
+construction also has Octave and Steps switches. Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1934,8 +1957,17 @@ True
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/dev/api/alto.ui.reference/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.reference</span></a>
+            <a class="prev" href="/alto/dev/api/alto.ui.scale_explorer/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.scale_explorer</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.staff/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.staff<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -1998,8 +2030,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
