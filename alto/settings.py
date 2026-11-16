@@ -250,6 +250,8 @@ class NoteNameSettings:
         A key of `NAMINGS`. Keyword-only.
     accidentals : bool, default False
         Also ask notes with explicit sharps, flats and naturals. Keyword-only.
+    require_octave : bool, default False
+        Also require the written octave as part of the answer. Keyword-only.
 
     Examples
     --------
@@ -265,6 +267,7 @@ class NoteNameSettings:
     note_values: set[str] = field(default_factory=lambda: {"whole"})
     naming: str = "letters"  # key of NAMINGS
     accidentals: bool = False  # also ask notes with explicit sharps/flats/naturals
+    require_octave: bool = False  # the answer also includes the note's written octave
 
     def active_clefs(self) -> list[str]:
         """
@@ -812,6 +815,46 @@ class KeyConstructionSettings(KeySignatureSettings):
 
 
 key_construction = KeyConstructionSettings()
+
+
+@dataclass
+class ScaleIdentificationSettings(KeySignatureSettings):
+    """
+    Choose the clefs, scale types and independent staff and scale key signatures for identification.
+
+    Attributes
+    ----------
+    staff_keys : set of int
+        Signatures drawn on the staff, independently of the scale's own signature. Keyword-only.
+
+    Examples
+    --------
+    >>> cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
+    >>> cfg.active_keys(), cfg.active_staff_keys()
+    ([2], [-3])
+    """
+
+    _: KW_ONLY
+    staff_keys: set[int] = field(default_factory=lambda: {0})
+
+    def active_staff_keys(self) -> list[int]:
+        """
+        Return the selected staff signatures, falling back to no signature.
+
+        Returns
+        -------
+        list of int
+            Signature counts in ascending order.
+
+        Examples
+        --------
+        >>> ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
+        [0]
+        """
+        return sorted(self.staff_keys) or [0]
+
+
+scale_identification = ScaleIdentificationSettings()
 
 
 @dataclass

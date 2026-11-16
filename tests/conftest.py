@@ -90,6 +90,7 @@ def _isolated_state() -> Iterator[None]:
         "key_signatures",
         "key_construction",
         "scale_construction",
+        "scale_identification",
         "clef_basics",
         "circle",
     )

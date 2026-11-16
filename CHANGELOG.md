@@ -7,11 +7,21 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Added
 
+- A searchable glossary in the top toolbar, with notation examples, playback, and related exercise and lesson tiles.
+- An interactive Scale Identification reference and lesson, with scale comparisons and note highlighting.
+- An optional octave answer in Note Identification, saved window geometry, and Restore defaults in Settings.
+
 - Scale degrees as a note-name group for Note Identification, Keyboard Identification and Note Construction, with caret
   notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
   Note-name previews have visible text labels.
 
 ### Changed
+
+- Appearance settings use a hierarchical sidebar and grouped overview. Data pages share the toolbar Back button,
+  and active toolbar icons use the theme accent color.
+
+- Scale Identification replaces Scale Spelling, keeping its icon. Identify an ascending scale on a staff, with selectable
+  clefs, scale types, and independent staff and scale key signatures.
 
 - Navigation is grouped on the left of the top bar, with Statistics and Browse database on the right. Exercises / Lessons
   changes the sidebar without leaving the active activity. Separate pane and grid buttons toggle the list or return to
@@ -19,6 +29,9 @@ Alto uses [semantic versioning](https://semver.org/).
   resumes the active exercise or lesson. Before starting an activity, the workspace prompts you to select one.
 
 ### Fixed
+
+- Scale Identification plays with even rhythm on the first correct answer, highlights each note as it sounds, and waits
+  for the scale to finish before advancing.
 
 - Switching themes in Settings is faster, and Settings opens more quickly.
 

@@ -117,6 +117,9 @@ Step(
     closing: bool = False,
     staves: tuple[Staff, ...] = (),
     task_staff: bool = False,
+    scale: str = '',
+    scale_tonic: str = 'C4',
+    scale_explore: bool = True,
 )
 ```
 
@@ -133,6 +136,9 @@ One page of a lesson.
 - `closing` (*bool*): True for the last step, which offers to practise.
 - `staves` (*tuple of Staff*): Staves to show beside the words, one above another, instead of the circle; empty for none.
 - `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task's clef.
+- `scale` (*str*): Scale type for an interactive notation diagram; empty for none.
+- `scale_tonic` (*str*): Starting note of the diagram, including its octave.
+- `scale_explore` (*bool*): Allow changing the example. False hides the selectors for identification tasks.
 
 **Examples**
 

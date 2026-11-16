@@ -261,7 +261,7 @@ class StatsPage(QWidget):
     Attributes
     ----------
     back : Signal
-        Emitted by the Back button and by Escape.
+        Emitted by Escape; the main window provides the shared Back button.
     learner : Learner
         Whose answers are shown; only the active profile's own.
     exercise : QComboBox
@@ -314,15 +314,10 @@ class StatsPage(QWidget):
         self.learner = learner
         outer = QVBoxLayout(self)
 
-        # Back to wherever you came from, then the filters: which profiles, which exercise, which period.
+        # The main window provides Back beside the navigation search field; this row holds the filters.
         bar = QHBoxLayout()
         bar.setSpacing(10)
-        self.back_button = QPushButton("←  Back")
-        self.back_button.setToolTip("Back to the previous page (Esc)")
-        self.back_button.clicked.connect(self.back)
-        bar.addWidget(self.back_button)
         QShortcut(QKeySequence(Qt.Key.Key_Escape), self, self.back.emit)
-        bar.addSpacing(12)
         who = QLabel(f"<b>{learner.profile.name}</b>")  # these are always the active profile's own numbers
         who.setToolTip("Statistics for the active profile")
         bar.addWidget(who)

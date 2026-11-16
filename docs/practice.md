@@ -43,7 +43,7 @@ for the exercise, since reading a note takes less time than spelling a scale:
 | Key Signature Identification, Clef Basics                                             | 5 s      |
 | Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s      |
 | Circle of Fifths                                                                      | 7 s      |
-| Scale Spelling                                                                        | 8 s      |
+| Scale Identification                                                                        | 8 s      |
 | Scale Construction                                                                    | 25 s     |
 | Arpeggio Identification                                                               | 9 s      |
 

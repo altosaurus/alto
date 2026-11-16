@@ -34,11 +34,20 @@ from pathlib import Path
 
 import numpy as np
 from PySide6.QtCore import (
+    QBuffer,
+    QByteArray,
+    QIODevice,
     QPropertyAnimation,
+    Qt,
     QTimer,
     QUrl,
 )
-from PySide6.QtMultimedia import QSoundEffect
+from PySide6.QtMultimedia import (
+    QAudioFormat,
+    QAudioSink,
+    QMediaDevices,
+    QSoundEffect,
+)
 
 from alto.theory.pitch import Note
 
@@ -363,6 +372,8 @@ class Sounds:
         self._preview_effects: dict[tuple[str, tuple[int, ...], int], QSoundEffect] = {}
         self._sounding: list = []  # sustained and damped notes that may still be sounding, to release when the next begins
         self._fades: dict = {}  # running fade-outs, by effect
+        self._melody_sink: QAudioSink | None = None
+        self._melody_buffer: QBuffer | None = None
         self._sequence_run = 0  # which sequence of notes is current, so that an older one stops when a new one starts
         self._sample_files: dict[str, dict[int, Path]] = {}
         self._dir = Path(tempfile.gettempdir()) / "alto_sounds"
@@ -590,6 +601,14 @@ class Sounds:
         --------
         >>> Sounds().stop_all()
         """
+        if self._melody_sink is not None:
+            self._melody_sink.stop()
+            self._melody_sink.deleteLater()
+            self._melody_sink = None
+        if self._melody_buffer is not None:
+            self._melody_buffer.close()
+            self._melody_buffer.deleteLater()
+            self._melody_buffer = None
         for fade in self._fades.values():
             fade.stop()
         self._fades.clear()
@@ -607,6 +626,7 @@ class Sounds:
         *,
         midis: tuple[int, ...],
         step_ms: int,
+        tail_ms: int = 0,
     ) -> Path:
         """
         Render a preview as one WAV file with note onsets a fixed number of samples apart.
@@ -619,6 +639,8 @@ class Sounds:
             The notes in playback order. Keyword-only.
         step_ms : int
             The interval between note onsets in milliseconds. Keyword-only.
+        tail_ms : int, default 0
+            Extra sustain for the last note, in milliseconds. Keyword-only.
 
         Returns
         -------
@@ -636,6 +658,7 @@ class Sounds:
                 midis,
                 step_ms,
                 self.FADE_MS,
+                tail_ms,
             ),
         ).encode()
         path = self._dir / f"preview_{hashlib.sha256(identity).hexdigest()}.wav"
@@ -644,16 +667,16 @@ class Sounds:
         gap = max(1, round(SAMPLE_RATE * step_ms / 1000))
         fade = max(1, round(SAMPLE_RATE * self.FADE_MS / 1000))
         notes = []
-        for midi in midis:
+        for index, midi in enumerate(midis):
             audio, rate = read_wav(self._note_file(inst, midi=midi))
             if rate != SAMPLE_RATE:
                 positions = np.arange(0, len(audio), rate / SAMPLE_RATE)
                 audio = np.interp(positions, np.arange(len(audio)), audio)
-            if inst.sustained or inst.damped:
-                audio = audio[: gap + fade].copy()
-                tail = max(0, len(audio) - gap)
-                if tail:
-                    audio[gap:] *= np.linspace(1.0, 0.0, tail)
+            hold = gap + (round(SAMPLE_RATE * tail_ms / 1000) if index == len(midis) - 1 else 0)
+            audio = audio[: hold + fade].copy()
+            tail = max(0, len(audio) - hold)
+            if tail:
+                audio[hold:] *= np.linspace(1.0, 0.0, tail)
             notes.append(audio)
         length = max((i * gap + len(audio) for i, audio in enumerate(notes)), default=0)
         phrase = np.zeros(length)
@@ -756,6 +779,7 @@ class Sounds:
         steps: list[tuple[list[int], float]],
         gap_ms: int,
         force: bool = False,
+        warmup: bool = False,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -768,6 +792,8 @@ class Sounds:
 
         Parameters
         ----------
+        warmup : bool
+            Silently initialize audio streams before starting playback.
         key : str
             The instrument's key.
         steps : list of tuple of (list of int, float)
@@ -788,7 +814,10 @@ class Sounds:
         >>> s._play_sequence("piano", steps=[([60], 1.0)], gap_ms=300)  # muted: only cancels any earlier sequence
         >>> s._sequence_run
         1
+
         """
+        if self._melody_sink is not None:
+            self.stop_all()
         self._sequence_run += 1
         run = self._sequence_run
         for effect in self._preview_effects.values():
@@ -811,6 +840,7 @@ class Sounds:
             print(f"audio unavailable: {exc}")
             return
         deadline = time.monotonic() + 1.0
+        primed = not warmup
 
         def loading() -> bool:
             """
@@ -867,11 +897,23 @@ class Sounds:
             --------
             >>> wait()  # doctest: +SKIP
             """
+            nonlocal primed
             if run != self._sequence_run:
                 return
             if loading() and time.monotonic() < deadline:
                 QTimer.singleShot(10, wait)
+            elif not primed:
+                # Loading the sample does not open its audio stream. Start each stream silently first,
+                # so backend initialization cannot delay the first audible notes independently.
+                primed = True
+                for effect in effects:
+                    effect.setVolume(0.0)
+                    effect.play()
+                QTimer.singleShot(150, wait)
             else:
+                if warmup:
+                    for effect in effects:
+                        effect.stop()
                 step(0)
 
         wait()
@@ -906,6 +948,7 @@ class Sounds:
         >>> seen
         [0]
         """
+        started = time.monotonic()
 
         def step(i: int) -> None:
             """
@@ -924,7 +967,8 @@ class Sounds:
                 return
             on_step(i if i < count else None)
             if i < count:
-                QTimer.singleShot(gap_ms, lambda: step(i + 1))
+                delay = max(1, round((started + (i + 1) * gap_ms / 1000 - time.monotonic()) * 1000))
+                QTimer.singleShot(delay, lambda: step(i + 1))
 
         step(0)
 
@@ -933,6 +977,7 @@ class Sounds:
         columns: Iterable[Sequence[Note]],
         *,
         gap_ms: int = 450,
+        warmup: bool = False,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -942,6 +987,8 @@ class Sounds:
 
         Parameters
         ----------
+        warmup : bool
+            Silently initialize audio streams before starting playback.
         columns : iterable of sequence of Note
             The columns of notes, as drawn on a staff.
         gap_ms : int, default 450
@@ -955,13 +1002,175 @@ class Sounds:
         >>> s = Sounds()
         >>> s.enabled = False
         >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
+
         """
         self._play_sequence(
             self.instrument,
             steps=[([n.midi for n in col], min(1.0, 1.4 / len(col) ** 0.5)) for col in columns],
             gap_ms=gap_ms,
+            warmup=warmup,
             on_step=on_step,
         )
+
+    def play_melody(
+        self,
+        midis: Iterable[int],
+        *,
+        gap_ms: int,
+        on_step: Callable[[int | None], object],
+    ) -> None:
+        """
+        Play a melody as one clip and synchronize highlights with processed audio frames.
+
+        Rendering fixes the note onsets even on first use, before samples have been loaded. Muted or unavailable audio
+        still walks the visual steps. The last note sustains for an extra 200 ms. A newer playback cancels visual callbacks.
+
+        Parameters
+        ----------
+        midis : iterable of int
+            MIDI notes in playback order.
+        gap_ms : int
+            Milliseconds between note onsets. Keyword-only.
+        on_step : callable
+            Receives each sounding note's index, then None after the last note's time. Keyword-only.
+
+        Examples
+        --------
+        >>> player = Sounds()
+        >>> player.enabled = False
+        >>> seen = []
+        >>> player.play_melody([60], gap_ms=300, on_step=seen.append)
+        >>> seen
+        [0]
+        """
+        self.stop_all()
+        self._sequence_run += 1
+        run = self._sequence_run
+        notes = tuple(midis)
+        if not notes:
+            return
+
+        def walk() -> None:
+            """
+            Start the visual clock for this melody.
+
+            Examples
+            --------
+            >>> walk()  # doctest: +SKIP
+            """
+            self._walk(len(notes), gap_ms=gap_ms, run=run, on_step=on_step)
+
+        if not self.enabled:
+            walk()
+            return
+        try:
+            inst = INSTRUMENT_BY_KEY[self.instrument]
+            path = self._preview_file(inst, midis=notes, step_ms=gap_ms, tail_ms=200)
+            audio_format = QMediaDevices.defaultAudioOutput().preferredFormat()
+            if not audio_format.isValid():
+                audio_format.setSampleRate(SAMPLE_RATE)
+                audio_format.setChannelCount(1)
+                audio_format.setSampleFormat(QAudioFormat.SampleFormat.Int16)
+            pcm = self._output_pcm(path, audio_format=audio_format)
+            sink = self._melody_sink = QAudioSink(audio_format)
+            sink.setBufferSize(audio_format.bytesForDuration(20_000))
+            sink.setVolume(1.0)
+            buffer = self._melody_buffer = QBuffer()
+            buffer.setData(QByteArray(pcm))
+            buffer.open(QIODevice.OpenModeFlag.ReadOnly)
+            sink.start(buffer)
+        except Exception as exc:  # unavailable audio must not prevent advancement
+            print(f"audio unavailable: {exc}")
+            walk()
+            return
+        last_index = -1
+        deadline = time.monotonic() + 5.0
+        timer = QTimer(sink)
+        timer.setTimerType(Qt.TimerType.PreciseTimer)
+        timer.setInterval(5)
+
+        def track() -> None:
+            """
+            Follow the output's processed audio frames instead of a separate wall clock.
+
+            Examples
+            --------
+            >>> track()  # doctest: +SKIP
+            """
+            nonlocal last_index
+            if run != self._sequence_run:
+                timer.stop()
+                return
+            if sink.error().value != 0 or (last_index < 0 and time.monotonic() >= deadline):
+                timer.stop()
+                sink.stop()
+                walk()
+                return
+            position = sink.processedUSecs()
+            if position <= 0:
+                return
+            index = min(len(notes), position // (gap_ms * 1000))
+            if index != last_index:
+                last_index = index
+                on_step(index if index < len(notes) else None)
+            if index == len(notes):
+                timer.stop()
+                timer.deleteLater()
+
+        timer.timeout.connect(track)
+        timer.start()
+        track()
+
+    @staticmethod
+    def _output_pcm(
+        path: Path,
+        *,
+        audio_format: QAudioFormat,
+    ) -> bytes:
+        """
+        Convert a mono clip to the output device's rate, channels and sample representation.
+
+        Parameters
+        ----------
+        path : pathlib.Path
+            The rendered melody WAV file.
+        audio_format : QAudioFormat
+            The output device's preferred format. Keyword-only.
+
+        Returns
+        -------
+        bytes
+            Interleaved PCM frames ready for the output device.
+
+        Raises
+        ------
+        ValueError
+            If the device has an unknown sample format.
+
+        Examples
+        --------
+        >>> fmt = QAudioFormat()
+        >>> fmt.setSampleRate(48000)
+        >>> fmt.setChannelCount(2)
+        >>> fmt.setSampleFormat(QAudioFormat.SampleFormat.Int32)
+        >>> fmt.bytesPerFrame()
+        8
+        """
+        samples, rate = read_wav(path)
+        if rate != audio_format.sampleRate():
+            positions = np.arange(0, len(samples), rate / audio_format.sampleRate())
+            samples = np.interp(positions, np.arange(len(samples)), samples)
+        samples = np.repeat(np.clip(samples, -1.0, 1.0), audio_format.channelCount())
+        kind = audio_format.sampleFormat()
+        if kind == QAudioFormat.SampleFormat.Float:
+            return samples.astype(np.float32).tobytes()
+        if kind == QAudioFormat.SampleFormat.Int32:
+            return (samples * 2147483647).astype(np.int32).tobytes()
+        if kind == QAudioFormat.SampleFormat.Int16:
+            return (samples * 32767).astype(np.int16).tobytes()
+        if kind == QAudioFormat.SampleFormat.UInt8:
+            return ((samples + 1) * 127.5).astype(np.uint8).tobytes()
+        raise ValueError(f"Unsupported output sample format: {kind}")
 
     def play_correct(self, streak: int) -> None:
         """

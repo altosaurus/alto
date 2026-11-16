@@ -19,14 +19,12 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from PySide6.QtCore import (
-    QEvent,
     QSize,
     Qt,
     Signal,
 )
 from PySide6.QtGui import (
     QColor,
-    QPalette,
 )
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -56,7 +54,6 @@ from alto.ui import (
     keyboard_styles,
     notation,
 )
-from alto.ui.colors import blend
 from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson_nav import section_item
@@ -583,7 +580,7 @@ class AppSettingsDialog(QDialog):
     theme_changed : bool
         True once the theme has been changed, so the window can be rebuilt in it.
     categories : QListWidget
-        The list of pages on the left: Appearance, Sound and Updates.
+        The list of pages on the left: Appearance sections, Sound and Updates.
     pages : QStackedWidget
         The page for the chosen category.
     instruments : InstrumentPicker
@@ -619,6 +616,8 @@ class AppSettingsDialog(QDialog):
     False
     """
 
+    defaults_requested = Signal()
+
     def __init__(self, parent: QWidget | None = None) -> None:
         """
         Build the dialog with the Appearance page showing.
@@ -646,16 +645,37 @@ class AppSettingsDialog(QDialog):
         self.categories.setObjectName("categories")  # styled in style.py
         self.categories.setFixedWidth(170)
         self.pages = _LazyPages()
-        for name, factory in (
-            ("Appearance", self._appearance_page),
-            ("Sound", self._sound_page),
-            ("Updates", self._updates_page),
-        ):
+        self._appearance_expanded = True
+        appearance = QListWidgetItem()
+        appearance.setData(Qt.ItemDataRole.AccessibleTextRole, "Appearance")
+        appearance.setData(Qt.ItemDataRole.UserRole, ("group", 0))
+        appearance.setSizeHint(QSize(0, 36))
+        self.categories.addItem(appearance)
+        parent_row = QWidget()
+        parent_layout = QHBoxLayout(parent_row)
+        parent_layout.setContentsMargins(10, 0, 8, 0)
+        parent_label = QLabel("Appearance")
+        parent_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        parent_layout.addWidget(parent_label, 1)
+        self.appearance_toggle = QToolButton()
+        self.appearance_toggle.setStyleSheet("QToolButton { border: none; background: transparent; }")
+        self.appearance_toggle.clicked.connect(lambda: self._toggle_category(appearance))
+        parent_layout.addWidget(self.appearance_toggle)
+        self.categories.setItemWidget(appearance, parent_row)
+        self._update_appearance_parent()
+        for index, name in enumerate(("Theme", "Notation style", "Keyboard style", "Transitions")):
+            item = QListWidgetItem(f"\u2003{name}")
+            item.setData(Qt.ItemDataRole.UserRole, ("appearance", index))
+            item.setSizeHint(QSize(0, 32))
+            self.categories.addItem(item)
+        self.pages.add_page(self._appearance_page)
+        for name, factory, index in (("Sound", self._sound_page, 1), ("Updates", self._updates_page, 2)):
             item = QListWidgetItem(name)
+            item.setData(Qt.ItemDataRole.UserRole, ("page", index))
             item.setSizeHint(QSize(0, 36))
             self.categories.addItem(item)
             self.pages.add_page(factory)
-        self.categories.currentRowChanged.connect(self.pages.setCurrentIndex)
+        self.categories.currentRowChanged.connect(self._select_category)
         self.categories.setCurrentRow(0)
         body = QHBoxLayout()
         body.setSpacing(14)
@@ -664,8 +684,31 @@ class AppSettingsDialog(QDialog):
         lay.addLayout(body, 1)
 
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        restore = buttons.addButton("Restore defaults…", QDialogButtonBox.ButtonRole.ResetRole)
+        restore.clicked.connect(self._restore_defaults)
         buttons.rejected.connect(self.accept)
         lay.addWidget(buttons)
+
+    def _restore_defaults(self) -> None:
+        """
+        Confirm restoring application and exercise preferences, then request the reset.
+
+        Examples
+        --------
+        >>> _restore_defaults()  # doctest: +SKIP
+        """
+        answer = QMessageBox.question(
+            self,
+            "Restore defaults",
+            "Restore all app and exercise settings to their defaults? Custom themes and keyboard colors will be removed. "
+            "Profiles and practice history will be kept.",
+            QMessageBox.StandardButton.RestoreDefaults | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Cancel,
+        )
+        if answer == QMessageBox.StandardButton.RestoreDefaults:
+            self.theme_changed = False
+            self.accept()
+            self.defaults_requested.emit()
 
     @staticmethod
     def _page() -> tuple[QWidget, QVBoxLayout]:
@@ -783,7 +826,7 @@ class AppSettingsDialog(QDialog):
         """
         Build the Appearance page.
 
-        It has four sections, switched with a segmented control: the colour theme, the notation style, the keyboard style and the
+        It has four sections, selected in the left pane: the colour theme, the notation style, the keyboard style and the
         transitions.
 
         Returns
@@ -795,7 +838,7 @@ class AppSettingsDialog(QDialog):
         --------
         >>> dialog = AppSettingsDialog()
         >>> dialog.appearance_pages.count()
-        4
+        5
         """
         page, lay = self._page()
         self.appearance_pages = _LazyPages()
@@ -803,80 +846,160 @@ class AppSettingsDialog(QDialog):
         self.appearance_pages.add_page(lambda: self._scrolling(self._notation_tab()))
         self.appearance_pages.add_page(lambda: self._scrolling(self._keyboard_tab()))
         self.appearance_pages.add_page(lambda: self._scrolling(self._transitions_tab()))
-        self.segments = QFrame()
-        self.segments.setObjectName("segments")
-        row = QHBoxLayout(self.segments)
-        row.setContentsMargins(
-            3,
-            3,
-            3,
-            3,
-        )
-        row.setSpacing(2)
-        group = QButtonGroup(self)
-        group.setExclusive(True)
-        self.segment_buttons = []
-        for i, label in enumerate(("Theme", "Notation style", "Keyboard style", "Transitions")):
-            b = QPushButton(label)
-            b.setCheckable(True)
-            b.setCursor(Qt.CursorShape.PointingHandCursor)
-            b.setChecked(i == 0)
-            group.addButton(b, i)
-            b.clicked.connect(lambda _=False, k=i: self.appearance_pages.setCurrentIndex(k))
-            row.addWidget(b)
-            self.segment_buttons.append(b)
-        self._style_segments()
-        top = QHBoxLayout()
-        top.addWidget(self.segments)
-        top.addStretch(1)
-        lay.addLayout(top)
+        self.appearance_pages.add_page(lambda: self._scrolling(self._appearance_summary()))
+        self.appearance_pages.setCurrentIndex(4)
         lay.addWidget(self.appearance_pages, 1)
         return page
 
-    def _style_segments(self) -> None:
+    def _appearance_summary(self) -> QWidget:
         """
-        Style the segmented control: a rounded track with the chosen segment raised and tinted, from the current palette.
+        Summarize the Appearance pages and provide links to each child.
+
+        Returns
+        -------
+        QWidget
+            The overview with links to the child pages.
 
         Examples
         --------
-        >>> dialog = AppSettingsDialog()
-        >>> dialog._style_segments()
-        >>> "segments" in dialog.segments.styleSheet()
-        True
+        >>> _appearance_summary()  # doctest: +SKIP
         """
-        pal = self.palette()
-        roles = (
-            QPalette.ColorRole.Window,
-            QPalette.ColorRole.Text,
-            QPalette.ColorRole.Base,
-            QPalette.ColorRole.Highlight,
-        )
-        window, text, base, accent = (pal.color(r) for r in roles)
-        track = blend(window, b=text, t=0.07)
-        self.segments.setStyleSheet(
-            f"QFrame#segments {{ background: {track.name()}; border-radius: 12px; }}"
-            "QFrame#segments QPushButton { border: 0; border-radius: 9px; padding: 6px 18px; background: transparent; }"
-            f"QFrame#segments QPushButton:checked {{ background: {base.name()}; color: {accent.name()}; "
-            f"border: 1px solid {pal.color(QPalette.ColorRole.Mid).name()}; }}",
-        )
+        page, lay = self._page()
+        self._heading(lay, title="Appearance", about="Customize how Alto looks and moves.")
+        for heading, children in (
+            (
+                "Colors & symbols",
+                (
+                    (1, "Theme", "Choose the app colors."),
+                    (2, "Notation style", "Choose the music font."),
+                ),
+            ),
+            (
+                "Instruments & motion",
+                (
+                    (3, "Keyboard style", "Style the piano keys."),
+                    (4, "Transitions", "Set how pages move."),
+                ),
+            ),
+        ):
+            section = QLabel(heading.upper())
+            section.setStyleSheet("color: palette(placeholder-text); font-size: 9pt; padding-top: 14px;")
+            lay.addWidget(section)
+            for row, title, description in children:
+                button = QPushButton()
+                button.setAccessibleName(title)
+                button.setAccessibleDescription(description)
+                button.setCursor(Qt.CursorShape.PointingHandCursor)
+                button.setStyleSheet(
+                    "QPushButton { text-align: left; border: none; border-bottom: 1px solid palette(mid); "
+                    "border-radius: 0; background: transparent; padding: 0; }"
+                    "QPushButton:hover { background: palette(midlight); }"
+                    "QPushButton:focus { border: 1px solid palette(highlight); }",
+                )
+                contents = QHBoxLayout(button)
+                contents.setContentsMargins(8, 14, 12, 14)
+                text = QWidget()
+                labels = QVBoxLayout(text)
+                labels.setContentsMargins(0, 0, 0, 0)
+                labels.setSpacing(4)
+                title_label = QLabel(title)
+                title_label.setStyleSheet("font-weight: bold;")
+                labels.addWidget(title_label)
+                labels.addWidget(self._about(description))
+                contents.addWidget(text, 1)
+                contents.addWidget(QLabel("›"))
+                button.setMinimumHeight(contents.minimumSize().height())
+                for widget in button.findChildren(QWidget):
+                    widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+                button.clicked.connect(lambda _checked=False, child=row: self._open_appearance_child(child))
+                lay.addWidget(button)
+        lay.addStretch()
+        return page
 
-    def changeEvent(self, event: QEvent) -> None:
+    def _open_appearance_child(self, row: int) -> None:
         """
-        Restyle the segmented control when the palette changes, so it follows the theme.
+        Expand Appearance and select one of its child pages.
 
         Parameters
         ----------
-        event : QEvent
-            The change.
+        row : int
+            The row of the settings navigation list.
+
 
         Examples
         --------
-        >>> dialog = AppSettingsDialog()
-        >>> dialog.changeEvent(QEvent(QEvent.Type.PaletteChange))
+        >>> _open_appearance_child()  # doctest: +SKIP
         """
-        if event.type() == QEvent.Type.PaletteChange and hasattr(self, "segments"):
-            self._style_segments()
-        super().changeEvent(event)
+        if not self._appearance_expanded:
+            self._toggle_category(self.categories.item(0))
+        self.categories.setCurrentRow(row)
+
+    def _select_category(self, row: int) -> None:
+        """
+        Show the selected settings page and, for Appearance, its selected section.
+
+        Parameters
+        ----------
+        row : int
+            The row of the settings navigation list.
+
+
+        Examples
+        --------
+        >>> _select_category()  # doctest: +SKIP
+        """
+        item = self.categories.item(row)
+        selection = item.data(Qt.ItemDataRole.UserRole) if item is not None else None
+        if not isinstance(selection, tuple):
+            return
+        kind, index = selection
+        if kind == "appearance":
+            self.pages.setCurrentIndex(0)
+            self.appearance_pages.setCurrentIndex(index)
+        elif kind == "group":
+            self.pages.setCurrentIndex(0)
+            self.appearance_pages.setCurrentIndex(4)
+        elif kind == "page":
+            self.pages.setCurrentIndex(index)
+
+    def _toggle_category(self, item: QListWidgetItem) -> None:
+        """
+        Expand or collapse a settings category that contains subitems.
+
+        Parameters
+        ----------
+        item : QListWidgetItem
+            The selected category item.
+
+
+        Examples
+        --------
+        >>> _toggle_category()  # doctest: +SKIP
+        """
+        if item.data(Qt.ItemDataRole.UserRole) != ("group", 0):
+            return
+        self._appearance_expanded = not self._appearance_expanded
+        if not self._appearance_expanded and 1 <= self.categories.currentRow() <= 4:
+            self.categories.setCurrentItem(item)
+        for row in range(1, 5):
+            child = self.categories.item(row)
+            if child is not None:
+                child.setHidden(not self._appearance_expanded)
+        self._update_appearance_parent()
+
+    def _update_appearance_parent(self) -> None:
+        """
+        Show the category summary and its current expanded state.
+
+        Examples
+        --------
+        >>> _update_appearance_parent()  # doctest: +SKIP
+        """
+        item = self.categories.item(0)
+        if item is None:
+            return
+        self.appearance_toggle.setText("⌄" if self._appearance_expanded else ">")
+        self.appearance_toggle.setAccessibleName("Collapse Appearance" if self._appearance_expanded else "Expand Appearance")
 
     def _theme_tab(self) -> QWidget:
         """
@@ -1216,7 +1339,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> sorted(dialog.baritone_buttons)
         ['c', 'f']
         """
@@ -1266,7 +1389,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[3].click()
+        >>> dialog.categories.setCurrentRow(4)
         >>> dialog.transition_list.count() == len(TRANSITIONS)
         True
         >>> dialog.transition_preview.transition.key == saved_transition()
@@ -1347,7 +1470,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog._choose_notation("leland")
         >>> notation.current().key
         'leland'
@@ -1363,7 +1486,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[1].click()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog._draw_baritone_icons()
         >>> dialog.baritone_buttons["f"].icon().isNull()
         False
@@ -1385,7 +1508,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[2].click()
+        >>> dialog.categories.setCurrentRow(3)
         >>> keyboard_styles.CUSTOM in dialog.keyboard_cards
         True
         """
@@ -1419,7 +1542,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.segment_buttons[2].click()
+        >>> dialog.categories.setCurrentRow(3)
         >>> dialog._custom_edited()
         >>> dialog.keyboard_cards[keyboard_styles.CUSTOM].isChecked()
         True
@@ -1440,7 +1563,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(1)
+        >>> dialog.categories.setCurrentRow(5)
         >>> dialog.instruments.list.count() > 0
         True
         """
@@ -1467,7 +1590,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(2)
+        >>> dialog.categories.setCurrentRow(6)
         >>> dialog.main_channel.isChecked()
         False
         """
@@ -1505,7 +1628,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
-        >>> dialog.categories.setCurrentRow(2)
+        >>> dialog.categories.setCurrentRow(6)
         >>> dialog.main_channel.setChecked(True)
         >>> saved_channel()
         'main'

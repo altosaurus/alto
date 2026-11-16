@@ -200,7 +200,7 @@ def test_the_transition_is_cascade_until_another_is_chosen_in_the_settings(app: 
     assert len({item.key for item in TRANSITIONS}) == len(TRANSITIONS) > 11  # every one has its own key
     assert [item.key for item in TRANSITIONS][:2] == ["none", "cascade"]  # the default comes straight after "no transition"
     dialog = AppSettingsDialog()
-    dialog.segment_buttons[3].click()
+    dialog.categories.setCurrentRow(4)
     assert set(dialog.transition_items) == {item.key for item in TRANSITIONS}
     assert dialog.transition_list.currentItem() is dialog.transition_items["cascade"]
     dialog.transition_list.setCurrentItem(dialog.transition_items["flip"])
@@ -288,7 +288,7 @@ def test_the_lessons_menu_entry_goes_to_the_lessons(app: QApplication, clean_les
     window = MainWindow()
     window.show()
     window.open_exercise(CircleOfFifths)
-    window.lessons_action.trigger()
+    window.show_lessons()
     assert window.stack.currentWidget() is window.home and window.home.mode == "lessons"
 
 
@@ -557,10 +557,10 @@ def test_the_lesson_list_can_be_hidden_and_shown_with_its_button(app: QApplicati
     page = window.stack.currentWidget()
     assert isinstance(page, LessonsPage)
     QTest.qWait(600)
-    assert window.sidebar_width() > 0 and page.sidebar_button.toolTip() == "Hide lesson list"
-    page.sidebar_button.click()
+    assert window.sidebar_width() > 0
+    window.pane_button.click()
     QTest.qWait(600)
-    assert window.sidebar_width() == 0 and page.sidebar_button.toolTip() == "Show lesson list"
+    assert window.sidebar_width() == 0
     window.toggle_sidebar()  # leave it as it was found
     QTest.qWait(600)
 
@@ -640,7 +640,7 @@ def test_the_transition_settings_have_a_list_on_the_left_and_a_preview_that_play
         dialog = AppSettingsDialog()
         dialog.resize(1000, 640)
         dialog.show()
-        dialog.segment_buttons[3].click()
+        dialog.categories.setCurrentRow(4)
         QTest.qWait(50)
         listing, preview = dialog.transition_list, dialog.transition_preview
         assert listing.mapTo(dialog, listing.rect().topLeft()).x() < preview.mapTo(dialog, preview.rect().topLeft()).x()

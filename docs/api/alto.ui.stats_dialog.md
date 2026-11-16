@@ -2,7 +2,7 @@
 title: alto.ui.stats_dialog
 parent: api
 package: alto.ui
-order: 50
+order: 53
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}
@@ -194,7 +194,7 @@ The statistics, as a page of the main window.
 
 **Attributes**
 
-- `back` (*Signal*): Emitted by the Back button and by Escape.
+- `back` (*Signal*): Emitted by Escape; the main window provides the shared Back button.
 - `learner` (*Learner*): Whose answers are shown; only the active profile's own.
 - `exercise` (*QComboBox*): The exercise filter.
 - `timeframe` (*QComboBox*): The timeframe filter.

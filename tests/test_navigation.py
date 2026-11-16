@@ -72,7 +72,30 @@ def test_tiles_are_the_default_and_navigation_is_on_the_left(window: MainWindow)
     assert window.pane_button.toolTip() == "Show navigation pane"
     assert window.home.resume_button.isHidden()
     window.view_button.click()
+    assert window.stack.currentWidget() is window.empty_page
+    window.view_button.click()
     assert window.stack.currentWidget() is window.home and window.sidebar_width() == 0
+
+
+def test_grid_button_returns_to_the_workspace_after_visiting_tiles(window: MainWindow) -> None:
+    """
+    Return to the same exercise and pane state when the grid button is clicked again.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window under test.
+    """
+    window.open_exercise(NoteNames)
+    activity = window.stack.currentWidget()
+    assert isinstance(activity, ExerciseView)
+    question = activity.question
+    pane_width = window.sidebar_width()
+    window.view_button.click()
+    assert window.stack.currentWidget() is window.home
+    window.view_button.click()
+    assert window.stack.currentWidget() is activity
+    assert activity.question is question and window.sidebar_width() == pane_width
     control_x = window.home.mode_control.mapTo(window, QPoint()).x()
     view_x = window.view_button.mapTo(window, QPoint()).x()
     stats_x = window.stats_button.mapTo(window, QPoint()).x()
@@ -373,11 +396,11 @@ def test_tiles_have_a_back_button_for_the_current_exercise(window: MainWindow) -
     selected = dict(view._pending)
     window.view_button.click()
     back = window.home.resume_button
-    assert back.isVisible() and back.text() == "← Back to exercises"
+    assert back.isVisible() and back.text() == "←  Back"
     assert abs(back.mapTo(window, QPoint()).y() - window.search_field.mapTo(window, QPoint()).y()) < 10
     assert back.mapTo(window, QPoint()).x() > window.search_row.mapTo(window, window.search_row.rect().topRight()).x()
     window.home.mode_control.buttons[1].click()
-    assert back.isVisible() and back.text() == "← Back to exercises"
+    assert back.isVisible() and back.text() == "←  Back"
     back.click()
     assert window.stack.currentWidget() is view and view.question is question
     # noinspection PyProtectedMember
@@ -399,9 +422,9 @@ def test_tiles_back_button_returns_to_the_lesson_step(window: MainWindow) -> Non
     assert isinstance(page, LessonsPage)
     page.view.go(to=2)
     window.view_button.click()
-    assert window.home.resume_button.text() == "← Back to lessons"
+    assert window.home.resume_button.text() == "←  Back"
     window.home.mode_control.buttons[0].click()
-    assert window.home.resume_button.text() == "← Back to lessons"
+    assert window.home.resume_button.text() == "←  Back"
     window.home.resume_button.click()
     assert window.stack.currentWidget() is page and page.view.current == 2
 
@@ -501,10 +524,7 @@ def test_search_does_not_answer_or_replace_the_active_question_and_survives_rebu
     assert window.stack.currentWidget() is view and view.question is question
     window.rebuild()
     assert window.search_field.text() == "clef"
-    assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
-        "Note Identification",
-        "Clef Basics",
-    ]
+    assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == ["Clef Basics"]
 
 
 def test_search_row_is_no_wider_than_the_remembered_sidebar(window: MainWindow) -> None:

@@ -149,7 +149,7 @@ class NoteNames(Exercise):
 
     name = "Note Identification"
     category = "Notation"
-    description = "Identify notes on the grand staff or on any of seven clefs, from treble to baritone."
+    description = "Identify notes on the staff."
     par_seconds = 3.0
 
     def settings_signature(self) -> str:
@@ -187,7 +187,7 @@ class NoteNames(Exercise):
             "keys shown on it.<br><br>"
             "Use the sliders button to choose the clefs, the range of notes, key signatures (the name then has to "
             "match the signature), note values, letter, solfège or scale-degree names, and whether sharps, flats "
-            "and naturals appear."
+            "and naturals appear, and whether to ask for the octave too."
         )
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
             text += (
@@ -248,6 +248,17 @@ class NoteNames(Exercise):
         note = Note.from_diatonic(letter_pos, accidental=acc)
 
         name = spell(note, naming=cfg.naming, key=key)
+        octaves = None
+        joiner = ""
+        answer = name
+        if cfg.require_octave:
+            possible_octaves = set()
+            for active_clef in cfg.active_clefs():
+                low, high = cfg.range_for(active_clef)
+                possible_octaves.update(Note.from_diatonic(step).octave for step in range(low, high + 1))
+            octaves = [str(octave) for octave in sorted(possible_octaves)]
+            joiner = " / " if cfg.naming in settings.DEGREE_NAMINGS else ""
+            answer += f"{joiner}{note.octave}"
         # One button for every name that can be the answer under the current settings.
         if with_accidentals:
             pool = {(l, a) for l in range(7) for a in (-1, 0, 1)}
@@ -276,13 +287,15 @@ class NoteNames(Exercise):
         return Question(
             "",
             choices=choices,
-            answer=name,
+            answer=answer,
             staff=[[note]],
             clef=clef,
             explanation=" ".join(expl),
             key=key,
             value=value,
             grid=grid,
+            octaves=octaves,
+            joiner=joiner,
         )
 
 
@@ -305,7 +318,7 @@ class IntervalNames(Exercise):
 
     name = "Interval Identification"
     category = "Intervals"
-    description = "Name the interval between two notes (up to an octave)."
+    description = "Name the interval between two notes."
     par_seconds = 6.0
 
     def instructions(self) -> str:
@@ -711,46 +724,149 @@ class KeySignatureConstruction(Exercise):
         )
 
 
-@register
-class ScaleDegrees(Exercise):
+def _scale_notes(
+    rng: random.Random,
+    *,
+    clef: str,
+    named: Note,
+    mode: str,
+    exact_octave: bool = False,
+) -> list[Note]:
     """
-    Spell a note of a scale or mode from its tonic.
+    Place an ascending scale in a readable octave for its clef.
+
+    Parameters
+    ----------
+    rng : random.Random
+        The random number generator.
+    clef : str
+        The staff's clef. Keyword-only.
+    named : Note
+        The tonic spelling; its octave is replaced. Keyword-only.
+    mode : str
+        The scale type in `SCALES`. Keyword-only.
+    exact_octave : bool, default False
+        Allow any starting octave within the construction staff's input range. Keyword-only.
+
+    Returns
+    -------
+    list of Note
+        Eight notes, including the tonic an octave above the first note.
 
     Examples
     --------
-    >>> q = ScaleDegrees().generate(random.Random(7))
-    >>> q.prompt.startswith("In ") and q.answer in q.choices
-    True
+    >>> notes = _scale_notes(random.Random(1), clef="bass", named=Note.parse("D4"), mode="Dorian")
+    >>> len(notes), notes[0].name, notes[-1].midi - notes[0].midi
+    (8, 'D', 12)
+    """
+    bottom = settings.BOTTOM_LINES[clef].diatonic
+    starts = [d for d in range(bottom - 3, bottom + 4) if d % 7 == named.letter]
+    if exact_octave:
+        low, high = settings.RANGE_LIMITS[clef]
+        starts = [d for d in range(low, high - 6) if d % 7 == named.letter] or starts
+    tonic = Note.from_diatonic(rng.choice(starts), accidental=named.accidental)
+    return [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]
+
+
+def _scale_material(
+    rng: random.Random,
+    *,
+    cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
+) -> tuple[str, int, str, int, list[Note]]:
+    """
+    Sample the shared musical material for scale identification and construction.
+
+    Parameters
+    ----------
+    rng : random.Random
+        The random number generator.
+    cfg : ScaleIdentificationSettings or ScaleConstructionSettings
+        The independent clef, mode and key choices. Keyword-only.
+
+    Returns
+    -------
+    tuple of (str, int, str, int, list of Note)
+        Mode, scale signature, clef, staff signature and eight ascending notes.
+
+    Examples
+    --------
+    >>> material = _scale_material(random.Random(1), cfg=settings.ScaleIdentificationSettings())
+    >>> len(material[-1])
+    8
+    """
+    mode = rng.choice(cfg.active_modes())
+    count = rng.choice(cfg.active_keys())
+    clef = rng.choice(cfg.active_clefs())
+    staff_key = rng.choice(cfg.active_staff_keys())
+    notes = _scale_notes(
+        rng,
+        clef=clef,
+        named=mode_tonic(count, mode=mode),
+        mode=mode,
+        exact_octave=isinstance(cfg, settings.ScaleConstructionSettings) and cfg.octave,
+    )
+    return mode, count, clef, staff_key, notes
+
+
+@register
+class ScaleIdentification(Exercise):
+    """
+    Identify the tonic and type of an ascending scale drawn on a staff.
+
+    Examples
+    --------
+    >>> q = ScaleIdentification().generate(random.Random(7))
+    >>> len(q.staff), q.answer in q.choices
+    (8, True)
     """
 
-    name = "Scale Spelling"
+    name = "Scale Identification"
     category = "Scales & keys"
-    description = "Spell a note of a scale or mode from its tonic."
+    description = "Identify a scale or mode written on the staff."
     par_seconds = 8.0
 
-    def instructions(self) -> str:
+    def settings_signature(self) -> str:
         """
-        Return the help text for the exercise.
+        Identify the clefs, scale types and staff and scale signatures in force.
 
         Returns
         -------
         str
-            Simple HTML.
+            The serialized question settings.
 
         Examples
         --------
-        >>> "degree" in ScaleDegrees().instructions()
+        >>> ScaleIdentification().settings_signature().startswith("[")
+        True
+        """
+        return signature(settings.scale_identification)
+
+    def instructions(self) -> str:
+        """
+        Explain how to identify the scale, including a staff with a different signature.
+
+        Returns
+        -------
+        str
+            Simple HTML help text.
+
+        Examples
+        --------
+        >>> "Scale Identification" in ScaleIdentification().instructions()
         True
         """
         return (
-            "<b>Scale Spelling</b><br>Work out the note at the given degree of the scale or mode and press its name. "
-            "Each scale uses every letter name once, so use a sharp or flat where the pattern needs one. You can press an "
-            "answer's number instead of the button: 1 is the first."
+            "<b>Scale Identification</b><br>Read the ascending scale on the staff and choose its tonic and scale type. "
+            "The first and last notes are the tonic, one octave apart. Read the clef, key signature and each note's "
+            "accidental, then use the whole and half steps to identify the scale or mode. "
+            "The staff's key signature need not be the scale's own: written accidentals show where they differ. "
+            "Use Settings to choose Clefs, Scales, Staff Key and Scale Key. "
+            "You can press an answer's number instead of clicking its button: 1 is the first."
         )
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Make a question asking for one degree of a scale.
+        Draw an ascending octave and offer scale names without revealing the answer on the staff.
 
         Parameters
         ----------
@@ -760,35 +876,28 @@ class ScaleDegrees(Exercise):
         Returns
         -------
         Question
-            For example 'In E♭ Dorian, what is scale degree 6?', answered 'C'.
+            Eight staff notes and a choice of tonic and scale type.
 
         Examples
         --------
-        >>> q = ScaleDegrees().generate(random.Random(8))
-        >>> "scale degree" in q.prompt
+        >>> q = ScaleIdentification().generate(random.Random(8))
+        >>> q.staff[0][0].name == q.staff[-1][0].name and not q.caption
         True
         """
-        scale = rng.choice(list(SCALES))
-        tonic = rng.choice([Note(4, letter=l, accidental=a) for l in range(7) for a in (-1, 0, 1)])
-        degree = rng.randint(2, 7)
-        notes = build(tonic, intervals=SCALES[scale])
-        if any(abs(n.accidental) > 1 for n in notes):
-            return self.generate(rng)
-        target = notes[degree - 1]
-        pool = [Note(4, letter=l, accidental=a).name for l in range(7) for a in (-1, 0, 1)]
-        near = [Note.from_diatonic(target.diatonic, accidental=a).name for a in (-1, 0, 1)]
-        choices = pick_distractors(
-            target.name,
-            pool=near + pool,
-            n=5,
-            rng=rng,
-        )
-        spelled = " ".join(n.name for n in notes)
+        mode, _, clef, staff_key, notes = _scale_material(rng, cfg=settings.scale_identification)
+        tonic = notes[0]
+        answer = f"{tonic.name} {_blank_scale(mode)[2:]}"
+        pool = [f"{tonic.name} {_blank_scale(m)[2:]}" for m in settings.scale_identification.active_modes()]
+        pool += [f"{mode_tonic(k, mode=mode).name} {_blank_scale(mode)[2:]}" for k in range(-7, 8)]
+        choices = pick_distractors(answer, pool=pool, n=5, rng=rng)
         return Question(
-            f"In {tonic.name} {scale}, what is scale degree {degree}?",
+            "Identify the scale on the staff.",
             choices=choices,
-            answer=target.name,
-            explanation=f"{tonic.name} {scale}: {spelled}",
+            answer=answer,
+            staff=[[note] for note in notes],
+            clef=clef,
+            key=staff_key,
+            explanation=f"{answer}: " + " ".join(note.name for note in notes),
         )
 
 
@@ -913,18 +1022,8 @@ class ScaleConstruction(Exercise):
         True
         """
         cfg = settings.scale_construction
-        mode = rng.choice(cfg.active_modes())
-        count = rng.choice(cfg.active_keys())
-        clef = rng.choice(cfg.active_clefs())
-        staff_key = rng.choice(cfg.active_staff_keys())  # the signature on the staff, whatever the scale's own is
-        named = mode_tonic(count, mode=mode)
-        bottom = settings.BOTTOM_LINES[clef].diatonic
-        starts = [d for d in range(bottom - 3, bottom + 4) if d % 7 == named.letter]  # the scale sits on the staff
-        if cfg.octave:  # the octave is part of the question, so any octave where the whole scale can be placed will do
-            low, high = settings.RANGE_LIMITS[clef]  # the furthest the staff can be clicked, ledger lines and all
-            starts = [d for d in range(low, high - 6) if d % 7 == named.letter] or starts  # the top note is 7 steps up
-        tonic = Note.from_diatonic(rng.choice(starts), accidental=named.accidental)
-        notes = [*build(tonic, intervals=SCALES[mode]), tonic.transpose(Interval(8, quality="P"))]
+        mode, count, clef, staff_key, notes = _scale_material(rng, cfg=cfg)
+        tonic = notes[0]
         kind = _blank_scale(mode)[2:]  # "Major", "minor", "Dorian"
         name = f"{tonic.name}{tonic.octave} {kind}" if cfg.octave else f"{tonic.name} {kind}"  # "G2 Major", or "G Major"
         steps = ["W" if b.midi - a.midi == 2 else "H" for a, b in zip(notes, notes[1:], strict=False)] if cfg.steps else None
@@ -2015,7 +2114,7 @@ class ClefBasics(Exercise):
 
     name = "Clef Basics"
     category = "Notation"
-    description = "Put the G, C or F clef where it makes the clef asked for, or name the clef on a staff."
+    description = "Identify clef symbols and place them on the staff."
     par_seconds = 5.0
     has_sound = False
 

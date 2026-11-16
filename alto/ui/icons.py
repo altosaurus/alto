@@ -26,6 +26,8 @@ from PySide6.QtGui import (
 )
 from PySide6.QtSvg import QSvgRenderer
 
+GLOSSARY = '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 5 4l3 8M3.2 9h3.6M12 5h9M12 10h9M3 16h18M3 21h13"/></g>'
+
 _BODY = '<path d="M3 9h4l5-4v14l-5-4H3z" fill="COLOR"/>'
 _STROKE = 'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"'
 _SPEAKER_ON = _BODY + f'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" {_STROKE}/>'

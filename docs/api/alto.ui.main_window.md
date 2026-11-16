@@ -2,7 +2,7 @@
 title: alto.ui.main_window
 parent: api
 package: alto.ui
-order: 39
+order: 41
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
@@ -95,6 +95,24 @@ Build the window and load every saved setting.
 True
 >>> MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
 False
+```
+
+### MainWindow.closeEvent
+
+```python
+def closeEvent(event: QCloseEvent) -> None
+```
+
+Remember the window's size and position when the app closes.
+
+**Parameters**
+
+- `event` (*QCloseEvent*): The window close event.
+
+**Examples**
+
+```pycon
+>>> closeEvent()  # doctest: +SKIP
 ```
 
 ### MainWindow.eventFilter
@@ -227,6 +245,20 @@ already open or closed as it was, not sliding.
 >>> window.rebuild()
 >>> window.centralWidget() is old_root
 False
+```
+
+### MainWindow.open_glossary
+
+```python
+def open_glossary() -> None
+```
+
+Toggle the glossary from its toolbar button.
+
+**Examples**
+
+```pycon
+>>> open_glossary()  # doctest: +SKIP
 ```
 
 ### MainWindow.open_stats

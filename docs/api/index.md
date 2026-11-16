@@ -53,6 +53,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.base](alto.lessons.base/) | What a lesson is made of: steps, and the small tasks inside them. |
 | [alto.lessons.circle_of_fifths](alto.lessons.circle_of_fifths/) | The lesson on the circle of fifths, taught from nothing. |
 | [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
+| [alto.lessons.scale_identification](alto.lessons.scale_identification/) | Reading scales and recognizing their interval patterns. |
 
 ## alto.theory
 
@@ -80,6 +81,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.degree_text](alto.ui.degree_text/) | Draw scale-degree carets above their digits without relying on font-specific combining accents. |
 | [alto.ui.engraving](alto.ui.engraving/) | Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others). |
 | [alto.ui.exercise_view](alto.ui.exercise_view/) | The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right. |
+| [alto.ui.glossary](alto.ui.glossary/) | A searchable glossary of the notation terms used in Alto. |
 | [alto.ui.home](alto.ui.home/) | The start screen: a card for every exercise, or for every lesson, in rows. |
 | [alto.ui.icons](alto.ui.icons/) | Small monochrome icons drawn from SVG, tinted with the current theme's text colour. |
 | [alto.ui.instrument_picker](alto.ui.instrument_picker/) | Choosing the instrument that plays notes, with a summary of what each one is made from. |
@@ -96,6 +98,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.profile_dialog](alto.ui.profile_dialog/) | Choosing who is practising. There is no password: a profile is just a name that keeps its own history. |
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |
+| [alto.ui.scale_explorer](alto.ui.scale_explorer/) | Interactive notation and step patterns for learning scales. |
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
 | [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |

@@ -2,7 +2,7 @@
 title: alto.ui.home
 parent: api
 package: alto.ui
-order: 31
+order: 33
 permalink: /api/alto.ui.home/
 ---
 {% raw %}
@@ -106,7 +106,7 @@ Build the card for one exercise.
 ```pycon
 >>> from alto.exercises.library import IntervalNames
 >>> ExerciseCard(IntervalNames).toolTip()
-'Name the interval between two notes (up to an octave).'
+'Name the interval between two notes.'
 ```
 
 ## lesson_card

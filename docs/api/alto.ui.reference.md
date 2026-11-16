@@ -2,7 +2,7 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 46
+order: 48
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
@@ -368,10 +368,24 @@ Build the panel: the lesson button, a line of explanation and a row for each cle
 True
 ```
 
+## ScaleReferencePanel
+
+```python
+ScaleReferencePanel(parent: QWidget | None = None)
+```
+
+Bases: `QWidget`
+
+Scale identification hints and a link to the guided lesson.
+
+**Constructor**
+
+Build a scrollable guide to tonic reading and scale patterns.
+
 ## reference_panel_for
 
 ```python
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | None
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None
 ```
 
 Return the reference pane for an exercise.

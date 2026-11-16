@@ -77,6 +77,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
     ScaleConstruction,
+    ScaleIdentification,
 )
 from alto.settings import (
     CLEFS,
@@ -157,6 +158,7 @@ def load_note_names() -> None:
     naming = text_value(s, key="noteNames/naming", default=cfg.naming)
     cfg.naming = naming if naming in NAMINGS else "letters"
     cfg.accidentals = text_value(s, key="noteNames/accidentals", default="false").lower() == "true"
+    cfg.require_octave = text_value(s, key="noteNames/requireOctave", default="false").lower() == "true"
     cfg.ranges = {}
     for item in text_value(s, key="noteNames/ranges", default="").split(","):  # e.g. "treble:31-33,bass:14-28"
         try:
@@ -189,6 +191,7 @@ def save_note_names() -> None:
     s.setValue("noteNames/values", ",".join(cfg.active_values()))
     s.setValue("noteNames/naming", cfg.naming)
     s.setValue("noteNames/accidentals", "true" if cfg.accidentals else "false")
+    s.setValue("noteNames/requireOctave", "true" if cfg.require_octave else "false")
     s.setValue("noteNames/ranges", ",".join(f"{k}:{lo}-{hi}" for k, (lo, hi) in cfg.ranges.items()))
 
 
@@ -1480,8 +1483,8 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
     """
     The settings of the note identification exercise: a menu leading to a page for each group of settings.
 
-    Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names and an Accidentals switch) and a page for each.
-    Edits are live: each changes the settings, saves them and emits `changed`.
+    Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names, Accidentals and Octave) and a page for
+    each. Edits are live: each changes the settings, saves them and emits `changed`.
 
     Attributes
     ----------
@@ -1497,6 +1500,8 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         The note value checkboxes.
     naming_radios : dict of str to QRadioButton
         The letters and solfège choices, plus caret and function notation in the Scale degrees group.
+    octave_row : _ToggleRow
+        Whether the answer must include the written octave.
     range_editors : dict of str to RangeEditor
         The range editor of each clef in use, built when the Range page opens.
 
@@ -1580,6 +1585,11 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         self.accidentals_row.setOn(cfg.accidentals)
         self.accidentals_row.switched.connect(self._accidentals_toggled)
         mlay.addWidget(self.accidentals_row)
+        self.octave_row = _ToggleRow("Octave")
+        self.octave_row.setToolTip("Also ask which octave the note is in")
+        self.octave_row.setOn(cfg.require_octave)
+        self.octave_row.switched.connect(self._octave_toggled)
+        mlay.addWidget(self.octave_row)
         mlay.addStretch()
 
         # layer 2: clefs
@@ -1835,6 +1845,25 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         True
         """
         self.cfg.accidentals = on
+        self._save_and_emit()
+
+    def _octave_toggled(self, on: bool) -> None:
+        """
+        Take the Octave switch into the settings, save it and say so.
+
+        Parameters
+        ----------
+        on : bool
+            Whether the answer must include the note's octave.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> panel._octave_toggled(True)
+        >>> panel.cfg.require_octave
+        True
+        """
+        self.cfg.require_octave = on
         self._save_and_emit()
 
     def _save_and_emit(self) -> None:
@@ -3287,6 +3316,7 @@ def _load_key_settings(
     if isinstance(cfg, settings.ScaleConstructionSettings):
         cfg.steps = text_value(saved_settings, key=f"{prefix}/steps", default="false").lower() == "true"
         cfg.octave = text_value(saved_settings, key=f"{prefix}/octave", default="false").lower() == "true"
+    if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
         staff_keys = text_value(saved_settings, key=f"{prefix}/staffKeys", default="")
         if staff_keys:
             cfg.staff_keys = {
@@ -3330,6 +3360,19 @@ def load_key_construction() -> None:
     _load_key_settings(settings.key_construction, prefix="keyConstruction")
 
 
+def load_scale_identification() -> None:
+    """
+    Load the saved scale identification options independently of scale construction.
+
+    Examples
+    --------
+    >>> load_scale_identification()
+    >>> settings.scale_identification.active_staff_keys()
+    [0]
+    """
+    _load_key_settings(settings.scale_identification, prefix="scaleIdentification")
+
+
 def load_scale_construction() -> None:
     """
     Load the saved scale construction settings into the shared settings object.
@@ -3355,12 +3398,11 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
     """
     The settings of a key signature exercise: a menu with a page for each group of settings.
 
-    The same panel serves key signature identification, key signature construction and scale construction, each saving
+    The same panel serves key signature identification, key signature construction and both scale exercises, each saving
     under its own name.
 
-    The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
-    the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
-    changes the settings, saves them and emits `changed`.
+    The menu has Clefs, Scales and Key signatures. Both scale exercises have independent staff and scale key choices;
+    construction also has Octave and Steps switches. Edits are live: each changes the settings, saves them and emits `changed`.
 
     Attributes
     ----------
@@ -3433,11 +3475,22 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        scales = isinstance(cfg, settings.ScaleConstructionSettings)  # these have a signature for the staff and one for the scale
+        scales = isinstance(
+            cfg,
+            (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
+        )  # these have a signature for the staff and one for the scale
         self.clefs_row = _Row("Clefs")
         self.modes_row = _Row("Scales")
-        self.keys_row = _Row("Scale keys" if scales else "Key signatures")  # short, so that the name fits beside its picture
-        self.staff_keys_row: _Row | None = _Row("Staff keys") if scales else None
+        self.keys_row = _Row(
+            "Scale Key"
+            if isinstance(cfg, settings.ScaleIdentificationSettings)
+            else "Scale keys"
+            if scales
+            else "Key signatures",
+        )  # short, so that the name fits beside its picture
+        self.staff_keys_row: _Row | None = (
+            _Row("Staff Key" if isinstance(cfg, settings.ScaleIdentificationSettings) else "Staff keys") if scales else None
+        )
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.keys_diagram = KeyDiagram()
@@ -3503,7 +3556,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.key_list.changed.connect(self._keys_edited)
         pages = [menu, clefs_page, modes_page]
         self.staff_key_list: KeyChecklist | None = None
-        if isinstance(cfg, settings.ScaleConstructionSettings):
+        if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             # layer 2: the signature drawn on the staff, which need not be the scale's own
             staff_key_list = KeyChecklist(cfg.staff_keys)
             staff_key_list.changed.connect(self._staff_keys_edited)
@@ -3576,7 +3629,10 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             enabled=True,
             keys=set(cfg.active_keys()),
         )
-        if self.staff_keys_row is not None and isinstance(cfg, settings.ScaleConstructionSettings):
+        if self.staff_keys_row is not None and isinstance(
+            cfg,
+            (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
+        ):
             _show_keys(
                 self.staff_keys_row,
                 diagram=self.staff_keys_diagram,
@@ -3604,6 +3660,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         if isinstance(cfg, settings.ScaleConstructionSettings):
             saved_settings.setValue(f"{self.prefix}/steps", "true" if cfg.steps else "false")
             saved_settings.setValue(f"{self.prefix}/octave", "true" if cfg.octave else "false")
+        if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             saved_settings.setValue(f"{self.prefix}/staffKeys", ",".join(str(k) for k in cfg.active_staff_keys()))
         self.changed.emit()
 
@@ -3654,7 +3711,10 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         True
         >>> store().remove("doctestScales")
         """
-        if isinstance(self.cfg, settings.ScaleConstructionSettings) and self.staff_key_list is not None:
+        if (
+            isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings))
+            and self.staff_key_list is not None
+        ):
             self.cfg.staff_keys = self.staff_key_list.selected()
             self._save_and_emit()
 
@@ -4356,6 +4416,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
         return KeySignatureSettingsPanel(settings.key_signatures)
     if isinstance(exercise, KeySignatureConstruction):
         return KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction")
+    if isinstance(exercise, ScaleIdentification):
+        return KeySignatureSettingsPanel(settings.scale_identification, prefix="scaleIdentification")
     if isinstance(exercise, ScaleConstruction):
         return KeySignatureSettingsPanel(settings.scale_construction, prefix="scaleConstruction")
     if isinstance(exercise, ClefBasics):

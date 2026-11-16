@@ -42,6 +42,7 @@ from alto.exercises.library import (
     CLEF_FACTS,
     CircleOfFifths,
     ClefBasics,
+    ScaleIdentification,
 )
 from alto.theory.fifths import (
     INTRO,
@@ -59,6 +60,7 @@ from alto.ui.circle import (
     FifthsCircle,
 )
 from alto.ui.pictures import ClefPictures
+from alto.ui.scale_explorer import ScaleExplorer
 
 if TYPE_CHECKING:
     from alto.exercises.base import Exercise
@@ -589,7 +591,41 @@ class ClefReferencePanel(QWidget):
         lay.addWidget(scroll, 1)
 
 
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | None:
+class ScaleReferencePanel(QWidget):
+    """Scale identification hints and a link to the guided lesson."""
+
+    lesson_requested = Signal(str)
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        """Build a scrollable guide to tonic reading and scale patterns."""
+        super().__init__(parent)
+        lay = QVBoxLayout(self)
+        self.lesson_button = QPushButton("New to this? Take the full lesson  →")
+        self.lesson_button.clicked.connect(lambda: self.lesson_requested.emit("scale-identification"))
+        lay.addWidget(self.lesson_button)
+        text = QLabel(
+            "<h3>Identifying a scale</h3><p>Read the clef and first note to find the tonic. Apply the staff key signature "
+            "and any written accidentals, then count the gaps between notes.</p>"
+            "<p>W = whole step (2 semitones); H = half step (1 semitone); 3H = 3 semitones. "
+            "The key signature alone does not identify the scale.</p>"
+            "<p>Melodic minor uses its ascending form here. Change the example below to compare scales.</p>",
+        )
+        text.setWordWrap(True)
+        text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        body = QWidget()
+        contents = QVBoxLayout(body)
+        contents.addWidget(text)
+        self.explorer = ScaleExplorer()
+        contents.addWidget(self.explorer)
+        contents.addStretch()
+        scroll.setWidget(body)
+        lay.addWidget(scroll, 1)
+
+
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None:
     """
     Return the reference pane for an exercise.
 
@@ -615,4 +651,6 @@ def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePan
         return ReferencePanel()
     if isinstance(exercise, ClefBasics):
         return ClefReferencePanel()
+    if isinstance(exercise, ScaleIdentification):
+        return ScaleReferencePanel()
     return None

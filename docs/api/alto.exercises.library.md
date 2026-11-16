@@ -359,48 +359,67 @@ True
 True
 ```
 
-## ScaleDegrees
+## ScaleIdentification
 
 ```python
-class ScaleDegrees(Exercise)
+class ScaleIdentification(Exercise)
 ```
 
-Spell a note of a scale or mode from its tonic.
+Identify the tonic and type of an ascending scale drawn on a staff.
 
 **Examples**
 
 ```pycon
->>> q = ScaleDegrees().generate(random.Random(7))
->>> q.prompt.startswith("In ") and q.answer in q.choices
+>>> q = ScaleIdentification().generate(random.Random(7))
+>>> len(q.staff), q.answer in q.choices
+(8, True)
+```
+
+### ScaleIdentification.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the clefs, scale types and staff and scale signatures in force.
+
+**Returns**
+
+- *str*: The serialized question settings.
+
+**Examples**
+
+```pycon
+>>> ScaleIdentification().settings_signature().startswith("[")
 True
 ```
 
-### ScaleDegrees.instructions
+### ScaleIdentification.instructions
 
 ```python
 def instructions() -> str
 ```
 
-Return the help text for the exercise.
+Explain how to identify the scale, including a staff with a different signature.
 
 **Returns**
 
-- *str*: Simple HTML.
+- *str*: Simple HTML help text.
 
 **Examples**
 
 ```pycon
->>> "degree" in ScaleDegrees().instructions()
+>>> "Scale Identification" in ScaleIdentification().instructions()
 True
 ```
 
-### ScaleDegrees.generate
+### ScaleIdentification.generate
 
 ```python
 def generate(rng: random.Random) -> Question
 ```
 
-Make a question asking for one degree of a scale.
+Draw an ascending octave and offer scale names without revealing the answer on the staff.
 
 **Parameters**
 
@@ -408,13 +427,13 @@ Make a question asking for one degree of a scale.
 
 **Returns**
 
-- *Question*: For example 'In E♭ Dorian, what is scale degree 6?', answered 'C'.
+- *Question*: Eight staff notes and a choice of tonic and scale type.
 
 **Examples**
 
 ```pycon
->>> q = ScaleDegrees().generate(random.Random(8))
->>> "scale degree" in q.prompt
+>>> q = ScaleIdentification().generate(random.Random(8))
+>>> q.staff[0][0].name == q.staff[-1][0].name and not q.caption
 True
 ```
 

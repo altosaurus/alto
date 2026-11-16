@@ -59,6 +59,7 @@ def app_style(palette: QPalette) -> str:
         fill=base,
         fill_hover=base,
         fill_pressed=midlight,
+        menu_surface=blend_name(window_c, b=text_c, t=0.07),
         edge=dark,
         box_edge=blend_name(base_c, b=text_c, t=0.45),
         box_edge_off=blend_name(base_c, b=text_c, t=0.2),
@@ -183,8 +184,8 @@ QListWidget#categories::item:hover {{ background: {nav_hover}; }}
 QListWidget#categories::item:selected, QListWidget#categories::item:selected:active,
 QListWidget#categories::item:selected:!active {{ background: {nav_selected}; color: {accent}; }}
 
-QMenu {{
-    background: palette(base);
+QMenu#appMenu {{
+    background: {menu_surface};
     border: 1px solid palette(mid);
     border-radius: {rp}px;
     padding: 6px;

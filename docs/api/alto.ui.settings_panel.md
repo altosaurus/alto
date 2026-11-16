@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 47
+order: 50
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -422,8 +422,8 @@ Bases: `ExerciseSettingsPanel`
 
 The settings of the note identification exercise: a menu leading to a page for each group of settings.
 
-Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names and an Accidentals switch) and a page for each.
-Edits are live: each changes the settings, saves them and emits `changed`.
+Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names, Accidentals and Octave) and a page for
+each. Edits are live: each changes the settings, saves them and emits `changed`.
 
 **Attributes**
 
@@ -433,6 +433,7 @@ Edits are live: each changes the settings, saves them and emits `changed`.
 - `key_boxes` (*dict of int to QCheckBox*): The key signature checkboxes.
 - `value_boxes` (*dict of str to QCheckBox*): The note value checkboxes.
 - `naming_radios` (*dict of str to QRadioButton*): The letters and solfège choices, plus caret and function notation in the Scale degrees group.
+- `octave_row` (*_ToggleRow*): Whether the answer must include the written octave.
 - `range_editors` (*dict of str to RangeEditor*): The range editor of each clef in use, built when the Range page opens.
 
 **Examples**
@@ -945,6 +946,22 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 >>> store().remove("keyConstruction")
 ```
 
+## load_scale_identification
+
+```python
+def load_scale_identification() -> None
+```
+
+Load the saved scale identification options independently of scale construction.
+
+**Examples**
+
+```pycon
+>>> load_scale_identification()
+>>> settings.scale_identification.active_staff_keys()
+[0]
+```
+
 ## load_scale_construction
 
 ```python
@@ -984,12 +1001,11 @@ Bases: `ExerciseSettingsPanel`
 
 The settings of a key signature exercise: a menu with a page for each group of settings.
 
-The same panel serves key signature identification, key signature construction and scale construction, each saving
+The same panel serves key signature identification, key signature construction and both scale exercises, each saving
 under its own name.
 
-The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
-the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
-changes the settings, saves them and emits `changed`.
+The menu has Clefs, Scales and Key signatures. Both scale exercises have independent staff and scale key choices;
+construction also has Octave and Steps switches. Edits are live: each changes the settings, saves them and emits `changed`.
 
 **Attributes**
 

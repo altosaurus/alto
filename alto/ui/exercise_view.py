@@ -60,6 +60,7 @@ from alto.exercises.base import (
     Exercise,
     Question,
 )
+from alto.exercises.library import ScaleIdentification
 from alto.learning import Learner
 from alto.settings import spell
 from alto.theory.pitch import (
@@ -89,6 +90,7 @@ from alto.ui.pictures import symbol_icon
 from alto.ui.reference import (
     ClefReferencePanel,
     ReferencePanel,
+    ScaleReferencePanel,
     reference_panel_for,
 )
 from alto.ui.settings_panel import settings_panel_for
@@ -554,6 +556,7 @@ class ExerciseView(QWidget):
         )
         self.choice_box.setSpacing(10)
         self._pair_token = 0  # counts questions, so a pending 'try again' reset can tell it is out of date
+        self.destroyed.connect(lambda: setattr(self, "_pair_token", -1))  # invalidate queued playback callbacks on deletion
         self._pending: dict[str, tuple[str, QPushButton]] = {}
         self._found: set[str] = set()  # the right answers given so far to a question that needs several
         self._busy = False
@@ -570,7 +573,7 @@ class ExerciseView(QWidget):
         reference = reference_panel_for(exercise)
         self.book_btn: QToolButton | None = None
         self.reference_pane: QFrame | None = None
-        self._reference: ReferencePanel | ClefReferencePanel | None = reference
+        self._reference: ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None = reference
         if reference is not None:
             reference.lesson_requested.connect(self.lesson_requested)
         if (
@@ -581,7 +584,7 @@ class ExerciseView(QWidget):
             book.setIconSize(QSize(24, 24))
             book.setCheckable(True)
             book.setAutoRaise(True)
-            book.setToolTip("Reference (experimental)")
+            book.setToolTip("Reference")
             book.setAccessibleName("Reference")
             book.toggled.connect(self._toggle_reference)  # the pane it opens is built below
             top.addWidget(book)
@@ -652,6 +655,16 @@ class ExerciseView(QWidget):
             self.pane.setMaximumWidth(0)
             pane_lay = QVBoxLayout(self.pane)
             pane_lay.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)  # let the pane shrink to zero while animating
+            settings_header = QHBoxLayout()
+            settings_header.addStretch()
+            self.settings_collapse = QToolButton()
+            self.settings_collapse.setText("−")
+            self.settings_collapse.setAutoRaise(True)
+            self.settings_collapse.setToolTip("Collapse exercise settings")
+            self.settings_collapse.setAccessibleName("Collapse exercise settings")
+            self.settings_collapse.clicked.connect(lambda: self.gear.setChecked(False))
+            settings_header.addWidget(self.settings_collapse)
+            pane_lay.addLayout(settings_header)
             self.settings_panel.setFixedWidth(self.PANE_WIDTH - 2 * 9)
             pane_lay.addWidget(self.settings_panel, 1)  # fill the pane so long pages (Range) can scroll
             self.pane.hide()
@@ -671,6 +684,16 @@ class ExerciseView(QWidget):
             ref_pane.setMaximumWidth(0)
             book_lay = QVBoxLayout(ref_pane)
             book_lay.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
+            reference_header = QHBoxLayout()
+            reference_header.addStretch()
+            self.reference_collapse = QToolButton()
+            self.reference_collapse.setText("−")
+            self.reference_collapse.setAutoRaise(True)
+            self.reference_collapse.setToolTip("Collapse reference")
+            self.reference_collapse.setAccessibleName("Collapse reference")
+            self.reference_collapse.clicked.connect(lambda: book.setChecked(False))
+            reference_header.addWidget(self.reference_collapse)
+            book_lay.addLayout(reference_header)
             reference.setFixedWidth(self.REFERENCE_WIDTH - 2 * 9)
             book_lay.addWidget(reference, 1)
             ref_pane.hide()
@@ -956,6 +979,7 @@ class ExerciseView(QWidget):
         self._pair_token += 1  # cancels a pending 'try again' reset
         self._pending = {}  # 'name' / 'octave' -> (text, button), for two-part answers
         self._busy = False
+        self.staff.column_colors.clear()
         self.prompt.setText(q.prompt)
         self.prompt.setVisible(bool(q.prompt) and not q.caption)  # some need none; a caption goes on the staff
         construct = q.construct is not None
@@ -1692,6 +1716,7 @@ class ExerciseView(QWidget):
                 sounds.play_notes(
                     [[n] for n in notes],  # as the learner placed it, in whichever octave that was
                     gap_ms=SCALE_GAP_MS,
+                    warmup=True,
                     on_step=lambda i: self._light_scale_note(i, token=token),
                 )
             self._advance.start(SCALE_GAP_MS * len(notes) + 400)  # on to the next question once the scale has played
@@ -2188,20 +2213,63 @@ class ExerciseView(QWidget):
                 self.circle.flash_wrong()
         if ok:
             self.answered = True  # the other buttons stay as they are; only the one pressed animates
-            self._flash(button, target="#2e7d32", staff=True)
+            identified_scale = isinstance(self.exercise, ScaleIdentification)
+            self._flash(button, target="#2e7d32", staff=not identified_scale)
             notes = q.staff or ([[q.keyboard]] if q.keyboard else [])
-            if not self.exercise.has_sound:
+            if identified_scale:
+                token = self._pair_token
+                sounds.play_notes(
+                    [[note] for column in q.staff for note in column],
+                    gap_ms=SCALE_GAP_MS,
+                    warmup=True,
+                    on_step=lambda index: self._light_identified_note(index, token=token),
+                )
+            elif not self.exercise.has_sound:
                 pass  # no tone for this exercise
             elif notes:
                 sounds.play_notes(notes)
             else:
                 sounds.play_correct(self.streak)
-            self._advance.start(1200)
+            if not identified_scale:
+                self._advance.start(1200)
         else:
             self.missed = True
             button.setEnabled(False)
             self._flash(button, target="#c62828")
         self._update_score()
+
+    def _light_identified_note(
+        self,
+        index: int | None,
+        *,
+        token: int,
+    ) -> None:
+        """
+        Highlight the sounding scale note and advance only after playback finishes.
+
+        Parameters
+        ----------
+        index : int or None
+            The sounding column, or None at the end of the melody.
+        token : int
+            The question that started playback; stale callbacks are ignored. Keyword-only.
+
+        Examples
+        --------
+        >>> view = ExerciseView(ScaleIdentification(), rng=random.Random(2))
+        >>> view._light_identified_note(2, token=view._pair_token)
+        >>> list(view.staff.column_colors)
+        [2]
+        """
+        if token != self._pair_token:
+            return
+        self.staff.column_colors = {index: QColor("#2e7d32")} if index is not None else {}
+        self.staff.set_note_color(QColor("#2e7d32") if index is None else None)
+        if index is None:
+            if self._hidden_at is not None:
+                self._advance_remaining = 400
+            else:
+                self._advance.start(400)
 
     def _update_score(self) -> None:
         """

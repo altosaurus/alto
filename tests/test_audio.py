@@ -6,11 +6,18 @@ import io
 import os
 import time
 import wave
+from collections.abc import Callable
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
-from PySide6.QtMultimedia import QSoundEffect
+from PySide6.QtCore import QTimer
+from PySide6.QtMultimedia import (
+    QAudioFormat,
+    QAudioSink,
+    QSoundEffect,
+)
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
@@ -28,6 +35,161 @@ from alto.audio import (
     to_wav_bytes,
 )
 from alto.theory.pitch import Note
+
+
+def test_melody_highlights_follow_the_audio_clock(
+    app: QApplication,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Follow processed audio frames through delayed starts and underruns rather than wall-clock guesses.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    tmp_path : Path
+        The rendered clip location.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the audio clock and output hardware.
+    """
+    player = Sounds()
+    fmt = QAudioFormat()
+    fmt.setSampleRate(SAMPLE_RATE)
+    fmt.setChannelCount(1)
+    fmt.setSampleFormat(QAudioFormat.SampleFormat.Int16)
+    monkeypatch.setattr(
+        audio_module.QMediaDevices,
+        "defaultAudioOutput",
+        lambda: SimpleNamespace(preferredFormat=lambda: fmt),
+    )
+    sink = QAudioSink(fmt)
+    position = [0]
+    calls: list[str] = []
+    seen: list[int | None] = []
+    path = tmp_path / "scale.wav"
+    path.write_bytes(to_wav_bytes(np.zeros(SAMPLE_RATE)))
+    monkeypatch.setattr(audio_module, "QAudioSink", lambda _format: sink)
+    monkeypatch.setattr(sink, "error", lambda: type("NoError", (), {"value": 0})())
+    monkeypatch.setattr(sink, "processedUSecs", lambda: position[0])
+    monkeypatch.setattr(sink, "start", lambda _buffer: calls.append("play"))
+    monkeypatch.setattr(sink, "stop", lambda: calls.append("stop"))
+    monkeypatch.setattr(sink, "deleteLater", lambda: None)
+    monkeypatch.setattr(player, "_preview_file", lambda *_args, **_kwargs: path)
+    player.play_melody([60, 62], gap_ms=280, on_step=seen.append)
+    timer = sink.findChild(QTimer)
+    assert timer is not None and calls == ["play"] and not seen
+    position[0] = 1
+    timer.timeout.emit()
+    assert seen == [0]
+    # A stalled device must not move the highlight, regardless of timer ticks.
+    timer.timeout.emit()
+    assert seen == [0]
+    position[0] = 280_000
+    timer.timeout.emit()
+    assert seen == [0, 1]
+    position[0] = 560_000
+    timer.timeout.emit()
+    assert seen == [0, 1, None] and not timer.isActive()
+    player.stop_all()
+    assert calls == ["play", "stop"]
+
+
+def test_muted_melody_has_the_same_visual_steps_and_cancels_old_callbacks(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Animate without loading audio and ignore steps from a replaced melody.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures scheduled steps without waiting in real time.
+    """
+    player = Sounds()
+    player.enabled = False
+    pending: list[Callable[[], object]] = []
+    old: list[int | None] = []
+    current: list[int | None] = []
+    monkeypatch.setattr(audio_module.QTimer, "singleShot", lambda _delay, callback: pending.append(callback))
+    monkeypatch.setattr(player, "_preview_file", lambda *_args, **_kwargs: pytest.fail("muted melody loaded audio"))
+    player.play_melody([60, 62], gap_ms=280, on_step=old.append)
+    player.play_melody([64], gap_ms=280, on_step=current.append)
+    while pending:
+        pending.pop(0)()
+    assert old == [0] and current == [0, None]
+
+
+def test_melody_tail_extends_only_the_last_note(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Keep note onsets fixed while allowing the final note an additional 200 ms before its fade.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The audio cache directory.
+    monkeypatch : pytest.MonkeyPatch
+        Supplies a sustained test recording.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    recording = tmp_path / "note.wav"
+    recording.write_bytes(to_wav_bytes(np.full(SAMPLE_RATE, 0.1)))
+    monkeypatch.setattr(player, "_note_file", lambda *_args, **_kwargs: recording)
+    inst = INSTRUMENT_BY_KEY["piano"]
+    short = player._preview_file(inst, midis=(60, 62), step_ms=280)
+    ringing = player._preview_file(inst, midis=(60, 62), step_ms=280, tail_ms=200)
+    original, rate = read_wav(short)
+    extended, _ = read_wav(ringing)
+    assert short != ringing and len(extended) - len(original) == rate // 5
+    assert np.allclose(original[: rate * 280 // 1000], extended[: rate * 280 // 1000])
+    assert extended[rate * 750 // 1000] > 0.09
+    assert abs(extended[-1]) < 0.001
+
+
+@pytest.mark.parametrize(
+    "kind",
+    [
+        QAudioFormat.SampleFormat.Float,
+        QAudioFormat.SampleFormat.Int32,
+        QAudioFormat.SampleFormat.Int16,
+        QAudioFormat.SampleFormat.UInt8,
+    ],
+)
+def test_melody_converts_to_the_device_format(
+    tmp_path: Path,
+    kind: QAudioFormat.SampleFormat,
+) -> None:
+    """
+    Convert 44.1 kHz mono recordings to 48 kHz stereo in each supported device sample format.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The test recording directory.
+    kind : QAudioFormat.SampleFormat
+        The output sample representation.
+    """
+    path = tmp_path / "mono.wav"
+    path.write_bytes(to_wav_bytes(np.full(SAMPLE_RATE, 0.25)))
+    fmt = QAudioFormat()
+    fmt.setSampleRate(48000)
+    fmt.setChannelCount(2)
+    fmt.setSampleFormat(kind)
+    pcm = Sounds._output_pcm(path, audio_format=fmt)
+    assert len(pcm) == 48000 * fmt.bytesPerFrame()
+    frames = np.frombuffer(pcm, dtype=np.uint8).reshape(48000, 2, fmt.bytesPerSample())
+    assert np.array_equal(frames[:, 0], frames[:, 1])
+    assert np.any(frames)
+    if kind == QAudioFormat.SampleFormat.Int32:
+        assert np.frombuffer(pcm, dtype=np.int32)[0] / 2147483647 == pytest.approx(0.25, abs=0.0001)
 
 
 def test_synth_is_normalized_and_finite() -> None:

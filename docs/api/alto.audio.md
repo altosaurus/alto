@@ -345,6 +345,7 @@ def play_notes(
     columns: Iterable[Sequence[Note]],
     *,
     gap_ms: int = 450,
+    warmup: bool = False,
     on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
@@ -355,6 +356,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 **Parameters**
 
+- `warmup` (*bool*): Silently initialize audio streams before starting playback.
 - `columns` (*iterable of sequence of Note*): The columns of notes, as drawn on a staff.
 - `gap_ms` (*int, default 450*): The time between columns, in milliseconds. Keyword-only.
 - `on_step` (*callable or None, default None*): Called with the index of each column as it starts, and with None when the last has had its time. It is called while muted too, so a display can follow the music with the sound off. Keyword-only.
@@ -365,6 +367,39 @@ The notes within a column sound together, a little quieter the more there are.
 >>> s = Sounds()
 >>> s.enabled = False
 >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
+```
+
+### Sounds.play_melody
+
+```python
+def play_melody(
+    midis: Iterable[int],
+    *,
+    gap_ms: int,
+    on_step: Callable[[int | None], object],
+) -> None
+```
+
+Play a melody as one clip and synchronize highlights with processed audio frames.
+
+Rendering fixes the note onsets even on first use, before samples have been loaded. Muted or unavailable audio
+still walks the visual steps. The last note sustains for an extra 200 ms. A newer playback cancels visual callbacks.
+
+**Parameters**
+
+- `midis` (*iterable of int*): MIDI notes in playback order.
+- `gap_ms` (*int*): Milliseconds between note onsets. Keyword-only.
+- `on_step` (*callable*): Receives each sounding note's index, then None after the last note's time. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> player = Sounds()
+>>> player.enabled = False
+>>> seen = []
+>>> player.play_melody([60], gap_ms=300, on_step=seen.append)
+>>> seen
+[0]
 ```
 
 ### Sounds.play_correct

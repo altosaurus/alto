@@ -17,6 +17,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import (
     QAbstractAnimation,
+    QByteArray,
     QEvent,
     QObject,
     QProcess,
@@ -25,6 +26,7 @@ from PySide6.QtCore import (
     QVariantAnimation,
 )
 from PySide6.QtGui import (
+    QCloseEvent,
     QGuiApplication,
     QKeySequence,
     QPalette,
@@ -48,7 +50,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto import updates
+from alto import settings, updates
+from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
 from alto.learning import Learner
@@ -61,6 +64,7 @@ from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.colors import blend_name
 from alto.ui.database_page import DatabasePage
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.glossary import GlossaryPage
 from alto.ui.home import (
     EXERCISE_ICONS,
     HomePage,
@@ -89,9 +93,11 @@ from alto.ui.settings_panel import (
     load_keyboard,
     load_note_names,
     load_scale_construction,
+    load_scale_identification,
 )
 from alto.ui.stats_dialog import StatsPage
 from alto.ui.store import (
+    import_settings,
     int_value,
     store,
     text_value,
@@ -239,11 +245,12 @@ class MainWindow(QMainWindow):
         False
         """
         super().__init__()
-        self._overlay: StatsPage | DatabasePage | LessonsPage | None = (
+        self._overlay: StatsPage | DatabasePage | GlossaryPage | LessonsPage | None = (
             None  # the statistics, database or lesson page, while one is showing
         )
         self._overlay_return: tuple[QWidget | None, str] | None = None  # the page and title to go back to
         self._pane_view = False
+        self._grid_return_available = False
         self._exercise_page: ExerciseView | None = None
         self._lesson_page: LessonsPage | None = None
         self._workspace_page: ExerciseView | LessonsPage | None = None
@@ -252,7 +259,27 @@ class MainWindow(QMainWindow):
         self.learner = learner  # who is practising, and their history; None practises without recording
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
+        saved_geometry = store().value("ui/windowGeometry", QByteArray())
+        if isinstance(saved_geometry, QByteArray):
+            self.restoreGeometry(saved_geometry)
         self._build()
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        """
+        Remember the window's size and position when the app closes.
+
+        Parameters
+        ----------
+        event : QCloseEvent
+            The window close event.
+
+
+        Examples
+        --------
+        >>> closeEvent()  # doctest: +SKIP
+        """
+        store().setValue("ui/windowGeometry", self.saveGeometry())
+        super().closeEvent(event)
 
     def _build(self) -> None:
         """
@@ -284,7 +311,7 @@ class MainWindow(QMainWindow):
         self.home = HomePage(REGISTRY)  # start screen with a button for every exercise
         self.home.exercise_chosen.connect(self.open_exercise)
         self.home.lesson_chosen.connect(self.open_lessons)
-        self.home.resume_button.clicked.connect(self._show_workspace)
+        self.home.resume_button.clicked.connect(self._back_from_topbar)
         self.stack.addWidget(self.home)
         self.empty_page = QLabel()
         self.empty_page.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -309,6 +336,8 @@ class MainWindow(QMainWindow):
             item.setSizeHint(QSize(0, 38))
             self.nav.addItem(item)
             self._items[cls] = item
+        widest_navigation = max(self.nav.sizeHintForColumn(0), self.lesson_nav.sizeHintForColumn(0))
+        self.SIDEBAR_DEFAULT = max(self.SIDEBAR_MIN, widest_navigation + 28)
         # noinspection PyShadowingNames
         self.nav.itemClicked.connect(lambda item: self.open_exercise(item.data(Qt.ItemDataRole.UserRole)))
 
@@ -320,16 +349,11 @@ class MainWindow(QMainWindow):
         self.menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.menu_button.setStyleSheet("QToolButton { font-size: 16pt; } QToolButton::menu-indicator { image: none; }")
         menu = QMenu(self.menu_button)
+        menu.setObjectName("appMenu")
         # A transparent, frameless popup lets the stylesheet's rounded corners show without a square backdrop.
         menu.setWindowFlags(menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
         menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text colour
-        stats_action = menu.addAction(svg_icon(icons.CHART, color=glyph, size=18), "Statistics")
-        stats_action.triggered.connect(self.open_stats)
-        database_action = menu.addAction(svg_icon(icons.DATABASE, color=glyph, size=18), "Browse database")
-        database_action.triggered.connect(self.open_database)
-        self.lessons_action = menu.addAction(svg_icon(icons.LESSONS, color=glyph, size=18), "Lessons")
-        self.lessons_action.triggered.connect(self.show_lessons)
         self.profile_action = menu.addAction(svg_icon(icons.PROFILE, color=glyph, size=18), "")
         self.profile_action.triggered.connect(self.switch_profile)
         settings_action = menu.addAction(svg_icon(icons.GEAR, color=glyph, size=18), "Settings…")
@@ -367,6 +391,7 @@ class MainWindow(QMainWindow):
         load_circle()
         load_clef_basics()
         load_scale_construction()
+        load_scale_identification()
         load_instrument()
         load_notation_style()
         load_keyboard_style()
@@ -408,8 +433,10 @@ class MainWindow(QMainWindow):
         self.view_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
         self.view_button.setIconSize(QSize(18, 18))
         self.view_button.setAutoRaise(True)
-        self.view_button.clicked.connect(self.show_home)
+        self.view_button.clicked.connect(self._toggle_tiles_workspace)
         self.pane_button = SidebarToggle(noun="navigation pane")
+        self.pane_button.setObjectName("navigationPane")
+        self.pane_button.setCheckable(True)
         self.pane_button.setIconSize(QSize(18, 18))
         self.pane_button.set_open(False)
         self.pane_button.setIcon(svg_icon(icons.NAVIGATION_OPEN, color=self.palette().color(QPalette.ColorRole.WindowText)))
@@ -463,8 +490,19 @@ class MainWindow(QMainWindow):
             QToolButton#navigationView:hover {{ background: palette(midlight); }}
             QToolButton#navigationView:pressed {{ background: palette(mid); }}
             QToolButton#navigationView:focus {{ border: 1px solid palette(highlight); }}
+            QToolButton#navigationPane:checked {{ background: transparent; }}
         """)
-        self.home.mode_control.setStyleSheet("QFrame#segments { background: transparent; border: none; }")
+        self.home.mode_control.setStyleSheet("""
+            QFrame#segments { background: transparent; border: none; }
+            QFrame#segments QPushButton,
+            QFrame#segments QPushButton:hover,
+            QFrame#segments QPushButton:pressed,
+            QFrame#segments QPushButton:checked,
+            QFrame#segments QPushButton:focus {
+                background: transparent; border: none; outline: none;
+            }
+            QFrame#segments QPushButton:checked { color: palette(highlight); }
+        """)
         for name, button in zip(("navigationExercises", "navigationLessons"), self.home.mode_control.buttons, strict=True):
             button.setObjectName(name)
             button.setMinimumHeight(32)
@@ -510,10 +548,23 @@ class MainWindow(QMainWindow):
             0,
             0,
         )
+        self.glossary_button = QToolButton()
+        self.glossary_button.setIconSize(QSize(22, 22))
+        self.glossary_button.setAutoRaise(True)
+        self.glossary_button.setCheckable(True)
+        self.glossary_button.setStyleSheet("QToolButton:checked { background: transparent; }")
+        self.glossary_button.setToolTip("Glossary")
+        self.glossary_button.setAccessibleName("Glossary")
+        self.glossary_button.clicked.connect(self.open_glossary)
+        tools.addWidget(self.glossary_button)
         self.stats_button = QToolButton()  # data tools stay separate from navigation
         self.stats_button.setIcon(svg_icon(icons.CHART, color=self.palette().color(QPalette.ColorRole.WindowText)))
         self.stats_button.setIconSize(QSize(22, 22))
         self.stats_button.setAutoRaise(True)
+        self.stats_button.setCheckable(True)
+        self.stats_button.setStyleSheet(
+            "QToolButton:checked { background: transparent; }",
+        )
         self.stats_button.setToolTip("Statistics")
         self.stats_button.setAccessibleName("Statistics")
         if self.learner is None:  # hidden, never shown here: a button with no parent that is shown opens as a window of its own
@@ -524,6 +575,10 @@ class MainWindow(QMainWindow):
         self.database_button.setIcon(svg_icon(icons.DATABASE, color=self.palette().color(QPalette.ColorRole.WindowText)))
         self.database_button.setIconSize(QSize(22, 22))
         self.database_button.setAutoRaise(True)
+        self.database_button.setCheckable(True)
+        self.database_button.setStyleSheet(
+            "QToolButton:checked { background: transparent; }",
+        )
         self.database_button.setToolTip("Browse the database")
         self.database_button.setAccessibleName("Browse the database")
         if self.learner is None:
@@ -655,11 +710,15 @@ class MainWindow(QMainWindow):
         """
         is_open = self.sidebar_width() > 0
         if hasattr(self, "pane_button"):
+            self.pane_button.setChecked(is_open)
             self.pane_button.set_open(is_open)
+            icon_color = self.palette().color(
+                QPalette.ColorRole.Highlight if is_open else QPalette.ColorRole.WindowText,
+            )
             self.pane_button.setIcon(
                 svg_icon(
                     icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN,
-                    color=self.palette().color(QPalette.ColorRole.WindowText),
+                    color=icon_color,
                 ),
             )
         if hasattr(self, "search_row"):
@@ -818,10 +877,52 @@ class MainWindow(QMainWindow):
             self._settings.activateWindow()
             return
         dialog = AppSettingsDialog(self)
+        dialog.defaults_requested.connect(self._restore_defaults)
         dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         dialog.finished.connect(self._settings_closed)
         self._settings = dialog
         dialog.show()
+
+    def _restore_defaults(self) -> None:
+        """
+        Restore all preferences while retaining profiles and recorded practice.
+
+        Examples
+        --------
+        >>> _restore_defaults()  # doctest: +SKIP
+        """
+        saved = store()
+        retained = {key: saved.value(key) for key in saved.allKeys() if key.startswith(("profile/", "lessons/"))}
+        import_settings(retained)
+        for name in (
+            "note_names",
+            "keyboard",
+            "construction",
+            "arpeggio",
+            "key_signatures",
+            "key_construction",
+            "scale_identification",
+            "scale_construction",
+            "clef_basics",
+            "circle",
+        ):
+            cfg = getattr(settings, name)
+            cfg.__dict__.clear()
+            cfg.__dict__.update(type(cfg)().__dict__)
+        sounds.stop_all()
+        sounds.enabled = True
+        apply_theme("system")
+        if self._sidebar_anim is not None:
+            self._sidebar_anim.stop()
+        self._overlay = None
+        self._overlay_return = None
+        for action in self.actions():
+            self.removeAction(action)
+        old = self.takeCentralWidget()
+        self._build()
+        self.resize(*default_size())
+        if old is not None:
+            old.deleteLater()
 
     def _settings_closed(self) -> None:
         """
@@ -958,6 +1059,22 @@ class MainWindow(QMainWindow):
         if self.learner:
             self.profile_action.setText(f"Profile: {self.learner.profile.name}…")
 
+    def open_glossary(self) -> None:
+        """
+        Toggle the glossary from its toolbar button.
+
+        Examples
+        --------
+        >>> open_glossary()  # doctest: +SKIP
+        """
+        if isinstance(self._overlay, GlossaryPage):
+            self.close_overlay()
+            return
+        page = GlossaryPage()
+        page.lesson_requested.connect(self.open_lessons)
+        page.exercise_requested.connect(self._practise)
+        self._open_overlay(page, title="Glossary")
+
     def open_stats(self) -> None:
         """
         Show the statistics in place of the current page. Nothing happens without a profile.
@@ -973,6 +1090,9 @@ class MainWindow(QMainWindow):
         >>> window.close_overlay()
         """
         if self.learner:
+            if isinstance(self._overlay, StatsPage):
+                self.close_overlay()
+                return
             self._open_overlay(StatsPage(self.learner), title="Statistics")
 
     def _update_empty_page(self) -> None:
@@ -1002,19 +1122,84 @@ class MainWindow(QMainWindow):
         """
         self.home.mode_control.set_compact(True)
         self.home.mode_control.set_current(1 if self.home.mode == "lessons" else 0)
+        for index, (button, icon) in enumerate(
+            zip(
+                self.home.mode_control.buttons,
+                (icons.EXERCISES, icons.LESSONS),
+                strict=True,
+            ),
+        ):
+            color = self.palette().color(
+                QPalette.ColorRole.Highlight if index == self.home.mode_control.current() else QPalette.ColorRole.WindowText,
+            )
+            button.setIcon(svg_icon(icon, color=color, size=18))
         section = "lessons" if self.home.mode == "lessons" else "exercises"
         self.search_field.setPlaceholderText(f"Search {section}…")
         self.search_field.setAccessibleName(f"Search {section}")
         self.view_button.setText("")
         self.view_button.setAccessibleName("Tiles")
         self.view_button.setToolTip("Return to tiles")
-        self.view_button.setIcon(svg_icon(icons.TILES, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        self.view_button.setIcon(
+            svg_icon(
+                icons.TILES,
+                color=self.palette().color(
+                    QPalette.ColorRole.Highlight if not self._pane_view else QPalette.ColorRole.WindowText,
+                ),
+            ),
+        )
+        stats_active = isinstance(self._overlay, StatsPage)
+        glossary_active = isinstance(self._overlay, GlossaryPage)
+        self.glossary_button.setChecked(glossary_active)
+        self.glossary_button.setIcon(
+            svg_icon(
+                icons.GLOSSARY,
+                color=self.palette().color(QPalette.ColorRole.Highlight if glossary_active else QPalette.ColorRole.WindowText),
+            ),
+        )
+        database_active = isinstance(self._overlay, DatabasePage)
+        self.stats_button.setChecked(stats_active)
+        self.database_button.setChecked(database_active)
+        self.stats_button.setIcon(
+            svg_icon(
+                icons.CHART,
+                color=self.palette().color(
+                    QPalette.ColorRole.Highlight if stats_active else QPalette.ColorRole.WindowText,
+                ),
+            ),
+        )
+        self.database_button.setIcon(
+            svg_icon(
+                icons.DATABASE,
+                color=self.palette().color(
+                    QPalette.ColorRole.Highlight if database_active else QPalette.ColorRole.WindowText,
+                ),
+            ),
+        )
         activity = self._workspace_page
         activity_section = "exercises" if isinstance(activity, ExerciseView) else "lessons" if activity else None
-        self.home.resume_button.setVisible(self.stack.currentWidget() is self.home and activity_section is not None)
-        if activity_section is not None:
-            self.home.resume_button.setText(f"← Back to {activity_section}")
-            self.home.resume_button.setAccessibleName(f"Back to {activity_section}")
+        current = self.stack.currentWidget()
+        show_back = (current is self.home and activity_section is not None) or isinstance(
+            self._overlay,
+            (StatsPage, DatabasePage, GlossaryPage),
+        )
+        self.home.resume_button.setVisible(show_back)
+        if show_back:
+            self.home.resume_button.setText("←  Back")
+            self.home.resume_button.setAccessibleName("Back")
+            self.home.resume_button.setToolTip("Back to the previous page")
+
+    def _back_from_topbar(self) -> None:
+        """
+        Return from a data page or resume the current activity from the tiles.
+
+        Examples
+        --------
+        >>> _back_from_topbar()  # doctest: +SKIP
+        """
+        if isinstance(self._overlay, (StatsPage, DatabasePage, GlossaryPage)):
+            self.close_overlay()
+        else:
+            self._show_workspace()
 
     def _mode_chosen(self) -> None:
         """
@@ -1065,7 +1250,7 @@ class MainWindow(QMainWindow):
         >>> window.stack.currentWidget() is window.empty_page
         True
         """
-        if isinstance(self._overlay, (StatsPage, DatabasePage)):
+        if isinstance(self._overlay, (StatsPage, DatabasePage, GlossaryPage)):
             self.close_overlay()
         self._pane_view = True
         page = self._workspace_page
@@ -1085,6 +1270,31 @@ class MainWindow(QMainWindow):
         self._show_nav()
         self._show_mode_control()
         self._update_sidebar_button()
+
+    def _toggle_tiles_workspace(self) -> None:
+        """
+        Switch between the tile catalogue and the workspace while keeping the activity in place.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._toggle_tiles_workspace()
+        >>> window.stack.currentWidget() is window.empty_page
+        True
+        >>> window._toggle_tiles_workspace()
+        >>> window.stack.currentWidget() is window.home
+        True
+        """
+        if self._pane_view:
+            self._grid_return_available = True
+            self._grid_return_sidebar = self.sidebar_width() > 0 or self._sidebar_pref
+            self.show_home()
+        elif self._grid_return_available:
+            self._grid_return_available = False
+            self._sidebar_pref = self._grid_return_sidebar
+            self._show_workspace()
+        else:
+            self._show_workspace()
 
     def show_lessons(self) -> None:
         """
@@ -1126,7 +1336,6 @@ class MainWindow(QMainWindow):
         if page is not old:
             page.practise_requested.connect(self._practise)
             page.back.connect(self._leave_lesson)
-            page.sidebar_button.clicked.connect(self.toggle_sidebar)
             page.view.stepped.connect(self.lesson_nav.select_step)
             self.stack.addWidget(page)
         self._lesson_return = (self.stack.currentWidget(), self.title_label.text())
@@ -1327,11 +1536,14 @@ class MainWindow(QMainWindow):
         >>> window.close_overlay()
         """
         if self.learner:
+            if isinstance(self._overlay, DatabasePage):
+                self.close_overlay()
+                return
             self._open_overlay(DatabasePage(self.learner), title="Database")
 
     def _open_overlay(
         self,
-        page: StatsPage | DatabasePage | LessonsPage,
+        page: StatsPage | DatabasePage | GlossaryPage | LessonsPage,
         *,
         title: str,
     ) -> None:
@@ -1358,6 +1570,10 @@ class MainWindow(QMainWindow):
         """
         if not isinstance(self._overlay, LessonsPage):
             self.close_overlay()
+        if self.stack.currentWidget() is self.home:
+            self._pane_view = False
+        elif self.stack.currentWidget() in (self.empty_page, self._workspace_page):
+            self._pane_view = True
         self._overlay_return = (self.stack.currentWidget(), self.title_label.text())
         self._overlay = page
         page.back.connect(self.close_overlay)
