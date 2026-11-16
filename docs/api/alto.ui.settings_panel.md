@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 45
+order: 46
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -1024,6 +1024,79 @@ Build the panel for a set of settings.
 ```pycon
 >>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
 4
+```
+
+## load_clef_basics
+
+```python
+def load_clef_basics() -> None
+```
+
+Load the saved clef basics settings into the shared settings object.
+
+Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
+setting as it was.
+
+**Examples**
+
+```pycon
+>>> store().setValue("clefBasics/clefs", "alto,subbass,flute")
+>>> store().setValue("clefBasics/type", "identification")
+>>> load_clef_basics()
+>>> settings.clef_basics.active_clefs(), settings.clef_basics.question_type
+(['alto', 'subbass'], 'identification')
+>>> settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
+>>> store().remove("clefBasics")
+```
+
+## ClefBasicsSettingsPanel
+
+```python
+ClefBasicsSettingsPanel(
+    cfg: settings.ClefBasicsSettings,
+    *,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `ExerciseSettingsPanel`
+
+The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.
+
+Question Type chooses between Clef Construction (put a named clef on a blank staff) and Clef Identification (name the clef on
+a staff). Clefs lists the clefs in the same groups as the other exercises, with the French violin and subbass clefs, which
+only this exercise has, at the bottom. Edits are live: each changes the settings, saves them and emits `changed`.
+
+**Attributes**
+
+- `cfg` (*ClefBasicsSettings*): The settings being edited.
+- `stack` (*SlideStack*): The menu and its two pages.
+- `types` (*dict of str to QRadioButton*): The choice of question, by key of `CLEF_QUESTION_TYPES`.
+- `boxes` (*dict of str to QCheckBox*): The checkbox of each clef.
+
+**Examples**
+
+```pycon
+>>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+>>> panel.stack.count()  # the menu and two pages
+3
+```
+
+**Constructor**
+
+Build the panel for a set of settings.
+
+**Parameters**
+
+- `cfg` (*ClefBasicsSettings*): The settings to edit.
+- `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
+>>> panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
+(True, ['french', 'subbass'])
 ```
 
 ## settings_inversion_names

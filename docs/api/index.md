@@ -52,6 +52,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 |---|---|
 | [alto.lessons.base](alto.lessons.base/) | What a lesson is made of: steps, and the small tasks inside them. |
 | [alto.lessons.circle_of_fifths](alto.lessons.circle_of_fifths/) | The lesson on the circle of fifths, taught from nothing. |
+| [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
 
 ## alto.theory
 
@@ -96,7 +97,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
-| [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes: one note for the note construction exercise, a row of them for scale construction. |
+| [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |
 | [alto.ui.stats_dialog](alto.ui.stats_dialog/) | The statistics screen: a few numbers and charts about how practice is going. |
 | [alto.ui.store](alto.ui.store/) | The application's saved settings (a thin layer over `QSettings`). |
 | [alto.ui.style](alto.ui.style/) | Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars. |

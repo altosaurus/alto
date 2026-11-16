@@ -2,7 +2,7 @@
 title: alto.ui.pictures
 parent: api
 package: alto.ui
-order: 41
+order: 42
 permalink: /api/alto.ui.pictures/
 ---
 {% raw %}
@@ -18,6 +18,38 @@ as the label of a choice. Colours come from the palette, so they work in light a
 ('Treble', '16th')
 >>> ClefPictures(["treble", "bass"]).toolTip()
 'Treble, Bass'
+```
+
+## symbol_icon
+
+```python
+def symbol_icon(
+    symbol: str,
+    *,
+    color: QColor,
+    height: int = 56,
+) -> QIcon
+```
+
+Draw a clef symbol on its own, without a staff, as an icon.
+
+The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centred.
+
+**Parameters**
+
+- `symbol` (*str*): "G", "C" or "F".
+- `color` (*QColor*): The colour to draw it in. Keyword-only.
+- `height` (*int, default 56*): The icon's height in pixels, which is also as wide as it is. Keyword-only.
+
+**Returns**
+
+- *QIcon*: The icon, in the notation font chosen in the settings.
+
+**Examples**
+
+```pycon
+>>> symbol_icon("F", color=QColor("black")).isNull()
+False
 ```
 
 ## ClefPictures

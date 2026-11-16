@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 46
+order: 47
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
@@ -21,6 +21,56 @@ font chosen in the settings.
 >>> staff.show_notes([[Note.parse("C4")]], clef="treble", key=2)
 >>> staff.clef, staff.key
 ('treble', 2)
+```
+
+## clef_targets
+
+```python
+def clef_targets(clef: str) -> set[tuple[str, int]]
+```
+
+Return the ways a clef can be written: the symbol and where on the staff it goes.
+
+**Parameters**
+
+- `clef` (*str*): A clef name such as "treble", "mezzo" or "baritone".
+
+**Returns**
+
+- *set of tuple of (str, int)*: Each is a symbol, "G", "C" or "F", and the place of its reference line (the G, F or middle C) counted in lines and spaces up from the bottom line at 0: the bottom line is 0, the space above it 1, the second line 2, up to the top line at 8. Most clefs have one. The baritone clef has two: the F clef on the middle line and the C clef on the top line.
+
+**Examples**
+
+```pycon
+>>> clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
+True
+>>> sorted(clef_targets("baritone"))
+[('C', 8), ('F', 4)]
+>>> sorted(clef_targets("french") | clef_targets("subbass"))
+[('F', 8), ('G', 0)]
+```
+
+## clef_target_of
+
+```python
+def clef_target_of(shape: str) -> tuple[str, int]
+```
+
+Return the symbol and the place of one way of writing a clef.
+
+**Parameters**
+
+- `shape` (*str*): A key of `engraving.CLEF_SIGNS`, such as "alto" or "baritone_c".
+
+**Returns**
+
+- *tuple of (str, int)*: The symbol and its place, as for `clef_targets`.
+
+**Examples**
+
+```pycon
+>>> clef_target_of("bass"), clef_target_of("soprano")
+(('F', 6), ('C', 0))
 ```
 
 ## key_signature_positions
@@ -142,6 +192,7 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
 - `wedge_colors` (*dict of int to QColor*): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or `note_color`.
 - `notation_style` (*NotationStyle or None*): A style to use instead of the one chosen in the settings.
+- `clef_hidden` (*bool*): Draw the staff without its clef, for a clef the learner places.
 - `key` (*int*): The key signature drawn: sharps if positive, flats if negative.
 - `key_room` (*int*): How many sharps or flats' worth of room to keep for the signature at least, so that a capped staff does not change width as the signature does. 0 keeps room only for the one drawn.
 - `value` (*str*): The note value drawn.

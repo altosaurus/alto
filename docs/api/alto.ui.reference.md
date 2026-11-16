@@ -2,7 +2,7 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 44
+order: 45
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
@@ -329,10 +329,49 @@ Build the panel with nothing picked.
 False
 ```
 
+## ClefReferencePanel
+
+```python
+ClefReferencePanel(parent: QWidget | None = None)
+```
+
+Bases: `QWidget`
+
+The reference for the clefs: how they are made, and a picture of each with where its symbol goes.
+
+**Attributes**
+
+- `lesson_button` (*QPushButton*): Opens the lesson on the clefs.
+- `lesson_requested` (*Signal*): Emitted with the key of the lesson to open when that button is pressed.
+- `rows` (*dict of str to QLabel*): The words beside the picture of each clef, by clef.
+
+**Examples**
+
+```pycon
+>>> panel = ClefReferencePanel()
+>>> "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
+True
+```
+
+**Constructor**
+
+Build the panel: the lesson button, a line of explanation and a row for each clef.
+
+**Parameters**
+
+- `parent` (*QWidget or None, default None*): The widget that owns it.
+
+**Constructor examples**
+
+```pycon
+>>> len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
+True
+```
+
 ## reference_panel_for
 
 ```python
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | None
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | None
 ```
 
 Return the reference pane for an exercise.
@@ -343,7 +382,7 @@ Return the reference pane for an exercise.
 
 **Returns**
 
-- *ReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
+- *ReferencePanel or ClefReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
 
 **Examples**
 
@@ -351,5 +390,7 @@ Return the reference pane for an exercise.
 >>> from alto.exercises.library import NoteNames
 >>> reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
 (True, True)
+>>> type(reference_panel_for(ClefBasics())).__name__
+'ClefReferencePanel'
 ```
 {% endraw %}

@@ -29,6 +29,7 @@ Task(
     cells: frozenset[tuple[str, int]] = frozenset(),
     choices: tuple[str, ...] = (),
     correct: str = '',
+    clef: str = '',
 )
 ```
 
@@ -44,6 +45,7 @@ It is answered either by clicking a cell of the circle (`cells`) or by pressing 
 - `cells` (*frozenset of tuple of (str, int)*): The cells that are right, each a ring ("outer" or "inner") and a place clockwise from the top.
 - `choices` (*tuple of str*): The buttons to choose from, for a question that is not answered on the circle.
 - `correct` (*str*): The right button, if there are choices.
+- `clef` (*str*): For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.
 
 **Examples**
 
@@ -77,6 +79,31 @@ True
 False
 ```
 
+## Staff
+
+```python
+Staff(
+    clef: str,
+    note: str = '',
+    caption: str = '',
+)
+```
+
+A staff to show beside the words of a step: a clef, and perhaps a note, with a line of words under it.
+
+**Attributes**
+
+- `clef` (*str*): The clef to draw, any of `alto.settings.CLEF_BASICS_CLEFS`.
+- `note` (*str*): A note to write on the staff, such as "C4"; empty for none. Only the seven clefs that have a lowest line for notes can have one, not the French violin and subbass clefs.
+- `caption` (*str*): The words under the staff.
+
+**Examples**
+
+```pycon
+>>> Staff(clef="alto", note="C4", caption="Alto clef").note
+'C4'
+```
+
 ## Step
 
 ```python
@@ -88,6 +115,8 @@ Step(
     hear_label: str = 'Hear it',
     make_task: Callable[[random.Random], Task] | None = field(default=None, compare=False),
     closing: bool = False,
+    staves: tuple[Staff, ...] = (),
+    task_staff: bool = False,
 )
 ```
 
@@ -102,6 +131,8 @@ One page of a lesson.
 - `hear_label` (*str*): What the Hear it button says.
 - `make_task` (*callable or None*): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
 - `closing` (*bool*): True for the last step, which offers to practise.
+- `staves` (*tuple of Staff*): Staves to show beside the words, one above another, instead of the circle; empty for none.
+- `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task's clef.
 
 **Examples**
 

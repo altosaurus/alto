@@ -2,11 +2,13 @@
 title: alto.ui.staff_input
 parent: api
 package: alto.ui
-order: 47
+order: 48
 permalink: /api/alto.ui.staff_input/
 ---
 {% raw %}
-The staffs you click to place notes: one note for the note construction exercise, a row of them for scale construction.
+The staffs you click to place notes or a clef.
+
+One note for the note construction exercise, a row of them for scale construction, and a clef for the clef exercise.
 
 **Examples**
 
@@ -796,5 +798,381 @@ Place the next note or mark the next step on a left click; change the sign or th
 >>> staff.mousePressEvent(press)  # every place is taken
 >>> [str(n) for n in staff.notes]
 ['E4']
+```
+
+## ClefInput
+
+```python
+ClefInput(parent: QWidget | None = None)
+```
+
+Bases: `StaffWidget`
+
+A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.
+
+The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
+follows the pointer from place to place, in a lighter colour, until you click. Without the mouse, `move_caret` moves it,
+`step_symbol` switches the symbol and `place_caret` places it.
+
+**Attributes**
+
+- `placed` (*Signal*): Emitted with the symbol ("G", "C" or "F") and its place when you click: 0 is the bottom line, 1 the space above it, up to 8 for the top line, with -6 to 14 allowed.
+- `changed` (*Signal*): Emitted when the symbol chosen or the place the keyboard would use changes.
+- `options` (*list of str*): The symbols that can be chosen, in the order the wheel goes through them.
+- `selected` (*str*): The symbol chosen now.
+- `locked` (*bool*): Ignore the mouse and the wheel (while feedback is showing).
+- `caret` (*int or None*): The place the keyboard would put the symbol; None until the keyboard has moved it.
+- `placed_symbol` (*str or None*): The symbol that has been placed and is drawn solid, with `placed_step` its place; None until one is.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G", "F"])
+>>> staff.step_symbol(1)
+>>> staff.selected
+'F'
+```
+
+**Constructor**
+
+Create the staff.
+
+**Parameters**
+
+- `parent` (*QWidget or None, default None*): The widget that owns the staff.
+
+**Constructor examples**
+
+```pycon
+>>> ClefInput().hasMouseTracking()
+True
+```
+
+### ClefInput.reset
+
+```python
+def reset(
+    options: list[str],
+    *,
+    caption: str = '',
+) -> None
+```
+
+Clear the staff for a new question and offer some symbols to choose from.
+
+**Parameters**
+
+- `options` (*list of str*): The symbols the wheel goes through, any of "G", "C" and "F"; the first is chosen to begin with.
+- `caption` (*str, default ""*): The question, written under the staff. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["C", "F"], caption="Place the alto clef.")
+>>> staff.selected, staff.placed_symbol, staff.caption
+('C', None, 'Place the alto clef.')
+```
+
+### ClefInput.select
+
+```python
+def select(symbol: str) -> None
+```
+
+Choose a symbol.
+
+**Parameters**
+
+- `symbol` (*str*): "G", "C" or "F"; one that is not among the options is ignored.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G", "C", "F"])
+>>> staff.select("F")
+>>> staff.selected
+'F'
+```
+
+### ClefInput.step_symbol
+
+```python
+def step_symbol(direction: int) -> None
+```
+
+Choose the next symbol of the options, or the one before, going round.
+
+**Parameters**
+
+- `direction` (*int*): 1 for the next, -1 for the one before.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G", "C", "F"])
+>>> staff.step_symbol(-1)
+>>> staff.selected
+'F'
+```
+
+### ClefInput.step_at
+
+```python
+def step_at(y: float) -> int
+```
+
+Return the line or space nearest to a height in the widget.
+
+**Parameters**
+
+- `y` (*float*): The height, in pixels.
+
+**Returns**
+
+- *int*: The place, 0 for the bottom line and 1 for the space above it, up to 8 for the top line; from the first ledger line below the staff (-6) to the third above it (14).
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G"])
+>>> staff.resize(400, 300)
+>>> floor = staff.staff_bottoms()["treble"]
+>>> staff.step_at(floor), staff.step_at(floor - 1.4 * staff.GAP), staff.step_at(0), staff.step_at(10_000)
+(0, 3, 14, -6)
+```
+
+### ClefInput.move_caret
+
+```python
+def move_caret(steps: int) -> None
+```
+
+Move the place the keyboard would put the symbol.
+
+**Parameters**
+
+- `steps` (*int*): How many lines and spaces up (positive) or down, stopping at the last ledger lines; the first move starts from the middle line.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G"])
+>>> staff.move_caret(1)
+>>> staff.caret
+5
+>>> staff.move_caret(20)
+>>> staff.caret
+14
+```
+
+### ClefInput.place
+
+```python
+def place(step: int) -> None
+```
+
+Put the chosen symbol in a place, drawn solid, and say so.
+
+**Parameters**
+
+- `step` (*int*): The place, 0 for the bottom line, 1 for the space above it and so on.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["F"])
+>>> got = []
+>>> _ = staff.placed.connect(lambda symbol, where: got.append((symbol, where)))
+>>> staff.place(6)
+>>> got, staff.placed_symbol, staff.placed_step
+([('F', 6)], 'F', 6)
+```
+
+### ClefInput.place_caret
+
+```python
+def place_caret() -> None
+```
+
+Place the symbol where the keyboard put it, or on the middle line if it has not moved.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G"])
+>>> staff.move_caret(-2)
+>>> staff.place_caret()
+>>> staff.placed_step
+2
+```
+
+### ClefInput.clear_placed
+
+```python
+def clear_placed() -> None
+```
+
+Take the placed symbol off the staff, so another can be tried.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.place(1)
+>>> staff.clear_placed()
+>>> staff.placed_symbol is None
+True
+```
+
+### ClefInput.set_clef_color
+
+```python
+def set_clef_color(color: QColor | None) -> None
+```
+
+Draw the placed symbol in a colour, for feedback, or back in black.
+
+**Parameters**
+
+- `color` (*QColor or None*): The colour; None for black.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.set_clef_color(QColor("#2e7d32"))
+>>> staff.clef_color == QColor("#2e7d32")
+True
+```
+
+### ClefInput.mouseMoveEvent
+
+```python
+def mouseMoveEvent(event: QMouseEvent) -> None
+```
+
+Show the symbol in the place under the pointer, in a lighter colour.
+
+**Parameters**
+
+- `event` (*QMouseEvent*): The mouse move.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G"])
+>>> staff.resize(400, 300)
+>>> from PySide6.QtCore import QPointF
+>>> point = QPointF(50, staff.staff_bottoms()["treble"] - 2 * staff.GAP)
+>>> staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
+...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
+>>> staff._hover
+4
+```
+
+### ClefInput.leaveEvent
+
+```python
+def leaveEvent(event: QEvent) -> None
+```
+
+Stop following the pointer when it leaves the staff.
+
+**Parameters**
+
+- `event` (*QEvent*): The leave event.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff._hover = 2
+>>> staff.leaveEvent(QEvent(QEvent.Type.Leave))
+>>> staff._hover is None
+True
+```
+
+### ClefInput.mousePressEvent
+
+```python
+def mousePressEvent(event: QMouseEvent) -> None
+```
+
+Place the symbol on a left click, or choose the next symbol on a right click.
+
+**Parameters**
+
+- `event` (*QMouseEvent*): The mouse press. Nothing happens while the staff is locked.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G", "F"])
+>>> staff.resize(400, 300)
+>>> from PySide6.QtCore import QPointF
+>>> point = QPointF(50, staff.staff_bottoms()["treble"])
+>>> staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.RightButton,
+...                                   Qt.MouseButton.RightButton, Qt.KeyboardModifier.NoModifier))
+>>> staff.selected
+'F'
+```
+
+### ClefInput.wheelEvent
+
+```python
+def wheelEvent(event: QWheelEvent) -> None
+```
+
+Choose the next symbol for each notch of the wheel turned up, and the one before for each turned down.
+
+**Parameters**
+
+- `event` (*QWheelEvent*): The wheel turn.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtCore import QPoint, QPointF
+>>> staff = ClefInput()
+>>> staff.reset(["G", "F"])
+>>> here = QPointF(50, 50)
+>>> staff.wheelEvent(QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
+...                              Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
+>>> staff.selected
+'F'
+```
+
+### ClefInput.paintEvent
+
+```python
+def paintEvent(_: QPaintEvent) -> None
+```
+
+Draw the staff, then the symbol that was placed or, until one is, the one that would be placed.
+
+A symbol on a ledger line has the ledger lines it needs drawn behind it.
+
+**Parameters**
+
+- `_` (*QPaintEvent*): The paint request; the whole widget is always redrawn.
+
+**Examples**
+
+```pycon
+>>> staff = ClefInput()
+>>> staff.reset(["G"])
+>>> staff.place(1)
+>>> staff.grab().isNull()
+False
 ```
 {% endraw %}

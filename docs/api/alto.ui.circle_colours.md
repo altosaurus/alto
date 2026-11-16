@@ -2,7 +2,7 @@
 title: alto.ui.circle_colours
 parent: api
 package: alto.ui
-order: 24
+order: 25
 permalink: /api/alto.ui.circle_colours/
 ---
 {% raw %}

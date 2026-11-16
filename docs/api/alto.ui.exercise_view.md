@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 28
+order: 29
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
@@ -167,6 +167,7 @@ The screen for practising one exercise.
 - `staff` (*StaffWidget*): Shows the notes of a question.
 - `keyboard` (*KeyboardWidget*): Shows the key of a keyboard question.
 - `input_staff` (*StaffInput*): The staff to click, for "place this note" questions.
+- `clef_input` (*ClefInput*): The blank staff a clef is put on, for "place this clef" questions.
 - `scale_input` (*ScaleInput*): The staff to click, for "place the notes of this scale" questions.
 - `fork` (*KeyFork*): The fork to pick a key signature on, for "build this key signature" questions.
 - `answer_button` (*QPushButton*): Hands in what was built with the fork or placed on the scale staff.
@@ -220,6 +221,43 @@ Show the next question: its staff, keyboard or text, and a fresh set of answer b
 >>> # noinspection PyUnresolvedReferences
 >>> view.answered, len(view.buttons) == len(view.question.choices)
 (False, True)
+```
+
+### ExerciseView.eventFilter
+
+```python
+def eventFilter(
+    watched: QObject,
+    event: QEvent,
+) -> bool
+```
+
+Send the mouse wheel to the fork, or to the clef staff, while it is showing and the mouse is over the music or Answer.
+
+**Parameters**
+
+- `watched` (*QObject*): The staff or the Answer button.
+- `event` (*QEvent*): Anything that reaches it; only the wheel is taken.
+
+**Returns**
+
+- *bool*: True if the fork or the clef staff took the wheel turn, False to let it go on as usual.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtCore import QPoint, QPointF
+>>> from PySide6.QtGui import QWheelEvent
+>>> from alto.exercises.library import KeySignatureConstruction
+>>> view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+>>> view.show()
+>>> here = QPointF(5, 5)
+>>> turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
+...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+>>> view.eventFilter(view.answer_button, turn)
+True
+>>> view.fork.value
+1
 ```
 
 ### ExerciseView.submit

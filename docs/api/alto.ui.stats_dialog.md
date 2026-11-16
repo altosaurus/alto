@@ -2,7 +2,7 @@
 title: alto.ui.stats_dialog
 parent: api
 package: alto.ui
-order: 48
+order: 49
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}
