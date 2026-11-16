@@ -2,7 +2,7 @@
 title: alto.ui.lesson
 parent: api
 package: alto.ui
-order: 37
+order: 39
 permalink: /api/alto.ui.lesson/
 ---
 {% raw %}
@@ -275,7 +275,6 @@ The page of an open lesson, with a button to leave it.
 **Attributes**
 
 - `view` (*LessonView*): The lesson being taken.
-- `sidebar_button` (*SidebarToggle*): Shows or hides the list on the left; the main window wires it up.
 - `back` (*Signal*): Emitted to leave the lesson, to wherever it was opened from.
 - `practise_requested` (*Signal*): Emitted with the class name of an exercise to practise.
 

@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 48
+order: 51
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}

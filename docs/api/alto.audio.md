@@ -367,6 +367,39 @@ The notes within a column sound together, a little quieter the more there are.
 >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
 ```
 
+### Sounds.play_melody
+
+```python
+def play_melody(
+    midis: Iterable[int],
+    *,
+    gap_ms: int,
+    on_step: Callable[[int | None], object],
+) -> None
+```
+
+Play a melody as one clip and synchronize highlights with processed audio frames.
+
+Rendering fixes the note onsets even on first use, before samples have been loaded. Muted or unavailable audio
+still walks the visual steps. The last note sustains for an extra 200 ms. A newer playback cancels visual callbacks.
+
+**Parameters**
+
+- `midis` (*iterable of int*): MIDI notes in playback order.
+- `gap_ms` (*int*): Milliseconds between note onsets. Keyword-only.
+- `on_step` (*callable*): Receives each sounding note's index, then None after the last note's time. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> player = Sounds()
+>>> player.enabled = False
+>>> seen = []
+>>> player.play_melody([60], gap_ms=300, on_step=seen.append)
+>>> seen
+[0]
+```
+
 ### Sounds.play_correct
 
 ```python

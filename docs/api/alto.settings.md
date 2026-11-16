@@ -100,6 +100,7 @@ NoteNameSettings(
     note_values: set[str] = field(default_factory=lambda: {'whole'}),
     naming: str = 'letters',
     accidentals: bool = False,
+    require_octave: bool = False,
 )
 ```
 
@@ -113,6 +114,7 @@ The settings of the note identification exercise.
 - `note_values` (*set of str*): The note values to draw, from `NOTE_VALUES`. Keyword-only.
 - `naming` (*str, default "letters"*): A key of `NAMINGS`. Keyword-only.
 - `accidentals` (*bool, default False*): Also ask notes with explicit sharps, flats and naturals. Keyword-only.
+- `require_octave` (*bool, default False*): Also require the written octave as part of the answer. Keyword-only.
 
 **Examples**
 
@@ -588,6 +590,50 @@ The settings of the key signature construction exercise: the same choices as key
 >>> cfg = KeyConstructionSettings(keys={-2})
 >>> cfg.active_keys(), cfg.active_modes()
 ([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
+```
+
+## ScaleIdentificationSettings
+
+```python
+ScaleIdentificationSettings(
+    *,
+    staff_keys: set[int] = field(default_factory=lambda: {0}),
+)
+```
+
+Bases: `KeySignatureSettings`
+
+Choose the clefs, scale types and independent staff and scale key signatures for identification.
+
+**Attributes**
+
+- `staff_keys` (*set of int*): Signatures drawn on the staff, independently of the scale's own signature. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
+>>> cfg.active_keys(), cfg.active_staff_keys()
+([2], [-3])
+```
+
+### ScaleIdentificationSettings.active_staff_keys
+
+```python
+def active_staff_keys() -> list[int]
+```
+
+Return the selected staff signatures, falling back to no signature.
+
+**Returns**
+
+- *list of int*: Signature counts in ascending order.
+
+**Examples**
+
+```pycon
+>>> ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
+[0]
 ```
 
 ## ScaleConstructionSettings

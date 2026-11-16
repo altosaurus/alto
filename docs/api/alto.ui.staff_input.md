@@ -2,7 +2,7 @@
 title: alto.ui.staff_input
 parent: api
 package: alto.ui
-order: 49
+order: 52
 permalink: /api/alto.ui.staff_input/
 ---
 {% raw %}

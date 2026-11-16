@@ -2,7 +2,7 @@
 title: alto.ui.database_page
 parent: api
 package: alto.ui
-order: 27
+order: 28
 permalink: /api/alto.ui.database_page/
 ---
 {% raw %}
@@ -352,7 +352,7 @@ Answers and questions are the active profile's own; profiles lists everyone.
 
 **Attributes**
 
-- `back` (*Signal*): Emitted by the Back button and by Escape.
+- `back` (*Signal*): Emitted by Escape; the main window provides the shared Back button.
 - `learner` (*Learner*): Whose answers and questions are shown.
 - `tabs` (*dict of str to QPushButton*): The buttons that choose the table: "answers", "questions" and "profiles".
 - `search` (*QLineEdit*): Filters every column at once.

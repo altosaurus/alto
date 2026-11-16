@@ -2,7 +2,7 @@
 title: alto.ui.keyboard_styles
 parent: api
 package: alto.ui
-order: 36
+order: 38
 permalink: /api/alto.ui.keyboard_styles/
 ---
 {% raw %}

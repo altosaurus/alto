@@ -27,6 +27,9 @@ Changes that are in the development docs and not in a release yet.
 ### Changed
 {: .no-toc}
 
+- Scale Identification replaces Scale Spelling, keeping its icon. Identify an ascending scale on a staff, with selectable
+  clefs, scale types, and independent staff and scale key signatures.
+
 - Navigation is grouped on the left of the top bar, with Statistics and Browse database on the right. Exercises / Lessons
   changes the sidebar without leaving the active activity. Separate pane and grid buttons toggle the list or return to
   tiles while retaining the question, answer selection and lesson step. Search filters tiles and lists, and a back button
@@ -34,6 +37,9 @@ Changes that are in the development docs and not in a release yet.
 
 ### Fixed
 {: .no-toc}
+
+- Scale Identification plays with even rhythm on the first correct answer, highlights each note as it sounds, and waits
+  for the scale to finish before advancing.
 
 - Switching themes in Settings is faster, and Settings opens more quickly.
 

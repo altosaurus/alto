@@ -2,7 +2,7 @@
 title: alto.ui.app_settings
 parent: api
 package: alto.ui
-order: 21
+order: 22
 permalink: /api/alto.ui.app_settings/
 ---
 {% raw %}
@@ -206,7 +206,7 @@ Pages are built when first selected, so hidden previews do not slow down opening
 **Attributes**
 
 - `theme_changed` (*bool*): True once the theme has been changed, so the window can be rebuilt in it.
-- `categories` (*QListWidget*): The list of pages on the left: Appearance, Sound and Updates.
+- `categories` (*QListWidget*): The list of pages on the left: Appearance sections, Sound and Updates.
 - `pages` (*QStackedWidget*): The page for the chosen category.
 - `instruments` (*InstrumentPicker*): The instrument chooser, available after the Sound page is first selected.
 - `theme_list` (*QListWidget*): The themes, on the Theme section, with the one in use in bold.
@@ -241,27 +241,8 @@ Build the dialog with the Appearance page showing.
 
 ```pycon
 >>> dialog = AppSettingsDialog()
->>> dialog.categories.currentRow()
-0
-```
-
-### AppSettingsDialog.changeEvent
-
-```python
-def changeEvent(event: QEvent) -> None
-```
-
-Restyle the segmented control when the palette changes, so it follows the theme.
-
-**Parameters**
-
-- `event` (*QEvent*): The change.
-
-**Examples**
-
-```pycon
->>> dialog = AppSettingsDialog()
->>> dialog.changeEvent(QEvent(QEvent.Type.PaletteChange))
+>>> dialog.categories.currentItem().text().strip()
+'Theme'
 ```
 
 ### AppSettingsDialog.card
