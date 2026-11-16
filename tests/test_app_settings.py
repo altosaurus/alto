@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gc
 import json
 import os
 from typing import TYPE_CHECKING
@@ -34,6 +35,7 @@ from alto import updates
 from alto.ui import (
     app_settings,
     keyboard_styles,
+    notation,
     theme,
     theme_editor,
 )
@@ -125,6 +127,124 @@ def test_the_segmented_control_switches_between_theme_and_notation_style(dialog:
     assert dialog.appearance_pages.currentIndex() == 0
 
 
+def test_hidden_settings_pages_are_built_on_first_visit_and_reused(dialog: AppSettingsDialog) -> None:
+    """
+    Check that unused previews do not exist and that revisiting a page preserves its widgets and selection.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The dialog under test.
+    """
+    assert not dialog.findChildren(app_settings.StyleCard)
+    assert not dialog.findChildren(app_settings.KeyboardCard)
+    assert not dialog.findChildren(app_settings.InstrumentPicker)
+    assert not dialog.findChildren(app_settings.TransitionPreview)
+    dialog.segment_buttons[1].click()
+    page = dialog.appearance_pages.currentWidget()
+    assert len(dialog.findChildren(app_settings.StyleCard)) == len(notation.STYLES)
+    dialog.segment_buttons[0].click()
+    dialog.segment_buttons[1].click()
+    assert dialog.appearance_pages.currentWidget() is page
+    dialog.categories.setCurrentRow(1)
+    sound = dialog.pages.currentWidget()
+    dialog.instruments.select("flute")
+    dialog.categories.setCurrentRow(2)
+    dialog.categories.setCurrentRow(1)
+    assert dialog.pages.currentWidget() is sound and dialog.instruments.shown == "Flute"
+
+
+def test_a_page_first_opened_after_a_theme_change_uses_the_new_palette(dialog: AppSettingsDialog) -> None:
+    """
+    Check that a page built after changing themes inherits the current colours.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The dialog under test.
+    """
+    try:
+        dialog.choose_theme("studio_dark")
+        dialog.categories.setCurrentRow(1)
+        role = QPalette.ColorRole.Window
+        assert dialog.instruments.palette().color(role) == QApplication.palette().color(role)
+        assert dialog.instruments.palette().color(role).name() == "#1b1e23"
+    finally:
+        theme.apply_theme("system")
+
+
+def test_clicking_the_current_theme_does_not_apply_it_again(
+    dialog: AppSettingsDialog,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that the current theme stays selected without an unnecessary palette update or window rebuild.
+
+    Parameters
+    ----------
+    dialog : AppSettingsDialog
+        The dialog under test.
+    monkeypatch : pytest.MonkeyPatch
+        Records theme applications.
+    """
+    applied = []
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(app_settings, "apply_theme", applied.append)
+    dialog.thumb("dark").click()
+    assert applied == [] and not dialog.theme_changed and dialog.thumb("dark").isChecked()
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_applying_a_theme_protects_qt_from_collection_and_restores_the_callers_gc_state(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    enabled: bool,
+) -> None:
+    """
+    Check that Qt is restyled without cyclic collection and that a caller's disabled collector stays disabled.
+
+    Parameters
+    ----------
+    app : QApplication
+        The application whose stylesheet changes.
+    monkeypatch : pytest.MonkeyPatch
+        Records collection state while Qt changes the stylesheet.
+    enabled : bool
+        Whether collection is enabled before changing the theme.
+    """
+    before = gc.isenabled()
+    states = []
+    original = app.setStyleSheet
+
+    def restyle(sheet: str) -> None:
+        """
+        Observe collection state during the real stylesheet update.
+
+        Parameters
+        ----------
+        sheet : str
+            The new stylesheet.
+        """
+        states.append(gc.isenabled())
+        original(sheet)
+
+    monkeypatch.setattr(app, "setStyleSheet", restyle)
+    try:
+        if enabled:
+            gc.enable()
+        else:
+            gc.disable()
+        theme.apply_theme("studio")
+        assert states and not any(states)
+        assert gc.isenabled() == enabled
+    finally:
+        theme.apply_theme("system")
+        if before:
+            gc.enable()
+        else:
+            gc.disable()
+
+
 def test_a_palette_change_restyles_the_segmented_control(dialog: AppSettingsDialog) -> None:
     """
     Check that a palette change restyles the segmented control.
@@ -170,6 +290,7 @@ def test_each_keyboard_style_has_a_card_and_the_classic_one_is_chosen_by_default
     dialog : AppSettingsDialog
         The dialog under test.
     """
+    dialog.segment_buttons[2].click()
     assert list(dialog.keyboard_cards) == [*(s.key for s in keyboard_styles.STYLES), "custom"]
     assert [k for k, c in dialog.keyboard_cards.items() if c.isChecked()] == ["classic"]
     dialog.segment_buttons[2].click()
@@ -189,6 +310,7 @@ def test_clicking_a_keyboard_card_applies_the_style(dialog: AppSettingsDialog) -
     dialog : AppSettingsDialog
         The dialog under test.
     """
+    dialog.segment_buttons[2].click()
     dialog.keyboard_cards["harpsichord-french"].click()
     assert keyboard_styles.current().key == "harpsichord-french"
 
@@ -202,6 +324,7 @@ def test_the_builder_colours_each_part_and_selects_the_custom_style(dialog: AppS
     dialog : AppSettingsDialog
         The dialog under test.
     """
+    dialog.segment_buttons[2].click()
     dialog.builder._set("naturals", colour="#ead9aa")  # boxwood
     assert keyboard_styles.current().key == "custom" and keyboard_styles.custom_colours()["naturals"] == "#ead9aa"
     assert dialog.keyboard_cards["custom"].isChecked()
@@ -221,6 +344,7 @@ def test_the_builder_has_a_chip_for_every_material_and_none_for_optional_parts(d
     dialog : AppSettingsDialog
         The dialog under test.
     """
+    dialog.segment_buttons[2].click()
     chips = dialog.builder.findChildren(QToolButton)
     required = sum(1 for _, _, optional in keyboard_styles.COMPONENTS if not optional)
     optional = len(keyboard_styles.COMPONENTS) - required
@@ -243,6 +367,7 @@ def test_the_builder_opens_the_colour_picker_and_keeps_a_chosen_colour(
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
     """
+    dialog.segment_buttons[2].click()
     picked = iter([QColor("#336699"), QColor()])  # then the dialog is cancelled
     monkeypatch.setattr(app_settings.QColorDialog, "getColor", lambda *a, **k: next(picked))
     dialog.builder.swatches["case"].click()
@@ -744,7 +869,11 @@ def test_a_dialog_opens_with_the_main_branch_ticked_if_that_was_chosen(dialog: A
         A dialog, which makes sure the settings are isolated from the real ones.
     """
     save_channel("main")
-    assert AppSettingsDialog().main_channel.isChecked()
+    following = AppSettingsDialog()
+    following.categories.setCurrentRow(2)
+    assert following.main_channel.isChecked()
     save_channel("releases")
-    assert not AppSettingsDialog().main_channel.isChecked()
+    releases = AppSettingsDialog()
+    releases.categories.setCurrentRow(2)
+    assert not releases.main_channel.isChecked()
     assert dialog is not None

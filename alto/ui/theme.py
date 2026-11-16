@@ -858,7 +858,7 @@ def apply_theme(key: str) -> None:
     if _applying:  # changing the colour scheme announces itself, which must not start the change over
         return
     _applying = True
-    gc.collect()  # widgets that are only waiting to be collected go now, not in the middle of the changes below
+    collecting = gc.isenabled()
     gc.disable()  # Qt tells every widget about a new palette or style, and a widget freed while it does so would crash it
     try:
         QGuiApplication.styleHints().setColorScheme(scheme_of(key) or Qt.ColorScheme.Unknown)
@@ -876,7 +876,11 @@ def apply_theme(key: str) -> None:
             if app.palette().color(QPalette.ColorRole.Window).name() == _custom_window:
                 app.setPalette(app.style().standardPalette())  # the reset did not take, so use the style's own for the scheme
             _custom_palette = False
-        app.setStyleSheet(app_style(app.palette()))
+        stylesheet = app_style(app.palette())
+        if app.styleSheet():
+            app.setStyleSheet("")  # replacing a live sheet recursively repolishes its descendants many times
+        app.setStyleSheet(stylesheet)
     finally:
-        gc.enable()
+        if collecting:
+            gc.enable()
         _applying = False

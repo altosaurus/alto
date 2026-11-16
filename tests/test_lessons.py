@@ -200,6 +200,7 @@ def test_the_transition_is_cascade_until_another_is_chosen_in_the_settings(app: 
     assert len({item.key for item in TRANSITIONS}) == len(TRANSITIONS) > 11  # every one has its own key
     assert [item.key for item in TRANSITIONS][:2] == ["none", "cascade"]  # the default comes straight after "no transition"
     dialog = AppSettingsDialog()
+    dialog.segment_buttons[3].click()
     assert set(dialog.transition_items) == {item.key for item in TRANSITIONS}
     assert dialog.transition_list.currentItem() is dialog.transition_items["cascade"]
     dialog.transition_list.setCurrentItem(dialog.transition_items["flip"])
