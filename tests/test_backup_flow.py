@@ -348,11 +348,7 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
 
     assert rows(clean) == original_rows
     assert export_settings() == original_settings
-    reopened = getattr(QApplication.instance(), "main_window", None)
-    assert isinstance(reopened, MainWindow)
-    assert reopened is not window
-    # noinspection PyUnresolvedReferences
-    now_learner = reopened.learner
+    now_learner = window.learner  # the window is rebuilt in place
     assert now_learner is not None
     assert now_learner.profile.name == "Ada" and now_learner.profile.id == learner.profile.id
     assert settings.note_names.active_clefs() == ["alto"] and sounds.instrument == "flute"

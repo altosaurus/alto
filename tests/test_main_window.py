@@ -6,14 +6,13 @@ import random
 import sys
 from typing import (
     TYPE_CHECKING,
-    Any,
-    cast,
 )
 
 import pytest
 from PySide6.QtCore import (
     QEvent,
     QObject,
+    QRect,
     QSize,
     Qt,
 )
@@ -50,6 +49,7 @@ from alto.ui.home import (
     ExerciseCard,
     HomePage,
 )
+from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
 from alto.ui.store import store
 
@@ -568,7 +568,7 @@ def test_changing_the_theme_in_settings_opens_a_fresh_window(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that changing the theme in settings opens a fresh window, once the settings are closed.
+    Check that changing the theme in settings rebuilds the window, once the settings are closed.
 
     Parameters
     ----------
@@ -636,12 +636,12 @@ def test_the_settings_do_not_block_the_window(
     dialog.close()
 
 
-def test_a_rebuilt_window_takes_the_old_ones_place(
+def test_a_rebuilt_window_stays_where_it_was(
     app: QApplication,
     practised_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that a rebuilt window takes the old ones place.
+    Check that a rebuilt window stays where it was, as the same window.
 
     Parameters
     ----------
@@ -659,9 +659,41 @@ def test_a_rebuilt_window_takes_the_old_ones_place(
     )
     old.show()
     old.rebuild()
-    fresh = cast(Any, QApplication.instance()).main_window  # set by rebuild()
-    assert fresh is not old and fresh.learner is old.learner and fresh.geometry().size() == old.geometry().size()
-    assert fresh.isVisible() and not old.isVisible()
+    assert old.isVisible() and old.geometry() == QRect(120, 80, 900, 600)  # the same window, in the same place
+    old.close()
+
+
+def test_a_rebuilt_window_shows_the_page_that_was_open(
+    app: QApplication,
+    practised_learner: Callable[..., Learner],
+) -> None:
+    """
+    Check that a rebuilt window shows the exercise, the lesson at its step, or the statistics that were open.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    practised_learner : Callable[..., Learner]
+        Builds a learner with a history of answers.
+    """
+    learner = practised_learner(5)
+    old = MainWindow(learner)
+    old.open_exercise(REGISTRY[0])
+    old.open_stats()
+    old.rebuild()
+    fresh = old
+    assert fresh.title_label.text() == "Statistics"
+    assert fresh.sidebar_width() > 0  # the list is in place at once, not sliding open
+    fresh.close_overlay()
+    assert fresh.title_label.text() == REGISTRY[0].name
+    fresh.open_lessons("circle-of-fifths")
+    page = fresh._overlay
+    assert isinstance(page, LessonsPage)
+    page.view.go(to=2)
+    fresh.rebuild()
+    page = fresh._overlay
+    assert isinstance(page, LessonsPage) and page.view.current == 2
     fresh.close()
 
 
