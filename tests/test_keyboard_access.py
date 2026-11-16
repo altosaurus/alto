@@ -826,11 +826,11 @@ def test_buttons_with_no_text_have_a_name_for_a_screen_reader(app: QApplication)
         The shared Qt application.
     """
     view = ExerciseView(NoteConstruction(), rng=random.Random(4))
-    for button in (view.sound_btn, view.gear, view.help_btn, view.sidebar_button):
+    for button in (view.sound_btn, view.gear, view.help_btn):
         assert button.accessibleName(), button
     assert view.sound_btn.accessibleName() in {"Sound on", "Sound muted"}
     window = MainWindow()
-    for button in (window.menu_button, window.stats_button, window.database_button):
+    for button in (window.menu_button, window.pane_button, window.view_button, window.stats_button, window.database_button):
         assert button.accessibleName(), button
     card = ExerciseCard(NoteConstruction)
     assert card.accessibleName().startswith("Note Construction") and card.accessibleDescription() == NoteConstruction.description

@@ -33,9 +33,11 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QColor,
+    QHideEvent,
     QKeySequence,
     QPalette,
     QShortcut,
+    QShowEvent,
     QWheelEvent,
 )
 from PySide6.QtWidgets import (
@@ -100,10 +102,7 @@ from alto.ui.staff_input import (
     ScaleInput,
     StaffInput,
 )
-from alto.ui.widgets import (
-    HelpButton,
-    SidebarToggle,
-)
+from alto.ui.widgets import HelpButton
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -387,6 +386,8 @@ class ExerciseView(QWidget):
         self.missed = False
         self._attempts = 0  # answers given to the question on screen
         self._clock = time.monotonic()  # when the last answer was given, or the question appeared
+        self._hidden_at: float | None = None
+        self._advance_remaining = -1
 
         self.score = QLabel()
         self.prompt = DegreeLabel()
@@ -562,8 +563,6 @@ class ExerciseView(QWidget):
         self._anims: list[QVariantAnimation] = []
 
         top = QHBoxLayout()
-        self.sidebar_button = SidebarToggle()  # wired up by the main window
-        top.addWidget(self.sidebar_button)
         top.addStretch()
         top.addWidget(self.score)
         self.help_btn = HelpButton(exercise.instructions)
@@ -700,6 +699,57 @@ class ExerciseView(QWidget):
         ]
         self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)  # the screen can be given the keyboard when it opens
         self.next_question()
+
+    def hideEvent(self, event: QHideEvent) -> None:
+        """
+        Pause automatic advancement and answer timing while browsing another page.
+
+        Parameters
+        ----------
+        event : QHideEvent
+            The notification that the exercise is being hidden.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> view = ExerciseView(NoteNames())
+        >>> view.show()
+        >>> view.hide()
+        >>> view._advance.isActive()
+        False
+        """
+        if self._hidden_at is None:
+            self._hidden_at = time.monotonic()
+            self._advance_remaining = self._advance.remainingTime()
+            self._advance.stop()
+        super().hideEvent(event)
+
+    def showEvent(self, event: QShowEvent) -> None:
+        """
+        Resume the exercise's answer clock and pending advance when it reappears.
+
+        Parameters
+        ----------
+        event : QShowEvent
+            The notification that the exercise is visible again.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> view = ExerciseView(NoteNames())
+        >>> view.show()
+        >>> view.hide()
+        >>> view.show()
+        >>> view._hidden_at is None
+        True
+        """
+        if self._hidden_at is not None:
+            self._clock += time.monotonic() - self._hidden_at
+            self._hidden_at = None
+            if self._advance_remaining >= 0:
+                self._advance.start(max(1, self._advance_remaining))
+            self._advance_remaining = -1
+        super().showEvent(event)
 
     def _bind(
         self,

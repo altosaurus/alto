@@ -359,7 +359,7 @@ def test_choosing_an_exercise_shows_it_opens_the_list_and_titles_the_window(wind
         assert window.title_label.text() == cls.name and window.nav.currentItem().data(Qt.ItemDataRole.UserRole) is cls
         settle()
         assert window.sidebar_width() > 0
-    assert window.stack.count() == 2  # the home screen and the one exercise: each is dropped when the next opens
+    assert window.stack.count() == 3  # tiles, the empty workspace and one retained exercise
 
 
 def test_the_exercise_list_can_be_collapsed_and_the_choice_is_remembered(window: MainWindow) -> None:
@@ -408,8 +408,9 @@ def test_going_home_closes_the_list(window: MainWindow) -> None:
     window.show_home()
     settle()
     assert window.stack.currentWidget() is window.home and window.sidebar_width() == 0
-    assert window.title_label.text() == MainWindow.APP_TITLE and window.nav.currentItem() is None
-    assert window.stack.count() == 1
+    assert window.title_label.text() == MainWindow.APP_TITLE
+    assert window.nav.currentItem() is not None  # retain the active exercise's selection
+    assert window.stack.count() == 3
 
 
 def test_the_statistics_and_database_pages_replace_the_current_page_and_back_returns(window: MainWindow) -> None:

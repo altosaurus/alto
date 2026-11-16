@@ -160,6 +160,8 @@ The start screen: a row of exercise buttons for each category.
 - `lesson_cards` (*list of TileCard*): One per lesson, with how far through it you are.
 - `canvas` (*TransitionCanvas*): Where the transition between the exercises and the lessons is drawn.
 - `mode_control` (*SegmentedControl*): The switch between the exercises and the lessons. The main window puts it in its top bar.
+- `resume_button` (*QPushButton*): Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.
+- `no_results` (*QLabel*): Shown when no tiles match the search.
 - `mode` (*str*): "exercises" or "lessons": which cards are showing.
 - `scroll_area` (*QScrollArea*): Scrolls the rows when the window is shorter than all of them.
 
@@ -190,6 +192,28 @@ Build the page.
 >>> from alto.exercises.library import NoteNames
 >>> len(HomePage([NoteNames]).cards)
 1
+```
+
+### HomePage.set_search
+
+```python
+def set_search(text: str) -> None
+```
+
+Show only tiles matching a title, description or category search.
+
+**Parameters**
+
+- `text` (*str*): Case-insensitive search text; empty text restores all tiles.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises import REGISTRY
+>>> page = HomePage(REGISTRY)
+>>> page.set_search("keyboard")
+>>> page._query
+'keyboard'
 ```
 
 ### HomePage.set_mode

@@ -11,6 +11,13 @@ Alto uses [semantic versioning](https://semver.org/).
   notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
   Note-name previews have visible text labels.
 
+### Changed
+
+- Navigation is grouped on the left of the top bar, with Statistics and Browse database on the right. Exercises / Lessons
+  changes the sidebar without leaving the active activity. Separate pane and grid buttons toggle the list or return to
+  tiles while retaining the question, answer selection and lesson step. Search filters tiles and lists, and a back button
+  resumes the active exercise or lesson. Before starting an activity, the workspace prompts you to select one.
+
 ### Fixed
 
 - Switching themes in Settings is faster, and Settings opens more quickly.

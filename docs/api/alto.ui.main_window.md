@@ -6,9 +6,9 @@ order: 39
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
-The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.
+The main window: tile browsing or a workspace with an independently selected exercise or lesson list.
 
-The page is the start screen, an exercise, or (while it is open) the statistics or the database browser.
+Navigation stays on the left of the top bar, with data tools on the right. Browsing tiles retains the active activity.
 
 **Examples**
 
@@ -61,6 +61,10 @@ The application window.
 - `home` (*HomePage*): The start screen.
 - `splitter` (*QSplitter*): Holds the list and the pages, so the list can be dragged narrower or wider.
 - `title_label` (*QLabel*): The title in the top bar.
+- `view_button` (*QToolButton*): Returns to the tiles without discarding the current activity.
+- `pane_button` (*SidebarToggle*): Opens or closes the navigation pane beside the current activity.
+- `empty_page` (*QLabel*): The selected section's prompt before an activity starts.
+- `search_field` (*QLineEdit*): Filters tiles and navigation lists without leaving the current activity.
 
 **Examples**
 
@@ -91,6 +95,36 @@ Build the window and load every saved setting.
 True
 >>> MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
 False
+```
+
+### MainWindow.eventFilter
+
+```python
+def eventFilter(
+    watched: QObject,
+    event: QEvent,
+) -> bool
+```
+
+Highlight the search field's outline while it has keyboard focus.
+
+**Parameters**
+
+- `watched` (*QObject*): The search field.
+- `event` (*QEvent*): The event being delivered.
+
+**Returns**
+
+- *bool*: Whether the base window consumes the event; focus changes are allowed through.
+
+**Examples**
+
+```pycon
+>>> window = MainWindow()
+>>> window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
+False
+>>> window.search_row.property("focusWithin")
+True
 ```
 
 ### MainWindow.sidebar_width
@@ -213,6 +247,23 @@ Show the statistics in place of the current page. Nothing happens without a prof
 >>> window.title_label.text()
 'Statistics'
 >>> window.close_overlay()
+```
+
+### MainWindow.toggle_navigation
+
+```python
+def toggle_navigation() -> None
+```
+
+Open the workspace from tiles, or toggle its navigation pane without leaving the activity.
+
+**Examples**
+
+```pycon
+>>> window = MainWindow()
+>>> window.toggle_navigation()
+>>> window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
+(True, 'Tiles')
 ```
 
 ### MainWindow.show_lessons

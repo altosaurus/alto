@@ -353,6 +353,37 @@ BOOK = (
     'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
+# Search: a magnifying glass.
+SEARCH = (
+    '<circle cx="10.5" cy="10.5" r="6" fill="none" stroke="COLOR" stroke-width="2"/>'
+    '<path d="M15 15l5.5 5.5" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"/>'
+)
+
+# Tile catalogue: a two-by-two grid.
+TILES = (
+    '<g fill="none" stroke="COLOR" stroke-width="2" stroke-linejoin="round">'
+    '<rect x="3" y="3" width="7" height="7" rx="1"/>'
+    '<rect x="14" y="3" width="7" height="7" rx="1"/>'
+    '<rect x="3" y="14" width="7" height="7" rx="1"/>'
+    '<rect x="14" y="14" width="7" height="7" rx="1"/></g>'
+)
+
+# Navigation pane: a window with a left sidebar.
+NAVIGATION_PANE = (
+    '<rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="COLOR" stroke-width="2"/>'
+    '<path d="M9 3v18" fill="none" stroke="COLOR" stroke-width="2"/>'
+)
+
+# Framed sidebar actions: the arrow points toward the destination of the pane.
+NAVIGATION_OPEN = (
+    NAVIGATION_PANE
+    + '<path d="m14 9 3 3-3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+NAVIGATION_CLOSE = (
+    NAVIGATION_PANE
+    + '<path d="m17 9-3 3 3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+
 # Exercises: a checklist.
 EXERCISES = (
     '<path d="M4 6.5l1.6 1.6L8.4 5M4 12.5l1.6 1.6L8.4 11M4 18.5l1.6 1.6L8.4 17M12.5 7h8M12.5 13h8M12.5 19h8" '

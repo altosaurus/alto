@@ -215,6 +215,53 @@ Build the screen and show the first question.
 True
 ```
 
+### ExerciseView.hideEvent
+
+```python
+def hideEvent(event: QHideEvent) -> None
+```
+
+Pause automatic advancement and answer timing while browsing another page.
+
+**Parameters**
+
+- `event` (*QHideEvent*): The notification that the exercise is being hidden.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> view = ExerciseView(NoteNames())
+>>> view.show()
+>>> view.hide()
+>>> view._advance.isActive()
+False
+```
+
+### ExerciseView.showEvent
+
+```python
+def showEvent(event: QShowEvent) -> None
+```
+
+Resume the exercise's answer clock and pending advance when it reappears.
+
+**Parameters**
+
+- `event` (*QShowEvent*): The notification that the exercise is visible again.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> view = ExerciseView(NoteNames())
+>>> view.show()
+>>> view.hide()
+>>> view.show()
+>>> view._hidden_at is None
+True
+```
+
 ### ExerciseView.next_question
 
 ```python

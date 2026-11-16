@@ -1,7 +1,7 @@
 """
-The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.
+The main window: tile browsing or a workspace with an independently selected exercise or lesson list.
 
-The page is the start screen, an exercise, or (while it is open) the statistics or the database browser.
+Navigation stays on the left of the top bar, with data tools on the right. Browsing tiles retains the active activity.
 
 Examples
 --------
@@ -13,9 +13,12 @@ Examples
 from __future__ import annotations
 
 import sys
+from dataclasses import dataclass
 
 from PySide6.QtCore import (
     QAbstractAnimation,
+    QEvent,
+    QObject,
     QProcess,
     QSize,
     Qt,
@@ -29,9 +32,11 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
+    QFrame,
     QGridLayout,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QMainWindow,
@@ -47,13 +52,13 @@ from alto import updates
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
 from alto.learning import Learner
-from alto.lessons import LESSONS
 from alto.ui import (
     backup_flow,
     icons,
     update_flow,
 )
 from alto.ui.app_settings import AppSettingsDialog
+from alto.ui.colors import blend_name
 from alto.ui.database_page import DatabasePage
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -65,6 +70,7 @@ from alto.ui.instrument_picker import load_instrument
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
 from alto.ui.lesson import LessonsPage
 from alto.ui.lesson_nav import (
+    STEP_ROLE,
     LessonNav,
     section_item,
 )
@@ -94,6 +100,7 @@ from alto.ui.theme import (
     apply_theme,
     saved_theme,
 )
+from alto.ui.widgets import SidebarToggle
 
 DEFAULT_WIDTH, DEFAULT_HEIGHT = 1100, 820  # big enough for a lesson step with its circle, and an exercise with its pane
 SCREEN_FRACTION = 0.92  # the most of the screen the window opens to, so that it never starts bigger than the screen
@@ -123,6 +130,49 @@ def default_size() -> tuple[int, int]:
     )
 
 
+@dataclass(kw_only=True)
+class _PageState:
+    """
+    Remember the activity, browsing section and layout across a theme rebuild.
+
+    Attributes
+    ----------
+    exercise : type of Exercise or None
+        The retained exercise's class.
+    lesson : tuple of (str, int) or None
+        The retained lesson's key and step.
+    active : str
+        "exercise", "lesson" or "empty" for the workspace behind the tiles.
+    lesson_parent : str
+        "exercise", "empty" or "home", the page to return to when leaving a lesson.
+    overlay : str or None
+        "stats" or "database" for a utility page on top.
+    mode : str
+        "exercises" or "lessons", independently of the active activity.
+    pane : bool
+        Whether the workspace rather than tiles is selected.
+    sidebar : bool
+        Whether the sidebar is expanded in the workspace.
+    search : str
+        The search text shared by the tiles and navigation lists.
+
+    Examples
+    --------
+    >>> _PageState().mode
+    'exercises'
+    """
+
+    exercise: type[Exercise] | None = None
+    lesson: tuple[str, int] | None = None
+    active: str = "empty"
+    lesson_parent: str = "home"
+    overlay: str | None = None
+    mode: str = "exercises"
+    pane: bool = False
+    sidebar: bool = True
+    search: str = ""
+
+
 class MainWindow(QMainWindow):
     """
     The application window.
@@ -147,6 +197,14 @@ class MainWindow(QMainWindow):
         Holds the list and the pages, so the list can be dragged narrower or wider.
     title_label : QLabel
         The title in the top bar.
+    view_button : QToolButton
+        Returns to the tiles without discarding the current activity.
+    pane_button : SidebarToggle
+        Opens or closes the navigation pane beside the current activity.
+    empty_page : QLabel
+        The selected section's prompt before an activity starts.
+    search_field : QLineEdit
+        Filters tiles and navigation lists without leaving the current activity.
 
     Examples
     --------
@@ -182,9 +240,14 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self._overlay: StatsPage | DatabasePage | LessonsPage | None = (
-            None  # the statistics or database page, while one is showing
+            None  # the statistics, database or lesson page, while one is showing
         )
         self._overlay_return: tuple[QWidget | None, str] | None = None  # the page and title to go back to
+        self._pane_view = False
+        self._exercise_page: ExerciseView | None = None
+        self._lesson_page: LessonsPage | None = None
+        self._workspace_page: ExerciseView | LessonsPage | None = None
+        self._lesson_return: tuple[QWidget | None, str] | None = None
         self._settings: AppSettingsDialog | None = None  # the settings, while they are open
         self.learner = learner  # who is practising, and their history; None practises without recording
         self.setWindowTitle(self.APP_TITLE)
@@ -201,6 +264,11 @@ class MainWindow(QMainWindow):
         >>> window.title_label.text()
         'Alto - Music Theory'
         """
+        self._pane_view = False
+        self._exercise_page = None
+        self._lesson_page = None
+        self._workspace_page = None
+        self._lesson_return = None
         self.nav = QListWidget()  # the exercise list: section labels and exercises, as a flat sidebar
         self.nav.setObjectName("nav")  # styled in style.py
         self.nav.setIconSize(QSize(20, 20))
@@ -216,7 +284,14 @@ class MainWindow(QMainWindow):
         self.home = HomePage(REGISTRY)  # start screen with a button for every exercise
         self.home.exercise_chosen.connect(self.open_exercise)
         self.home.lesson_chosen.connect(self.open_lessons)
+        self.home.resume_button.clicked.connect(self._show_workspace)
         self.stack.addWidget(self.home)
+        self.empty_page = QLabel()
+        self.empty_page.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_page.setWordWrap(True)
+        self.empty_page.setAccessibleName("Select an activity")
+        self.stack.addWidget(self.empty_page)
+        self._update_empty_page()
 
         self._items: dict[type, QListWidgetItem] = {}
         ink = self.palette().color(QPalette.ColorRole.Text)
@@ -317,8 +392,7 @@ class MainWindow(QMainWindow):
 
         root = QWidget()
         lay = QVBoxLayout(root)
-        # Top bar: menu buttons on the left, the exercise title centred. Equal-stretch outer columns
-        # keep the title centred however wide the buttons are.
+        # Navigation on the left, data tools on the right, with the activity title centred.
         self.title_label = QLabel(self.APP_TITLE)
         self.title_label.setStyleSheet("font-size: 14pt; font-weight: bold;")
         buttons = QHBoxLayout()
@@ -330,7 +404,113 @@ class MainWindow(QMainWindow):
         )
         # noinspection DuplicatedCode
         buttons.addWidget(self.menu_button)
-        self.stats_button = QToolButton()  # a quick way to the statistics, beside the menu
+        self.view_button = QToolButton()
+        self.view_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        self.view_button.setIconSize(QSize(18, 18))
+        self.view_button.setAutoRaise(True)
+        self.view_button.clicked.connect(self.show_home)
+        self.pane_button = SidebarToggle(noun="navigation pane")
+        self.pane_button.setIconSize(QSize(18, 18))
+        self.pane_button.set_open(False)
+        self.pane_button.setIcon(svg_icon(icons.NAVIGATION_OPEN, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        self.pane_button.clicked.connect(self.toggle_navigation)
+        self.search_field = QLineEdit()
+        self.search_field.setObjectName("navigationSearch")
+        self.search_field.setClearButtonEnabled(True)
+        self.search_field.setMinimumWidth(0)
+        self.search_field.setMinimumHeight(32)
+        self.search_field.textChanged.connect(self._apply_search)
+        search_action = self.search_field.addAction(
+            svg_icon(icons.SEARCH, color=self.palette().color(QPalette.ColorRole.WindowText)),
+            QLineEdit.ActionPosition.LeadingPosition,
+        )
+        search_action.setText("Search")
+        search_action.triggered.connect(lambda: self.search_field.setFocus())
+        self.view_button.setObjectName("navigationView")
+        self.view_button.setMinimumHeight(32)
+        self.search_row = QFrame()
+        self.search_row.setObjectName("navigationSearchGroup")
+        self.search_row.setProperty("focusWithin", False)
+        self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
+        fill = blend_name(
+            self.palette().color(QPalette.ColorRole.Window),
+            b=self.palette().color(QPalette.ColorRole.Text),
+            t=0.04,
+        )
+        edge = blend_name(
+            self.palette().color(QPalette.ColorRole.Window),
+            b=self.palette().color(QPalette.ColorRole.Text),
+            t=0.22,
+        )
+        self.search_row.setStyleSheet(f"""
+            QFrame#navigationSearchGroup {{
+                background: {fill}; border: 1px solid {edge}; border-radius: 8px;
+            }}
+            QFrame#navigationSearchGroup[focusWithin="true"] {{ border-color: palette(highlight); }}
+            QLineEdit#navigationSearch {{
+                background: transparent; border: none; border-radius: 7px;
+                padding: 0 6px; selection-background-color: palette(highlight);
+            }}
+        """)
+        self.navigation_group = QFrame()
+        self.navigation_group.setObjectName("navigationGroup")
+        self.navigation_group.setStyleSheet(f"""
+            QFrame#navigationGroup {{ background: transparent; border: none; }}
+            QFrame#navigationDivider {{ background: {edge}; border: none; }}
+            QToolButton#navigationView {{
+                background: transparent; border: none; border-radius: 6px; padding: 4px 6px;
+            }}
+            QToolButton#navigationView:hover {{ background: palette(midlight); }}
+            QToolButton#navigationView:pressed {{ background: palette(mid); }}
+            QToolButton#navigationView:focus {{ border: 1px solid palette(highlight); }}
+        """)
+        self.home.mode_control.setStyleSheet("QFrame#segments { background: transparent; border: none; }")
+        for name, button in zip(("navigationExercises", "navigationLessons"), self.home.mode_control.buttons, strict=True):
+            button.setObjectName(name)
+            button.setMinimumHeight(32)
+        section_layout = self.home.mode_control.layout()
+        assert section_layout is not None
+        section_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        section_layout.setSpacing(2)
+        navigation_row = QHBoxLayout(self.navigation_group)
+        navigation_row.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        navigation_row.setSpacing(10)
+        navigation_row.addWidget(self.home.mode_control)
+        navigation_row.addWidget(self.pane_button)
+        self.navigation_divider = QFrame()
+        self.navigation_divider.setObjectName("navigationDivider")
+        self.navigation_divider.setFixedSize(1, 22)
+        navigation_row.addWidget(self.navigation_divider, alignment=Qt.AlignmentFlag.AlignVCenter)
+        navigation_row.addWidget(self.view_button)
+        buttons.addWidget(self.navigation_group)
+        self.search_field.installEventFilter(self)
+        search_row = QHBoxLayout(self.search_row)
+        search_row.setContentsMargins(
+            1,
+            1,
+            1,
+            1,
+        )
+        search_row.setSpacing(0)
+        search_row.addWidget(self.search_field, 1)
+        tools = QHBoxLayout()
+        tools.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        self.stats_button = QToolButton()  # data tools stay separate from navigation
         self.stats_button.setIcon(svg_icon(icons.CHART, color=self.palette().color(QPalette.ColorRole.WindowText)))
         self.stats_button.setIconSize(QSize(22, 22))
         self.stats_button.setAutoRaise(True)
@@ -339,7 +519,7 @@ class MainWindow(QMainWindow):
         if self.learner is None:  # hidden, never shown here: a button with no parent that is shown opens as a window of its own
             self.stats_button.hide()
         self.stats_button.clicked.connect(self.open_stats)
-        buttons.addWidget(self.stats_button)
+        tools.addWidget(self.stats_button)
         self.database_button = QToolButton()
         self.database_button.setIcon(svg_icon(icons.DATABASE, color=self.palette().color(QPalette.ColorRole.WindowText)))
         self.database_button.setIconSize(QSize(22, 22))
@@ -349,7 +529,7 @@ class MainWindow(QMainWindow):
         if self.learner is None:
             self.database_button.hide()
         self.database_button.clicked.connect(self.open_database)
-        buttons.addWidget(self.database_button)
+        tools.addWidget(self.database_button)
         bar = QGridLayout()
         bar.addLayout(
             buttons,
@@ -363,12 +543,23 @@ class MainWindow(QMainWindow):
             1,
             Qt.AlignmentFlag.AlignCenter,
         )
-        bar.addWidget(
-            self.home.mode_control,
+        bar.addLayout(
+            tools,
             0,
             2,
             Qt.AlignmentFlag.AlignRight,
-        )  # the switch between exercises and lessons
+        )
+        browser_row = QHBoxLayout()
+        browser_row.addWidget(self.search_row)
+        browser_row.addWidget(self.home.resume_button)
+        browser_row.addStretch(1)
+        bar.addLayout(
+            browser_row,
+            1,
+            0,
+            1,
+            3,
+        )
         self.stack.currentChanged.connect(self._show_mode_control)
         self.stack.currentChanged.connect(self._show_nav)
         self.home.mode_control.chosen.connect(self._mode_chosen)
@@ -378,6 +569,41 @@ class MainWindow(QMainWindow):
         lay.addLayout(bar)
         lay.addWidget(self.splitter, 1)
         self.setCentralWidget(root)
+
+    def eventFilter(  # noqa: PLR0917 (Qt calls this override with both positional arguments)
+        self,
+        watched: QObject,
+        event: QEvent,
+    ) -> bool:
+        """
+        Highlight the search field's outline while it has keyboard focus.
+
+        Parameters
+        ----------
+        watched : QObject
+            The search field.
+        event : QEvent
+            The event being delivered.
+
+        Returns
+        -------
+        bool
+            Whether the base window consumes the event; focus changes are allowed through.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
+        False
+        >>> window.search_row.property("focusWithin")
+        True
+        """
+        if watched is self.search_field and event.type() in (QEvent.Type.FocusIn, QEvent.Type.FocusOut):
+            self.search_row.setProperty("focusWithin", event.type() == QEvent.Type.FocusIn)
+            self.search_row.style().unpolish(self.search_row)
+            self.search_row.style().polish(self.search_row)
+            self.search_row.update()
+        return super().eventFilter(watched, event)
 
     # exercise list: collapse / resize
     def sidebar_width(self) -> int:
@@ -421,19 +647,27 @@ class MainWindow(QMainWindow):
 
     def _update_sidebar_button(self) -> None:
         """
-        Keep every page's toggle button in step with the list.
-
-        The buttons live in the exercise headers.
+        Keep the header and lesson toggle buttons in step with the list.
 
         Examples
         --------
         >>> MainWindow()._update_sidebar_button()
         """
         is_open = self.sidebar_width() > 0
+        if hasattr(self, "pane_button"):
+            self.pane_button.set_open(is_open)
+            self.pane_button.setIcon(
+                svg_icon(
+                    icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN,
+                    color=self.palette().color(QPalette.ColorRole.WindowText),
+                ),
+            )
+        if hasattr(self, "search_row"):
+            self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
         for i in range(self.stack.count()):
             button = getattr(self.stack.widget(i), "sidebar_button", None)
-            if button is not None:
-                # noinspection PyUnresolvedReferences
+            if isinstance(button, SidebarToggle):
+                button.noun = "lesson list" if self.home.mode == "lessons" else "exercise list"
                 button.set_open(is_open)
 
     def _save_sidebar(self) -> None:
@@ -547,20 +781,20 @@ class MainWindow(QMainWindow):
         if cls is None:
             return
         self.close_overlay()
-        old = self.stack.currentWidget()
-        view = ExerciseView(cls(), learner=self.learner)
-        view.sidebar_button.clicked.connect(self.toggle_sidebar)
-        view.lesson_requested.connect(lambda key: self.open_lessons(key))
-        self.title_label.setText(cls.name)
+        old = self._exercise_page
+        view = old if old is not None and type(old.exercise) is cls else ExerciseView(cls(), learner=self.learner)
+        if view is not old:
+            view.lesson_requested.connect(lambda key: self.open_lessons(key))
+            self.stack.addWidget(view)
+        if self._lesson_return is not None and self._lesson_return[0] is old:
+            self._lesson_return = (view, cls.name)
+        self._exercise_page = view
+        self._workspace_page = view
+        self.home.set_mode("exercises", animate=False)
         self.nav.setCurrentItem(self._items[cls])
-        self.stack.addWidget(view)
-        self.stack.setCurrentWidget(view)
-        self._update_sidebar_button()
+        self._show_workspace()
         self._drop(old)
-        self.splitter.handle(1).setEnabled(True)
-        if self._sidebar_pref:
-            self._set_sidebar(True)  # the list appears once an exercise is chosen
-        view.setFocus()  # the keyboard goes to the exercise, so its keys work without a click
+        view.setFocus()
 
     def open_settings(self) -> None:
         """
@@ -633,63 +867,78 @@ class MainWindow(QMainWindow):
         if old is not None:
             old.deleteLater()
 
-    def _page_state(self) -> tuple[type[Exercise] | None, str, tuple[str, int] | str | None]:
+    def _page_state(self) -> _PageState:
         """
-        Note what is open, so a window built in its place can show the same.
+        Remember retained activities and the independently selected navigation section.
 
         Returns
         -------
-        tuple of (type of Exercise or None, str, tuple of (str, int) or str or None)
-            The exercise that is open underneath (None on the start screen), the start screen's side ("exercises" or
-            "lessons"), and the page laid over it: a lesson as its key and step, "stats" or "database", or None.
+        _PageState
+            Activities, selected section, tile or pane view, and any utility page.
 
         Examples
         --------
         >>> window = MainWindow()
-        >>> window._page_state()
-        (None, 'exercises', None)
+        >>> window._page_state().pane
+        False
         """
-        base = self._overlay_return[0] if self._overlay is not None and self._overlay_return else self.stack.currentWidget()
-        exercise = type(base.exercise) if isinstance(base, ExerciseView) else None
-        overlay: tuple[str, int] | str | None = None
-        if isinstance(self._overlay, LessonsPage):
-            overlay = (self._overlay.view.lesson.key, self._overlay.view.current)
-        elif isinstance(self._overlay, StatsPage):
-            overlay = "stats"
-        elif isinstance(self._overlay, DatabasePage):
-            overlay = "database"
-        return exercise, self.home.mode, overlay
+        parent = self._lesson_return[0] if self._lesson_return else self.home
+        return _PageState(
+            exercise=type(self._exercise_page.exercise) if self._exercise_page is not None else None,
+            lesson=(self._lesson_page.view.lesson.key, self._lesson_page.view.current) if self._lesson_page is not None else None,
+            active="lesson" if isinstance(self._workspace_page, LessonsPage) else "exercise" if self._workspace_page else "empty",
+            lesson_parent="exercise" if isinstance(parent, ExerciseView) else "empty" if parent is self.empty_page else "home",
+            overlay="stats"
+            if isinstance(self._overlay, StatsPage)
+            else "database"
+            if isinstance(self._overlay, DatabasePage)
+            else None,
+            mode=self.home.mode,
+            pane=self._pane_view,
+            sidebar=self._sidebar_pref,
+            search=self.search_field.text(),
+        )
 
-    def _restore_page(self, state: tuple[type[Exercise] | None, str, tuple[str, int] | str | None]) -> None:
+    def _restore_page(self, state: _PageState) -> None:
         """
-        Show the pages that `_page_state` noted in another window.
+        Restore retained activity types and the navigation layout after rebuilding.
 
         Parameters
         ----------
-        state : tuple of (type of Exercise or None, str, tuple of (str, int) or str or None)
-            What `_page_state` returned.
+        state : _PageState
+            The activities and navigation state to restore.
 
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
         >>> window = MainWindow()
-        >>> window._restore_page((NoteNames, "exercises", None))
+        >>> window._restore_page(_PageState(exercise=NoteNames, active="exercise", pane=True))
         >>> window.title_label.text()
         'Note Identification'
         """
-        exercise, mode, overlay = state
-        if exercise is not None:
-            self.open_exercise(exercise)
-        elif mode != self.home.mode:
-            self.home.set_mode(mode, animate=False)
-        if isinstance(overlay, tuple):
-            self.open_lessons(overlay[0])
-            page = self._overlay
-            if isinstance(page, LessonsPage):
-                page.view.go(to=overlay[1])
-        elif overlay == "stats":
+        if state.exercise is not None:
+            self.open_exercise(state.exercise)
+        if state.lesson is not None:
+            self.open_lessons(state.lesson[0])
+            if self._lesson_page is not None:
+                self._lesson_page.view.go(to=state.lesson[1])
+            if state.lesson_parent != "exercise":
+                parent = self.empty_page if state.lesson_parent == "empty" else self.home
+                self._lesson_return = (parent, self.APP_TITLE)
+        self._workspace_page = (
+            self._lesson_page if state.active == "lesson" else self._exercise_page if state.active == "exercise" else None
+        )
+        if self.home.mode != state.mode:
+            self.home.set_mode(state.mode, animate=False)
+        self.search_field.setText(state.search)
+        self._sidebar_pref = state.sidebar
+        if state.pane:
+            self._show_workspace()
+        else:
+            self.show_home()
+        if state.overlay == "stats":
             self.open_stats()
-        elif overlay == "database":
+        elif state.overlay == "database":
             self.open_database()
 
     def _show_profile(self) -> None:
@@ -726,49 +975,116 @@ class MainWindow(QMainWindow):
         if self.learner:
             self._open_overlay(StatsPage(self.learner), title="Statistics")
 
-    def _show_mode_control(self) -> None:
+    def _update_empty_page(self) -> None:
         """
-        Keep the exercises and lessons switch in step with the page.
-
-        On the start screen it shows its words. In an exercise or a lesson it stays, as icons only, with the side you are on
-        chosen, and pressing either goes back to the start screen on that side.
+        Match the empty workspace prompt to the selected exercise or lesson list.
 
         Examples
         --------
-        >>> from alto.exercises.library import NoteNames
         >>> window = MainWindow()
-        >>> window.show()
-        >>> window.home.mode_control.buttons[0].text()
-        'Exercises'
-        >>> window.open_exercise(NoteNames)
-        >>> window.home.mode_control.isVisible(), window.home.mode_control.buttons[0].text()
-        (True, '')
+        >>> window.home.set_mode("exercises", animate=False)
+        >>> window._update_empty_page()
+        >>> window.empty_page.text()
+        'Select an exercise to begin.'
         """
-        control = self.home.mode_control
-        current = self.stack.currentWidget()
-        on_home = current is self.home
-        control.set_compact(not on_home)
-        if on_home:
-            control.set_current(1 if self.home.mode == "lessons" else 0)
-        else:
-            control.set_current(1 if isinstance(current, LessonsPage) else 0)
+        noun = "a lesson" if self.home.mode == "lessons" else "an exercise"
+        self.empty_page.setText(f"Select {noun} to begin.")
+
+    def _show_mode_control(self) -> None:
+        """
+        Keep navigation icon-only in both views and name the view button for its destination.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.view_button.accessibleName()
+        'Tiles'
+        """
+        self.home.mode_control.set_compact(True)
+        self.home.mode_control.set_current(1 if self.home.mode == "lessons" else 0)
+        section = "lessons" if self.home.mode == "lessons" else "exercises"
+        self.search_field.setPlaceholderText(f"Search {section}…")
+        self.search_field.setAccessibleName(f"Search {section}")
+        self.view_button.setText("")
+        self.view_button.setAccessibleName("Tiles")
+        self.view_button.setToolTip("Return to tiles")
+        self.view_button.setIcon(svg_icon(icons.TILES, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        activity = self._workspace_page
+        activity_section = "exercises" if isinstance(activity, ExerciseView) else "lessons" if activity else None
+        self.home.resume_button.setVisible(self.stack.currentWidget() is self.home and activity_section is not None)
+        if activity_section is not None:
+            self.home.resume_button.setText(f"← Back to {activity_section}")
+            self.home.resume_button.setAccessibleName(f"Back to {activity_section}")
 
     def _mode_chosen(self) -> None:
         """
-        Go back to the start screen when a side of the switch is pressed from inside an exercise or a lesson.
+        Switch the browser's section without replacing the current activity.
 
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
         >>> window = MainWindow()
         >>> window.open_exercise(NoteNames)
+        >>> view = window.stack.currentWidget()
         >>> window.home.mode_control.buttons[1].click()
-        >>> window.stack.currentWidget() is window.home, window.home.mode
-        (True, 'lessons')
-        >>> window.home.set_mode("exercises")
+        >>> window.stack.currentWidget() is view and window.nav_stack.currentWidget() is window.lesson_nav
+        True
         """
-        if self.stack.currentWidget() is not self.home:
-            self.show_home()
+        self._show_nav()
+        self._show_mode_control()
+        self._update_empty_page()
+        self._update_sidebar_button()
+        if self._pane_view:
+            self._set_sidebar(True, user=True)
+
+    def toggle_navigation(self) -> None:
+        """
+        Open the workspace from tiles, or toggle its navigation pane without leaving the activity.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.toggle_navigation()
+        >>> window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
+        (True, 'Tiles')
+        """
+        if self._pane_view:
+            self.toggle_sidebar()
+        else:
+            self._show_workspace()
+            self._set_sidebar(True, user=True)
+
+    def _show_workspace(self) -> None:
+        """
+        Show the retained activity, or the empty prompt before an activity begins.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._show_workspace()
+        >>> window.stack.currentWidget() is window.empty_page
+        True
+        """
+        if isinstance(self._overlay, (StatsPage, DatabasePage)):
+            self.close_overlay()
+        self._pane_view = True
+        page = self._workspace_page
+        self._overlay = page if isinstance(page, LessonsPage) else None
+        self._overlay_return = self._lesson_return if self._overlay is not None else None
+        self._update_empty_page()
+        self.title_label.setText(
+            page.exercise.name
+            if isinstance(page, ExerciseView)
+            else page.view.lesson.title
+            if isinstance(page, LessonsPage)
+            else self.APP_TITLE,
+        )
+        self.stack.setCurrentWidget(page if page is not None else self.empty_page)
+        self.splitter.handle(1).setEnabled(True)
+        self._set_sidebar(self._sidebar_pref)
+        self._show_nav()
+        self._show_mode_control()
+        self._update_sidebar_button()
 
     def show_lessons(self) -> None:
         """
@@ -802,19 +1118,25 @@ class MainWindow(QMainWindow):
         ('The Circle of Fifths', True)
         >>> window.close_overlay()
         """
-        page = LessonsPage(lesson)
-        page.practise_requested.connect(self._practise)
-        page.back.connect(self._leave_lesson)  # as well as closing it, leaving may close the list
-        page.sidebar_button.clicked.connect(self.toggle_sidebar)
-        page.view.stepped.connect(self.lesson_nav.select_step)
-        title = next((candidate.title for candidate in LESSONS if candidate.key == lesson), "Lesson")
-        self._open_overlay(page, title=title)
+        self.close_overlay()
+        if isinstance(self._overlay, LessonsPage):
+            self.close_overlay()
+        old = self._lesson_page
+        page = old if old is not None and old.view.lesson.key == lesson else LessonsPage(lesson)
+        if page is not old:
+            page.practise_requested.connect(self._practise)
+            page.back.connect(self._leave_lesson)
+            page.sidebar_button.clicked.connect(self.toggle_sidebar)
+            page.view.stepped.connect(self.lesson_nav.select_step)
+            self.stack.addWidget(page)
+        self._lesson_return = (self.stack.currentWidget(), self.title_label.text())
+        self._lesson_page = page
+        self._workspace_page = page
+        self.home.set_mode("lessons", animate=False)
         self.lesson_nav.show_lesson(lesson)
         self.lesson_nav.select_step(page.view.current)
-        self.splitter.handle(1).setEnabled(True)
-        if self._sidebar_pref:
-            self._set_sidebar(True)  # the list appears once a lesson is open, as it does for an exercise
-        self._update_sidebar_button()
+        self._show_workspace()
+        self._drop(old)
 
     def _leave_lesson(self) -> None:
         """
@@ -829,9 +1151,15 @@ class MainWindow(QMainWindow):
         True
         """
         self.close_overlay()
-        if self.stack.currentWidget() is self.home:
-            self._set_sidebar(False)  # the start screen has no list
-            self.splitter.handle(1).setEnabled(False)
+        page = self.stack.currentWidget()
+        self._workspace_page = page if isinstance(page, ExerciseView) else None
+        if page is self.home:
+            self.show_home()
+        elif isinstance(page, ExerciseView):
+            self.home.set_mode("exercises", animate=False)
+            self._show_workspace()
+        else:
+            self._show_workspace()
 
     def _lesson_picked(self, key: str) -> None:
         """
@@ -872,13 +1200,15 @@ class MainWindow(QMainWindow):
         True
         >>> window.close_overlay()
         """
-        page = self._overlay
-        if isinstance(page, LessonsPage):
+        page = self._lesson_page
+        if page is not None:
+            self._workspace_page = page
+            self._show_workspace()
             page.view.go(to=number)
 
     def _show_nav(self) -> None:
         """
-        Show the lesson list while a lesson is open, and the exercise list otherwise.
+        Show the selected browser section independently of the active activity.
 
         Examples
         --------
@@ -887,8 +1217,79 @@ class MainWindow(QMainWindow):
         >>> window.nav_stack.currentWidget() is window.nav
         True
         """
-        lesson = isinstance(self.stack.currentWidget(), LessonsPage)
-        self.nav_stack.setCurrentWidget(self.lesson_nav if lesson else self.nav)
+        lesson = self.home.mode == "lessons"
+        nav = self.lesson_nav if lesson else self.nav
+        self.nav_stack.setCurrentWidget(nav)
+        self._filter_navigation(nav, query=self.search_field.text())
+
+    def _apply_search(
+        self,
+        text: str,
+    ) -> None:
+        """
+        Filter tiles and both navigation lists without replacing the active activity.
+
+        Parameters
+        ----------
+        text : str
+            The exercise or lesson search text.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.search_field.setText("keyboard")
+        >>> sum(not item.isHidden() for item in window._items.values())
+        1
+        """
+        self.home.set_search(text)
+        self._filter_navigation(self.nav, query=text)
+        self._filter_navigation(self.lesson_nav, query=text)
+
+    def _filter_navigation(
+        self,
+        nav: QListWidget,
+        *,
+        query: str,
+    ) -> None:
+        """
+        Hide unmatched rows and empty category headings, retaining matching lessons' steps.
+
+        Parameters
+        ----------
+        nav : QListWidget
+            The exercise or lesson list.
+        query : str
+            Case-insensitive title, description or category search. Keyword-only.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._filter_navigation(window.nav, query="nothing matches this")
+        >>> all(window.nav.item(i).isHidden() for i in range(window.nav.count()))
+        True
+        """
+        query = query.strip().casefold()
+        heading: QListWidgetItem | None = None
+        heading_text = ""
+        group_visible = False
+        lesson_matches = False
+        for index in range(nav.count()):
+            item = nav.item(index)
+            if not item.flags() & Qt.ItemFlag.ItemIsSelectable:
+                if heading is not None:
+                    heading.setHidden(not group_visible)
+                heading, heading_text, group_visible = item, item.text(), False
+                continue
+            matches = query in f"{item.text()} {item.toolTip()} {heading_text}".casefold()
+            if nav is self.lesson_nav:
+                if isinstance(item.data(STEP_ROLE), int):
+                    matches = lesson_matches
+                else:
+                    lesson_matches = matches
+            item.setHidden(not matches)
+            group_visible |= matches
+        if heading is not None:
+            heading.setHidden(not group_visible)
 
     def _practise(self, name: str) -> None:
         """
@@ -955,7 +1356,8 @@ class MainWindow(QMainWindow):
         True
         >>> window.close_overlay()
         """
-        self.close_overlay()
+        if not isinstance(self._overlay, LessonsPage):
+            self.close_overlay()
         self._overlay_return = (self.stack.currentWidget(), self.title_label.text())
         self._overlay = page
         page.back.connect(self.close_overlay)
@@ -981,11 +1383,14 @@ class MainWindow(QMainWindow):
         if page is None or self._overlay_return is None:
             return
         previous, title = self._overlay_return
+        self._overlay_return = None
         if previous is not None:
             self.stack.setCurrentWidget(previous)
         self.title_label.setText(title)
-        self.stack.removeWidget(page)
-        page.deleteLater()
+        if isinstance(previous, LessonsPage):
+            self._overlay = previous
+            self._overlay_return = self._lesson_return
+        self._drop(page)
 
     def switch_profile(self) -> None:
         """
@@ -1009,6 +1414,12 @@ class MainWindow(QMainWindow):
             remember_profile(chosen)
             self._show_profile()
             self.show_home()
+            exercise, lesson = self._exercise_page, self._lesson_page
+            self._workspace_page = self._exercise_page = self._lesson_page = None
+            self._lesson_return = None
+            self._drop(exercise)
+            self._drop(lesson)
+            self._show_mode_control()
 
     def export_backup(self) -> None:
         """
@@ -1071,20 +1482,24 @@ class MainWindow(QMainWindow):
         >>> window.title_label.text()
         'Alto - Music Theory'
         """
-        self.close_overlay()
-        old = self.stack.currentWidget()
+        if not isinstance(self._overlay, LessonsPage):
+            self.close_overlay()
+        current = self.stack.currentWidget()
+        if isinstance(current, (ExerciseView, LessonsPage)):
+            self._workspace_page = current
+        self._overlay = None
+        self._overlay_return = None
+        self._pane_view = False
         self.title_label.setText(self.APP_TITLE)
-        self.nav.clearSelection()
-        self.nav.setCurrentRow(-1)
         self.stack.setCurrentWidget(self.home)
-        self._update_sidebar_button()
-        self._drop(old)
-        self._set_sidebar(False)  # the start screen has no list
+        self._show_mode_control()
+        self._set_sidebar(False)
         self.splitter.handle(1).setEnabled(False)
+        self._update_sidebar_button()
 
     def _drop(self, old: QWidget | None) -> None:
         """
-        Remove a page that is no longer showing, unless it is the start screen.
+        Remove an unused page, keeping the tiles, empty workspace and retained activities.
 
         Parameters
         ----------
@@ -1101,7 +1516,7 @@ class MainWindow(QMainWindow):
         """
         if old is None:
             return
-        if old is self.home or old is self.stack.currentWidget():
+        if old in (self.home, self.empty_page, self._exercise_page, self._lesson_page, self.stack.currentWidget()):
             return
         # noinspection PyTypeChecker
         self.stack.removeWidget(old)
