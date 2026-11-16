@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alto"
-version = "0.0.0"
+version = "0.0.1"
 description = "Alto: a free desktop music theory trainer with spaced repetition, for note reading, intervals, chords, scales and key signatures"
 keywords = ["music theory", "ear training", "sight reading", "spaced repetition", "intervals", "chords", "scales", "key signatures", "solfege", "music education", "pyside6"]
 classifiers = [
