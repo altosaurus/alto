@@ -5,6 +5,10 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Switching themes in Settings is faster, and Settings opens more quickly.
+
 ## [0.0.1] - 2026-11-15
 
 ### Added

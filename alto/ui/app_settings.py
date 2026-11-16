@@ -16,6 +16,8 @@ Examples
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from PySide6.QtCore import (
     QEvent,
     QSize,
@@ -91,6 +93,93 @@ from alto.ui.update_flow import (
 )
 
 NEW_THEME = "__new__"  # what the row that makes a new theme holds in place of a theme's key
+
+
+class _LazyPages(QStackedWidget):
+    """
+    A settings stack that builds each page once, when it is first selected.
+
+    Examples
+    --------
+    >>> pages = _LazyPages()
+    >>> pages.add_page(lambda: QLabel("First"))
+    0
+    >>> pages.add_page(lambda: QLabel("Second"))
+    1
+    >>> pages.setCurrentIndex(1)
+    >>> isinstance(pages.currentWidget(), QLabel)
+    True
+    """
+
+    def __init__(self) -> None:
+        """
+        Create an empty stack.
+
+        Examples
+        --------
+        >>> _LazyPages().count()
+        0
+        """
+        super().__init__()
+        self._factories: dict[int, Callable[[], QWidget]] = {}
+        self.currentChanged.connect(self._ensure_page)
+
+    def add_page(self, factory: Callable[[], QWidget]) -> int:
+        """
+        Reserve a page, building it immediately only if it becomes the selected page.
+
+        Parameters
+        ----------
+        factory : callable
+            Builds the page when it is first selected.
+
+        Returns
+        -------
+        int
+            The page's index.
+
+        Examples
+        --------
+        >>> _LazyPages().add_page(QWidget)
+        0
+        """
+        index = self.count()
+        self._factories[index] = factory
+        return self.addWidget(QWidget())
+
+    def _ensure_page(self, index: int) -> None:
+        """
+        Replace a selected placeholder with its page, keeping every page index unchanged.
+
+        Parameters
+        ----------
+        index : int
+            The page that was selected.
+
+        Examples
+        --------
+        >>> pages = _LazyPages()
+        >>> pages.add_page(QWidget)
+        0
+        >>> pages._ensure_page(0)
+        >>> pages.count()
+        1
+        """
+        factory = self._factories.pop(index, None)
+        if factory is None:
+            return
+        page = factory()
+        placeholder = self.widget(index)
+        assert placeholder is not None
+        selected = self.currentIndex()
+        blocked = self.blockSignals(True)
+        try:
+            self.removeWidget(placeholder)
+            self.insertWidget(index, page)
+            self.setCurrentIndex(selected)
+        finally:
+            self.blockSignals(blocked)
+        placeholder.deleteLater()
 
 
 class StyleCard(QPushButton):
@@ -487,16 +576,18 @@ class AppSettingsDialog(QDialog):
     """
     Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
 
+    Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.
+
     Attributes
     ----------
     theme_changed : bool
         True once the theme has been changed, so the window can be rebuilt in it.
     categories : QListWidget
-        The list of pages on the left: Appearance and Sound.
+        The list of pages on the left: Appearance, Sound and Updates.
     pages : QStackedWidget
         The page for the chosen category.
     instruments : InstrumentPicker
-        The instrument chooser on the Sound page.
+        The instrument chooser, available after the Sound page is first selected.
     theme_list : QListWidget
         The themes, on the Theme section, with the one in use in bold.
     theme_items : dict of str to QListWidgetItem
@@ -515,7 +606,7 @@ class AppSettingsDialog(QDialog):
     theme_thumbs : dict of str to ThemeThumb
         The clickable pictures of every built card, by the key of the theme each chooses; use `thumb` to get one.
     transition_list : QListWidget
-        The choice of transition between the exercises and the lessons, on the Transitions section.
+        The choice of transition, available after the Transitions section is first selected.
     transition_items : dict of str to QListWidgetItem
         The rows of that list, by the transition's key.
     transition_preview : TransitionPreview
@@ -554,16 +645,16 @@ class AppSettingsDialog(QDialog):
         self.categories = QListWidget()
         self.categories.setObjectName("categories")  # styled in style.py
         self.categories.setFixedWidth(170)
-        self.pages = QStackedWidget()
-        for name, page in (
-            ("Appearance", self._appearance_page()),
-            ("Sound", self._sound_page()),
-            ("Updates", self._updates_page()),
+        self.pages = _LazyPages()
+        for name, factory in (
+            ("Appearance", self._appearance_page),
+            ("Sound", self._sound_page),
+            ("Updates", self._updates_page),
         ):
             item = QListWidgetItem(name)
             item.setSizeHint(QSize(0, 36))
             self.categories.addItem(item)
-            self.pages.addWidget(page)
+            self.pages.add_page(factory)
         self.categories.currentRowChanged.connect(self.pages.setCurrentIndex)
         self.categories.setCurrentRow(0)
         body = QHBoxLayout()
@@ -707,11 +798,11 @@ class AppSettingsDialog(QDialog):
         4
         """
         page, lay = self._page()
-        self.appearance_pages = QStackedWidget()
-        self.appearance_pages.addWidget(self._theme_tab())  # its cards and its editor scroll by themselves, not the page
-        self.appearance_pages.addWidget(self._scrolling(self._notation_tab()))
-        self.appearance_pages.addWidget(self._scrolling(self._keyboard_tab()))
-        self.appearance_pages.addWidget(self._scrolling(self._transitions_tab()))
+        self.appearance_pages = _LazyPages()
+        self.appearance_pages.add_page(self._theme_tab)  # its cards and its editor scroll by themselves, not the page
+        self.appearance_pages.add_page(lambda: self._scrolling(self._notation_tab()))
+        self.appearance_pages.add_page(lambda: self._scrolling(self._keyboard_tab()))
+        self.appearance_pages.add_page(lambda: self._scrolling(self._transitions_tab()))
         self.segments = QFrame()
         self.segments.setObjectName("segments")
         row = QHBoxLayout(self.segments)
@@ -1109,7 +1200,8 @@ class AppSettingsDialog(QDialog):
         >>> dialog._pick_theme("system")
         """
         self._version = family_of(key)[1]  # moving to another theme keeps to this version
-        self.choose_theme(key)
+        if key != saved_theme():
+            self.choose_theme(key)
         self._show_theme(key)
 
     def _notation_tab(self) -> QWidget:
@@ -1124,6 +1216,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[1].click()
         >>> sorted(dialog.baritone_buttons)
         ['c', 'f']
         """
@@ -1173,6 +1266,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[3].click()
         >>> dialog.transition_list.count() == len(TRANSITIONS)
         True
         >>> dialog.transition_preview.transition.key == saved_transition()
@@ -1253,6 +1347,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[1].click()
         >>> dialog._choose_notation("leland")
         >>> notation.current().key
         'leland'
@@ -1268,6 +1363,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[1].click()
         >>> dialog._draw_baritone_icons()
         >>> dialog.baritone_buttons["f"].icon().isNull()
         False
@@ -1289,6 +1385,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[2].click()
         >>> keyboard_styles.CUSTOM in dialog.keyboard_cards
         True
         """
@@ -1322,6 +1419,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.segment_buttons[2].click()
         >>> dialog._custom_edited()
         >>> dialog.keyboard_cards[keyboard_styles.CUSTOM].isChecked()
         True
@@ -1342,6 +1440,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.categories.setCurrentRow(1)
         >>> dialog.instruments.list.count() > 0
         True
         """
@@ -1368,6 +1467,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog.main_channel.isChecked()
         False
         """
@@ -1405,6 +1505,7 @@ class AppSettingsDialog(QDialog):
         Examples
         --------
         >>> dialog = AppSettingsDialog()
+        >>> dialog.categories.setCurrentRow(2)
         >>> dialog.main_channel.setChecked(True)
         >>> saved_channel()
         'main'

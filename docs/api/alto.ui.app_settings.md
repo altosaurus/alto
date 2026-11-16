@@ -201,12 +201,14 @@ Bases: `QDialog`
 
 Application-wide settings. Changes apply immediately, and the main window can be used while the dialog is open.
 
+Pages are built when first selected, so hidden previews do not slow down opening Settings or changing themes.
+
 **Attributes**
 
 - `theme_changed` (*bool*): True once the theme has been changed, so the window can be rebuilt in it.
-- `categories` (*QListWidget*): The list of pages on the left: Appearance and Sound.
+- `categories` (*QListWidget*): The list of pages on the left: Appearance, Sound and Updates.
 - `pages` (*QStackedWidget*): The page for the chosen category.
-- `instruments` (*InstrumentPicker*): The instrument chooser on the Sound page.
+- `instruments` (*InstrumentPicker*): The instrument chooser, available after the Sound page is first selected.
 - `theme_list` (*QListWidget*): The themes, on the Theme section, with the one in use in bold.
 - `theme_items` (*dict of str to QListWidgetItem*): The rows of that list, by the key of the theme's family.
 - `theme_pages` (*QStackedWidget*): The card of the theme chosen in the list, or the editor.
@@ -215,7 +217,7 @@ Application-wide settings. Changes apply immediately, and the main window can be
 - `theme_cards` (*dict of str to ThemeCard*): The cards built so far, by the key of the theme's family. A card is built when its row is first chosen, because every widget makes a change of theme slower; use `card` to get one.
 - `theme_scrolls` (*dict of str to QScrollArea*): The scroll area each built card is in, which is what the stack shows; use `scroll` to get one.
 - `theme_thumbs` (*dict of str to ThemeThumb*): The clickable pictures of every built card, by the key of the theme each chooses; use `thumb` to get one.
-- `transition_list` (*QListWidget*): The choice of transition between the exercises and the lessons, on the Transitions section.
+- `transition_list` (*QListWidget*): The choice of transition, available after the Transitions section is first selected.
 - `transition_items` (*dict of str to QListWidgetItem*): The rows of that list, by the transition's key.
 - `transition_preview` (*TransitionPreview*): Plays the transition that is chosen, beside the choices.
 

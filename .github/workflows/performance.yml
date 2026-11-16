@@ -75,6 +75,14 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.ref || github.ref }}
 
+      # A tag checkout is detached and has origin/main but no local main, which ASV's branches configuration needs.
+      - name: Make the configured benchmark branch available
+        id: benchmark-branch
+        run: |
+          if ! git show-ref --verify --quiet refs/heads/main; then
+            git branch main origin/main
+          fi
+
       - name: Use the benchmarks of main on this version
         if: inputs.ref != ''
         run: git checkout origin/main -- benchmarks asv.conf.json
