@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -609,8 +609,18 @@ separate from anyone else who uses the same computer. Next time Alto opens strai
   <li>The counter at the top shows how many you have right and your current streak.</li>
 </ol>
 
-<p>The sidebar on the left switches between exercises. The button at the top left of the exercise hides and shows it. The sliders button at the top right opens the
-exercise’s own settings, and the <strong>?</strong> button explains the exercise.</p>
+<p>The <strong>Exercises / Lessons</strong> control at the top left selects what to browse. Alto starts with tiles. <strong>Navigation Pane</strong>
+opens the matching list on the left; before you start an activity, the main panel says “Select an exercise to begin.” or
+“Select a lesson to begin.” Use the separate <strong>Tiles</strong> grid button to return to tiles without losing your place.</p>
+
+<p>The icon-only <strong>Exercises / Lessons</strong> pair sits at the top left, followed by an open/close navigation-pane button, a divider,
+and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
+selected section by name, description or category, and follows the sidebar’s width.</p>
+
+<p>During an exercise or lesson, <strong>Exercises / Lessons</strong> switches the list while keeping your activity on screen. Selecting
+an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
+<strong>Statistics</strong> and <strong>Browse database</strong> are at the top right. The sliders button opens the exercise’s own settings, and <strong>?</strong>
+explains it.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/dev/assets/img/note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
@@ -704,8 +714,8 @@ exercise’s own settings, and the <strong>?</strong> button explains the exerci
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

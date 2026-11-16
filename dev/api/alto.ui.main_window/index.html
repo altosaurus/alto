@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -481,9 +481,9 @@
         <article>
           <h1>alto.ui.main_window</h1>
           
-<p>The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.</p>
+<p>The main window: tile browsing or a workspace with an independently selected exercise or lesson list.</p>
 
-<p>The page is the start screen, an exercise, or (while it is open) the statistics or the database browser.</p>
+<p>Navigation stays on the left of the top bar, with data tools on the right. Browsing tiles retains the active activity.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -535,6 +535,10 @@ True
   <li><code class="language-plaintext highlighter-rouge">home</code> (<em>HomePage</em>): The start screen.</li>
   <li><code class="language-plaintext highlighter-rouge">splitter</code> (<em>QSplitter</em>): Holds the list and the pages, so the list can be dragged narrower or wider.</li>
   <li><code class="language-plaintext highlighter-rouge">title_label</code> (<em>QLabel</em>): The title in the top bar.</li>
+  <li><code class="language-plaintext highlighter-rouge">view_button</code> (<em>QToolButton</em>): Returns to the tiles without discarding the current activity.</li>
+  <li><code class="language-plaintext highlighter-rouge">pane_button</code> (<em>SidebarToggle</em>): Opens or closes the navigation pane beside the current activity.</li>
+  <li><code class="language-plaintext highlighter-rouge">empty_page</code> (<em>QLabel</em>): The selected section’s prompt before an activity starts.</li>
+  <li><code class="language-plaintext highlighter-rouge">search_field</code> (<em>QLineEdit</em>): Filters tiles and navigation lists without leaving the current activity.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -566,6 +570,38 @@ True
 True
 &gt;&gt;&gt; MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
 False
+</code></pre>
+
+<h3 id="mainwindoweventfilter">MainWindow.eventFilter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
+    <span class="n">watched</span><span class="p">:</span> <span class="n">QObject</span><span class="p">,</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Highlight the search field’s outline while it has keyboard focus.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">watched</code> (<em>QObject</em>): The search field.</li>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The event being delivered.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: Whether the base window consumes the event; focus changes are allowed through.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
+False
+&gt;&gt;&gt; window.search_row.property("focusWithin")
+True
 </code></pre>
 
 <h3 id="mainwindowsidebar_width">MainWindow.sidebar_width</h3>
@@ -680,6 +716,21 @@ False
 &gt;&gt;&gt; window.title_label.text()
 'Statistics'
 &gt;&gt;&gt; window.close_overlay()
+</code></pre>
+
+<h3 id="mainwindowtoggle_navigation">MainWindow.toggle_navigation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">toggle_navigation</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Open the workspace from tiles, or toggle its navigation pane without leaving the activity.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
+&gt;&gt;&gt; window.toggle_navigation()
+&gt;&gt;&gt; window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
+(True, 'Tiles')
 </code></pre>
 
 <h3 id="mainwindowshow_lessons">MainWindow.show_lessons</h3>
@@ -1103,8 +1154,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

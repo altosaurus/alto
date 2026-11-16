@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -497,6 +497,15 @@ notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered deg
 Note-name previews have visible text labels.</li>
 </ul>
 
+<h3 class="no-toc" id="changed">Changed</h3>
+
+<ul>
+  <li>Navigation is grouped on the left of the top bar, with Statistics and Browse database on the right. Exercises / Lessons
+changes the sidebar without leaving the active activity. Separate pane and grid buttons toggle the list or return to
+tiles while retaining the question, answer selection and lesson step. Search filters tiles and lists, and a back button
+resumes the active exercise or lesson. Before starting an activity, the workspace prompts you to select one.</li>
+</ul>
+
 <h3 class="no-toc" id="fixed">Fixed</h3>
 
 <ul>
@@ -526,7 +535,7 @@ main button names the visitor’s system and goes to the right file, with the ot
 applies to the exercise, the lessons and the reference.</li>
 </ul>
 
-<h3 class="no-toc" id="changed">Changed</h3>
+<h3 class="no-toc" id="changed-1">Changed</h3>
 
 <ul>
   <li>The notation-font previews in Settings use the DSCH motif (D, E♭, C, B) in treble clef.</li>
@@ -976,8 +985,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

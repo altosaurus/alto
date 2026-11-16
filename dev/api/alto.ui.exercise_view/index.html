@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794858588">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -698,6 +698,53 @@ digit takes that digit.</p>
 True
 </code></pre>
 
+<h3 id="exerciseviewhideevent">ExerciseView.hideEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hideEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QHideEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Pause automatic advancement and answer timing while browsing another page.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QHideEvent</em>): The notification that the exercise is being hidden.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; view = ExerciseView(NoteNames())
+&gt;&gt;&gt; view.show()
+&gt;&gt;&gt; view.hide()
+&gt;&gt;&gt; view._advance.isActive()
+False
+</code></pre>
+
+<h3 id="exerciseviewshowevent">ExerciseView.showEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">showEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QShowEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Resume the exercise’s answer clock and pending advance when it reappears.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QShowEvent</em>): The notification that the exercise is visible again.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; view = ExerciseView(NoteNames())
+&gt;&gt;&gt; view.show()
+&gt;&gt;&gt; view.hide()
+&gt;&gt;&gt; view.show()
+&gt;&gt;&gt; view._hidden_at is None
+True
+</code></pre>
+
 <h3 id="exerciseviewnext_question">ExerciseView.next_question</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">next_question</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1036,8 +1083,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794858588" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794858588" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
