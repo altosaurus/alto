@@ -376,7 +376,7 @@ def test_the_settings_dialog_offers_both_ways_of_writing_the_baritone_clef(
         The notation module, with the baritone clef style restored afterwards.
     """
     dialog = AppSettingsDialog()
-    dialog.segment_buttons[1].click()
+    dialog.categories.setCurrentRow(2)
     buttons = dialog.baritone_buttons
     assert set(buttons) == {"f", "c"} and buttons["f"].isChecked() and not buttons["c"].isChecked()
     buttons["c"].click()

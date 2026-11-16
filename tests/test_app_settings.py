@@ -74,6 +74,7 @@ def dialog(
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(app_settings, "saved_theme", lambda: "dark")
     dlg = AppSettingsDialog()
+    dlg.categories.setCurrentRow(1)
     yield dlg
     dlg.deleteLater()  # gone before the application, or Qt crashes when Python exits
     QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
@@ -121,9 +122,9 @@ def test_the_segmented_control_switches_between_theme_and_notation_style(dialog:
         The dialog under test.
     """
     assert dialog.appearance_pages.currentIndex() == 0
-    dialog.segment_buttons[1].click()
+    dialog.categories.setCurrentRow(2)
     assert dialog.appearance_pages.currentIndex() == 1
-    dialog.segment_buttons[0].click()
+    dialog.categories.setCurrentRow(1)
     assert dialog.appearance_pages.currentIndex() == 0
 
 
@@ -140,17 +141,17 @@ def test_hidden_settings_pages_are_built_on_first_visit_and_reused(dialog: AppSe
     assert not dialog.findChildren(app_settings.KeyboardCard)
     assert not dialog.findChildren(app_settings.InstrumentPicker)
     assert not dialog.findChildren(app_settings.TransitionPreview)
-    dialog.segment_buttons[1].click()
+    dialog.categories.setCurrentRow(2)
     page = dialog.appearance_pages.currentWidget()
     assert len(dialog.findChildren(app_settings.StyleCard)) == len(notation.STYLES)
-    dialog.segment_buttons[0].click()
-    dialog.segment_buttons[1].click()
-    assert dialog.appearance_pages.currentWidget() is page
     dialog.categories.setCurrentRow(1)
+    dialog.categories.setCurrentRow(2)
+    assert dialog.appearance_pages.currentWidget() is page
+    dialog.categories.setCurrentRow(5)
     sound = dialog.pages.currentWidget()
     dialog.instruments.select("flute")
-    dialog.categories.setCurrentRow(2)
-    dialog.categories.setCurrentRow(1)
+    dialog.categories.setCurrentRow(6)
+    dialog.categories.setCurrentRow(5)
     assert dialog.pages.currentWidget() is sound and dialog.instruments.shown == "Flute"
 
 
@@ -165,7 +166,7 @@ def test_a_page_first_opened_after_a_theme_change_uses_the_new_palette(dialog: A
     """
     try:
         dialog.choose_theme("studio_dark")
-        dialog.categories.setCurrentRow(1)
+        dialog.categories.setCurrentRow(5)
         role = QPalette.ColorRole.Window
         assert dialog.instruments.palette().color(role) == QApplication.palette().color(role)
         assert dialog.instruments.palette().color(role).name() == "#1b1e23"
@@ -254,9 +255,9 @@ def test_a_palette_change_restyles_the_segmented_control(dialog: AppSettingsDial
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    before = dialog.segments.styleSheet()
+    before = dialog.categories.currentRow()
     QApplication.sendEvent(dialog, QEvent(QEvent.Type.PaletteChange))
-    assert dialog.segments.styleSheet() == before  # same palette, same style: redrawn without error
+    assert dialog.categories.currentRow() == before  # same palette, same style: redrawn without error
 
 
 def test_choosing_a_theme_saves_and_applies_it(
@@ -290,10 +291,10 @@ def test_each_keyboard_style_has_a_card_and_the_classic_one_is_chosen_by_default
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     assert list(dialog.keyboard_cards) == [*(s.key for s in keyboard_styles.STYLES), "custom"]
     assert [k for k, c in dialog.keyboard_cards.items() if c.isChecked()] == ["classic"]
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     assert dialog.appearance_pages.currentIndex() == 2
     for card in dialog.keyboard_cards.values():
         pix = QPixmap(card.size())
@@ -310,7 +311,7 @@ def test_clicking_a_keyboard_card_applies_the_style(dialog: AppSettingsDialog) -
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     dialog.keyboard_cards["harpsichord-french"].click()
     assert keyboard_styles.current().key == "harpsichord-french"
 
@@ -324,7 +325,7 @@ def test_the_builder_colours_each_part_and_selects_the_custom_style(dialog: AppS
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     dialog.builder._set("naturals", colour="#ead9aa")  # boxwood
     assert keyboard_styles.current().key == "custom" and keyboard_styles.custom_colours()["naturals"] == "#ead9aa"
     assert dialog.keyboard_cards["custom"].isChecked()
@@ -344,7 +345,7 @@ def test_the_builder_has_a_chip_for_every_material_and_none_for_optional_parts(d
     dialog : AppSettingsDialog
         The dialog under test.
     """
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     chips = dialog.builder.findChildren(QToolButton)
     required = sum(1 for _, _, optional in keyboard_styles.COMPONENTS if not optional)
     optional = len(keyboard_styles.COMPONENTS) - required
@@ -367,7 +368,7 @@ def test_the_builder_opens_the_colour_picker_and_keeps_a_chosen_colour(
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
     """
-    dialog.segment_buttons[2].click()
+    dialog.categories.setCurrentRow(3)
     picked = iter([QColor("#336699"), QColor()])  # then the dialog is cancelled
     monkeypatch.setattr(app_settings.QColorDialog, "getColor", lambda *a, **k: next(picked))
     dialog.builder.swatches["case"].click()
@@ -418,6 +419,7 @@ def test_the_theme_list_is_on_the_left_and_the_card_of_the_chosen_row_on_the_rig
     monkeypatch.setattr(app_settings, "apply_theme", applied.append)
     theme.save_theme("system")
     dialog = AppSettingsDialog()
+    dialog.categories.setCurrentRow(1)
     dialog.resize(1100, 700)
     dialog.show()
     try:
@@ -469,6 +471,7 @@ def test_the_dialog_opens_on_the_theme_in_use(
     theme.save_theme("pine_dark")
     try:
         dialog = AppSettingsDialog()
+        dialog.categories.setCurrentRow(1)
         assert dialog.theme_list.currentItem() is dialog.theme_items["pine"]
         assert dialog.theme_pages.currentWidget() is dialog.card_page("pine")
         assert dialog.thumb("pine_dark").isChecked()
@@ -612,6 +615,7 @@ def test_a_theme_can_be_made_saved_and_used(
         Replaces settings, functions or attributes for the length of the test.
     """
     dialog = AppSettingsDialog()
+    dialog.categories.setCurrentRow(1)
     dialog.resize(1100, 700)
     dialog.show()
     editor = dialog.theme_editor
@@ -638,6 +642,7 @@ def test_a_theme_can_be_made_saved_and_used(
     assert QApplication.palette().color(QPalette.ColorRole.Highlight).name() == "#00ffcc"
     dialog.close()
     again = AppSettingsDialog()  # and it is still there the next time
+    again.categories.setCurrentRow(1)
     assert theme.family_of(theme.saved_theme()) == (family, "dark") and family in again.theme_items
     assert again.theme_list.currentItem() is again.theme_items[family]
 
@@ -664,6 +669,7 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     colours = {part: "#112233" for part in theme.PARTS}
     theme.upsert_user_theme(theme.ThemeRecord(id="my_test", name="Mine", light=dict(colours), dark=dict(colours)))
     dialog = AppSettingsDialog()
+    dialog.categories.setCurrentRow(1)
     dialog.show()
     assert theme.custom_theme("my_test") is not None and dialog.card("my_test").change_button is not None
     assert dialog.card("sage").change_button is None  # only a theme of the user's own can be changed
@@ -734,6 +740,7 @@ def test_the_editors_buttons_stay_in_view_at_the_top_and_its_fields_take_the_app
     """
     theme.apply_theme("system")
     dialog = AppSettingsDialog()
+    dialog.categories.setCurrentRow(1)
     dialog.resize(1000, 480)  # short, so that the form has to scroll
     dialog.show()
     dialog.theme_list.setCurrentItem(dialog.new_theme_item)
@@ -845,7 +852,7 @@ def test_the_updates_page_shows_the_version_and_remembers_whether_to_follow_the_
         The dialog under test.
     """
     names = [dialog.categories.item(row).text() for row in range(dialog.categories.count())]
-    assert names == ["Appearance", "Sound", "Updates"]
+    assert names == ["", "\u2003Theme", "\u2003Notation style", "\u2003Keyboard style", "\u2003Transitions", "Sound", "Updates"]
     dialog.categories.setCurrentRow(names.index("Updates"))
     page = dialog.pages.currentWidget()
     assert page is not None
@@ -870,10 +877,12 @@ def test_a_dialog_opens_with_the_main_branch_ticked_if_that_was_chosen(dialog: A
     """
     save_channel("main")
     following = AppSettingsDialog()
-    following.categories.setCurrentRow(2)
+    following.categories.setCurrentRow(1)
+    following.categories.setCurrentRow(6)
     assert following.main_channel.isChecked()
     save_channel("releases")
     releases = AppSettingsDialog()
-    releases.categories.setCurrentRow(2)
+    releases.categories.setCurrentRow(1)
+    releases.categories.setCurrentRow(6)
     assert not releases.main_channel.isChecked()
     assert dialog is not None

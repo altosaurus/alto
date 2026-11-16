@@ -530,7 +530,7 @@ class DatabasePage(QWidget):
     Attributes
     ----------
     back : Signal
-        Emitted by the Back button and by Escape.
+        Emitted by Escape; the main window provides the shared Back button.
     learner : Learner
         Whose answers and questions are shown.
     tabs : dict of str to QPushButton
@@ -585,12 +585,7 @@ class DatabasePage(QWidget):
         lay = QVBoxLayout(self)
         bar = QHBoxLayout()
         bar.setSpacing(10)
-        back = QPushButton("←  Back")
-        back.setToolTip("Back to the previous page (Esc)")
-        back.clicked.connect(self.back)
-        bar.addWidget(back)
         QShortcut(QKeySequence(Qt.Key.Key_Escape), self, self.back.emit)
-        bar.addSpacing(12)
         self.group = QButtonGroup(self)
         self.group.setExclusive(True)
         self.tabs: dict[str, QPushButton] = {}
