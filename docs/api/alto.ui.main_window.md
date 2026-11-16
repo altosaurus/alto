@@ -2,7 +2,7 @@
 title: alto.ui.main_window
 parent: api
 package: alto.ui
-order: 37
+order: 38
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
@@ -180,12 +180,19 @@ True
 def rebuild() -> None
 ```
 
-Open a fresh window in the same place, so every icon and colour is drawn in the new theme.
+Make the window's contents again in the same window, so every icon and colour is drawn in the new theme.
+
+The window itself stays, so it does not vanish and reappear. The page that was open is shown again, with the list
+already open or closed as it was, not sliding.
 
 **Examples**
 
 ```pycon
->>> MainWindow().rebuild()  # doctest: +SKIP
+>>> window = MainWindow()
+>>> old_root = window.centralWidget()
+>>> window.rebuild()
+>>> window.centralWidget() is old_root
+False
 ```
 
 ### MainWindow.open_stats

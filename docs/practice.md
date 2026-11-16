@@ -4,6 +4,7 @@ nav_order: 4
 nav_group: Using Alto
 permalink: /practice/
 ---
+
 Alto is not a flash-card list that shows every question equally often. It keeps track of how you do on each question
 and decides what to ask next from that.
 
@@ -20,13 +21,13 @@ value and the order of the answer buttons do not make it a different question.
 Each question has a score called **strain**, which says how much practice it needs. It starts at 1.5 for a question
 you have not seen, stays between 0 and 6, and changes with each answer.
 
-| What happened | Effect on strain |
-|---|---|
-| A wrong answer | **+1.5** each time, so every extra attempt pushes the question higher |
-| Right first time | **−0.5** |
-| Right, but only after misses | **−0.2** |
-| First answer very quick | up to **−0.6** more |
-| First answer very slow | up to **+1.0** more |
+| What happened                | Effect on strain                                                      |
+|------------------------------|-----------------------------------------------------------------------|
+| A wrong answer               | **+1.5** each time, so every extra attempt pushes the question higher |
+| Right first time             | **−0.5**                                                              |
+| Right, but only after misses | **−0.2**                                                              |
+| First answer very quick      | up to **−0.6** more                                                   |
+| First answer very slow       | up to **+1.0** more                                                   |
 
 Because of the last two rows, a slow correct answer still counts against a question, and a very quick correct one
 counts strongly in its favour.
@@ -36,15 +37,15 @@ counts strongly in its favour.
 Speed is measured on your **first** answer only, from the moment the question appears. It is compared with a "par" time
 for the exercise, since reading a note takes less time than spelling a scale:
 
-| Exercise | Par time |
-|---|---|
-| Note Identification, Keyboard Identification | 3 s |
-| Key Signature Identification | 5 s |
-| Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s |
-| Circle of Fifths | 7 s |
-| Scale Spelling | 8 s |
-| Scale Construction | 25 s |
-| Arpeggio Identification | 9 s |
+| Exercise                                                                              | Par time |
+|---------------------------------------------------------------------------------------|----------|
+| Note Identification, Keyboard Identification                                          | 3 s      |
+| Key Signature Identification, Clef Basics                                             | 5 s      |
+| Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s      |
+| Circle of Fifths                                                                      | 7 s      |
+| Scale Spelling                                                                        | 8 s      |
+| Scale Construction                                                                    | 25 s     |
+| Arpeggio Identification                                                               | 9 s      |
 
 At half the par time or quicker you get the full speed bonus. At par there is no effect. At four times par or slower
 you get the full slow penalty. In between it changes smoothly.

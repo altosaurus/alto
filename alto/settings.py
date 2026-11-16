@@ -43,6 +43,17 @@ CLEFS = (
     "mezzo",
     "baritone",
 )
+CLEF_NAMES = {
+    "treble": "Treble",
+    "bass": "Bass",
+    "alto": "Alto",
+    "tenor": "Tenor",
+    "soprano": "Soprano",
+    "mezzo": "Mezzo-soprano",
+    "baritone": "Baritone",
+    "french": "French violin",
+    "subbass": "Subbass",
+}  # what each of `CLEFS` is called, and the two more that only the clef exercise has
 # How the clefs are grouped on the settings pages: the grand staff, the four in everyday use, and the three rarer ones.
 CLEF_GROUPS = (
     ("grand",),
@@ -53,7 +64,9 @@ CLEF_GROUPS = (
         "tenor",
     ),
     ("soprano", "mezzo", "baritone"),
+    ("french", "subbass"),  # only the clef exercise has these, so the other pages leave the group out
 )
+CLEF_BASICS_CLEFS = (*CLEFS, "french", "subbass")  # the clef exercise also has the French violin clef and the subbass clef
 RANGE_KEYS = (*CLEFS, "grand")  # clefs that can have a note range
 # Inclusive diatonic range of notes that may be asked, per clef (defaults sit comfortably on the staff).
 DEFAULT_RANGES = {
@@ -808,6 +821,108 @@ class ScaleConstructionSettings(KeySignatureSettings):
 
 
 scale_construction = ScaleConstructionSettings()
+
+
+# The three clef symbols: the G clef, the C clef and the F clef. Every clef is one of them, put on a particular line.
+CLEF_SYMBOLS = ("G", "C", "F")
+CLEF_SYMBOL_NAMES = {"G": "G clef", "C": "C clef", "F": "F clef"}
+
+
+CLEF_QUESTION_TYPES = {
+    "construction": "Clef Construction",
+    "identification": "Clef Identification",
+}  # what the clef exercise asks: to put a named clef on a blank staff, or to name the clef on a staff
+
+
+@dataclass
+class ClefBasicsSettings:
+    """
+    The settings of the clef basics exercise: what kind of question is asked, and which clefs.
+
+    Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
+    on the second line. The three symbols can always be chosen from.
+
+    Attributes
+    ----------
+    clefs : set of str
+        The clefs that are asked for, any of `CLEF_BASICS_CLEFS`. Keyword-only.
+    question_type : str, default "construction"
+        "construction" to put a named clef on a blank staff, or "identification" to name the clef shown on a staff by pressing
+        a button. Keyword-only.
+
+    Examples
+    --------
+    >>> ClefBasicsSettings(clefs={"subbass", "alto"}).active_clefs()
+    ['alto', 'subbass']
+    >>> ClefBasicsSettings().question_type
+    'construction'
+    """
+
+    _: KW_ONLY
+    clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of CLEF_BASICS_CLEFS: the clefs that are asked for
+    question_type: str = "construction"  # a key of CLEF_QUESTION_TYPES
+
+    def active_clefs(self) -> list[str]:
+        """
+        Return the clefs to ask for, in canonical order.
+
+        Returns
+        -------
+        list of str
+            The chosen clefs, or the treble clef if none are chosen.
+
+        Examples
+        --------
+        >>> ClefBasicsSettings().active_clefs()
+        ['treble', 'bass']
+        >>> ClefBasicsSettings(clefs=set()).active_clefs()
+        ['treble']
+        """
+        return [c for c in CLEF_BASICS_CLEFS if c in self.clefs] or ["treble"]
+
+    def active_type(self) -> str:
+        """
+        Return the kind of question to ask.
+
+        Returns
+        -------
+        str
+            "construction" or "identification"; construction if the setting is anything else.
+
+        Examples
+        --------
+        >>> ClefBasicsSettings(question_type="identification").active_type()
+        'identification'
+        >>> ClefBasicsSettings(question_type="nonsense").active_type()
+        'construction'
+        """
+        return self.question_type if self.question_type in CLEF_QUESTION_TYPES else "construction"
+
+    def answer_clefs(self) -> list[str]:
+        """
+        Return the clefs to offer as buttons when a clef is to be named: those asked for, and enough others to have a choice.
+
+        Returns
+        -------
+        list of str
+            In canonical order; at least two, the treble and bass clefs being added if only one is asked for.
+
+        Examples
+        --------
+        >>> ClefBasicsSettings(clefs={"alto", "tenor"}).answer_clefs()
+        ['alto', 'tenor']
+        >>> ClefBasicsSettings(clefs={"alto"}).answer_clefs()
+        ['treble', 'alto']
+        """
+        chosen = set(self.active_clefs())
+        for extra in ("treble", "bass", "alto"):
+            if len(chosen) >= 2:
+                break
+            chosen.add(extra)
+        return [c for c in CLEF_BASICS_CLEFS if c in chosen]
+
+
+clef_basics = ClefBasicsSettings()
 
 
 # Circle of fifths exercise: what to ask about the circle.

@@ -876,4 +876,87 @@ Make a note name to be placed on the staff.
 >>> q.answer in q.prompt
 True
 ```
+
+## ClefBasics
+
+```python
+class ClefBasics(Exercise)
+```
+
+Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.
+
+**Examples**
+
+```pycon
+>>> q = ClefBasics().generate(random.Random(1))
+>>> q.answer == q.place_clef and q.place_clef in settings.CLEF_BASICS_CLEFS
+True
+```
+
+### ClefBasics.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Return what identifies the settings that shape these questions.
+
+**Returns**
+
+- *str*: The clefs asked for.
+
+**Examples**
+
+```pycon
+>>> ClefBasics().settings_signature().startswith("[")
+True
+```
+
+### ClefBasics.instructions
+
+```python
+def instructions() -> str
+```
+
+Return the help text for the exercise, for the kind of question that is being asked.
+
+**Returns**
+
+- *str*: Simple HTML.
+
+**Examples**
+
+```pycon
+>>> "Clef Basics" in ClefBasics().instructions()
+True
+```
+
+### ClefBasics.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Name a clef to place, or draw a clef to name.
+
+**Parameters**
+
+- `rng` (*random.Random*): The random number generator.
+
+**Returns**
+
+- *Question*: For construction, a blank staff and the name of the clef, which is the question written under the staff. For identification, a staff with the clef drawn on it, and a button for each clef that can be asked for.
+
+**Examples**
+
+```pycon
+>>> q = ClefBasics().generate(random.Random(3))
+>>> q.prompt.startswith("Place the ") and q.caption == q.prompt
+True
+>>> settings.clef_basics.question_type = "identification"
+>>> q = ClefBasics().generate(random.Random(3))
+>>> q.answer in q.choices, q.place_clef, q.caption
+(True, '', 'Which clef is this?')
+>>> settings.clef_basics.question_type = "construction"
+```
 {% endraw %}

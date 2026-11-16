@@ -7,21 +7,24 @@ A lesson is plain data, a tuple of steps, so it can be read and tested without a
 Examples
 --------
 >>> [lesson.key for lesson in LESSONS]
-['circle-of-fifths']
+['circle-of-fifths', 'clef-basics']
 """
 
 from alto.lessons.base import (
     Lesson,
+    Staff,
     Step,
     Task,
 )
 from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+from alto.lessons.clef_basics import CLEF_BASICS
 
-LESSONS: tuple[Lesson, ...] = (CIRCLE_OF_FIFTHS,)  # in the order they are listed
+LESSONS: tuple[Lesson, ...] = (CIRCLE_OF_FIFTHS, CLEF_BASICS)  # in the order they are listed
 
 __all__ = [
     "LESSONS",
     "Lesson",
+    "Staff",
     "Step",
     "Task",
 ]

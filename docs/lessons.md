@@ -19,7 +19,7 @@ A tile says **Start**, or **Continue at step N** if you have begun. Click it to 
 to return to where you were. **Start over** goes back to the first step.
 
 The Circle of Fifths exercise also has a way in: open its reference pane with the book button, and press **New to this? Take the
-full lesson** at the top.
+full lesson** at the top. The Clef Basics exercise has the same, with a table of the clefs under the button.
 
 ## The lesson list
 
@@ -35,6 +35,8 @@ step, and **Finish** on the last, leave the lesson.
 A step has some reading, and may have:
 
 - **A sound to hear.** A button plays the notes being described, in the instrument chosen in the settings.
+- **Staves.** The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
+  small exercise the staff changes with the question.
 - **The circle of fifths.** Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have **Down a
   fifth** and **Up a fifth** buttons that walk round the circle for you.
 - **A small exercise.** It cannot be failed. A wrong answer gets a hint, a second wrong answer shows the answer with its
@@ -52,3 +54,18 @@ Eight steps for a beginner:
 6. **The inner ring: relative minors.** Find the relative minor of a key.
 7. **A key and its neighbours.** The IV and V of a key. Find the key a fifth above or below another.
 8. **What you can do now.** A summary, and a button to practise in the Circle of Fifths exercise.
+
+## The Clef Basics lesson
+
+Ten steps for a beginner:
+
+1. **What a clef does.** The same place on the staff is a different note in the treble and bass clefs.
+2. **Three symbols.** Every clef is the G clef, the C clef or the F clef, put on a line.
+3. **The G clef.** The treble clef, and the French violin clef on the bottom line.
+4. **The F clef.** The bass clef on the fourth line, the subbass clef on the top line, and the baritone clef.
+5. **The C clef and middle C.** Soprano, mezzo-soprano, alto and tenor are the C clef on four lines, and each centres on middle C.
+6. **The rarer clefs.** French violin, subbass and the two ways to write the baritone clef.
+7. **Name the symbol.** A clef is drawn: is it the G, C or F clef?
+8. **Find the line.** A named clef: which line of a blank staff is it written on?
+9. **Name the clef.** The two halves together, as in Clef Identification.
+10. **What you can do now.** A summary, and a button to practise in the Clef Basics exercise.

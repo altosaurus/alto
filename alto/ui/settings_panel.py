@@ -69,6 +69,7 @@ from alto.exercises.base import Exercise
 from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
+    ClefBasics,
     KeyboardNotes,
     KeySignatureConstruction,
     KeySignatures,
@@ -742,6 +743,8 @@ def _clefs_page(
     selected: set[str],
     edited: Callable[[], object],
     back: Callable[[], object],
+    title: str = "Clefs",
+    hint: str = "One of the checked clefs is picked at random.",
 ) -> tuple[dict[str, QCheckBox], QWidget]:
     """
     Build the "Clefs" page that every exercise with a choice of clefs shares.
@@ -756,13 +759,17 @@ def _clefs_page(
         Called whenever a box is ticked or unticked. Keyword-only.
     back : callable
         Called when the Back button is clicked. Keyword-only.
+    title : str, default "Clefs"
+        The page's title. Keyword-only.
+    hint : str, default "One of the checked clefs is picked at random."
+        The grey line above the list. Keyword-only.
 
     Returns
     -------
     dict of str to QCheckBox
         The checkbox of each clef offered.
     QWidget
-        The page, titled "Clefs". The last ticked clef cannot be unticked.
+        The page, with its title. The last ticked clef cannot be unticked.
 
     Examples
     --------
@@ -783,17 +790,17 @@ def _clefs_page(
         0,
         0,
     )
-    hint = QLabel("One of the checked clefs is picked at random.")
-    hint.setWordWrap(True)
-    hint.setStyleSheet("color: gray;")
-    lay.addWidget(hint)
+    note = QLabel(hint)
+    note.setWordWrap(True)
+    note.setStyleSheet("color: gray;")
+    lay.addWidget(note)
     for c, box in boxes.items():
         box.setChecked(c in selected)
     lay.addWidget(_clef_list(boxes))
     _guard_last(list(boxes.values()))  # the last checked clef can't be unchecked
     for box in boxes.values():
         box.toggled.connect(edited)
-    return boxes, _subpage("Clefs", body=body, back=back)
+    return boxes, _subpage(title, body=body, back=back)
 
 
 def _show_keys(
@@ -3701,6 +3708,220 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
+def load_clef_basics() -> None:
+    """
+    Load the saved clef basics settings into the shared settings object.
+
+    Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
+    setting as it was.
+
+    Examples
+    --------
+    >>> store().setValue("clefBasics/clefs", "alto,subbass,flute")
+    >>> store().setValue("clefBasics/type", "identification")
+    >>> load_clef_basics()
+    >>> settings.clef_basics.active_clefs(), settings.clef_basics.question_type
+    (['alto', 'subbass'], 'identification')
+    >>> settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
+    >>> store().remove("clefBasics")
+    """
+    clefs = text_value(store(), key="clefBasics/clefs", default="")
+    if clefs:
+        settings.clef_basics.clefs = {
+            c for c in clefs.split(",") if c in settings.CLEF_BASICS_CLEFS
+        } or settings.clef_basics.clefs
+    kind = text_value(store(), key="clefBasics/type", default="")
+    if kind in settings.CLEF_QUESTION_TYPES:
+        settings.clef_basics.question_type = kind
+
+
+class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
+    """
+    The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.
+
+    Question Type chooses between Clef Construction (put a named clef on a blank staff) and Clef Identification (name the clef on
+    a staff). Clefs lists the clefs in the same groups as the other exercises, with the French violin and subbass clefs, which
+    only this exercise has, at the bottom. Edits are live: each changes the settings, saves them and emits `changed`.
+
+    Attributes
+    ----------
+    cfg : ClefBasicsSettings
+        The settings being edited.
+    stack : SlideStack
+        The menu and its two pages.
+    types : dict of str to QRadioButton
+        The choice of question, by key of `CLEF_QUESTION_TYPES`.
+    boxes : dict of str to QCheckBox
+        The checkbox of each clef.
+
+    Examples
+    --------
+    >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+    >>> panel.stack.count()  # the menu and two pages
+    3
+    """
+
+    def __init__(
+        self,
+        cfg: settings.ClefBasicsSettings,
+        *,
+        parent: QWidget | None = None,
+    ) -> None:
+        """
+        Build the panel for a set of settings.
+
+        Parameters
+        ----------
+        cfg : ClefBasicsSettings
+            The settings to edit.
+        parent : QWidget or None, default None
+            The widget that owns the panel. Keyword-only.
+
+        Examples
+        --------
+        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
+        >>> panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
+        (True, ['french', 'subbass'])
+        """
+        super().__init__(parent)
+        self.cfg = cfg
+        self.stack = SlideStack()
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        outer.addWidget(self.stack)
+        menu = QWidget()
+        mlay = QVBoxLayout(menu)
+        mlay.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        mlay.addWidget(QLabel("<h3>Settings</h3>"))
+        self.type_row = _Row("Question Type")
+        self.type_row.clicked.connect(lambda _=False: self._go(1))
+        mlay.addWidget(self.type_row)
+        self.clefs_row = _Row("Clefs")
+        self.clef_pictures = ClefPictures()
+        self.clefs_row.attach(self.clef_pictures)
+        self.clefs_row.clicked.connect(lambda _=False: self._go(2))
+        mlay.addWidget(self.clefs_row)
+        mlay.addStretch()
+        self.types: dict[str, QRadioButton] = {}
+        type_body = QWidget()
+        type_lay = QVBoxLayout(type_body)
+        type_lay.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        type_group = QButtonGroup(self)
+        for key, label in settings.CLEF_QUESTION_TYPES.items():
+            radio = QRadioButton(label)
+            radio.setChecked(key == cfg.active_type())
+            radio.toggled.connect(lambda on, chosen=key: self._type_chosen(chosen, on=on))
+            type_group.addButton(radio)
+            type_lay.addWidget(radio)
+            self.types[key] = radio
+        type_page = _subpage("Question Type", body=type_body, back=lambda: self._go(0))
+        self.boxes, clefs_page = _clefs_page(
+            settings.CLEF_BASICS_CLEFS,
+            selected=cfg.clefs,
+            edited=self._clefs_edited,
+            back=lambda: self._go(0),
+        )
+        for page in (menu, type_page, clefs_page):
+            self.stack.addWidget(page)
+        self._refresh_summaries()
+
+    def _go(self, index: int) -> None:
+        """
+        Slide to a page, refreshing the menu's summary when going back to it.
+
+        Parameters
+        ----------
+        index : int
+            0 for the menu, 1 for Question Type, 2 for Clefs.
+
+        Examples
+        --------
+        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+        >>> panel._go(1)
+        >>> panel.stack.sliding
+        True
+        """
+        if self.stack.sliding or index == self.stack.currentIndex():
+            return
+        if index == 0:
+            self._refresh_summaries()
+        self.stack.slide_to(index)
+
+    def _refresh_summaries(self) -> None:
+        """
+        Show the kind of question and the clefs that are asked for in the menu's rows.
+
+        Examples
+        --------
+        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"alto"}))
+        >>> panel.clef_pictures.clefs, panel.type_row.value.text()
+        (['alto'], 'Construction')
+        """
+        self.clef_pictures.set_clefs(self.cfg.active_clefs())
+        self.type_row.value.setText(settings.CLEF_QUESTION_TYPES[self.cfg.active_type()].removeprefix("Clef "))
+
+    def _type_chosen(self, key: str, *, on: bool) -> None:
+        """
+        Take the kind of question chosen into the settings, save it and say so.
+
+        Parameters
+        ----------
+        key : str
+            A key of `CLEF_QUESTION_TYPES`.
+        on : bool
+            Whether its button was just switched on; the one switched off is ignored.
+
+        Examples
+        --------
+        >>> cfg = settings.ClefBasicsSettings()
+        >>> panel = ClefBasicsSettingsPanel(cfg)
+        >>> panel.types["identification"].setChecked(True)
+        >>> cfg.question_type, str(store().value("clefBasics/type"))
+        ('identification', 'identification')
+        >>> store().remove("clefBasics")
+        """
+        if not on:
+            return
+        self.cfg.question_type = key
+        store().setValue("clefBasics/type", key)
+        self.changed.emit()
+
+    def _clefs_edited(self) -> None:
+        """
+        Take the ticked clefs into the settings, save them and say so.
+
+        The last ticked clef cannot be unticked.
+
+        Examples
+        --------
+        >>> cfg = settings.ClefBasicsSettings()
+        >>> panel = ClefBasicsSettingsPanel(cfg)
+        >>> panel.boxes["french"].setChecked(True)
+        >>> "french" in cfg.clefs, str(store().value("clefBasics/clefs"))
+        (True, 'treble,bass,french')
+        >>> store().remove("clefBasics")
+        """
+        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
+        _guard_last(list(self.boxes.values()))
+        store().setValue("clefBasics/clefs", ",".join(self.cfg.active_clefs()))
+        self.changed.emit()
+
+
 def settings_inversion_names() -> tuple[str, ...]:
     """
     Return the inversions as they are written in the settings.
@@ -4127,6 +4348,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
         return KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction")
     if isinstance(exercise, ScaleConstruction):
         return KeySignatureSettingsPanel(settings.scale_construction, prefix="scaleConstruction")
+    if isinstance(exercise, ClefBasics):
+        return ClefBasicsSettingsPanel(settings.clef_basics)
     if isinstance(exercise, CircleOfFifths):
         return CircleSettingsPanel(settings.circle)
     return None

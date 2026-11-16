@@ -33,6 +33,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QWidget
 
+from alto import settings
 from alto.settings import SOLFEGE
 from alto.theory.pitch import (
     MAJOR_KEYS,
@@ -43,18 +44,14 @@ from alto.ui.colors import blend
 from alto.ui.notation import current as current_style
 from alto.ui.staff import (
     BOTTOM_LINE,
+    CLEF_EXTENT,
     MIDDLE_C,
+    SYMBOL_CLEF,
     StaffWidget,
 )
 
 CLEF_NAMES = {
-    "treble": "Treble",
-    "bass": "Bass",
-    "alto": "Alto",
-    "tenor": "Tenor",
-    "soprano": "Soprano",
-    "mezzo": "Mezzo-soprano",
-    "baritone": "Baritone",
+    **settings.CLEF_NAMES,
     "grand": "Grand staff",
     "baritone_f": "Baritone (F clef)",
     "baritone_c": "Baritone (C clef)",
@@ -68,6 +65,59 @@ VALUE_NAMES = {
     "sixteenth": "16th",
     "thirty_second": "32nd",
 }
+
+
+def symbol_icon(
+    symbol: str,
+    *,
+    color: QColor,
+    height: int = 56,
+) -> QIcon:
+    """
+    Draw a clef symbol on its own, without a staff, as an icon.
+
+    The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centred.
+
+    Parameters
+    ----------
+    symbol : str
+        "G", "C" or "F".
+    color : QColor
+        The colour to draw it in. Keyword-only.
+    height : int, default 56
+        The icon's height in pixels, which is also as wide as it is. Keyword-only.
+
+    Returns
+    -------
+    QIcon
+        The icon, in the notation font chosen in the settings.
+
+    Examples
+    --------
+    >>> symbol_icon("F", color=QColor("black")).isNull()
+    False
+    """
+    ratio = 2.0
+    pixmap = QPixmap(int(height * ratio), int(height * ratio))
+    pixmap.setDevicePixelRatio(ratio)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    clef = SYMBOL_CLEF[symbol]
+    top, bottom = CLEF_EXTENT[clef]
+    gap = height / 9.0  # the treble clef, the tallest, is about nine gaps high
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    # noinspection PyProtectedMember
+    StaffWidget._draw_clef(
+        painter,
+        clef=clef,
+        x=(height - 3.2 * gap) / 2,
+        bottom=height / 2 + (top + bottom) / 2 * gap,  # the middle of the symbol on the middle of the icon
+        gap=gap,
+        color=color,
+        font=current_style().font,
+    )
+    painter.end()
+    return QIcon(pixmap)
 
 
 class _Picture(QWidget):

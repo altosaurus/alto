@@ -71,6 +71,8 @@ CLEF_GLYPH = {
     "mezzo": "𝄡",
     "baritone_c": "𝄡",
     "baritone_f": "𝄢",
+    "french": "𝄞",
+    "subbass": "𝄢",
 }
 # (glyph top, glyph bottom) measured upward from the bottom staff line, in staff gaps
 CLEF_EXTENT = {
@@ -82,8 +84,67 @@ CLEF_EXTENT = {
     "mezzo": (3.0, -1.0),
     "baritone_c": (6.0, 2.0),
     "baritone_f": (3.0, -0.3),
+    "french": (5.6, -3.2),  # the treble clef, a gap lower
+    "subbass": (5.0, 1.7),  # the bass clef, a gap higher
 }
 MIDDLE_C = Note(4, letter=0).diatonic
+
+
+SYMBOL_CLEF = {"G": "treble", "C": "alto", "F": "bass"}  # a clef drawn with each symbol, to draw the symbol by
+
+
+def clef_targets(clef: str) -> set[tuple[str, int]]:
+    """
+    Return the ways a clef can be written: the symbol and where on the staff it goes.
+
+    Parameters
+    ----------
+    clef : str
+        A clef name such as "treble", "mezzo" or "baritone".
+
+    Returns
+    -------
+    set of tuple of (str, int)
+        Each is a symbol, "G", "C" or "F", and the place of its reference line (the G, F or middle C) counted in lines and spaces
+        up from the bottom line at 0: the bottom line is 0, the space above it 1, the second line 2, up to the top line at 8. Most
+        clefs have one. The baritone clef has two: the F clef on the middle line and the C clef on the top line.
+
+    Examples
+    --------
+    >>> clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
+    True
+    >>> sorted(clef_targets("baritone"))
+    [('C', 8), ('F', 4)]
+    >>> sorted(clef_targets("french") | clef_targets("subbass"))
+    [('F', 8), ('G', 0)]
+    """
+    if clef == "baritone":
+        return {clef_target_of("baritone_f"), clef_target_of("baritone_c")}
+    return {clef_target_of(clef)}
+
+
+def clef_target_of(shape: str) -> tuple[str, int]:
+    """
+    Return the symbol and the place of one way of writing a clef.
+
+    Parameters
+    ----------
+    shape : str
+        A key of `engraving.CLEF_SIGNS`, such as "alto" or "baritone_c".
+
+    Returns
+    -------
+    tuple of (str, int)
+        The symbol and its place, as for `clef_targets`.
+
+    Examples
+    --------
+    >>> clef_target_of("bass"), clef_target_of("soprano")
+    (('F', 6), ('C', 0))
+    """
+    glyph, line = engraving.CLEF_SIGNS[shape]
+    return glyph[0].upper(), 2 * line
+
 
 # Where each key-signature accidental sits, in order of appearance. Each is a fourth up or a fifth down from the one before
 # (sharps: F C G D A E B, flats: B E A D G C F), and the pattern is chosen so that all seven stay on the staff, or one step
@@ -302,6 +363,8 @@ class StaffWidget(QWidget):
         or `note_color`.
     notation_style : NotationStyle or None
         A style to use instead of the one chosen in the settings.
+    clef_hidden : bool
+        Draw the staff without its clef, for a clef the learner places.
     key : int
         The key signature drawn: sharps if positive, flats if negative.
     key_room : int
@@ -371,6 +434,7 @@ class StaffWidget(QWidget):
         self.key_room = 0  # sharps or flats' worth of room to keep for the signature, so the width need not follow it
         self.value = "whole"
         self.caption = ""  # text written under the staff, inside the paper
+        self.clef_hidden = False  # draw the staff without its clef, for a clef the learner places
         self._fit_height("treble")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
@@ -589,15 +653,16 @@ class StaffWidget(QWidget):
         for clef, bottom in staves.items():
             for i in range(5):
                 p.drawLine(QPointF(left, bottom - i * gap), QPointF(right, bottom - i * gap))
-            self._draw_clef(
-                p,
-                clef=clef,
-                x=left + 8,
-                bottom=bottom,
-                gap=gap,
-                color=fg,
-                font=font,
-            )
+            if not self.clef_hidden:
+                self._draw_clef(
+                    p,
+                    clef=clef,
+                    x=left + 8,
+                    bottom=bottom,
+                    gap=gap,
+                    color=fg,
+                    font=font,
+                )
             self._draw_key_signature(
                 p,
                 clef=clef,

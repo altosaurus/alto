@@ -2,7 +2,7 @@
 title: alto.ui.lesson
 parent: api
 package: alto.ui
-order: 35
+order: 36
 permalink: /api/alto.ui.lesson/
 ---
 {% raw %}
@@ -85,6 +85,7 @@ One step of a lesson: its words, a sound to hear, the circle, and a task.
 
 - `step` (*Step*): The step.
 - `circle` (*ExplorableCircle or None*): The circle, for a step that has one.
+- `staves` (*list of StaffWidget*): The staves beside the words, for a step that has them: one for each of its `staves`, or the one that follows the task.
 - `left_scroll` (*QScrollArea*): Holds the words and controls on the left, so they scroll if the window is too short for them.
 - `task` (*Task or None*): The task now being asked, for a step that has them.
 - `feedback` (*QLabel*): What is said about the last answer.

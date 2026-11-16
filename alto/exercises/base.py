@@ -103,6 +103,9 @@ class Question:
     required : tuple of str
         Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭.
         Empty for an ordinary question with one answer. Keyword-only.
+    place_clef : str, default ""
+        The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button.
+        Empty for any other question. Keyword-only.
 
     Examples
     --------
@@ -145,6 +148,7 @@ class Question:
     circle_ring: str = "outer"  # the ring of the cell asked about: "outer" (majors) or "inner" (minors)
     circle_key: int | None = None  # for a numeral question, the place of the key whose chords they are
     required: tuple[str, ...] = ()  # answers that must all be given, in any order, such as both names of an enharmonic key
+    place_clef: str = ""  # the clef to put on a blank staff, as a G, C or F symbol in the right place
 
     def check_placed(self, note: Note) -> bool:
         """

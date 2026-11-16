@@ -2,7 +2,7 @@
 title: alto.ui.key_fork
 parent: api
 package: alto.ui
-order: 32
+order: 33
 permalink: /api/alto.ui.key_fork/
 ---
 {% raw %}
@@ -10,7 +10,7 @@ The fork: a picker for a key signature, shaped like a tuning fork lying on its s
 
 The stem on the left ends in a natural sign (no sharps or flats, C major). At the right the stem opens into two tines:
 the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to 7. A circle marks the chosen signature. Click a
-number to choose it, or turn the mouse wheel to move the circle along the fork.
+number to choose it, drag the circle along the fork, or turn the mouse wheel to move it.
 
 **Examples**
 
@@ -135,6 +135,31 @@ Return the point a fraction of the way along a path made of short straight piece
 (10.0, 5.0)
 >>> point_along([QPointF(0, 0), QPointF(3, 4)], t=0.5).toTuple()  # slanting pieces are measured along their length
 (1.5, 2.0)
+```
+
+## nearest_on_fork
+
+```python
+def nearest_on_fork(point: QPointF) -> QPointF
+```
+
+Return the point on the fork's line that is closest to a point.
+
+**Parameters**
+
+- `point` (*QPointF*): Any position in the widget, such as the mouse while the circle is dragged.
+
+**Returns**
+
+- *QPointF*: The closest point on the way from the last sharp, round the U, to the last flat.
+
+**Examples**
+
+```pycon
+>>> nearest_on_fork(QPointF(node_position(2).x(), 0)) == node_position(2)  # straight above the number
+True
+>>> nearest_on_fork(QPointF(-50, node_position(0).y())) == node_position(0)  # past the end of the stem
+True
 ```
 
 ## fork_path
@@ -317,7 +342,7 @@ True
 def mousePressEvent(event: QMouseEvent) -> None
 ```
 
-Choose the number that was clicked.
+Pick up the circle if it was pressed, or choose the number that was clicked.
 
 **Parameters**
 
@@ -333,6 +358,83 @@ Choose the number that was clicked.
 ...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
 >>> fork.value
 -2
+```
+
+### KeyFork.mouseMoveEvent
+
+```python
+def mouseMoveEvent(event: QMouseEvent) -> None
+```
+
+Carry the circle along the fork while it is held, and light the number under the mouse otherwise.
+
+The signature changes to the nearest number as the circle passes it.
+
+**Parameters**
+
+- `event` (*QMouseEvent*): The move.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtCore import QEvent
+>>> fork = KeyFork()
+>>> here = node_position(0)
+>>> there = node_position(3)
+>>> fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, here, here, Qt.MouseButton.LeftButton,
+...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+>>> fork.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, there, there, Qt.MouseButton.NoButton,
+...                                 Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+>>> fork.value
+3
+```
+
+### KeyFork.mouseReleaseEvent
+
+```python
+def mouseReleaseEvent(event: QMouseEvent) -> None
+```
+
+Let go of the circle, which slides to the number it is nearest.
+
+**Parameters**
+
+- `event` (*QMouseEvent*): The release.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtCore import QEvent
+>>> fork = KeyFork()
+>>> fork._dragging = True
+>>> fork._marker = node_position(0) + QPointF(9, 0)
+>>> fork.mouseReleaseEvent(QMouseEvent(QEvent.Type.MouseButtonRelease, fork._marker, fork._marker,
+...                                    Qt.MouseButton.LeftButton, Qt.MouseButton.NoButton,
+...                                    Qt.KeyboardModifier.NoModifier))
+>>> fork._dragging
+False
+```
+
+### KeyFork.leaveEvent
+
+```python
+def leaveEvent(event: QEvent) -> None
+```
+
+Stop lighting a number when the mouse leaves the fork.
+
+**Parameters**
+
+- `event` (*QEvent*): The leave event.
+
+**Examples**
+
+```pycon
+>>> fork = KeyFork()
+>>> fork._hover = 3
+>>> fork.leaveEvent(QEvent(QEvent.Type.Leave))
+>>> fork._hover is None
+True
 ```
 
 ### KeyFork.wheelEvent

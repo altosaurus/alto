@@ -15,6 +15,7 @@ from __future__ import annotations
 import sys
 
 from PySide6.QtCore import (
+    QAbstractAnimation,
     QProcess,
     QSize,
     Qt,
@@ -75,6 +76,7 @@ from alto.ui.profile_dialog import (
 from alto.ui.settings_panel import (
     load_arpeggio,
     load_circle,
+    load_clef_basics,
     load_construction,
     load_key_construction,
     load_key_signatures,
@@ -187,6 +189,18 @@ class MainWindow(QMainWindow):
         self.learner = learner  # who is practising, and their history; None practises without recording
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
+        self._build()
+
+    def _build(self) -> None:
+        """
+        Make the window's contents: the lists, the pages, the menu and the top bar, drawn in the current theme.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.title_label.text()
+        'Alto - Music Theory'
+        """
         self.nav = QListWidget()  # the exercise list: section labels and exercises, as a flat sidebar
         self.nav.setObjectName("nav")  # styled in style.py
         self.nav.setIconSize(QSize(20, 20))
@@ -276,6 +290,7 @@ class MainWindow(QMainWindow):
         load_key_signatures()
         load_key_construction()
         load_circle()
+        load_clef_basics()
         load_scale_construction()
         load_instrument()
         load_notation_style()
@@ -313,6 +328,7 @@ class MainWindow(QMainWindow):
             0,
             0,
         )
+        # noinspection DuplicatedCode
         buttons.addWidget(self.menu_button)
         self.stats_button = QToolButton()  # a quick way to the statistics, beside the menu
         self.stats_button.setIcon(svg_icon(icons.CHART, color=self.palette().color(QPalette.ColorRole.WindowText)))
@@ -588,21 +604,93 @@ class MainWindow(QMainWindow):
 
     def rebuild(self) -> None:
         """
-        Open a fresh window in the same place, so every icon and colour is drawn in the new theme.
+        Make the window's contents again in the same window, so every icon and colour is drawn in the new theme.
+
+        The window itself stays, so it does not vanish and reappear. The page that was open is shown again, with the list
+        already open or closed as it was, not sliding.
 
         Examples
         --------
-        >>> MainWindow().rebuild()  # doctest: +SKIP
+        >>> window = MainWindow()
+        >>> old_root = window.centralWidget()
+        >>> window.rebuild()
+        >>> window.centralWidget() is old_root
+        False
         """
-        fresh = type(self)(self.learner)
-        fresh.setGeometry(self.geometry())
-        fresh.setWindowState(self.windowState())
-        app = QApplication.instance()
-        if app is not None:
-            # noinspection PyUnresolvedReferences
-            app.main_window = fresh  # pyright: ignore[reportAttributeAccessIssue]  (see alto/__main__.py)
-        fresh.show()
-        self.close()
+        state = self._page_state()
+        if self._sidebar_anim is not None:
+            self._sidebar_anim.stop()
+        self._overlay = None
+        self._overlay_return = None
+        for action in self.actions():
+            self.removeAction(action)
+        old = self.takeCentralWidget()
+        self._build()
+        self._restore_page(state)
+        animation = self._sidebar_anim
+        if animation is not None and animation.state() == QAbstractAnimation.State.Running:
+            animation.setCurrentTime(animation.duration())  # the list is already open, not sliding open again
+        if old is not None:
+            old.deleteLater()
+
+    def _page_state(self) -> tuple[type[Exercise] | None, str, tuple[str, int] | str | None]:
+        """
+        Note what is open, so a window built in its place can show the same.
+
+        Returns
+        -------
+        tuple of (type of Exercise or None, str, tuple of (str, int) or str or None)
+            The exercise that is open underneath (None on the start screen), the start screen's side ("exercises" or
+            "lessons"), and the page laid over it: a lesson as its key and step, "stats" or "database", or None.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._page_state()
+        (None, 'exercises', None)
+        """
+        base = self._overlay_return[0] if self._overlay is not None and self._overlay_return else self.stack.currentWidget()
+        exercise = type(base.exercise) if isinstance(base, ExerciseView) else None
+        overlay: tuple[str, int] | str | None = None
+        if isinstance(self._overlay, LessonsPage):
+            overlay = (self._overlay.view.lesson.key, self._overlay.view.current)
+        elif isinstance(self._overlay, StatsPage):
+            overlay = "stats"
+        elif isinstance(self._overlay, DatabasePage):
+            overlay = "database"
+        return exercise, self.home.mode, overlay
+
+    def _restore_page(self, state: tuple[type[Exercise] | None, str, tuple[str, int] | str | None]) -> None:
+        """
+        Show the pages that `_page_state` noted in another window.
+
+        Parameters
+        ----------
+        state : tuple of (type of Exercise or None, str, tuple of (str, int) or str or None)
+            What `_page_state` returned.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> window = MainWindow()
+        >>> window._restore_page((NoteNames, "exercises", None))
+        >>> window.title_label.text()
+        'Note Identification'
+        """
+        exercise, mode, overlay = state
+        if exercise is not None:
+            self.open_exercise(exercise)
+        elif mode != self.home.mode:
+            self.home.set_mode(mode, animate=False)
+        if isinstance(overlay, tuple):
+            self.open_lessons(overlay[0])
+            page = self._overlay
+            if isinstance(page, LessonsPage):
+                page.view.go(to=overlay[1])
+        elif overlay == "stats":
+            self.open_stats()
+        elif overlay == "database":
+            self.open_database()
 
     def _show_profile(self) -> None:
         """
