@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
@@ -497,22 +500,26 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="n">note</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the pitch-class name of a note in the chosen naming system.</p>
+<p>Return a note name in the chosen naming system, optionally including its octave.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note</em>): The note.</li>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, or “solfege” for Do Re Mi. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, “solfege” for Do Re Mi, “degrees” for caret scale degrees, or “functions” for function names. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Include the note’s octave, separated from a scale degree by “ / “. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>str</em>: The name with its accidental, without the octave.</li>
+  <li><em>str</em>: The name and, if requested, octave. Carets use accidental prefixes; function names use Raised or Lowered prefixes.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -521,6 +528,18 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 'F♯'
 &gt;&gt;&gt; spell(Note.parse("F#4"), naming="solfege")
 'Fa♯'
+&gt;&gt;&gt; spell(Note.parse("F#4"), naming="degrees", key=1)
+'7̂'
+&gt;&gt;&gt; spell(Note.parse("F4"), naming="degrees", key=1)
+'♭7̂'
+&gt;&gt;&gt; spell(Note.parse("Eb4"), naming="degrees")
+'♭3̂'
+&gt;&gt;&gt; spell(Note.parse("G4"), naming="functions", key=1)
+'Tonic'
+&gt;&gt;&gt; spell(Note.parse("F4"), naming="functions", key=1)
+'Lowered Leading tone'
+&gt;&gt;&gt; spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
+'1̂ / 4'
 </code></pre>
 
 <h2 id="diatonic_name">diatonic_name</h2>
@@ -1443,8 +1462,8 @@ on the second line. The three symbols can always be chosen from.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

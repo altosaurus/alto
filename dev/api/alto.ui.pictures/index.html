@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -343,6 +343,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -967,14 +970,14 @@ False
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
 
-<p>How notes are named: C, D and E on a staff, labelled with letters or with solfège syllables.</p>
+<p>How notes are named: C, D and E on a staff, labelled with letters, solfège syllables or scale degrees.</p>
 
 <p><strong>Attributes</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">H, W</code> (<em>float</em>): The picture’s height and width.</li>
   <li><code class="language-plaintext highlighter-rouge">LETTERS, SYLLABLES</code> (<em>tuple of str</em>): The two sets of labels.</li>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” or “solfege”.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters”, “solfege”, “degrees” (caret) or “functions”.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -990,7 +993,7 @@ False
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” or “solfege”.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters”, “solfege”, “degrees” (caret) or “functions”.</li>
   <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
@@ -1011,7 +1014,7 @@ False
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” for C D E, or “solfege” for Do Re Mi.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” for C D E, “solfege” for Do Re Mi, or “degrees” for 1̂ 2̂ 3̂, or “functions” for function names.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1037,7 +1040,7 @@ False
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” or “solfege”.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters”, “solfege”, “degrees” (caret) or “functions”.</li>
   <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.6</em>): How much to enlarge it. Keyword-only.</li>
 </ul>
 
@@ -1073,6 +1076,9 @@ False
 </code></pre>
 
 
+          
+          
+          
           
           
           
@@ -1348,8 +1354,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

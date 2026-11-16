@@ -79,6 +79,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.database_page/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.degree_text/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.engraving/</loc>
 </url>
 <url>
@@ -202,10 +205,10 @@
 <loc>https://altosaurus.github.io/alto/dev/getting-started/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
+<loc>https://altosaurus.github.io/alto/dev/api/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/api/</loc>
+<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/</loc>

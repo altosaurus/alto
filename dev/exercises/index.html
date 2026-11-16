@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
@@ -499,7 +502,10 @@ exercise that has a clef setting, apart from the grand staff, which only Note Id
   <li><strong>Range:</strong> the lowest and highest note that can appear, per clef.</li>
   <li><strong>Key signatures:</strong> which keys appear. When a key is on, the note’s name has to agree with the signature.</li>
   <li><strong>Note values:</strong> whole notes up to thirty-second notes, and the breve.</li>
-  <li><strong>Note names:</strong> letters (C D E) or solfège (Do Re Mi).</li>
+  <li><strong>Note names:</strong> letters (C D E), solfège (Do Re Mi), or the <strong>Scale degrees</strong> group, with <strong>Caret</strong>
+(1̂ 2̂ 3̂) and <strong>Function</strong> (Tonic, Supertonic, Mediant, and so on). Every option has a text label beside its preview.
+Degrees refer to the major key signature (C major without a signature). Caret labels use accidental prefixes,
+while function labels use words such as <strong>Raised Supertonic</strong> and <strong>Lowered Mediant</strong>.</li>
   <li><strong>Accidentals:</strong> whether notes with their own sharp, flat or natural sign appear.</li>
 </ul>
 
@@ -509,6 +515,9 @@ that option. Changes apply to the next question straight away.</p>
 <h2 id="keyboard-identification">Keyboard Identification</h2>
 
 <p>One key on a piano keyboard is highlighted. Press the button with its name.</p>
+
+<p>This exercise uses the <strong>Note names</strong> setting from Note Identification. Scale degrees follow the shown major key,
+or C major when key signatures are off. When octaves are required, degree and octave are separated: <strong>1̂ / 4</strong>.</p>
 
 <ul>
   <li><strong>Black keys:</strong> include them. A black key has two names, such as C♯ and D♭, and either one is accepted.</li>
@@ -525,7 +534,9 @@ that option. Changes apply to the next question straight away.</p>
 
 <h2 id="note-construction">Note Construction</h2>
 
-<p>The reverse of note identification. A note name is shown, and you click the staff where that note belongs.</p>
+<p>The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
+It uses the <strong>Note names</strong> setting from Note Identification. With scale degrees selected, the question names the
+major key, degree and octave. Without a key signature, the reference is C major.</p>
 
 <ul>
   <li>The octave counts: middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.</li>
@@ -1045,8 +1056,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794839330">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794845623">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -343,6 +343,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -675,6 +678,10 @@
       <td>A read-only look at what is stored: every answer, every question’s record, and the profiles.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.degree_text/">alto.ui.degree_text</a></td>
+      <td>Draw scale-degree carets above their digits without relying on font-specific combining accents.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.engraving/">alto.ui.engraving</a></td>
       <td>Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others).</td>
     </tr>
@@ -950,8 +957,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794839330" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794839330" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794845623" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794845623" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
