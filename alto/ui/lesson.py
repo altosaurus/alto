@@ -46,12 +46,12 @@ from alto.lessons import (
 from alto.lessons.circle_of_fifths import summary
 from alto.theory.pitch import Note
 from alto.ui.reference import ExplorableCircle
+from alto.ui.scale_explorer import ScaleExplorer
 from alto.ui.staff import StaffWidget
 from alto.ui.store import (
     int_value,
     store,
 )
-from alto.ui.widgets import SidebarToggle
 
 TEXT_WIDTH = 560  # the widest a paragraph is set, in pixels, so lines stay short enough to read comfortably
 CIRCLE_SIZE = 560  # the biggest the circle is in a lesson, in pixels
@@ -278,6 +278,15 @@ class StepView(QWidget):
             stack.addStretch(1)
             holder.setMaximumWidth(STAFF_WIDTH)
             lay.addWidget(holder, 3)
+        self.scale_explorer: ScaleExplorer | None = None
+        if step.scale:
+            explorer = ScaleExplorer(scale=step.scale, tonic=step.scale_tonic, editable=step.scale_explore)
+            self.scale_explorer = explorer
+            scale_scroll = QScrollArea()
+            scale_scroll.setWidgetResizable(True)
+            scale_scroll.setFrameShape(QFrame.Shape.NoFrame)
+            scale_scroll.setWidget(explorer)
+            lay.addWidget(scale_scroll, 3)
         if step.circle == "walk" and self.circle is not None:
             self._show(self.circle, ring="outer", place=0)
         elif self.circle is not None:
@@ -685,8 +694,6 @@ class LessonsPage(QWidget):
     ----------
     view : LessonView
         The lesson being taken.
-    sidebar_button : SidebarToggle
-        Shows or hides the list on the left; the main window wires it up.
     back : Signal
         Emitted to leave the lesson, to wherever it was opened from.
     practise_requested : Signal
@@ -737,8 +744,6 @@ class LessonsPage(QWidget):
             raise KeyError(key)
         outer = QVBoxLayout(self)
         bar = QHBoxLayout()
-        self.sidebar_button = SidebarToggle(noun="lesson list")
-        bar.addWidget(self.sidebar_button)
         self.back_button = QPushButton("←  Leave lesson")
         self.back_button.setToolTip("Leave the lesson (Esc). Alto remembers where you were.")
         self.back_button.clicked.connect(self.back)

@@ -137,6 +137,12 @@ class Step:
         Staves to show beside the words, one above another, instead of the circle; empty for none.
     task_staff : bool
         Show one staff beside the words that follows the task: it draws the task's clef.
+    scale : str
+        Scale type for an interactive notation diagram; empty for none.
+    scale_tonic : str
+        Starting note of the diagram, including its octave.
+    scale_explore : bool
+        Allow changing the example. False hides the selectors for identification tasks.
 
     Examples
     --------
@@ -153,6 +159,9 @@ class Step:
     closing: bool = False
     staves: tuple[Staff, ...] = ()
     task_staff: bool = False
+    scale: str = ""  # a scale explorer beside the lesson; empty for none
+    scale_tonic: str = "C4"
+    scale_explore: bool = True  # false fixes the example and hides the scale's name for a question
 
 
 @dataclass(frozen=True)
