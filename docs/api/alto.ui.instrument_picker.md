@@ -13,8 +13,8 @@ Choosing the instrument that plays notes, with a summary of what each one is mad
 ```pycon
 >>> format_size(2_500_000)
 '2.5 MB'
->>> sorted(PREVIEW)
-[60, 64, 67]
+>>> list(PREVIEW)
+[74, 75, 72, 71]
 ```
 
 ## load_instrument
@@ -251,7 +251,7 @@ Nothing happens if it has no recordings installed.
 def preview(key: str) -> None
 ```
 
-Play a short C major arpeggio in an instrument, even if sound is muted.
+Play the DSCH motif in an instrument, even if sound is muted.
 
 **Parameters**
 

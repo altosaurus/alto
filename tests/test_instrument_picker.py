@@ -14,7 +14,6 @@ from PySide6.QtCore import (
     QEvent,
     Qt,
 )
-from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
 from alto.audio import sounds
@@ -225,12 +224,12 @@ def test_an_instrument_with_no_recordings_cannot_be_chosen(
     assert sounds.instrument == "piano"
 
 
-def test_hear_it_plays_a_short_arpeggio_in_that_instrument(
+def test_hear_it_plays_the_dsch_motif_in_that_instrument(
     picker: InstrumentPicker,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that hear it plays a short arpeggio in that instrument.
+    Check that Hear it plays the DSCH motif in that instrument, even while muted.
 
     Parameters
     ----------
@@ -240,39 +239,11 @@ def test_hear_it_plays_a_short_arpeggio_in_that_instrument(
         Replaces settings, functions or attributes for the length of the test.
     """
     played = []
-
-    def record(
-        midi: int,
-        volume: float = 1.0,
-        instrument: str | None = None,
-        force: bool = False,
-        **kwargs: object,
-    ) -> None:
-        """
-        Record a note instead of playing it.
-
-        Parameters
-        ----------
-        midi : int
-            The note.
-        volume : float
-            Its volume.
-        instrument : str or None
-            The instrument.
-        force : bool
-            Whether it was forced.
-        kwargs : object
-            Ignored.
-        """
-        del volume, kwargs  # accepted to match what it stands in for, but not needed
-        played.append((midi, instrument, force))
-
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(sounds, "play_midi", record)
+    monkeypatch.setattr(sounds, "preview", lambda key, *, midis: played.append((key, tuple(midis))))
     picker.select("viola_bowed")
     picker.buttons["viola_bowed"][1].click()
-    QTest.qWait(900)
-    assert played == [(60, "viola_bowed", True), (64, "viola_bowed", True), (67, "viola_bowed", True)]
+    assert played == [("viola_bowed", (74, 75, 72, 71))]
     assert sounds.instrument == "piano"  # hearing it does not choose it
 
 

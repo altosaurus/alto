@@ -157,13 +157,13 @@ class StyleCard(QPushButton):
         self.staff.setFixedWidth(214)
         self.staff.show_notes(
             [
-                [Note(4, letter=2)],
-                [Note(4, letter=4)],
+                [Note(5, letter=1)],
+                [Note(5, letter=2, accidental=-1)],
                 [Note(5, letter=0)],
                 [Note(4, letter=6)],
             ],
             clef="treble",
-            key=1,
+            key=0,
             value="quarter",
         )
         name = QLabel(f"<b>{style.label}</b>")

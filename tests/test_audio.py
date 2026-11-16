@@ -6,12 +6,15 @@ import io
 import os
 import time
 import wave
+from pathlib import Path
 
 import numpy as np
 import pytest
+from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
+from alto import audio as audio_module
 from alto.audio import (
     ASSET_DIR,
     INSTRUMENT_BY_KEY,
@@ -442,6 +445,112 @@ def test_the_two_ways_of_playing_the_viola_are_listed_together() -> None:
 
 
 # -- hearing an instrument (the preview in the settings) ------------------------------------------------------------
+@pytest.mark.parametrize("rate", [22050, 44100])
+def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    rate: int,
+) -> None:
+    """
+    Check exact note spacing in the first rendered clip, including recordings with a different sample rate.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A temporary sound cache.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the recordings with short impulses.
+    rate : int
+        The recordings' sample rate.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    midis = (
+        74,
+        75,
+        72,
+        71,
+    )
+    files = {}
+    for index, note_number in enumerate(midis):
+        samples = np.zeros(rate // 100)
+        samples[0] = (index + 1) / 10
+        path = tmp_path / f"{note_number}.wav"
+        path.write_bytes(to_wav_bytes(samples, rate=rate))
+        files[note_number] = path
+    monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: files[midi])
+    path = player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300)
+    samples, rendered_rate = read_wav(path)
+    assert rendered_rate == SAMPLE_RATE
+    sounding = np.flatnonzero(np.abs(samples) > 0.01)
+    onsets = sounding[np.r_[True, np.diff(sounding) > 1]]
+    assert onsets.tolist() == [
+        0,
+        13230,
+        26460,
+        39690,
+    ]
+    assert np.allclose(
+        samples[onsets],
+        [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+        ],
+        atol=0.0001,
+    )
+    monkeypatch.setattr(player, "_note_file", lambda *_args, **_kwargs: pytest.fail("cached preview reread its notes"))
+    assert player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300) == path
+
+
+def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
+    app: QApplication,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that a muted preview starts one clip, reuses it on replay and stops it when another instrument is previewed.
+
+    Parameters
+    ----------
+    app : QApplication
+        The Qt application.
+    tmp_path : Path
+        A temporary sound cache.
+    monkeypatch : pytest.MonkeyPatch
+        Records playback without using audio hardware.
+    """
+    player = Sounds()
+    player.enabled = False
+    midis = (
+        74,
+        75,
+        72,
+        71,
+    )
+    effect = QSoundEffect()
+    calls = []
+    # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(audio_module, "QSoundEffect", lambda: effect)
+    monkeypatch.setattr(player, "_preview_file", lambda inst, **_kwargs: tmp_path / f"{inst.key}.wav")
+    monkeypatch.setattr(effect, "play", lambda: calls.append(("play", effect.source().fileName())))
+    monkeypatch.setattr(effect, "stop", lambda: calls.append(("stop", effect.source().fileName())))
+    player.preview("flute", midis=midis)
+    player.preview("flute", midis=midis)
+    player.preview("piano", midis=midis)
+    assert calls[:4] == [
+        ("play", "flute.wav"),
+        ("stop", "flute.wav"),
+        ("play", "flute.wav"),
+        ("stop", "flute.wav"),
+    ]
+    assert calls[-1] == ("play", "piano.wav")
+    assert len(player._preview_effects) == 2
+    player.play_notes([[Note(4, letter=0)]])
+    assert calls[-1] == ("stop", "piano.wav")
+
+
 def preview_engine(
     monkeypatch: pytest.MonkeyPatch,
 ) -> tuple[Sounds, list[tuple[int, float]]]:
@@ -487,9 +596,9 @@ def preview_engine(
     return s, started
 
 
-def test_a_preview_plays_its_notes_in_order_one_step_apart(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_sequence_plays_its_notes_in_order_one_step_apart(monkeypatch: pytest.MonkeyPatch) -> None:
     """
-    Check that a preview plays its notes in order one step apart.
+    Check that a sequence plays its notes in order one step apart.
 
     Parameters
     ----------
@@ -497,7 +606,12 @@ def test_a_preview_plays_its_notes_in_order_one_step_apart(monkeypatch: pytest.M
         Replaces settings, functions or attributes for the length of the test.
     """
     s, started = preview_engine(monkeypatch)
-    s.preview("viola_bowed", midis=(60, 64, 67), step_ms=60)
+    s._play_sequence(
+        "viola_bowed",
+        steps=[([60], 0.9), ([64], 0.9), ([67], 0.9)],
+        gap_ms=60,
+        force=True,
+    )
     QTest.qWait(400)
     assert [m for m, _ in started] == [60, 64, 67]
     times = [t for _, t in started]
@@ -514,7 +628,12 @@ def test_a_pause_in_the_program_delays_the_notes_instead_of_making_them_sound_to
         Replaces settings, functions or attributes for the length of the test.
     """
     s, started = preview_engine(monkeypatch)
-    s.preview("viola_bowed", midis=(60, 64, 67), step_ms=80)
+    s._play_sequence(
+        "viola_bowed",
+        steps=[([60], 0.9), ([64], 0.9), ([67], 0.9)],
+        gap_ms=80,
+        force=True,
+    )
     time.sleep(0.5)  # the sound system starting up, say, which blocks the timers
     QTest.qWait(500)
     assert [m for m, _ in started] == [60, 64, 67]
@@ -522,9 +641,9 @@ def test_a_pause_in_the_program_delays_the_notes_instead_of_making_them_sound_to
     assert all(b - a >= 0.07 for a, b in zip(times, times[1:]))
 
 
-def test_starting_a_second_preview_ends_the_first(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_starting_a_second_sequence_ends_the_first(monkeypatch: pytest.MonkeyPatch) -> None:
     """
-    Check that starting a second preview ends the first.
+    Check that starting a second sequence ends the first.
 
     Parameters
     ----------
@@ -532,9 +651,19 @@ def test_starting_a_second_preview_ends_the_first(monkeypatch: pytest.MonkeyPatc
         Replaces settings, functions or attributes for the length of the test.
     """
     s, started = preview_engine(monkeypatch)
-    s.preview("viola_bowed", midis=(60, 64, 67), step_ms=80)
+    s._play_sequence(
+        "viola_bowed",
+        steps=[([60], 0.9), ([64], 0.9), ([67], 0.9)],
+        gap_ms=80,
+        force=True,
+    )
     QTest.qWait(100)  # the first note, and maybe the second, have started
-    s.preview("viola_bowed", midis=(62, 65, 69), step_ms=80)
+    s._play_sequence(
+        "viola_bowed",
+        steps=[([62], 0.9), ([65], 0.9), ([69], 0.9)],
+        gap_ms=80,
+        force=True,
+    )
     QTest.qWait(400)
     played = [m for m, _ in started]
     assert played[-3:] == [62, 65, 69]

@@ -3,6 +3,7 @@ Note playback: recorded instrument samples (University of Iowa), with pitch-shif
 
 `Sounds` plays notes through Qt's `QSoundEffect`, one effect per note, created the first time it is needed. A note with
 no recording is made by shifting the nearest recording (or, for the piano outside its sampled range, by synthesis).
+Instrument previews render the phrase as one cached clip, with fixed spacing between its notes.
 The module-level `sounds` is the one the interface uses.
 
 Examples
@@ -15,6 +16,7 @@ Examples
 
 from __future__ import annotations
 
+import hashlib
 import io
 import tempfile
 import time
@@ -358,6 +360,7 @@ class Sounds:
         self.enabled = True
         self.instrument = "piano"  # key into INSTRUMENT_BY_KEY
         self._effects = {}
+        self._preview_effects: dict[tuple[str, tuple[int, ...], int], QSoundEffect] = {}
         self._sounding: list = []  # sustained and damped notes that may still be sounding, to release when the next begins
         self._fades: dict = {}  # running fade-outs, by effect
         self._sequence_run = 0  # which sequence of notes is current, so that an older one stops when a new one starts
@@ -595,6 +598,71 @@ class Sounds:
             if fx.isPlaying():
                 fx.setVolume(0.0)
                 fx.stop()
+        for fx in self._preview_effects.values():
+            fx.stop()
+
+    def _preview_file(
+        self,
+        inst: Instrument,
+        *,
+        midis: tuple[int, ...],
+        step_ms: int,
+    ) -> Path:
+        """
+        Render a preview as one WAV file with note onsets a fixed number of samples apart.
+
+        Parameters
+        ----------
+        inst : Instrument
+            The instrument whose recordings to use.
+        midis : tuple of int
+            The notes in playback order. Keyword-only.
+        step_ms : int
+            The interval between note onsets in milliseconds. Keyword-only.
+
+        Returns
+        -------
+        pathlib.Path
+            A cached mono WAV file containing the phrase.
+
+        Examples
+        --------
+        >>> Sounds()._preview_file(INSTRUMENT_BY_KEY["piano"], midis=(74, 75, 72, 71), step_ms=300).suffix
+        '.wav'
+        """
+        identity = repr(
+            (
+                inst.key,
+                midis,
+                step_ms,
+                self.FADE_MS,
+            ),
+        ).encode()
+        path = self._dir / f"preview_{hashlib.sha256(identity).hexdigest()}.wav"
+        if path.exists():
+            return path
+        gap = max(1, round(SAMPLE_RATE * step_ms / 1000))
+        fade = max(1, round(SAMPLE_RATE * self.FADE_MS / 1000))
+        notes = []
+        for midi in midis:
+            audio, rate = read_wav(self._note_file(inst, midi=midi))
+            if rate != SAMPLE_RATE:
+                positions = np.arange(0, len(audio), rate / SAMPLE_RATE)
+                audio = np.interp(positions, np.arange(len(audio)), audio)
+            if inst.sustained or inst.damped:
+                audio = audio[: gap + fade].copy()
+                tail = max(0, len(audio) - gap)
+                if tail:
+                    audio[gap:] *= np.linspace(1.0, 0.0, tail)
+            notes.append(audio)
+        length = max((i * gap + len(audio) for i, audio in enumerate(notes)), default=0)
+        phrase = np.zeros(length)
+        for i, audio in enumerate(notes):
+            start = i * gap
+            phrase[start : start + len(audio)] += audio
+        self._dir.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(to_wav_bytes(np.clip(phrase, -1.0, 1.0)))
+        return path
 
     def preview(
         self,
@@ -606,6 +674,7 @@ class Sounds:
         """
         Play notes one after another in an instrument, even while muted, to hear what it sounds like.
 
+        The phrase is rendered as one audio clip, so first-use loading cannot change the spacing between notes.
         Starting a preview silences the one before it.
 
         Parameters
@@ -622,12 +691,23 @@ class Sounds:
         >>> sounds.preview("flute", midis=[60, 64, 67])  # doctest: +SKIP
         """
         self.stop_all()
-        self._play_sequence(
-            key,
-            steps=[([m], 0.9) for m in midis],
-            gap_ms=step_ms,
-            force=True,
-        )
+        self._sequence_run += 1
+        notes = tuple(midis)
+        if not notes:
+            return
+        try:
+            inst = INSTRUMENT_BY_KEY[key]
+            cache_key = (key, notes, step_ms)
+            effect = self._preview_effects.get(cache_key)
+            if effect is None:
+                path = self._preview_file(inst, midis=notes, step_ms=step_ms)
+                effect = QSoundEffect()
+                effect.setSource(QUrl.fromLocalFile(str(path)))
+                self._preview_effects[cache_key] = effect
+            effect.setVolume(min(1.0, 0.9 * inst.gain))
+            effect.play()
+        except Exception as exc:  # audio must never break the instrument picker
+            print(f"audio unavailable: {exc}")
 
     def _play_column(
         self,
@@ -711,6 +791,8 @@ class Sounds:
         """
         self._sequence_run += 1
         run = self._sequence_run
+        for effect in self._preview_effects.values():
+            effect.stop()
         if not steps:
             return
         if not (self.enabled or force):

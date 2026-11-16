@@ -5,8 +5,8 @@ Examples
 --------
 >>> format_size(2_500_000)
 '2.5 MB'
->>> sorted(PREVIEW)
-[60, 64, 67]
+>>> list(PREVIEW)
+[74, 75, 72, 71]
 """
 
 from __future__ import annotations
@@ -53,7 +53,12 @@ from alto.ui.store import (
     text_value,
 )
 
-PREVIEW = (60, 64, 67)  # a C major arpeggio, to hear an instrument
+PREVIEW = (
+    74,
+    75,
+    72,
+    71,
+)  # DSCH: D5, E♭5, C5, B4, matching the notation-font previews
 
 
 def load_instrument() -> None:
@@ -756,7 +761,7 @@ class InstrumentPicker(QWidget):
     # noinspection PyMethodMayBeStatic
     def preview(self, key: str) -> None:
         """
-        Play a short C major arpeggio in an instrument, even if sound is muted.
+        Play the DSCH motif in an instrument, even if sound is muted.
 
         Parameters
         ----------

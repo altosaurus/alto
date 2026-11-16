@@ -250,6 +250,7 @@ def test_a_failure_in_the_sound_system_is_reported_not_raised(
         raise RuntimeError("no sound card")
 
     monkeypatch.setattr(s, "_effect", broken)
+    monkeypatch.setattr(s, "_preview_file", lambda *_args, **_kwargs: broken("piano", midi=60))
     s.play_midi(60)
     s.play_notes([[Note(4, letter=0)]])
     s.preview("piano", midis=(60,))
