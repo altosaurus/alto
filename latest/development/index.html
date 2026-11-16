@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794772250">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -75,6 +75,15 @@
             <li><a class="row" href="/alto/latest/">Home</a></li>
             
             
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
             
             
             
@@ -142,9 +151,14 @@
             
             
             
+            </ul></details></li>
             
             
-            <li><a class="row" href="/alto/latest/development/" aria-current="page">For developers</a></li>
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/latest/development/" aria-current="page">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
             
             
             
@@ -223,6 +237,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -283,6 +300,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -314,6 +334,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -422,13 +445,30 @@
             
             
             
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
             
             
             <li><a class="row" href="/alto/latest/credits/">License and credits</a></li>
             
             
             
-            
+            </ul></details></li>
           </ul>
         </nav>
       </details>
@@ -437,7 +477,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>For developers</h1>
-          <p>Alto is a Python application using PySide6. The source is at <a href="https://github.com/genedan/alto">github.com/genedan/alto</a>.</p>
+          <p>Alto is a Python application using PySide6. The source is at <a href="https://github.com/altosaurus/alto">github.com/altosaurus/alto</a>.</p>
 
 <p>This page is the quick reference: commands, tooling and the short recipes. The <a href="/alto/latest/guide/">developer guide</a> explains how
 the program works and the ideas underneath it (audio, notation, spaced repetition, styling, animation), with reading lists.</p>
@@ -498,6 +538,60 @@ change that adds code should add a test for it; <code class="language-plaintext 
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pytest <span class="nt">--cov</span> <span class="nt">--cov-report</span><span class="o">=</span>term-missing
 </code></pre></div></div>
+
+<h3 id="which-checks-run-for-which-change">Which checks run for which change</h3>
+
+<p>Neither the workflows nor the pre-push hook run everything for every change. <code class="language-plaintext highlighter-rouge">scripts/changed_tests.py</code> looks at the files that
+changed and decides, and anything it does not recognise is a reason to run everything:</p>
+
+<ul>
+  <li><strong>Only docs</strong> (<code class="language-plaintext highlighter-rouge">docs/**</code> and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
+with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.</li>
+  <li><strong>A change to <code class="language-plaintext highlighter-rouge">alto/</code> or to a test:</strong> the tests that import the changed module, directly or through others, their doctests, and
+the tests that read every module or page. The pre-push hook runs exactly these, so a small change is checked in seconds;
+<code class="language-plaintext highlighter-rouge">ALTO_TEST_ALL=1 git push</code> runs the whole suite. The workflows run the whole suite.</li>
+  <li><strong>Anything else</strong> (a script, a workflow, <code class="language-plaintext highlighter-rouge">pyproject.toml</code>, a <code class="language-plaintext highlighter-rouge">conftest.py</code>, the packaging files, a picture): everything.</li>
+</ul>
+
+<p>In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
+and a push to <code class="language-plaintext highlighter-rouge">main</code> runs every supported version. A new push to a pull request cancels the runs still going for the old one.
+Nothing requires these checks to pass before a merge, so the ones a change skips do not leave it waiting; if you add required
+checks to the <code class="language-plaintext highlighter-rouge">main</code> ruleset, change the <code class="language-plaintext highlighter-rouge">paths-ignore</code> rules to job-level <code class="language-plaintext highlighter-rouge">if</code> conditions first, because a workflow that is skipped
+never reports and a required check would wait for it.</p>
+
+<h2 id="keeping-alto-fast">Keeping Alto fast</h2>
+
+<p>Three things watch how fast Alto is, each for a different kind of slowdown. The operations they time are in
+<code class="language-plaintext highlighter-rouge">benchmarks/operations.py</code>: opening every page (and going between a lesson and an exercise), asking and answering a question,
+painting each screen, drawing the circle of fifths at new sizes, and reading and writing the data of a profile with a year of practice
+behind it.</p>
+
+<ul>
+  <li><strong>Budgets, on every pull request.</strong> <code class="language-plaintext highlighter-rouge">tests/test_performance.py</code> fails when an operation takes longer than its budget in
+<code class="language-plaintext highlighter-rouge">benchmarks/budgets.py</code>. A budget is four or five times what the operation takes on a development machine, so that a slow build
+machine does not fail a test but a change that makes something many times slower does. The first use of something in a new process
+(starting the app, the first look at a page, the circle at sizes not used before) is measured in a process of its own, because Qt
+makes fonts and layouts on first use and later runs hide that cost.</li>
+  <li><strong>A history, from release to release.</strong> <code class="language-plaintext highlighter-rouge">benchmarks/suite.py</code> is an <a href="https://asv.readthedocs.io/">ASV</a> suite, and the Performance
+workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/performance.yml</code>) runs it when a version is tagged and once a week, and keeps the results on the
+branch <code class="language-plaintext highlighter-rouge">asv-results</code>. A change of more than 30% against the previous release is written in the run’s summary. That is advice and not a
+failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
+would catch.</li>
+  <li><strong>By hand, before a release.</strong> The run takes a minute or two, and the feel of animations on a real screen is not something a test
+can judge, so look at the lesson, the circle of fifths and the statistics page on a real display as well.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> benchmarks.survey        <span class="c"># every operation once, slowest first, in milliseconds</span>
+python <span class="nt">-m</span> benchmarks.operations page:lesson <span class="nt">--profile</span>   <span class="c"># where the time goes in one operation, the first time</span>
+pytest tests/test_performance.py   <span class="c"># the budgets</span>
+asv run <span class="nt">-E</span> existing:<span class="si">$(</span>which python<span class="si">)</span> <span class="nt">--set-commit-hash</span> <span class="si">$(</span>git rev-parse HEAD<span class="si">)</span>   <span class="c"># record this commit</span>
+asv compare v0.0.0 HEAD            <span class="c"># what changed since a release, once both have been recorded</span>
+</code></pre></div></div>
+
+<p>When an operation is made faster or slower on purpose, change its budget in the same commit. A new page or exercise needs a line in
+<code class="language-plaintext highlighter-rouge">benchmarks/budgets.py</code> (a prefix such as <code class="language-plaintext highlighter-rouge">page:</code> covers it) and, if it is a new kind of operation, an entry in
+<code class="language-plaintext highlighter-rouge">benchmarks/operations.py</code>; the tests fail until it has a budget, so nothing goes unwatched. The first release to be measured is the
+one that has <code class="language-plaintext highlighter-rouge">benchmarks/</code>; to measure an earlier one, run the Performance workflow by hand with <code class="language-plaintext highlighter-rouge">ref</code> set to its tag.</p>
 
 <h2 id="type-checking">Type checking</h2>
 
@@ -710,6 +804,87 @@ the terms. This is what the summary in the Sound settings shows.</li>
 a case, felt, bone caps or stop knobs. The settings page, the keyboard and the range picker all read from that list, so nothing
 else needs changing. Add a row to the table in <code class="language-plaintext highlighter-rouge">docs/settings.md</code>. The colours named after materials in the builder are <code class="language-plaintext highlighter-rouge">MATERIALS</code> in the same file.</p>
 
+<h2 id="versions-of-the-docs">Versions of the docs</h2>
+
+<p>The docs exist in one copy for each release and one for the development version, and a dropdown in the top bar switches between them.
+A page of an old release says so in a banner, and links to the same page in the latest one.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/alto/dev/        the development version, rebuilt when a change to docs/ is merged into main
+/alto/v0.1.0/     one folder for each release, built once when its tag is pushed and not changed after that
+/alto/latest/     the newest release again, built with its own address so that its links and its sitemap say /latest/
+/alto/            goes to latest (to dev until there is a release); also versions.json, version-switcher.js, 404.html, robots.txt
+</code></pre></div></div>
+
+<p>The Docs workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/docs.yml</code>) builds them with Jekyll and keeps the result on the branch <code class="language-plaintext highlighter-rouge">gh-pages</code>, which
+GitHub Pages serves. <code class="language-plaintext highlighter-rouge">scripts/docs_site.py</code> writes what sits around the versions: <code class="language-plaintext highlighter-rouge">versions.json</code>, the home page that goes to the
+latest, and the sitemap. The files that belong to the whole site and not to one version are in <code class="language-plaintext highlighter-rouge">docs/site-root/</code>. One of them,
+<code class="language-plaintext highlighter-rouge">version-switcher.js</code>, fills the dropdown from <code class="language-plaintext highlighter-rouge">versions.json</code> at run time, so a release made years ago still offers the newest
+versions, and a fix to the dropdown reaches all of them.</p>
+
+<p>Search engines are told to prefer the latest version: every page has a <code class="language-plaintext highlighter-rouge">canonical</code> address under <code class="language-plaintext highlighter-rouge">/latest/</code>, <code class="language-plaintext highlighter-rouge">dev</code> is <code class="language-plaintext highlighter-rouge">noindex</code>, and
+only <code class="language-plaintext highlighter-rouge">latest</code> is in the sitemap. A page that existed at the root before the docs had versions is sent to <code class="language-plaintext highlighter-rouge">/latest/</code> by <code class="language-plaintext highlighter-rouge">404.html</code>.</p>
+
+<p>To add a docs-only fix to an old release, there is nothing to do but publish a new release: a version is built once from its tag.
+To build a release that was tagged before it had a dropdown, run the Docs workflow by hand with <code class="language-plaintext highlighter-rouge">ref</code> set to its tag. It puts the
+current layout over that tag’s docs, and the words stay as they were.</p>
+
+<p><strong>Switching a copy of the repository to this</strong>, once: after the first run has created the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch, set Settings, Pages,
+Source to “Deploy from a branch”, <code class="language-plaintext highlighter-rouge">gh-pages</code>, <code class="language-plaintext highlighter-rouge">/ (root)</code>. Until then GitHub builds a single copy from <code class="language-plaintext highlighter-rouge">main:/docs</code> as before. Do this
+soon after merging, because the one copy no longer has <code class="language-plaintext highlighter-rouge">robots.txt</code>, <code class="language-plaintext highlighter-rouge">llms.txt</code> or the Search Console file, which now live in
+<code class="language-plaintext highlighter-rouge">docs/site-root/</code>.</p>
+
+<h3 id="pages-in-the-sidebar">Pages in the sidebar</h3>
+
+<p>The sidebar and the “On this page” list are built from the pages themselves. A page is listed by what its front matter says:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nav_order</code></td>
+      <td>Where it goes, lowest first. A page without one is not in the sidebar.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nav_group</code></td>
+      <td>The heading it goes under (Using Alto, For developers, About). The headings open and close, and the pages of one heading must be next to each other in <code class="language-plaintext highlighter-rouge">nav_order</code>. Home has none.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">children</code>, <code class="language-plaintext highlighter-rouge">parent</code></td>
+      <td>A page with <code class="language-plaintext highlighter-rouge">children: name</code> is one row that links to it and opens the pages that say <code class="language-plaintext highlighter-rouge">parent: name</code>, in their <code class="language-plaintext highlighter-rouge">order</code>. Those pages can also say <code class="language-plaintext highlighter-rouge">package:</code> to be grouped under a small heading that opens and closes (the API reference).</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A heading that is also the title of a page (For developers) is that page’s link, and the page is not listed again under it. Whatever holds
+the page you are on is open. Which headings you closed is remembered in the browser.</p>
+
+<p>On a wide screen a page with two or more <code class="language-plaintext highlighter-rouge">##</code> or <code class="language-plaintext highlighter-rouge">###</code> headings gets an “On this page” list beside it, made in the browser from those
+headings, and on a narrower one a box above the text. Nothing needs to be written for it. A page that should not have one, such as the
+home page, says <code class="language-plaintext highlighter-rouge">toc: false</code> in its front matter. <code class="language-plaintext highlighter-rouge">docs/api/index.md</code> is written by
+<code class="language-plaintext highlighter-rouge">scripts/api_docs.py</code>, so change its front matter there.</p>
+
+<p>Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar’s
+own order: the pages by <code class="language-plaintext highlighter-rouge">nav_order</code>, each followed by its <code class="language-plaintext highlighter-rouge">children</code> in their <code class="language-plaintext highlighter-rouge">order</code>. Nothing needs to be written for them. The first page has
+no previous link and the last no next one.</p>
+
+<h3 id="building-the-docs">Building the docs</h3>
+
+<p>You need Ruby and Bundler. In <code class="language-plaintext highlighter-rouge">docs/</code>, <code class="language-plaintext highlighter-rouge">bundle install</code> once, then build one version the way the workflow does:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>docs
+<span class="nb">printf</span> <span class="s1">'baseurl: /alto/dev\ndocs_version: dev\n'</span> <span class="o">&gt;</span> /tmp/version.yml
+bundle <span class="nb">exec </span>jekyll build <span class="nt">--destination</span> /tmp/site/dev <span class="nt">--config</span> _config.yml,/tmp/version.yml
+python ../scripts/docs_site.py finish /tmp/site <span class="nt">--root-files</span> site-root <span class="nt">--site-url</span> https://altosaurus.github.io/alto
+</code></pre></div></div>
+
+<p>then serve <code class="language-plaintext highlighter-rouge">/tmp/site</code> under a folder called <code class="language-plaintext highlighter-rouge">alto</code> (for example <code class="language-plaintext highlighter-rouge">mkdir /tmp/www &amp;&amp; ln -s /tmp/site /tmp/www/alto &amp;&amp; python -m http.server -d /tmp/www</code>)
+and open <code class="language-plaintext highlighter-rouge">http://127.0.0.1:8000/alto/</code>. <code class="language-plaintext highlighter-rouge">tests/test_docs_site.py</code> checks the script and the files without needing Ruby.</p>
+
 <h2 id="keeping-the-docs-and-screenshots-current">Keeping the docs and screenshots current</h2>
 
 <p>Every picture in the docs comes as a light and a dark pair, and <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code> makes all of them:</p>
@@ -754,7 +929,9 @@ fixed bug) adds a line under <strong>Unreleased</strong> in the same pull reques
   <li>Choose the version. Alto uses <a href="https://semver.org/">semantic versioning</a>: a new feature raises the middle number, a fix
 raises the last.</li>
   <li>In <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>, rename <strong>Unreleased</strong> to the version with today’s date (<code class="language-plaintext highlighter-rouge">## [0.1.0] - 2026-12-01</code>), add a new empty
-<strong>Unreleased</strong> above it, and update the two links at the bottom.</li>
+<strong>Unreleased</strong> above it, and update the two links at the bottom. Then run <code class="language-plaintext highlighter-rouge">python scripts/release_notes.py</code>, which rewrites
+the Release notes page of the docs (<code class="language-plaintext highlighter-rouge">docs/release-notes.md</code>) from the changelog; <code class="language-plaintext highlighter-rouge">--check</code> says whether it is up to date, and a
+test fails when it is not, so a changelog line always arrives with its page.</li>
   <li>Set the same version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. <code class="language-plaintext highlighter-rouge">tests/test_changelog.py</code> fails if the changelog has no notes for it.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
@@ -848,7 +1025,7 @@ file and the changelog notes. Started by hand from the Actions tab, it only buil
 
 <h2 id="reporting-problems">Reporting problems</h2>
 
-<p>Open an issue on <a href="https://github.com/genedan/alto/issues">GitHub</a>. Say which operating system and Python version you
+<p>Open an issue on <a href="https://github.com/altosaurus/alto/issues">GitHub</a>. Say which operating system and Python version you
 use, and which exercise you were in.</p>
 
           
@@ -955,8 +1132,8 @@ use, and which exercise you were in.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794772250" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794772250" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

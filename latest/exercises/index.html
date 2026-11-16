@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794772250">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -75,6 +75,15 @@
             <li><a class="row" href="/alto/latest/">Home</a></li>
             
             
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
             
             
             
@@ -142,9 +151,14 @@
             
             
             
+            </ul></details></li>
             
             
-            <li><a class="row" href="/alto/latest/development/">For developers</a></li>
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
             
             
             
@@ -223,6 +237,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -283,6 +300,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -314,6 +334,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -422,13 +445,30 @@
             
             
             
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
             
             
             <li><a class="row" href="/alto/latest/credits/">License and credits</a></li>
             
             
             
-            
+            </ul></details></li>
           </ul>
         </nav>
       </details>
@@ -437,7 +477,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Exercises</h1>
-          <p>Alto has eleven exercises. Each one has a <strong>?</strong> button with a short explanation, and eight of them have their own
+          <p>Alto has twelve exercises. Each one has a <strong>?</strong> button with a short explanation, and nine of them have their own
 settings (the sliders button). The others use fixed rules, described below.</p>
 
 <p><strong>Every exercise can be done with the keyboard alone, and without clicking on the staff.</strong> The answer buttons have keys,
@@ -504,7 +544,107 @@ space, and <strong>Octave ↑</strong> and <strong>Octave ↓</strong> (<kbd>Pag
   
 </figure>
 
-<h2 id="interval-identification">Interval identification</h2>
+<h2 id="clef-basics">Clef Basics</h2>
+
+<p>Clef Basics has two kinds of question, chosen with <strong>Question Type</strong> in the exercise settings: <strong>Clef Construction</strong>,
+which
+is described first, and <strong>Clef Identification</strong>, described at the end.</p>
+
+<p>In Clef Construction a blank staff is shown with the question under it, such as “Place the mezzo-soprano clef.” Every
+clef is one of three symbols,
+the <strong>G clef</strong>, the <strong>C clef</strong> or the <strong>F clef</strong>, put on a particular line of the staff:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Clef</th>
+      <th>Symbol and line</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Treble</td>
+      <td>The G clef on the second line</td>
+    </tr>
+    <tr>
+      <td>French violin</td>
+      <td>The G clef on the bottom line</td>
+    </tr>
+    <tr>
+      <td>Bass</td>
+      <td>The F clef on the fourth line</td>
+    </tr>
+    <tr>
+      <td>Subbass</td>
+      <td>The F clef on the top line</td>
+    </tr>
+    <tr>
+      <td>Alto</td>
+      <td>The C clef on the middle line</td>
+    </tr>
+    <tr>
+      <td>Tenor</td>
+      <td>The C clef on the fourth line</td>
+    </tr>
+    <tr>
+      <td>Mezzo-soprano</td>
+      <td>The C clef on the second line</td>
+    </tr>
+    <tr>
+      <td>Soprano</td>
+      <td>The C clef on the bottom line</td>
+    </tr>
+    <tr>
+      <td>Baritone</td>
+      <td>The F clef on the middle line, or the C clef on the top line: both are accepted</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><strong>Choose the symbol</strong> with the three buttons under the music, by turning the mouse wheel, or by right-clicking.</li>
+  <li><strong>Click where it goes.</strong> The symbol follows the pointer, in a lighter colour, and is placed where you click. To mix
+things up it
+can be tried on any line or space of the staff, and on up to three ledger lines and spaces above and below it, but
+only
+the places in the table are right.</li>
+  <li><strong>Without the mouse:</strong> <kbd>←</kbd> and <kbd>→</kbd> choose the symbol, <kbd>↑</kbd> and <kbd>↓</kbd> move it up and
+down a line or
+space, and <kbd>Return</kbd> presses <strong>Answer</strong>.</li>
+</ul>
+
+<p>The right symbol in the wrong place is wrong, and so is another symbol in the right place. A wrong try turns red and
+clears so
+you can try again; only your first try counts towards your score. This exercise makes no sound.</p>
+
+<h3 id="clef-identification">Clef Identification</h3>
+
+<p>A clef is drawn on a staff, with “Which clef is this?” under it. Press the button with its name. There is a button for
+each clef
+that is asked for, and at least two buttons even if only one clef is asked for. A baritone clef is drawn the way you
+chose in
+<a href="/alto/latest/settings/">Settings</a>. Like the other exercises with buttons, the buttons have keys, shown when
+you hover
+over them.</p>
+
+<h3 id="reference-and-lesson">Reference and lesson</h3>
+
+<p>The book button (experimental), beside the help button, opens a reference in a pane on the right: the three symbols and
+a
+picture of each clef with where its symbol goes. A button at the top opens the <a href="/alto/latest/lessons/">Clef Basics lesson</a>.</p>
+
+<h3 id="settings">Settings</h3>
+
+<p>In the exercise settings you can choose:</p>
+
+<ul>
+  <li><strong>Question Type:</strong> Clef Construction or Clef Identification.</li>
+  <li><strong>Clefs:</strong> the clefs that are asked for: the seven clefs of the other exercises, then, at the bottom, the French
+violin and
+subbass clefs, which only this exercise has.</li>
+</ul>
+
+<h2 id="interval-identification">Interval Identification</h2>
 
 <p>Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.</p>
 
@@ -513,8 +653,8 @@ is <strong>P</strong> (perfect), <strong>M</strong> (major), <strong>m</strong> 
 is m3.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/latest/assets/img/intervals.png" alt="Interval identification showing two notes and the interval buttons" loading="lazy" />
-  <img class="for-dark" src="/alto/latest/assets/img/intervals-dark.png" alt="Interval identification showing two notes and the interval buttons" loading="lazy" />
+  <img class="for-light" src="/alto/latest/assets/img/intervals.png" alt="Interval Identification showing two notes and the interval buttons" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/intervals-dark.png" alt="Interval Identification showing two notes and the interval buttons" loading="lazy" />
   
 </figure>
 
@@ -552,10 +692,14 @@ C major. The stem opens into two tines: the top one has the sharps, 1 to 7, and 
 marks what you have chosen, and the staff shows that many sharps or flats as you move it. To choose:</p>
 
 <ul>
-  <li><strong>Click</strong> a number, or the natural sign.</li>
+  <li><strong>Click</strong> a number, or the natural sign. A number lights up a little as the mouse passes over it.</li>
+  <li><strong>Drag the circle</strong> along the fork. It follows the mouse, round the bend and out along either tine, and slides to the
+nearest number when you let go.</li>
   <li><strong>Turn the mouse wheel</strong> to move the circle along the fork, one number for each notch: up towards more sharps, down
-towards more flats, passing through the natural sign on the way from one side to the other.</li>
-  <li><strong>Press the arrow keys</strong> (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever the
+towards more flats, passing through the natural sign on the way from one side to the other. The wheel works over the
+staff and the Answer button too.</li>
+  <li><strong>Press the arrow keys</strong> (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever
+the
 keyboard is on the exercise screen, and <kbd>Home</kbd> to go back to the natural sign. Then press <kbd>Return</kbd>.</li>
 </ul>
 
@@ -572,7 +716,7 @@ counts towards your score. Like Key Signature Identification, this exercise make
 
 <p>The settings are kept apart from those of Key Signature Identification.</p>
 
-<h2 id="scale-spelling">Scale spelling</h2>
+<h2 id="scale-spelling">Scale Spelling</h2>
 
 <p>A question such as “In B♭ Dorian, what is scale degree 3?” Press the note’s name. Each scale uses every letter name
 once, so use a sharp or flat where the pattern needs one. Alto asks about:</p>
@@ -678,8 +822,9 @@ green with the notes as the right scale plays.</p>
 
 <p>A circle of fifths, drawn as two rings of twelve wedges. The outer ring holds the major keys, with C at the top and each
 step clockwise a fifth higher: G, D, A, E, B, then F♯ at the bottom, and round through the flats back to F. The inner ring
-holds their relative minors, so A minor sits under C major, E minor under G major, and so on. Each wedge has its own colour.
-The disc in the middle shows the staff.</p>
+holds their relative minors, so A minor sits under C major, E minor under G major, and so on. The wedges are coloured by
+key signature: cyan for the flat keys on the left, through royal blue at C, to indigo for the sharp keys on the right (the
+<a href="#colours">colours</a> can be changed). The disc in the middle, which is the colour of the window, shows the staff.</p>
 
 <p>Every question lights one cell and leaves its answer blank. There are three kinds, and the exercise settings (the sliders
 button) switch each on or off:</p>
@@ -695,6 +840,28 @@ circle are lit. One of them is outlined. Press its Roman numeral.</li>
 <p>All of them are on buttons at the bottom, laid out like the Keyboard Identification screen: the letters in the middle row,
 the sharps above them and the flats below. For the minor keys the buttons read Am, F♯m and so on. You can also type: a letter,
 <kbd>Shift</kbd> and a letter for a sharp, or <kbd>Ctrl</kbd> and a letter for a flat. The numerals are on <kbd>1</kbd> to <kbd>6</kbd>.</p>
+
+<h3 id="colours">Colours</h3>
+
+<p>The <strong>Colours</strong> row of the exercise settings (the sliders button) chooses how the circle is coloured. Pick one of fourteen
+presets, or press <strong>Create your own…</strong> to make one.</p>
+
+<ul>
+  <li><strong>Cyan to indigo</strong> is the default. Cyan runs through the flat keys, royal blue marks C and indigo the sharp keys, so a
+key’s colour tells you how far it is from C.</li>
+  <li><strong>Midnight, Deepening, Two blues, Chequer and Glacier</strong> are other blues to go with this site. Glacier, like Paper, has pale
+wedges with dark names, for a light window.</li>
+  <li><strong>Sharps and flats, Major and minor, Spectrum, After Scriabin, Ink, Ember, Colour-blind safe and Paper</strong> are the other
+presets. Colour-blind safe uses six hues from the Okabe and Ito palette.</li>
+</ul>
+
+<p>A scheme of your own is made in one of five ways: <strong>One colour</strong>, <strong>Two rings</strong> (one colour for the major keys and one for the
+minor), <strong>By key signature</strong> (a colour for the flat keys, for C and for the sharp keys, blended between), <strong>Distance from C</strong>
+(a colour for C and one for F♯, mirrored on both sides) and <strong>Round the circle</strong> (one colour, turned a twelfth of the wheel
+for each step). The colours you choose are what a cell looks like when it is lit; the quiet cells are made from them. You can
+choose dark wedges with light names or light wedges with dark names, name the scheme, edit it later and delete it. Your schemes are saved with your other
+settings, up to 24 of them. The colours apply to every picture of the circle: the exercise, the lessons and the reference.
+Changing them keeps the question you are on.</p>
 
 <h3 id="keys-with-two-names">Keys with two names</h3>
 
@@ -733,7 +900,7 @@ Only your first try counts toward your score.</li>
 
 <p>This exercise makes no sound.</p>
 
-<h2 id="chord-quality">Chord quality</h2>
+<h2 id="chord-quality">Chord Quality</h2>
 
 <p>A chord is drawn in root position on a treble or bass staff. Press its type:</p>
 
@@ -741,7 +908,7 @@ Only your first try counts toward your score.</li>
 
 <p>Check the size of the intervals stacked above the lowest note to tell the types apart.</p>
 
-<h2 id="arpeggio-identification">Arpeggio identification</h2>
+<h2 id="arpeggio-identification">Arpeggio Identification</h2>
 
 <p>A chord is drawn one note at a time, rising from its lowest note to the same note an octave higher. Press its type, then
 press its inversion. The answer counts once you have chosen both, in either order, and a wrong pair is cleared so you can
@@ -789,8 +956,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
 </ul>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/latest/assets/img/arpeggios.png" alt="Arpeggio identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" loading="lazy" />
-  <img class="for-dark" src="/alto/latest/assets/img/arpeggios-dark.png" alt="Arpeggio identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" loading="lazy" />
+  <img class="for-light" src="/alto/latest/assets/img/arpeggios.png" alt="Arpeggio Identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/arpeggios-dark.png" alt="Arpeggio Identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" loading="lazy" />
   
 </figure>
 
@@ -878,8 +1045,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794772250" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794772250" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

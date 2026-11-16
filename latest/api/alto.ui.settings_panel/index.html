@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794772250">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -75,6 +75,15 @@
             <li><a class="row" href="/alto/latest/">Home</a></li>
             
             
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
             
             
             
@@ -142,9 +151,14 @@
             
             
             
+            </ul></details></li>
             
             
-            <li><a class="row" href="/alto/latest/development/">For developers</a></li>
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
             
             
             
@@ -223,6 +237,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -283,6 +300,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -314,6 +334,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -422,13 +445,30 @@
             
             
             
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
             
             
             <li><a class="row" href="/alto/latest/credits/">License and credits</a></li>
             
             
             
-            
+            </ul></details></li>
           </ul>
         </nav>
       </details>
@@ -822,7 +862,8 @@ True
 <p><strong>Attributes</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after any setting is edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.</li>
+  <li><code class="language-plaintext highlighter-rouge">restyled</code> (<em>Signal</em>): Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is drawn again.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1448,6 +1489,78 @@ changes the settings, saves them and emits <code class="language-plaintext highl
 4
 </code></pre>
 
+<h2 id="load_clef_basics">load_clef_basics</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_clef_basics</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved clef basics settings into the shared settings object.</p>
+
+<p>Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
+setting as it was.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("clefBasics/clefs", "alto,subbass,flute")
+&gt;&gt;&gt; store().setValue("clefBasics/type", "identification")
+&gt;&gt;&gt; load_clef_basics()
+&gt;&gt;&gt; settings.clef_basics.active_clefs(), settings.clef_basics.question_type
+(['alto', 'subbass'], 'identification')
+&gt;&gt;&gt; settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
+&gt;&gt;&gt; store().remove("clefBasics")
+</code></pre>
+
+<h2 id="clefbasicssettingspanel">ClefBasicsSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.</p>
+
+<p>Question Type chooses between Clef Construction (put a named clef on a blank staff) and Clef Identification (name the clef on
+a staff). Clefs lists the clefs in the same groups as the other exercises, with the French violin and subbass clefs, which
+only this exercise has, at the bottom. Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ClefBasicsSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its two pages.</li>
+  <li><code class="language-plaintext highlighter-rouge">types</code> (<em>dict of str to QRadioButton</em>): The choice of question, by key of <code class="language-plaintext highlighter-rouge">CLEF_QUESTION_TYPES</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The checkbox of each clef.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
+&gt;&gt;&gt; panel.stack.count()  # the menu and two pages
+3
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel for a set of settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ClefBasicsSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
+&gt;&gt;&gt; panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
+(True, ['french', 'subbass'])
+</code></pre>
+
 <h2 id="settings_inversion_names">settings_inversion_names</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_inversion_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span>
@@ -1474,15 +1587,39 @@ changes the settings, saves them and emits <code class="language-plaintext highl
 
 <p>Load the saved circle of fifths settings into the shared settings object.</p>
 
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
+<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
+saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.</p>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("circle/questions", "numeral,nonsense")
+&gt;&gt;&gt; store().setValue("circle/scheme", "midnight")
 &gt;&gt;&gt; load_circle()
-&gt;&gt;&gt; settings.circle.questions
-{'numeral'}
+&gt;&gt;&gt; settings.circle.questions, settings.circle.scheme
+({'numeral'}, 'midnight')
 &gt;&gt;&gt; settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
+&gt;&gt;&gt; settings.circle.scheme = DEFAULT_SCHEME
+&gt;&gt;&gt; store().remove("circle")
+</code></pre>
+
+<h2 id="save_circle">save_circle</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_circle</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the circle of fifths settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings to save.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_circle(settings.CircleSettings(scheme="ink"))
+&gt;&gt;&gt; store().value("circle/scheme")
+'ink'
 &gt;&gt;&gt; store().remove("circle")
 </code></pre>
 
@@ -1497,25 +1634,29 @@ changes the settings, saves them and emits <code class="language-plaintext highl
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
 
-<p>The settings of the circle of fifths exercise: which kinds of question to ask.</p>
+<p>The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.</p>
 
-<p>The menu has one row, Questions, which opens a page of switches. Edits are live: each changes the settings, saves them and
-emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
+of question emits <code class="language-plaintext highlighter-rouge">changed</code>, and a new colour scheme emits <code class="language-plaintext highlighter-rouge">restyled</code>, which keeps the question.</p>
 
 <p><strong>Attributes</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings being edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its page.</li>
-  <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>_Row</em>): The menu row.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.</li>
+  <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>_Row</em>): The menu row for the questions.</li>
+  <li><code class="language-plaintext highlighter-rouge">colours_row</code> (<em>_Row</em>): The menu row for the colours; its value is the name of the chosen scheme.</li>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>ChoiceChecklist</em>): The kinds of question: relative major, relative minor and Roman numerals.</li>
+  <li><code class="language-plaintext highlighter-rouge">schemes</code> (<em>SchemePage</em>): The colour schemes.</li>
+  <li><code class="language-plaintext highlighter-rouge">editor</code> (<em>SchemeEditor</em>): The editor of a scheme of your own.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; panel = CircleSettingsPanel(settings.CircleSettings())
-&gt;&gt;&gt; panel.questions_row.value.text()
-'3 of 3'
+&gt;&gt;&gt; panel.questions_row.value.text(), panel.colours_row.value.text()
+('3 of 3', 'Cyan to indigo')
 </code></pre>
 
 <p><strong>Constructor</strong></p>
@@ -1531,8 +1672,8 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu and one page
-2
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+4
 </code></pre>
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
@@ -1564,6 +1705,15 @@ True
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1842,8 +1992,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794772250" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794772250" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

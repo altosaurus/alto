@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794772250">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -75,6 +75,15 @@
             <li><a class="row" href="/alto/latest/">Home</a></li>
             
             
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
             
             
             
@@ -142,9 +151,14 @@
             
             
             
+            </ul></details></li>
             
             
-            <li><a class="row" href="/alto/latest/development/">For developers</a></li>
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
             
             
             
@@ -223,6 +237,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -283,6 +300,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -314,6 +334,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -422,13 +445,30 @@
             
             
             
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
             
             
             <li><a class="row" href="/alto/latest/credits/">License and credits</a></li>
             
             
             
-            
+            </ul></details></li>
           </ul>
         </nav>
       </details>
@@ -764,9 +804,49 @@ True
 False
 </code></pre>
 
+<h2 id="clefreferencepanel">ClefReferencePanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefReferencePanel</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>The reference for the clefs: how they are made, and a picture of each with where its symbol goes.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lesson_button</code> (<em>QPushButton</em>): Opens the lesson on the clefs.</li>
+  <li><code class="language-plaintext highlighter-rouge">lesson_requested</code> (<em>Signal</em>): Emitted with the key of the lesson to open when that button is pressed.</li>
+  <li><code class="language-plaintext highlighter-rouge">rows</code> (<em>dict of str to QLabel</em>): The words beside the picture of each clef, by clef.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefReferencePanel()
+&gt;&gt;&gt; "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
+True
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the panel: the lesson button, a line of explanation and a row for each clef.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
+True
+</code></pre>
+
 <h2 id="reference_panel_for">reference_panel_for</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reference_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReferencePanel</span> <span class="o">|</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reference_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReferencePanel</span> <span class="o">|</span> <span class="n">ClefReferencePanel</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
 <p>Return the reference pane for an exercise.</p>
@@ -780,7 +860,7 @@ False
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>ReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
+  <li><em>ReferencePanel or ClefReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -788,9 +868,20 @@ False
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
 &gt;&gt;&gt; reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
 (True, True)
+&gt;&gt;&gt; type(reference_panel_for(ClefBasics())).__name__
+'ClefReferencePanel'
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1066,8 +1157,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794772250" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794772250" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

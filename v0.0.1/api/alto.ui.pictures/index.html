@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alto.ui.pictures · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  
+  
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.pictures/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alto">
+  <meta property="og:title" content="alto.ui.pictures · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.pictures/">
+  <meta property="og:image" content="https://altosaurus.github.io/alto/v0.0.1/assets/img/note-identification.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script>
+    // Apply a remembered choice before the page paints, so there is no flash of the other theme.
+    try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+  </script>
+  <link rel="icon" href="/alto/v0.0.1/assets/img/icon.png">
+  <link rel="stylesheet" href="/alto/v0.0.1/assets/css/site.css?v=1794806458">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  </svg>
+  <a class="skip" href="#content">Skip to the content</a>
+  <header class="topbar">
+    <a class="brand" href="/alto/v0.0.1/">
+      <img src="/alto/v0.0.1/assets/img/icon.png" alt="" width="30" height="30">
+      <span>Alto</span>
+    </a>
+    <div class="top-actions">
+      <div class="version" id="version-slot" data-version="v0.0.1" data-root="/alto"><span class="version-name">v0.0.1</span></div>
+      <div class="dd" id="theme-dd">
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <div class="dd-menu" id="theme-menu" role="menu" hidden>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+          <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="system"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-monitor"/></svg></span><span class="dd-text">System</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
+        </div>
+      </div>
+      <a class="icon-link" href="https://github.com/altosaurus/alto" aria-label="Alto on GitHub" title="Alto on GitHub">
+        <svg viewBox="0 0 16 16" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+      </a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details class="menu" id="menu">
+        <summary>Contents</summary>
+        <nav class="nav" aria-label="Documentation">
+          
+          
+          
+          
+          
+          <ul class="nav-list">
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/">Home</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/getting-started/">Getting started</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/exercises/">Exercises</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/practice/">How practice adapts</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/statistics/">Statistics and database</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/lessons/">Lessons</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/settings/">Settings</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/shortcuts/">Shortcuts</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/data/">Your data</a></li>
+            
+            
+            
+            
+            
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/v0.0.1/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/v0.0.1/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/orientation/">Getting oriented</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/python/">Python beyond the basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/qt/">Qt and PySide6</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/styling/">Styling beyond QtWidgets</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/notation/">Rendering music notation</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/audio/">Computer audio</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/spaced-repetition/">Spaced repetition and adaptive practice</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/animation/">Animation</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/exercises/">Building an exercise</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/data/">Data and persistence</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/quality/">Testing, quality and release</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/pitfalls/">Pitfalls and debugging</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/guide/reading/">Glossary and further reading</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section" open>
+              <summary class="nav-row"><a class="row grow" href="/alto/v0.0.1/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              <ul class="kids">
+                
+                
+                
+                <li><details class="nav-pkg">
+                  <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.audio/">audio</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.instrument_info/">instrument_info</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.selfupdate/">selfupdate</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.updates/">updates</a></li>
+                
+                
+                </ul></details></li>
+                <li><details class="nav-pkg">
+                  <summary>alto.exercises<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.exercises.base/">base</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.exercises.library/">library</a></li>
+                
+                
+                </ul></details></li>
+                <li><details class="nav-pkg">
+                  <summary>alto.learning<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.learning.backup/">backup</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.learning.scheduler/">scheduler</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.learning.stats/">stats</a></li>
+                
+                
+                </ul></details></li>
+                <li><details class="nav-pkg">
+                  <summary>alto.lessons<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.lessons.base/">base</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                </ul></details></li>
+                <li><details class="nav-pkg">
+                  <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.theory.pitch/">pitch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.theory.scales/">scales</a></li>
+                
+                
+                </ul></details></li>
+                <li><details class="nav-pkg" open>
+                  <summary>alto.ui<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+                  <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.backup_flow/">backup_flow</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.charts/">charts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.circle_colours/">circle_colours</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.colors/">colors</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.database_page/">database_page</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.engraving/">engraving</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.home/">home</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.icons/">icons</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.key_fork/">key_fork</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.keyboard/">keyboard</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.keyboard_styles/">keyboard_styles</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.lesson/">lesson</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.lesson_nav/">lesson_nav</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.main_window/">main_window</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.notation/">notation</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.notes/">notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.package_update/">package_update</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.pictures/" aria-current="page">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.profile_dialog/">profile_dialog</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.question_preview/">question_preview</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.settings_panel/">settings_panel</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.staff/">staff</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.stats_dialog/">stats_dialog</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.store/">store</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.style/">style</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.theme/">theme</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.theme_cards/">theme_cards</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.theme_editor/">theme_editor</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.transition_preview/">transition_preview</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.transitions/">transitions</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.update_flow/">update_flow</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/v0.0.1/api/alto.ui.widgets/">widgets</a></li>
+                
+                </ul></details></li>
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/v0.0.1/credits/">License and credits</a></li>
+            
+            
+            
+            </ul></details></li>
+          </ul>
+        </nav>
+      </details>
+    </aside>
+    <main id="content" class="content">
+      <div class="page-grid" id="page-grid">
+        <article>
+          <h1>alto.ui.pictures</h1>
+          
+<p>Small pictures of musical things (clefs, note values, key signatures, note ranges …) for the settings panes.</p>
+
+<p>Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
+as the label of a choice. Colours come from the palette, so they work in light and dark themes.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CLEF_NAMES["treble"], VALUE_NAMES["sixteenth"]
+('Treble', '16th')
+&gt;&gt;&gt; ClefPictures(["treble", "bass"]).toolTip()
+'Treble, Bass'
+</code></pre>
+
+<h2 id="symbol_icon">symbol_icon</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">symbol_icon</span><span class="p">(</span>
+    <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">56</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
+</code></pre></div></div>
+
+<p>Draw a clef symbol on its own, without a staff, as an icon.</p>
+
+<p>The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centred.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">symbol</code> (<em>str</em>): “G”, “C” or “F”.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): The colour to draw it in. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">height</code> (<em>int, default 56</em>): The icon’s height in pixels, which is also as wide as it is. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QIcon</em>: The icon, in the notation font chosen in the settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; symbol_icon("F", color=QColor("black")).isNull()
+False
+</code></pre>
+
+<h2 id="clefpictures">ClefPictures</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefPictures</span><span class="p">(</span>
+    <span class="n">clefs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
+
+<p>The selected clefs, each on its own five-line staff, and a two-stave picture with a brace for the grand staff.</p>
+
+<p>Showing each clef on its own staff lets alto and tenor, which share a symbol, look different.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">H, W, GAP, SPACING</code> (<em>float</em>): The picture’s height, the width of one clef, the distance between staff lines and the space between clefs.</li>
+  <li><code class="language-plaintext highlighter-rouge">NAMES</code> (<em>dict of str to str</em>): The name of each clef.</li>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>list of str</em>): The clefs shown.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["alto", "tenor"]).toolTip()
+'Alto, Tenor'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the picture.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>list of str or None, default None</em>): The clefs to show, any of <code class="language-plaintext highlighter-rouge">CLEF_NAMES</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["treble"], scale=2.0).width()
+60
+</code></pre>
+
+<h3 id="clefpicturesset_clefs">ClefPictures.set_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_clefs</span><span class="p">(</span><span class="n">clefs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show different clefs and size the picture for them.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>list of str</em>): The clefs to show, any of <code class="language-plaintext highlighter-rouge">CLEF_NAMES</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ClefPictures()
+&gt;&gt;&gt; pictures.set_clefs(["treble", "bass", "alto"])
+&gt;&gt;&gt; pictures.width()  # three clefs and the space between them
+106
+&gt;&gt;&gt; pictures.toolTip()
+'Treble, Bass, Alto'
+</code></pre>
+
+<h3 id="clefpicturesicon">ClefPictures.icon</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">icon</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
+</code></pre></div></div>
+
+<p>Return one clef as an icon.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">CLEF_NAMES</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.8</em>): How much to enlarge it. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QIcon</em>: The icon.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures.icon("grand").isNull()
+False
+</code></pre>
+
+<h3 id="clefpicturespaintevent">ClefPictures.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw each clef on its staff, or the grand staff with its brace.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["treble", "grand"]).grab().isNull()
+False
+</code></pre>
+
+<h2 id="valuepictures">ValuePictures</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ValuePictures</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">centre_stemless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
+
+<p>Note values as engraved symbols (no staff), each with its head on the same baseline so they line up.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>list of str</em>): The note values shown, keys of <code class="language-plaintext highlighter-rouge">VALUE_NAMES</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">centre_stemless</code> (<em>bool</em>): Whether the breve and whole note sit at the picture’s vertical centre.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ValuePictures(["whole", "quarter", "eighth"])
+&gt;&gt;&gt; pictures.values
+['whole', 'quarter', 'eighth']
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the picture.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>list of str or None, default None</em>): The note values to show.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">centre_stemless</code> (<em>bool, default False</em>): Put the breve and whole note at the picture’s vertical centre, so beside a line of text they line up with the middle of the text; the others keep their heads low so their stems fit above. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures(["half"], centre_stemless=True).centre_stemless
+True
+</code></pre>
+
+<h3 id="valuepicturesset_values">ValuePictures.set_values</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_values</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show different note values and size the picture for them.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>list of str</em>): The note values to show.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ValuePictures()
+&gt;&gt;&gt; pictures.set_values(["breve", "whole"])
+&gt;&gt;&gt; pictures.values
+['breve', 'whole']
+</code></pre>
+
+<h3 id="valuepicturesicon">ValuePictures.icon</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">icon</span><span class="p">(</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.7</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
+</code></pre></div></div>
+
+<p>Return one note value as an icon.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">VALUE_NAMES</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.7</em>): How much to enlarge it. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QIcon</em>: The icon.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures.icon("quarter").isNull()
+False
+</code></pre>
+
+<h3 id="valuepicturespaintevent">ValuePictures.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw each note value.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures(["whole", "half", "quarter"]).grab().isNull()
+False
+</code></pre>
+
+<h2 id="keysignaturepicture">KeySignaturePicture</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignaturePicture</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
+
+<p>A key signature as a plain row of its sharps or flats, with no staff or clef.</p>
+
+<p>Each sign sits at the height it has after a treble clef, and C major, which has none, shows a natural sign.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">H, GAP, STEP</code> (<em>float</em>): The picture’s height, the distance between staff lines and the space between signs.</li>
+  <li><code class="language-plaintext highlighter-rouge">ORDER</code> (<em>dict of int to str</em>): Where each sign is written, in order, for sharps (1) and flats (-1).</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): The key signature: sharps if positive, flats if negative.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(2).toolTip()
+'D major: 2 sharps'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the picture.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(0).toolTip()
+'C major: no sharps or flats'
+&gt;&gt;&gt; KeySignaturePicture(-1).toolTip()
+'F major: 1 flat'
+</code></pre>
+
+<h3 id="keysignaturepictureicon">KeySignaturePicture.icon</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">icon</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
+</code></pre></div></div>
+
+<p>Return a key signature as an icon.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): Sharps if positive, flats if negative.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.2</em>): How much to enlarge it. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QIcon</em>: The icon.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture.icon(3).isNull()
+False
+</code></pre>
+
+<h3 id="keysignaturepicturepaintevent">KeySignaturePicture.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the row of sharps or flats, or a natural sign for C major.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(-3).grab().isNull()
+False
+</code></pre>
+
+<h2 id="rangepictures">RangePictures</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RangePictures</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">max_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
+
+<p>For each clef, a staff with its lowest and highest note, so the range can be read off at a glance.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">H, W, SPACING</code> (<em>float</em>): The picture’s height, the width of one staff and the space between staves.</li>
+  <li><code class="language-plaintext highlighter-rouge">MAX_SCALE</code> (<em>float</em>): The most the picture is enlarged to fit <code class="language-plaintext highlighter-rouge">max_width</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">max_width</code> (<em>float or None</em>): The width to enlarge the picture to, if any.</li>
+  <li><code class="language-plaintext highlighter-rouge">items</code> (<em>list of tuple of (str, int, int)</em>): Each clef with its lowest and highest note, as staff steps (<code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pictures = RangePictures([("treble", 22, 52)])
+&gt;&gt;&gt; pictures.toolTip()
+'Treble: D3 to F7'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the picture.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">items</code> (<em>list of tuple of (str, int, int) or None, default None</em>): Each clef with its lowest and highest note.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">max_width</code> (<em>float or None, default None</em>): Enlarge the picture to use this width (up to <code class="language-plaintext highlighter-rouge">MAX_SCALE</code>) however many clefs there are. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RangePictures([("treble", 22, 52)], max_width=238).scale
+1.9
+</code></pre>
+
+<h3 id="rangepicturesset_items">RangePictures.set_items</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_items</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the ranges of some clefs and size the picture for them.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">items</code> (<em>list of tuple of (str, int, int)</em>): Each clef with its lowest and highest note, as staff steps (<code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; pictures = RangePictures()
+&gt;&gt;&gt; pictures.set_items([("bass", 10, 40), ("alto", 21, 35)])
+&gt;&gt;&gt; pictures.toolTip().splitlines()
+['Bass: F1 to A5', 'Alto: C3 to C5']
+</code></pre>
+
+<h3 id="rangepicturespaintevent">RangePictures.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw a staff for each clef with its lowest and highest note.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RangePictures([("treble", 22, 52), ("bass", 10, 40)]).grab().isNull()
+False
+</code></pre>
+
+<h2 id="namepicture">NamePicture</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NamePicture</span><span class="p">(</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_Picture</code></p>
+
+<p>How notes are named: C, D and E on a staff, labelled with letters or with solfège syllables.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">H, W</code> (<em>float</em>): The picture’s height and width.</li>
+  <li><code class="language-plaintext highlighter-rouge">LETTERS, SYLLABLES</code> (<em>tuple of str</em>): The two sets of labels.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” or “solfege”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture("solfege").toolTip()
+'Solfège (Do Re Mi)'
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Create the picture.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” or “solfege”.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.0</em>): How much to enlarge it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture().naming
+'letters'
+</code></pre>
+
+<h3 id="namepictureset_naming">NamePicture.set_naming</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_naming</span><span class="p">(</span><span class="n">naming</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Choose which labels are drawn.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” for C D E, or “solfege” for Do Re Mi.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; picture = NamePicture()
+&gt;&gt;&gt; picture.set_naming("solfege")
+&gt;&gt;&gt; picture.toolTip()
+'Solfège (Do Re Mi)'
+</code></pre>
+
+<h3 id="namepictureicon">NamePicture.icon</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="k">def</span> <span class="nf">icon</span><span class="p">(</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.6</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QIcon</span>
+</code></pre></div></div>
+
+<p>Return the picture as an icon.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str</em>): “letters” or “solfege”.</li>
+  <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>float, default 1.6</em>): How much to enlarge it. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QIcon</em>: The icon.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture.icon("letters").isNull()
+False
+</code></pre>
+
+<h3 id="namepicturepaintevent">NamePicture.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the staff, the clef, the three notes and their labels.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture("letters").grab().isNull()
+False
+</code></pre>
+
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <nav class="page-nav" aria-label="Previous and next pages">
+            <a class="prev" href="/alto/v0.0.1/api/alto.ui.package_update/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.package_update</span></a>
+            <a class="next" href="/alto/v0.0.1/api/alto.ui.profile_dialog/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.profile_dialog<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+          </nav>
+          
+        </article>
+        <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
+      </div>
+      <footer>Alto is open source under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>.</footer>
+    </main>
+  </div>
+  <script>
+    // The contents list is always open beside the page on wide screens, and starts closed on narrow ones.
+    var menu = document.getElementById("menu");
+    if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
+
+    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // remembered; System forgets it, and the page then follows the system again.
+    var root = document.documentElement, button = document.getElementById("theme-button");
+    var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    function chosen() { return root.getAttribute("data-theme") || "system"; }
+    function effective() { return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light"); }
+    function show() {
+      button.querySelector("use").setAttribute("href", effective() === "dark" ? "#i-moon" : "#i-sun");
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute("aria-checked", items[i].getAttribute("data-theme-choice") === chosen() ? "true" : "false");
+      }
+    }
+    function open(isOpen) {
+      menu.hidden = !isOpen;
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      if (isOpen) {
+        var checked = menu.querySelector('[aria-checked="true"]') || items[0];
+        checked.focus();
+      }
+    }
+    button.addEventListener("click", function () { open(menu.hidden); });
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", function (event) {
+        var choice = event.currentTarget.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("alto-docs-theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", choice);
+          try { localStorage.setItem("alto-docs-theme", choice); } catch (e) {}
+        }
+        show();
+        open(false);
+        button.focus();
+      });
+    }
+    document.addEventListener("click", function (event) { if (!menu.hidden && !event.target.closest("#theme-dd")) { open(false); } });
+    document.addEventListener("keydown", function (event) {
+      if (menu.hidden) { return; }
+      if (event.key === "Escape") { open(false); button.focus(); }
+      var at = Array.prototype.indexOf.call(items, document.activeElement);
+      if (event.key === "ArrowDown") { event.preventDefault(); items[(at + 1) % items.length].focus(); }
+      if (event.key === "ArrowUp") { event.preventDefault(); items[(at + items.length - 1) % items.length].focus(); }
+    });
+    if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
+    show();
+  </script>
+  <script src="/alto/v0.0.1/assets/js/nav.js?v=1794806458" defer></script>
+  <script src="/alto/v0.0.1/assets/js/toc.js?v=1794806458" defer></script>
+  <script src="/alto/version-switcher.js" defer></script>
+</body>
+</html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794772250">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -75,6 +75,15 @@
             <li><a class="row" href="/alto/latest/">Home</a></li>
             
             
+            
+            
+            
+            
+            
+            
+            <li class="nav-group"><details data-nav-group="Using Alto" open>
+              <summary class="nav-head"><span class="grow">Using Alto</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
             
             
             
@@ -142,9 +151,14 @@
             
             
             
+            </ul></details></li>
             
             
-            <li><a class="row" href="/alto/latest/development/">For developers</a></li>
+            <li class="nav-group"><details data-nav-group="For developers" open>
+              <summary class="nav-head"><a class="grow" href="/alto/latest/development/">For developers</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
             
             
             
@@ -223,6 +237,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.circle_schemes/">circle_schemes</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
@@ -283,6 +300,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.circle_of_fifths/">circle_of_fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -314,6 +334,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -422,13 +445,30 @@
             
             
             
+            </ul></details></li>
+            
+            
+            <li class="nav-group"><details data-nav-group="About" open>
+              <summary class="nav-head"><span class="grow">About</span><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <ul>
+            
+            
+            
+            
+            
+            <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
+            
+            
+            
+            
             
             
             <li><a class="row" href="/alto/latest/credits/">License and credits</a></li>
             
             
             
-            
+            </ul></details></li>
           </ul>
         </nav>
       </details>
@@ -452,6 +492,60 @@ font chosen in the settings.</p>
 &gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="treble", key=2)
 &gt;&gt;&gt; staff.clef, staff.key
 ('treble', 2)
+</code></pre>
+
+<h2 id="clef_targets">clef_targets</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clef_targets</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Return the ways a clef can be written: the symbol and where on the staff it goes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): A clef name such as “treble”, “mezzo” or “baritone”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set of tuple of (str, int)</em>: Each is a symbol, “G”, “C” or “F”, and the place of its reference line (the G, F or middle C) counted in lines and spaces up from the bottom line at 0: the bottom line is 0, the space above it 1, the second line 2, up to the top line at 8. Most clefs have one. The baritone clef has two: the F clef on the middle line and the C clef on the top line.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
+True
+&gt;&gt;&gt; sorted(clef_targets("baritone"))
+[('C', 8), ('F', 4)]
+&gt;&gt;&gt; sorted(clef_targets("french") | clef_targets("subbass"))
+[('F', 8), ('G', 0)]
+</code></pre>
+
+<h2 id="clef_target_of">clef_target_of</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clef_target_of</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the symbol and the place of one way of writing a clef.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">shape</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">engraving.CLEF_SIGNS</code>, such as “alto” or “baritone_c”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (str, int)</em>: The symbol and its place, as for <code class="language-plaintext highlighter-rouge">clef_targets</code>.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; clef_target_of("bass"), clef_target_of("soprano")
+(('F', 6), ('C', 0))
 </code></pre>
 
 <h2 id="key_signature_positions">key_signature_positions</h2>
@@ -577,6 +671,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">wedges</code> (<em>list of str</em>): The step between each column and the next, such as “W” or “H”, drawn as two lines rising from the notes to a point above them, with the letter over the point; “” for none there.</li>
   <li><code class="language-plaintext highlighter-rouge">wedge_colors</code> (<em>dict of int to QColor</em>): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">notation_style</code> (<em>NotationStyle or None</em>): A style to use instead of the one chosen in the settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">clef_hidden</code> (<em>bool</em>): Draw the staff without its clef, for a clef the learner places.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): The key signature drawn: sharps if positive, flats if negative.</li>
   <li><code class="language-plaintext highlighter-rouge">key_room</code> (<em>int</em>): How many sharps or flats’ worth of room to keep for the signature at least, so that a capped staff does not change width as the signature does. 0 keeps room only for the one drawn.</li>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str</em>): The note value drawn.</li>
@@ -954,6 +1049,15 @@ True
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/api/alto.ui.settings_panel/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.settings_panel</span></a>
             <a class="next" href="/alto/latest/api/alto.ui.staff_input/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.staff_input<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1018,8 +1122,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794772250" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794772250" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

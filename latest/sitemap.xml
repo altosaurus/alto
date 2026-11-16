@@ -4,6 +4,9 @@
 <loc>https://altosaurus.github.io/alto/latest/api/alto.audio/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/latest/api/alto.circle_schemes/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/latest/api/alto.exercises.base/</loc>
 </url>
 <url>
@@ -34,6 +37,9 @@
 <loc>https://altosaurus.github.io/alto/latest/api/alto.lessons.circle_of_fifths/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/latest/api/alto.lessons.clef_basics/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/latest/api/alto.location/</loc>
 </url>
 <url>
@@ -62,6 +68,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/latest/api/alto.ui.circle/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/latest/api/alto.ui.circle_colours/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/latest/api/alto.ui.colors/</loc>
@@ -227,6 +236,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/latest/guide/reading/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/latest/release-notes/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/latest/settings/</loc>
