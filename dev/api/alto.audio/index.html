@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794804844">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -482,6 +482,7 @@
 
 <p><code class="language-plaintext highlighter-rouge">Sounds</code> plays notes through Qt’s <code class="language-plaintext highlighter-rouge">QSoundEffect</code>, one effect per note, created the first time it is needed. A note with
 no recording is made by shifting the nearest recording (or, for the piano outside its sampled range, by synthesis).
+Instrument previews render the phrase as one cached clip, with fixed spacing between its notes.
 The module-level <code class="language-plaintext highlighter-rouge">sounds</code> is the one the interface uses.</p>
 
 <p><strong>Examples</strong></p>
@@ -799,7 +800,8 @@ that start together. Nothing plays while muted unless
 
 <p>Play notes one after another in an instrument, even while muted, to hear what it sounds like.</p>
 
-<p>Starting a preview silences the one before it.</p>
+<p>The phrase is rendered as one audio clip, so first-use loading cannot change the spacing between notes.
+Starting a preview silences the one before it.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1016,8 +1018,8 @@ that start together. Nothing plays while muted unless
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794804844" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794804844" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

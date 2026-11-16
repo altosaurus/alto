@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794804844">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -484,8 +484,8 @@
 
 <pre><code class="language-pycon">&gt;&gt;&gt; format_size(2_500_000)
 '2.5 MB'
-&gt;&gt;&gt; sorted(PREVIEW)
-[60, 64, 67]
+&gt;&gt;&gt; list(PREVIEW)
+[74, 75, 72, 71]
 </code></pre>
 
 <h2 id="load_instrument">load_instrument</h2>
@@ -722,7 +722,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Play a short C major arpeggio in an instrument, even if sound is muted.</p>
+<p>Play the DSCH motif in an instrument, even if sound is muted.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -981,8 +981,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794804844" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794804844" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

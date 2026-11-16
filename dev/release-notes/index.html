@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794801699">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794804844">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -508,6 +508,8 @@ applies to the exercise, the lessons and the reference.</li>
 <h3 class="no-toc" id="changed">Changed</h3>
 
 <ul>
+  <li>The notation-font previews in Settings use the DSCH motif (D, E♭, C, B) in treble clef.</li>
+  <li>Instrument previews play the same DSCH motif as the notation-font previews.</li>
   <li>
     <p>Exercise and lesson icons use consistent musical glyphs and follow the theme colour.</p>
   </li>
@@ -523,6 +525,7 @@ previous and next pages. The home page leaves checking a download and updating t
 <h3 class="no-toc" id="fixed">Fixed</h3>
 
 <ul>
+  <li>Instrument previews keep an even rhythm on first playback by rendering the phrase as one audio clip.</li>
   <li>Changing the theme in the settings no longer sends you back to the exercises home page, or makes the window disappear and grow back
 from a dot. The window stays where it is, showing the exercise, lesson step or page you were on.</li>
 </ul>
@@ -949,8 +952,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794801699" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794801699" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794804844" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794804844" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
