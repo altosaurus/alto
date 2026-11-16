@@ -185,7 +185,7 @@ jobs:
           git push --quiet origin HEAD:asv-results
 
       - name: Make the pages with the graphs
-        run: asv publish --machine "$MACHINE"
+        run: asv publish
 
       - uses: actions/upload-artifact@v4
         with:
