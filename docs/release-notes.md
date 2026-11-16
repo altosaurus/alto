@@ -13,9 +13,9 @@ All notable changes to Alto, newest first. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and Alto uses [semantic versioning](https://semver.org/).
 Each release's downloads are on its GitHub release.
 
-## Unreleased
+## 0.0.1
 
-Changes that are in the development docs and not in a release yet.
+Released 2026-11-15. [GitHub release](https://github.com/altosaurus/alto/releases/tag/v0.0.1)
 
 ### Added
 {: .no-toc}

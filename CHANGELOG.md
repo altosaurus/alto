@@ -5,6 +5,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-11-15
+
 ### Added
 
 - A new exercise, Clef Basics: a blank staff and the name of a clef. Choose the G, C or F clef symbol with three buttons, the mouse
@@ -109,5 +111,6 @@ The first release.
 
 - A documentation site, a developer guide, an API reference generated from the docstrings, and `ARCHITECTURE.md`.
 
-[Unreleased]: https://github.com/altosaurus/alto/compare/v0.0.0...HEAD
+[Unreleased]: https://github.com/altosaurus/alto/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/altosaurus/alto/compare/v0.0.0...v0.0.1
 [0.0.0]: https://github.com/altosaurus/alto/releases/tag/v0.0.0
