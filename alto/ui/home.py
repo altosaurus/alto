@@ -76,6 +76,7 @@ EXERCISE_ICONS = {
     "CircleOfFifths": icons.EXERCISE_CIRCLE,
     "ChordQualities": icons.EXERCISE_CHORDS,
     "ArpeggioNames": icons.EXERCISE_ARPEGGIOS,
+    "ClefBasics": icons.EXERCISE_CLEFS,
 }
 
 

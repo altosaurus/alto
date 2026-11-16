@@ -76,6 +76,7 @@ from alto.ui.profile_dialog import (
 from alto.ui.settings_panel import (
     load_arpeggio,
     load_circle,
+    load_clef_basics,
     load_construction,
     load_key_construction,
     load_key_signatures,
@@ -289,6 +290,7 @@ class MainWindow(QMainWindow):
         load_key_signatures()
         load_key_construction()
         load_circle()
+        load_clef_basics()
         load_scale_construction()
         load_instrument()
         load_notation_style()

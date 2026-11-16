@@ -39,12 +39,14 @@ from alto.audio import sounds
 from alto.lessons import (
     LESSONS,
     Lesson,
+    Staff,
     Step,
     Task,
 )
 from alto.lessons.circle_of_fifths import summary
 from alto.theory.pitch import Note
 from alto.ui.reference import ExplorableCircle
+from alto.ui.staff import StaffWidget
 from alto.ui.store import (
     int_value,
     store,
@@ -53,6 +55,7 @@ from alto.ui.widgets import SidebarToggle
 
 TEXT_WIDTH = 560  # the widest a paragraph is set, in pixels, so lines stay short enough to read comfortably
 CIRCLE_SIZE = 560  # the biggest the circle is in a lesson, in pixels
+STAFF_WIDTH = 520  # the widest the staves beside a lesson's words are, in pixels
 RIGHT = "#2e7d32"  # the green of a right answer, as everywhere in the app
 GENTLE = "#b26a00"  # the amber of a hint, which is not a red mark because nothing here can be failed
 GIVE_UP_AFTER = 2  # wrong answers before the answer is shown
@@ -115,6 +118,8 @@ class StepView(QWidget):
         The step.
     circle : ExplorableCircle or None
         The circle, for a step that has one.
+    staves : list of StaffWidget
+        The staves beside the words, for a step that has them: one for each of its `staves`, or the one that follows the task.
     left_scroll : QScrollArea
         Holds the words and controls on the left, so they scroll if the window is too short for them.
     task : Task or None
@@ -166,6 +171,7 @@ class StepView(QWidget):
         self.rng = rng or random.Random()
         self.task: Task | None = None
         self.circle: ExplorableCircle | None = None
+        self.staves: list[StaffWidget] = []
         self.choice_buttons: list[QPushButton] = []
         self._wrong = 0  # wrong answers to the task now being asked
         self._setting = False  # True while the program, not the learner, is picking a cell
@@ -217,6 +223,8 @@ class StepView(QWidget):
             circle.set_interactive(step.circle != "rest")
             circle.picked.connect(lambda ring, place: self._picked(ring, place=place))
             self.circle = circle
+        if step.staves or step.task_staff:
+            self.staves = [self._make_staff(staff) for staff in (step.staves or (Staff(clef="treble"),))]
         if step.circle == "walk":
             self.walk_row = QHBoxLayout()
             self.down = QPushButton("◀  Down a fifth")
@@ -255,12 +263,51 @@ class StepView(QWidget):
         lay.addWidget(scroll, 2)
         if self.circle is not None:
             lay.addWidget(self.circle, 3)  # it takes the height that is left, and is drawn as the biggest square that fits
+        if self.staves:
+            holder = QWidget()  # the staves, one above another, in the middle of the space beside the words
+            stack = QVBoxLayout(holder)
+            stack.setContentsMargins(
+                0,
+                0,
+                0,
+                0,
+            )
+            stack.addStretch(1)
+            for staff_widget in self.staves:
+                stack.addWidget(staff_widget)
+            stack.addStretch(1)
+            holder.setMaximumWidth(STAFF_WIDTH)
+            lay.addWidget(holder, 3)
         if step.circle == "walk" and self.circle is not None:
             self._show(self.circle, ring="outer", place=0)
         elif self.circle is not None:
             self.info.setText(self._invitation())
         if step.make_task is not None:
             self.ask()
+
+    @staticmethod
+    def _make_staff(staff: Staff) -> StaffWidget:
+        """
+        Make the picture of a staff for a step: a clef, perhaps a note, and the words under it.
+
+        Parameters
+        ----------
+        staff : Staff
+            What to show.
+
+        Returns
+        -------
+        StaffWidget
+            A small staff.
+
+        Examples
+        --------
+        >>> StepView._make_staff(Staff(clef="alto", note="C4", caption="Alto")).caption
+        'Alto'
+        """
+        widget = StaffWidget(gap=8.0, margin=5.5, compact=True)
+        widget.show_notes([[Note.parse(staff.note)]] if staff.note else [], clef=staff.clef, caption=staff.caption)
+        return widget
 
     def _invitation(self) -> str:
         """
@@ -380,6 +427,11 @@ class StepView(QWidget):
             if widget is not None:
                 widget.deleteLater()
         self.choice_buttons = []
+        if (
+            self.staves and self.step.task_staff
+        ):  # the staff beside the words follows the task: its clef, or none to count lines on
+            self.staves[0].clef_hidden = not task.clef
+            self.staves[0].show_notes([], clef=task.clef or "treble")
         for text in task.choices:
             button = QPushButton(text)
             button.setMinimumWidth(56)

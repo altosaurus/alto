@@ -1889,3 +1889,139 @@ class NoteConstruction(Exercise):
             key=count,
             explanation=explanation,
         )
+
+
+# What to say about where each clef goes, for the explanation after a question about it.
+CLEF_FACTS = {
+    "treble": "The treble clef is the G clef on the second line: its curl circles the G above middle C.",
+    "bass": "The bass clef is the F clef on the fourth line: its two dots are either side of the F below middle C.",
+    "alto": "The alto clef is the C clef on the middle line: its middle is on middle C.",
+    "tenor": "The tenor clef is the C clef on the fourth line: its middle is on middle C.",
+    "soprano": "The soprano clef is the C clef on the bottom line: its middle is on middle C.",
+    "mezzo": "The mezzo-soprano clef is the C clef on the second line: its middle is on middle C.",
+    "baritone": "The baritone clef is the F clef on the middle line, or the C clef on the top line: both are used.",
+    "french": "The French violin clef is the G clef on the bottom line, a step lower than the treble clef.",
+    "subbass": "The subbass clef is the F clef on the top line, a step higher than the bass clef.",
+}
+
+
+@register
+class ClefBasics(Exercise):
+    """
+    Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.
+
+    Examples
+    --------
+    >>> q = ClefBasics().generate(random.Random(1))
+    >>> q.answer == q.place_clef and q.place_clef in settings.CLEF_BASICS_CLEFS
+    True
+    """
+
+    name = "Clef Basics"
+    category = "Notation"
+    description = "Put the G, C or F clef where it makes the clef asked for, or name the clef on a staff."
+    par_seconds = 5.0
+    has_sound = False
+
+    def settings_signature(self) -> str:
+        """
+        Return what identifies the settings that shape these questions.
+
+        Returns
+        -------
+        str
+            The clefs asked for.
+
+        Examples
+        --------
+        >>> ClefBasics().settings_signature().startswith("[")
+        True
+        """
+        return signature(settings.clef_basics)
+
+    def instructions(self) -> str:
+        """
+        Return the help text for the exercise, for the kind of question that is being asked.
+
+        Returns
+        -------
+        str
+            Simple HTML.
+
+        Examples
+        --------
+        >>> "Clef Basics" in ClefBasics().instructions()
+        True
+        """
+        if settings.clef_basics.active_type() == "identification":
+            return (
+                "<b>Clef Basics: Clef Identification</b><br>A clef is drawn on a staff. Press the button with its name. The "
+                "C clef is the alto, tenor, mezzo-soprano or soprano clef, by the line it is centred on (the line of middle C); "
+                "the G clef is the treble clef, or the French violin clef on the bottom line; the F clef is the bass clef, "
+                "the baritone clef on the middle line, or the subbass clef on the top line. The baritone clef can also be "
+                "written as a C clef on the top line.<br><br>Use the sliders button to choose which clefs are asked for, and "
+                "to ask you to put a named clef on a blank staff instead."
+            )
+        return (
+            "<b>Clef Basics: Clef Construction</b><br>The staff is blank and the name of a clef is shown. Every clef is one of "
+            "three symbols, the G clef, the C clef or the F clef, put on a line: the G clef circles the G line, the F clef has "
+            "its dots round the F line, and a C clef is centred on middle C. So the mezzo-soprano clef is the C clef on the "
+            "second line.<br><br>Choose the symbol with the buttons under the staff, the mouse wheel or a right click, then "
+            "click where it goes. The clef can be tried on the lines, the spaces and the ledger lines above and below the "
+            "staff, but only one place is right, except for the baritone clef, which is the F clef on the middle line or the "
+            "C clef on the top line.<br><br>Without the mouse: the Left and Right arrows choose the symbol, the Up and Down "
+            "arrows move it up or down a line or space, and Answer (or Return) places it.<br><br>Use the sliders button to "
+            "choose which clefs are asked for, and to ask you to name a clef on a staff instead."
+        )
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Name a clef to place, or draw a clef to name.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            For construction, a blank staff and the name of the clef, which is the question written under the staff. For
+            identification, a staff with the clef drawn on it, and a button for each clef that can be asked for.
+
+        Examples
+        --------
+        >>> q = ClefBasics().generate(random.Random(3))
+        >>> q.prompt.startswith("Place the ") and q.caption == q.prompt
+        True
+        >>> settings.clef_basics.question_type = "identification"
+        >>> q = ClefBasics().generate(random.Random(3))
+        >>> q.answer in q.choices, q.place_clef, q.caption
+        (True, '', 'Which clef is this?')
+        >>> settings.clef_basics.question_type = "construction"
+        """
+        cfg = settings.clef_basics
+        clef = rng.choice(cfg.active_clefs())
+        name = settings.CLEF_NAMES[clef]
+        if cfg.active_type() == "identification":
+            names = [settings.CLEF_NAMES[c] for c in cfg.answer_clefs()]
+            return Question(
+                "Which clef is this?",
+                choices=names,
+                answer=name,
+                grid={choice: divmod(i, 5) for i, choice in enumerate(names)},  # rows of five, not one long row
+                clef=clef,
+                show_staff=True,
+                caption="Which clef is this?",  # the question goes under the staff, in the white area
+                explanation=CLEF_FACTS[clef],
+            )
+        words = name if name.startswith("French") else name.lower()  # "mezzo-soprano", but "French violin"
+        return Question(
+            f"Place the {words} clef.",
+            choices=[],
+            answer=clef,
+            show_staff=True,
+            caption=f"Place the {words} clef.",  # the question goes under the staff, in the white area
+            place_clef=clef,
+            explanation=CLEF_FACTS[clef],
+        )

@@ -128,6 +128,9 @@ def test_every_exercise_generates_valid_questions() -> None:
             if q.build_key:  # answered by building a key signature with the fork, so there are no buttons
                 assert not q.choices and q.check_built(q.key) and q.show_staff and q.caption, (cls.name, q)
                 continue
+            if q.place_clef:  # answered by putting a clef on a blank staff, so there are no buttons
+                assert not q.choices and q.show_staff and q.caption, (cls.name, q)
+                continue
             if q.octaves:  # a two-part answer: a choice, then one of the second row
                 assert q.answer in [c + q.joiner + o for c in q.choices for o in q.octaves], (cls.name, q)
             else:

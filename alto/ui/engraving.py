@@ -494,6 +494,21 @@ def draw_note(
         )
 
 
+# Each clef's SMuFL glyph and how many gaps above the bottom staff line its reference line (the G, F or middle C) is
+CLEF_SIGNS = {
+    "treble": ("gClef", 1),
+    "bass": ("fClef", 3),
+    "alto": ("cClef", 2),
+    "tenor": ("cClef", 3),
+    "soprano": ("cClef", 0),
+    "mezzo": ("cClef", 1),
+    "baritone_c": ("cClef", 4),
+    "baritone_f": ("fClef", 2),
+    "french": ("gClef", 0),  # the French violin clef: the G clef on the bottom line
+    "subbass": ("fClef", 4),  # the subbass clef: the F clef on the top line
+}
+
+
 def draw_clef(
     p: QPainter,
     *,
@@ -536,17 +551,7 @@ def draw_clef(
     >>> any(image.pixelColor(x_, y).lightness() < 128 for x_ in range(10, 40) for y in range(20, 90))
     True
     """
-    # `line` is how many gaps above the bottom staff line the clef's reference line (the G, F or middle C) is
-    name, line = {
-        "treble": ("gClef", 1),
-        "bass": ("fClef", 3),
-        "alto": ("cClef", 2),
-        "tenor": ("cClef", 3),
-        "soprano": ("cClef", 0),
-        "mezzo": ("cClef", 1),
-        "baritone_c": ("cClef", 4),
-        "baritone_f": ("fClef", 2),
-    }[clef]
+    name, line = CLEF_SIGNS[clef]
     _fill(
         p,
         path=_place(

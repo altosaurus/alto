@@ -4,7 +4,8 @@ nav_order: 3
 nav_group: Using Alto
 permalink: /exercises/
 ---
-Alto has eleven exercises. Each one has a **?** button with a short explanation, and eight of them have their own
+
+Alto has twelve exercises. Each one has a **?** button with a short explanation, and nine of them have their own
 settings (the sliders button). The others use fixed rules, described below.
 
 **Every exercise can be done with the keyboard alone, and without clicking on the staff.** The answer buttons have keys,
@@ -57,6 +58,68 @@ The reverse of note identification. A note name is shown, and you click the staf
 
 {% include shot.html src="note-construction.png" alt="Note Construction asking to place a note on a staff" %}
 
+## Clef Basics
+
+Clef Basics has two kinds of question, chosen with **Question Type** in the exercise settings: **Clef Construction**,
+which
+is described first, and **Clef Identification**, described at the end.
+
+In Clef Construction a blank staff is shown with the question under it, such as "Place the mezzo-soprano clef." Every
+clef is one of three symbols,
+the **G clef**, the **C clef** or the **F clef**, put on a particular line of the staff:
+
+| Clef          | Symbol and line                                                                 |
+|---------------|---------------------------------------------------------------------------------|
+| Treble        | The G clef on the second line                                                   |
+| French violin | The G clef on the bottom line                                                   |
+| Bass          | The F clef on the fourth line                                                   |
+| Subbass       | The F clef on the top line                                                      |
+| Alto          | The C clef on the middle line                                                   |
+| Tenor         | The C clef on the fourth line                                                   |
+| Mezzo-soprano | The C clef on the second line                                                   |
+| Soprano       | The C clef on the bottom line                                                   |
+| Baritone      | The F clef on the middle line, or the C clef on the top line: both are accepted |
+
+- **Choose the symbol** with the three buttons under the music, by turning the mouse wheel, or by right-clicking.
+- **Click where it goes.** The symbol follows the pointer, in a lighter colour, and is placed where you click. To mix
+  things up it
+  can be tried on any line or space of the staff, and on up to three ledger lines and spaces above and below it, but
+  only
+  the places in the table are right.
+- **Without the mouse:** <kbd>←</kbd> and <kbd>→</kbd> choose the symbol, <kbd>↑</kbd> and <kbd>↓</kbd> move it up and
+  down a line or
+  space, and <kbd>Return</kbd> presses **Answer**.
+
+The right symbol in the wrong place is wrong, and so is another symbol in the right place. A wrong try turns red and
+clears so
+you can try again; only your first try counts towards your score. This exercise makes no sound.
+
+### Clef Identification
+
+A clef is drawn on a staff, with "Which clef is this?" under it. Press the button with its name. There is a button for
+each clef
+that is asked for, and at least two buttons even if only one clef is asked for. A baritone clef is drawn the way you
+chose in
+[Settings]({{ '/settings/' | relative_url }}). Like the other exercises with buttons, the buttons have keys, shown when
+you hover
+over them.
+
+### Reference and lesson
+
+The book button (experimental), beside the help button, opens a reference in a pane on the right: the three symbols and
+a
+picture of each clef with where its symbol goes. A button at the top opens the [Clef Basics lesson]({{ '/lessons/' |
+relative_url }}).
+
+### Settings
+
+In the exercise settings you can choose:
+
+- **Question Type:** Clef Construction or Clef Identification.
+- **Clefs:** the clefs that are asked for: the seven clefs of the other exercises, then, at the bottom, the French
+  violin and
+  subbass clefs, which only this exercise has.
+
 ## Interval Identification
 
 Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.
@@ -94,10 +157,14 @@ The fork is shaped like a tuning fork lying on its side. Its stem, on the left, 
 C major. The stem opens into two tines: the top one has the sharps, 1 to 7, and the bottom one the flats, 1 to 7. A circle
 marks what you have chosen, and the staff shows that many sharps or flats as you move it. To choose:
 
-- **Click** a number, or the natural sign.
+- **Click** a number, or the natural sign. A number lights up a little as the mouse passes over it.
+- **Drag the circle** along the fork. It follows the mouse, round the bend and out along either tine, and slides to the
+  nearest number when you let go.
 - **Turn the mouse wheel** to move the circle along the fork, one number for each notch: up towards more sharps, down
-  towards more flats, passing through the natural sign on the way from one side to the other.
-- **Press the arrow keys** (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever the
+  towards more flats, passing through the natural sign on the way from one side to the other. The wheel works over the
+  staff and the Answer button too.
+- **Press the arrow keys** (<kbd>↑</kbd> or <kbd>→</kbd> for a sharp, <kbd>↓</kbd> or <kbd>←</kbd> for a flat) wherever
+  the
   keyboard is on the exercise screen, and <kbd>Home</kbd> to go back to the natural sign. Then press <kbd>Return</kbd>.
 
 A wrong signature turns the circle red and puts it back on the natural sign so you can try again; only your first try
@@ -295,11 +362,11 @@ try again.
 
 The inversion is which chord tone is lowest:
 
-| Inversion | Lowest note |
-|---|---|
-| Root position | the root |
-| 1st inversion | the third |
-| 2nd inversion | the fifth |
+| Inversion     | Lowest note                       |
+|---------------|-----------------------------------|
+| Root position | the root                          |
+| 1st inversion | the third                         |
+| 2nd inversion | the fifth                         |
 | 3rd inversion | the seventh (seventh chords only) |
 
 By default Alto asks major, minor, dominant 7th and diminished 7th arpeggios on the treble and bass staves, in every

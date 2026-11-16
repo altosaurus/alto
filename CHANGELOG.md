@@ -7,6 +7,13 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Added
 
+- A new exercise, Clef Basics: a blank staff and the name of a clef. Choose the G, C or F clef symbol with three buttons, the mouse
+  wheel or a right click, and put it where it makes that clef: the C clef on the second line is the mezzo-soprano clef. It can be tried
+  on lines, spaces and three ledger lines each way. Its settings are Question Type, Clef Construction or Clef Identification (a clef is drawn on a staff and you press the
+  button with its name), and Clefs, which chooses which clefs are asked for, including the French violin and subbass clefs. The baritone clef is accepted as the F clef on the middle line or the C clef on the top line.
+- A Clef Basics lesson, in ten short steps with small exercises: what a clef does, the G, C and F clef, the line each puts its symbol
+  on, and how to tell them apart. The Clef Basics exercise has a reference pane, opened with the book button, with a table of the clefs
+  and a button that opens the lesson.
 - The documentation has a version for each release and one for the development version, with a dropdown in the top bar to switch
   between them. A page of an older release says so and links to the latest.
 - The documentation home page has a Download Alto button under the first paragraph, and a download section in place of "Get started". Its
@@ -17,11 +24,20 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Changed
 
+- Exercise and lesson icons use consistent musical glyphs and follow the theme colour.
+
+- In Key Signature Construction a number on the fork lights up as the mouse passes over it, the circle can be dragged along the fork, and
+  the mouse wheel works over the staff and the Answer button too.
 - The documentation sidebar sorts the pages under headings that open and close, with the developer guide and the API reference as single
   rows that open their pages, long pages have an "On this page" list that follows your reading, and every page ends with links to the
   previous and next pages. The home page leaves checking a download and updating to the Getting started page, which now explains both.
 - The circle of fifths is coloured from cyan through blue to indigo by key signature, instead of every colour of the rainbow.
 - The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.
+
+### Fixed
+
+- Changing the theme in the settings no longer sends you back to the exercises home page, or makes the window disappear and grow back
+  from a dot. The window stays where it is, showing the exercise, lesson step or page you were on.
 
 ## [0.0.0] - 2026-11-15
 

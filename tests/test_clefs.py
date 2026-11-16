@@ -72,7 +72,7 @@ def test_each_c_clef_puts_middle_c_on_its_own_line() -> None:
 
 def test_the_clefs_are_grouped_into_the_grand_staff_the_everyday_clefs_and_the_rest() -> None:
     """
-    Check that the clefs are grouped into the grand staff the everyday clefs and the rest.
+    Check that the clefs are grouped into the grand staff, the everyday clefs, the rest and the two only Clef Basics has.
     """
     assert settings.CLEF_GROUPS == (
         ("grand",),
@@ -83,8 +83,11 @@ def test_the_clefs_are_grouped_into_the_grand_staff_the_everyday_clefs_and_the_r
             "tenor",
         ),
         ("soprano", "mezzo", "baritone"),
+        ("french", "subbass"),  # only Clef Basics has these two
     )
-    assert sorted(c for g in settings.CLEF_GROUPS for c in g) == sorted(settings.RANGE_KEYS)  # each clef in one group
+    assert sorted(c for g in settings.CLEF_GROUPS for c in g) == sorted(
+        (*settings.RANGE_KEYS, "french", "subbass"),
+    )  # one group each
     for clef in settings.RANGE_KEYS:
         assert clef in CLEF_NAMES and clef in settings.DEFAULT_RANGES and clef in settings.RANGE_LIMITS
 

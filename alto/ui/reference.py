@@ -29,6 +29,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QFrame,
+    QHBoxLayout,
     QLabel,
     QPushButton,
     QScrollArea,
@@ -36,7 +37,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto.exercises.library import CircleOfFifths
+from alto import settings
+from alto.exercises.library import (
+    CLEF_FACTS,
+    CircleOfFifths,
+    ClefBasics,
+)
 from alto.theory.fifths import (
     INTRO,
     MAJORS,
@@ -52,6 +58,7 @@ from alto.ui.circle import (
     WEDGE,
     FifthsCircle,
 )
+from alto.ui.pictures import ClefPictures
 
 if TYPE_CHECKING:
     from alto.exercises.base import Exercise
@@ -496,7 +503,93 @@ class ReferencePanel(QWidget):
             self.explanation.setText(explain(ring, place=place))
 
 
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | None:
+CLEF_INTRO = (
+    "Every clef is one of three symbols put on a line of the staff. The G clef circles the G above middle C, the F clef has its "
+    "dots either side of the F below middle C, and a C clef is centred on middle C. Which clef it is depends on the line."
+)
+
+
+class ClefReferencePanel(QWidget):
+    """
+    The reference for the clefs: how they are made, and a picture of each with where its symbol goes.
+
+    Attributes
+    ----------
+    lesson_button : QPushButton
+        Opens the lesson on the clefs.
+    lesson_requested : Signal
+        Emitted with the key of the lesson to open when that button is pressed.
+    rows : dict of str to QLabel
+        The words beside the picture of each clef, by clef.
+
+    Examples
+    --------
+    >>> panel = ClefReferencePanel()
+    >>> "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
+    True
+    """
+
+    lesson_requested = Signal(str)
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        """
+        Build the panel: the lesson button, a line of explanation and a row for each clef.
+
+        Parameters
+        ----------
+        parent : QWidget or None, default None
+            The widget that owns it.
+
+        Examples
+        --------
+        >>> len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
+        True
+        """
+        super().__init__(parent)
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        self.lesson_button = QPushButton("New to this? Take the full lesson  →")
+        self.lesson_button.setToolTip("A step-by-step lesson on the clefs, with small exercises")
+        self.lesson_button.clicked.connect(lambda: self.lesson_requested.emit("clef-basics"))
+        lay.addWidget(self.lesson_button)  # at the top, where it is seen before the reading starts
+        intro = QLabel(CLEF_INTRO)
+        intro.setWordWrap(True)
+        intro.setTextFormat(Qt.TextFormat.PlainText)
+        lay.addWidget(intro)
+        body = QWidget()
+        rows = QVBoxLayout(body)
+        rows.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        self.rows: dict[str, QLabel] = {}
+        for clef in settings.CLEF_BASICS_CLEFS:
+            line = QHBoxLayout()
+            line.addWidget(ClefPictures([clef], scale=1.2), 0, Qt.AlignmentFlag.AlignTop)
+            words = QLabel(f"<b>{settings.CLEF_NAMES[clef]}</b><br>{CLEF_FACTS[clef]}")
+            words.setWordWrap(True)
+            words.setTextFormat(Qt.TextFormat.RichText)
+            words.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            line.addWidget(words, 1)
+            rows.addLayout(line)
+            self.rows[clef] = words
+        rows.addStretch(1)
+        scroll = QScrollArea()
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setWidget(body)
+        lay.addWidget(scroll, 1)
+
+
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | None:
     """
     Return the reference pane for an exercise.
 
@@ -507,7 +600,7 @@ def reference_panel_for(exercise: Exercise) -> ReferencePanel | None:
 
     Returns
     -------
-    ReferencePanel or None
+    ReferencePanel or ClefReferencePanel or None
         The panel, or None for an exercise with nothing to look up.
 
     Examples
@@ -515,7 +608,11 @@ def reference_panel_for(exercise: Exercise) -> ReferencePanel | None:
     >>> from alto.exercises.library import NoteNames
     >>> reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
     (True, True)
+    >>> type(reference_panel_for(ClefBasics())).__name__
+    'ClefReferencePanel'
     """
     if isinstance(exercise, CircleOfFifths):
         return ReferencePanel()
+    if isinstance(exercise, ClefBasics):
+        return ClefReferencePanel()
     return None

@@ -22,6 +22,8 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtCore import (
     QEasingCurve,
+    QEvent,
+    QObject,
     QPropertyAnimation,
     QSize,
     Qt,
@@ -34,6 +36,7 @@ from PySide6.QtGui import (
     QKeySequence,
     QPalette,
     QShortcut,
+    QWheelEvent,
 )
 from PySide6.QtWidgets import (
     QAbstractButton,
@@ -73,7 +76,9 @@ from alto.ui.key_fork import (
     KeyFork,
 )
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.pictures import symbol_icon
 from alto.ui.reference import (
+    ClefReferencePanel,
     ReferencePanel,
     reference_panel_for,
 )
@@ -81,8 +86,10 @@ from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import (
     MAX_STEP,
     StaffWidget,
+    clef_targets,
 )
 from alto.ui.staff_input import (
+    ClefInput,
     ScaleInput,
     StaffInput,
 )
@@ -259,6 +266,8 @@ class ExerciseView(QWidget):
         Shows the key of a keyboard question.
     input_staff : StaffInput
         The staff to click, for "place this note" questions.
+    clef_input : ClefInput
+        The blank staff a clef is put on, for "place this clef" questions.
     scale_input : ScaleInput
         The staff to click, for "place the notes of this scale" questions.
     fork : KeyFork
@@ -284,6 +293,7 @@ class ExerciseView(QWidget):
 
     PANE_WIDTH = 290
     REFERENCE_WIDTH = 400
+    CHOICE_MAX_WIDTH = 760  # the answer buttons are never spread wider than this, however wide the window
 
     def __init__(
         self,
@@ -353,6 +363,8 @@ class ExerciseView(QWidget):
         self.answer_button.setMinimumHeight(40)
         self.answer_button.setShortcut("Return")
         self.answer_button.clicked.connect(self._answer)
+        self.staff.installEventFilter(self)  # the wheel over the music or Answer moves the fork's circle too
+        self.answer_button.installEventFilter(self)
         answer_lay.addWidget(self.undo_button)
         answer_lay.addWidget(self.place_button, 1)
         answer_lay.addWidget(self.answer_button, 1)
@@ -360,6 +372,35 @@ class ExerciseView(QWidget):
         self.input_staff.placed.connect(self._place)
         self.input_staff.accidental_cycled.connect(self._cycle_accidental)
         self.input_staff.caret_moved.connect(self._update_placement_status)
+        self.clef_input = ClefInput()  # for 'place this clef' questions
+        self.clef_input.placed.connect(self._place_clef)
+        self.clef_input.changed.connect(self._show_placement_rows)
+        self.symbol_row = QWidget()  # a button for each clef symbol, under the staff, as another way to choose one
+        symbol_lay = QHBoxLayout(self.symbol_row)
+        symbol_lay.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        symbol_lay.addStretch()
+        self.symbol_group = QButtonGroup(self)
+        self.symbol_buttons: dict[str, QPushButton] = {}
+        for symbol in app_settings.CLEF_SYMBOLS:
+            button = QPushButton()
+            button.setIcon(
+                symbol_icon(symbol, color=self.palette().color(QPalette.ColorRole.ButtonText)),
+            )  # the symbol, not a name
+            button.setIconSize(QSize(56, 56))
+            button.setAccessibleName(app_settings.CLEF_SYMBOL_NAMES[symbol])
+            button.setCheckable(True)
+            button.setMinimumHeight(68)
+            button.setToolTip(f"{app_settings.CLEF_SYMBOL_NAMES[symbol]} (or turn the mouse wheel, or use Left and Right)")
+            button.clicked.connect(lambda _=False, chosen=symbol: self.clef_input.select(chosen))
+            self.symbol_group.addButton(button)
+            self.symbol_buttons[symbol] = button
+            symbol_lay.addWidget(button)
+        symbol_lay.addStretch()
         self.scale_input = ScaleInput()  # for 'place this scale' questions
         self.scale_input.notes_changed.connect(self._scale_changed)
         self.scale_input.accidental_cycled.connect(self._cycle_accidental)
@@ -448,7 +489,16 @@ class ExerciseView(QWidget):
             compact=True,
         )  # key signature only
         self.key_staff.setFixedWidth(210)
-        self.choice_box = QGridLayout()
+        self.choice_area = QWidget()  # holds the answer buttons, with room around them and a widest it will be
+        self.choice_area.setMaximumWidth(self.CHOICE_MAX_WIDTH)
+        self.choice_box = QGridLayout(self.choice_area)
+        self.choice_box.setContentsMargins(
+            16,
+            8,
+            16,
+            8,
+        )
+        self.choice_box.setSpacing(10)
         self._pair_token = 0  # counts questions, so a pending 'try again' reset can tell it is out of date
         self._pending: dict[str, tuple[str, QPushButton]] = {}
         self._found: set[str] = set()  # the right answers given so far to a question that needs several
@@ -468,7 +518,7 @@ class ExerciseView(QWidget):
         reference = reference_panel_for(exercise)
         self.book_btn: QToolButton | None = None
         self.reference_pane: QFrame | None = None
-        self._reference: ReferencePanel | None = reference
+        self._reference: ReferencePanel | ClefReferencePanel | None = reference
         if reference is not None:
             reference.lesson_requested.connect(self.lesson_requested)
         if (
@@ -515,6 +565,8 @@ class ExerciseView(QWidget):
         lay.addWidget(self.fork, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.input_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.scale_input, alignment=Qt.AlignmentFlag.AlignHCenter)
+        lay.addWidget(self.clef_input, alignment=Qt.AlignmentFlag.AlignHCenter)
+        lay.addWidget(self.symbol_row)
         lay.addWidget(self.place_status)
         lay.addWidget(self.pitch_row)
         lay.addWidget(self.accidental_row)
@@ -522,7 +574,11 @@ class ExerciseView(QWidget):
         lay.addWidget(self.answer_row)
         lay.addWidget(self.key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.keyboard)
-        lay.addLayout(self.choice_box)
+        choice_row = QHBoxLayout()  # the buttons' area in the middle, with the room that is left over on either side
+        choice_row.addStretch(1)
+        choice_row.addWidget(self.choice_area, 100)
+        choice_row.addStretch(1)
+        lay.addLayout(choice_row)
         self.octave_row = QWidget()  # shown only when the answer needs an octave as well as a name
         self.octave_box = QHBoxLayout(self.octave_row)
         self.octave_box.setContentsMargins(
@@ -801,7 +857,8 @@ class ExerciseView(QWidget):
         self.prompt.setVisible(bool(q.prompt) and not q.caption)  # some need none; a caption goes on the staff
         construct = q.construct is not None
         scale = q.construct_scale is not None
-        self.staff.setVisible((bool(q.staff) or q.show_staff) and not construct and not scale)
+        clef = bool(q.place_clef)
+        self.staff.setVisible((bool(q.staff) or q.show_staff) and not construct and not scale and not clef)
         self.fork.setVisible(q.build_key)
         self.circle.setVisible(q.circle is not None)
         if q.circle is not None:
@@ -813,6 +870,10 @@ class ExerciseView(QWidget):
             self.fork.set_value(0, slide=False)
         self.input_staff.setVisible(construct)
         self.scale_input.setVisible(scale)
+        self.clef_input.setVisible(clef)
+        self.symbol_row.setVisible(clef)
+        if clef:
+            self.clef_input.reset(list(app_settings.CLEF_SYMBOLS), caption=q.caption)
         if construct:
             self.input_staff.reset(q.clef, key=q.key)
         if q.construct_scale is not None:
@@ -1182,6 +1243,8 @@ class ExerciseView(QWidget):
         q = self.question
         if q and q.build_key:
             self._check_built()
+        elif q and q.place_clef:
+            self.clef_input.place_caret()
         elif q and q.construct_scale is not None:
             self._check_scale()
 
@@ -1222,11 +1285,16 @@ class ExerciseView(QWidget):
         if q is None:
             return
         note, scale, fork = q.construct is not None, q.construct_scale is not None, q.build_key
+        clef = bool(q.place_clef)
         staff = self._input()
         placing_notes = note or (scale and not self.scale_input.complete)
         steps_turn = scale and self.scale_input.placing_steps
         live = not self.answered and not self._busy
-        self.answer_row.setVisible(note or scale or fork)
+        for symbol, button in self.symbol_buttons.items():  # one for each symbol that can be chosen, the chosen one pressed
+            button.setVisible(clef and symbol in self.clef_input.options)
+            button.setChecked(symbol == self.clef_input.selected)
+            button.setEnabled(live)
+        self.answer_row.setVisible(note or scale or fork or clef)
         self.place_status.setVisible(note or scale)
         self.pitch_row.setVisible(placing_notes)
         self.accidental_row.setVisible(q.accidentals and placing_notes)
@@ -1238,10 +1306,10 @@ class ExerciseView(QWidget):
             self.place_button.setText(label)
             self.place_button.setShortcut("Return")  # setting a button's text makes it forget its shortcut
         self.place_button.setEnabled(live and not (scale and self.scale_input.done))
-        self.answer_button.setVisible(scale or fork)
-        self.answer_button.setEnabled(live if fork else live and self.scale_input.done)
+        self.answer_button.setVisible(scale or fork or clef)
+        self.answer_button.setEnabled(live if fork or clef else live and self.scale_input.done)
         for key in self._arrow_keys:
-            key.setEnabled(note or scale or fork)
+            key.setEnabled(note or scale or fork or clef)
         for key in self._letter_keys:
             key.setEnabled(placing_notes and not fork)
         if note or scale:
@@ -1347,6 +1415,12 @@ class ExerciseView(QWidget):
                     self.fork.set_value(self.fork.value + step)
                 elif name == "home":  # back to the natural sign, no sharps or flats
                     self.fork.set_value(0)
+            return
+        if q.place_clef:
+            if name in {"up", "down"}:
+                self.clef_input.move_caret(1 if name == "up" else -1)
+            elif name in {"left", "right"}:
+                self.clef_input.step_symbol(1 if name == "right" else -1)
             return
         if q.construct is None and q.construct_scale is None:
             return
@@ -1566,6 +1640,131 @@ class ExerciseView(QWidget):
         sounded = self.scale_input.slots if index is None else index + 1
         self.scale_input.column_colors = {i: QColor("#2e7d32") for i in range(sounded)}
         self.scale_input.update()
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917  (Qt calls it with both)
+        """
+        Send the mouse wheel to the fork, or to the clef staff, while it is showing and the mouse is over the music or Answer.
+
+        Parameters
+        ----------
+        watched : QObject
+            The staff or the Answer button.
+        event : QEvent
+            Anything that reaches it; only the wheel is taken.
+
+        Returns
+        -------
+        bool
+            True if the fork or the clef staff took the wheel turn, False to let it go on as usual.
+
+        Examples
+        --------
+        >>> from PySide6.QtCore import QPoint, QPointF
+        >>> from PySide6.QtGui import QWheelEvent
+        >>> from alto.exercises.library import KeySignatureConstruction
+        >>> view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
+        >>> view.show()
+        >>> here = QPointF(5, 5)
+        >>> turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
+        ...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+        >>> view.eventFilter(view.answer_button, turn)
+        True
+        >>> view.fork.value
+        1
+        """
+        if isinstance(event, QWheelEvent) and watched in (self.staff, self.answer_button):
+            if self.fork.isVisible():
+                self.fork.wheelEvent(event)
+                return True
+            if self.clef_input.isVisible():
+                self.clef_input.wheelEvent(event)
+                return True
+        return super().eventFilter(watched, event)
+
+    def _place_clef(self, symbol: str, step: int) -> None:  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        """
+        Check a clef symbol that was put on the staff against the clef asked for.
+
+        The symbol and the place must both be those that make the clef: the C clef on the second line is the mezzo-soprano clef,
+        and anywhere else it is not. The baritone clef is either the F clef on the middle line or the C clef on the top line.
+        A right one is scored, turns green and moves on; a wrong one turns red and the staff clears so another can be tried.
+
+        Parameters
+        ----------
+        symbol : str
+            The symbol that was placed, "G", "C" or "F".
+        step : int
+            Where it was placed: 0 for the bottom line, 1 for the space above it, up to 8 for the top line.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import ClefBasics
+        >>> view = ExerciseView(ClefBasics(), rng=random.Random(2))
+        >>> # noinspection PyUnresolvedReferences
+        >>> view._place_clef(*sorted(clef_targets(view.question.place_clef))[0])
+        >>> view.answered, view.correct
+        (True, 1)
+        >>> view._advance.stop()
+        """
+        q = self.question
+        if not q or not q.place_clef or self.answered or self._busy:
+            return
+        ok = (symbol, step) in clef_targets(q.place_clef)
+        self._record(ok, choice=f"{symbol} clef at {step}")
+        self.clef_input.locked = True
+        self._flash_clef("#2e7d32" if ok else "#c62828")
+        if ok:
+            self.answered = True
+            self._advance.start(1200)
+        else:
+            self.missed = True
+            self._busy = True
+            token = self._pair_token
+
+            def retry() -> None:
+                """
+                Clear the staff so a wrong clef can be tried again, unless a new question has replaced it.
+
+                Examples
+                --------
+                >>> retry()  # doctest: +SKIP
+                """
+                if token != self._pair_token:  # a new question replaced this one
+                    return
+                self.clef_input.locked = False
+                self.clef_input.clear_placed()
+                self._busy = False
+                self._show_placement_rows()
+
+            QTimer.singleShot(900, retry)
+        self._show_placement_rows()
+        self._update_score()
+
+    def _flash_clef(self, target: str) -> None:
+        """
+        Fade the placed clef from black to a colour.
+
+        Parameters
+        ----------
+        target : str
+            The colour to fade to, such as '#c62828'.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import ClefBasics
+        >>> view = ExerciseView(ClefBasics(), rng=random.Random(2))
+        >>> view._flash_clef("#c62828")
+        >>> len(view._anims)
+        1
+        """
+        end, start = QColor(target), QColor("black")
+        anim = QVariantAnimation(self)
+        anim.setDuration(350)
+        anim.setStartValue(0.0)
+        anim.setEndValue(1.0)
+        anim.valueChanged.connect(lambda t: self.clef_input.set_clef_color(blend(start, b=end, t=t)))
+        self._anims.append(anim)
+        anim.start()
 
     def _fork_changed(self, count: int) -> None:
         """
