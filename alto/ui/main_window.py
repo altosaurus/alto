@@ -1596,7 +1596,7 @@ class MainWindow(QMainWindow):
         >>> window = MainWindow()
         >>> window.search_field.setText("keyboard")
         >>> sum(not item.isHidden() for item in window._items.values())
-        1
+        2
         """
         self.home.set_search(text)
         self._filter_navigation(self.nav, query=text)

@@ -922,7 +922,7 @@ Range and interval selection pages for keyboard interval identification.
 ```pycon
 >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
 >>> panel.stack.count()
-3
+4
 ```
 
 **Constructor**

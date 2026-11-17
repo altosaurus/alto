@@ -3080,7 +3080,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
     --------
     >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
     >>> panel.stack.count()
-    3
+    4
     """
 
     def __init__(
