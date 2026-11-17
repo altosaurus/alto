@@ -77,7 +77,7 @@ class StaffInput(StaffWidget):
         Ignore the mouse (while feedback is showing).
     caret : int or None
         The staff step of the note that the keyboard would place, as `Note.diatonic` counts them; None until the keyboard
-        or a click has put it somewhere. Once it has a place the note is shown in the preview colour while the pointer is
+        or a click has put it somewhere. Once it has a place the note is shown in the preview color while the pointer is
         away.
 
     Examples
@@ -354,7 +354,7 @@ class StaffInput(StaffWidget):
         note : Note or None
             The note to draw; None clears the staff.
         color : QColor or None, default None
-            The colour to draw it in; the notation's own ink if None. Keyword-only.
+            The color to draw it in; the notation's own ink if None. Keyword-only.
 
         Examples
         --------
@@ -397,7 +397,7 @@ class StaffInput(StaffWidget):
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         """
-        Show the note under the pointer, in a lighter colour.
+        Show the note under the pointer, in a lighter color.
 
         Parameters
         ----------
@@ -478,8 +478,8 @@ class ScaleInput(StaffInput):
     The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
     moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.
 
-    When steps are asked for, once all the notes are placed two lines rise from each pair of neighbouring notes to a point
-    above them (a wedge). The step to be marked next is shown there, in the preview colour, as "W" (whole) or "H" (half).
+    When steps are asked for, once all the notes are placed two lines rise from each pair of neighboring notes to a point
+    above them (a wedge). The step to be marked next is shown there, in the preview color, as "W" (whole) or "H" (half).
     The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.
 
     Attributes
@@ -699,7 +699,7 @@ class ScaleInput(StaffInput):
         note : Note or None
             The note to show; None shows none.
         color : QColor or None, default None
-            Unused: the note under the pointer is always drawn in the preview colour. Keyword-only.
+            Unused: the note under the pointer is always drawn in the preview color. Keyword-only.
 
         Examples
         --------
@@ -809,7 +809,7 @@ class ScaleInput(StaffInput):
             return
         event.accept()
         self._wheel += event.angleDelta().y()
-        notches = int(self._wheel / WHEEL_NOTCH)  # whole notches, towards zero
+        notches = int(self._wheel / WHEEL_NOTCH)  # whole notches, toward zero
         self._wheel -= notches * WHEEL_NOTCH
         if self.placing_steps:
             if abs(notches) % 2:  # two notches are back where they started
@@ -932,7 +932,7 @@ class ClefInput(StaffWidget):
     A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.
 
     The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
-    follows the pointer from place to place, in a lighter colour, until you click. Without the mouse, `move_caret` moves it,
+    follows the pointer from place to place, in a lighter color, until you click. Without the mouse, `move_caret` moves it,
     `step_symbol` switches the symbol and `place_caret` places it.
 
     Attributes
@@ -987,7 +987,7 @@ class ClefInput(StaffWidget):
         self.caret: int | None = None
         self.placed_symbol: str | None = None
         self.placed_step = 0
-        self.clef_color: QColor | None = None  # the colour of the symbol placed, for feedback; None is black
+        self.clef_color: QColor | None = None  # the color of the symbol placed, for feedback; None is black
         self._hover: int | None = None  # the place under the pointer
         self._wheel = 0  # the part of a wheel notch not yet used
         self.clef_hidden = True
@@ -1050,7 +1050,7 @@ class ClefInput(StaffWidget):
 
     def step_symbol(self, direction: int) -> None:
         """
-        Choose the next symbol of the options, or the one before, going round.
+        Choose the next symbol of the options, or the one before, going around.
 
         Parameters
         ----------
@@ -1180,12 +1180,12 @@ class ClefInput(StaffWidget):
 
     def set_clef_color(self, color: QColor | None) -> None:
         """
-        Draw the placed symbol in a colour, for feedback, or back in black.
+        Draw the placed symbol in a color, for feedback, or back in black.
 
         Parameters
         ----------
         color : QColor or None
-            The colour; None for black.
+            The color; None for black.
 
         Examples
         --------
@@ -1199,7 +1199,7 @@ class ClefInput(StaffWidget):
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         """
-        Show the symbol in the place under the pointer, in a lighter colour.
+        Show the symbol in the place under the pointer, in a lighter color.
 
         Parameters
         ----------
@@ -1322,12 +1322,12 @@ class ClefInput(StaffWidget):
         """
         super().paintEvent(_)
         if self.placed_symbol is not None:
-            symbol, step, colour = self.placed_symbol, self.placed_step, self.clef_color or QColor("black")
+            symbol, step, color = self.placed_symbol, self.placed_step, self.clef_color or QColor("black")
         else:
             step = self._hover if self._hover is not None else self.caret
             if step is None or self.locked:
                 return
-            symbol, colour = self.selected, PREVIEW
+            symbol, color = self.selected, PREVIEW
         gap = self.GAP
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -1346,7 +1346,7 @@ class ClefInput(StaffWidget):
             x=left,
             bottom=base - (step - reference) * gap / 2,  # its reference line goes where the symbol was put
             gap=gap,
-            color=colour,
+            color=color,
             font=look.font,
         )
         p.end()

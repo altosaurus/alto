@@ -1,7 +1,7 @@
 """
 The circle of fifths and the exercise on it.
 
-The circle itself (its twelve keys, its geometry and colours, and what it shows for each kind of question, a right answer and a
+The circle itself (its twelve keys, its geometry and colors, and what it shows for each kind of question, a right answer and a
 wrong one), the exercise with its three kinds of question, the answers that need two buttons, and the exercise screen.
 """
 
@@ -66,7 +66,7 @@ from alto.ui import circle as circle_module
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
     GLOW_MS,
-    WRONG_COLOUR,
+    WRONG_COLOR,
     WRONG_MS,
     FifthsCircle,
     wedge_color,
@@ -254,7 +254,7 @@ def test_a_minor_is_the_relative_of_the_major_beside_it() -> None:
     """
     Check that each pair shares a key signature, and that the minor is three semitones below the major.
 
-    The other name of a key must be the same key spelt another way.
+    The other name of a key must be the same key spelled another way.
     """
     for place, (majors, minors) in enumerate(zip(MAJORS, MINORS, strict=True)):
         count = SIGNATURES[place]
@@ -318,7 +318,7 @@ def test_the_six_chords_of_a_key_are_its_own_wedge_and_the_wedge_on_each_side_on
         )  # small letters: minor chords, the inner ring
 
 
-def test_the_chords_of_a_key_are_spelt_as_that_key_spells_them() -> None:
+def test_the_chords_of_a_key_are_spelled_as_that_key_spells_them() -> None:
     """
     Check the chord names, including where a wedge has two names and the key decides which is right.
     """
@@ -338,18 +338,18 @@ def test_each_wedge_is_30_degrees_clockwise_from_the_top() -> None:
     """
     Check that a point in the middle of each wedge is inside its own shape and no other, going clockwise from the top.
     """
-    centre = QPointF(200, 200)
+    center = QPointF(200, 200)
     for index in range(12):
-        shapes = [wedge_path(centre=centre, inner=100, outer=190, index=i) for i in range(12)]
-        point = wedge_middle(centre=centre, radius=150, index=index)
+        shapes = [wedge_path(center=center, inner=100, outer=190, index=i) for i in range(12)]
+        point = wedge_middle(center=center, radius=150, index=index)
         assert [shape.contains(point) for shape in shapes] == [i == index for i in range(12)], index
-    assert wedge_middle(centre=centre, radius=100, index=0).y() < 200
-    assert wedge_middle(centre=centre, radius=100, index=3).x() > 200
-    assert wedge_middle(centre=centre, radius=100, index=6).y() > 200
-    assert wedge_middle(centre=centre, radius=100, index=9).x() < 200
+    assert wedge_middle(center=center, radius=100, index=0).y() < 200
+    assert wedge_middle(center=center, radius=100, index=3).x() > 200
+    assert wedge_middle(center=center, radius=100, index=6).y() > 200
+    assert wedge_middle(center=center, radius=100, index=9).x() < 200
 
 
-def test_in_the_spectrum_scheme_the_hues_go_once_round_the_colour_wheel_from_red_at_the_top() -> None:
+def test_in_the_spectrum_scheme_the_hues_go_once_round_the_color_wheel_from_red_at_the_top() -> None:
     """
     Check that the spectrum scheme's wedges have twelve different hues, red at the top, each brighter when lit.
     """
@@ -369,7 +369,7 @@ def test_in_the_spectrum_scheme_the_hues_go_once_round_the_colour_wheel_from_red
 
 def test_the_circle_is_drawn_in_the_scheme_chosen_in_the_settings() -> None:
     """
-    Check that a wedge without a scheme named takes the colours of the chosen one.
+    Check that a wedge without a scheme named takes the colors of the chosen one.
     """
     settings.circle.scheme = "spectrum"
     assert wedge_color(0, inner=False).hue() == 0
@@ -395,7 +395,7 @@ def test_a_wrong_answer_is_flashed_in_the_red_of_the_wrong_buttons() -> None:
     """
     Check that the cell flashes the same red as a wrong answer's button.
     """
-    assert WRONG_COLOUR.name() == "#c62828"
+    assert WRONG_COLOR.name() == "#c62828"
 
 
 # -- the widget -------------------------------------------------------------------------------------------------------
@@ -424,7 +424,7 @@ def test_a_relative_major_question_shows_the_minors_and_asks_about_an_outer_cell
 
 def test_a_relative_minor_question_shows_the_majors_and_asks_about_an_inner_cell(app: QApplication) -> None:
     """
-    Check the other way round: every major named, the minor blank, and the inner cell is the one asked.
+    Check the other way around: every major named, the minor blank, and the inner cell is the one asked.
 
     Parameters
     ----------
@@ -524,7 +524,7 @@ def test_nothing_flashes_when_nothing_is_asked(app: QApplication) -> None:
 
 def test_what_is_drawn_for_each_state(app: QApplication) -> None:
     """
-    Check by looking at the pixels: the asked cell is lit, a wrong answer is the opposite colour, a right one is brighter.
+    Check by looking at the pixels: the asked cell is lit, a wrong answer is the opposite color, a right one is brighter.
 
     Parameters
     ----------
@@ -536,12 +536,12 @@ def test_what_is_drawn_for_each_state(app: QApplication) -> None:
     circle.resize(520, 520)
     # the red cell at the top, where the red flash has to be told apart by its stripes
     circle.show_question("major", place=0, title="A minor")
-    centre, radius = circle.geometry_of()
-    spot = wedge_middle(centre=centre, radius=0.87 * radius, index=0)
+    center, radius = circle.geometry_of()
+    spot = wedge_middle(center=center, radius=0.87 * radius, index=0)
 
-    def colour() -> QColor:
+    def color() -> QColor:
         """
-        Return the colour of the outer cell at the top, as drawn now.
+        Return the color of the outer cell at the top, as drawn now.
 
         Returns
         -------
@@ -550,22 +550,22 @@ def test_what_is_drawn_for_each_state(app: QApplication) -> None:
         """
         return circle.grab().toImage().pixelColor(int(spot.x()), int(spot.y()))
 
-    asked_colour = colour()
-    assert asked_colour.hue() <= 8 or asked_colour.hue() >= 352
-    assert asked_colour.lightness() > wedge_color(0, inner=False).lightness()
+    asked_color = color()
+    assert asked_color.hue() <= 8 or asked_color.hue() >= 352
+    assert asked_color.lightness() > wedge_color(0, inner=False).lightness()
     circle._warning = ("outer", 0, 1.0)
-    warned = colour()
-    assert abs(warned.red() - WRONG_COLOUR.red()) < 12 and warned.green() < 70 and warned.blue() < 70, warned.name()
-    assert warned != asked_colour
+    warned = color()
+    assert abs(warned.red() - WRONG_COLOR.red()) < 12 and warned.green() < 70 and warned.blue() < 70, warned.name()
+    assert warned != asked_color
     circle._warning = None
     circle.reveal(animate=False)
-    lit = colour()
-    assert lit.hue() <= 8 or lit.hue() >= 352 and lit.lightness() > asked_colour.lightness()  # brighter than when asked
+    lit = color()
+    assert lit.hue() <= 8 or lit.hue() >= 352 and lit.lightness() > asked_color.lightness()  # brighter than when asked
 
 
 def test_the_circle_is_square_and_fits_whatever_room_it_has(app: QApplication) -> None:
     """
-    Check that the circle is centred, never bigger than the room, and that it draws at any size.
+    Check that the circle is centered, never bigger than the room, and that it draws at any size.
 
     Parameters
     ----------
@@ -575,9 +575,9 @@ def test_the_circle_is_square_and_fits_whatever_room_it_has(app: QApplication) -
     circle = FifthsCircle()
     for width, height in ((300, 300), (700, 320), (320, 700), (900, 900)):
         circle.resize(width, height)
-        centre, radius = circle.geometry_of()
+        center, radius = circle.geometry_of()
         side = float(min(width, height))
-        assert centre.toTuple() == (width / 2, height / 2) and radius <= side / 2
+        assert center.toTuple() == (width / 2, height / 2) and radius <= side / 2
         assert not circle.grab().isNull()
 
 
@@ -640,7 +640,7 @@ def test_a_relative_major_question_names_the_minor_and_wants_the_major() -> None
 
 def test_a_relative_minor_question_names_the_major_and_wants_the_minor() -> None:
     """
-    Check the same the other way round: the major named, the minor wanted, and the minor keys on the buttons.
+    Check the same the other way around: the major named, the minor wanted, and the minor keys on the buttons.
     """
     questions = asked("minor")
     assert {q.circle for q in questions} == set(range(12))
@@ -673,7 +673,7 @@ def test_a_key_with_two_names_needs_both_and_a_key_with_one_needs_just_that_one(
 
 def test_a_numeral_question_names_a_chord_of_a_key_and_wants_its_numeral() -> None:
     """
-    Check that every key and every one of its six chords comes up, with the chord spelt as the key spells it.
+    Check that every key and every one of its six chords comes up, with the chord spelled as the key spells it.
     """
     questions = asked("numeral", n=600)
     assert {q.circle_key for q in questions} == set(range(12))
@@ -1162,6 +1162,6 @@ def test_a_sharp_or_flat_is_never_measured_in_the_text_font(
     monkeypatch.setattr(circle_module, "QFontMetricsF", Recording)
     image = QImage(200, 100, QImage.Format.Format_ARGB32)
     painter = QPainter(image)
-    write_text(painter, centre=QPointF(100, 50), text="B♭m", pixels=23, weight=QFont.Weight.Bold, colour=QColor("white"))
+    write_text(painter, center=QPointF(100, 50), text="B♭m", pixels=23, weight=QFont.Weight.Bold, color=QColor("white"))
     painter.end()
     assert measured and not any(sign in text for text in measured for sign in "♯♭♮")

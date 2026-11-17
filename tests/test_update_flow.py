@@ -539,9 +539,9 @@ def test_a_failed_or_unusable_answer_from_github_is_reported_with_the_reason(
     assert fakes.installs == [] and fakes.restarts == 0
 
 
-def test_cancelling_the_wait_for_github_shows_nothing_and_a_late_answer_is_ignored(app: QApplication, fakes: Fakes) -> None:
+def test_canceling_the_wait_for_github_shows_nothing_and_a_late_answer_is_ignored(app: QApplication, fakes: Fakes) -> None:
     """
-    Check that cancelling while GitHub is slow marks the check cancelled, shows nothing, and ignores the answer that comes later.
+    Check that canceling while GitHub is slow marks the check canceled, shows nothing, and ignores the answer that comes later.
 
     Parameters
     ----------
@@ -555,7 +555,7 @@ def test_cancelling_the_wait_for_github_shows_nothing_and_a_late_answer_is_ignor
     dialog.fetcher.start(seconds=5)
     dialog.reject()
     QTest.qWait(800)
-    assert dialog.cancelled and dialog.ended and dialog.release is None and dialog.error == ""
+    assert dialog.canceled and dialog.ended and dialog.release is None and dialog.error == ""
     assert fakes.shown == []
 
 
@@ -899,7 +899,7 @@ def test_declining_the_update_of_a_packaged_copy_downloads_nothing(
     assert fakes.package_runs == [] and fakes.handoffs == [] and fakes.quits == 0
 
 
-def test_a_failed_or_cancelled_download_hands_nothing_over_and_leaves_alto_open(
+def test_a_failed_or_canceled_download_hands_nothing_over_and_leaves_alto_open(
     app: QApplication,
     fakes: Fakes,
     monkeypatch: pytest.MonkeyPatch,
@@ -1105,9 +1105,9 @@ def test_the_update_window_cannot_be_closed_until_the_update_has_ended(app: QApp
     assert not dialog.isVisible()
 
 
-def test_cancelling_the_check_of_the_main_branch_stops_it_quietly(app: QApplication, fakes: Fakes) -> None:
+def test_canceling_the_check_of_the_main_branch_stops_it_quietly(app: QApplication, fakes: Fakes) -> None:
     """
-    Check that cancelling stops the program, marks the check cancelled, and shows no message.
+    Check that canceling stops the program, marks the check canceled, and shows no message.
 
     Parameters
     ----------
@@ -1120,7 +1120,7 @@ def test_cancelling_the_check_of_the_main_branch_stops_it_quietly(app: QApplicat
     dialog.runner.start(sys.executable, arguments=["-c", SLEEPS])
     assert dialog.runner.running
     dialog.reject()
-    assert dialog.cancelled and dialog.ended and not dialog.runner.running
+    assert dialog.canceled and dialog.ended and not dialog.runner.running
     assert fakes.shown == [] and dialog.commit == ""
 
 

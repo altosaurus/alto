@@ -115,7 +115,7 @@ class QuestionPreview(QDialog):
             circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
             circle.reveal(animate=False)
             lay.addWidget(circle, alignment=Qt.AlignmentFlag.AlignHCenter)
-        if q.keyboard is not None:
+        if q.keyboard is not None or q.keyboard_notes:
             if q.key_staff:
                 key_staff = StaffWidget(
                     gap=8.0,
@@ -129,7 +129,10 @@ class QuestionPreview(QDialog):
                 lay.addWidget(key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
             keyboard = KeyboardWidget()
             keyboard.max_key_width = 30.0 if q.key_staff else 38.0
-            keyboard.show_key(q.keyboard.midi, span=q.keyboard_range)
+            if q.keyboard_notes:
+                keyboard.show_keys([note.midi for note in q.keyboard_notes], span=q.keyboard_range)
+            elif q.keyboard is not None:
+                keyboard.show_key(q.keyboard.midi, span=q.keyboard_range)
             lay.addWidget(keyboard)
 
         lines = [f"<b>Answer:</b> {self._answer_text()}"]
@@ -146,7 +149,15 @@ class QuestionPreview(QDialog):
         lay.addWidget(info)
 
         buttons = QDialogButtonBox()
-        notes = q.staff or ([[q.keyboard]] if q.keyboard else [[q.construct]] if q.construct is not None else scale)
+        notes = q.staff or (
+            [q.keyboard_notes]
+            if q.keyboard_notes
+            else [[q.keyboard]]
+            if q.keyboard
+            else [[q.construct]]
+            if q.construct is not None
+            else scale
+        )
         if notes:
             play = QPushButton("Play")
             play.clicked.connect(lambda: sounds.play_notes(notes))

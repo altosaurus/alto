@@ -9,7 +9,7 @@ permalink: /credits/
 Alto's own code is released under the [MIT License](https://github.com/altosaurus/alto/blob/main/LICENSE). You can use,
 change and share it freely, including in other projects.
 
-The fonts and recordings bundled with Alto are not covered by that licence. Each keeps its author's terms.
+The fonts and recordings bundled with Alto are not covered by that license. Each keeps its author's terms.
 
 ## Music fonts
 
@@ -36,7 +36,7 @@ appear only to say where a font comes from or is used.
 
 The piano is the [Salamander Grand Piano](https://sfzinstruments.github.io/pianos/salamander) V3 by Alexander Holm, a Yamaha C5
 grand recorded with two AKG C414 microphones, used under the
-[Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/) licence. Alto uses 30 of its recordings from one
+[Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/) license. Alto uses 30 of its recordings from one
 dynamic layer, converted to mono, trimmed, faded and levelled. The author does not endorse Alto.
 
 The flute, French horn, viola, marimba and vibraphone use recordings from the
@@ -52,5 +52,5 @@ Windows mark is four squares. The marks belong to their owners and are shown onl
 
 Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0) and [numpy](https://numpy.org/) (BSD-3-Clause).
 
-The complete list, with licence texts, is in
+The complete list, with license texts, is in
 [THIRD_PARTY_NOTICES.md](https://github.com/altosaurus/alto/blob/main/THIRD_PARTY_NOTICES.md) in the repository.

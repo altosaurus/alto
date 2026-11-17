@@ -199,7 +199,7 @@ def test_a_menu_row_can_hold_a_picture_inline_or_on_its_own_line(app: QApplicati
     """
     plain = sp._Row("Plain")
     plain.attach(QLabel("inline"))
-    plain.fit()  # only a tall row needs fitting
+    plain.fit()  # only a tall row needs to be fitted
     tall = sp._Row("Tall", tall=True)
     tall.attach(QLabel("below"))
     assert tall.minimumHeight() > 0 and plain._contents.count() >= 3
@@ -280,9 +280,9 @@ def test_the_choice_checklist_always_keeps_one_choice(app: QApplication) -> None
     assert checklist.selected() == {"a", "b"} and checklist.boxes["a"].isEnabled() and changed == [1]
 
 
-def test_the_key_signature_page_greys_out_the_keys_until_it_is_switched_on(app: QApplication) -> None:
+def test_the_key_signature_page_grays_out_the_keys_until_it_is_switched_on(app: QApplication) -> None:
     """
-    Check that the key signature page greys out the keys until it is switched on.
+    Check that the key signature page grays out the keys until it is switched on.
 
     Parameters
     ----------

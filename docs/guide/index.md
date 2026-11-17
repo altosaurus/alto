@@ -24,7 +24,7 @@ Read [Getting oriented]({{ '/guide/orientation/' | relative_url }}) first, whate
 | Get the program running, find your way around, and follow the project's rules | [Getting oriented]({{ '/guide/orientation/' | relative_url }}) |
 | Understand the Python features the code leans on (dataclasses, type hints, keyword-only arguments, closures) | [Python beyond the basics]({{ '/guide/python/' | relative_url }}) |
 | Understand Qt: the event loop, signals, painting, ownership, and the traps in each | [Qt and PySide6]({{ '/guide/qt/' | relative_url }}) |
-| Change how the program looks (colours, themes, stylesheets, icons, custom widgets) | [Styling beyond QtWidgets]({{ '/guide/styling/' | relative_url }}) |
+| Change how the program looks (colors, themes, stylesheets, icons, custom widgets) | [Styling beyond QtWidgets]({{ '/guide/styling/' | relative_url }}) |
 | Change how music is drawn (clefs, noteheads, key signatures, fonts) | [Rendering music notation]({{ '/guide/notation/' | relative_url }}) |
 | Change or add sounds (instruments, pitch shifting, timing) | [Computer audio]({{ '/guide/audio/' | relative_url }}) |
 | Change what gets asked and when | [Spaced repetition and adaptive practice]({{ '/guide/spaced-repetition/' | relative_url }}) |
@@ -86,7 +86,7 @@ are what make that true, and the guide assumes you keep them.
 A workflow that works without an assistant:
 
 1. Find the code. Search the [API reference]({{ '/api/' | relative_url }}) or run `grep -rn "name" alto/`.
-2. Read the docstring and its example. Open a Python shell and run the example with small changes until the behaviour is clear.
+2. Read the docstring and its example. Open a Python shell and run the example with small changes until the behavior is clear.
 3. Write a failing test for the change first, in `tests/`. It tells you when you are done.
 4. Make the change. Run `pytest -x -q` often, since most mistakes show up in seconds.
 5. Run the full checks listed in [Getting oriented]({{ '/guide/orientation/' | relative_url }}) before you commit.
@@ -103,7 +103,7 @@ Property animation. Offscreen platform. Doctest. Fixture. Monkeypatch.*
 
 ## A word on the reading lists
 
-Each chapter ends with further reading. They favour books, peer-reviewed papers, standards and official documentation over
+Each chapter ends with further reading. They favor books, peer-reviewed papers, standards and official documentation over
 blog posts. Where a source is on the author's own site (as the Stanford audio books are), it is there because it is the
 primary source. Web addresses change, so the lists give authors, titles, publishers and years, which are enough to find a
 book or paper even when a link has gone. Treat the addresses as hints.

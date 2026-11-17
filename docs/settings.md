@@ -20,24 +20,24 @@ the selected one's settings appear on the right.
 The Appearance page has four sections, **Theme**, **Notation style**, **Keyboard style** and **Transitions**, which you switch between with the pill-shaped control at the top.
 
 **Theme.** The themes are in a list on the left. The right side is the theme's card: its name, three pictures of the window one
-above another. Beside the Light and Dark pictures are squares of that version's colours, and the window, accent and ink colours
+above another. Beside the Light and Dark pictures are squares of that version's colors, and the window, accent and ink colors
 written out as hexadecimal codes. The pictures are **Light**, **Dark** and **System**. The System picture is cut through
 on a slant, light on one side and dark on the other, because that version is light when your operating system is set to light and
 dark when it is set to dark, and changes with it. Choosing a theme in the list uses it at once, in whichever of Light, Dark and
 System you chose last, so you can go down the list and see each theme in the version you prefer. Clicking a picture changes the
 version. The picture in use is outlined, and its theme is bold in the list. The first theme, **Default**, is the desktop's own
-colours. Then there is **Studio**, with cool greys and a clear blue, and twenty-four more: Parchment, Slate Blue, Sage, Harbour,
+colors. Then there is **Studio**, with cool grays and a clear blue, and twenty-four more: Parchment, Slate Blue, Sage, Harbor,
 Lavender Hush, Rosewater, Marigold, Pine, Indigo Ink, Graphite, Terracotta, Mint, Sky, Plum, Sand, Teal, Copper, Charcoal and Gold,
 Cherry, Moss, Arctic, Dusk, Lime Shock and Ember.
 
 **Your own themes.** The top of the theme list is **My themes**, with a row **＋ New theme…**. Choosing it opens an editor in
-place of the card. **Save** (filled in the accent colour), **Cancel** and, for a theme already saved, **Delete theme** are at the top
-right of the editor, where they stay in view while the colours below them scroll. Give the theme a name, then choose a colour for each part of its **Light version** and its **Dark version**:
-the window, panels, text, quiet text, outlines, accent and the track behind a switch. Click a colour to open the colour picker: the pointer becomes a hand over a colour, a ring appears round it, and the code beside it turns bold and dark. A
-small picture of each version follows the colours as you change them. A new theme starts as a copy of Studio, and choosing another
-theme in the **Start from** list takes that theme's colours at once, for both versions. **Save** keeps the theme and uses it, in the
+place of the card. **Save** (filled in the accent color), **Cancel** and, for a theme already saved, **Delete theme** are at the top
+right of the editor, where they stay in view while the colors below them scroll. Give the theme a name, then choose a color for each part of its **Light version** and its **Dark version**:
+the window, panels, text, quiet text, outlines, accent and the track behind a switch. Click a color to open the color picker: the pointer becomes a hand over a color, a ring appears around it, and the code beside it turns bold and dark. A
+small picture of each version follows the colors as you change them. A new theme starts as a copy of Studio, and choosing another
+theme in the **Start from** list takes that theme's colors at once, for both versions. **Save** keeps the theme and uses it, in the
 version you last chose. Your themes are kept with your other settings, so they are there next time, and they are part of a
-backup. A theme of your own appears in the list with the same three pictures as any other, and its card has a **Change colours…**
+backup. A theme of your own appears in the list with the same three pictures as any other, and its card has a **Change colors…**
 button for the editor, from which you can also **Delete theme** after it asks.
 
 **Notation style.** The music font used to draw clefs, notes and accidentals. Each choice shows a preview. Your choice
@@ -46,7 +46,7 @@ applies to every staff in the app, including the small pictures in the settings 
 | Style | Character |
 |---|---|
 | Finale Maestro | The look of Finale. |
-| Leland | MuseScore 4's font. Light and modern, modelled on SCORE. |
+| Leland | MuseScore 4's font. Light and modern, modeled on SCORE. |
 | Bravura | The reference font of the SMuFL standard, which Dorico uses by default. |
 | Noto Music | Google's engraved look. |
 | Sebastian | A classic engraved face with generous proportions. |
@@ -60,8 +60,8 @@ applies to every staff in the app, including the small pictures in the settings 
 Under the styles, **Baritone clef** chooses how that clef is written. It is the same staff and the same notes either way
 (the bottom line is B2 and the top line is C4):
 
-- **F clef, on the middle line** is the default. It looks like a bass clef moved up, with its dots either side of the middle line.
-- **C clef, on the top line** looks like an alto clef moved up, with its centre on the top line.
+- **F clef, on the middle line** is the default. It looks like a bass clef moved up, with its dots on either side of the middle line.
+- **C clef, on the top line** looks like an alto clef moved up, with its center on the top line.
 
 The choice applies to every baritone staff in the app and its pictures, in whichever music font you have chosen.
 
@@ -74,24 +74,24 @@ small picture of the keys. Your choice applies to every keyboard in the app. The
 | Modern piano | A current upright or grand, with red felt under the fallboard. |
 | Antique ivory | Naturals aged to a warm yellow, in a rosewood case. |
 | Harpsichord, Italian | Boxwood naturals and dark sharps in a cypress case. |
-| Harpsichord, French | Reversed colours: ebony naturals with bone-topped sharps. |
+| Harpsichord, French | Reversed colors: ebony naturals with bone-topped sharps. |
 | Baroque pipe organ | Bone and ebony keys in an oak case, under a row of stop knobs. |
 | Tonewheel organ | Plastic keys in a walnut case, with the lowest octave reversed. |
 | Flat and minimal | No case and no gradients. Reads well at small sizes. |
 | Engraving | Ink on paper, like a plate in an old method book. |
-| Colour by note | One hue per semitone, so every C has the same colour. |
+| Color by note | One hue per semitone, so every C has the same color. |
 | Midnight neon | Dark keys with a cyan glow and magenta sharps. |
 | High contrast | Pure black and white with heavy outlines and a yellow dot on every C. |
 
-The colours are typical of the materials, not measurements of one instrument.
+The colors are typical of the materials, not measurements of one instrument.
 
 **Build your own.** Below the cards, each part of the keyboard has a row: **Naturals**, **Sharps**, **Case**, **Felt strip** and
-**Sharp caps**. Click a part's swatch to open the colour picker, or click one of the round chips for a colour named after a
-material: Acrylic white, Mother-of-pearl, Ivory, Bone, Boxwood, Maple, Cypress, Oak, Walnut, Rosewood, Ebonised pearwood, Ebony,
-Black acrylic, Aluminium, Brass, Red felt, Green baize and Blue felt. Hover a chip to see its name. The case, felt and caps can be
-left out with the ✕ chip. Changing any part switches to the **Custom** style, and your colours are remembered.
+**Sharp caps**. Click a part's swatch to open the color picker, or click one of the round chips for a color named after a
+material: Acrylic white, Mother-of-pearl, Ivory, Bone, Boxwood, Maple, Cypress, Oak, Walnut, Rosewood, Ebonized pearwood, Ebony,
+Black acrylic, Aluminum, Brass, Red felt, Green baize and Blue felt. Hover a chip to see its name. The case, felt and caps can be
+left out with the ✕ chip. Changing any part switches to the **Custom** style, and your colors are remembered.
 
-The breve is always drawn in its square form, whichever font you choose. All the fonts are bundled with Alto except Noto Music, which is read from your system.
+The double whole note is always drawn in its square form, whichever font you choose. All the fonts are bundled with Alto except Noto Music, which is read from your system.
 
 **Transitions.** How the home page changes when you switch between the exercises and the lessons. The choices are in a list on
 the left, and a preview on the right plays the one you pick, once, on a mock of the home page with the app's own cards and the
@@ -113,12 +113,12 @@ The choice applies the next time you flip the switch.
 
 **Instrument.** The sound used for notes and for the correct-answer chime. The instruments are listed in a box on the
 left: piano, flute, French horn, viola, marimba and vibraphone. The one in use is in bold and
-ticked. Choose any of them to see a summary on the right of what its sound is made from:
+checked. Choose any of them to see a summary on the right of what its sound is made from:
 
 - where the recordings come from, who played them, and when and how they were recorded;
 - which articulation and dynamic were used, such as blown without vibrato at fortissimo or struck with yarn mallets;
 - how many notes are recorded, their range, and whether every semitone is covered (notes in between are shifted from
-  a neighbour);
+  a neighbor);
 - how much space they take, and the terms they are available under.
 
 The viola can be played two ways, so it has one entry. Its page describes the **Arco** (bowed) and **Pizzicato**
@@ -145,10 +145,10 @@ the install script; a packaged copy always follows releases. See [Getting starte
 ## Exercise settings
 
 Note Identification, Keyboard Identification and Note Construction have a sliders button at the top right of the
-exercise. It opens a pane on the right. Each row summarises its setting with a small picture, and clicking a row opens
+exercise. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
 that setting's page. See [Exercises]({{ '/exercises/' | relative_url }}) for what each option does.
 
-Changing a setting starts a new question straight away, and the settings are remembered the next time you open Alto.
+Changing a setting starts a new question right away, and the settings are remembered the next time you open Alto.
 
 ## Where settings are stored
 

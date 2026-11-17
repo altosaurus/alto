@@ -72,7 +72,7 @@ def test_a_set_recorded_in_minor_thirds_is_described_as_every_third_semitone() -
     Check that a set recorded in minor thirds is described as every third semitone.
     """
     c = coverage(range(21, 109, 3))
-    assert c.describe() == "30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbour."
+    assert c.describe() == "30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor."
 
 
 def test_every_second_semitone_is_described_as_such() -> None:

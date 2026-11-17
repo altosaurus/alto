@@ -13,11 +13,11 @@ from going wrong, and the design rules that decide how long and in what manner t
 
 An animation changes a value over time. Everything else follows from that sentence.
 
-- Pick a **value** that describes the look: a number from 0 to 1, a position, a width, a colour.
+- Pick a **value** that describes the look: a number from 0 to 1, a position, a width, a color.
 - Pick a **start** and an **end** and a **duration**.
 - At each tick Qt computes where the value is on its way (a number between the start and the end, shaped by an **easing
   curve**) and hands it to you.
-- You apply it: move something, resize it, set a colour, call `update()` and repaint with it.
+- You apply it: move something, resize it, set a color, call `update()` and repaint with it.
 
 A screen refreshes about 60 times a second, so a 200 ms animation is roughly twelve frames. Qt drives the ticks from its
 event loop, which means they stop if you block the loop. That is why the first rule of
@@ -27,7 +27,7 @@ event loop, which means they stop if you block the loop. That is why the first r
 
 | Class | What it does |
 |---|---|
-| `QVariantAnimation` | Animates *any* value (a float, a colour, a point) and calls a function with each value: `valueChanged`. The general tool. |
+| `QVariantAnimation` | Animates *any* value (a float, a color, a point) and calls a function with each value: `valueChanged`. The general tool. |
 | `QPropertyAnimation` | Animates a named **property** of an object (`b"pos"`, `b"maximumWidth"`, `b"volume"`) directly, so you do not write the callback. |
 | `QParallelAnimationGroup` | Runs several animations at once. |
 | `QSequentialAnimationGroup` | Runs them one after another. |
@@ -47,7 +47,7 @@ which Qt's set is based on.
 
 Rules of thumb that most design systems agree on: use ease-**out** for things *entering* or responding to the user (they arrive
 and settle); ease-**in** for things *leaving* (they accelerate away); ease-**in-out** for things that move from one place to
-another on screen; and **linear** only for colour fades, rotations and progress bars, where no physical object is implied.
+another on screen; and **linear** only for color fades, rotations and progress bars, where no physical object is implied.
 
 ## Alto's animations, one at a time
 
@@ -86,7 +86,7 @@ and the final state is set in `finished`, not assumed, so the widgets always end
 
 The exercise's settings pane opens by animating `maximumWidth` of the pane from 0 to `PANE_WIDTH` (`QPropertyAnimation(self.pane,
 b"maximumWidth", self)`, 220 ms, `OutCubic`). The layout does the rest: as the pane's allowed width grows, the layout gives it
-the room and shrinks its neighbour. This is a common Qt trick: **animate a constraint, not a position**, and let the layout
+the room and shrinks its neighbor. This is a common Qt trick: **animate a constraint, not a position**, and let the layout
 move everything. The pane is hidden when it finishes at zero (`_pane_settled`) so it takes no space and cannot be tabbed into.
 
 ### The sidebar: animate the splitter
@@ -102,14 +102,14 @@ tick, calls `splitter.setSizes`. The animation is a number; the callback decides
 ### The switch knob: animate a number, paint from it
 
 `Switch` (also in `settings_panel.py`) holds a float `_pos` between 0 and 1. A `QVariantAnimation` of 140 ms moves `_pos`, and
-each tick calls `update()`. `paintEvent` draws the track colour as `blend(off, b=on, t=self._pos)` and the knob at
-`margin + r + _pos * travel`. One number drives both the colour and the position, so they cannot disagree. The class
+each tick calls `update()`. `paintEvent` draws the track color as `blend(off, b=on, t=self._pos)` and the knob at
+`margin + r + _pos * travel`. One number drives both the color and the position, so they cannot disagree. The class
 `setChecked` skips the animation (**"no animation when set programmatically"**) so that loading a setting at start-up does not
 make every switch slide.
 
-### The right/wrong flash: animate a colour
+### The right/wrong flash: animate a color
 
-`ExerciseView._flash` fades an answer button from black to green or red in 350 ms with a **linear** curve, because it is a colour
+`ExerciseView._flash` fades an answer button from black to green or red in 350 ms with a **linear** curve, because it is a color
 fade. It uses `QVariantAnimation` with a start of 0.0 and an end of 1.0 and in its callback computes `blend(start, b=end, t=t)`
 and sets the button's style sheet from the result. The animations are kept in a list (`self._anims`) that is cleared when the next
 question appears, so nothing animates a button that no longer exists.
@@ -128,7 +128,7 @@ Not visual, but the same idea: `Sounds._release` fades a `QSoundEffect`'s `volum
 3. **Set the end state in `finished`.** Do not rely on the last tick landing exactly on the end value.
 4. **Guard against re-entry.** Ignore a request while a transition is running (`SlideStack`), or cancel and restart (the sidebar).
    Decide deliberately which; the one you did not decide on is the one with the bug.
-5. **Cancel late callbacks with a token.** A `QTimer.singleShot` cannot be cancelled once scheduled. If the callback might fire
+5. **Cancel late callbacks with a token.** A `QTimer.singleShot` cannot be canceled once scheduled. If the callback might fire
    after the state has moved on (a new question has appeared), have it compare a counter it captured against the current one and
    do nothing if they differ. `ExerciseView._pair_token` and `Sounds._sequence_run` do this.
 6. **Do not animate loading.** Setting a value from saved settings should jump, not animate (see `Switch.setChecked`).
@@ -139,7 +139,7 @@ Not visual, but the same idea: `Sounds._release` fades a `QSoundEffect`'s `volum
 
 Tests run the event loop long enough for an animation to finish: `QTest.qWait(300)` after triggering a 220 ms slide, then
 assert the end state. A shorter wait asserts the middle. `tests/test_settings_panels.py` has a `slide()` helper that waits
-300 ms for a page to finish sliding, and `SlideStack.sliding` reports whether a slide is under way. To test that your code ignores a request
+300 ms for a page to finish sliding, and `SlideStack.sliding` reports whether a slide is underway. To test that your code ignores a request
 during a slide, call it twice in a row and assert one slide happened.
 
 Because tests wait in real time, keep durations short. There is no virtual clock in Qt's animation framework.

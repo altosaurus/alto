@@ -1,5 +1,5 @@
 """
-Choosing who is practising. There is no password: a profile is just a name that keeps its own history.
+Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.
 
 Examples
 --------
@@ -38,7 +38,7 @@ from alto.ui.store import (
 
 class ProfileDialog(QDialog):
     """
-    Ask who is practising: a first name on launch, then a list to switch between.
+    Ask who is practicing: a first name on launch, then a list to switch between.
 
     On first launch (no profiles yet) it asks for a name. Afterwards it lists the profiles to switch between and lets you add
     another.
@@ -106,7 +106,7 @@ class ProfileDialog(QDialog):
                 "often, and ones you answer quickly and correctly fade away. There is no password.",
             )
         else:
-            lay.addWidget(QLabel("<h3>Who is practising?</h3>"))
+            lay.addWidget(QLabel("<h3>Who is practicing?</h3>"))
             about = QLabel("Each profile keeps its own history.")
         about.setWordWrap(True)
         about.setStyleSheet("color: gray;")

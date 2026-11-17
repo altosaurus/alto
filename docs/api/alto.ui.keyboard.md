@@ -2,14 +2,14 @@
 title: alto.ui.keyboard
 parent: api
 package: alto.ui
-order: 37
+order: 40
 permalink: /api/alto.ui.keyboard/
 ---
 {% raw %}
 The on-screen piano keyboard, drawn to real proportions, and a miniature of the whole piano for choosing a span of keys.
 
 `KeyboardWidget` shows a range of keys and can highlight one. `KeyboardSpan` shows all 88 keys in miniature, shades the
-range that will be asked, and can be dragged to change it. Colours and materials come from `keyboard_styles`.
+range that will be asked, and can be dragged to change it. Colors and materials come from `keyboard_styles`.
 
 **Examples**
 
@@ -28,17 +28,18 @@ KeyboardWidget(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-A piano keyboard drawn to real proportions that can highlight one key.
+A piano keyboard drawn to real proportions that can highlight one or more keys.
 
 **Attributes**
 
 - `lo` (*int*): The lowest key shown, as a MIDI number.
 - `hi` (*int*): The highest key shown, as a MIDI number.
 - `highlight` (*int or None*): The key to highlight.
+- `additional_highlights` (*set of int*): Other keys highlighted together with `highlight`.
 - `style_override` (*KeyboardStyle or None*): A fixed style, for the preview cards in the settings; otherwise the style chosen in the settings is used.
 - `pad` (*float*): The frame padding, in pixels.
 - `max_key_width` (*float*): The widest a key may be, in pixels. Smaller when something else (the key signature) shares the page.
-- `highlight_color` (*QColor*): The colour of the highlighted key.
+- `highlight_color` (*QColor*): The color of the highlighted key.
 
 **Examples**
 
@@ -152,17 +153,46 @@ Highlight a key, and optionally choose the range of keys to show.
 (48, 71, 60)
 ```
 
+### KeyboardWidget.show_keys
+
+```python
+def show_keys(
+    midis: list[int],
+    *,
+    span: tuple[int, int] | None = None,
+) -> None
+```
+
+Highlight several keys together, clearing highlights from the previous question.
+
+**Parameters**
+
+- `midis` (*list of int*): The MIDI numbers to highlight; an empty list clears all highlights.
+- `span` (*tuple of (int, int) or None, default None*): The inclusive range to display, widened to white keys. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> keyboard = KeyboardWidget()
+>>> keyboard.show_keys([60, 66], span=(48, 72))
+>>> keyboard.highlight, keyboard.additional_highlights
+(60, {66})
+>>> keyboard.show_key(62)
+>>> keyboard.additional_highlights
+set()
+```
+
 ### KeyboardWidget.set_highlight_color
 
 ```python
 def set_highlight_color(color: QColor) -> None
 ```
 
-Choose the colour of the highlighted key and redraw.
+Choose the color of the highlighted key and redraw.
 
 **Parameters**
 
-- `color` (*QColor*): The colour.
+- `color` (*QColor*): The color.
 
 **Examples**
 

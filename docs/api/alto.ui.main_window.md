@@ -2,7 +2,7 @@
 title: alto.ui.main_window
 parent: api
 package: alto.ui
-order: 41
+order: 44
 permalink: /api/alto.ui.main_window/
 ---
 {% raw %}
@@ -55,7 +55,7 @@ The application window.
 - `SIDEBAR_MIN` (*int*): The narrowest the exercise list can be before it collapses, in pixels.
 - `SIDEBAR_DEFAULT` (*int*): The list's width the first time.
 - `APP_TITLE` (*str*): The title shown on the start screen.
-- `learner` (*Learner or None*): Who is practising, and their history; None practises without recording.
+- `learner` (*Learner or None*): Who is practicing, and their history; None practices without recording.
 - `nav` (*QListWidget*): The exercise list.
 - `stack` (*QStackedWidget*): The pages: the start screen, then exercises and the statistics or database while they are open.
 - `home` (*HomePage*): The start screen.
@@ -83,7 +83,7 @@ Build the window and load every saved setting.
 
 **Parameters**
 
-- `learner` (*Learner or None, default None*): Who is practising. Without one, nothing is recorded and the statistics buttons are hidden.
+- `learner` (*Learner or None, default None*): Who is practicing. Without one, nothing is recorded and the statistics buttons are hidden.
 
 **Constructor examples**
 
@@ -246,7 +246,7 @@ True
 def rebuild() -> None
 ```
 
-Make the window's contents again in the same window, so every icon and colour is drawn in the new theme.
+Make the window's contents again in the same window, so every icon and color is drawn in the new theme.
 
 The window itself stays, so it does not vanish and reappear. The page that was open is shown again, with the list
 already open or closed as it was, not sliding.

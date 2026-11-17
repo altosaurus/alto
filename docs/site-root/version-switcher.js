@@ -5,7 +5,7 @@
 // from a site with that list (a local preview) keeps the plain text it was built with.
 //
 // A version's stylesheet is frozen with it, so this file brings its own styles (the `avs-` classes below) instead of relying on
-// the page's. They use the page's colours where it defines them, with plain fallbacks, and the icons have their size written on them.
+// the page's. They use the page's colors where it defines them, with plain fallbacks, and the icons have their size written on them.
 (function () {
   "use strict";
   var slot = document.getElementById("version-slot");

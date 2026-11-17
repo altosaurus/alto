@@ -20,6 +20,9 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- Keyboard Interval Identification with configurable keyboard and interval ranges, compound intervals, and Limited, All,
+  or Compact answer buttons. Compact answers use a quality letter and an interval number.
+
 - A searchable glossary in the top toolbar, with notation examples, playback, and related exercise and lesson tiles.
 - An interactive Scale Identification reference and lesson, with scale comparisons and note highlighting.
 - An optional octave answer in Note Identification, saved window geometry, and Restore defaults in Settings.
@@ -30,6 +33,10 @@ Changes that are in the development docs and not in a release yet.
 
 ### Changed
 {: .no-toc}
+
+- Keyboard exercise icons use seven realistically proportioned white keys; the interval icon adds a span bracket.
+- Exercise button-group labels appear above their buttons, and theme rebuilds preserve the exercise settings page.
+- Code, documentation, and interface text use American English; saved color-scheme settings remain compatible.
 
 - Appearance settings use a hierarchical sidebar and grouped overview. Data pages share the toolbar Back button,
   and active toolbar icons use the theme accent color.
@@ -69,7 +76,7 @@ Released 2026-11-15. [GitHub release](https://github.com/altosaurus/alto/release
 - The documentation home page has a Download Alto button under the first paragraph, and a download section in place of "Get started". Its
   main button names the visitor's system and goes to the right file, with the other systems listed below it.
 - The documentation has a Release notes page, made from this changelog, under About in the sidebar and linked from the home page.
-- The circle of fifths has a Colours setting with fourteen colour schemes, and a Create your own that saves schemes of your own. It
+- The circle of fifths has a Colors setting with fourteen color schemes, and a Create your own that saves schemes of your own. It
   applies to the exercise, the lessons and the reference.
 
 ### Changed
@@ -77,14 +84,14 @@ Released 2026-11-15. [GitHub release](https://github.com/altosaurus/alto/release
 
 - The notation-font previews in Settings use the DSCH motif (D, E♭, C, B) in treble clef.
 - Instrument previews play the same DSCH motif as the notation-font previews.
-- Exercise and lesson icons use consistent musical glyphs and follow the theme colour.
+- Exercise and lesson icons use consistent musical glyphs and follow the theme color.
 
 - In Key Signature Construction a number on the fork lights up as the mouse passes over it, the circle can be dragged along the fork, and
   the mouse wheel works over the staff and the Answer button too.
 - The documentation sidebar sorts the pages under headings that open and close, with the developer guide and the API reference as single
   rows that open their pages, long pages have an "On this page" list that follows your reading, and every page ends with links to the
   previous and next pages. The home page leaves checking a download and updating to the Getting started page, which now explains both.
-- The circle of fifths is coloured from cyan through blue to indigo by key signature, instead of every colour of the rainbow.
+- The circle of fifths is colored from cyan through blue to indigo by key signature, instead of every color of the rainbow.
 - The circle of fifths opens, and redraws when its window is resized, several times faster. Lessons that show it open faster too.
 
 ### Fixed
@@ -130,10 +137,10 @@ The first release.
 
 **Look and sound**
 
-- 26 colour themes, including light, dark and following the desktop, and a form to make your own.
+- 26 color themes, including light, dark and following the desktop, and a form to make your own.
 - 11 notation styles (music fonts), 12 keyboard looks, and 30 transitions between the exercise and lesson cards, including none.
 - The Salamander Grand Piano as the default piano, and recordings of a marimba, vibraphone, flute, horn and viola, chosen in Settings.
-  The recordings and fonts are used under their own licences, listed in `THIRD_PARTY_NOTICES.md`.
+  The recordings and fonts are used under their own licenses, listed in `THIRD_PARTY_NOTICES.md`.
 
 **Your data**
 
@@ -150,7 +157,7 @@ The first release.
   Alto installs nothing whose signature does not verify.
 - Settings → Updates shows the version you have, and a choice to follow the main branch instead of releases, for the latest
   changes before they are released.
-- A Linux download: a `.tar.gz` with its own Python and Qt, so nothing else needs installing. `sh install.sh install` installs it
+- A Linux download: a `.tar.gz` with its own Python and Qt, so nothing else needs to be installed. `sh install.sh install` installs it
   for you alone, with an entry in the application menu, and `sh install.sh uninstall` removes it and keeps your data unless
   `--purge` is given. Installing a newer download over it updates it.
 - A Windows installer: Alto for one user with no administrator prompt, an entry in the Start menu and in Settings → Apps, and an

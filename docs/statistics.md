@@ -19,11 +19,11 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 ### What you see
 
 - **Summary tiles:** questions answered, how often the first answer was right, the typical time to a first answer,
-  attempts per question, days practised, and time spent practising. A single answer counts for at most two minutes of
+  attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
   practice time, so leaving the app open does not inflate it.
-- **Questions answered:** a bar per day, with the questions you got right first time in green and the ones you missed in red.
+- **Questions answered:** a bar per day, with the questions you got right on the first try in green and the ones you missed in red.
   Short timeframes switch to hours, and long ones to weeks or months.
-- **Right first time:** your first-try accuracy over time. Days with no answers leave a gap.
+- **Right on the first try:** your first-try accuracy over time. Days with no answers leave a gap.
 - **Typical time to first answer:** the median, over time, so a single slow answer does not distort it.
 - **By exercise:** accuracy, number of questions and typical time for each exercise.
 - **Reviews:** a calendar of the last 12 months, a square per day (weeks run left to right, Monday at the top), darker
@@ -60,7 +60,7 @@ The database button next to the statistics button opens a read-only view of what
 Three tables are available:
 
 - **Answers:** every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.
-- **Questions:** the record kept for each question: its strain, how often it was answered, right first time, missed, typical time and when it was last seen.
+- **Questions:** the record kept for each question: its strain, how often it was answered, right on the first try, missed, typical time and when it was last seen.
 - **Profiles:** everyone who has a profile, with how many answers and questions each has.
 
 Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are

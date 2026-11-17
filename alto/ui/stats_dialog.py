@@ -220,9 +220,9 @@ class Tile(QFrame):
 
         Examples
         --------
-        >>> tile = Tile("Days practised")
+        >>> tile = Tile("Days practiced")
         >>> tile.caption.text()
-        'Days practised'
+        'Days practiced'
         """
         super().__init__(parent)
         self.setObjectName("keyGroup")  # the same bordered box used elsewhere in the settings
@@ -352,11 +352,11 @@ class StatsPage(QWidget):
             key: Tile(caption)
             for key, caption in (
                 ("questions", "Questions answered"),
-                ("accuracy", "Right first time"),
+                ("accuracy", "Right on the first try"),
                 ("speed", "Typical first answer"),
                 ("tries", "Attempts per question"),
-                ("days", "Days practised"),
-                ("time", "Time practising"),
+                ("days", "Days practiced"),
+                ("time", "Time practicing"),
             )
         }
         tiles = QGridLayout()
@@ -366,9 +366,9 @@ class StatsPage(QWidget):
         lay.addLayout(tiles)
 
         self.volume = StackedBarChart("Questions answered")
-        self.accuracy = LineChart("Right first time", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
+        self.accuracy = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
         self.speed = LineChart("Typical time to first answer", fmt=lambda v: f"{v:.1f} s")
-        self.by_exercise = HBarChart("Right first time, by exercise")
+        self.by_exercise = HBarChart("Right on the first try, by exercise")
         charts = QGridLayout()
         charts.setSpacing(14)
         for i, chart in enumerate(
@@ -503,14 +503,14 @@ class StatsPage(QWidget):
         self.note.setText(
             f"Showing {who}. A question counts as right only if the first answer was right."
             if s.questions
-            else f"No answers recorded for {who} in this selection yet. Practise an exercise, then come back.",
+            else f"No answers recorded for {who} in this selection yet. Practice an exercise, then come back.",
         )
         self.tiles["questions"].show_value(str(s.questions))
         accuracy, tries = s.accuracy, s.attempts_per_question
         self.tiles["accuracy"].show_value("–" if accuracy is None else f"{accuracy:.0f}%")
         self.tiles["speed"].show_value("–" if s.median_seconds is None else f"{s.median_seconds:.1f} s")
         self.tiles["tries"].show_value("–" if tries is None else f"{tries:.2f}")
-        self.tiles["days"].show_value(str(s.days_practised))
+        self.tiles["days"].show_value(str(s.days_practiced))
         self.tiles["time"].show_value(format_duration(s.practice_seconds))
 
         labels = [b.label for b in s.buckets]
@@ -526,7 +526,7 @@ class StatsPage(QWidget):
             right=[b.first_right for b in s.buckets],
             wrong=[b.questions - b.first_right for b in s.buckets],
         )
-        self.accuracy.title = f"Right first time, per {per}"
+        self.accuracy.title = f"Right on the first try, per {per}"
         self.accuracy.set_data(labels, values=[b.accuracy for b in s.buckets])
         self.speed.title = f"Typical time to first answer, per {per}"
         self.speed.set_data(labels, values=[b.median_seconds for b in s.buckets])
@@ -632,7 +632,7 @@ class StatsPage(QWidget):
         >>> page.detail.isHidden(), page.answers.proxy.rowCount()
         (False, 1)
         >>> page.detail_note.text()
-        '1 answer, to 1 question, 1 right first time.'
+        '1 answer, to 1 question, 1 right on the first try.'
         """
         db, pid = self.learner.db, self.learner.profile.id
         rows = db.attempt_rows(
@@ -655,7 +655,7 @@ class StatsPage(QWidget):
             firsts = [r for r in rows if r["attempt_no"] == 1]
             right = sum(1 for r in firsts if r["correct"])
             asked = f"{len(firsts)} question{'s' if len(firsts) != 1 else ''}"
-            note = f"{total:,} answer{plural}, to {asked}, {right} right first time."
+            note = f"{total:,} answer{plural}, to {asked}, {right} right on the first try."
         self.detail_title.setText(f"<b>{title}</b>")
         self.detail_note.setText(note)
         self.answers.show_answers(rows)

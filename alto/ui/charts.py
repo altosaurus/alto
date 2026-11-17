@@ -1,5 +1,5 @@
 """
-Small charts drawn with QPainter, in the application's theme colours.
+Small charts drawn with QPainter, in the application's theme colors.
 
 Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a title, draws a message when there is nothing to
 show, and explains the bar or square under the pointer in a tooltip.
@@ -109,7 +109,7 @@ class _Chart(QWidget):
     """
     A titled plot area with a value axis on the left and labels along the bottom.
 
-    The base of the other charts: it holds the title and labels, the plot area, the colours, and the shared drawing of the
+    The base of the other charts: it holds the title and labels, the plot area, the colors, and the shared drawing of the
     title, the axes and the hover tooltip.
 
     Attributes
@@ -127,7 +127,7 @@ class _Chart(QWidget):
     hovered : object
         The item under the pointer, or None. It is drawn brighter and the others fainter.
     selected : object
-        The item the page is showing more about, or None. It stays emphasised. Set with `set_selected`.
+        The item the page is showing more about, or None. It stays emphasized. Set with `set_selected`.
 
     Examples
     --------
@@ -247,42 +247,42 @@ class _Chart(QWidget):
         self,
         item: object,
         *,
-        colour: QColor,
+        color: QColor,
     ) -> QColor:
         """
-        Return the colour to draw an element in: brighter if it is under the pointer or selected, fainter if another is.
+        Return the color to draw an element in: brighter if it is under the pointer or selected, fainter if another is.
 
-        With nothing under the pointer and nothing selected, every element is drawn in its own colour.
+        With nothing under the pointer and nothing selected, every element is drawn in its own color.
 
         Parameters
         ----------
         item : object
             The element about to be drawn: a period or row by index, or a day.
-        colour : QColor
-            The colour it is drawn in when nothing is emphasised. Keyword-only.
+        color : QColor
+            The color it is drawn in when nothing is emphasized. Keyword-only.
 
         Returns
         -------
         QColor
-            The colour to draw it in. The argument is not changed.
+            The color to draw it in. The argument is not changed.
 
         Examples
         --------
         >>> chart = _Chart("Speed")
-        >>> chart._tone(0, colour=QColor("#2e7d32")).name()  # nothing emphasised
+        >>> chart._tone(0, color=QColor("#2e7d32")).name()  # nothing emphasized
         '#2e7d32'
         >>> chart.hovered = 1
-        >>> chart._tone(1, colour=QColor("#2e7d32")).lightness() > QColor("#2e7d32").lightness()
+        >>> chart._tone(1, color=QColor("#2e7d32")).lightness() > QColor("#2e7d32").lightness()
         True
-        >>> chart._tone(0, colour=QColor("#2e7d32")).alphaF() < 1.0
+        >>> chart._tone(0, color=QColor("#2e7d32")).alphaF() < 1.0
         True
         """
         if self.hovered is None and self.selected is None:
-            return colour
+            return color
         if item in (self.hovered, self.selected):
-            return colour.lighter(FOCUS_LIGHTER)
-        faint = QColor(colour)
-        faint.setAlphaF(colour.alphaF() * DIM_OPACITY)
+            return color.lighter(FOCUS_LIGHTER)
+        faint = QColor(color)
+        faint.setAlphaF(color.alphaF() * DIM_OPACITY)
         return faint
 
     def _column_at(self, pos: QPointF) -> int | None:
@@ -411,16 +411,16 @@ class _Chart(QWidget):
         QToolTip.hideText()
         super().leaveEvent(event)
 
-    # -- colours -----------------------------------------------------------------------------------------------------
+    # -- colors -----------------------------------------------------------------------------------------------------
 
     def _ink(self) -> QColor:
         """
-        Return the colour of text and lines in the current theme.
+        Return the color of text and lines in the current theme.
 
         Returns
         -------
         QColor
-            The palette's text colour.
+            The palette's text color.
 
         Examples
         --------
@@ -431,12 +431,12 @@ class _Chart(QWidget):
 
     def _soft(self) -> QColor:
         """
-        Return a muted colour for axis labels, between the background and the text colour.
+        Return a muted color for axis labels, between the background and the text color.
 
         Returns
         -------
         QColor
-            The blended colour.
+            The blended color.
 
         Examples
         --------
@@ -447,12 +447,12 @@ class _Chart(QWidget):
 
     def _grid(self) -> QColor:
         """
-        Return a faint colour for grid lines, close to the background.
+        Return a faint color for grid lines, close to the background.
 
         Returns
         -------
         QColor
-            The blended colour.
+            The blended color.
 
         Examples
         --------
@@ -615,7 +615,7 @@ class _Chart(QWidget):
         self,
         p: QPainter,
         *,
-        centres: Sequence[float],
+        centers: Sequence[float],
         labels: Sequence[str],
     ) -> None:
         """
@@ -625,8 +625,8 @@ class _Chart(QWidget):
         ----------
         p : QPainter
             The painter to draw with.
-        centres : sequence of float
-            The x position of each label's centre. Keyword-only.
+        centers : sequence of float
+            The x position of each label's center. Keyword-only.
         labels : sequence of str
             The labels. The newest (last) is always drawn. Keyword-only.
 
@@ -638,7 +638,7 @@ class _Chart(QWidget):
         >>> image = QImage(400, 300, QImage.Format.Format_ARGB32)
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
-        >>> chart._category_axis(painter, centres=[100.0, 200.0, 300.0], labels=["Mon", "Tue", "Wed"])
+        >>> chart._category_axis(painter, centers=[100.0, 200.0, 300.0], labels=["Mon", "Tue", "Wed"])
         >>> painter.end()
         True
         """
@@ -652,7 +652,7 @@ class _Chart(QWidget):
         every = max(1, math.ceil(widest / max(self._plot().width() / len(labels), 1)))
         for i in range(len(labels) - 1, -1, -every):  # count back from the latest, so the newest label is always there
             label_box = QRectF(
-                centres[i] - widest / 2,
+                centers[i] - widest / 2,
                 self._plot().bottom() + 5,
                 widest,
                 16,
@@ -664,7 +664,7 @@ class _Chart(QWidget):
         self,
         event: QMouseEvent,
         *,
-        centres: Sequence[float],
+        centers: Sequence[float],
         texts: Sequence[str],
     ) -> None:
         """
@@ -674,7 +674,7 @@ class _Chart(QWidget):
         ----------
         event : QMouseEvent
             The mouse move.
-        centres : sequence of float
+        centers : sequence of float
             The x position of each item. Keyword-only.
         texts : sequence of str
             The tooltip for each item. Keyword-only.
@@ -688,12 +688,12 @@ class _Chart(QWidget):
         >>> point = QPointF(100, 100)
         >>> event_ = QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
         ...                     Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier)
-        >>> chart._hover(event_, centres=[100.0, 200.0], texts=["First", "Second"])
+        >>> chart._hover(event_, centers=[100.0, 200.0], texts=["First", "Second"])
         """
-        if not centres:
+        if not centers:
             return
         x = event.position().x()
-        i = min(range(len(centres)), key=lambda k: abs(centres[k] - x))
+        i = min(range(len(centers)), key=lambda k: abs(centers[k] - x))
         if (
             self._plot()
             .adjusted(
@@ -716,7 +716,7 @@ class StackedBarChart(_Chart):
     Attributes
     ----------
     right : list of int
-        Questions right first time, per period.
+        Questions right on the first try, per period.
     wrong : list of int
         Questions missed, per period.
 
@@ -768,7 +768,7 @@ class StackedBarChart(_Chart):
         labels : sequence of str
             The label of each period.
         right : sequence of int
-            Questions right first time in each period. Keyword-only.
+            Questions right on the first try in each period. Keyword-only.
         wrong : sequence of int
             Questions missed in each period. Keyword-only.
 
@@ -782,7 +782,7 @@ class StackedBarChart(_Chart):
         self.labels, self.right, self.wrong = list(labels), list(right), list(wrong)
         self.update()
 
-    def _centres(self) -> list[float]:
+    def _centers(self) -> list[float]:
         """
         Return the x position of the middle of each period's bar.
 
@@ -796,7 +796,7 @@ class StackedBarChart(_Chart):
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
         >>> chart.set_data(["a", "b"], right=[1, 1], wrong=[0, 0])
-        >>> [round(x) for x in chart._centres()]
+        >>> [round(x) for x in chart._centers()]
         [127, 301]
         """
         plot, n = self._plot(), max(len(self.labels), 1)
@@ -836,12 +836,12 @@ class StackedBarChart(_Chart):
         plot, n = self._plot(), len(self.labels)
         slot = plot.width() / n
         bar = min(max(slot * 0.68, 2.0), 38.0)
-        centres = self._centres()
+        centers = self._centers()
         p.setPen(Qt.PenStyle.NoPen)
-        for i, (cx, r, w) in enumerate(zip(centres, self.right, self.wrong)):
+        for i, (cx, r, w) in enumerate(zip(centers, self.right, self.wrong)):
             h_right, h_wrong = plot.height() * r / top, plot.height() * w / top
             if r:
-                p.setBrush(self._tone(i, colour=GOOD))
+                p.setBrush(self._tone(i, color=GOOD))
                 p.drawRoundedRect(
                     QRectF(
                         cx - bar / 2,
@@ -853,7 +853,7 @@ class StackedBarChart(_Chart):
                     2,
                 )
             if w:
-                p.setBrush(self._tone(i, colour=BAD))
+                p.setBrush(self._tone(i, color=BAD))
                 p.drawRoundedRect(
                     QRectF(
                         cx - bar / 2,
@@ -864,7 +864,7 @@ class StackedBarChart(_Chart):
                     2,
                     2,
                 )
-        self._category_axis(p, centres=centres, labels=self.labels)
+        self._category_axis(p, centers=centers, labels=self.labels)
 
     def _item_at(self, pos: QPointF) -> int | None:
         """
@@ -911,16 +911,16 @@ class StackedBarChart(_Chart):
         >>> chart = StackedBarChart("Questions")
         >>> chart.resize(400, 300)
         >>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
-        >>> point = QPointF(chart._centres()[0], chart._plot().center().y())
+        >>> point = QPointF(chart._centers()[0], chart._plot().center().y())
         >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
         ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
         """
         self._track(event)
         self._hover(
             event,
-            centres=self._centres(),
+            centers=self._centers(),
             texts=[
-                f"{lab}\n{r + w} question{'s' if r + w != 1 else ''}: {r} right first time, {w} missed"
+                f"{lab}\n{r + w} question{'s' if r + w != 1 else ''}: {r} right on the first try, {w} missed"
                 for lab, r, w in zip(self.labels, self.right, self.wrong)
             ],
         )
@@ -943,7 +943,7 @@ class LineChart(_Chart):
 
     Examples
     --------
-    >>> chart = LineChart("Right first time", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
+    >>> chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
     >>> chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
     >>> chart.values
     [40.0, None, 80.0]
@@ -1006,7 +1006,7 @@ class LineChart(_Chart):
         self.labels, self.values = list(labels), list(values)
         self.update()
 
-    def _centres(self) -> list[float]:
+    def _centers(self) -> list[float]:
         """
         Return the x position of each period's point.
 
@@ -1020,7 +1020,7 @@ class LineChart(_Chart):
         >>> chart = LineChart("Speed", fmt=str)
         >>> chart.resize(400, 300)
         >>> chart.set_data(["a", "b"], values=[1.0, 2.0])
-        >>> [round(x) for x in chart._centres()]
+        >>> [round(x) for x in chart._centers()]
         [127, 301]
         """
         plot, n = self._plot(), len(self.labels)
@@ -1037,7 +1037,7 @@ class LineChart(_Chart):
 
         Examples
         --------
-        >>> chart = LineChart("Right first time", fmt=str, fixed_top=100)
+        >>> chart = LineChart("Right on the first try", fmt=str, fixed_top=100)
         >>> chart._top_and_ticks()
         (100, [0.0, 25.0, 50.0, 75.0, 100.0])
         """
@@ -1077,10 +1077,10 @@ class LineChart(_Chart):
             top=top,
             fmt=self.fmt,
         )
-        plot, centres = self._plot(), self._centres()
+        plot, centers = self._plot(), self._centers()
         points = [
             QPointF(cx, plot.bottom() - plot.height() * min(v, top) / top) if v is not None else None
-            for cx, v in zip(centres, self.values)
+            for cx, v in zip(centers, self.values)
         ]
         accent = self.palette().color(QPalette.ColorRole.Highlight)
         faint = QColor(accent)
@@ -1111,10 +1111,10 @@ class LineChart(_Chart):
         radius = 3.6 if len(self.labels) <= 40 else 2.4
         for i, pt in enumerate(points):
             if pt is not None:
-                p.setBrush(self._tone(i, colour=accent))
+                p.setBrush(self._tone(i, color=accent))
                 grown = radius * 1.4 if i in (self.hovered, self.selected) else radius  # the point being pointed at is larger
                 p.drawEllipse(pt, grown, grown)
-        self._category_axis(p, centres=centres, labels=self.labels)
+        self._category_axis(p, centers=centers, labels=self.labels)
 
     def _item_at(self, pos: QPointF) -> int | None:
         """
@@ -1161,14 +1161,14 @@ class LineChart(_Chart):
         >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
         >>> chart.resize(400, 300)
         >>> chart.set_data(["a", "b"], values=[2.0, 3.0])
-        >>> point = QPointF(chart._centres()[0], chart._plot().center().y())
+        >>> point = QPointF(chart._centers()[0], chart._plot().center().y())
         >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
         ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
         """
         self._track(event)
         self._hover(
             event,
-            centres=self._centres(),
+            centers=self._centers(),
             texts=[f"{lab}\n{self.fmt(v) if v is not None else 'no answers'}" for lab, v in zip(self.labels, self.values)],
         )
 
@@ -1186,7 +1186,7 @@ class HBarChart(_Chart):
 
     Examples
     --------
-    >>> chart = HBarChart("Right first time, by exercise")
+    >>> chart = HBarChart("Right on the first try, by exercise")
     >>> chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
     >>> len(chart.rows)
     2
@@ -1265,7 +1265,7 @@ class HBarChart(_Chart):
         x0, x1 = label_w, self.width() - value_w - 8
         for i, (name, value, text) in enumerate(self.rows):
             y = self.TOP + i * self.ROW
-            p.setPen(self._tone(i, colour=self._ink()))
+            p.setPen(self._tone(i, color=self._ink()))
             p.drawText(
                 QRectF(
                     0,
@@ -1288,7 +1288,7 @@ class HBarChart(_Chart):
                 4,
                 4,
             )
-            p.setBrush(self._tone(i, colour=self.palette().color(QPalette.ColorRole.Highlight)))
+            p.setBrush(self._tone(i, color=self.palette().color(QPalette.ColorRole.Highlight)))
             p.drawRoundedRect(
                 QRectF(
                     x0,
@@ -1299,7 +1299,7 @@ class HBarChart(_Chart):
                 4,
                 4,
             )
-            p.setPen(self._tone(i, colour=self._soft()))
+            p.setPen(self._tone(i, color=self._soft()))
             p.drawText(
                 QRectF(
                     x1 + 6,
@@ -1522,7 +1522,7 @@ class HeatmapChart(_Chart):
 
     def _shade(self, level: int) -> QColor:
         """
-        Return the colour of a square.
+        Return the color of a square.
 
         Parameters
         ----------
@@ -1532,7 +1532,7 @@ class HeatmapChart(_Chart):
         Returns
         -------
         QColor
-            The grid colour for 0, otherwise a green that deepens with the level.
+            The grid color for 0, otherwise a green that deepens with the level.
 
         Examples
         --------
@@ -1641,7 +1641,7 @@ class HeatmapChart(_Chart):
                     cell - gap,
                     cell - gap,
                 )
-                p.setBrush(self._tone(day, colour=self._shade(self.level(self.counts.get(day, 0)))))
+                p.setBrush(self._tone(day, color=self._shade(self.level(self.counts.get(day, 0)))))
                 p.drawRoundedRect(square, 2, 2)
         # the legend, bottom right: Less [squares] More
         y = y0 + 7 * cell + 8

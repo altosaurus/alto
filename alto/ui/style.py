@@ -1,7 +1,7 @@
 """
 Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars.
 
-Colours come from the palette so it follows the system light/dark theme.
+Colors come from the palette so it follows the system light/dark theme.
 
 Examples
 --------
@@ -22,13 +22,13 @@ def app_style(palette: QPalette) -> str:
     """
     Build the stylesheet for a palette.
 
-    White-filled buttons with a dark border and a heavier lower edge, rounded check boxes and lists, and so on, with colours
+    White-filled buttons with a dark border and a heavier lower edge, rounded check boxes and lists, and so on, with colors
     taken from the palette.
 
     Parameters
     ----------
     palette : QPalette
-        The palette to take colours from, so the style follows the light or dark theme.
+        The palette to take colors from, so the style follows the light or dark theme.
 
     Returns
     -------
@@ -85,7 +85,7 @@ QPushButton:pressed {{ background: {fill_pressed}; border-bottom-width: 1px; pad
 QPushButton:checked {{ border: 2px solid palette(highlight); border-bottom-width: 2px; }}
 QPushButton:disabled {{ background: palette(window); color: gray; border-color: palette(midlight); }}
 
-/* The main button of a form, such as Save: filled with the accent colour. */
+/* The main button of a form, such as Save: filled with the accent color. */
 QPushButton[primary="true"] {{ background: {accent}; border-color: {accent}; color: palette(highlighted-text); font-weight: 600; }}
 QPushButton[primary="true"]:hover {{ background: {accent}; border-color: palette(text); }}
 QPushButton[primary="true"]:disabled {{ background: {accent_dim}; border-color: {accent_dim}; color: palette(highlighted-text); }}
@@ -100,19 +100,26 @@ QLineEdit[field="true"], QComboBox[field="true"] {{
     selection-background-color: palette(highlight);
     selection-color: palette(highlighted-text);
 }}
-QComboBox[field="true"] {{ combobox-popup: 0; }}  /* the list drops down below the box, and does not cover it and what is round it */
+QComboBox[field="true"] {{ combobox-popup: 0; }}  /* the list drops down below the box, and does not cover it and what is around it */
 QLineEdit[field="true"]:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on {{ border-color: palette(highlight); }}
 QComboBox[field="true"]::drop-down {{ border: none; width: 28px; }}
 QComboBox[field="true"]::down-arrow {{ image: url({chevron}); width: 16px; height: 16px; }}
+QFrame#dropdownPopup {{
+    border: 1px solid palette(mid);
+    border-radius: {RADIUS}px;
+    background: palette(base);
+}}
 QComboBox[field="true"] QAbstractItemView {{
     border: 1px solid palette(mid);
+    border-radius: {RADIUS}px;
+    padding: 4px;
     background: palette(base);
     selection-background-color: palette(highlight);
     selection-color: palette(highlighted-text);
     outline: 0;
 }}
 
-/* Check boxes and radio buttons: rounded, soft-edged, and filled with the accent colour when selected. */
+/* Check boxes and radio buttons: rounded, soft-edged, and filled with the accent color when selected. */
 QCheckBox, QRadioButton {{ spacing: 10px; }}
 QCheckBox::indicator, QRadioButton::indicator {{
     width: 18px;
@@ -148,8 +155,15 @@ QToolButton:hover {{ background: palette(midlight); border-color: palette(mid); 
 QToolButton:pressed {{ background: palette(mid); }}
 QToolButton:checked {{ background: palette(mid); }}
 QToolButton:disabled {{ color: gray; }}
-QToolButton[arrowButton="true"] {{ border-color: {edge}; background: {fill}; }}
-QToolButton[arrowButton="true"]:hover {{ background: {fill_hover}; }}
+QToolButton[arrowButton="true"] {{
+    border-color: {edge};
+    border-bottom-width: 2px;
+    border-radius: {RADIUS}px;
+    background: {fill};
+}}
+QToolButton[arrowButton="true"]:hover {{ background: {fill_hover}; border-color: palette(highlight); }}
+QToolButton[arrowButton="true"]:focus {{ border-color: palette(highlight); }}
+QToolButton[arrowButton="true"]:pressed {{ background: {fill_pressed}; border-bottom-width: 1px; padding-top: 4px; }}
 QToolButton[arrowButton="true"]:disabled {{ background: palette(window); border-color: palette(midlight); }}
 
 QFrame#settingsPane {{

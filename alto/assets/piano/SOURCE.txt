@@ -3,8 +3,8 @@ A Yamaha C5 grand piano recorded with two AKG C414 microphones in an AB position
 (48 kHz, 24-bit, 16 velocity layers, sampled in minor thirds from the lowest A).
 https://sfzinstruments.github.io/pianos/salamander   https://github.com/sfzinstruments/SalamanderGrandPiano
 
-Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0), https://creativecommons.org/licenses/by/3.0/
-The licence text is in LICENSE-CC-BY-3.0.txt in this folder.
+License: Creative Commons Attribution 3.0 Unported (CC BY 3.0), https://creativecommons.org/licenses/by/3.0/
+The license text is in LICENSE-CC-BY-3.0.txt in this folder.
 
 Changes made for Alto: layer 8 of 16 (medium) only, the 30 recordings (MIDI 21, 24, 27 ... 108, A0 to C8), mixed to mono and
 converted to 44.1 kHz 16-bit, the silence before each note trimmed, cut to 2.5 s with a 0.5 s fade-out, and levelled (first-second

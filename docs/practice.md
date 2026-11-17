@@ -24,13 +24,13 @@ you have not seen, stays between 0 and 6, and changes with each answer.
 | What happened                | Effect on strain                                                      |
 |------------------------------|-----------------------------------------------------------------------|
 | A wrong answer               | **+1.5** each time, so every extra attempt pushes the question higher |
-| Right first time             | **−0.5**                                                              |
+| Right on the first try             | **−0.5**                                                              |
 | Right, but only after misses | **−0.2**                                                              |
 | First answer very quick      | up to **−0.6** more                                                   |
 | First answer very slow       | up to **+1.0** more                                                   |
 
 Because of the last two rows, a slow correct answer still counts against a question, and a very quick correct one
-counts strongly in its favour.
+counts strongly in its favor.
 
 ### How speed is judged
 
@@ -41,7 +41,7 @@ for the exercise, since reading a note takes less time than spelling a scale:
 |---------------------------------------------------------------------------------------|----------|
 | Note Identification, Keyboard Identification                                          | 3 s      |
 | Key Signature Identification, Clef Basics                                             | 5 s      |
-| Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s      |
+| Interval Identification, Keyboard Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s      |
 | Circle of Fifths                                                                      | 7 s      |
 | Scale Identification                                                                        | 8 s      |
 | Scale Construction                                                                    | 25 s     |
@@ -69,4 +69,4 @@ If you change the clefs or key signatures, you will not be given old questions t
 ## Your profile
 
 Each profile has its own history, so two people sharing a computer do not affect each other's questions. The profile
-name is shown in the menu (☰), where you can switch or add profiles. See [Statistics]({{ '/statistics/' | relative_url }}) to check how a profile is going.
+name is shown in the menu (☰), where you can switch or add profiles. See [Statistics]({{ '/statistics/' | relative_url }}) to check a profile’s progress.

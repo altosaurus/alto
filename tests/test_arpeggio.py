@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
-from PySide6.QtCore import QEvent
+from PySide6.QtCore import QEvent, QPoint
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
@@ -419,17 +419,23 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(view: ExerciseView) -> Non
     assert view.answered and view.correct == 0
 
 
-def test_the_inversion_row_is_labelled_inversion(view: ExerciseView) -> None:
+def test_the_inversion_row_is_labeled_inversion(view: ExerciseView) -> None:
     """
-    Check that the inversion row is labelled inversion.
+    Check that the inversion row is labeled inversion.
 
     Parameters
     ----------
     view : ExerciseView
         The exercise view under test.
     """
-    labels = [view.octave_box.itemAt(i).widget() for i in range(view.octave_box.count())]
-    assert [w.text() for w in labels if isinstance(w, QLabel)] == ["Inversion"]
+    view.show()
+    QApplication.processEvents()
+    assert view.interval_label.text() == "Inversion"
+    assert view.interval_label.isVisible()
+    label_bottom = view.interval_label.mapTo(view, QPoint(0, view.interval_label.height())).y()
+    buttons_top = view.octave_row.mapTo(view, QPoint(0, 0)).y()
+    assert label_bottom <= buttons_top
+    assert all(not isinstance(view.octave_box.itemAt(i).widget(), QLabel) for i in range(view.octave_box.count()))
 
 
 def test_the_settings_panel_edits_and_saves_the_settings(

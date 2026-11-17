@@ -40,7 +40,7 @@ from alto import (
 from alto.selfupdate import (
     Prepared,
     Target,
-    UpdateCancelled,
+    UpdateCanceled,
     UpdateError,
 )
 from alto.updates import Release
@@ -61,7 +61,7 @@ class UpdatePreparer(QObject):
         Emitted with the bytes received so far and the total (0 if it is not known), while the file downloads.
     done : Signal
         Emitted once at the end, with 0 if the update is ready (see `prepared`) or 1 if it failed, and the reason. Nothing is
-        emitted if the person cancelled.
+        emitted if the person canceled.
     prepared : Prepared or None
         The checked update, once it is ready.
 
@@ -85,7 +85,7 @@ class UpdatePreparer(QObject):
             The object that owns it.
         """
         super().__init__(parent)
-        self._cancelled = False
+        self._canceled = False
         self.prepared: Prepared | None = None
 
     def start(
@@ -110,17 +110,17 @@ class UpdatePreparer(QObject):
         keys : tuple of str
             The public keys (base64) a signature may be made with.
         """
-        self._cancelled = False
+        self._canceled = False
         arguments = {"release": release, "target": target, "work": work, "keys": keys}
         threading.Thread(target=self._work, kwargs=arguments, daemon=True).start()
 
     def cancel(self) -> None:
         """Stop, at the next chance, and say nothing more."""
-        self._cancelled = True
+        self._canceled = True
 
-    def is_cancelled(self) -> bool:
+    def is_canceled(self) -> bool:
         """
-        Say whether the person has cancelled.
+        Say whether the person has canceled.
 
         Returns
         -------
@@ -129,10 +129,10 @@ class UpdatePreparer(QObject):
 
         Examples
         --------
-        >>> UpdatePreparer().is_cancelled()
+        >>> UpdatePreparer().is_canceled()
         False
         """
-        return self._cancelled
+        return self._canceled
 
     def _say(
         self,
@@ -141,7 +141,7 @@ class UpdatePreparer(QObject):
         message: str,
     ) -> None:
         """
-        Announce the end, unless the person cancelled or the window is gone.
+        Announce the end, unless the person canceled or the window is gone.
 
         Parameters
         ----------
@@ -150,7 +150,7 @@ class UpdatePreparer(QObject):
         message : str
             The reason, if it failed. Keyword-only.
         """
-        if self._cancelled:
+        if self._canceled:
             return
         try:
             self.done.emit(code, message)
@@ -189,9 +189,9 @@ class UpdatePreparer(QObject):
                 base=updates.DOWNLOAD_BASE,
                 status=self._emit_status,
                 progress=self._emit_progress,
-                cancelled=self.is_cancelled,
+                canceled=self.is_canceled,
             )
-        except UpdateCancelled:
+        except UpdateCanceled:
             shutil.rmtree(work, ignore_errors=True)  # the window removes it too, but this thread may still have been writing
         except UpdateError as error:
             shutil.rmtree(work, ignore_errors=True)
@@ -200,7 +200,7 @@ class UpdatePreparer(QObject):
             shutil.rmtree(work, ignore_errors=True)
             self._say(1, message=f"The update could not be prepared: {error}")
         else:
-            if self._cancelled:
+            if self._canceled:
                 shutil.rmtree(work, ignore_errors=True)
             self._say(0, message="")
 
@@ -213,7 +213,7 @@ class UpdatePreparer(QObject):
         text : str
             What is being done.
         """
-        if not self._cancelled:
+        if not self._canceled:
             try:
                 self.status.emit(text)
             except RuntimeError:
@@ -234,7 +234,7 @@ class UpdatePreparer(QObject):
         total : int
             The total, or 0 if it is not known.
         """
-        if not self._cancelled:
+        if not self._canceled:
             try:
                 self.progress.emit(done, total)
             except RuntimeError:
@@ -254,11 +254,11 @@ class PackageUpdateDialog(QDialog):
     button : QPushButton
         Cancel while the update is being prepared, then OK if it is ready or Close if it failed.
     ended : bool
-        Whether the preparing has ended, ready, failed or cancelled.
+        Whether the preparing has ended, ready, failed or canceled.
     ready : bool
         Whether the update is downloaded and checked.
-    cancelled : bool
-        Whether the person cancelled.
+    canceled : bool
+        Whether the person canceled.
     error : str
         Why it failed, if it did.
     preparer : UpdatePreparer
@@ -291,7 +291,7 @@ class PackageUpdateDialog(QDialog):
         self._work: Path | None = None
         self.ended = False
         self.ready = False
-        self.cancelled = False
+        self.canceled = False
         self.error = ""
         lay = QVBoxLayout(self)
         self.status = QLabel(f"Getting Alto {release.version}…")
@@ -317,7 +317,7 @@ class PackageUpdateDialog(QDialog):
         Returns
         -------
         Prepared or None
-            The update, if it is ready and OK was pressed; None if it failed or was cancelled, in which case nothing is left
+            The update, if it is ready and OK was pressed; None if it failed or was canceled, in which case nothing is left
             behind.
 
         Examples
@@ -340,7 +340,7 @@ class PackageUpdateDialog(QDialog):
     def reject(self) -> None:
         """Close the window; before the update is ready that cancels it."""
         if not self.ended:
-            self.cancelled = True
+            self.canceled = True
             self.ended = True
             self.preparer.cancel()
         super().reject()

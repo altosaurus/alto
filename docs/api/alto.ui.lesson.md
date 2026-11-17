@@ -2,7 +2,7 @@
 title: alto.ui.lesson
 parent: api
 package: alto.ui
-order: 39
+order: 42
 permalink: /api/alto.ui.lesson/
 ---
 {% raw %}
@@ -91,7 +91,7 @@ One step of a lesson: its words, a sound to hear, the circle, and a task.
 - `feedback` (*QLabel*): What is said about the last answer.
 - `info` (*QLabel*): What is said about the key last picked on the circle.
 - `again` (*QPushButton*): Asks another task; it appears once the task has been answered.
-- `practise` (*Signal*): Emitted by the Practise button on the last step.
+- `practice` (*Signal*): Emitted by the Practice button on the last step.
 
 **Examples**
 
@@ -138,7 +138,7 @@ Play the step's notes.
 def walk(step: int) -> None
 ```
 
-Move the pick one fifth round the outer ring.
+Move the pick one fifth around the outer ring.
 
 **Parameters**
 
@@ -203,7 +203,7 @@ One lesson being taken: the step, a progress bar, and Back and Next.
 - `next_button` (*QPushButton*): Goes to the next step, or finishes on the last one.
 - `leave` (*Signal*): Emitted to leave the lesson.
 - `stepped` (*Signal*): Emitted with the number of the step each time one is shown.
-- `practise` (*Signal*): Emitted when the last step's Practise button is pressed, with the exercise's class name.
+- `practice` (*Signal*): Emitted when the last step's Practice button is pressed, with the exercise's class name.
 
 **Examples**
 
@@ -276,7 +276,7 @@ The page of an open lesson, with a button to leave it.
 
 - `view` (*LessonView*): The lesson being taken.
 - `back` (*Signal*): Emitted to leave the lesson, to wherever it was opened from.
-- `practise_requested` (*Signal*): Emitted with the class name of an exercise to practise.
+- `practice_requested` (*Signal*): Emitted with the class name of an exercise to practice.
 
 **Examples**
 

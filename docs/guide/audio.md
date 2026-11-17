@@ -45,7 +45,7 @@ a sound with many high partials, which is why `synth_piano` stops adding partial
 ### Loudness
 
 - **Clipping**: a sample cannot go beyond -1 or 1. A calculation that goes past it is flattened ("clipped"), which sounds harsh.
-  Anything you generate should be scaled down (**normalised**) so its peak is below 1. `synth_piano` scales its result so the
+  Anything you generate should be scaled down (**normalized**) so its peak is below 1. `synth_piano` scales its result so the
   loudest sample is 0.8.
 - **Decibels** are a logarithmic scale for amplitude: `20 * log10(ratio)`. Halving the amplitude is -6 dB. Because hearing is
   roughly logarithmic too, a linear volume of 0.5 does not sound "half as loud"; it sounds only a little quieter. Qt's
@@ -102,7 +102,7 @@ play_midi(midi)
 
 1. **`_note_file`** returns the recording's path if that note has one. If it does not, it picks the *nearest* recorded note and
    makes a new WAV by shifting its pitch (below), saved in `alto_sounds` in the system temporary folder. The piano is special:
-   beyond two semitones from a recording it is synthesised instead (below).
+   beyond two semitones from a recording it is synthesized instead (below).
 2. **`_effect`** wraps the file in a `QSoundEffect` the first time and keeps it, so a note is loaded once.
    **`QSoundEffect`** is Qt Multimedia's class for short, uncompressed sounds that must start with low delay: it loads the whole
    file into memory, so `play()` is quick. Qt has two others: `QMediaPlayer` streams longer, compressed audio and starts slower,
@@ -121,7 +121,7 @@ def shift_pitch(samples, *, semitones):
 ```
 
 To raise a recording by two semitones, read it 12% faster: take the samples at positions 0, 1.122, 2.245, ... and interpolate
-between neighbours. This is **resampling**, and it is the simplest pitch shifter. It has two well-known side effects: the
+between neighbors. This is **resampling**, and it is the simplest pitch shifter. It has two well-known side effects: the
 sound gets **shorter** (a note shifted up two semitones lasts 1/1.122 of the time, which the arithmetic above confirms: 70,560
 samples become 62,861), and the **timbre** changes, because everything speeds up together (the "chipmunk effect"). For one or
 two semitones on a flute or a viola neither is noticeable, which is why Alto shifts only to fill the odd missing note.
@@ -160,7 +160,7 @@ for n in range(1, 17):  # the first 16 partials
   short burst of **filtered noise** for the hammer's thump (white noise smoothed by a moving average, a crude low-pass filter),
   and a 50 ms fade-out so the file does not end with a click.
 
-You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesised middle C
+You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesized middle C
 is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz):
 
 ```python
@@ -194,7 +194,7 @@ go. A recording played in full sounds as if the **damper pedal** were held down:
 so each note ends as the next begins, the way fingers move from key to key. The last note of a melody is left to fade by
 itself.
 
-An abrupt stop is audible as a click, and a fade avoids it. The same idea (**an envelope**) shapes every synthesised note.
+An abrupt stop is audible as a click, and a fade avoids it. The same idea (**an envelope**) shapes every synthesized note.
 The classical envelope is **ADSR**: *attack* (how fast the sound begins), *decay*, *sustain* level, *release* (how it ends).
 
 ### Timing a sequence
@@ -207,7 +207,7 @@ To play a melody or an arpeggio, `_play_sequence` schedules each step with `QTim
    finishes. If starting one note takes a while, the others are not pushed later and the rhythm stays even. The test
    `test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm` checks this.
 3. **A newer sequence cancels an older one.** Each sequence has a run number, and a step that finds a newer number does nothing.
-   This pattern, a *token*, appears in the animations too: callbacks scheduled for later cannot be cancelled easily, so they
+   This pattern, a *token*, appears in the animations too: callbacks scheduled for later cannot be canceled easily, so they
    check whether they are still wanted.
 
 ## Latency and the limits of this design
@@ -221,13 +221,13 @@ get an **underrun** (a glitch). None of that applies to Alto, and it is the reas
 
 The steps are in [For developers]({{ '/development/' | relative_url }}): the WAV files named by MIDI number in
 `alto/assets/samples/<key>/`, an `Instrument` in `INSTRUMENTS`, an entry in `instrument_info.INFO`, and the credit in
-`THIRD_PARTY_NOTICES.md`. Check that the licence permits redistribution. A few practical points:
+`THIRD_PARTY_NOTICES.md`. Check that the license permits redistribution. A few practical points:
 
-- **Trim silence at the start**, or the note feels late. Normalise levels so that notes of one instrument are similar, then set
+- **Trim silence at the start**, or the note feels late. Normalize levels so that notes of one instrument are similar, then set
   `gain` to balance instruments against each other.
 - **Mono, 16-bit** files at any common rate (44.1 or 48 kHz) work; `QSoundEffect` resamples at playback.
 - Mark `sustained=True` for bowed and blown instruments, and `damped=True` for an instrument with dampers, such as the piano; leave both off for struck and plucked ones that ring on.
-- Gaps are fine: a missing note is made from its nearest neighbour.
+- Gaps are fine: a missing note is made from its nearest neighbor.
 
 ## Testing audio without speakers
 
@@ -240,7 +240,7 @@ the world: replace the world with a recorder.
 
 *PCM, WAV, RIFF.* *Nyquist frequency, aliasing, anti-aliasing filter.* *Quantisation, dither.* *Dynamic range, decibel,
 loudness, psychoacoustics, equal-loudness contours.* *Overtone, partial, harmonic series, timbre, inharmonicity.* *Additive,
-subtractive, FM, wavetable and physical-modelling synthesis.* *Karplus-Strong algorithm* (a famous few-line plucked-string
+subtractive, FM, wavetable and physical-modeling synthesis.* *Karplus-Strong algorithm* (a famous few-line plucked-string
 model). *Convolution* and *impulse response* (how reverb is done). *Fourier transform, FFT, spectrogram, window function.*
 *Resampling, interpolation, sinc interpolation, polyphase filter.* *Time-stretching, phase vocoder, PSOLA.* *Sampler,
 multisampling, velocity layer, round robin, loop point.* *SoundFont and SFZ* (sample instrument formats). *Latency, buffer,
@@ -250,7 +250,7 @@ underrun, callback.* *MIDI* (the standard also defines messages, channels and fi
 
 - Julius O. Smith III, *Mathematics of the Discrete Fourier Transform*, *Introduction to Digital Filters*, *Physical Audio Signal
   Processing* and *Spectral Audio Signal Processing* (W3K Publishing, 2007; free at ccrma.stanford.edu/~jos, the author's
-  Stanford page, which is the primary source). The best free route from the sampling theorem to physical modelling of
+  Stanford page, which is the primary source). The best free route from the sampling theorem to physical modeling of
   instruments.
 - Ken C. Pohlmann, *Principles of Digital Audio*, 6th ed. (McGraw-Hill, 2010): sampling, quantisation, converters, file formats.
 - Alan V. Oppenheim and Ronald W. Schafer, *Discrete-Time Signal Processing*, 3rd ed. (Pearson, 2010): the standard textbook

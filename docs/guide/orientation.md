@@ -50,7 +50,7 @@ integration runs the tests on a machine with no display, and it is how you can d
 ```
 alto/                  the program
     __main__.py        starts the app: python -m alto
-    audio.py           samples, pitch shifting, the piano synthesiser, playback
+    audio.py           samples, pitch shifting, the piano synthesizer, playback
     instrument_info.py facts about each instrument's recordings
     settings.py        the user's choices as plain objects (no saving)
     theory/            notes, intervals, scales, chords

@@ -69,6 +69,7 @@ EXERCISE_ICONS = {
     "KeyboardNotes": icons.EXERCISE_KEYBOARD,
     "NoteConstruction": icons.EXERCISE_CONSTRUCTION,
     "IntervalNames": icons.EXERCISE_INTERVALS,
+    "KeyboardIntervals": icons.EXERCISE_KEYBOARD_INTERVALS,
     "KeySignatures": icons.EXERCISE_KEY_SIGNATURES,
     "KeySignatureConstruction": icons.EXERCISE_KEY_CONSTRUCTION,
     "ScaleIdentification": icons.EXERCISE_SCALES,
@@ -112,7 +113,7 @@ class TileCard(QPushButton):
         Parameters
         ----------
         icon : str
-            The inside of a 24 by 24 SVG, drawn in the text colour. Keyword-only.
+            The inside of a 24 by 24 SVG, drawn in the text color. Keyword-only.
         category : str
             The small heading above the name. Keyword-only.
         name : str
@@ -217,7 +218,7 @@ def lesson_card(
     parent: QWidget | None = None,
 ) -> TileCard:
     """
-    Make the card of a lesson: the icon of the exercise that practises the same topic, and how far through it you are.
+    Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.
 
     Parameters
     ----------
@@ -334,7 +335,7 @@ class HomePage(QWidget):
             card.clicked.connect(lambda _=False, c=cls: self.exercise_chosen.emit(c))
             self.cards.append(card)
         body = QWidget()  # scrolls when the window is shorter than all the rows
-        self.rows = QVBoxLayout(body)  # one centred row of cards at a time
+        self.rows = QVBoxLayout(body)  # one centered row of cards at a time
         self.rows.setContentsMargins(
             28,
             12,
@@ -468,7 +469,7 @@ class HomePage(QWidget):
         transition : Transition
             Which one to play.
         direction : int
-            1 when going towards the lessons, -1 when coming back. Keyword-only.
+            1 when going toward the lessons, -1 when coming back. Keyword-only.
 
         Examples
         --------

@@ -2,13 +2,13 @@
 title: alto.ui.app_settings
 parent: api
 package: alto.ui
-order: 22
+order: 23
 permalink: /api/alto.ui.app_settings/
 ---
 {% raw %}
 The application-wide settings dialog.
 
-It holds the colour theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
+It holds the color theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -117,7 +117,7 @@ def show_style(style: keyboard_styles.KeyboardStyle) -> None
 
 Redraw the preview in a style.
 
-The custom card follows the colours being edited.
+The custom card follows the colors being edited.
 
 **Parameters**
 
@@ -141,14 +141,14 @@ KeyboardBuilder(parent: QWidget | None = None)
 
 Bases: `QFrame`
 
-Rows for colouring each part of a keyboard.
+Rows for coloring each part of a keyboard.
 
-Each has a swatch that opens the colour picker, and chips for colours named after materials. Changing anything selects
+Each has a swatch that opens the color picker, and chips for colors named after materials. Changing anything selects
 the Custom style.
 
 **Attributes**
 
-- `changed` (*Signal*): Emitted after a part is recoloured.
+- `changed` (*Signal*): Emitted after a part is recolored.
 - `swatches` (*dict of str to QPushButton*): The swatch of each part ("naturals", "sharps", "case", "felt" and "caps").
 
 **Examples**
@@ -161,7 +161,7 @@ the Custom style.
 
 **Constructor**
 
-Build the rows and show each part's current colour.
+Build the rows and show each part's current color.
 
 **Parameters**
 
@@ -180,14 +180,14 @@ Build the rows and show each part's current colour.
 def refresh() -> None
 ```
 
-Show each part's current colour on its swatch.
+Show each part's current color on its swatch.
 
 **Examples**
 
 ```pycon
 >>> builder = KeyboardBuilder()
 >>> builder.refresh()
->>> builder.swatches["naturals"].text()  # a colour is set, so the swatch shows it, not "none"
+>>> builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
 ''
 ```
 
@@ -328,11 +328,11 @@ False
 def choose_theme(key: str) -> None
 ```
 
-Switch the colour theme, remember it, and note that the window should be rebuilt in it.
+Switch the color theme, remember it, and note that the window should be rebuilt in it.
 
 **Parameters**
 
-- `key` (*str*): "system", "light" or "dark", or the key of a theme with colours of its own.
+- `key` (*str*): "system", "light" or "dark", or the key of a theme with colors of its own.
 
 **Examples**
 

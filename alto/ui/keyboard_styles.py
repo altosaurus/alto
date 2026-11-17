@@ -1,7 +1,7 @@
 """
-Keyboard styles: the colours and materials the on-screen piano keys are drawn in.
+Keyboard styles: the colors and materials the on-screen piano keys are drawn in.
 
-There are ready-made styles (`STYLES`) and a custom one built from colours chosen part by part.
+There are ready-made styles (`STYLES`) and a custom one built from colors chosen part by part.
 
 Examples
 --------
@@ -37,7 +37,7 @@ DEFAULT_CASE = "#2b2b30"
 @dataclass(frozen=True)
 class KeyboardStyle:
     """
-    How a keyboard looks: the colours of the keys and the case, and a few details of the drawing.
+    How a keyboard looks: the colors of the keys and the case, and a few details of the drawing.
 
     Attributes
     ----------
@@ -46,15 +46,15 @@ class KeyboardStyle:
     label : str
         The name shown in the interface. Keyword-only.
     note : str
-        A few words on what it is modelled on. Keyword-only.
+        A few words on what it is modeled on. Keyword-only.
     white : tuple of (str, str)
-        The natural keys' colour at the top and at the bottom. Keyword-only.
+        The natural keys' color at the top and at the bottom. Keyword-only.
     white_edge : str
-        The outline colour of the natural keys. Keyword-only.
+        The outline color of the natural keys. Keyword-only.
     black : tuple of (str, str)
-        The sharps' colour at the top and at the bottom. Keyword-only.
+        The sharps' color at the top and at the bottom. Keyword-only.
     black_edge : str
-        The outline colour of the sharps. Keyword-only.
+        The outline color of the sharps. Keyword-only.
     case : str or None
         The body around the keys; None draws no body. Keyword-only.
     felt : str or None
@@ -64,13 +64,13 @@ class KeyboardStyle:
     narrow : float, default 1.0
         How wide the sharps are, compared with a piano's. Keyword-only.
     gap : float, default 1.0
-        Pixels between neighbouring naturals. Keyword-only.
+        Pixels between neighboring naturals. Keyword-only.
     rail : float, default 8.0
         The height of the strip above the keys. Keyword-only.
     thick : bool, default False
         Heavy outlines. Keyword-only.
     hue : bool, default False
-        Colour each key by its note name. Keyword-only.
+        Color each key by its note name. Keyword-only.
     glow : bool, default False
         A soft halo around the outlines. Keyword-only.
     ink : bool, default False
@@ -78,9 +78,9 @@ class KeyboardStyle:
     knobs : bool, default False
         A row of organ stop knobs in the strip above the keys. Keyword-only.
     reverse_below : int or None
-        Keys under this MIDI number swap colours (an organ's preset keys). Keyword-only.
+        Keys under this MIDI number swap colors (an organ's preset keys). Keyword-only.
     dot : str or None
-        The colour of a dot that marks every C. Keyword-only.
+        The color of a dot that marks every C. Keyword-only.
     round : float, default 7.0
         The most the lower corners of a natural are rounded, in pixels. Keyword-only.
 
@@ -94,8 +94,8 @@ class KeyboardStyle:
     key: str
     _: KW_ONLY
     label: str
-    note: str  # a few words on what it is modelled on
-    white: tuple[str, str]  # natural keys: colour at the top and at the bottom
+    note: str  # a few words on what it is modeled on
+    white: tuple[str, str]  # natural keys: color at the top and at the bottom
     white_edge: str
     black: tuple[str, str]  # sharps and flats
     black_edge: str
@@ -103,15 +103,15 @@ class KeyboardStyle:
     felt: str | None = None  # a strip of felt under the fallboard
     cap: str | None = None  # a bone cap on top of each sharp
     narrow: float = 1.0  # how wide the sharps are, compared with a piano's
-    gap: float = 1.0  # pixels between neighbouring naturals
+    gap: float = 1.0  # pixels between neighboring naturals
     rail: float = 8.0  # height of the strip above the keys
     thick: bool = False  # heavy outlines
-    hue: bool = False  # colour each key by its note name
+    hue: bool = False  # color each key by its note name
     glow: bool = False  # a soft halo around the outlines
     ink: bool = False  # hatched sharps, like an engraving
     knobs: bool = False  # a row of organ stop knobs in the strip above the keys
-    reverse_below: int | None = None  # keys under this MIDI number swap colours (an organ's preset keys)
-    dot: str | None = None  # colour of a dot that marks every C
+    reverse_below: int | None = None  # keys under this MIDI number swap colors (an organ's preset keys)
+    dot: str | None = None  # color of a dot that marks every C
     round: float = 7.0  # the most the lower corners of a natural are rounded, in pixels
 
 
@@ -163,7 +163,7 @@ STYLES = (
     KeyboardStyle(
         "harpsichord-french",
         label="Harpsichord, French",
-        note="Reversed colours: ebony naturals, bone-topped sharps.",
+        note="Reversed colors: ebony naturals, bone-topped sharps.",
         white=("#2a211c", "#120d0a"),
         white_edge="#000000",
         black=("#4b3b30", "#2a2019"),
@@ -228,9 +228,9 @@ STYLES = (
         round=0,
     ),
     KeyboardStyle(
-        "colour",
-        label="Colour by note",
-        note="One hue per semitone, so every C has the same colour.",
+        "color",
+        label="Color by note",
+        note="One hue per semitone, so every C has the same color.",
         white=("#ffffff", "#ffffff"),
         white_edge="#44000000",
         black=("#222222", "#222222"),
@@ -273,7 +273,7 @@ BY_KEY = {s.key: s for s in STYLES}
 CUSTOM = "custom"
 _current = BY_KEY[DEFAULT]
 
-# The parts of a keyboard you can colour yourself: (key, label, whether it can be left out).
+# The parts of a keyboard you can color yourself: (key, label, whether it can be left out).
 COMPONENTS = (
     ("naturals", "Naturals", False),
     ("sharps", "Sharps", False),
@@ -290,7 +290,7 @@ DEFAULT_CUSTOM: dict[str, str | None] = {
 }
 _custom: dict[str, str | None] = dict(DEFAULT_CUSTOM)
 
-# Colours named after what keyboards are made of. They are typical shades, not measurements of one instrument.
+# Colors named after what keyboards are made of. They are typical shades, not measurements of one instrument.
 MATERIALS = (
     ("Acrylic white", "#fbfaf7"),
     ("Mother-of-pearl", "#f2eee6"),
@@ -302,10 +302,10 @@ MATERIALS = (
     ("Oak", "#6b4a2c"),
     ("Walnut", "#5a3320"),
     ("Rosewood", "#4a2a1c"),
-    ("Ebonised pearwood", "#2a211c"),
+    ("Ebonized pearwood", "#2a211c"),
     ("Ebony", "#120d0a"),
     ("Black acrylic", "#1c1c20"),
-    ("Aluminium", "#b8bcc2"),
+    ("Aluminum", "#b8bcc2"),
     ("Brass", "#b5933a"),
     ("Red felt", "#7d1f27"),
     ("Green baize", "#1b3a2a"),
@@ -313,18 +313,18 @@ MATERIALS = (
 )
 
 
-def custom_colours() -> dict[str, str | None]:
+def custom_colors() -> dict[str, str | None]:
     """
-    Return the colour of each part of the custom keyboard.
+    Return the color of each part of the custom keyboard.
 
     Returns
     -------
     dict of str to str or None
-        Part name ("naturals", "sharps", "case", "felt" or "caps") to its colour, or None where an optional part is left out.
+        Part name ("naturals", "sharps", "case", "felt" or "caps") to its color, or None where an optional part is left out.
 
     Examples
     --------
-    >>> sorted(custom_colours())
+    >>> sorted(custom_colors())
     ['caps', 'case', 'felt', 'naturals', 'sharps']
     """
     return dict(_custom)
@@ -332,9 +332,9 @@ def custom_colours() -> dict[str, str | None]:
 
 def custom_style() -> KeyboardStyle:
     """
-    Build the style from the custom colours.
+    Build the style from the custom colors.
 
-    Gradients and outlines are worked out from each part's colour.
+    Gradients and outlines are worked out from each part's color.
 
     Returns
     -------
@@ -351,7 +351,7 @@ def custom_style() -> KeyboardStyle:
     return KeyboardStyle(
         CUSTOM,
         label="Custom",
-        note="Your own colours, part by part.",
+        note="Your own colors, part by part.",
         white=(naturals.name(), naturals.darker(106).name()),
         white_edge=naturals.darker(140).name(),
         black=(sharps.lighter(130).name(), sharps.name()),
@@ -408,7 +408,7 @@ def current() -> KeyboardStyle:
 
 def load_style() -> None:
     """
-    Apply the saved style (Classic if none is saved or it is unknown), and the saved custom colours.
+    Apply the saved style (Classic if none is saved or it is unknown), and the saved custom colors.
 
     Examples
     --------
@@ -451,31 +451,31 @@ def set_style(key: str) -> None:
     _redraw()
 
 
-def set_custom_colour(
+def set_custom_color(
     part: str,
     *,
-    colour: str | None,
+    color: str | None,
 ) -> None:
     """
-    Colour one part of the custom keyboard and switch to the custom style.
+    Color one part of the custom keyboard and switch to the custom style.
 
     Parameters
     ----------
     part : str
         One of "naturals", "sharps", "case", "felt" or "caps".
-    colour : str or None
-        A colour such as '#336699', or None to leave an optional part (case, felt or caps) out. Keyword-only.
+    color : str or None
+        A color such as '#336699', or None to leave an optional part (case, felt or caps) out. Keyword-only.
 
     Examples
     --------
-    >>> set_custom_colour("naturals", colour="#ffffff")
-    >>> current().key, custom_colours()["naturals"]
+    >>> set_custom_color("naturals", color="#ffffff")
+    >>> current().key, custom_colors()["naturals"]
     ('custom', '#ffffff')
-    >>> set_custom_colour("naturals", colour=DEFAULT_CUSTOM["naturals"])
+    >>> set_custom_color("naturals", color=DEFAULT_CUSTOM["naturals"])
     >>> set_style(DEFAULT)
     """
-    _custom[part] = colour
-    store().setValue(f"ui/keyboardCustom/{part}", colour or "none")
+    _custom[part] = color
+    store().setValue(f"ui/keyboardCustom/{part}", color or "none")
     set_style(CUSTOM)
 
 
@@ -520,7 +520,7 @@ def _redraw() -> None:
         hook()
 
 
-# -- colours --------------------------------------------------------------------------------------------------------
+# -- colors --------------------------------------------------------------------------------------------------------
 
 
 def reversed_key(
@@ -529,7 +529,7 @@ def reversed_key(
     midi: int,
 ) -> bool:
     """
-    Report whether a key has swapped colours, as the low preset keys of an organ do.
+    Report whether a key has swapped colors, as the low preset keys of an organ do.
 
     Parameters
     ----------
@@ -541,7 +541,7 @@ def reversed_key(
     Returns
     -------
     bool
-        True if the style swaps colours below some key and this key is below it.
+        True if the style swaps colors below some key and this key is below it.
 
     Examples
     --------
@@ -581,7 +581,7 @@ def key_brush(
     Returns
     -------
     QBrush
-        A solid colour, a top-to-bottom gradient, or (for styles that colour keys by note) a colour that depends on the note.
+        A solid color, a top-to-bottom gradient, or (for styles that color keys by note) a color that depends on the note.
 
     Examples
     --------
@@ -609,7 +609,7 @@ def edge_color(
     black: bool,
 ) -> QColor:
     """
-    Return the outline colour for a key.
+    Return the outline color for a key.
 
     Parameters
     ----------
@@ -623,7 +623,7 @@ def edge_color(
     Returns
     -------
     QColor
-        The outline colour.
+        The outline color.
 
     Examples
     --------

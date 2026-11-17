@@ -2,7 +2,7 @@
 title: alto.ui.transitions
 parent: api
 package: alto.ui
-order: 60
+order: 63
 permalink: /api/alto.ui.transitions/
 ---
 {% raw %}
@@ -81,7 +81,7 @@ What a transition is given at each moment: the time, the two sets of sprites and
 - `time` (*float*): The time since the transition began, in milliseconds.
 - `old` (*sequence of Sprite*): The cards that are leaving.
 - `new` (*sequence of Sprite*): The cards that are arriving.
-- `direction` (*int*): 1 when going towards the lessons, -1 when coming back.
+- `direction` (*int*): 1 when going toward the lessons, -1 when coming back.
 
 **Examples**
 
@@ -212,7 +212,7 @@ Set the sprites for a crossfade: the old cards fade out as the new ones fade in.
 def slide(scene: Scene) -> None
 ```
 
-Set the sprites for a slide: both sets move sideways, towards the side of the switch that was pressed.
+Set the sprites for a slide: both sets move sideways, toward the side of the switch that was pressed.
 
 **Parameters**
 
@@ -446,7 +446,7 @@ look to rest) and leaving (from rest to that look).
 - `angle` (*float*): How far the card is turned at the far look, in degrees; it follows the direction of the switch.
 - `blur` (*float*): How blurred it is at the far look, from 0 to 1.
 - `fade` (*bool*): True to fade between solid and clear; False to keep it solid, and hide it only once it is out of the way.
-- `reveal` (*str*): "" for none, or "side" or "centre" to uncover it from one side or from the middle.
+- `reveal` (*str*): "" for none, or "side" or "center" to uncover it from one side or from the middle.
 
 **Examples**
 
@@ -803,7 +803,7 @@ Play a transition from the old cards that cover the canvas to the new ones.
 
 - `transition` (*Transition*): Which one.
 - `new` (*list of Sprite*): The photographs of the cards that are arriving. Keyword-only.
-- `direction` (*int*): 1 when going towards the lessons, -1 when coming back. Keyword-only.
+- `direction` (*int*): 1 when going toward the lessons, -1 when coming back. Keyword-only.
 
 **Examples**
 

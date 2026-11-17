@@ -738,7 +738,7 @@ class DatabasePage(QWidget):
                     "payload": r["payload"],
                     "details": [
                         (
-                            f"<b>History:</b> answered {r['seen']} time{'s' if r['seen'] != 1 else ''}, right first time "
+                            f"<b>History:</b> answered {r['seen']} time{'s' if r['seen'] != 1 else ''}, right on the first try "
                             f"{r['first_try_right']}, {r['wrong_attempts']} "
                             f"missed attempt{'s' if r['wrong_attempts'] != 1 else ''}, "
                             f"typically {typical:.1f} s"
@@ -765,7 +765,7 @@ class DatabasePage(QWidget):
                 "Question",
                 "Strain",
                 "Answered",
-                "Right first time",
+                "Right on the first try",
                 "Missed",
                 "Typical time",
                 "Last seen",

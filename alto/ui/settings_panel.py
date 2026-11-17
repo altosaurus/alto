@@ -34,6 +34,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QColor,
+    QIntValidator,
     QPainter,
     QPaintEvent,
     QPalette,
@@ -49,6 +50,7 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QPushButton,
     QRadioButton,
     QScrollArea,
@@ -71,6 +73,7 @@ from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
     ClefBasics,
+    KeyboardIntervals,
     KeyboardNotes,
     KeySignatureConstruction,
     KeySignatures,
@@ -96,12 +99,14 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import INVERSION_NAMES
-from alto.ui.circle_colours import (
+from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
 )
 from alto.ui.colors import blend
 from alto.ui.degree_text import degree_tooltip
+from alto.ui.dropdown import FieldComboBox
+from alto.ui.interval_range import IntervalRangeSlider
 from alto.ui.keyboard import KeyboardSpan
 from alto.ui.pictures import (
     CLEF_NAMES,
@@ -279,6 +284,7 @@ def _arrow(
     btn.setArrowType(kind)
     btn.setProperty("arrowButton", True)  # styled with a visible border (see style.py)
     btn.setToolTip(tip)
+    btn.setAccessibleName(tip)
     btn.setAutoRepeat(True)
     btn.setAutoRepeatDelay(350)
     btn.setAutoRepeatInterval(90)
@@ -382,11 +388,11 @@ class RangeEditor(QWidget):
             0,
             0,
         )
-        row.addStretch()  # keep the staff and its arrows together, centred in the pane
+        row.addStretch()  # keep the staff and its arrows together, centered in the pane
         for column, buttons in ((0, (self.low_up, self.low_down)), (2, (self.high_up, self.high_down))):
             col = QVBoxLayout()
             col.setSpacing(2)
-            col.addStretch()  # centre the pair on the staff's midline
+            col.addStretch()  # center the pair on the staff's midline
             col.addWidget(buttons[0])
             col.addWidget(buttons[1])
             col.addStretch()
@@ -565,21 +571,21 @@ class KeyDiagram(QWidget):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         pal = self.palette()
         text = pal.color(QPalette.ColorRole.Text)
-        base = pal.color(QPalette.ColorRole.Base)  # the row is filled with the base colour
+        base = pal.color(QPalette.ColorRole.Base)  # the row is filled with the base color
 
-        def shade(t: float) -> QColor:  # t of the way from the row's background to the text colour
+        def shade(t: float) -> QColor:  # t of the way from the row's background to the text color
             """
-            Return a colour a fraction of the way from the row's background to the text colour.
+            Return a color a fraction of the way from the row's background to the text color.
 
             Parameters
             ----------
             t : float
-                0 for the background, 1 for the text colour.
+                0 for the background, 1 for the text color.
 
             Returns
             -------
             QColor
-                The blended colour.
+                The blended color.
 
             Examples
             --------
@@ -759,31 +765,31 @@ def _clefs_page(
     choices : iterable of str
         The clefs to offer, from `settings.RANGE_KEYS`; "grand" is left out of exercises that cannot use the grand staff.
     selected : set of str
-        The clefs that start ticked. Keyword-only.
+        The clefs that start checked. Keyword-only.
     edited : callable
-        Called whenever a box is ticked or unticked. Keyword-only.
+        Called whenever a box is checked or unchecked. Keyword-only.
     back : callable
         Called when the Back button is clicked. Keyword-only.
     title : str, default "Clefs"
         The page's title. Keyword-only.
     hint : str, default "One of the checked clefs is picked at random."
-        The grey line above the list. Keyword-only.
+        The gray line above the list. Keyword-only.
 
     Returns
     -------
     dict of str to QCheckBox
         The checkbox of each clef offered.
     QWidget
-        The page, with its title. The last ticked clef cannot be unticked.
+        The page, with its title. The last checked clef cannot be unchecked.
 
     Examples
     --------
-    >>> ticked = []
-    >>> boxes_, page_ = _clefs_page(("treble", "bass"), selected={"bass"}, edited=lambda: ticked.append(1), back=lambda: None)
-    >>> boxes_["bass"].isEnabled()  # it is the only one ticked, so it stays ticked
+    >>> checked = []
+    >>> boxes_, page_ = _clefs_page(("treble", "bass"), selected={"bass"}, edited=lambda: checked.append(1), back=lambda: None)
+    >>> boxes_["bass"].isEnabled()  # it is the only one checked, so it stays checked
     False
     >>> boxes_["treble"].setChecked(True)
-    >>> sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), ticked
+    >>> sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), checked
     (['bass', 'treble'], [1])
     """
     boxes = {c: _clef_box(c) for c in choices}
@@ -987,7 +993,7 @@ class _Row(QPushButton):
         """
         Put a widget in the row.
 
-        Just after the value text, or (in a tall row) centred on its own line below.
+        Just after the value text, or (in a tall row) centered on its own line below.
 
         Parameters
         ----------
@@ -1643,7 +1649,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         values_hint.setWordWrap(True)
         vlay.addWidget(values_hint)
         for v, box in self.value_boxes.items():
-            picture = ValuePictures([v], scale=1.25, centre_stemless=True)
+            picture = ValuePictures([v], scale=1.25, center_stemless=True)
             box.setIcon(picture.to_icon())
             box.setIconSize(picture.size())
             box.setStyleSheet("QCheckBox { font-size: 11pt; }")
@@ -1765,9 +1771,9 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
     # clefs page
     def _clefs_edited(self) -> None:
         """
-        Take the ticked clefs into the settings, save them and say so.
+        Take the checked clefs into the settings, save them and say so.
 
-        The last ticked clef cannot be unticked.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
@@ -1786,7 +1792,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
     # key signatures / note values / note names pages
     def _keys_edited(self) -> None:
         """
-        Take the ticked key signatures into the settings, save them and say so.
+        Take the checked key signatures into the settings, save them and say so.
 
         Examples
         --------
@@ -1801,7 +1807,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
 
     def _values_edited(self) -> None:
         """
-        Take the ticked note values into the settings, save them and say so.
+        Take the checked note values into the settings, save them and say so.
 
         Examples
         --------
@@ -2013,16 +2019,75 @@ def save_keyboard() -> None:
     saved_settings.setValue("keyboard/keys", ",".join(str(k) for k in cfg.active_keys()))
 
 
+def load_keyboard_intervals() -> None:
+    """
+    Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.
+
+    Examples
+    --------
+    >>> load_keyboard_intervals()
+    >>> settings.keyboard_intervals.bounds()[0] < settings.keyboard_intervals.bounds()[1]
+    True
+    """
+    saved = store()
+    cfg = settings.keyboard_intervals
+    defaults = settings.KeyboardIntervalSettings()
+    try:
+        low = int_value(saved, key="keyboardIntervals/low", default=defaults.low)
+        high = int_value(saved, key="keyboardIntervals/high", default=defaults.high)
+    except (TypeError, ValueError):
+        low, high = defaults.bounds()
+    first, last = settings.KEYBOARD_FULL
+    cfg.low, cfg.high = (low, high) if first <= low < high <= last else defaults.bounds()
+    selected = text_value(saved, key="keyboardIntervals/intervals", default=",".join(str(n) for n in range(1, 13)))
+    cfg.intervals = {int(value) for value in selected.split(",") if value.isdecimal() and 1 <= int(value) <= last - first}
+    if not cfg.intervals and selected.strip():
+        cfg.intervals = {1}
+    cfg.intervals = set(cfg.active_intervals())
+    cfg.compact_buttons = text_value(saved, key="keyboardIntervals/compactButtons", default="false").lower() == "true"
+    cfg.all_interval_buttons = text_value(saved, key="keyboardIntervals/allButtons", default="false").lower() == "true"
+    try:
+        cfg.button_count = int_value(saved, key="keyboardIntervals/buttonCount", default=6)
+    except (TypeError, ValueError):
+        cfg.button_count = 6
+    cfg.button_count = cfg.answer_button_limit()
+
+
+def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None:
+    """
+    Save the keyboard interval range and selected distances.
+
+    Parameters
+    ----------
+    cfg : KeyboardIntervalSettings
+        The settings to save.
+
+    Examples
+    --------
+    >>> save_keyboard_intervals(settings.KeyboardIntervalSettings())
+    >>> int(store().value("keyboardIntervals/low"))
+    48
+    """
+    saved = store()
+    low, high = cfg.bounds()
+    saved.setValue("keyboardIntervals/low", low)
+    saved.setValue("keyboardIntervals/high", high)
+    saved.setValue("keyboardIntervals/intervals", ",".join(str(n) for n in cfg.active_intervals()))
+    saved.setValue("keyboardIntervals/compactButtons", "true" if cfg.compact_buttons else "false")
+    saved.setValue("keyboardIntervals/allButtons", "true" if cfg.all_interval_buttons else "false")
+    saved.setValue("keyboardIntervals/buttonCount", cfg.answer_button_limit())
+
+
 class KeyChecklist(QWidget):
     """
     Checkboxes for the 15 major keys, flats on the left and sharps on the right.
 
-    At least one stays checked. Each is labelled with a picture of its signature.
+    At least one stays checked. Each is labeled with a picture of its signature.
 
     Attributes
     ----------
     changed : Signal
-        Emitted after a box is ticked or unticked.
+        Emitted after a box is checked or unchecked.
     boxes : dict of int to QCheckBox
         The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).
 
@@ -2046,7 +2111,7 @@ class KeyChecklist(QWidget):
         Parameters
         ----------
         selected : set of int
-            The key signatures to tick at first.
+            The key signatures to check initially.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2057,7 +2122,7 @@ class KeyChecklist(QWidget):
         """
         super().__init__(parent)
         self.boxes = {k: QCheckBox() for k in range(-7, 8)}
-        for k, box in self.boxes.items():  # each key is labelled with its signature, as written after a treble clef
+        for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
             description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
             _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
         # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
@@ -2088,7 +2153,7 @@ class KeyChecklist(QWidget):
 
     def selected(self) -> set[int]:
         """
-        Return the ticked key signatures.
+        Return the checked key signatures.
 
         Returns
         -------
@@ -2104,7 +2169,7 @@ class KeyChecklist(QWidget):
 
     def _toggled(self) -> None:
         """
-        Keep one box ticked, and say that something changed.
+        Keep one box checked, and say that something changed.
 
         Examples
         --------
@@ -2156,7 +2221,7 @@ class KeySignaturePage(QWidget):
         enabled : bool
             Whether key signatures are on.
         selected : set of int
-            The key signatures to tick at first. Keyword-only.
+            The key signatures to check initially. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2203,7 +2268,7 @@ class KeySignaturePage(QWidget):
 
     def selected(self) -> set[int]:
         """
-        Return the ticked key signatures.
+        Return the checked key signatures.
 
         Returns
         -------
@@ -2774,9 +2839,9 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
 
     def _clefs_edited(self) -> None:
         """
-        Take the ticked clefs into the settings, save them and say so.
+        Take the checked clefs into the settings, save them and say so.
 
-        The last ticked clef cannot be unticked.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
@@ -2881,12 +2946,14 @@ def load_arpeggio() -> None:
 
 class ChoiceChecklist(QWidget):
     """
-    Checkboxes for a list of choices, optionally under small headings. At least one stays checked.
+    Checkboxes for a list of choices, optionally under headings and allowing an empty selection.
 
     Attributes
     ----------
     changed : Signal
-        Emitted after a box is ticked or unticked.
+        Emitted after a box is checked or unchecked.
+    allow_empty : bool
+        Whether all choices may be unchecked.
     boxes : dict
         The checkbox of each choice, by its key.
 
@@ -2905,6 +2972,7 @@ class ChoiceChecklist(QWidget):
         groups: list[tuple[str, list[tuple[object, str]]]],
         *,
         selected: set,
+        allow_empty: bool = False,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -2915,7 +2983,9 @@ class ChoiceChecklist(QWidget):
         groups : list of tuple of (str, list of tuple of (object, str))
             The headings and, under each, the choices as (key, label); an empty heading shows none.
         selected : set
-            The keys to tick at first. Keyword-only.
+            The keys to check initially. Keyword-only.
+        allow_empty : bool, default False
+            Allow all choices to be unchecked. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2927,6 +2997,7 @@ class ChoiceChecklist(QWidget):
         [0, 1]
         """
         super().__init__(parent)
+        self.allow_empty = allow_empty
         self.boxes: dict[object, QCheckBox] = {}
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
@@ -2947,16 +3018,17 @@ class ChoiceChecklist(QWidget):
                 box.toggled.connect(self._toggled)
                 self.boxes[key] = box
                 lay.addWidget(box)
-        _guard_last(list(self.boxes.values()))
+        if not self.allow_empty:
+            _guard_last(list(self.boxes.values()))
 
     def selected(self) -> set:
         """
-        Return the ticked choices.
+        Return the checked choices.
 
         Returns
         -------
         set
-            The keys of the ticked boxes.
+            The keys of the checked boxes.
 
         Examples
         --------
@@ -2967,7 +3039,7 @@ class ChoiceChecklist(QWidget):
 
     def _toggled(self) -> None:
         """
-        Keep one box ticked, and say that something changed.
+        Keep one box checked, and say that something changed.
 
         Examples
         --------
@@ -2978,7 +3050,536 @@ class ChoiceChecklist(QWidget):
         >>> got
         [1]
         """
-        _guard_last(list(self.boxes.values()))
+        if not self.allow_empty:
+            _guard_last(list(self.boxes.values()))
+        self.changed.emit()
+
+
+class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
+    """
+    Range and interval selection pages for keyboard interval identification.
+
+    Attributes
+    ----------
+    cfg : KeyboardIntervalSettings
+        The settings being edited.
+    stack : SlideStack
+        The settings menu, range page, and interval page.
+    span : KeyboardSpan
+        The draggable range selector.
+    interval_range : QWidget
+        The interval range controls directly below Select all.
+    interval_slider : IntervalRangeSlider
+        The two-handle interval selector.
+    interval_low_label, interval_high_label : FieldComboBox
+        Clickable endpoint notation with scrollable interval lists.
+    interval_page : ChoiceChecklist
+        The interval checkboxes, keyed by distance in half steps.
+
+    Examples
+    --------
+    >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+    >>> panel.stack.count()
+    4
+    """
+
+    def __init__(
+        self,
+        cfg: settings.KeyboardIntervalSettings,
+        *,
+        parent: QWidget | None = None,
+    ) -> None:
+        """
+        Build the range selector and interval checklist.
+
+        Parameters
+        ----------
+        cfg : KeyboardIntervalSettings
+            The settings to edit.
+        parent : QWidget or None, default None
+            The widget that owns the panel. Keyword-only.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel.low_label.text(), panel.high_label.text()
+        ('C3', 'C5')
+        """
+        super().__init__(parent)
+        self.cfg = cfg
+        cfg.low, cfg.high = cfg.bounds()
+        cfg.intervals = set(cfg.active_intervals())
+        self._selection_before_all = set(cfg.intervals)
+        self._select_all_active = False
+        self.stack = SlideStack()
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(self.stack)
+        menu = QWidget()
+        menu_layout = QVBoxLayout(menu)
+        menu_layout.setContentsMargins(0, 0, 0, 0)
+        menu_layout.addWidget(QLabel("<h3>Settings</h3>"))
+        self.range_row = _Row("Range", tall=True)
+        self.range_row.clicked.connect(lambda: self._go(1))
+        self.range_keyboard = KeyboardSpan(compact=True, size=(ROW_PICTURE_WIDTH, 36))
+        self.range_row.attach(self.range_keyboard)
+        self.intervals_row = _Row("Intervals")
+        self.intervals_row.clicked.connect(lambda: self._go(2))
+        menu_layout.addWidget(self.range_row)
+        menu_layout.addWidget(self.intervals_row)
+        self.buttons_row = _Row("Buttons")
+        self.buttons_row.clicked.connect(lambda: self._go(3))
+        menu_layout.addWidget(self.buttons_row)
+        menu_layout.addStretch()
+        buttons_body = QWidget()
+        buttons_layout = QVBoxLayout(buttons_body)
+        buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.button_modes: dict[str, QRadioButton] = {}
+        mode_group = QButtonGroup(self)
+        for mode, label, tip in (
+            ("limited", "Limited", "Show up to the chosen number of answer buttons"),
+            ("all", "All", "Show a fixed button for every selected interval"),
+            ("compact", "Compact", "Choose a quality letter and an interval number, in either order"),
+        ):
+            radio = QRadioButton(label)
+            radio.setToolTip(tip)
+            mode_group.addButton(radio)
+            radio.toggled.connect(lambda on, chosen=mode: self._button_mode_chosen(chosen, on=on))
+            buttons_layout.addWidget(radio)
+            self.button_modes[mode] = radio
+        self.button_count_row = QWidget()
+        count_layout = QHBoxLayout(self.button_count_row)
+        count_layout.setContentsMargins(0, 0, 0, 0)
+        count_layout.addWidget(QLabel("Button count"), 1)
+        self.button_count_down = _arrow(Qt.ArrowType.LeftArrow, tip="Fewer answer buttons")
+        self.button_count_up = _arrow(Qt.ArrowType.RightArrow, tip="More answer buttons")
+        self.button_count_down.clicked.connect(lambda: self._step_button_count(-1))
+        self.button_count_up.clicked.connect(lambda: self._step_button_count(1))
+        self.button_count = QLineEdit()
+        self.button_count.setProperty("field", True)
+        self.button_count.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.button_count.setFixedWidth(54)
+        self.button_count.setValidator(QIntValidator(1, len(settings.KEYBOARD_INTERVAL_NAMES), self.button_count))
+        self.button_count.setAccessibleName("Answer button count")
+        self.button_count.setToolTip("Maximum answer buttons in limited mode; fewer are shown if fewer intervals are selected")
+        self.button_count.editingFinished.connect(self._button_count_edited)
+        count_layout.addWidget(self.button_count_down)
+        count_layout.addWidget(self.button_count)
+        count_layout.addWidget(self.button_count_up)
+        buttons_layout.insertWidget(1, self.button_count_row)
+        buttons_layout.addStretch()
+
+        body = QWidget()
+        layout = QVBoxLayout(body)
+        layout.setContentsMargins(0, 0, 0, 0)
+        hint = QLabel("Drag to choose the keys to practice. Both highlighted notes must fit within this range.")
+        hint.setWordWrap(True)
+        layout.addWidget(hint)
+        self.span = KeyboardSpan()
+        self.span.dragged.connect(self._set_range)
+        layout.addWidget(self.span)
+        self.low_label, self.high_label = QLabel(), QLabel()
+        self.arrows: dict[str, tuple[QToolButton, QToolButton]] = {}
+        for title, label, which in (("Lowest key", self.low_label, "low"), ("Highest key", self.high_label, "high")):
+            row = QHBoxLayout()
+            row.addWidget(QLabel(f"<b>{title}</b>"), 1)
+            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
+            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
+            down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
+            up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setMinimumWidth(48)
+            row.addWidget(down)
+            row.addWidget(label)
+            row.addWidget(up)
+            layout.addLayout(row)
+            self.arrows[which] = (down, up)
+        self.entire = QPushButton("Entire keyboard")
+        self.entire.clicked.connect(lambda: self._set_range(*settings.KEYBOARD_FULL))
+        self.default = QPushButton("Reset to default")
+        self.default.clicked.connect(lambda: self._set_range(*settings.KEYBOARD_DEFAULT))
+        layout.addWidget(self.entire)
+        layout.addWidget(self.default)
+
+        intervals = QWidget()
+        intervals_layout = QVBoxLayout(intervals)
+        intervals_layout.setContentsMargins(0, 0, 0, 0)
+        self.select_all = _ToggleRow("Select all")
+        self.select_all.switched.connect(self._select_all_toggled)
+        intervals_layout.addWidget(self.select_all)
+        self.interval_range = QWidget()
+        range_layout = QVBoxLayout(self.interval_range)
+        range_layout.setContentsMargins(0, 0, 0, 0)
+        self.interval_slider = IntervalRangeSlider()
+        self.interval_slider.edited.connect(self._interval_range_edited)
+        range_layout.addWidget(self.interval_slider)
+        endpoints = QGridLayout()
+        endpoints.setColumnStretch(2, 1)
+        self.interval_low_label, self.interval_high_label = FieldComboBox(), FieldComboBox()
+        self.interval_arrows: dict[str, tuple[QToolButton, QToolButton]] = {}
+        for row, (title, label, which) in enumerate(
+            (("From", self.interval_low_label, "low"), ("To", self.interval_high_label, "high")),
+        ):
+            endpoints.addWidget(QLabel(title), row, 0)
+            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: smaller interval")
+            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: larger interval")
+            down.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=-1))
+            up.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=1))
+            label.setProperty("field", True)
+            label.setMinimumWidth(48)
+            label.setMaxVisibleItems(12)
+            label.setPlaceholderText("—")
+            label.setAccessibleName("Lowest interval" if which == "low" else "Highest interval")
+            label.setToolTip(f"Choose the {'lowest' if which == 'low' else 'highest'} interval")
+            label.activated.connect(lambda index, w=which: self._interval_endpoint_picked(w, index=index))
+            endpoints.addWidget(down, row, 1)
+            endpoints.addWidget(label, row, 2)
+            endpoints.addWidget(up, row, 3)
+            self.interval_arrows[which] = (down, up)
+        range_layout.addLayout(endpoints)
+        intervals_layout.addWidget(self.interval_range)
+        self.interval_page = ChoiceChecklist(
+            [
+                (
+                    "Simple intervals",
+                    [(distance, settings.keyboard_interval_name(distance)) for distance in range(1, 13)],
+                ),
+                (
+                    "Compound intervals",
+                    [
+                        (distance, settings.keyboard_interval_name(distance))
+                        for distance in range(13, len(settings.KEYBOARD_INTERVAL_NAMES) + 1)
+                    ],
+                ),
+            ],
+            selected=cfg.intervals,
+            allow_empty=True,
+        )
+        self.interval_page.changed.connect(self._intervals_edited)
+        intervals_layout.addWidget(self.interval_page)
+        self.stack.addWidget(menu)
+        self.stack.addWidget(_subpage("Range", body=body, back=lambda: self._go(0)))
+        self.stack.addWidget(_subpage("Intervals", body=_scrolling(intervals), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(_subpage("Buttons", body=buttons_body, back=lambda: self._go(0)))
+        self._refresh()
+
+    def _go(self, index: int) -> None:
+        """
+        Open a settings page.
+
+        Parameters
+        ----------
+        index : int
+            The menu at 0, range at 1, intervals at 2, or answer buttons at 3.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._go(1)
+        >>> panel.stack.sliding
+        True
+        """
+        if not self.stack.sliding and index != self.stack.currentIndex():
+            self.stack.slide_to(index)
+
+    def _refresh(self) -> None:
+        """
+        Update range labels and disable interval choices that cannot be used.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings(low=60, high=64))
+        >>> panel.interval_page.boxes[12].isEnabled()
+        False
+        """
+        cfg = self.cfg
+        mode = "compact" if cfg.compact_buttons else "all" if cfg.all_interval_buttons else "limited"
+        for key, radio in self.button_modes.items():
+            radio.blockSignals(True)
+            radio.setChecked(key == mode)
+            radio.blockSignals(False)
+        self.buttons_row.value.setText(self.button_modes[mode].text())
+        self.button_count.setText(str(cfg.answer_button_limit()))
+        self.button_count_row.setEnabled(not (cfg.all_interval_buttons or cfg.compact_buttons))
+        self.button_count_down.setEnabled(cfg.answer_button_limit() > 1)
+        self.button_count_up.setEnabled(cfg.answer_button_limit() < len(settings.KEYBOARD_INTERVAL_NAMES))
+        self.low_label.setText(key_name(cfg.low))
+        self.high_label.setText(key_name(cfg.high))
+        self.span.set_span(cfg.low, hi=cfg.high)
+        available = cfg.high - cfg.low
+        low = min(cfg.intervals) if cfg.intervals else 1
+        high = max(cfg.intervals) if cfg.intervals else 1
+        active = bool(cfg.intervals)
+        self.interval_slider.set_range(low, high=high, maximum=available, active=active)
+        for picker, value in ((self.interval_low_label, low), (self.interval_high_label, high)):
+            picker.blockSignals(True)
+            if picker.count() != available:
+                picker.clear()
+                picker.addItems(list(settings.KEYBOARD_INTERVAL_NAMES[:available]))
+            picker.setCurrentIndex(value - 1 if active else -1)
+            picker.blockSignals(False)
+        self.interval_arrows["low"][0].setEnabled(not active or low > 1)
+        self.interval_arrows["low"][1].setEnabled(not active or low < high)
+        self.interval_arrows["high"][0].setEnabled(not active or high > low)
+        self.interval_arrows["high"][1].setEnabled(not active or high < available)
+        self.range_keyboard.set_span(cfg.low, hi=cfg.high)
+        self.range_keyboard.setToolTip(f"{key_name(cfg.low)} to {key_name(cfg.high)}")
+        first, last = settings.KEYBOARD_FULL
+        self.arrows["low"][0].setEnabled(cfg.low > first)
+        self.arrows["low"][1].setEnabled(cfg.low + 1 < cfg.high)
+        self.arrows["high"][0].setEnabled(cfg.high - 1 > cfg.low)
+        self.arrows["high"][1].setEnabled(cfg.high < last)
+        names = [settings.KEYBOARD_INTERVAL_NAMES[distance - 1] for distance in sorted(cfg.intervals)]
+        all_selected = len(names) == cfg.high - cfg.low
+        self.select_all.setOn(self._select_all_active)
+        self.intervals_row.value.setText("All" if all_selected else ", ".join(names) if names else "None")
+        self.intervals_row.setToolTip(", ".join(names))
+        for distance in range(1, len(settings.KEYBOARD_INTERVAL_NAMES) + 1):
+            box = self.interval_page.boxes[distance]
+            box.setVisible(distance <= cfg.high - cfg.low)
+            box.blockSignals(True)
+            box.setChecked(distance in cfg.intervals)
+            box.setEnabled(distance <= cfg.high - cfg.low)
+            box.blockSignals(False)
+
+    def _step(self, which: str, *, delta: int) -> None:
+        """
+        Adjust one endpoint without collapsing the range to a single key.
+
+        Parameters
+        ----------
+        which : str
+            The endpoint, "low" or "high".
+        delta : int
+            The number of keys to move. Keyword-only.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._step("low", delta=1)
+        >>> panel.cfg.low
+        49
+        """
+        low, high = self.cfg.low, self.cfg.high
+        first, last = settings.KEYBOARD_FULL
+        if which == "low":
+            low = min(max(low + delta, first), high - 1)
+        else:
+            high = max(min(high + delta, last), low + 1)
+        self._set_range(low, high)
+
+    def _set_range(  # noqa: PLR0917 (the Qt signal supplies two positional arguments)
+        self,
+        low: int,
+        high: int,
+    ) -> None:
+        """
+        Save a dragged range and retain only intervals that fit.
+
+        Parameters
+        ----------
+        low : int
+            The lowest selected MIDI key.
+        high : int
+            The highest selected MIDI key.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._set_range(60, 64)
+        >>> panel.cfg.active_intervals()
+        [1, 2, 3, 4]
+        """
+        self.cfg.low, self.cfg.high = low, high
+        self.cfg.low, self.cfg.high = self.cfg.bounds()
+        if self._select_all_active:
+            self.cfg.intervals = set(range(1, self.cfg.high - self.cfg.low + 1))
+        else:
+            self.cfg.intervals = set(self.cfg.active_intervals())
+        self._save_and_emit()
+
+    def _interval_endpoint_picked(self, which: str, *, index: int) -> None:
+        """
+        Select an endpoint from its dropdown and keep the interval bounds ordered.
+
+        Parameters
+        ----------
+        which : str
+            The endpoint, "low" or "high".
+        index : int
+            The selected interval's zero-based index. Keyword-only.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._interval_endpoint_picked("low", index=2)
+        >>> min(panel.cfg.intervals), max(panel.cfg.intervals)
+        (3, 12)
+        """
+        if not 0 <= index < self.cfg.high - self.cfg.low:
+            return
+        value = index + 1
+        selected = self.cfg.intervals
+        low = min(selected) if selected else value
+        high = max(selected) if selected else value
+        if which == "low":
+            low, high = value, max(high, value)
+        else:
+            low, high = min(low, value), value
+        self._interval_range_edited(low, high)
+
+    def _interval_range_edited(  # noqa: PLR0917 (the Qt signal supplies two positional arguments)
+        self,
+        low: int,
+        high: int,
+    ) -> None:
+        """
+        Select the interval span chosen with the slider or endpoint buttons.
+
+        Parameters
+        ----------
+        low : int
+            The lowest interval distance, in half steps.
+        high : int
+            The highest interval distance, in half steps.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel.interval_slider.move_endpoint("low", delta=2)
+        >>> panel.cfg.intervals
+        {3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+        >>> panel.cfg.bounds()
+        (48, 72)
+        """
+        self._select_all_active = False
+        self.cfg.intervals = set(range(low, high + 1))
+        self._save_and_emit()
+
+    def _step_button_count(self, delta: int) -> None:
+        """
+        Adjust the limited answer-button count with an arrow button.
+
+        Parameters
+        ----------
+        delta : int
+            The number of buttons to add or remove.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._step_button_count(1)
+        >>> panel.cfg.button_count
+        7
+        """
+        self.cfg.button_count = max(1, min(len(settings.KEYBOARD_INTERVAL_NAMES), self.cfg.answer_button_limit() + delta))
+        self._save_and_emit()
+
+    def _button_count_edited(self) -> None:
+        """
+        Commit a typed answer-button count, restoring the current value if the input is invalid.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel.button_count.setText("8")
+        >>> panel._button_count_edited()
+        >>> panel.cfg.button_count
+        8
+        """
+        try:
+            count = int(self.button_count.text())
+        except ValueError:
+            self._refresh()
+            return
+        self.cfg.button_count = max(1, min(len(settings.KEYBOARD_INTERVAL_NAMES), count))
+        self._save_and_emit()
+
+    def _button_mode_chosen(self, mode: str, *, on: bool) -> None:
+        """
+        Save the selected answer mode while preserving the limited button count.
+
+        Parameters
+        ----------
+        mode : str
+            The selected mode: "limited", "all", or "compact".
+        on : bool
+            Whether this radio button is selected. Keyword-only.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel.button_modes["compact"].click()
+        >>> panel.cfg.compact_buttons, panel.cfg.all_interval_buttons
+        (True, False)
+        """
+        if not on:
+            return
+        self.cfg.compact_buttons = mode == "compact"
+        self.cfg.all_interval_buttons = mode == "all"
+        self._save_and_emit()
+
+    def _select_all_toggled(self, on: bool) -> None:
+        """
+        Temporarily select every interval, or restore the selection from before the toggle was enabled.
+
+        Parameters
+        ----------
+        on : bool
+            True to select all available intervals; False to restore the previous selection.
+
+        Examples
+        --------
+        >>> cfg = settings.KeyboardIntervalSettings(low=60, high=64, intervals={3})
+        >>> panel = KeyboardIntervalSettingsPanel(cfg)
+        >>> panel._select_all_toggled(True)
+        >>> cfg.intervals
+        {1, 2, 3, 4}
+        >>> panel._select_all_toggled(False)
+        >>> cfg.intervals
+        {3}
+        """
+        if on:
+            self._selection_before_all = set(self.cfg.intervals)
+            self.cfg.intervals = set(range(1, self.cfg.high - self.cfg.low + 1))
+        else:
+            self.cfg.intervals = set(self._selection_before_all)
+            self.cfg.intervals = set(self.cfg.active_intervals())
+        self._select_all_active = on
+        self._save_and_emit()
+
+    def _intervals_edited(self) -> None:
+        """
+        Save the interval selection and ask a new question.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel.interval_page.boxes[12].setChecked(False)
+        >>> 12 in panel.cfg.intervals
+        False
+        """
+        self._select_all_active = False
+        selected = self.interval_page.selected()
+        self.cfg.intervals = {
+            distance for distance in range(1, len(settings.KEYBOARD_INTERVAL_NAMES) + 1) if distance in selected
+        }
+        self.cfg.intervals = set(self.cfg.active_intervals())
+        self._save_and_emit()
+
+    def _save_and_emit(self) -> None:
+        """
+        Refresh the controls, persist the settings, and notify the exercise.
+
+        Examples
+        --------
+        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+        >>> panel._save_and_emit()
+        >>> int(store().value("keyboardIntervals/low")) == panel.cfg.low
+        True
+        """
+        self._refresh()
+        save_keyboard_intervals(self.cfg)
         self.changed.emit()
 
 
@@ -3207,9 +3808,9 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
 
     def _clefs_edited(self) -> None:
         """
-        Take the ticked clefs into the settings, save them and say so.
+        Take the checked clefs into the settings, save them and say so.
 
-        The last ticked clef cannot be unticked.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
@@ -3225,7 +3826,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
 
     def _types_edited(self) -> None:
         """
-        Take the ticked chord types into the settings, save them and say so.
+        Take the checked chord types into the settings, save them and say so.
 
         Examples
         --------
@@ -3240,7 +3841,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
 
     def _inversions_edited(self) -> None:
         """
-        Take the ticked inversions into the settings, save them and say so.
+        Take the checked inversions into the settings, save them and say so.
 
         Examples
         --------
@@ -3666,9 +4267,9 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
 
     def _clefs_edited(self) -> None:
         """
-        Take the ticked clefs into the settings, save them and say so.
+        Take the checked clefs into the settings, save them and say so.
 
-        The last ticked clef cannot be unticked.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
@@ -3684,7 +4285,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
 
     def _modes_edited(self) -> None:
         """
-        Take the ticked scales into the settings, save them and say so.
+        Take the checked scales into the settings, save them and say so.
 
         Examples
         --------
@@ -3699,7 +4300,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
 
     def _staff_keys_edited(self) -> None:
         """
-        Take the ticked staff key signatures into the settings, save them and say so.
+        Take the checked staff key signatures into the settings, save them and say so.
 
         Examples
         --------
@@ -3764,7 +4365,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
 
     def _keys_edited(self) -> None:
         """
-        Take the ticked key signatures into the settings, save them and say so.
+        Take the checked key signatures into the settings, save them and say so.
 
         Examples
         --------
@@ -3973,9 +4574,9 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
 
     def _clefs_edited(self) -> None:
         """
-        Take the ticked clefs into the settings, save them and say so.
+        Take the checked clefs into the settings, save them and say so.
 
-        The last ticked clef cannot be unticked.
+        The last checked clef cannot be unchecked.
 
         Examples
         --------
@@ -4014,7 +4615,7 @@ def load_circle() -> None:
     Load the saved circle of fifths settings into the shared settings object.
 
     Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-    saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
+    saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
 
     Examples
     --------
@@ -4035,6 +4636,10 @@ def load_circle() -> None:
         } or settings.circle.questions
     settings.circle.customs = load_customs(text_value(saved_settings, key="circle/customSchemes", default="[]"))
     wanted = text_value(saved_settings, key="circle/scheme", default=DEFAULT_SCHEME)
+    if wanted == "colour-blind":  # Migrate the preset key saved by earlier versions.
+        wanted = "color-blind"
+    elif wanted == "chequer":
+        wanted = "checker"
     known = set(PRESETS) | {record["id"] for record in settings.circle.customs}
     settings.circle.scheme = wanted if wanted in known else DEFAULT_SCHEME
 
@@ -4092,33 +4697,33 @@ def save_circle(cfg: settings.CircleSettings) -> None:
 
 class CircleSettingsPanel(ExerciseSettingsPanel):
     """
-    The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.
+    The settings of the circle of fifths exercise: which kinds of question to ask, and the colors of the circle.
 
-    The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+    The menu has two rows. Questions opens a page of switches. Colors opens a page of color schemes to choose from, with a
     button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
-    of question emits `changed`, and a new colour scheme emits `restyled`, which keeps the question.
+    of question emits `changed`, and a new color scheme emits `restyled`, which keeps the question.
 
     Attributes
     ----------
     cfg : CircleSettings
         The settings being edited.
     stack : SlideStack
-        The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.
+        The menu and its pages: the menu, the questions, the color schemes and the editor of a scheme.
     questions_row : _Row
         The menu row for the questions.
-    colours_row : _Row
-        The menu row for the colours; its value is the name of the chosen scheme.
+    colors_row : _Row
+        The menu row for the colors; its value is the name of the chosen scheme.
     questions : ChoiceChecklist
         The kinds of question: relative major, relative minor and Roman numerals.
     schemes : SchemePage
-        The colour schemes.
+        The color schemes.
     editor : SchemeEditor
         The editor of a scheme of your own.
 
     Examples
     --------
     >>> panel = CircleSettingsPanel(settings.CircleSettings())
-    >>> panel.questions_row.value.text(), panel.colours_row.value.text()
+    >>> panel.questions_row.value.text(), panel.colors_row.value.text()
     ('3 of 3', 'Cyan to indigo')
     """
 
@@ -4140,7 +4745,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
         Examples
         --------
-        >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+        >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
         4
         """
         super().__init__(parent)
@@ -4166,14 +4771,14 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self.questions_row = _Row("Questions")
         self.questions_row.clicked.connect(lambda: self._go(1))
         mlay.addWidget(self.questions_row)
-        self.colours_row = _Row("Colours")
-        self.colours_row.clicked.connect(lambda: self._go(2))
-        mlay.addWidget(self.colours_row)
+        self.colors_row = _Row("Colors")
+        self.colors_row.clicked.connect(lambda: self._go(2))
+        mlay.addWidget(self.colors_row)
         mlay.addStretch()
         self.questions = ChoiceChecklist([("", list(settings.CIRCLE_QUESTIONS.items()))], selected=cfg.questions)
         self.questions.changed.connect(self._questions_edited)
         note = QLabel(
-            "Relative major: a minor key is shown, and you name its major. Relative minor: the other way round. Roman "
+            "Relative major: a minor key is shown, and you name its major. Relative minor: the other way around. Roman "
             "numerals: a key is shown with its six chords lit, and you give the numeral of one. One of the checked kinds is "
             "asked at random.",
         )
@@ -4196,12 +4801,12 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self.editor = SchemeEditor()
         self.editor.saved.connect(self._scheme_saved)
         self.editor.deleted.connect(self._scheme_deleted)
-        self.editor.cancelled.connect(lambda: self._go(2))
+        self.editor.canceled.connect(lambda: self._go(2))
         pages = (
             menu,
             _subpage("Questions", body=body, back=lambda: self._go(0)),
-            _subpage("Colours", body=_scrolling(self.schemes), back=lambda: self._go(0), fill=True),
-            _subpage("Your colours", body=_scrolling(self.editor), back=lambda: self._go(2), fill=True),
+            _subpage("Colors", body=_scrolling(self.schemes), back=lambda: self._go(0), fill=True),
+            _subpage("Your colors", body=_scrolling(self.editor), back=lambda: self._go(2), fill=True),
         )
         for page in pages:
             self.stack.addWidget(page)
@@ -4215,7 +4820,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         Parameters
         ----------
         index : int
-            0 for the menu, 1 for the questions, 2 for the colour schemes and 3 for the editor of a scheme.
+            0 for the menu, 1 for the questions, 2 for the color schemes and 3 for the editor of a scheme.
 
         Examples
         --------
@@ -4232,21 +4837,21 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
     def _refresh_summaries(self) -> None:
         """
-        Update the menu's summaries: how many kinds of question are on, and the name of the colour scheme.
+        Update the menu's summaries: how many kinds of question are on, and the name of the color scheme.
 
         Examples
         --------
         >>> panel = CircleSettingsPanel(settings.CircleSettings(questions={"minor"}, scheme="midnight"))
         >>> panel._refresh_summaries()
-        >>> panel.questions_row.value.text(), panel.colours_row.value.text()
+        >>> panel.questions_row.value.text(), panel.colors_row.value.text()
         ('1 of 3', 'Midnight')
         """
         self.questions_row.value.setText(f"{len(self.cfg.active_questions())} of {len(settings.CIRCLE_QUESTIONS)}")
-        self.colours_row.value.setText(self.cfg.active_scheme().name)
+        self.colors_row.value.setText(self.cfg.active_scheme().name)
 
     def _questions_edited(self) -> None:
         """
-        Take the ticked kinds of question into the settings, save them and say so.
+        Take the checked kinds of question into the settings, save them and say so.
 
         Examples
         --------
@@ -4263,7 +4868,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
     def _scheme_chosen(self, key: str) -> None:
         """
-        Use a colour scheme: take it into the settings, save it and say so.
+        Use a color scheme: take it into the settings, save it and say so.
 
         Parameters
         ----------
@@ -4275,7 +4880,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         >>> cfg = settings.CircleSettings()
         >>> panel = CircleSettingsPanel(cfg)
         >>> panel._scheme_chosen("ember")
-        >>> cfg.scheme, panel.schemes.thumbs["ember"].isChecked(), panel.colours_row.value.text()
+        >>> cfg.scheme, panel.schemes.thumbs["ember"].isChecked(), panel.colors_row.value.text()
         ('ember', True, 'Ember')
         >>> store().remove("circle")
         """
@@ -4311,7 +4916,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         Examples
         --------
         >>> from alto.circle_schemes import record_of
-        >>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+        >>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
         >>> panel = CircleSettingsPanel(settings.CircleSettings(customs=[mine]))
         >>> panel._edit_scheme("custom-1")
         >>> panel.editor.name.text(), panel.editor.delete_button.isHidden()
@@ -4339,7 +4944,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         >>> panel._new_scheme()
         >>> panel._scheme_saved(panel.editor.record())
         >>> cfg.scheme, [r["name"] for r in cfg.customs], "custom-1" in panel.schemes.thumbs
-        ('custom-1', ['My colours'], True)
+        ('custom-1', ['My colors'], True)
         >>> store().remove("circle")
         """
         others = [existing for existing in self.cfg.customs if existing["id"] != record["id"]]
@@ -4364,7 +4969,7 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         Examples
         --------
         >>> from alto.circle_schemes import record_of
-        >>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+        >>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
         >>> cfg = settings.CircleSettings(customs=[mine], scheme="custom-1")
         >>> panel = CircleSettingsPanel(cfg)
         >>> panel._scheme_deleted("custom-1")
@@ -4406,6 +5011,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     """
     if isinstance(exercise, NoteNames):
         return NoteNameSettingsPanel(settings.note_names)
+    if isinstance(exercise, KeyboardIntervals):
+        return KeyboardIntervalSettingsPanel(settings.keyboard_intervals)
     if isinstance(exercise, KeyboardNotes):
         return KeyboardSettingsPanel(settings.keyboard)
     if isinstance(exercise, NoteConstruction):

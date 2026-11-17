@@ -2,7 +2,7 @@
 title: alto.ui.degree_text
 parent: api
 package: alto.ui
-order: 29
+order: 30
 permalink: /api/alto.ui.degree_text/
 ---
 {% raw %}
@@ -28,11 +28,11 @@ def draw_degree_text(
 ) -> None
 ```
 
-Draw text with each combining circumflex centred above its preceding digit.
+Draw text with each combining circumflex centered above its preceding digit.
 
 **Parameters**
 
-- `painter` (*QPainter*): The active painter, with the desired font and colour.
+- `painter` (*QPainter*): The active painter, with the desired font and color.
 - `rect` (*QRectF*): The rectangle in which to align the text. Keyword-only.
 - `text` (*str*): The text, retaining combining circumflexes for copying and accessibility. Keyword-only.
 - `alignment` (*Qt.AlignmentFlag, default AlignCenter*): Horizontal and vertical alignment. Keyword-only.
@@ -62,7 +62,7 @@ Render caret examples as an inline image for Qt's rich-text tooltip.
 
 **Returns**
 
-- *str*: Plain text or HTML containing the explicitly centred carets.
+- *str*: Plain text or HTML containing the explicitly centered carets.
 
 **Examples**
 
@@ -128,7 +128,7 @@ A plain-text label with explicitly positioned scale-degree carets.
 def paintEvent(event: QPaintEvent) -> None
 ```
 
-Paint degree labels with carets centred above their numbers.
+Paint degree labels with carets centered above their numbers.
 
 **Parameters**
 

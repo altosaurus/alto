@@ -138,7 +138,7 @@ def export_backup(
     Returns
     -------
     Path or None
-        The file that was written, or None if the user cancelled or the backup could not be written (which is explained).
+        The file that was written, or None if the user canceled or the backup could not be written (which is explained).
 
     Examples
     --------
@@ -224,7 +224,7 @@ def import_backup(
     Returns
     -------
     bool
-        True if the backup was applied; False if the user cancelled or the file was refused (which is explained).
+        True if the backup was applied; False if the user canceled or the file was refused (which is explained).
 
     Examples
     --------

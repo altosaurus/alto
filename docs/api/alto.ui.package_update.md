@@ -2,7 +2,7 @@
 title: alto.ui.package_update
 parent: api
 package: alto.ui
-order: 44
+order: 47
 permalink: /api/alto.ui.package_update/
 ---
 {% raw %}
@@ -34,7 +34,7 @@ Download and check an update on another thread, and report how it goes through s
 
 - `status` (*Signal*): Emitted with what is being done ("Checking the signature…").
 - `progress` (*Signal*): Emitted with the bytes received so far and the total (0 if it is not known), while the file downloads.
-- `done` (*Signal*): Emitted once at the end, with 0 if the update is ready (see `prepared`) or 1 if it failed, and the reason. Nothing is emitted if the person cancelled.
+- `done` (*Signal*): Emitted once at the end, with 0 if the update is ready (see `prepared`) or 1 if it failed, and the reason. Nothing is emitted if the person canceled.
 - `prepared` (*Prepared or None*): The checked update, once it is ready.
 
 **Examples**
@@ -81,13 +81,13 @@ def cancel() -> None
 
 Stop, at the next chance, and say nothing more.
 
-### UpdatePreparer.is_cancelled
+### UpdatePreparer.is_canceled
 
 ```python
-def is_cancelled() -> bool
+def is_canceled() -> bool
 ```
 
-Say whether the person has cancelled.
+Say whether the person has canceled.
 
 **Returns**
 
@@ -96,7 +96,7 @@ Say whether the person has cancelled.
 **Examples**
 
 ```pycon
->>> UpdatePreparer().is_cancelled()
+>>> UpdatePreparer().is_canceled()
 False
 ```
 
@@ -120,9 +120,9 @@ The window that downloads and checks an update for a packaged copy, and then say
 - `status` (*QLabel*): What is happening.
 - `bar` (*QProgressBar*): The progress of the download; a bar that keeps moving while the size is not known.
 - `button` (*QPushButton*): Cancel while the update is being prepared, then OK if it is ready or Close if it failed.
-- `ended` (*bool*): Whether the preparing has ended, ready, failed or cancelled.
+- `ended` (*bool*): Whether the preparing has ended, ready, failed or canceled.
 - `ready` (*bool*): Whether the update is downloaded and checked.
-- `cancelled` (*bool*): Whether the person cancelled.
+- `canceled` (*bool*): Whether the person canceled.
 - `error` (*str*): Why it failed, if it did.
 - `preparer` (*UpdatePreparer*): What does the work.
 
@@ -146,7 +146,7 @@ Download and check the update, showing the window until the person has read how 
 
 **Returns**
 
-- *Prepared or None*: The update, if it is ready and OK was pressed; None if it failed or was cancelled, in which case nothing is left behind.
+- *Prepared or None*: The update, if it is ready and OK was pressed; None if it failed or was canceled, in which case nothing is left behind.
 
 **Examples**
 

@@ -2,7 +2,7 @@
 title: alto.ui.notes
 parent: api
 package: alto.ui
-order: 43
+order: 46
 permalink: /api/alto.ui.notes/
 ---
 {% raw %}
@@ -35,8 +35,8 @@ def note_shape(
 
 Return the outline of a note of a value, with the stem up or down.
 
-Stems only exist from the half note on, so a breve or whole note is the same either way. Shapes are kept after the first
-time.
+Half notes and shorter values have stems, so a double whole note or whole note looks the same either way.
+Shapes are cached after their first use.
 
 **Parameters**
 
@@ -65,21 +65,21 @@ def draw_note(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     stem_down: bool = False,
 ) -> None
 ```
 
-Draw a note with its head centred on a point.
+Draw a note with its head centered on a point.
 
 **Parameters**
 
 - `p` (*QPainter*): The painter to draw with.
 - `value` (*str*): The note value. Keyword-only.
-- `x` (*float*): The head's centre, in pixels. Keyword-only.
-- `y` (*float*): The head's centre, in pixels. Keyword-only.
+- `x` (*float*): The head's center, in pixels. Keyword-only.
+- `y` (*float*): The head's center, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines, which is also the head's height. Keyword-only.
-- `colour` (*QColor*): The colour to draw in. Keyword-only.
+- `color` (*QColor*): The color to draw in. Keyword-only.
 - `stem_down` (*bool, default False*): Draw the stem down. Keyword-only.
 
 **Examples**
@@ -89,7 +89,7 @@ Draw a note with its head centred on a point.
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
 >>> painter = QPainter(image)
->>> draw_note(painter, value="quarter", x=50, y=50, gap=16, colour=QColor("black"))
+>>> draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
 >>> painter.end()
 True
 >>> image.pixelColor(50, 50).lightness() < 128  # the head is drawn at the point

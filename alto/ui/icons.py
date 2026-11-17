@@ -1,7 +1,7 @@
 """
-Small monochrome icons drawn from SVG, tinted with the current theme's text colour.
+Small monochrome icons drawn from SVG, tinted with the current theme's text color.
 
-Each icon is the inside of a 24 by 24 SVG, written with the word COLOR where the theme colour goes. `svg_icon` turns one
+Each icon is the inside of a 24 by 24 SVG, written with the word COLOR where the theme color goes. `svg_icon` turns one
 into a `QIcon`.
 
 Examples
@@ -57,9 +57,9 @@ def svg_icon(
     Parameters
     ----------
     inner : str
-        The SVG shapes, using COLOR wherever the colour goes.
+        The SVG shapes, using COLOR wherever the color goes.
     color : QColor
-        The colour to draw in. Keyword-only.
+        The color to draw in. Keyword-only.
     size : int, default 24
         The icon's size in logical pixels. Keyword-only.
     scale : float, default 2.0
@@ -112,9 +112,9 @@ def _ring(
     Parameters
     ----------
     x : float
-        The centre's x position in the 24 by 24 drawing.
+        The center's x position in the 24 by 24 drawing.
     y : float
-        The centre's y position. Keyword-only.
+        The center's y position. Keyword-only.
     rx : float, default 3.3
         The horizontal radius. Keyword-only.
     ry : float, default 2.3
@@ -241,14 +241,14 @@ def _cells(
     gap: float,
 ) -> str:
     """
-    Return the SVG for a ring cut into twelve cells, with the gap between cells centred at the top.
+    Return the SVG for a ring cut into twelve cells, with the gap between cells centered at the top.
 
     Parameters
     ----------
     radius : float
         The ring's radius in the 24 by 24 drawing.
     gap : float
-        The length of the gap between neighbouring cells, along the ring. Keyword-only.
+        The length of the gap between neighboring cells, along the ring. Keyword-only.
 
     Returns
     -------
@@ -328,18 +328,16 @@ EXERCISE_ARPEGGIOS = (
 # A play triangle, for the "hear it" buttons.
 PLAY = '<path d="M8 5.5v13l11-6.5z" fill="COLOR" stroke="COLOR" stroke-width="1.6" stroke-linejoin="round"/>'
 
-# Keyboard: four white keys with black keys on top, in real proportions (a white key is 6.2 times as long as it is wide; a black
-# key is 0.58 as wide and 0.63 as long), drawn in the theme's colour like the other exercise icons: thin outlines for the white
-# keys and solid black keys.
-_WHITE_KEY = 'fill="none" stroke="COLOR" stroke-width="0.7" stroke-linejoin="miter"'
-EXERCISE_KEYBOARD = (
-    f'<path d="M5.20 1.46H8.60V21.94Q8.60 22.54 8.00 22.54H5.80Q5.20 22.54 5.20 21.94Z" {_WHITE_KEY}/>'
-    f'<path d="M8.60 1.46H12.00V21.94Q12.00 22.54 11.40 22.54H9.20Q8.60 22.54 8.60 21.94Z" {_WHITE_KEY}/>'
-    f'<path d="M12.00 1.46H15.40V21.94Q15.40 22.54 14.80 22.54H12.60Q12.00 22.54 12.00 21.94Z" {_WHITE_KEY}/>'
-    f'<path d="M15.40 1.46H18.80V21.94Q18.80 22.54 18.20 22.54H16.00Q15.40 22.54 15.40 21.94Z" {_WHITE_KEY}/>'
-    '<rect x="7.38" y="1.46" width="1.97" height="13.28" rx="0.25" fill="COLOR"/>'
-    '<rect x="11.25" y="1.46" width="1.97" height="13.28" rx="0.25" fill="COLOR"/>'
-    '<rect x="14.41" y="1.46" width="1.97" height="13.28" rx="0.25" fill="COLOR"/>'
+# Keyboard: seven white keys (C through B) with the two-and-three black-key pattern. Retain the real key proportions:
+# white keys are 6.2 times as long as they are wide; black keys are 0.58 as wide and 0.63 as long.
+# Black-key centers match KeyboardWidget: slightly offset from the white-key boundaries within each group.
+# Leave room above the shared keyboard artwork for the interval icon's bracket.
+_WHITE_KEY = 'y="5.56" width="2.7" height="16.74" rx="0.35" fill="none" stroke="COLOR" stroke-width="0.65"'
+EXERCISE_KEYBOARD = "".join(
+    f'<rect x="{x:.2f}" {_WHITE_KEY}/>' for x in (2.55, 5.25, 7.95, 10.65, 13.35, 16.05, 18.75)
+) + "".join(
+    f'<rect x="{x:.3f}" y="5.56" width="1.566" height="10.5462" rx="0.2" fill="COLOR"/>'
+    for x in (4.278, 7.356, 12.189, 15.267, 18.345)
 )
 
 # Help: a question mark in a circle.
@@ -361,7 +359,7 @@ SEARCH = (
     '<path d="M15 15l5.5 5.5" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"/>'
 )
 
-# Tile catalogue: a two-by-two grid.
+# Tile catalog: a two-by-two grid.
 TILES = (
     '<g fill="none" stroke="COLOR" stroke-width="2" stroke-linejoin="round">'
     '<rect x="3" y="3" width="7" height="7" rx="1"/>'
@@ -384,6 +382,12 @@ NAVIGATION_OPEN = (
 NAVIGATION_CLOSE = (
     NAVIGATION_PANE
     + '<path d="m17 9-3 3 3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+
+# Keyboard intervals: the shared keyboard with a span bracket above the keys.
+EXERCISE_KEYBOARD_INTERVALS = (
+    EXERCISE_KEYBOARD
+    + '<path d="M3.9 3.6V1.5H20.1V3.6" fill="none" stroke="COLOR" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
 # Exercises: Iconoir music-double-note with filled note heads (MIT; see THIRD_PARTY_NOTICES.md).
@@ -455,7 +459,7 @@ EXERCISE_CLEFS = f'<path transform="translate(6.07 3.00) scale(0.18)" d="{_CLEF_
 # Menu icons (24x24, outlined like the others): restart and the application's settings.
 _MENU = 'fill="none" stroke="COLOR" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
 CODE = f'<path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16" {_MENU}/>'
-# Iconoir GitHub icon; MIT licence and attribution in THIRD_PARTY_NOTICES.md.
+# Iconoir GitHub icon; MIT license and attribution in THIRD_PARTY_NOTICES.md.
 GITHUB = (
     '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
     '<path d="M16 22.0268V19.1568C16.0375 18.68 15.9731 18.2006 15.811 17.7506C15.6489 17.3006 15.3929 16.8902 15.06 16.5468C18.2 16.1968 21.5 15.0068 21.5 9.54679C21.4997 8.15062 20.9627 6.80799 20 5.79679C20.4558 4.5753 20.4236 3.22514 19.91 2.02679C19.91 2.02679 18.73 1.67679 16 3.50679C13.708 2.88561 11.292 2.88561 8.99999 3.50679C6.26999 1.67679 5.08999 2.02679 5.08999 2.02679C4.57636 3.22514 4.54413 4.5753 4.99999 5.79679C4.03011 6.81549 3.49251 8.17026 3.49999 9.57679C3.49999 14.9968 6.79998 16.1868 9.93998 16.5768C9.61098 16.9168 9.35725 17.3222 9.19529 17.7667C9.03334 18.2112 8.96679 18.6849 8.99999 19.1568V22.0268"/>'

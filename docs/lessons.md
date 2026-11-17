@@ -9,7 +9,7 @@ Lessons are step-by-step walks through a topic for someone meeting it for the fi
 ## Finding them
 
 The home page has a switch at the top, **Exercises** and **Lessons**. Choose **Lessons** to see a tile for each lesson, with the
-icon of the exercise that practises the same topic: the Circle of Fifths lesson has the circle of fifths icon. Alto remembers which
+icon of the exercise that practices the same topic: the Circle of Fifths lesson has the circle of fifths icon. Alto remembers which
 side you were on. The cards change with the transition chosen under **Settings… › Appearance › Transitions**. **Lessons** in the menu (☰) also goes straight to them.
 
 The switch stays in the top bar inside an exercise or a lesson, as two icons without words. The one for the side you are on is
@@ -38,7 +38,7 @@ A step has some reading, and may have:
 - **Staves.** The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
   small exercise the staff changes with the question.
 - **The circle of fifths.** Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have **Down a
-  fifth** and **Up a fifth** buttons that walk round the circle for you.
+  fifth** and **Up a fifth** buttons that walk around the circle for you.
 - **A small exercise.** It cannot be failed. A wrong answer gets a hint, a second wrong answer shows the answer with its
   explanation, and a right answer is explained. **Try another** asks a new one.
 
@@ -52,8 +52,8 @@ Eight steps for a beginner:
 4. **Counting sharps.** Find the key with a given number of sharps.
 5. **Flats go the other way.** Counterclockwise adds flats; where the two meet. Find the key with a given number of flats.
 6. **The inner ring: relative minors.** Find the relative minor of a key.
-7. **A key and its neighbours.** The IV and V of a key. Find the key a fifth above or below another.
-8. **What you can do now.** A summary, and a button to practise in the Circle of Fifths exercise.
+7. **A key and its neighbors.** The IV and V of a key. Find the key a fifth above or below another.
+8. **What you can do now.** A summary, and a button to practice in the Circle of Fifths exercise.
 
 ## The Clef Basics lesson
 
@@ -63,9 +63,9 @@ Ten steps for a beginner:
 2. **Three symbols.** Every clef is the G clef, the C clef or the F clef, put on a line.
 3. **The G clef.** The treble clef, and the French violin clef on the bottom line.
 4. **The F clef.** The bass clef on the fourth line, the subbass clef on the top line, and the baritone clef.
-5. **The C clef and middle C.** Soprano, mezzo-soprano, alto and tenor are the C clef on four lines, and each centres on middle C.
+5. **The C clef and middle C.** Soprano, mezzo-soprano, alto and tenor are the C clef on four lines, and each centers on middle C.
 6. **The rarer clefs.** French violin, subbass and the two ways to write the baritone clef.
 7. **Name the symbol.** A clef is drawn: is it the G, C or F clef?
 8. **Find the line.** A named clef: which line of a blank staff is it written on?
 9. **Name the clef.** The two halves together, as in Clef Identification.
-10. **What you can do now.** A summary, and a button to practise in the Clef Basics exercise.
+10. **What you can do now.** A summary, and a button to practice in the Clef Basics exercise.

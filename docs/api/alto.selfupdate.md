@@ -29,13 +29,13 @@ class UpdateError(Exception)
 
 Something went wrong in getting or checking an update. The message says what, in words for the person.
 
-## UpdateCancelled
+## UpdateCanceled
 
 ```python
-class UpdateCancelled(Exception)
+class UpdateCanceled(Exception)
 ```
 
-The person cancelled the update before it was ready.
+The person canceled the update before it was ready.
 
 ## Target
 
@@ -130,7 +130,7 @@ def download(
     allowed: str,
     max_bytes: int,
     progress: Callable[[int, int], None],
-    cancelled: Callable[[], bool],
+    canceled: Callable[[], bool],
     seconds: int = 30,
 ) -> str
 ```
@@ -140,11 +140,11 @@ Fetch a file, checking the address, the size and the connection, and give its SH
 **Parameters**
 
 - `url` (*str*): The address. It must start with `allowed`.
-- `destination` (*Path*): Where to write the file. Nothing is left there if the download fails or is cancelled. Keyword-only.
+- `destination` (*Path*): Where to write the file. Nothing is left there if the download fails or is canceled. Keyword-only.
 - `allowed` (*str*): What the address must start with, which is where a release keeps its files. Keyword-only.
 - `max_bytes` (*int*): The most to accept, by the size the server states and by what actually arrives. Keyword-only.
 - `progress` (*Callable*): Called with the bytes received so far and the size the server states (0 if it does not say). Keyword-only.
-- `cancelled` (*Callable*): Asked now and then; True stops the download. Keyword-only.
+- `canceled` (*Callable*): Asked now and then; True stops the download. Keyword-only.
 - `seconds` (*int, default 30*): How long to wait for the server at a time. Keyword-only.
 
 **Returns**
@@ -154,7 +154,7 @@ Fetch a file, checking the address, the size and the connection, and give its SH
 **Raises**
 
 - *UpdateError*: If the address is not allowed, the file is too large, the connection is not secure, or the download fails.
-- *UpdateCancelled*: If `cancelled` said so.
+- *UpdateCanceled*: If `canceled` said so.
 
 ## extract_tarball
 
@@ -216,7 +216,7 @@ def prepare_update(
     base: str = updates.DOWNLOAD_BASE,
     status: Callable[[str], None],
     progress: Callable[[int, int], None],
-    cancelled: Callable[[], bool],
+    canceled: Callable[[], bool],
 ) -> Prepared
 ```
 
@@ -232,7 +232,7 @@ Download a release for this copy and check it: its signed list of checksums, the
 - `base` (*str, default updates.DOWNLOAD_BASE*): Where the release keeps its files. Keyword-only.
 - `status` (*Callable*): Called with what is being done, in words for the person. Keyword-only.
 - `progress` (*Callable*): Called with the bytes received so far and the total, while the file downloads. Keyword-only.
-- `cancelled` (*Callable*): Asked now and then; True stops. Keyword-only.
+- `canceled` (*Callable*): Asked now and then; True stops. Keyword-only.
 
 **Returns**
 
@@ -241,7 +241,7 @@ Download a release for this copy and check it: its signed list of checksums, the
 **Raises**
 
 - *UpdateError*: If anything is missing or does not check out. Nothing is installed.
-- *UpdateCancelled*: If `cancelled` said so.
+- *UpdateCanceled*: If `canceled` said so.
 
 ## clean_environment
 

@@ -394,7 +394,7 @@ def test_the_button_task_checks_the_letter(app: QApplication) -> None:
 
 def test_walking_the_circle_steps_a_fifth_at_a_time(app: QApplication) -> None:
     """
-    Check that the walk buttons go clockwise and counterclockwise round the outer ring, and tell the key signature.
+    Check that the walk buttons go clockwise and counterclockwise around the outer ring, and tell the key signature.
 
     Parameters
     ----------
@@ -492,9 +492,9 @@ def test_a_started_lesson_says_where_to_continue_and_can_start_over(app: QApplic
     assert page.view.current == 0 and saved_step(LESSONS[0]) == 0
 
 
-def test_the_last_step_offers_to_practise_the_exercise(app: QApplication, clean_lessons: None) -> None:
+def test_the_last_step_offers_to_practice_the_exercise(app: QApplication, clean_lessons: None) -> None:
     """
-    Check that the Practise button leaves the lessons and opens the Circle of Fifths exercise.
+    Check that the Practice button leaves the lessons and opens the Circle of Fifths exercise.
 
     Parameters
     ----------
@@ -510,7 +510,7 @@ def test_the_last_step_offers_to_practise_the_exercise(app: QApplication, clean_
     page.view.go(to=len(CIRCLE_OF_FIFTHS.steps) - 1)
     step_view = page.view.pages.currentWidget()
     assert isinstance(step_view, StepView)
-    step_view.practise_button.click()
+    step_view.practice_button.click()
     assert window.title_label.text() == "Circle of Fifths"
 
 

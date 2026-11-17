@@ -1,7 +1,7 @@
 Alto: a music theory trainer
 ============================
 
-This folder is the Linux download of Alto. It carries its own Python and Qt, so nothing else needs installing.
+This folder is the Linux download of Alto. It carries its own Python and Qt, so nothing else needs to be installed.
 
 Install (for you only, no root needed)
 
@@ -26,6 +26,6 @@ https://github.com/altosaurus/alto/issues, with the name and version of your Lin
 
 Files
 
-    LICENSE, THIRD_PARTY_NOTICES.md   Alto's licence, and the licences of the fonts and recordings it carries
+    LICENSE, THIRD_PARTY_NOTICES.md   Alto's license, and the licenses of the fonts and recordings it carries
 
 https://github.com/altosaurus/alto

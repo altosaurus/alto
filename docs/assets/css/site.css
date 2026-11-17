@@ -147,7 +147,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
 }
 
 /* The theme switch in the sidebar. */
-/* Dropdowns in the top bar (the version and the colour theme): filled soft squares, and menus with an icon tile on each row. */
+/* Dropdowns in the top bar (the version and the color theme): filled soft squares, and menus with an icon tile on each row. */
 svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .dd { position: relative; }
 .dd-btn {

@@ -1,5 +1,5 @@
 """
-Tests for the window that updates a packaged copy: progress, the word that Alto will restart, failures, and cancelling.
+Tests for the window that updates a packaged copy: progress, the word that Alto will restart, failures, and canceling.
 
 The real worker thread runs against a local web server that plays GitHub, with keys made for the test, so the download and the
 checks are the real ones. Nothing here goes online or starts an installer.
@@ -200,7 +200,7 @@ def test_a_good_release_is_checked_and_then_the_window_says_alto_will_restart(wi
     status, button, maximum, value = window.seen[0]
     assert status == READY and "Alto will close, install it and open again when you press OK" in status
     assert button == "OK" and (maximum, value) == (1, 1)  # a bar that is full
-    assert dialog.ready and dialog.error == "" and not dialog.cancelled
+    assert dialog.ready and dialog.error == "" and not dialog.canceled
     assert prepared is not None and prepared.root is not None and (prepared.root / "install.sh").is_file()
     assert prepared.work.is_dir()  # kept for the hand-over, which removes it
 
@@ -242,9 +242,9 @@ def test_a_file_that_cannot_be_fetched_ends_in_the_reason(window: Window, tmp_pa
     assert prepared is None and "download failed" in dialog.error and window.seen[0][1] == "Close"
 
 
-def test_cancelling_while_it_works_stops_the_update_and_removes_what_was_downloaded(window: Window, tmp_path: Path) -> None:
+def test_canceling_while_it_works_stops_the_update_and_removes_what_was_downloaded(window: Window, tmp_path: Path) -> None:
     """
-    Check that pressing Cancel while the work goes on gives back nothing, marks the window cancelled, and clears the folder.
+    Check that pressing Cancel while the work goes on gives back nothing, marks the window canceled, and clears the folder.
 
     Parameters
     ----------
@@ -256,7 +256,7 @@ def test_cancelling_while_it_works_stops_the_update_and_removes_what_was_downloa
     release = publish(window.server, keys=window.keys, package=linux_package(), name=NAME)
     window.action = "cancel"
     dialog, prepared = window.run(release, tmp_path)
-    assert prepared is None and dialog.cancelled and dialog.ended and dialog.preparer.is_cancelled() and not dialog.ready
+    assert prepared is None and dialog.canceled and dialog.ended and dialog.preparer.is_canceled() and not dialog.ready
     assert dialog._work is not None and wait_until_gone(dialog._work)
 
 
@@ -297,9 +297,9 @@ def test_the_download_shows_how_much_has_arrived(app: QApplication) -> None:
     assert (dialog.bar.maximum(), dialog.bar.value()) == (10 * megabyte, 5 * megabyte)
 
 
-def test_the_preparer_reports_through_signals_and_stays_quiet_when_cancelled(window: Window, tmp_path: Path) -> None:
+def test_the_preparer_reports_through_signals_and_stays_quiet_when_canceled(window: Window, tmp_path: Path) -> None:
     """
-    Check the thread's signals: the steps and the end for a good release, and no end at all if it was cancelled first.
+    Check the thread's signals: the steps and the end for a good release, and no end at all if it was canceled first.
 
     Parameters
     ----------
@@ -334,4 +334,4 @@ def test_the_preparer_reports_through_signals_and_stays_quiet_when_cancelled(win
     quiet.cancel()
     quiet._say(0, message="")
     quiet._say(1, message="x")
-    assert quiet_ends == [] and quiet.is_cancelled()
+    assert quiet_ends == [] and quiet.is_canceled()

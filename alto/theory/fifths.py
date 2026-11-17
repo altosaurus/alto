@@ -80,7 +80,7 @@ CELLS_OF_A_KEY = {
     ("inner", -1): "ii",
     ("inner", 0): "vi",
     ("inner", 1): "iii",
-}  # which wedge of which ring holds each chord, as steps round the circle from the key's own wedge: IV is a step to the left
+}  # which wedge of which ring holds each chord, as steps around the circle from the key's own wedge: IV is a step to the left
 
 
 def place_of_major(name: str) -> int:
@@ -164,7 +164,7 @@ def cells_of_key(place: int) -> dict[tuple[str, int], str]:
 
 def numeral_chords(place: int) -> dict[str, str]:
     """
-    Return the six chords of a major key that are on the circle, spelt as that key spells them.
+    Return the six chords of a major key that are on the circle, spelled as that key spells them.
 
     A wedge with two names, such as D♭ and C♯, is the same chord, but the key decides which name is right: C♯ is the V of F♯.
 
@@ -317,10 +317,10 @@ def explain(ring: str, *, place: int) -> str:
     own = f"{major} major" if outer else f"{minor} minor"
     paragraphs = [f"<b>{own}</b> has {_count(signature)}."]
     other = (MAJORS if outer else MINORS)[place]
-    if len(other) == 2:  # the same key spelt the other way has the other signature
-        spelt = f"{other[1]} major" if outer else f"{other[1][:-1]} minor"
+    if len(other) == 2:  # the same key spelled the other way has the other signature
+        spelled = f"{other[1]} major" if outer else f"{other[1][:-1]} minor"
         flipped = signature - 12 if signature > 0 else signature + 12
-        paragraphs.append(f"It can also be spelt <b>{spelt}</b>, which has {_count(flipped)}.")
+        paragraphs.append(f"It can also be spelled <b>{spelled}</b>, which has {_count(flipped)}.")
     mode = "major" if outer else "minor"
     if place == 0:
         paragraphs.append(
@@ -332,7 +332,7 @@ def explain(ring: str, *, place: int) -> str:
         before = before if outer else before[:-1]
         paragraphs.append(
             f"It is a fifth above {before}, one step clockwise: its first note is five notes up from {before}'s, which is why "
-            f"each step round the circle changes the signature by one. {before} {mode} is one step back.",
+            f"each step around the circle changes the signature by one. {before} {mode} is one step back.",
         )
     relative = (
         f"Its relative minor, <b>{minor} minor</b>, is just inside it."
@@ -342,7 +342,7 @@ def explain(ring: str, *, place: int) -> str:
     paragraphs.append(f"{relative} The two share a key signature: {minor} is the sixth note of the {major} major scale.")
     chords = numeral_chords(place)
     paragraphs.append(
-        f"The chords of {major} major that sit on the circle are lit. On the outer ring, the key and its two neighbours are "
+        f"The chords of {major} major that sit on the circle are lit. On the outer ring, the key and its two neighbors are "
         f"the major chords I ({chords['I']}), IV ({chords['IV']}, a fifth below) and V ({chords['V']}, a fifth above). On the "
         f"inner ring, the minor chords ii ({chords['ii']}), iii ({chords['iii']}) and vi ({chords['vi']}) sit under them.",
     )

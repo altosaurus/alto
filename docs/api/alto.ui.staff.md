@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 51
+order: 54
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
@@ -139,7 +139,7 @@ Draw the sharps or flats of a key signature, left to right.
 - `x` (*float*): The left edge of the first accidental, in pixels. Keyword-only.
 - `bottom` (*float*): The y position of the staff's bottom line, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines, in pixels. Keyword-only.
-- `color` (*QColor*): The colour to draw in. Keyword-only.
+- `color` (*QColor*): The color to draw in. Keyword-only.
 - `step` (*float, default KEY_STEP*): The horizontal spacing between accidentals. Keyword-only.
 - `size` (*float, default 2.0*): The size of the built-in characters, in staff gaps. Keyword-only.
 - `font` (*str or None, default None*): A SMuFL font to engrave them in; None uses the built-in sharp and flat characters. Keyword-only.
@@ -187,10 +187,10 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `max_step` (*float or None*): The most width each column of notes may take.
 - `clef` (*str*): The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
 - `columns` (*list of list of Note*): The notes drawn; each inner list is one chord or note.
-- `note_color` (*QColor or None*): The colour of the notes; None draws them in the notation style's ink.
-- `column_colors` (*dict of int to QColor*): The colour of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
+- `note_color` (*QColor or None*): The color of the notes; None draws them in the notation style's ink.
+- `column_colors` (*dict of int to QColor*): The color of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
 - `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
-- `wedge_colors` (*dict of int to QColor*): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or `note_color`.
+- `wedge_colors` (*dict of int to QColor*): The color of particular wedges, by position from 0. The others take the color of the note on their right, or `note_color`.
 - `notation_style` (*NotationStyle or None*): A style to use instead of the one chosen in the settings.
 - `clef_hidden` (*bool*): Draw the staff without its clef, for a clef the learner places.
 - `key` (*int*): The key signature drawn: sharps if positive, flats if negative.
@@ -268,7 +268,7 @@ def sizeHint() -> QSize
 
 Return the size the staff would like.
 
-A capped staff asks for its full capped width, so a layout that centres it gives it that much.
+A capped staff asks for its full capped width, so a layout that centers it gives it that much.
 
 **Returns**
 
@@ -289,11 +289,11 @@ A capped staff asks for its full capped width, so a layout that centres it gives
 def set_note_color(color: QColor | None) -> None
 ```
 
-Draw the notes in a colour, for feedback, or back in the style's ink.
+Draw the notes in a color, for feedback, or back in the style's ink.
 
 **Parameters**
 
-- `color` (*QColor or None*): The colour; None to use the notation style's ink.
+- `color` (*QColor or None*): The color; None to use the notation style's ink.
 
 **Examples**
 

@@ -5,7 +5,7 @@ Write the icons of the exercises for the docs, from the icons the app draws on i
     python scripts/exercise_icons.py            # rewrite docs/_includes/exercise-icons.html
     python scripts/exercise_icons.py --check    # fail if it is out of date, changing nothing
 
-The app draws each exercise's icon from a few lines of SVG in `alto/ui/icons.py`, tinted with the theme's text colour. The home
+The app draws each exercise's icon from a few lines of SVG in `alto/ui/icons.py`, tinted with the theme's text color. The home
 page of the docs shows the same icons beside the names of the exercises, so this writes them as an SVG sprite that the page
 includes, with `currentColor` where the app has its tint, so that they follow the docs' light and dark themes by themselves.
 `tests/test_docs.py` fails when the file is out of date.

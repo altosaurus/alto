@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 31
+order: 33
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
@@ -158,21 +158,21 @@ ExerciseView(
 
 Bases: `QWidget`
 
-The screen for practising one exercise.
+The screen for practicing one exercise.
 
 **Attributes**
 
 - `PANE_WIDTH` (*int*): The width of the settings pane when it is open, in pixels.
 - `REFERENCE_WIDTH` (*int*): The width of the reference pane when it is open, in pixels.
-- `exercise` (*Exercise*): The exercise being practised.
+- `exercise` (*Exercise*): The exercise being practiced.
 - `learner` (*Learner or None*): Records every answer and chooses what to ask next; None asks at random.
 - `rng` (*random.Random*): The random number generator for new questions.
-- `correct` (*int*): Questions answered right first time.
+- `correct` (*int*): Questions answered right on the first try.
 - `total` (*int*): Questions answered.
 - `streak` (*int*): Right answers in a row.
 - `question` (*Question or None*): The question on screen.
 - `answered` (*bool*): True once the question has been answered right.
-- `missed` (*bool*): True once the question has been answered wrong, so it no longer counts towards the score.
+- `missed` (*bool*): True once the question has been answered wrong, so it no longer counts toward the score.
 - `buttons` (*list of QPushButton*): The answer buttons on screen.
 - `settings_panel` (*QWidget or None*): The exercise's settings, or None for an exercise with none.
 - `staff` (*StaffWidget*): Shows the notes of a question.
@@ -201,7 +201,7 @@ Build the screen and show the first question.
 
 **Parameters**
 
-- `exercise` (*Exercise*): The exercise to practise.
+- `exercise` (*Exercise*): The exercise to practice.
 - `rng` (*random.Random or None, default None*): The random number generator; a fresh one if None. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the screen. Keyword-only.
 - `learner` (*Learner or None, default None*): Where to record answers and what to ask next; None asks at random and records nothing. Keyword-only.
@@ -260,6 +260,48 @@ Resume the exercise's answer clock and pending advance when it reappears.
 >>> view.show()
 >>> view._hidden_at is None
 True
+```
+
+### ExerciseView.settings_state
+
+```python
+def settings_state() -> tuple[bool, int, int] | None
+```
+
+Remember the exercise settings pane, selected page, and scroll position before a theme rebuild.
+
+**Returns**
+
+- *tuple of (bool, int, int) or None*: Whether the pane is open, its page index, and its vertical scroll position; None without settings.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> ExerciseView(NoteNames(), rng=random.Random(1)).settings_state()
+(False, 0, 0)
+```
+
+### ExerciseView.restore_settings_state
+
+```python
+def restore_settings_state(state: tuple[bool, int, int]) -> None
+```
+
+Restore exercise settings navigation immediately after rebuilding the view.
+
+**Parameters**
+
+- `state` (*tuple of (bool, int, int)*): Whether the pane was open, the selected page, and its vertical scroll position.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+>>> view.restore_settings_state((True, 0, 0))
+>>> view.settings_state()
+(True, 0, 0)
 ```
 
 ### ExerciseView.next_question

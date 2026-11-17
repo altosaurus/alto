@@ -2,13 +2,13 @@
 title: alto.ui.theme
 parent: api
 package: alto.ui
-order: 56
+order: 59
 permalink: /api/alto.ui.theme/
 ---
 {% raw %}
-The colour theme: follow the system, force light or dark, or use a theme with colours of its own.
+The color theme: follow the system, force light or dark, or use a theme with colors of its own.
 
-A theme with colours of its own is a `CustomTheme`: a fixed palette that is light or dark whatever the desktop is set to.
+A theme with colors of its own is a `CustomTheme`: a fixed palette that is light or dark whatever the desktop is set to.
 
 **Examples**
 
@@ -36,7 +36,7 @@ CustomTheme(
 )
 ```
 
-A theme with colours of its own.
+A theme with colors of its own.
 
 **Attributes**
 
@@ -45,13 +45,13 @@ A theme with colours of its own.
 - `label` (*str*): What the settings call it.
 - `note` (*str*): A short line about it, shown under its picture.
 - `dark` (*bool*): True if it is a dark theme, so that Qt draws its own parts (such as the title bar) to match.
-- `window` (*str*): The colour of the window.
-- `panel` (*str*): The colour of lists, boxes and buttons.
-- `ink` (*str*): The colour of text.
-- `muted` (*str*): The colour of quiet text.
-- `line` (*str*): The colour of outlines.
-- `accent` (*str*): The colour of what is chosen, and of links.
-- `track` (*str*): The colour of the track behind a switch or a slider, a little off the window's own.
+- `window` (*str*): The color of the window.
+- `panel` (*str*): The color of lists, boxes and buttons.
+- `ink` (*str*): The color of text.
+- `muted` (*str*): The color of quiet text.
+- `line` (*str*): The color of outlines.
+- `accent` (*str*): The color of what is chosen, and of links.
+- `track` (*str*): The color of the track behind a switch or a slider, a little off the window's own.
 
 **Examples**
 
@@ -71,7 +71,7 @@ def hsl_hex(
 ) -> str
 ```
 
-Turn a colour given as hue, saturation and lightness into "#rrggbb".
+Turn a color given as hue, saturation and lightness into "#rrggbb".
 
 **Parameters**
 
@@ -81,7 +81,7 @@ Turn a colour given as hue, saturation and lightness into "#rrggbb".
 
 **Returns**
 
-- *str*: The colour in hexadecimal.
+- *str*: The color in hexadecimal.
 
 **Examples**
 
@@ -171,7 +171,7 @@ Give the key of one version of a family.
 class ThemeRecord(TypedDict)
 ```
 
-A theme the user made, as it is saved: its key, its name, and the colours of its light and dark versions.
+A theme the user made, as it is saved: its key, its name, and the colors of its light and dark versions.
 
 **Examples**
 
@@ -190,7 +190,7 @@ Read the themes the user has made, as they are saved.
 
 **Returns**
 
-- *list of ThemeRecord*: One record for each theme: its "id", its "name", and its "light" and "dark" colours. A saved list that cannot be read, or has something else in it, gives only the records that can be used.
+- *list of ThemeRecord*: One record for each theme: its "id", its "name", and its "light" and "dark" colors. A saved list that cannot be read, or has something else in it, gives only the records that can be used.
 
 **Examples**
 
@@ -255,9 +255,9 @@ Save a theme the user made, replacing the one with the same key if there is one.
 
 ```pycon
 >>> store().remove("ui/userThemes")
->>> colours = {part: "#112233" for part in PARTS}
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colours, dark=colours))
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Renamed", light=colours, dark=colours))
+>>> colors = {part: "#112233" for part in PARTS}
+>>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
+>>> upsert_user_theme(ThemeRecord(id="my_a", name="Renamed", light=colors, dark=colors))
 >>> [(r["id"], r["name"]) for r in user_records()]
 [('my_a', 'Renamed')]
 >>> store().remove("ui/userThemes")
@@ -279,8 +279,8 @@ Remove a theme the user made.
 
 ```pycon
 >>> store().remove("ui/userThemes")
->>> colours = {part: "#112233" for part in PARTS}
->>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colours, dark=colours))
+>>> colors = {part: "#112233" for part in PARTS}
+>>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
 >>> delete_user_theme("my_a")
 >>> user_records()
 []
@@ -332,7 +332,7 @@ True
 def custom_theme(key: str) -> CustomTheme | None
 ```
 
-Find a theme with colours of its own, one of the built-in ones or one the user made.
+Find a theme with colors of its own, one of the built-in ones or one the user made.
 
 **Parameters**
 
@@ -355,7 +355,7 @@ Find a theme with colours of its own, one of the built-in ones or one the user m
 def scheme_of(key: str) -> Qt.ColorScheme | None
 ```
 
-Say which colour scheme a theme uses: light, dark, or the desktop's own.
+Say which color scheme a theme uses: light, dark, or the desktop's own.
 
 **Parameters**
 
@@ -372,13 +372,13 @@ Say which colour scheme a theme uses: light, dark, or the desktop's own.
 (True, True, None)
 ```
 
-## preview_colours
+## preview_colors
 
 ```python
-def preview_colours(theme: CustomTheme) -> dict[str, str]
+def preview_colors(theme: CustomTheme) -> dict[str, str]
 ```
 
-Pick the colours for the small picture of a theme in the settings.
+Pick the colors for the small picture of a theme in the settings.
 
 **Parameters**
 
@@ -386,12 +386,12 @@ Pick the colours for the small picture of a theme in the settings.
 
 **Returns**
 
-- *dict of str to str*: The window, panel, outline, text, faint and chosen colours, and a tint for the chosen row.
+- *dict of str to str*: The window, panel, outline, text, faint and chosen colors, and a tint for the chosen row.
 
 **Examples**
 
 ```pycon
->>> preview_colours(CUSTOM_THEMES[0])["window"], sorted(preview_colours(CUSTOM_THEMES[0]))[:3]
+>>> preview_colors(CUSTOM_THEMES[0])["window"], sorted(preview_colors(CUSTOM_THEMES[0]))[:3]
 ('#eceef1', ['accent', 'faint', 'ink'])
 ```
 
@@ -401,7 +401,7 @@ Pick the colours for the small picture of a theme in the settings.
 def theme_palette(theme: CustomTheme) -> QPalette
 ```
 
-Build the Qt palette of a theme with colours of its own.
+Build the Qt palette of a theme with colors of its own.
 
 **Parameters**
 
@@ -409,13 +409,13 @@ Build the Qt palette of a theme with colours of its own.
 
 **Returns**
 
-- *QPalette*: The palette: the window, lists and buttons, text, the chosen row and links in the theme's colours, with quiet text for what is switched off.
+- *QPalette*: The palette: the window, lists and buttons, text, the chosen row and links in the theme's colors, with quiet text for what is switched off.
 
 **Examples**
 
 ```pycon
->>> colours = theme_palette(CUSTOM_THEMES[0])
->>> colours.color(QPalette.ColorRole.Window).name(), colours.color(QPalette.ColorRole.Highlight).name()
+>>> colors = theme_palette(CUSTOM_THEMES[0])
+>>> colors.color(QPalette.ColorRole.Window).name(), colors.color(QPalette.ColorRole.Highlight).name()
 ('#eceef1', '#2f7fc1')
 ```
 
@@ -429,7 +429,7 @@ Return the theme the user chose.
 
 **Returns**
 
-- *str*: The key of the theme: "system", "light", "dark" or one of the themes with colours of its own; "system" if nothing valid is saved.
+- *str*: The key of the theme: "system", "light", "dark" or one of the themes with colors of its own; "system" if nothing valid is saved.
 
 **Examples**
 
@@ -450,7 +450,7 @@ Remember the theme the user chose.
 
 **Parameters**
 
-- `key` (*str*): "system", "light", "dark" or the key of a theme with colours of its own.
+- `key` (*str*): "system", "light", "dark" or the key of a theme with colors of its own.
 
 **Examples**
 
@@ -467,13 +467,13 @@ Remember the theme the user chose.
 def system_is_dark() -> bool
 ```
 
-Say whether the desktop is set to dark, as long as the app is not forcing a colour scheme of its own.
+Say whether the desktop is set to dark, as long as the app is not forcing a color scheme of its own.
 
 A theme that follows the desktop does not force one, so this is what it asks.
 
 **Returns**
 
-- *bool*: True if the colour scheme in use is dark.
+- *bool*: True if the color scheme in use is dark.
 
 **Examples**
 
@@ -488,11 +488,11 @@ True
 def apply_theme(key: str) -> None
 ```
 
-Switch the application's colour scheme and rebuild the stylesheet from the new palette.
+Switch the application's color scheme and rebuild the stylesheet from the new palette.
 
 **Parameters**
 
-- `key` (*str*): "system" to follow the desktop, "light" or "dark", or the key of a theme with colours of its own. Anything else follows the system.
+- `key` (*str*): "system" to follow the desktop, "light" or "dark", or the key of a theme with colors of its own. Anything else follows the system.
 
 **Examples**
 

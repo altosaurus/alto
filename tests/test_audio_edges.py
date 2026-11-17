@@ -173,7 +173,7 @@ def test_playing_a_note_again_cancels_its_fade() -> None:
         # noinspection PyMethodMayBeStatic
         def stop(self) -> None:
             """
-            Record that the fade was cancelled.
+            Record that the fade was canceled.
             """
             stopped.append(1)
 
@@ -190,24 +190,24 @@ def test_stop_all_silences_what_is_playing_and_cancels_fades() -> None:
     s = Sounds()
     quiet, loud = Effect(), Effect(playing=True)
     s._effects = {("piano", 60): quiet, ("piano", 62): loud}
-    cancelled = []
+    canceled = []
 
     class Fade:
         """
-        A fade-out that records when it is cancelled.
+        A fade-out that records when it is canceled.
         """
 
         # noinspection PyMethodMayBeStatic
         def stop(self) -> None:
             """
-            Record that the fade was cancelled.
+            Record that the fade was canceled.
             """
-            cancelled.append(1)
+            canceled.append(1)
 
     s._fades = {1: Fade(), 2: Fade()}
     s._sounding = [loud]
     s.stop_all()
-    assert cancelled == [1, 1] and s._fades == {} and s._sounding == []
+    assert canceled == [1, 1] and s._fades == {} and s._sounding == []
     assert loud.stopped == 1 and loud.volume_set == [0.0] and quiet.stopped == 0
 
 

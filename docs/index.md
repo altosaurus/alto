@@ -14,7 +14,7 @@ toc: false
 
 {% include shot.html src="circle-of-fifths.png" alt="The Circle of Fifths exercise, with the list of exercises open on the left" caption="An exercise, here the circle of fifths. The list on the left switches between exercises." %}
 
-## What you can practise
+## What you can practice
 
 <ul class="cards">
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteNames"/></svg>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
@@ -22,6 +22,7 @@ toc: false
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteConstruction"/></svg>Note Construction</strong>Click the staff where a named note belongs.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ClefBasics"/></svg>Clef Basics</strong>Put the G, C or F clef where it makes the clef you are asked for, or name the clef on a staff.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-IntervalNames"/></svg>Interval Identification</strong>Name the interval between two notes.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardIntervals"/></svg>Keyboard Interval Identification</strong>Identify the interval between two highlighted piano keys.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatures"/></svg>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatureConstruction"/></svg>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleIdentification"/></svg>Scale Identification</strong>Identify a scale or mode on the staff.</li>
@@ -39,9 +40,9 @@ toc: false
 - **Local and private.** Your history is one file on your computer. [Your data]({{ '/data/' | relative_url }}).
 - **Free and open source** under the MIT License.
 
-{% include shot.html src="stats.png" alt="The statistics page with summary tiles and charts of accuracy, speed and volume" caption="Statistics for a demo profile: how often you are right, how fast, and how much you practise." %}
+{% include shot.html src="stats.png" alt="The statistics page with summary tiles and charts of accuracy, speed and volume" caption="Statistics for a demo profile: how often you are right, how fast, and how much you practice." %}
 
-{% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green" caption="The review heatmap: every day you practised, at a glance." %}
+{% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green" caption="The review heatmap: every day you practiced, at a glance." %}
 
 {% assign v = site.app_version %}
 {% assign base = "https://github.com/altosaurus/alto/releases/download/v" | append: v | append: "/" %}

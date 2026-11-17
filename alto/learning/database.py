@@ -115,7 +115,7 @@ def check_snapshot(data: bytes) -> tuple[int, int, int]:
 @dataclass(frozen=True)
 class Profile:
     """
-    A person who practises: their answers are kept apart from everyone else's.
+    A person who practices: their answers are kept apart from everyone else's.
 
     Attributes
     ----------
@@ -147,7 +147,7 @@ class ItemRecord:
     seen : int
         How many times the question was shown and answered. Keyword-only.
     first_try_right : int
-        How many of those showings were answered right first time. Keyword-only.
+        How many of those showings were answered right on the first try. Keyword-only.
     wrong_attempts : int
         How many wrong answers there have been in all. Keyword-only.
     total_first_ms : int

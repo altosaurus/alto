@@ -112,7 +112,7 @@ Return the six wedges that hold the chords of a major key, and the Roman numeral
 def numeral_chords(place: int) -> dict[str, str]
 ```
 
-Return the six chords of a major key that are on the circle, spelt as that key spells them.
+Return the six chords of a major key that are on the circle, spelled as that key spells them.
 
 A wedge with two names, such as D♭ and C♯, is the same chord, but the key decides which name is right: C♯ is the V of F♯.
 

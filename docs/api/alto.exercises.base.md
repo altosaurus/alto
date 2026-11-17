@@ -35,6 +35,7 @@ Question(
     value: str = 'whole',
     grid: dict[str, tuple[int, int]] | None = None,
     keyboard: Note | None = None,
+    keyboard_notes: list[Note] = field(default_factory=list),
     key_staff: bool = False,
     keyboard_range: tuple[int, int] | None = None,
     octaves: list[str] | None = None,
@@ -72,6 +73,7 @@ One question, with what to show for it and which answer is right.
 - `value` (*str, default "whole"*): The note value to draw (single notes only). Keyword-only.
 - `grid` (*dict of str to tuple of (int, int) or None*): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
 - `keyboard` (*Note or None*): A piano key to highlight, instead of drawing a staff. Keyword-only.
+- `keyboard_notes` (*list of Note*): Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.
 - `key_staff` (*bool, default False*): Draw `key` as a small key-signature staff above the keyboard. Keyword-only.
 - `keyboard_range` (*tuple of (int, int) or None*): The keys (MIDI numbers, inclusive) the keyboard picture should show. Keyword-only.
 - `octaves` (*list of str or None*): When set, the answer is a choice button plus one of these second-row buttons. Keyword-only.
@@ -278,7 +280,7 @@ True
 def item_key() -> str
 ```
 
-Return a stable identity for the question, so the same one can be recognised when it comes round again.
+Return a stable identity for the question, so the same one can be recognized when it comes around again.
 
 It covers what is asked and where it is drawn, but not the note value or the order of the buttons.
 

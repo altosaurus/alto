@@ -130,8 +130,8 @@ class StepView(QWidget):
         What is said about the key last picked on the circle.
     again : QPushButton
         Asks another task; it appears once the task has been answered.
-    practise : Signal
-        Emitted by the Practise button on the last step.
+    practice : Signal
+        Emitted by the Practice button on the last step.
 
     Examples
     --------
@@ -140,7 +140,7 @@ class StepView(QWidget):
     True
     """
 
-    practise = Signal()
+    practice = Signal()
 
     def __init__(
         self,
@@ -249,10 +249,10 @@ class StepView(QWidget):
         self.task_box.setVisible(step.make_task is not None)
         side.addWidget(self.task_box)
         if step.closing:
-            self.practise_button = QPushButton("Practise this in the exercise  →")
-            self.practise_button.setDefault(True)
-            self.practise_button.clicked.connect(self.practise)
-            side.addWidget(self.practise_button, alignment=Qt.AlignmentFlag.AlignLeft)
+            self.practice_button = QPushButton("Practice this in the exercise  →")
+            self.practice_button.setDefault(True)
+            self.practice_button.clicked.connect(self.practice)
+            side.addWidget(self.practice_button, alignment=Qt.AlignmentFlag.AlignLeft)
         left.addStretch(1)
         scroll = QScrollArea()
         scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -351,7 +351,7 @@ class StepView(QWidget):
 
     def walk(self, step: int) -> None:
         """
-        Move the pick one fifth round the outer ring.
+        Move the pick one fifth around the outer ring.
 
         Parameters
         ----------
@@ -575,8 +575,8 @@ class LessonView(QWidget):
         Emitted to leave the lesson.
     stepped : Signal
         Emitted with the number of the step each time one is shown.
-    practise : Signal
-        Emitted when the last step's Practise button is pressed, with the exercise's class name.
+    practice : Signal
+        Emitted when the last step's Practice button is pressed, with the exercise's class name.
 
     Examples
     --------
@@ -590,7 +590,7 @@ class LessonView(QWidget):
 
     leave = Signal()
     stepped = Signal(int)
-    practise = Signal(str)
+    practice = Signal(str)
 
     def __init__(
         self,
@@ -673,7 +673,7 @@ class LessonView(QWidget):
         self.current = to
         if to not in self._views:
             made = StepView(steps[to])
-            made.practise.connect(lambda: self.practise.emit(self.lesson.exercise))
+            made.practice.connect(lambda: self.practice.emit(self.lesson.exercise))
             self._views[to] = made
             self.pages.addWidget(made)
         self.pages.setCurrentWidget(self._views[to])
@@ -696,8 +696,8 @@ class LessonsPage(QWidget):
         The lesson being taken.
     back : Signal
         Emitted to leave the lesson, to wherever it was opened from.
-    practise_requested : Signal
-        Emitted with the class name of an exercise to practise.
+    practice_requested : Signal
+        Emitted with the class name of an exercise to practice.
 
     Examples
     --------
@@ -707,7 +707,7 @@ class LessonsPage(QWidget):
     """
 
     back = Signal()
-    practise_requested = Signal(str)
+    practice_requested = Signal(str)
 
     def __init__(
         self,
@@ -756,6 +756,6 @@ class LessonsPage(QWidget):
         QShortcut(QKeySequence(Qt.Key.Key_Escape), self, self.back.emit)
         self.view = LessonView(lesson, start=saved_step(lesson) if step is None else step)
         self.view.leave.connect(self.back)
-        self.view.practise.connect(self.practise_requested)
+        self.view.practice.connect(self.practice_requested)
         self.restart_button.clicked.connect(lambda: self.view.go(to=0))
         outer.addWidget(self.view, 1)

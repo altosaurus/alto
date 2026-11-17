@@ -100,7 +100,7 @@ def save_instrument() -> None:
 
 def tokens(widget: QWidget) -> dict[str, str]:
     """
-    Return the summary page's colours.
+    Return the summary page's colors.
 
     All are mixed from the system palette so they follow its light or dark theme.
 
@@ -112,15 +112,15 @@ def tokens(widget: QWidget) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        Colour name to '#rrggbb': accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a
-        text colour and a soft background (such as good and good_soft).
+        Color name to '#rrggbb': accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a
+        text color and a soft background (such as good and good_soft).
 
     Examples
     --------
-    >>> colours = tokens(QWidget())
-    >>> sorted(colours)[:3]
+    >>> colors = tokens(QWidget())
+    >>> sorted(colors)[:3]
     ['accent', 'accent_soft', 'bad']
-    >>> colours["panel"].startswith("#")
+    >>> colors["panel"].startswith("#")
     True
     """
     pal = widget.palette()
@@ -128,7 +128,7 @@ def tokens(widget: QWidget) -> dict[str, str]:
     accent = pal.color(QPalette.ColorRole.Highlight)
     window = pal.color(QPalette.ColorRole.Window)
     out = dict(
-        accent=blend_name(accent, b=text, t=0.35),  # as text, a little towards the text colour so it reads on either theme
+        accent=blend_name(accent, b=text, t=0.35),  # as text, a little toward the text color so it reads on either theme
         accent_soft=blend_name(base, b=accent, t=0.18),
         muted=blend_name(text, b=base, t=0.42),
         line=pal.color(QPalette.ColorRole.Mid).name(),
@@ -136,7 +136,7 @@ def tokens(widget: QWidget) -> dict[str, str]:
         well=blend_name(window, b=text, t=0.05),
     )
     for kind, hue in (("good", QColor("#2e9e50")), ("warn", QColor("#d08a00")), ("bad", QColor("#d64a37"))):
-        out[kind] = blend_name(text, b=hue, t=0.65)  # the text colour leaning towards the hue, so it stays readable
+        out[kind] = blend_name(text, b=hue, t=0.65)  # the text color leaning toward the hue, so it stays readable
         out[kind + "_soft"] = blend_name(base, b=hue, t=0.16)
     return out
 
@@ -380,7 +380,7 @@ class InstrumentPicker(QWidget):
         """
         Mark the entry in use in the list.
 
-        It is shown bold and ticked (saying which way of playing, if there are several), and the entries with no recordings
+        It is shown bold and checked (saying which way of playing, if there are several), and the entries with no recordings
         installed are put in italics.
 
         Examples
@@ -404,7 +404,7 @@ class InstrumentPicker(QWidget):
             installed = any(coverage(sounds.recordings(i)).installed for i in members)
             font = item.font()
             font.setBold(active is not None)
-            font.setItalic(not installed)  # the list's stylesheet fixes the colour, so italics mark what is missing
+            font.setItalic(not installed)  # the list's stylesheet fixes the color, so italics mark what is missing
             item.setFont(font)
             item.setToolTip("" if installed else "No recordings are installed for this instrument")
 
@@ -456,7 +456,7 @@ class InstrumentPicker(QWidget):
         text : str
             What the tag says.
         kind : str, default ""
-            "accent", "good", "warn" or "bad" for a coloured one, or empty for a plain outlined one. Keyword-only.
+            "accent", "good", "warn" or "bad" for a colored one, or empty for a plain outlined one. Keyword-only.
 
         Returns
         -------
@@ -473,10 +473,10 @@ class InstrumentPicker(QWidget):
         t = tokens(self)
         chip = QLabel(text)
         if kind:
-            colours = f"color: {t[kind]}; background: {t[kind + '_soft']}; border: 1px solid transparent; font-weight: 600;"
+            colors = f"color: {t[kind]}; background: {t[kind + '_soft']}; border: 1px solid transparent; font-weight: 600;"
         else:
-            colours = f"color: {t['muted']}; background: transparent; border: 1px solid {t['line']};"
-        chip.setStyleSheet(colours + " border-radius: 10px; padding: 2px 10px;")
+            colors = f"color: {t['muted']}; background: transparent; border: 1px solid {t['line']};"
+        chip.setStyleSheet(colors + " border-radius: 10px; padding: 2px 10px;")
         return chip
 
     def _link(
@@ -486,7 +486,7 @@ class InstrumentPicker(QWidget):
         text: str,
     ) -> str:
         """
-        Return a link as HTML, in the accent colour.
+        Return a link as HTML, in the accent color.
 
         Parameters
         ----------
@@ -517,7 +517,7 @@ class InstrumentPicker(QWidget):
         link: bool = False,
     ) -> None:
         """
-        Add a labelled line to the facts grid on the summary page.
+        Add a labeled line to the facts grid on the summary page.
 
         Parameters
         ----------
@@ -708,7 +708,7 @@ class InstrumentPicker(QWidget):
 
     def changeEvent(self, event: QEvent) -> None:
         """
-        Redraw the summary page when the palette changes, so its colours follow the theme.
+        Redraw the summary page when the palette changes, so its colors follow the theme.
 
         Parameters
         ----------

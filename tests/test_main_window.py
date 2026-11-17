@@ -26,16 +26,18 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QListWidget,
+    QScrollArea,
     QWidget,
 )
 
 from alto import __main__ as entry
-from alto import updates
+from alto import settings, updates
 from alto.exercises import REGISTRY
 from alto.exercises.base import (
     Exercise,
     Question,
 )
+from alto.exercises.library import KeyboardIntervals
 from alto.learning import (
     Database,
     Learner,
@@ -51,7 +53,12 @@ from alto.ui.home import (
 )
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
+from alto.ui.settings_panel import (
+    KeyboardIntervalSettingsPanel,
+    save_keyboard_intervals,
+)
 from alto.ui.store import store
+from alto.ui.theme import apply_theme
 
 if TYPE_CHECKING:
     from collections.abc import (
@@ -183,7 +190,7 @@ def test_an_exercise_with_no_icon_of_its_own_gets_the_default(app: QApplication)
 @pytest.fixture
 def window(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> Iterator[MainWindow]:
     """
     Provide a shown main window with some history.
@@ -192,7 +199,7 @@ def window(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable
+    practiced_learner : Callable
         Builds a learner with a history.
 
     Yields
@@ -200,7 +207,7 @@ def window(
     MainWindow
         The window; it is closed afterwards.
     """
-    w = MainWindow(practised_learner(10))
+    w = MainWindow(practiced_learner(10))
     w.show()
     yield w
     w.close()
@@ -265,7 +272,7 @@ def test_each_exercise_in_the_list_sits_under_its_own_category_heading(window: M
 
 def test_building_the_window_opens_no_other_window(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that building the main window opens no window of its own besides itself.
@@ -277,7 +284,7 @@ def test_building_the_window_opens_no_other_window(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable
+    practiced_learner : Callable
         Builds a learner with a history. Only the first parameter may be positional.
     """
     opened: list[str] = []
@@ -308,7 +315,7 @@ def test_building_the_window_opens_no_other_window(
     spy = Spy()
     app.installEventFilter(spy)
     try:
-        for learner in (practised_learner(3), None):
+        for learner in (practiced_learner(3), None):
             w = MainWindow(learner)
             w.close()
             w.deleteLater()
@@ -439,12 +446,12 @@ def test_the_statistics_and_database_pages_replace_the_current_page_and_back_ret
     assert window._overlay is None and window.stack.currentWidget() is exercise
 
 
-def test_switching_profile_changes_who_is_practising_and_goes_home(
+def test_switching_profile_changes_who_is_practicing_and_goes_home(
     window: MainWindow,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that switching profile changes who is practising and goes home.
+    Check that switching profile changes who is practicing and goes home.
 
     Parameters
     ----------
@@ -509,7 +516,7 @@ def test_switching_profile_changes_who_is_practising_and_goes_home(
 
     class Cancels(Chooses):
         """
-        A stand-in for the profile dialog that is cancelled.
+        A stand-in for the profile dialog that is canceled.
         """
 
         def exec(self) -> QDialog.DialogCode:
@@ -639,7 +646,7 @@ def test_the_settings_do_not_block_the_window(
 
 def test_a_rebuilt_window_stays_where_it_was(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that a rebuilt window stays where it was, as the same window.
@@ -648,10 +655,10 @@ def test_a_rebuilt_window_stays_where_it_was(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    old = MainWindow(practised_learner(5))
+    old = MainWindow(practiced_learner(5))
     old.setGeometry(
         120,
         80,
@@ -666,7 +673,7 @@ def test_a_rebuilt_window_stays_where_it_was(
 
 def test_a_rebuilt_window_shows_the_page_that_was_open(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that a rebuilt window shows the exercise, the lesson at its step, or the statistics that were open.
@@ -675,10 +682,10 @@ def test_a_rebuilt_window_shows_the_page_that_was_open(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner(5)
+    learner = practiced_learner(5)
     old = MainWindow(learner)
     old.open_exercise(REGISTRY[0])
     old.open_stats()
@@ -961,3 +968,80 @@ def test_the_app_quits_quietly_if_no_profile_is_chosen(
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry, "startup_profile", lambda db: None)
     assert entry.main() == 0
+
+
+def retained_exercise_page(window: MainWindow) -> ExerciseView:
+    """
+    Return the retained exercise view for a window under test.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window with an open exercise.
+
+    Returns
+    -------
+    ExerciseView
+        The retained exercise view.
+    """
+    # noinspection PyProtectedMember
+    page = window._exercise_page
+    assert isinstance(page, ExerciseView)
+    return page
+
+
+@pytest.mark.parametrize("opened,page_index", [(False, 0), (True, 0), (True, 2)])
+def test_theme_changes_preserve_the_exercise_settings_pane(app: QApplication, opened: bool, page_index: int) -> None:
+    """
+    Keep exercise settings open or closed and retain their page and scroll position after closing theme settings.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared application.
+    opened : bool
+        Whether the exercise settings pane starts open.
+    page_index : int
+        The settings menu or interval page to preserve.
+    """
+    window = MainWindow()
+    window.resize(1100, 750)
+    window.show()
+    cfg = settings.keyboard_intervals
+    cfg.low, cfg.high = settings.KEYBOARD_FULL
+    save_keyboard_intervals(cfg)
+    window.open_exercise(KeyboardIntervals)
+    view = retained_exercise_page(window)
+    assert isinstance(view, ExerciseView) and view.gear is not None
+    panel = view.settings_panel
+    assert isinstance(panel, KeyboardIntervalSettingsPanel)
+    panel.stack.setCurrentIndex(page_index)
+    view.gear.setChecked(opened)
+    if opened:
+        view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    app.processEvents()
+    scroll = panel.stack.currentWidget().findChild(QScrollArea)
+    if scroll is not None:
+        scroll.verticalScrollBar().setValue(180)
+    before = view.settings_state()
+    assert before is not None
+    if page_index == 2:
+        assert before[2] > 0
+    try:
+        for theme in ("dark", "light"):
+            window.open_settings()
+            dialog = window._settings
+            assert dialog is not None
+            dialog.choose_theme(theme)
+            dialog.close()
+            app.processEvents()
+            fresh = retained_exercise_page(window)
+            assert fresh is not view
+            assert fresh.settings_state() == before
+            assert fresh.gear is not None and fresh.gear.isChecked() == opened
+            assert fresh.pane.isVisible() == opened
+            assert fresh.pane.maximumWidth() == (fresh.PANE_WIDTH if opened else 0)
+            view = fresh
+    finally:
+        window.close()
+        apply_theme("system")

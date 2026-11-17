@@ -60,6 +60,8 @@ class Question:
         Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
     keyboard : Note or None
         A piano key to highlight, instead of drawing a staff. Keyword-only.
+    keyboard_notes : list of Note
+        Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.
     key_staff : bool, default False
         Draw `key` as a small key-signature staff above the keyboard. Keyword-only.
     keyboard_range : tuple of (int, int) or None
@@ -129,6 +131,7 @@ class Question:
     # Optional button placement: choice -> (row, column). Without it the choices form one row.
     grid: dict[str, tuple[int, int]] | None = None
     keyboard: Note | None = None  # a piano key to highlight, instead of drawing a staff
+    keyboard_notes: list[Note] = field(default_factory=list)
     key_staff: bool = False  # draw `key` as a small key-signature staff above the keyboard
     keyboard_range: tuple[int, int] | None = None  # the keys (MIDI, inclusive) the keyboard picture should show
     octaves: list[str] | None = None  # when set, the answer is a choice button plus one of these second-row buttons
@@ -316,7 +319,7 @@ class Question:
 
     def item_key(self) -> str:
         """
-        Return a stable identity for the question, so the same one can be recognised when it comes round again.
+        Return a stable identity for the question, so the same one can be recognized when it comes around again.
 
         It covers what is asked and where it is drawn, but not the note value or the order of the buttons.
 
@@ -357,7 +360,7 @@ class Question:
             """
             return None if n is None else [n.octave, n.letter, n.accidental]
 
-        data = [
+        data: list[object] = [
             self.prompt,
             self.answer,
             self.clef,
@@ -366,6 +369,8 @@ class Question:
             spelled(self.keyboard),
             spelled(self.construct),
         ]
+        if self.keyboard_notes:
+            data.append([spelled(n) for n in self.keyboard_notes])
         return hashlib.sha1(json.dumps(data).encode()).hexdigest()[:20]
 
     def to_dict(self) -> dict:
@@ -410,6 +415,7 @@ class Question:
         """
         d = dict(d)
         d["staff"] = [[Note(**n) for n in col] for col in d.get("staff", [])]
+        d["keyboard_notes"] = [Note(**n) for n in d.get("keyboard_notes", [])]
         d.pop("play", None)  # questions stored by an older version carried the notes of a scale to play
         d["keyboard"], d["construct"] = note_from(d.get("keyboard")), note_from(d.get("construct"))
         if d.get("construct_scale") is not None:

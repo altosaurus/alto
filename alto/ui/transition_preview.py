@@ -52,7 +52,7 @@ from alto.ui.widgets import SegmentedControl
 
 PAUSE_MS = 600  # how long the exercises rest before the preview switches to the lessons
 COLUMNS = 3  # how many cards are in a row on the preview's page
-MARGIN = 14  # the space round the cards, before they are scaled down to fit
+MARGIN = 14  # the space around the cards, before they are scaled down to fit
 EXAMPLES = (
     ("Notation", "Reading the staff", "Where each note lives.", "NoteNames"),
     ("Intervals", "Counting intervals", "From seconds to octaves.", "IntervalNames"),

@@ -30,7 +30,7 @@ from PySide6.QtGui import (
 )
 
 STAFF_SPACE = 33.5  # a note head is one staff space tall
-GLYPHS = {  # the breve is not here: its square form is drawn by _square_breve (the font only has the oval one)
+GLYPHS = {  # the double whole note is not here: its square form is drawn by _square_breve (the font only has the oval one)
     "whole": "\U0001d15d",
     "half": "\U0001d15e",
     "quarter": "\U0001d15f",
@@ -38,7 +38,7 @@ GLYPHS = {  # the breve is not here: its square form is drawn by _square_breve (
     "sixteenth": "\U0001d161",
     "thirty_second": "\U0001d162",
 }
-HEAD_CENTRE = {  # centre of the note head, from the glyph's origin
+HEAD_CENTER = {  # center of the note head, from the glyph's origin
     "breve": (0.0, 0.0),
     "whole": (34.2, -17.85),
     "half": (26.5, -17.9),
@@ -64,7 +64,7 @@ _shapes: dict[tuple[str, bool], QPainterPath] = {}
 
 def _square_breve() -> QPainterPath:
     """
-    Return the square form of the breve (double whole note), centred on (0, 0).
+    Return the square form of the double whole note (stored as "breve"), centered on (0, 0).
 
     Two slender upright bars are joined by a heavy bar above and below a hollow slot, with the uprights standing a little
     proud at the ends, so the sides read like the serifs of a capital I.
@@ -96,7 +96,7 @@ def _square_breve() -> QPainterPath:
         Parameters
         ----------
         x0 : float
-            The left edge, in staff spaces from the centre.
+            The left edge, in staff spaces from the center.
         y0 : float
             The top edge. Keyword-only.
         x1 : float
@@ -214,7 +214,7 @@ def _stem_down_shape(value: str) -> QPainterPath:
     """
     Make the stem-down form of a note from the stem-up glyph.
 
-    The glyph is turned half a turn about the centre of its head, and a longer stem or flags are added where the value needs
+    The glyph is turned half a turn about the center of its head, and a longer stem or flags are added where the value needs
     them.
 
     Parameters
@@ -232,7 +232,7 @@ def _stem_down_shape(value: str) -> QPainterPath:
     >>> _stem_down_shape("eighth").isEmpty()
     False
     """
-    hx, hy = HEAD_CENTRE[value]
+    hx, hy = HEAD_CENTER[value]
     turn = QTransform()
     turn.translate(hx, hy)
     turn.rotate(180)
@@ -278,8 +278,8 @@ def note_shape(
     """
     Return the outline of a note of a value, with the stem up or down.
 
-    Stems only exist from the half note on, so a breve or whole note is the same either way. Shapes are kept after the first
-    time.
+    Half notes and shorter values have stems, so a double whole note or whole note looks the same either way.
+    Shapes are cached after their first use.
 
     Parameters
     ----------
@@ -313,11 +313,11 @@ def draw_note(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     stem_down: bool = False,
 ) -> None:
     """
-    Draw a note with its head centred on a point.
+    Draw a note with its head centered on a point.
 
     Parameters
     ----------
@@ -326,13 +326,13 @@ def draw_note(
     value : str
         The note value. Keyword-only.
     x : float
-        The head's centre, in pixels. Keyword-only.
+        The head's center, in pixels. Keyword-only.
     y : float
-        The head's centre, in pixels. Keyword-only.
+        The head's center, in pixels. Keyword-only.
     gap : float
         The distance between staff lines, which is also the head's height. Keyword-only.
-    colour : QColor
-        The colour to draw in. Keyword-only.
+    color : QColor
+        The color to draw in. Keyword-only.
     stem_down : bool, default False
         Draw the stem down. Keyword-only.
 
@@ -342,13 +342,13 @@ def draw_note(
     >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_note(painter, value="quarter", x=50, y=50, gap=16, colour=QColor("black"))
+    >>> draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
     >>> painter.end()
     True
     >>> image.pixelColor(50, 50).lightness() < 128  # the head is drawn at the point
     True
     """
-    hx, hy = HEAD_CENTRE[value]
+    hx, hy = HEAD_CENTER[value]
     k = gap / STAFF_SPACE
     t = QTransform()
     t.translate(x, y)
@@ -356,6 +356,6 @@ def draw_note(
     t.translate(-hx, -hy)
     p.save()
     p.setPen(Qt.PenStyle.NoPen)
-    p.setBrush(colour)
+    p.setBrush(color)
     p.drawPath(t.map(note_shape(value, stem_down=stem_down)))
     p.restore()

@@ -101,7 +101,7 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
     """
     Check the six badges with a logo: each names a real workflow (or the Python versions) and carries its picture in its address.
 
-    Shields has a one-colour pytest and Python logo of its own, but the colour ones, and the pictures for Pyright,
+    Shields has a one-color pytest and Python logo of its own, but the color ones, and the pictures for Pyright,
     ASV and Jekyll, are not in its set. So each picture is carried in the badge's address. They must stay small,
     so that the address does, and be PNG files.
     """

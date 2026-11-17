@@ -2,7 +2,7 @@
 The on-screen piano keyboard, drawn to real proportions, and a miniature of the whole piano for choosing a span of keys.
 
 `KeyboardWidget` shows a range of keys and can highlight one. `KeyboardSpan` shows all 88 keys in miniature, shades the
-range that will be asked, and can be dragged to change it. Colours and materials come from `keyboard_styles`.
+range that will be asked, and can be dragged to change it. Colors and materials come from `keyboard_styles`.
 
 Examples
 --------
@@ -61,7 +61,7 @@ PAD = 10.0  # frame padding
 
 # Real piano proportions, in units of one white key's width (23.5 mm): a white key is about 6.2 units long,
 # a black key 0.58 wide and 0.63 as long as a white one. Black keys do not sit on the boundary between
-# white keys: in each group they are spread a little, so these are their centres within an octave.
+# white keys: in each group they are spread a little, so these are their centers within an octave.
 WHITE_INDEX = {
     0: 0,
     2: 1,
@@ -140,7 +140,7 @@ def _bottom_rounded(
 
 class KeyboardWidget(QWidget):
     """
-    A piano keyboard drawn to real proportions that can highlight one key.
+    A piano keyboard drawn to real proportions that can highlight one or more keys.
 
     Attributes
     ----------
@@ -150,6 +150,8 @@ class KeyboardWidget(QWidget):
         The highest key shown, as a MIDI number.
     highlight : int or None
         The key to highlight.
+    additional_highlights : set of int
+        Other keys highlighted together with `highlight`.
     style_override : KeyboardStyle or None
         A fixed style, for the preview cards in the settings; otherwise the style chosen in the settings is used.
     pad : float
@@ -157,7 +159,7 @@ class KeyboardWidget(QWidget):
     max_key_width : float
         The widest a key may be, in pixels. Smaller when something else (the key signature) shares the page.
     highlight_color : QColor
-        The colour of the highlighted key.
+        The color of the highlighted key.
 
     Examples
     --------
@@ -183,6 +185,7 @@ class KeyboardWidget(QWidget):
         super().__init__(parent)
         self.lo, self.hi = KEYBOARD_DEFAULT
         self.highlight: int | None = None
+        self.additional_highlights: set[int] = set()
         self.style_override: KeyboardStyle | None = None  # a fixed style, for the preview cards in the settings
         self.pad = PAD
         self.max_key_width = MAX_KEY_WIDTH  # smaller when something else (the key signature) shares the page
@@ -326,18 +329,49 @@ class KeyboardWidget(QWidget):
             if self.hi % 12 not in WHITE_PITCH_CLASSES:
                 self.hi += 1
         self.highlight = midi
+        self.additional_highlights.clear()
         self.highlight_color = QColor(self.palette().color(QPalette.ColorRole.Highlight))
         self._fit_height()
         self.update()
 
+    def show_keys(
+        self,
+        midis: list[int],
+        *,
+        span: tuple[int, int] | None = None,
+    ) -> None:
+        """
+        Highlight several keys together, clearing highlights from the previous question.
+
+        Parameters
+        ----------
+        midis : list of int
+            The MIDI numbers to highlight; an empty list clears all highlights.
+        span : tuple of (int, int) or None, default None
+            The inclusive range to display, widened to white keys. Keyword-only.
+
+        Examples
+        --------
+        >>> keyboard = KeyboardWidget()
+        >>> keyboard.show_keys([60, 66], span=(48, 72))
+        >>> keyboard.highlight, keyboard.additional_highlights
+        (60, {66})
+        >>> keyboard.show_key(62)
+        >>> keyboard.additional_highlights
+        set()
+        """
+        self.show_key(midis[0] if midis else None, span=span)
+        self.additional_highlights = set(midis[1:])
+        self.update()
+
     def set_highlight_color(self, color: QColor) -> None:
         """
-        Choose the colour of the highlighted key and redraw.
+        Choose the color of the highlighted key and redraw.
 
         Parameters
         ----------
         color : QColor
-            The colour.
+            The color.
 
         Examples
         --------
@@ -374,7 +408,7 @@ class KeyboardWidget(QWidget):
         style, pad = self.style, self.pad
         kw = self._key_width()
         n = len(whites)
-        left = (self.width() - n * kw) / 2  # centre the keys
+        left = (self.width() - n * kw) / 2  # center the keys
         top = pad + style.rail
         kh = kw * KEY_LENGTH
         first = 7 * (whites[0] // 12) + WHITE_INDEX[whites[0] % 12]  # absolute white-key number of the leftmost key
@@ -418,7 +452,7 @@ class KeyboardWidget(QWidget):
         radius = min(style.round, kw * 0.14)
         edge = 2.5 if style.thick else 1.0
         for i, midi in enumerate(whites):
-            on = midi == self.highlight
+            on = midi == self.highlight or midi in self.additional_highlights
             path = _bottom_rounded(
                 left + i * kw + style.gap / 2,
                 y=top,
@@ -456,9 +490,9 @@ class KeyboardWidget(QWidget):
         for midi in range(self.lo, self.hi + 1):
             if midi % 12 in WHITE_PITCH_CLASSES:
                 continue
-            centre = 7 * (midi // 12) + BLACK_CENTER[midi % 12]
-            x = left + (centre - first) * kw - bw / 2
-            on = midi == self.highlight
+            center = 7 * (midi // 12) + BLACK_CENTER[midi % 12]
+            x = left + (center - first) * kw - bw / 2
+            on = midi == self.highlight or midi in self.additional_highlights
             path = _bottom_rounded(
                 x,
                 y=top - 1,
@@ -526,7 +560,7 @@ class KeyboardWidget(QWidget):
         path : QPainterPath
             The key's outline, which the halo is drawn along. Keyword-only.
         style : KeyboardStyle
-            The style, which gives the colour and whether there is a glow. Keyword-only.
+            The style, which gives the color and whether there is a glow. Keyword-only.
         midi : int
             The key's MIDI number. Keyword-only.
         black : bool
@@ -546,14 +580,14 @@ class KeyboardWidget(QWidget):
         >>> painter.end()
         True
         """
-        colour = keyboard_styles.edge_color(style, midi=midi, black=black)
+        color = keyboard_styles.edge_color(style, midi=midi, black=black)
         if style.glow:
-            halo = QColor(colour)
+            halo = QColor(color)
             halo.setAlpha(60)
             p.setBrush(Qt.BrushStyle.NoBrush)
             p.setPen(QPen(halo, 5))
             p.drawPath(path)
-        p.setPen(QPen(colour, width))
+        p.setPen(QPen(color, width))
 
 
 class KeyboardSpan(QWidget):
@@ -696,8 +730,8 @@ class KeyboardSpan(QWidget):
             """
             if midi % 12 in WHITE_PITCH_CLASSES:
                 return 4 + whites.index(midi) * kw, 4 + (whites.index(midi) + 1) * kw
-            centre = 4 + (whites.index(midi - 1) + 1) * kw
-            return centre - kw * 0.3, centre + kw * 0.3
+            center = 4 + (whites.index(midi - 1) + 1) * kw
+            return center - kw * 0.3, center + kw * 0.3
 
         return sides(self.lo)[0], sides(self.hi)[1]
 

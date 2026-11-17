@@ -280,7 +280,7 @@ def draw_key_signature(
     gap : float
         The distance between staff lines, in pixels. Keyword-only.
     color : QColor
-        The colour to draw in. Keyword-only.
+        The color to draw in. Keyword-only.
     step : float, default KEY_STEP
         The horizontal spacing between accidentals. Keyword-only.
     size : float, default 2.0
@@ -313,7 +313,7 @@ def draw_key_signature(
                 x=x + i * step,
                 y=y,
                 gap=gap,
-                colour=color,
+                color=color,
                 fit=step - 1,
             )
         return
@@ -353,14 +353,14 @@ class StaffWidget(QWidget):
     columns : list of list of Note
         The notes drawn; each inner list is one chord or note.
     note_color : QColor or None
-        The colour of the notes; None draws them in the notation style's ink.
+        The color of the notes; None draws them in the notation style's ink.
     column_colors : dict of int to QColor
-        The colour of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
+        The color of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
     wedges : list of str
         The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point
         above them, with the letter over the point; "" for none there.
     wedge_colors : dict of int to QColor
-        The colour of particular wedges, by position from 0. The others take the colour of the note on their right,
+        The color of particular wedges, by position from 0. The others take the color of the note on their right,
         or `note_color`.
     notation_style : NotationStyle or None
         A style to use instead of the one chosen in the settings.
@@ -427,9 +427,9 @@ class StaffWidget(QWidget):
         self.clef = "treble"
         self.columns: list[list[Note]] = []
         self.note_color: QColor | None = None  # None draws notes in the style's ink
-        self.column_colors: dict[int, QColor] = {}  # a colour for a column of notes by its position, over `note_color`
-        self.wedges: list[str] = []  # the text of the wedge under each pair of neighbouring columns; "" for none
-        self.wedge_colors: dict[int, QColor] = {}  # a colour for a wedge by its position, over its right-hand note's
+        self.column_colors: dict[int, QColor] = {}  # a color for a column of notes by its position, over `note_color`
+        self.wedges: list[str] = []  # the text of the wedge under each pair of neighboring columns; "" for none
+        self.wedge_colors: dict[int, QColor] = {}  # a color for a wedge by its position, over its right-hand note's
         self.notation_style: NotationStyle | None = None  # None follows the style chosen in settings
         self.key = 0
         self.key_room = 0  # sharps or flats' worth of room to keep for the signature, so the width need not follow it
@@ -506,7 +506,7 @@ class StaffWidget(QWidget):
         """
         Return the size the staff would like.
 
-        A capped staff asks for its full capped width, so a layout that centres it gives it that much.
+        A capped staff asks for its full capped width, so a layout that centers it gives it that much.
 
         Returns
         -------
@@ -550,12 +550,12 @@ class StaffWidget(QWidget):
 
     def set_note_color(self, color: QColor | None) -> None:
         """
-        Draw the notes in a colour, for feedback, or back in the style's ink.
+        Draw the notes in a color, for feedback, or back in the style's ink.
 
         Parameters
         ----------
         color : QColor or None
-            The colour; None to use the notation style's ink.
+            The color; None to use the notation style's ink.
 
         Examples
         --------
@@ -760,14 +760,14 @@ class StaffWidget(QWidget):
                             x=ax,
                             y=y,
                             gap=gap,
-                            colour=ncol,
+                            color=ncol,
                         )
                     else:
                         sign = ACCIDENTAL_SYMBOLS[note.accidental] or "♮"
                         p.setFont(QFont("DejaVu Sans", int(gap * 2.0)))
                         p.drawText(QPointF(ax, y + gap * 0.5), sign)
                     acc_slot += 1
-        for i, text in enumerate(self.wedges):  # the steps between neighbouring notes, above them
+        for i, text in enumerate(self.wedges):  # the steps between neighboring notes, above them
             if text and i in heads and i + 1 in heads:
                 self._draw_wedge(
                     p,
@@ -789,7 +789,7 @@ class StaffWidget(QWidget):
         color: QColor,
     ) -> None:
         """
-        Draw the step between two neighbouring notes: two lines from the notes up to a point, and the letter over the point.
+        Draw the step between two neighboring notes: two lines from the notes up to a point, and the letter over the point.
 
         The lines leave the tops of the two notes and meet above them, so the point is above the higher of the two.
 
@@ -806,7 +806,7 @@ class StaffWidget(QWidget):
         gap : float
             The distance between staff lines. Keyword-only.
         color : QColor
-            The colour of the lines and the letter. Keyword-only.
+            The color of the lines and the letter. Keyword-only.
 
         Examples
         --------
@@ -867,7 +867,7 @@ class StaffWidget(QWidget):
         gap : float
             The distance between staff lines. Keyword-only.
         color : QColor
-            The colour to draw in. Keyword-only.
+            The color to draw in. Keyword-only.
         font : str or None, default None
             A SMuFL font to engrave with. Keyword-only.
 
@@ -907,27 +907,27 @@ class StaffWidget(QWidget):
         font: str | None = None,
     ) -> None:
         """
-        Draw a note of a value with its head centred on a point.
+        Draw a note of a value with its head centered on a point.
 
         Parameters
         ----------
         p : QPainter
             The painter to draw with.
         x : float
-            The head's centre, in pixels. Keyword-only.
+            The head's center, in pixels. Keyword-only.
         y : float
-            The head's centre, in pixels. Keyword-only.
+            The head's center, in pixels. Keyword-only.
         gap : float
             The distance between staff lines, in pixels. Keyword-only.
         color : QColor
-            The colour to draw in. Keyword-only.
+            The color to draw in. Keyword-only.
         value : str
             The note value. Keyword-only.
         stem_down : bool
             Draw the stem down. Keyword-only.
         font : str or None, default None
-            A SMuFL font to engrave with; None uses the built-in Noto Music drawing. The breve is always the square form.
-            Keyword-only.
+            A SMuFL font to engrave with; None uses the built-in Noto Music drawing.
+            The double whole note always uses the square form. Keyword-only.
 
         Examples
         --------
@@ -941,7 +941,7 @@ class StaffWidget(QWidget):
         >>> image.pixelColor(50, 50).lightness() < 128
         True
         """
-        if font and value != "breve":  # the breve is always the square form, whatever the music font
+        if font and value != "breve":  # the double whole note is always the square form, whatever the music font
             engraving.draw_note(
                 p,
                 font=font,
@@ -949,7 +949,7 @@ class StaffWidget(QWidget):
                 x=x,
                 y=y,
                 gap=gap,
-                colour=color,
+                color=color,
                 stem_down=stem_down,
             )
         elif value == "whole":
@@ -967,7 +967,7 @@ class StaffWidget(QWidget):
                 x=x,
                 y=y,
                 gap=gap,
-                colour=color,
+                color=color,
                 stem_down=stem_down,
             )
 
@@ -1001,7 +1001,7 @@ class StaffWidget(QWidget):
         gap : float
             The distance between staff lines, in pixels. Keyword-only.
         color : QColor, default black
-            The colour to draw in. Keyword-only.
+            The color to draw in. Keyword-only.
         font : str or None, default None
             A SMuFL font to engrave with. Keyword-only.
 
@@ -1026,7 +1026,7 @@ class StaffWidget(QWidget):
                 x=x,
                 bottom=bottom,
                 gap=gap,
-                colour=color,
+                color=color,
             )
             return
         top, bot = CLEF_EXTENT[clef]
@@ -1076,7 +1076,7 @@ class StaffWidget(QWidget):
         y1 : float
             The bottom, in pixels. Keyword-only.
         color : QColor
-            The colour to draw in. Keyword-only.
+            The color to draw in. Keyword-only.
         wd : float, default 11.0
             How wide to draw it, in pixels. Keyword-only.
         font : str or None, default None
@@ -1100,7 +1100,7 @@ class StaffWidget(QWidget):
             x=x,
             y0=y0,
             y1=y1,
-            colour=color,
+            color=color,
             width=wd * 1.25,
         ):
             return
@@ -1162,13 +1162,13 @@ class StaffWidget(QWidget):
         p : QPainter
             The painter to draw with.
         x : float
-            The head's centre, in pixels. Keyword-only.
+            The head's center, in pixels. Keyword-only.
         y : float
-            The head's centre, in pixels. Keyword-only.
+            The head's center, in pixels. Keyword-only.
         gap : float
             The distance between staff lines, which sets the size. Keyword-only.
         color : QColor, default black
-            The colour to draw in. Keyword-only.
+            The color to draw in. Keyword-only.
 
         Examples
         --------
@@ -1207,14 +1207,14 @@ class StaffWidget(QWidget):
         gap: float,
     ) -> None:
         """
-        Draw a ledger line, a little wider than the note head (which is about 0.74 gap either side of centre).
+        Draw a ledger line, a little wider than the note head (which is about 0.74 gap either side of center).
 
         Parameters
         ----------
         p : QPainter
             The painter to draw with, with its pen already set.
         x : float
-            The centre of the line, in pixels. Keyword-only.
+            The center of the line, in pixels. Keyword-only.
         y : float
             The line's height, in pixels. Keyword-only.
         gap : float

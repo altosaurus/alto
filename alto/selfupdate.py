@@ -53,7 +53,7 @@ WINDOWS_INSTALLER_ARGUMENTS = (
     "/RELAUNCH=1",
 )
 # How PowerShell is started on Windows to wait for Alto to end and then run the installer. The script travels as `-EncodedCommand`
-# (base64 of UTF-16), so no path needs quoting for a command line, and no execution policy applies to it.
+# (base64 of UTF-16), so no path needs to be quoted for a command line, and no execution policy applies to it.
 POWERSHELL = "powershell.exe"
 POWERSHELL_ARGUMENTS = ("-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand")
 # The program that installs an update on Linux. It waits for Alto to end (the files it replaces are Alto's own), runs the new
@@ -80,8 +80,8 @@ class UpdateError(Exception):
     """Something went wrong in getting or checking an update. The message says what, in words for the person."""
 
 
-class UpdateCancelled(Exception):
-    """The person cancelled the update before it was ready."""
+class UpdateCanceled(Exception):
+    """The person canceled the update before it was ready."""
 
 
 @dataclass(frozen=True)
@@ -187,7 +187,7 @@ def download(
     allowed: str,
     max_bytes: int,
     progress: Callable[[int, int], None],
-    cancelled: Callable[[], bool],
+    canceled: Callable[[], bool],
     seconds: int = 30,
 ) -> str:
     """
@@ -198,14 +198,14 @@ def download(
     url : str
         The address. It must start with `allowed`.
     destination : Path
-        Where to write the file. Nothing is left there if the download fails or is cancelled. Keyword-only.
+        Where to write the file. Nothing is left there if the download fails or is canceled. Keyword-only.
     allowed : str
         What the address must start with, which is where a release keeps its files. Keyword-only.
     max_bytes : int
         The most to accept, by the size the server states and by what actually arrives. Keyword-only.
     progress : Callable
         Called with the bytes received so far and the size the server states (0 if it does not say). Keyword-only.
-    cancelled : Callable
+    canceled : Callable
         Asked now and then; True stops the download. Keyword-only.
     seconds : int, default 30
         How long to wait for the server at a time. Keyword-only.
@@ -219,8 +219,8 @@ def download(
     ------
     UpdateError
         If the address is not allowed, the file is too large, the connection is not secure, or the download fails.
-    UpdateCancelled
-        If `cancelled` said so.
+    UpdateCanceled
+        If `canceled` said so.
     """
     if not url.startswith(allowed):
         raise UpdateError("The release names a file at an address that Alto does not download updates from, so it was not used.")
@@ -236,8 +236,8 @@ def download(
                 raise UpdateError("The update is larger than expected, so it was not downloaded.")
             received = 0
             while True:
-                if cancelled():
-                    raise UpdateCancelled
+                if canceled():
+                    raise UpdateCanceled
                 chunk = response.read(65536)
                 if not chunk:
                     break
@@ -247,7 +247,7 @@ def download(
                 digest.update(chunk)
                 out.write(chunk)
                 progress(received, total)
-    except (UpdateError, UpdateCancelled):
+    except (UpdateError, UpdateCanceled):
         part.unlink(missing_ok=True)
         raise
     except (urllib.error.URLError, TimeoutError, OSError) as error:
@@ -324,7 +324,7 @@ def prepare_update(
     base: str = updates.DOWNLOAD_BASE,
     status: Callable[[str], None],
     progress: Callable[[int, int], None],
-    cancelled: Callable[[], bool],
+    canceled: Callable[[], bool],
 ) -> Prepared:
     """
     Download a release for this copy and check it: its signed list of checksums, then the file against its listed hash.
@@ -347,7 +347,7 @@ def prepare_update(
         Called with what is being done, in words for the person. Keyword-only.
     progress : Callable
         Called with the bytes received so far and the total, while the file downloads. Keyword-only.
-    cancelled : Callable
+    canceled : Callable
         Asked now and then; True stops. Keyword-only.
 
     Returns
@@ -359,8 +359,8 @@ def prepare_update(
     ------
     UpdateError
         If anything is missing or does not check out. Nothing is installed.
-    UpdateCancelled
-        If `cancelled` said so.
+    UpdateCanceled
+        If `canceled` said so.
     """
     if not keys:
         raise UpdateError("This copy of Alto has no key to check an update with, so it cannot install one.")
@@ -384,7 +384,7 @@ def prepare_update(
             allowed=base,
             max_bytes=MAX_LIST_BYTES,
             progress=ignore_progress,
-            cancelled=cancelled,
+            canceled=canceled,
         )
     data = list_file.read_bytes()
     if not updates.verify_signature(data, signature=signature_file.read_text(encoding="utf-8", errors="replace"), keys=keys):
@@ -403,7 +403,7 @@ def prepare_update(
         allowed=base,
         max_bytes=MAX_PACKAGE_BYTES,
         progress=progress,
-        cancelled=cancelled,
+        canceled=canceled,
     )
     status("Checking the download…")
     if actual != listed:
@@ -411,8 +411,8 @@ def prepare_update(
         raise UpdateError("The download does not match the checksum that was signed, so it was not installed.")
     if target.system == "windows":
         return Prepared(work, installer=file, root=None)
-    if cancelled():
-        raise UpdateCancelled
+    if canceled():
+        raise UpdateCanceled
     status("Unpacking…")
     root = extract_tarball(file, destination=work / "unpacked")
     file.unlink(missing_ok=True)

@@ -420,7 +420,7 @@ def test_note_construction_key_signature() -> None:
         assert any(construct_of(q).accidental == 0 for q in differing)  # an explicit natural
         assert all("needs its own" in q.explanation for q in differing)
 
-        cfg.key_signature = False  # off: no signature, and the old behaviour
+        cfg.key_signature = False  # off: no signature, and the old behavior
         assert {NoteConstruction().generate(rng).key for _ in range(100)} == {0}
     finally:
         cfg.clefs, cfg.accidentals, cfg.key_signature, cfg.keys = old

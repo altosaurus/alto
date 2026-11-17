@@ -1,6 +1,6 @@
 # Third-party material
 
-Alto bundles the following. Each item is used under the terms stated by its author. The source files and licence
+Alto bundles the following. Each item is used under the terms stated by its author. The source files and license
 texts are in the folders named below.
 
 ## Music fonts (`alto/assets/fonts/`)
@@ -27,7 +27,7 @@ Dorico, Finale, MuseScore or Verovio, which are mentioned only to say where a fo
 
 The piano is the Salamander Grand Piano V3 by Alexander Holm: a Yamaha C5 grand recorded with two AKG C414 microphones
 (https://sfzinstruments.github.io/pianos/salamander, https://github.com/sfzinstruments/SalamanderGrandPiano). It is used under the
-Creative Commons Attribution 3.0 Unported licence (CC BY 3.0, https://creativecommons.org/licenses/by/3.0/), whose text is in
+Creative Commons Attribution 3.0 Unported license (CC BY 3.0, https://creativecommons.org/licenses/by/3.0/), whose text is in
 `alto/assets/piano/LICENSE-CC-BY-3.0.txt`. Alto uses 30 recordings from one dynamic layer, converted to mono 44.1 kHz, trimmed
 and faded to 2.5 s, and levelled. Details are in `alto/assets/piano/SOURCE.txt`. Alexander Holm does not endorse Alto.
 
@@ -46,7 +46,7 @@ square: the alto clef in `icon.svg` and the treble clef in `icon-treble.svg`.
 
 ## Fonts used from the system, not bundled
 
-- Noto Music (Google, SIL OFL 1.1) draws the "Noto Music" notation style, and DejaVu Sans (Bitstream Vera licence with
+- Noto Music (Google, SIL OFL 1.1) draws the "Noto Music" notation style, and DejaVu Sans (Bitstream Vera license with
   DejaVu changes, free to redistribute) draws a few sharp and flat signs. Alto asks the operating system for them by name.
 
 ## Software dependencies
@@ -56,7 +56,7 @@ square: the alto clef in `icon.svg` and the treble clef in `icon-treble.svg`.
 ## Iconoir icons (`alto/ui/icons.py`)
 
 The GitHub and music-double-note (Exercises) icons are from [Iconoir](https://github.com/iconoir-icons/iconoir), under the
-[MIT licence](alto/assets/licenses/LICENSE-iconoir.txt).
+[MIT license](alto/assets/licenses/LICENSE-iconoir.txt).
 Their paths are unchanged; their colors follow the application theme. The music-double-note icon's note heads are filled.
 
-Copyright (c) 2021 Luca Burgio. The full licence is bundled at the path linked above.
+Copyright (c) 2021 Luca Burgio. The full license is bundled at the path linked above.

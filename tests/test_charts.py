@@ -145,7 +145,7 @@ def test_a_bar_names_itself_when_hovered(
     chart.resize(560, 260)
     chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
     plot = chart._plot()
-    inside = QPoint(round(chart._centres()[0]), round(plot.center().y()))
+    inside = QPoint(round(chart._centers()[0]), round(plot.center().y()))
     chart.mouseMoveEvent(
         QMouseEvent(
             QMouseEvent.Type.MouseMove,
@@ -183,7 +183,7 @@ def test_a_bar_names_itself_when_hovered(
     one = charts.StackedBarChart("One")
     one.resize(560, 260)
     one.set_data(["x"], right=[1], wrong=[0])
-    point = QPointF(one._centres()[0], one._plot().center().y())
+    point = QPointF(one._centers()[0], one._plot().center().y())
     one.mouseMoveEvent(
         QMouseEvent(
             QMouseEvent.Type.MouseMove,
@@ -255,7 +255,7 @@ def test_a_line_chart_point_names_itself_when_hovered(
     plot = chart._plot()
     for i, expected in ((0, "Mon\n2.0 s"), (1, "Tue\nno answers"), (2, "Wed\n4.5 s")):
         # noinspection PyTypeChecker
-        point = QPointF(chart._centres()[i], plot.center().y())
+        point = QPointF(chart._centers()[i], plot.center().y())
         chart.mouseMoveEvent(
             QMouseEvent(
                 QMouseEvent.Type.MouseMove,
@@ -293,16 +293,16 @@ def test_the_horizontal_bar_chart_lists_its_rows(app: QApplication) -> None:
     assert chart.minimumHeight() > 190
 
 
-def test_the_chart_colours_follow_the_palette(app: QApplication) -> None:
+def test_the_chart_colors_follow_the_palette(app: QApplication) -> None:
     """
-    Check that the chart colours follow the palette.
+    Check that the chart colors follow the palette.
 
     Parameters
     ----------
     app : QApplication
         The shared Qt application.
     """
-    chart = charts.StackedBarChart("Colours")
+    chart = charts.StackedBarChart("Colors")
     assert chart._ink() != chart._grid() and chart._soft() is not None
     QTest.qWait(1)
 
@@ -320,7 +320,7 @@ def test_an_axis_with_no_labels_draws_nothing(app: QApplication) -> None:
     image = QImage(200, 100, QImage.Format.Format_ARGB32)
     image.fill(0)
     painter = QPainter(image)
-    chart._category_axis(painter, centres=[], labels=[])
+    chart._category_axis(painter, centers=[], labels=[])
     painter.end()
     assert image.pixelColor(100, 90).alpha() == 0
 
@@ -488,12 +488,12 @@ def test_a_bar_chart_highlights_the_period_under_the_pointer_and_announces_a_cli
     got: list[object] = []
     chart.clicked.connect(got.append)
     plot = chart._plot()
-    columns = [QPointF(c, plot.center().y()) for c in chart._centres()]
+    columns = [QPointF(c, plot.center().y()) for c in chart._centers()]
     mouse(chart, QMouseEvent.Type.MouseMove, at=columns[0])
     assert chart.hovered == 0 and chart.cursor().shape() == Qt.CursorShape.PointingHandCursor
     green = QColor("#2e7d32")
-    assert chart._tone(0, colour=green).lightness() > green.lightness()  # the bar under the pointer is brighter
-    assert chart._tone(2, colour=green).alphaF() < 1.0  # and the others are fainter
+    assert chart._tone(0, color=green).lightness() > green.lightness()  # the bar under the pointer is brighter
+    assert chart._tone(2, color=green).alphaF() < 1.0  # and the others are fainter
     mouse(chart, QMouseEvent.Type.MouseMove, at=columns[1])  # nothing was answered in the middle period
     assert chart.hovered is None and chart.cursor().shape() == Qt.CursorShape.ArrowCursor
     click(chart, at=columns[1])
@@ -537,7 +537,7 @@ def test_a_press_that_does_not_come_up_on_the_same_item_is_not_a_click(app: QApp
     chart.set_data(["a", "b"], right=[3, 3], wrong=[0, 0])
     got: list[object] = []
     chart.clicked.connect(got.append)
-    first, second = (QPointF(c, chart._plot().center().y()) for c in chart._centres())
+    first, second = (QPointF(c, chart._plot().center().y()) for c in chart._centers())
     mouse(chart, QMouseEvent.Type.MouseButtonPress, at=first)
     mouse(chart, QMouseEvent.Type.MouseButtonRelease, at=second)
     mouse(chart, QMouseEvent.Type.MouseButtonPress, at=first, button=Qt.MouseButton.RightButton)
@@ -562,8 +562,8 @@ def test_a_line_chart_can_be_clicked_where_it_has_a_value(app: QApplication) -> 
     chart.set_data(["a", "b", "c"], values=[2.0, None, 5.0])
     got: list[object] = []
     chart.clicked.connect(got.append)
-    for centre in chart._centres():
-        click(chart, at=QPointF(centre, chart._plot().center().y()))
+    for center in chart._centers():
+        click(chart, at=QPointF(center, chart._plot().center().y()))
     assert got == [0, 2]
     chart.set_selected(0)
     assert chart.grab().toImage() != ink_image_without_highlight(chart)
@@ -594,9 +594,9 @@ def test_a_row_of_the_bar_list_highlights_and_announces_a_click(app: QApplicatio
     assert chart.grab().toImage() != ink_image_without_highlight(chart)
 
 
-def test_the_calendar_emphasises_a_day_and_announces_a_click_only_on_days_with_answers(app: QApplication) -> None:
+def test_the_calendar_emphasizes_a_day_and_announces_a_click_only_on_days_with_answers(app: QApplication) -> None:
     """
-    Check that a day of the calendar can be clicked only if questions were answered on it, and is emphasised when pointed at.
+    Check that a day of the calendar can be clicked only if questions were answered on it, and is emphasized when pointed at.
 
     Parameters
     ----------
@@ -617,6 +617,6 @@ def test_the_calendar_emphasises_a_day_and_announces_a_click_only_on_days_with_a
     assert got == [today]
     pointed_at = chart.grab().toImage()
     assert pointed_at != ink_image_without_highlight(chart)
-    chart.set_selected(today)  # the page is still showing that day, so it stays emphasised when the pointer moves away
+    chart.set_selected(today)  # the page is still showing that day, so it stays emphasized when the pointer moves away
     mouse(chart, QMouseEvent.Type.MouseMove, at=thursday)
     assert chart.hovered is None and chart.grab().toImage() == pointed_at

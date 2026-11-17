@@ -1,5 +1,5 @@
 """
-The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.
+The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.
 
 Examples
 --------
@@ -53,13 +53,13 @@ from alto.ui.circle import (
     wedge_path,
 )
 
-START_COLOURS = ["#1fa7c9", "#2f6bd0", "#6a4fe0"]  # what a new scheme starts with: the idea of "Cyan to indigo"
+START_COLORS = ["#1fa7c9", "#2f6bd0", "#6a4fe0"]  # what a new scheme starts with: the idea of "Cyan to indigo"
 THUMB = 112  # the size of a scheme's picture, in pixels
 
 
 def blank(key: str) -> CustomRecord:
     """
-    Make the scheme a new one starts as: colours by key signature, from cyan through blue to indigo, on dark wedges.
+    Make the scheme a new one starts as: colors by key signature, from cyan through blue to indigo, on dark wedges.
 
     Parameters
     ----------
@@ -76,12 +76,12 @@ def blank(key: str) -> CustomRecord:
     >>> blank("custom-3")["id"], blank("custom-3")["mode"]
     ('custom-3', 'signature')
     """
-    return {"id": key, "name": "My colours", "mode": "signature", "colours": list(START_COLOURS), "light": False}
+    return {"id": key, "name": "My colors", "mode": "signature", "colors": list(START_COLORS), "light": False}
 
 
 class SchemeThumb(QPushButton):
     """
-    A small picture of the circle in a colour scheme, to click to choose the scheme.
+    A small picture of the circle in a color scheme, to click to choose the scheme.
 
     Attributes
     ----------
@@ -109,7 +109,7 @@ class SchemeThumb(QPushButton):
         Parameters
         ----------
         scheme : Scheme
-            The colour scheme to draw.
+            The color scheme to draw.
         size : int, default 112
             Its width and height in pixels. Keyword-only.
         parent : QWidget or None, default None
@@ -149,7 +149,7 @@ class SchemeThumb(QPushButton):
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
-        Draw the circle, with one cell asked and its relative lit, and a ring round it when it is the chosen scheme.
+        Draw the circle, with one cell asked and its relative lit, and a ring around it when it is the chosen scheme.
 
         Parameters
         ----------
@@ -166,7 +166,7 @@ class SchemeThumb(QPushButton):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         box = QRectF(self.rect()).adjusted(3, 3, -3, -3)
         radius = min(box.width(), box.height()) / 2
-        centre = QPointF(box.center())
+        center = QPointF(box.center())
         scheme = self.scheme
         window = self.palette().color(QPalette.ColorRole.Window)
         p.setPen(QPen(window, max(radius / 60, 0.8)))
@@ -174,18 +174,18 @@ class SchemeThumb(QPushButton):
             for ring, (inner, outer) in {"outer": (OUTER_FROM, 1.0), "inner": (DISC, OUTER_FROM)}.items():
                 lift = (0.6 if ring == "outer" else 0.4) if index == 0 else 0.0
                 p.setBrush(wedge_color(index, inner=ring == "inner", lift=lift, scheme=scheme))
-                p.drawPath(wedge_path(centre=centre, inner=inner * radius, outer=outer * radius, index=index))
+                p.drawPath(wedge_path(center=center, inner=inner * radius, outer=outer * radius, index=index))
         p.setBrush(window)
-        p.drawEllipse(centre, DISC * radius, DISC * radius)
+        p.drawEllipse(center, DISC * radius, DISC * radius)
         if self.isChecked():
             p.setBrush(Qt.BrushStyle.NoBrush)
             p.setPen(QPen(self.palette().highlight().color(), 2.5))
-            p.drawEllipse(centre, radius + 1, radius + 1)
+            p.drawEllipse(center, radius + 1, radius + 1)
 
 
 class SchemePage(QWidget):
     """
-    The page that lists the colour schemes: the presets, the user's own, and a button to make another.
+    The page that lists the color schemes: the presets, the user's own, and a button to make another.
 
     Attributes
     ----------
@@ -249,7 +249,7 @@ class SchemePage(QWidget):
         --------
         >>> page = SchemePage()
         >>> from alto.circle_schemes import record_of
-        >>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+        >>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
         >>> page.load(current="custom-1", customs=[mine])
         >>> page.thumbs["custom-1"].isChecked(), page.thumbs["midnight"].isChecked()
         (True, False)
@@ -326,9 +326,9 @@ class SchemePage(QWidget):
 
 class SchemeEditor(QWidget):
     """
-    The editor for a colour scheme of the user's own: a name, how its colours are made, and the colours.
+    The editor for a color scheme of the user's own: a name, how its colors are made, and the colors.
 
-    The colours are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
+    The colors are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
     edited.
 
     Attributes
@@ -337,16 +337,16 @@ class SchemeEditor(QWidget):
         Emitted with the record when Save is clicked.
     deleted : Signal
         Emitted with the scheme's key when Delete is clicked (only an existing scheme can be deleted).
-    cancelled : Signal
+    canceled : Signal
         Emitted when Cancel is clicked.
     name : QLineEdit
         The name.
     mode : QComboBox
-        How the colours are made: a key of `MODES` is each item's data.
+        How the colors are made: a key of `MODES` is each item's data.
     wedges : QComboBox
         Whether the wedges are dark, with light names, or light, with dark names.
     swatches : list of QPushButton
-        One button for each colour the mode takes; the others are hidden.
+        One button for each color the mode takes; the others are hidden.
     preview : SchemeThumb
         The picture of the scheme as it is.
 
@@ -360,7 +360,7 @@ class SchemeEditor(QWidget):
 
     saved = Signal(object)
     deleted = Signal(str)
-    cancelled = Signal()
+    canceled = Signal()
 
     def __init__(self, parent: QWidget | None = None) -> None:
         """
@@ -378,7 +378,7 @@ class SchemeEditor(QWidget):
         """
         super().__init__(parent)
         self._key = ""
-        self._colours = list(START_COLOURS)
+        self._colors = list(START_COLORS)
         self.name = QLineEdit()
         self.name.setMaxLength(40)
         self.mode = QComboBox()
@@ -396,7 +396,7 @@ class SchemeEditor(QWidget):
         form = QGridLayout()
         form.addWidget(QLabel("Name"), 0, 0)
         form.addWidget(self.name, 0, 1)
-        form.addWidget(QLabel("Colours made"), 1, 0)
+        form.addWidget(QLabel("Colors made"), 1, 0)
         form.addWidget(self.mode, 1, 1)
         form.addWidget(QLabel("Wedges"), 2, 0)
         form.addWidget(self.wedges, 2, 1)
@@ -407,7 +407,7 @@ class SchemeEditor(QWidget):
         buttons = QHBoxLayout()
         save, cancel = QPushButton("Save"), QPushButton("Cancel")
         save.clicked.connect(lambda: self.saved.emit(self.record()))
-        cancel.clicked.connect(self.cancelled.emit)
+        cancel.clicked.connect(self.canceled.emit)
         self.delete_button.clicked.connect(lambda: self.deleted.emit(self._key))
         for button in (save, cancel, self.delete_button):
             buttons.addWidget(button)
@@ -415,7 +415,7 @@ class SchemeEditor(QWidget):
         outer.setContentsMargins(0, 0, 0, 0)
         outer.addWidget(self.preview, alignment=Qt.AlignmentFlag.AlignHCenter)
         outer.addLayout(form)
-        outer.addWidget(QLabel("A colour is what a cell looks like when it is lit."))
+        outer.addWidget(QLabel("A color is what a cell looks like when it is lit."))
         outer.addLayout(buttons)
         outer.addStretch()
         self.mode.currentIndexChanged.connect(self._refresh)
@@ -443,14 +443,14 @@ class SchemeEditor(QWidget):
         >>> editor = SchemeEditor()
         >>> editor.load(None, taken=[])
         >>> editor.name.text(), editor.delete_button.isHidden()
-        ('My colours', True)
+        ('My colors', True)
         """
         draft = record or blank(next_custom_key(taken))
         self._key = draft["id"]
         self.name.setText(draft["name"])
         self.mode.setCurrentIndex(max(self.mode.findData(draft["mode"]), 0))
         self.wedges.setCurrentIndex(1 if draft["light"] else 0)
-        self._colours = [*draft["colours"], *START_COLOURS][:3]
+        self._colors = [*draft["colors"], *START_COLORS][:3]
         self.delete_button.setHidden(record is None)
         self._refresh()
 
@@ -461,47 +461,47 @@ class SchemeEditor(QWidget):
         Returns
         -------
         CustomRecord
-            Its key, name, mode, colours and whether its wedges are light.
+            Its key, name, mode, colors and whether its wedges are light.
 
         Examples
         --------
         >>> editor = SchemeEditor()
         >>> editor.load(None, taken=[])
-        >>> editor.record()["colours"]
+        >>> editor.record()["colors"]
         ['#1fa7c9', '#2f6bd0', '#6a4fe0']
         """
         return self._draft()
 
-    def set_colour(
+    def set_color(
         self,
         index: int,
         *,
-        colour: str,
+        color: str,
     ) -> None:
         """
-        Set one of the colours.
+        Set one of the colors.
 
         Parameters
         ----------
         index : int
-            Which colour of the mode: 0, 1 or 2.
-        colour : str
-            The colour, "#rrggbb". Keyword-only.
+            Which color of the mode: 0, 1 or 2.
+        color : str
+            The color, "#rrggbb". Keyword-only.
 
         Examples
         --------
         >>> editor = SchemeEditor()
         >>> editor.load(None, taken=[])
-        >>> editor.set_colour(0, colour="#ff0000")
-        >>> editor.record()["colours"][0]
+        >>> editor.set_color(0, color="#ff0000")
+        >>> editor.record()["colors"][0]
         '#ff0000'
         """
-        self._colours[index] = colour
+        self._colors[index] = color
         self._refresh()
 
     def _draft(self) -> CustomRecord:
         """
-        Gather the fields into a record, with only the colours the chosen mode takes.
+        Gather the fields into a record, with only the colors the chosen mode takes.
 
         Returns
         -------
@@ -516,33 +516,33 @@ class SchemeEditor(QWidget):
         mode = str(self.mode.currentData())
         return {
             "id": self._key,
-            "name": self.name.text().strip() or "My colours",
+            "name": self.name.text().strip() or "My colors",
             "mode": mode,
-            "colours": self._colours[: len(MODES[mode][1])],
+            "colors": self._colors[: len(MODES[mode][1])],
             "light": bool(self.wedges.currentData()),
         }
 
     def _pick(self, index: int) -> None:
         """
-        Ask for one of the colours in a colour dialog.
+        Ask for one of the colors in a color dialog.
 
         Parameters
         ----------
         index : int
-            Which colour of the mode.
+            Which color of the mode.
 
         Examples
         --------
         >>> SchemeEditor()._pick.__name__
         '_pick'
         """
-        chosen = QColorDialog.getColor(QColor(self._colours[index]), self, "Choose a colour")
+        chosen = QColorDialog.getColor(QColor(self._colors[index]), self, "Choose a color")
         if chosen.isValid():
-            self.set_colour(index, colour=chosen.name())
+            self.set_color(index, color=chosen.name())
 
     def _refresh(self) -> None:
         """
-        Show only the colours the mode takes, label and tint them, and redraw the picture.
+        Show only the colors the mode takes, label and tint them, and redraw the picture.
 
         Examples
         --------
@@ -560,7 +560,7 @@ class SchemeEditor(QWidget):
             button.setVisible(visible)
             if visible:
                 label.setText(labels[number])
-                shown = self._colours[number]
+                shown = self._colors[number]
                 ink = "#000000" if hsl_of(shown)[2] > 0.55 else "#ffffff"
                 button.setText(shown)
                 button.setStyleSheet(f"background: {shown}; color: {ink};")

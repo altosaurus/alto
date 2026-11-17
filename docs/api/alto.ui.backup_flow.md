@@ -2,7 +2,7 @@
 title: alto.ui.backup_flow
 parent: api
 package: alto.ui
-order: 23
+order: 24
 permalink: /api/alto.ui.backup_flow/
 ---
 {% raw %}
@@ -117,7 +117,7 @@ Ask where to save a backup, and write it.
 
 **Returns**
 
-- *Path or None*: The file that was written, or None if the user cancelled or the backup could not be written (which is explained).
+- *Path or None*: The file that was written, or None if the user canceled or the backup could not be written (which is explained).
 
 **Examples**
 
@@ -176,7 +176,7 @@ caller has to reload what is on screen afterwards.
 
 **Returns**
 
-- *bool*: True if the backup was applied; False if the user cancelled or the file was refused (which is explained).
+- *bool*: True if the backup was applied; False if the user canceled or the file was refused (which is explained).
 
 **Examples**
 

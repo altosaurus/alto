@@ -76,7 +76,7 @@ def node_position(value: int) -> QPointF:
     Returns
     -------
     QPointF
-        The centre of its number, in the widget's coordinates.
+        The center of its number, in the widget's coordinates.
 
     Examples
     --------
@@ -102,7 +102,7 @@ def route(value: int) -> list[QPointF]:
     Returns
     -------
     list of QPointF
-        The points to pass through: the stem's end, round the bend of the U to the tine and then each number up to the one asked.
+        The points to pass through: the stem's end, around the bend of the U to the tine and then each number up to the one asked.
 
     Examples
     --------
@@ -117,7 +117,7 @@ def route(value: int) -> list[QPointF]:
     if value == 0:
         return points
     sign = 1 if value > 0 else -1
-    for i in range(BEND_STEPS + 1):  # round the U, from the apex to the start of the tine
+    for i in range(BEND_STEPS + 1):  # around the U, from the apex to the start of the tine
         angle = math.pi / 2 * i / BEND_STEPS
         points.append(QPointF(JOINT_X - BEND_R * math.cos(angle), MID_Y - sign * BEND_R * math.sin(angle)))
     points += [node_position(sign * k) for k in range(1, abs(value) + 1)]
@@ -128,7 +128,7 @@ def path_between(a: int, *, b: int) -> list[QPointF]:
     """
     Return the way along the fork from one signature to another.
 
-    The circle goes back along the tine it is on, round the U and out along the other, never across the gap between the tines.
+    The circle goes back along the tine it is on, around the U and out along the other, never across the gap between the tines.
 
     Parameters
     ----------
@@ -148,7 +148,7 @@ def path_between(a: int, *, b: int) -> list[QPointF]:
     True
     >>> path_between(1, b=-1)[0] == node_position(1) and path_between(1, b=-1)[-1] == node_position(-1)
     True
-    >>> any(abs(p.x() - APEX_X) < 1e-9 for p in path_between(1, b=-1))  # it goes round the U, through its apex
+    >>> any(abs(p.x() - APEX_X) < 1e-9 for p in path_between(1, b=-1))  # it goes around the U, through its apex
     True
     """
     from_a, to_b = route(a), route(b)
@@ -203,7 +203,7 @@ def nearest_on_fork(point: QPointF) -> QPointF:
     Returns
     -------
     QPointF
-        The closest point on the way from the last sharp, round the U, to the last flat.
+        The closest point on the way from the last sharp, around the U, to the last flat.
 
     Examples
     --------
@@ -272,7 +272,7 @@ def draw_natural(
     height : float
         How tall it is, in pixels. Keyword-only.
     color : QColor
-        The colour of the lines. Keyword-only.
+        The color of the lines. Keyword-only.
 
     Examples
     --------
@@ -341,7 +341,7 @@ class KeyFork(QWidget):
         self._hover: int | None = None  # the number under the mouse, which is lit a little
         self._dragging = False  # True while the circle is held
         self._marker = node_position(0)  # where the circle is drawn, which lags behind `value` while it slides
-        self._marker_color: QColor | None = None  # None for the highlight colour
+        self._marker_color: QColor | None = None  # None for the highlight color
         self._slide = QVariantAnimation(self)
         self._slide.setDuration(SLIDE_MS)
         self._slide.setEasingCurve(QEasingCurve.Type.InOutQuad)
@@ -417,12 +417,12 @@ class KeyFork(QWidget):
 
     def set_marker_color(self, color: QColor | None) -> None:
         """
-        Colour the circle, for a right or wrong answer.
+        Color the circle, for a right or wrong answer.
 
         Parameters
         ----------
         color : QColor or None
-            The colour to use, or None for the highlight colour.
+            The color to use, or None for the highlight color.
 
         Examples
         --------
@@ -591,7 +591,7 @@ class KeyFork(QWidget):
         """
         Move the circle one number along the fork for each notch of the wheel.
 
-        Rolling up goes towards more sharps and down towards more flats, passing through the natural sign.
+        Rolling up goes toward more sharps and down toward more flats, passing through the natural sign.
 
         Parameters
         ----------
@@ -612,7 +612,7 @@ class KeyFork(QWidget):
         if self.locked:
             return
         self._wheel += event.angleDelta().y()
-        notches = int(self._wheel / WHEEL_NOTCH)  # whole notches, towards zero
+        notches = int(self._wheel / WHEEL_NOTCH)  # whole notches, toward zero
         self._wheel -= notches * WHEEL_NOTCH
         if notches:
             self.set_value(self.value + notches)

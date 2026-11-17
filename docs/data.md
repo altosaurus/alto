@@ -19,7 +19,7 @@ Your practice history, profiles included, is one [SQLite](https://www.sqlite.org
 | macOS | `~/Library/Application Support/Alto/alto.db` |
 | Windows | `C:\Users\<you>\AppData\Roaming\Alto\alto.db` |
 
-To keep a second copy of Alto apart, for example one you are changing while you use the installed one to practise, set
+To keep a second copy of Alto apart, for example one you are changing while you use the installed one to practice, set
 `ALTO_HOME` to a folder. Alto then keeps its history in `data/alto.db` there and its settings in `config/`, and leaves the
 usual places alone. `scripts/dev.sh` starts Alto from a clone this way, in `~/.alto-dev`.
 

@@ -170,9 +170,9 @@ def test_every_note_value_is_drawn(
         assert dark_pixels(staff) > 300
 
 
-def test_a_staff_can_colour_its_notes_and_follows_the_chosen_style(app: QApplication) -> None:
+def test_a_staff_can_color_its_notes_and_follows_the_chosen_style(app: QApplication) -> None:
     """
-    Check that a staff can colour its notes and follows the chosen style.
+    Check that a staff can color its notes and follows the chosen style.
 
     Parameters
     ----------
@@ -487,31 +487,31 @@ def test_choosing_a_keyboard_style_is_saved_and_redraws_open_keyboards(app: QApp
     assert keyboard_styles.current().key == keyboard_styles.DEFAULT
 
 
-def test_custom_keyboard_colours_are_saved_loaded_and_checked(app: QApplication) -> None:
+def test_custom_keyboard_colors_are_saved_loaded_and_checked(app: QApplication) -> None:
     """
-    Check that custom keyboard colours are saved loaded and checked.
+    Check that custom keyboard colors are saved loaded and checked.
 
     Parameters
     ----------
     app : QApplication
         The shared Qt application.
     """
-    keyboard_styles.set_custom_colour("naturals", colour="#ead9aa")
-    keyboard_styles.set_custom_colour("case", colour=None)
-    keyboard_styles.set_custom_colour("caps", colour="#eee3c8")
+    keyboard_styles.set_custom_color("naturals", color="#ead9aa")
+    keyboard_styles.set_custom_color("case", color=None)
+    keyboard_styles.set_custom_color("caps", color="#eee3c8")
     style = keyboard_styles.current()
     assert style.key == "custom" and style.white[0] == "#ead9aa" and style.case is None and style.cap == "#eee3c8"
     assert style.rail == 4.0  # no case and no felt: a thin strip
     assert keyboard_styles.custom_style().rail == 4.0
-    keyboard_styles.set_custom_colour("felt", colour="#7d1f27")
+    keyboard_styles.set_custom_color("felt", color="#7d1f27")
     assert keyboard_styles.custom_style().rail == 8.0
     keyboard_styles._custom.update(keyboard_styles.DEFAULT_CUSTOM)
     keyboard_styles.load_style()  # what was saved comes back
-    assert keyboard_styles.custom_colours()["naturals"] == "#ead9aa" and keyboard_styles.custom_colours()["case"] is None
+    assert keyboard_styles.custom_colors()["naturals"] == "#ead9aa" and keyboard_styles.custom_colors()["case"] is None
     assert keyboard_styles.current().key == "custom"
-    store().setValue("ui/keyboardCustom/naturals", "not a colour")
+    store().setValue("ui/keyboardCustom/naturals", "not a color")
     keyboard_styles.load_style()  # a bad value falls back to the default
-    assert keyboard_styles.custom_colours()["naturals"] == keyboard_styles.DEFAULT_CUSTOM["naturals"]
+    assert keyboard_styles.custom_colors()["naturals"] == keyboard_styles.DEFAULT_CUSTOM["naturals"]
 
 
 def test_a_keyboard_span_shows_the_range_in_miniature(app: QApplication) -> None:
@@ -707,7 +707,7 @@ def test_the_settings_pictures_draw_and_make_icons(app: QApplication) -> None:
             "eighth",
             "breve",
         ],
-        centre_stemless=True,
+        center_stemless=True,
     )
     values.set_values(["half", "sixteenth", "thirty_second"])
     keys = [
@@ -915,9 +915,9 @@ def test_a_staff_without_a_cap_is_left_as_it_was(app: QApplication) -> None:
     assert small.maximumWidth() == 214  # the small previews in the settings keep their fixed width
 
 
-def test_a_capped_staff_in_a_narrow_space_shrinks_to_fit_and_in_a_wide_one_is_centred(app: QApplication) -> None:
+def test_a_capped_staff_in_a_narrow_space_shrinks_to_fit_and_in_a_wide_one_is_centered(app: QApplication) -> None:
     """
-    Check that a capped staff in a narrow space shrinks to fit and in a wide one is centred.
+    Check that a capped staff in a narrow space shrinks to fit and in a wide one is centered.
 
     Parameters
     ----------

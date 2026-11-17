@@ -227,8 +227,8 @@ class ExplorableCircle(FifthsCircle):
         >>> circle.cell_at(middle) is None
         True
         """
-        centre, radius = self.geometry_of()
-        dx, dy = point.x() - centre.x(), point.y() - centre.y()
+        center, radius = self.geometry_of()
+        dx, dy = point.x() - center.x(), point.y() - center.y()
         far = math.hypot(dx, dy) / radius
         if far > 1.0 or far < DISC:
             return None
@@ -282,8 +282,8 @@ class ExplorableCircle(FifthsCircle):
         >>> from PySide6.QtTest import QTest
         >>> circle = ExplorableCircle()
         >>> circle.resize(400, 400)
-        >>> centre, radius = circle.geometry_of()
-        >>> QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+        >>> center, radius = circle.geometry_of()
+        >>> QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
         >>> circle.cell
         ('outer', 0)
         """
@@ -312,8 +312,8 @@ class ExplorableCircle(FifthsCircle):
         >>> circle = ExplorableCircle()
         >>> circle.resize(400, 400)
         >>> circle.show()
-        >>> centre, radius = circle.geometry_of()
-        >>> QTest.mouseMove(circle, QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+        >>> center, radius = circle.geometry_of()
+        >>> QTest.mouseMove(circle, QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
         >>> circle.hover
         ('outer', 0)
         """
@@ -362,7 +362,7 @@ class ExplorableCircle(FifthsCircle):
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         """
-        Move the pick with the arrow keys: Left and Right round the circle, Up and Down between the rings.
+        Move the pick with the arrow keys: Left and Right around the circle, Up and Down between the rings.
 
         Escape clears the pick, and Home picks C major.
 
@@ -507,7 +507,7 @@ class ReferencePanel(QWidget):
 
 CLEF_INTRO = (
     "Every clef is one of three symbols put on a line of the staff. The G clef circles the G above middle C, the F clef has its "
-    "dots either side of the F below middle C, and a C clef is centred on middle C. Which clef it is depends on the line."
+    "dots either side of the F below middle C, and a C clef is centered on middle C. Which clef it is depends on the line."
 )
 
 

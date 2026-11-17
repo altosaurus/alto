@@ -5,7 +5,7 @@ order: 12
 permalink: /guide/pitfalls/
 ---
 This is the chapter to open when something strange happens. Each entry below is a mistake that was actually made while building
-Alto, with the symptom you will see, the cause, and the fix. After them come the tools for finding a problem you do not recognise.
+Alto, with the symptom you will see, the cause, and the fix. After them come the tools for finding a problem you do not recognize.
 
 ## Qt objects and their lifetimes
 
@@ -117,7 +117,7 @@ as template code. *Fix:* wrap the page or the block in `raw` and `endraw` tags, 
 **Symptom: `tests/test_api_docs.py` fails.** The generated API pages are out of date. Run `python scripts/api_docs.py` and commit the
 result.
 
-## Finding a problem you do not recognise
+## Finding a problem you do not recognize
 
 ### Reproduce it small
 
