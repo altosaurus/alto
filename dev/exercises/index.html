@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -530,7 +530,7 @@ while function labels use words such as <strong>Raised Supertonic</strong> and <
 <p>The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
 that option. Changes apply to the next question right away.</p>
 
-<h2 id="keyboard-identification">Keyboard Identification</h2>
+<h2 id="keyboard-note-identification">Keyboard Note Identification</h2>
 
 <p>One key on a piano keyboard is highlighted. Press the button with its name.</p>
 
@@ -545,8 +545,8 @@ or C major when key signatures are off. When octaves are required, degree and oc
 </ul>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/keyboard.png" alt="Keyboard Identification with one highlighted key and the note name buttons" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/keyboard-dark.png" alt="Keyboard Identification with one highlighted key and the note name buttons" loading="lazy" />
+  <img class="for-light" src="/alto/dev/assets/img/keyboard.png" alt="Keyboard Note Identification with one highlighted key and the note name buttons" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/keyboard-dark.png" alt="Keyboard Note Identification with one highlighted key and the note name buttons" loading="lazy" />
   
 </figure>
 
@@ -554,16 +554,18 @@ or C major when key signatures are off. When octaves are required, degree and oc
 
 <p>The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
 It uses the <strong>Note names</strong> setting from Note Identification. With scale degrees selected, the question names the
-major key, degree and octave. Without a key signature, the reference is C major.</p>
+key, degree and octave. Under <strong>Question Type</strong>, choose <strong>Notes Only</strong> for note names or <strong>Scale and Degree</strong> to use selected keys. Switch between <strong>Major</strong> and <strong>Minor</strong> to choose signatures for each. To practice just one group, leave the other tab’s keys unchecked. Minor uses the natural minor scale.
+Select C major or A minor for a staff with no sharps or flats.</p>
 
 <ul>
-  <li>The octave counts: middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.</li>
-  <li>With <strong>Accidentals</strong> on, pick ♭, ♮ or ♯ first, or right-click the staff to step through them.</li>
-  <li>With <strong>Key signatures</strong> on, a signature is drawn at the start of the staff. It already applies to every note of that letter, so in G major you place F♯ on the F line with no extra sign.</li>
+  <li><strong>Octave</strong> is on by default. Turn it off to place the note in any octave. Middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.</li>
+  <li><strong>Staff Key</strong> selects the signatures drawn on the staff independently of the keys in the prompts. Choose the unmarked
+signature for a staff with no sharps or flats. If the signatures differ, use the accidental buttons as needed.</li>
+  <li>Use the accidental buttons or right-click the staff to choose a sharp, flat, natural, or no sign.</li>
   <li>A wrong click shows the note you placed so you can adjust and try again. Only the exact spelling counts, so G♯ is not A♭.</li>
   <li><strong>Without the mouse:</strong> the <strong>Higher</strong> and <strong>Lower</strong> buttons (or the <kbd>↑</kbd> and <kbd>↓</kbd> keys) move the note a line or
 space, and <strong>Octave ↑</strong> and <strong>Octave ↓</strong> (<kbd>Page Up</kbd> and <kbd>Page Down</kbd>) an octave. Typing a letter from
-<kbd>A</kbd> to <kbd>G</kbd> jumps to the nearest note with that name, and <kbd>←</kbd> and <kbd>→</kbd> step through the signs.
+<kbd>A</kbd> to <kbd>G</kbd> jumps to the nearest note with that name.
 <strong>Place note</strong> (<kbd>Return</kbd>) places it. A line under the staff says which note is chosen, in words a screen reader can read.</li>
 </ul>
 
@@ -727,7 +729,7 @@ above their buttons. Both A4 and d5 are accepted for a tritone, including corres
 
 <p>The mode, limited button count, range, and interval selections are saved.</p>
 
-<p>These settings are saved independently of Keyboard Identification.</p>
+<p>These settings are saved independently of Keyboard Note Identification.</p>
 
 <h2 id="key-signature-identification">Key Signature Identification</h2>
 
@@ -797,8 +799,8 @@ once, so use a sharp or flat where the pattern needs one. Alto asks about:</p>
 <h2 id="scale-construction">Scale Construction</h2>
 
 <p>A blank staff is shown with the name of a scale under it, such as “D Major”, “E♭ minor” or “A Dorian”. Click the staff to
-place the scale’s notes from left to right, going up from the first note to the same note an octave higher: eight notes in
-all. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
+place the scale’s notes from left to right in the requested direction, ending an octave from the first note: eight notes in
+all. In <strong>Motion</strong>, choose Ascending or Descending. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
 do not move as you add more. Any octave will do, as long as the whole scale is in the same one.</p>
 
 <p>You never have to click the staff. <strong>Higher</strong>, <strong>Lower</strong>, <strong>Octave ↑</strong> and <strong>Octave ↓</strong> under it move the next note, the sign
@@ -833,9 +835,9 @@ sound muted, and the next question comes when the scale has finished.</p>
 <ul>
   <li><strong>Clefs:</strong> any of the seven clefs, for the staff the scale is placed on.</li>
   <li><strong>Scales:</strong> major (Ionian), Dorian, Phrygian, Lydian, Mixolydian, minor (Aeolian) and Locrian.</li>
-  <li><strong>Staff keys:</strong> which key signatures may be drawn on the staff, from seven flats to seven sharps. It is separate from
+  <li><strong>Staff Key:</strong> which key signatures may be drawn on the staff, from seven flats to seven sharps. It is separate from
 the scale’s own signature (below). By default only the blank staff, with no sharps or flats, is chosen.</li>
-  <li><strong>Scale keys:</strong> which of the fifteen signatures the scales have. G major and E minor, for example, both have one sharp.</li>
+  <li><strong>Scale Key:</strong> choose signatures separately on the Major and Minor tabs. Natural minor uses the Minor tab. Major and the other modes use the Major tab’s signatures.</li>
   <li><strong>Octave:</strong> a switch, off by default. When it is on, the scale has to start in the octave named (below).</li>
   <li><strong>Steps:</strong> a switch, off by default. When it is on, you also mark the whole and half steps between the notes (below).</li>
 </ul>
@@ -908,7 +910,7 @@ name of its relative major, which has the same key signature: A, in this case.</
 circle are lit. One of them is outlined. Press its Roman numeral.</li>
 </ul>
 
-<p>All of them are on buttons at the bottom, laid out like the Keyboard Identification screen: the letters in the middle row,
+<p>All of them are on buttons at the bottom, laid out like the Keyboard Note Identification screen: the letters in the middle row,
 the sharps above them and the flats below. For the minor keys the buttons read Am, F♯m and so on. You can also type: a letter,
 <kbd>Shift</kbd> and a letter for a sharp, or <kbd>Ctrl</kbd> and a letter for a flat. The numerals are on <kbd>1</kbd> to <kbd>6</kbd>.</p>
 
@@ -1116,8 +1118,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

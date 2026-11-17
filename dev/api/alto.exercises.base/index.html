@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -523,6 +523,8 @@ a new exercise needs no new interface code.</p>
     <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'treble'</span><span class="p">,</span>
     <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">staff_signature</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
     <span class="n">grid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">keyboard</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
@@ -540,6 +542,8 @@ a new exercise needs no new interface code.</p>
     <span class="n">build_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">construct_scale</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">construct_steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">notes_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">any_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">exact_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">circle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">circle_kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
@@ -563,6 +567,8 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">explanation</code> (<em>str, default ““</em>): Text shown after the answer to say why it is right. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (single notes only). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_signature</code> (<em>int or None</em>): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use the signature’s relative minor for scale degree naming. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">grid</code> (<em>dict of str to tuple of (int, int) or None</em>): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard</code> (<em>Note or None</em>): A piano key to highlight, instead of drawing a staff. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_notes</code> (<em>list of Note</em>): Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.</li>
@@ -579,6 +585,8 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">build_key</code> (<em>bool, default False</em>): The learner builds the key signature <code class="language-plaintext highlighter-rouge">key</code> on a blank staff with the fork widget, instead of pressing a button. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_scale</code> (<em>list of Note or None</em>): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_steps</code> (<em>list of str or None</em>): The steps between the notes of <code class="language-plaintext highlighter-rouge">construct_scale</code>, each “W” (whole) or “H” (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notes_only</code> (<em>bool, default False</em>): Show note names without a scale degree context. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">any_octave</code> (<em>bool, default False</em>): Accept a single constructed note with the right spelling in any octave. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">exact_octave</code> (<em>bool, default False</em>): The scale has to be placed in the octave asked, not in any octave. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle</code> (<em>int or None</em>): A question on the circle of fifths: the place asked about, clockwise from C at 0. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle_kind</code> (<em>str, default ““</em>): What the circle asks: “major” (the relative major of a minor key), “minor” (the relative minor of a major key) or “numeral” (the Roman numeral of a chord of a key). Keyword-only.</li>
@@ -604,7 +612,7 @@ True
 
 <p>Report whether a note placed on the staff is the one asked for.</p>
 
-<p>The spelling and octave must match exactly, so G♯4 is not A♭4.</p>
+<p>The spelling must match exactly. The octave must also match unless <code class="language-plaintext highlighter-rouge">any_octave</code> is set.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -615,7 +623,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>bool</em>: True if it equals the note in <code class="language-plaintext highlighter-rouge">construct</code>.</li>
+  <li><em>bool</em>: True if it matches the requested note spelling and any required octave.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1284,8 +1292,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

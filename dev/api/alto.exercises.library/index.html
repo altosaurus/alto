@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -508,7 +508,7 @@ the exercises to the home screen.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises import REGISTRY
 &gt;&gt;&gt; [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Identification', 'Note Construction']
+['Note Identification', 'Keyboard Note Identification', 'Note Construction']
 </code></pre>
 
 <h2 id="notenames">NoteNames</h2>
@@ -945,7 +945,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Identify the tonic and type of an ascending scale drawn on a staff.</p>
+<p>Identify the tonic and type of a scale drawn on a staff.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -997,7 +997,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Draw an ascending octave and offer scale names without revealing the answer on the staff.</p>
+<p>Draw a one-octave scale and offer scale names without revealing the answer on the staff.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1086,7 +1086,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Question</em>: A blank staff captioned with the scale, such as ‘D Major’; <code class="language-plaintext highlighter-rouge">construct_scale</code> is its eight notes, going up an octave.</li>
+  <li><em>Question</em>: A blank staff captioned with the scale, such as ‘D Major’. The eight notes in the selected direction are stored in <code class="language-plaintext highlighter-rouge">construct_scale</code>.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1739,8 +1739,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

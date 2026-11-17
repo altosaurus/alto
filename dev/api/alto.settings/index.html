@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -520,6 +520,7 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
@@ -532,6 +533,7 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
   <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, “solfege” for Do Re Mi, “degrees” for caret scale degrees, or “functions” for function names. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Include the note’s octave, separated from a scale degree by “ / “. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use the relative natural minor as the scale degree reference. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -915,7 +917,14 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="o">*</span><span class="p">,</span>
     <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">key_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'scale'</span><span class="p">,</span>
+    <span class="n">degrees</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))),</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -927,7 +936,14 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
   <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
   <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask for sharps and flats, which the answer then has to include. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key_signature</code> (<em>bool, default False</em>): Draw a key signature; it applies to the note unless the note is given its own sign. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">question_type</code> (<em>str, default “scale”</em>): Use the selected scale keys or ask for notes without a scale key. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">degrees</code> (<em>set of int</em>): Scale degrees to ask for in Scale and Degree mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default True</em>): Require the note to be placed in a specific octave. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int or None</em>): Staff signatures chosen independently. None uses the question key. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">major</code> (<em>bool, default True</em>): Use major keys. With key signatures off, use C major. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use relative minor keys. With key signatures off, use A minor. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures selected for minor keys. None uses the original shared selection. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1223,6 +1239,11 @@ used.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleIdentificationSettings</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'combined'</span><span class="p">,</span>
+    <span class="n">button_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'limited'</span><span class="p">,</span>
+    <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">motion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'ascending'</span><span class="p">,</span>
     <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1235,6 +1256,11 @@ used.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int</em>): Signatures drawn on the staff, independently of the scale’s own signature. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion</code> (<em>str, default “ascending”</em>): Direction of the scale, “ascending” or “descending”. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button_mode</code> (<em>str, default “limited”</em>): Show a limited set of complete answers or separate tonic and mode buttons in “all” mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button_count</code> (<em>int, default 6</em>): Maximum number of answer buttons in limited mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">question_type</code> (<em>str, default “combined”</em>): Ask for the mode, the tonic (key), or both. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures for natural minor. None uses the shared key selection. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1267,6 +1293,8 @@ used.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleConstructionSettings</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">motion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'ascending'</span><span class="p">,</span>
     <span class="n">steps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
@@ -1290,6 +1318,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
   <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>bool, default False</em>): Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int</em>): The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Name the octave of the first note, such as “G2 Major”, and require the scale to start there; any scale asked then fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion</code> (<em>str, default “ascending”</em>): Direction of the scale, “ascending” or “descending”. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures for natural minor. None uses the shared key selection. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1651,8 +1681,8 @@ on the second line. The three symbols can always be chosen from.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

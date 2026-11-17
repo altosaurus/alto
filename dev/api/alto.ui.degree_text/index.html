@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -599,6 +599,20 @@ True
 False
 </code></pre>
 
+<h2 id="degreecheckbox">DegreeCheckBox</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeCheckBox</span><span class="p">(</span><span class="n">QCheckBox</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Draw the scale degree caret centered above the checkbox label’s digit.</p>
+
+<h3 id="degreecheckboxpaintevent">DegreeCheckBox.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Paint the native checkbox and use the shared scale degree renderer for its label.</p>
+
 <h2 id="degreelabel">DegreeLabel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DegreeLabel</span><span class="p">(</span><span class="n">QLabel</span><span class="p">)</span>
@@ -871,8 +885,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

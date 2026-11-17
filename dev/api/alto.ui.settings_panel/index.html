@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794958815">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1028,6 +1028,8 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyChecklist</span><span class="p">(</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
+    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1059,6 +1061,8 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1093,6 +1097,8 @@ True
     <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1125,6 +1131,8 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">enabled</code> (<em>bool</em>): Whether key signatures are on.</li>
   <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1235,9 +1243,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("construction/accidentals", "true")
 &gt;&gt;&gt; load_construction()
 &gt;&gt;&gt; settings.construction.accidentals
-True
-&gt;&gt;&gt; store().setValue("construction/accidentals", "false")
-&gt;&gt;&gt; load_construction()
+False
 </code></pre>
 
 <h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
@@ -1253,7 +1259,7 @@ True
 
 <p>The settings of the note construction exercise: a menu with a page for the staff and one for the keys.</p>
 
-<p>The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+<p>The menu has Clefs, Staff Key, Question Type, and Octave. Edits are live: each changes the settings, saves them and
 emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1262,7 +1268,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ConstructionSettings</em>): The settings being edited.</li>
   <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
   <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes, including the grand staff.</li>
-  <li><code class="language-plaintext highlighter-rouge">key_page</code> (<em>KeySignaturePage</em>): The key signature sub-page.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_tabs</code> (<em>QTabWidget</em>): The key signature sub-page.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1286,7 +1292,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <p><strong>Constructor examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-3
+4
 </code></pre>
 
 <h2 id="load_arpeggio">load_arpeggio</h2>
@@ -2135,8 +2141,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794958815" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794958815" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
