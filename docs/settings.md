@@ -144,7 +144,7 @@ the install script; a packaged copy always follows releases. See [Getting starte
 
 ## Exercise settings
 
-Note Identification, Keyboard Identification and Note Construction have a sliders button at the top right of the
+Note Identification, Keyboard Note Identification and Note Construction have a sliders button at the top right of the
 exercise. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
 that setting's page. See [Exercises]({{ '/exercises/' | relative_url }}) for what each option does.
 

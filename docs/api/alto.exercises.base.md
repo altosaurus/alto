@@ -32,6 +32,8 @@ Question(
     clef: str = 'treble',
     explanation: str = '',
     key: int = 0,
+    staff_signature: int | None = None,
+    minor: bool = False,
     value: str = 'whole',
     grid: dict[str, tuple[int, int]] | None = None,
     keyboard: Note | None = None,
@@ -49,6 +51,8 @@ Question(
     build_key: bool = False,
     construct_scale: list[Note] | None = None,
     construct_steps: list[str] | None = None,
+    notes_only: bool = False,
+    any_octave: bool = False,
     exact_octave: bool = False,
     circle: int | None = None,
     circle_kind: str = '',
@@ -71,6 +75,8 @@ One question, with what to show for it and which answer is right.
 - `explanation` (*str, default ""*): Text shown after the answer to say why it is right. Keyword-only.
 - `key` (*int, default 0*): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.
 - `value` (*str, default "whole"*): The note value to draw (single notes only). Keyword-only.
+- `staff_signature` (*int or None*): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.
+- `minor` (*bool, default False*): Use the signature's relative minor for scale degree naming. Keyword-only.
 - `grid` (*dict of str to tuple of (int, int) or None*): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
 - `keyboard` (*Note or None*): A piano key to highlight, instead of drawing a staff. Keyword-only.
 - `keyboard_notes` (*list of Note*): Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.
@@ -87,6 +93,8 @@ One question, with what to show for it and which answer is right.
 - `build_key` (*bool, default False*): The learner builds the key signature `key` on a blank staff with the fork widget, instead of pressing a button. Keyword-only.
 - `construct_scale` (*list of Note or None*): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.
 - `construct_steps` (*list of str or None*): The steps between the notes of `construct_scale`, each "W" (whole) or "H" (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.
+- `notes_only` (*bool, default False*): Show note names without a scale degree context. Keyword-only.
+- `any_octave` (*bool, default False*): Accept a single constructed note with the right spelling in any octave. Keyword-only.
 - `exact_octave` (*bool, default False*): The scale has to be placed in the octave asked, not in any octave. Keyword-only.
 - `circle` (*int or None*): A question on the circle of fifths: the place asked about, clockwise from C at 0. Keyword-only.
 - `circle_kind` (*str, default ""*): What the circle asks: "major" (the relative major of a minor key), "minor" (the relative minor of a major key) or "numeral" (the Roman numeral of a chord of a key). Keyword-only.
@@ -113,7 +121,7 @@ def check_placed(note: Note) -> bool
 
 Report whether a note placed on the staff is the one asked for.
 
-The spelling and octave must match exactly, so G♯4 is not A♭4.
+The spelling must match exactly. The octave must also match unless `any_octave` is set.
 
 **Parameters**
 
@@ -121,7 +129,7 @@ The spelling and octave must match exactly, so G♯4 is not A♭4.
 
 **Returns**
 
-- *bool*: True if it equals the note in `construct`.
+- *bool*: True if it matches the requested note spelling and any required octave.
 
 **Examples**
 

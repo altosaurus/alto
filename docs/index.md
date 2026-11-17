@@ -18,7 +18,7 @@ toc: false
 
 <ul class="cards">
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteNames"/></svg>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardNotes"/></svg>Keyboard Identification</strong>Name the highlighted key on a piano keyboard.</li>
+  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardNotes"/></svg>Keyboard Note Identification</strong>Name the highlighted key on a piano keyboard.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteConstruction"/></svg>Note Construction</strong>Click the staff where a named note belongs.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ClefBasics"/></svg>Clef Basics</strong>Put the G, C or F clef where it makes the clef you are asked for, or name the clef on a staff.</li>
   <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-IntervalNames"/></svg>Interval Identification</strong>Name the interval between two notes.</li>

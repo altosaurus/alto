@@ -56,6 +56,10 @@ class Question:
         The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.
     value : str, default "whole"
         The note value to draw (single notes only). Keyword-only.
+    staff_signature : int or None
+        Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.
+    minor : bool, default False
+        Use the signature's relative minor for scale degree naming. Keyword-only.
     grid : dict of str to tuple of (int, int) or None
         Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
     keyboard : Note or None
@@ -91,6 +95,10 @@ class Question:
     construct_steps : list of str or None
         The steps between the notes of `construct_scale`, each "W" (whole) or "H" (half), to mark once the notes are placed;
         None if the steps are not asked. Keyword-only.
+    notes_only : bool, default False
+        Show note names without a scale degree context. Keyword-only.
+    any_octave : bool, default False
+        Accept a single constructed note with the right spelling in any octave. Keyword-only.
     exact_octave : bool, default False
         The scale has to be placed in the octave asked, not in any octave. Keyword-only.
     circle : int or None
@@ -127,6 +135,8 @@ class Question:
     clef: str = "treble"
     explanation: str = ""
     key: int = 0  # key signature to draw: sharps (+) / flats (-)
+    staff_signature: int | None = None
+    minor: bool = False  # interpret the signature as a natural minor key for scale degrees
     value: str = "whole"  # note value to draw (single notes only)
     # Optional button placement: choice -> (row, column). Without it the choices form one row.
     grid: dict[str, tuple[int, int]] | None = None
@@ -145,6 +155,8 @@ class Question:
     build_key: bool = False  # the learner builds the key signature `key` with the fork, on a staff that starts blank
     construct_scale: list[Note] | None = None  # the notes of a scale to place on the staff, left to right
     construct_steps: list[str] | None = None  # the whole ("W") and half ("H") steps between them, if those are asked too
+    notes_only: bool = False
+    any_octave: bool = False
     exact_octave: bool = False  # the scale must be in the octave of `construct_scale`, not in any octave
     circle: int | None = None  # a question on the circle of fifths: the place asked about, clockwise from C at 0
     circle_kind: str = ""  # "major", "minor" or "numeral": what the circle asks
@@ -157,7 +169,7 @@ class Question:
         """
         Report whether a note placed on the staff is the one asked for.
 
-        The spelling and octave must match exactly, so G♯4 is not A♭4.
+        The spelling must match exactly. The octave must also match unless `any_octave` is set.
 
         Parameters
         ----------
@@ -167,7 +179,7 @@ class Question:
         Returns
         -------
         bool
-            True if it equals the note in `construct`.
+            True if it matches the requested note spelling and any required octave.
 
         Examples
         --------
@@ -177,6 +189,8 @@ class Question:
         >>> q.check_placed(Note.parse("B#3"))  # sounds the same, but is spelled differently
         False
         """
+        if self.any_octave and self.construct is not None:
+            return note.name == self.construct.name
         return note == self.construct
 
     def check_scale(self, notes: list[Note]) -> bool:
@@ -371,6 +385,14 @@ class Question:
         ]
         if self.keyboard_notes:
             data.append([spelled(n) for n in self.keyboard_notes])
+        if self.notes_only:
+            data.append("notes only")
+        if self.any_octave:
+            data.append("any octave")
+        if self.staff_signature is not None:
+            data.append(["staff signature", self.staff_signature])
+        if self.minor:
+            data.append("minor")
         return hashlib.sha1(json.dumps(data).encode()).hexdigest()[:20]
 
     def to_dict(self) -> dict:
@@ -414,6 +436,8 @@ class Question:
         True
         """
         d = dict(d)
+        if d.pop("staff_key_hidden", False):
+            d.setdefault("staff_signature", 0)
         d["staff"] = [[Note(**n) for n in col] for col in d.get("staff", [])]
         d["keyboard_notes"] = [Note(**n) for n in d.get("keyboard_notes", [])]
         d.pop("play", None)  # questions stored by an older version carried the notes of a scale to play

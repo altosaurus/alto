@@ -152,8 +152,9 @@ def test_construction_degree_prompt_and_accessible_caret() -> None:
         assert question.check_placed(question.construct)
         assert question.answer == note_name(question.construct, key=question.key)
         assert question.caption == question.prompt
-        assert "G major" in question.prompt
-        assert "octave" in question.prompt
+        degree, octave = question.answer.split(" / ")
+        subscript = octave.translate(str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋"))
+        assert question.prompt == f"GM {degree}{subscript}"
     note = Note.parse("F4")
     assert note_name(note, key=1) == "♭7̂ / 4"
     assert note_words(note, key=1) == "flat degree 7, octave 4"
@@ -227,7 +228,7 @@ def test_construction_degree_caption_is_shown_on_the_staff(app: QApplication) ->
     view = ExerciseView(NoteConstruction(), rng=random.Random(4))
     assert view.question is not None
     assert view.input_staff.caption == view.question.prompt
-    assert "B♭ major" in view.input_staff.caption
+    assert view.input_staff.caption == "B♭M 6̂₃"
     assert view.prompt.isHidden()
     preview = QuestionPreview("Note Construction", question=view.question)
     # noinspection PyProtectedMember

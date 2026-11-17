@@ -16,7 +16,7 @@ the exercises to the home screen.
 ```pycon
 >>> from alto.exercises import REGISTRY
 >>> [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Identification', 'Note Construction']
+['Note Identification', 'Keyboard Note Identification', 'Note Construction']
 ```
 
 ## NoteNames
@@ -447,7 +447,7 @@ True
 class ScaleIdentification(Exercise)
 ```
 
-Identify the tonic and type of an ascending scale drawn on a staff.
+Identify the tonic and type of a scale drawn on a staff.
 
 **Examples**
 
@@ -501,7 +501,7 @@ True
 def generate(rng: random.Random) -> Question
 ```
 
-Draw an ascending octave and offer scale names without revealing the answer on the staff.
+Draw a one-octave scale and offer scale names without revealing the answer on the staff.
 
 **Parameters**
 
@@ -587,7 +587,7 @@ Name a scale to be placed on the staff.
 
 **Returns**
 
-- *Question*: A blank staff captioned with the scale, such as 'D Major'; `construct_scale` is its eight notes, going up an octave.
+- *Question*: A blank staff captioned with the scale, such as 'D Major'. The eight notes in the selected direction are stored in `construct_scale`.
 
 **Examples**
 

@@ -544,6 +544,8 @@ Save the keyboard interval range and selected distances.
 KeyChecklist(
     selected: set[int],
     *,
+    allow_empty: bool = False,
+    key_names: dict[int, str] | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -573,6 +575,8 @@ Build the checklist.
 **Parameters**
 
 - `selected` (*set of int*): The key signatures to check initially.
+- `allow_empty` (*bool, default False*): Allow every key to be unchecked. Keyword-only.
+- `key_names` (*dict of int to str or None, default None*): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -608,6 +612,8 @@ KeySignaturePage(
     enabled: bool,
     *,
     selected: set[int],
+    allow_empty: bool = False,
+    key_names: dict[int, str] | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -638,6 +644,8 @@ Build the page.
 
 - `enabled` (*bool*): Whether key signatures are on.
 - `selected` (*set of int*): The key signatures to check initially. Keyword-only.
+- `allow_empty` (*bool, default False*): Allow every key to be unchecked. Keyword-only.
+- `key_names` (*dict of int to str or None, default None*): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -749,9 +757,7 @@ Load the saved note construction settings into the shared settings object.
 >>> store().setValue("construction/accidentals", "true")
 >>> load_construction()
 >>> settings.construction.accidentals
-True
->>> store().setValue("construction/accidentals", "false")
->>> load_construction()
+False
 ```
 
 ## NoteConstructionSettingsPanel
@@ -768,7 +774,7 @@ Bases: `ExerciseSettingsPanel`
 
 The settings of the note construction exercise: a menu with a page for the staff and one for the keys.
 
-The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+The menu has Clefs, Staff Key, Question Type, and Octave. Edits are live: each changes the settings, saves them and
 emits `changed`.
 
 **Attributes**
@@ -776,7 +782,7 @@ emits `changed`.
 - `cfg` (*ConstructionSettings*): The settings being edited.
 - `stack` (*SlideStack*): The menu and its pages.
 - `boxes` (*dict of str to QCheckBox*): The clef checkboxes, including the grand staff.
-- `key_page` (*KeySignaturePage*): The key signature sub-page.
+- `key_tabs` (*QTabWidget*): The key signature sub-page.
 
 **Examples**
 

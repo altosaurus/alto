@@ -29,6 +29,7 @@ def spell(
     naming: str = 'letters',
     key: int = 0,
     octave: bool = False,
+    minor: bool = False,
 ) -> str
 ```
 
@@ -40,6 +41,7 @@ Return a note name in the chosen naming system, optionally including its octave.
 - `naming` (*str, default "letters"*): "letters" for C D E, "solfege" for Do Re Mi, "degrees" for caret scale degrees, or "functions" for function names. Keyword-only.
 - `key` (*int, default 0*): The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.
 - `octave` (*bool, default False*): Include the note's octave, separated from a scale degree by " / ". Keyword-only.
+- `minor` (*bool, default False*): Use the relative natural minor as the scale degree reference. Keyword-only.
 
 **Returns**
 
@@ -412,7 +414,14 @@ ConstructionSettings(
     *,
     accidentals: bool = False,
     key_signature: bool = False,
+    question_type: str = 'scale',
+    degrees: set[int] = field(default_factory=lambda: set(range(1, 8))),
+    octave: bool = True,
+    staff_keys: set[int] | None = None,
+    major: bool = True,
+    minor: bool = False,
     keys: set[int] = field(default_factory=lambda: {-3, -2, -1, 0, 1, 2, 3}),
+    minor_keys: set[int] | None = None,
 )
 ```
 
@@ -423,7 +432,14 @@ The settings of the note construction exercise.
 - `clefs` (*set of str*): The clefs to ask on, any of `RANGE_KEYS`, so "grand" is allowed.
 - `accidentals` (*bool, default False*): Also ask for sharps and flats, which the answer then has to include. Keyword-only.
 - `key_signature` (*bool, default False*): Draw a key signature; it applies to the note unless the note is given its own sign. Keyword-only.
+- `question_type` (*str, default "scale"*): Use the selected scale keys or ask for notes without a scale key. Keyword-only.
+- `degrees` (*set of int*): Scale degrees to ask for in Scale and Degree mode. Keyword-only.
+- `octave` (*bool, default True*): Require the note to be placed in a specific octave. Keyword-only.
+- `staff_keys` (*set of int or None*): Staff signatures chosen independently. None uses the question key. Keyword-only.
+- `major` (*bool, default True*): Use major keys. With key signatures off, use C major. Keyword-only.
+- `minor` (*bool, default False*): Use relative minor keys. With key signatures off, use A minor. Keyword-only.
 - `keys` (*set of int*): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.
+- `minor_keys` (*set of int or None*): Signatures selected for minor keys. None uses the original shared selection. Keyword-only.
 
 **Examples**
 
@@ -718,6 +734,11 @@ The settings of the key signature construction exercise: the same choices as key
 ```python
 ScaleIdentificationSettings(
     *,
+    question_type: str = 'combined',
+    button_mode: str = 'limited',
+    button_count: int = 6,
+    minor_keys: set[int] | None = None,
+    motion: str = 'ascending',
     staff_keys: set[int] = field(default_factory=lambda: {0}),
 )
 ```
@@ -729,6 +750,11 @@ Choose the clefs, scale types and independent staff and scale key signatures for
 **Attributes**
 
 - `staff_keys` (*set of int*): Signatures drawn on the staff, independently of the scale's own signature. Keyword-only.
+- `motion` (*str, default "ascending"*): Direction of the scale, "ascending" or "descending". Keyword-only.
+- `button_mode` (*str, default "limited"*): Show a limited set of complete answers or separate tonic and mode buttons in "all" mode. Keyword-only.
+- `button_count` (*int, default 6*): Maximum number of answer buttons in limited mode. Keyword-only.
+- `question_type` (*str, default "combined"*): Ask for the mode, the tonic (key), or both. Keyword-only.
+- `minor_keys` (*set of int or None*): Signatures for natural minor. None uses the shared key selection. Keyword-only.
 
 **Examples**
 
@@ -762,6 +788,8 @@ Return the selected staff signatures, falling back to no signature.
 ```python
 ScaleConstructionSettings(
     *,
+    minor_keys: set[int] | None = None,
+    motion: str = 'ascending',
     steps: bool = False,
     octave: bool = False,
     staff_keys: set[int] = field(default_factory=lambda: {0}),
@@ -784,6 +812,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 - `steps` (*bool, default False*): Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.
 - `staff_keys` (*set of int*): The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none. Keyword-only.
 - `octave` (*bool, default False*): Name the octave of the first note, such as "G2 Major", and require the scale to start there; any scale asked then fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.
+- `motion` (*str, default "ascending"*): Direction of the scale, "ascending" or "descending". Keyword-only.
+- `minor_keys` (*set of int or None*): Signatures for natural minor. None uses the shared key selection. Keyword-only.
 
 **Examples**
 

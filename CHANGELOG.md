@@ -14,7 +14,7 @@ Alto uses [semantic versioning](https://semver.org/).
 - An interactive Scale Identification reference and lesson, with scale comparisons and note highlighting.
 - An optional octave answer in Note Identification, saved window geometry, and Restore defaults in Settings.
 
-- Scale degrees as a note-name group for Note Identification, Keyboard Identification and Note Construction, with caret
+- Scale degrees as a note-name group for Note Identification, Keyboard Note Identification and Note Construction, with caret
   notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered degrees and explicit major-key context.
   Note-name previews have visible text labels.
 
@@ -90,7 +90,7 @@ The first release.
 **Exercises**
 
 - Eleven exercises in four categories:
-  - Notation: Note Identification, Keyboard Identification and Note Construction.
+  - Notation: Note Identification, Keyboard Note Identification and Note Construction.
   - Intervals: Interval identification.
   - Scales and keys: Key Signature Identification, Key Signature Construction, Scale spelling, Scale Construction and the Circle of Fifths.
   - Chords: Chord quality and Arpeggio identification.

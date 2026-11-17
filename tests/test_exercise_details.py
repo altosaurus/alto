@@ -85,10 +85,10 @@ def test_the_note_construction_help_follows_the_settings() -> None:
     cfg = settings.construction
     cfg.key_signature, cfg.accidentals = False, False
     plain = NoteConstruction().instructions()
-    assert "key signature" not in plain and "right" not in plain
+    assert "key signature is drawn" not in plain and "right-click" in plain
     cfg.key_signature, cfg.accidentals = True, True
     full = NoteConstruction().instructions()
-    assert "key signature is drawn" in full and "right click" in full
+    assert "key signature is drawn" in full and "right-click" in full
 
 
 def test_a_stored_question_comes_back_exactly() -> None:

@@ -349,7 +349,7 @@ def test_note_construction() -> None:
         rng = random.Random(9)
         cfg.clefs, cfg.accidentals = {"treble", "alto"}, False
         qs = [NoteConstruction().generate(rng) for _ in range(300)]
-        assert {q.clef for q in qs} == {"treble", "alto"} and not any(q.accidentals for q in qs)
+        assert {q.clef for q in qs} == {"treble", "alto"} and all(q.accidentals for q in qs)
         for q in qs:
             lo, hi = settings.DEFAULT_RANGES[q.clef]
             assert lo <= construct_of(q).diatonic <= hi and construct_of(q).accidental == 0

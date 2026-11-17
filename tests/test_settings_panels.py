@@ -130,7 +130,7 @@ def test_the_construction_settings_are_read_back_and_bad_ones_ignored() -> None:
     settings.construction.__init__()
     sp.load_construction()
     cfg = settings.construction
-    assert cfg.clefs == {"bass", "grand"} and cfg.accidentals and cfg.key_signature and cfg.keys == {-3, 0}
+    assert cfg.clefs == {"bass", "grand"} and not cfg.accidentals and cfg.key_signature and cfg.keys == {-3, 0}
     s.setValue("construction/clefs", "nonsense")
     s.setValue("construction/keys", "99")
     cfg.__init__()
@@ -580,16 +580,13 @@ def test_the_construction_pane_opens_its_pages_and_edits_the_settings(constructi
     construction.clefs_row.click()  # ignored: already open
     back(construction)
     assert construction.clef_pictures is not None
-    construction.accidentals_row.click()
-    assert cfg.accidentals and store().value("construction/accidentals") == "true"
     construction.keys_row.click()
     slide()
     assert construction.stack.currentIndex() == 2
-    construction.key_page.switch_row.click()
-    construction.key_page.checklist.boxes[-2].setChecked(True)
+    construction.major_keys.boxes[-2].setChecked(True)
     assert cfg.key_signature and -2 in cfg.keys
     back(construction)
-    assert construction.keys_row.value.text() == ""  # with key signatures on, the diagram shows instead of "Off"
+    assert construction.keys_row.value.text() == "Scale and Degree"
 
 
 # -- the arpeggio pane's pages ----------------------------------------------------------------------------------------

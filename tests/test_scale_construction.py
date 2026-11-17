@@ -1700,7 +1700,7 @@ def test_the_preview_shows_the_staffs_signature(app: QApplication) -> None:
 
 def test_the_settings_have_a_staff_key_signature_apart_from_the_scales(app: QApplication) -> None:
     """
-    Check that scale construction has a Staff keys page and a Scale keys page next to each other, each with its own choice.
+    Check that scale construction has a Staff Key page and a Scale keys page next to each other, each with its own choice.
 
     Parameters
     ----------
@@ -1710,8 +1710,8 @@ def test_the_settings_have_a_staff_key_signature_apart_from_the_scales(app: QApp
     view = ExerciseView(ScaleConstruction(), rng=random.Random(4))
     pane = view.settings_panel
     assert isinstance(pane, sp.KeySignatureSettingsPanel) and pane.staff_keys_row is not None and pane.staff_key_list is not None
-    assert "Staff keys" in pane.staff_keys_row.title.text() and "Scale keys" in pane.keys_row.title.text()
-    assert pane.stack.count() == 5  # the menu, then clefs, scales, and the staff's key and the scale's next to each other
+    assert "Staff Key" in pane.staff_keys_row.title.text() and "Scale Key" in pane.keys_row.title.text()
+    assert pane.stack.count() == 6  # menu, clefs, scales, staff keys, scale keys, and motion
     for row, index in ((pane.clefs_row, 1), (pane.modes_row, 2), (pane.staff_keys_row, 3), (pane.keys_row, 4)):
         row.click()
         QTest.qWait(300)

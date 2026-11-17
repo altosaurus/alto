@@ -35,7 +35,7 @@ In the exercise settings you can choose:
 The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
 that option. Changes apply to the next question right away.
 
-## Keyboard Identification
+## Keyboard Note Identification
 
 One key on a piano keyboard is highlighted. Press the button with its name.
 
@@ -47,21 +47,23 @@ or C major when key signatures are off. When octaves are required, degree and oc
 - **Range:** which part of the keyboard is asked.
 - **Key signatures:** show a key signature above the keyboard. The name then has to follow that signature. F♯ and G♭ are no longer interchangeable.
 
-{% include shot.html src="keyboard.png" alt="Keyboard Identification with one highlighted key and the note name buttons" %}
+{% include shot.html src="keyboard.png" alt="Keyboard Note Identification with one highlighted key and the note name buttons" %}
 
 ## Note Construction
 
 The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
 It uses the **Note names** setting from Note Identification. With scale degrees selected, the question names the
-major key, degree and octave. Without a key signature, the reference is C major.
+key, degree and octave. Under **Question Type**, choose **Notes Only** for note names or **Scale and Degree** to use selected keys. Switch between **Major** and **Minor** to choose signatures for each. To practice just one group, leave the other tab’s keys unchecked. Minor uses the natural minor scale.
+Select C major or A minor for a staff with no sharps or flats.
 
-- The octave counts: middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.
-- With **Accidentals** on, pick ♭, ♮ or ♯ first, or right-click the staff to step through them.
-- With **Key signatures** on, a signature is drawn at the start of the staff. It already applies to every note of that letter, so in G major you place F♯ on the F line with no extra sign.
+- **Octave** is on by default. Turn it off to place the note in any octave. Middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.
+- **Staff Key** selects the signatures drawn on the staff independently of the keys in the prompts. Choose the unmarked
+  signature for a staff with no sharps or flats. If the signatures differ, use the accidental buttons as needed.
+- Use the accidental buttons or right-click the staff to choose a sharp, flat, natural, or no sign.
 - A wrong click shows the note you placed so you can adjust and try again. Only the exact spelling counts, so G♯ is not A♭.
 - **Without the mouse:** the **Higher** and **Lower** buttons (or the <kbd>↑</kbd> and <kbd>↓</kbd> keys) move the note a line or
   space, and **Octave ↑** and **Octave ↓** (<kbd>Page Up</kbd> and <kbd>Page Down</kbd>) an octave. Typing a letter from
-  <kbd>A</kbd> to <kbd>G</kbd> jumps to the nearest note with that name, and <kbd>←</kbd> and <kbd>→</kbd> step through the signs.
+  <kbd>A</kbd> to <kbd>G</kbd> jumps to the nearest note with that name.
   **Place note** (<kbd>Return</kbd>) places it. A line under the staff says which note is chosen, in words a screen reader can read.
 
 {% include shot.html src="note-construction.png" alt="Note Construction asking to place a note on a staff" %}
@@ -174,7 +176,7 @@ Open **Buttons** to choose one answer mode:
 
 The mode, limited button count, range, and interval selections are saved.
 
-These settings are saved independently of Keyboard Identification.
+These settings are saved independently of Keyboard Note Identification.
 
 ## Key Signature Identification
 
@@ -234,8 +236,8 @@ Major (Ionian), Dorian, Phrygian, Lydian, Mixolydian, natural minor (Aeolian), L
 ## Scale Construction
 
 A blank staff is shown with the name of a scale under it, such as "D Major", "E♭ minor" or "A Dorian". Click the staff to
-place the scale's notes from left to right, going up from the first note to the same note an octave higher: eight notes in
-all. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
+place the scale's notes from left to right in the requested direction, ending an octave from the first note: eight notes in
+all. In **Motion**, choose Ascending or Descending. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
 do not move as you add more. Any octave will do, as long as the whole scale is in the same one.
 
 You never have to click the staff. **Higher**, **Lower**, **Octave ↑** and **Octave ↓** under it move the next note, the sign
@@ -265,9 +267,9 @@ In the exercise settings you can choose:
 
 - **Clefs:** any of the seven clefs, for the staff the scale is placed on.
 - **Scales:** major (Ionian), Dorian, Phrygian, Lydian, Mixolydian, minor (Aeolian) and Locrian.
-- **Staff keys:** which key signatures may be drawn on the staff, from seven flats to seven sharps. It is separate from
+- **Staff Key:** which key signatures may be drawn on the staff, from seven flats to seven sharps. It is separate from
   the scale's own signature (below). By default only the blank staff, with no sharps or flats, is chosen.
-- **Scale keys:** which of the fifteen signatures the scales have. G major and E minor, for example, both have one sharp.
+- **Scale Key:** choose signatures separately on the Major and Minor tabs. Natural minor uses the Minor tab. Major and the other modes use the Major tab’s signatures.
 - **Octave:** a switch, off by default. When it is on, the scale has to start in the octave named (below).
 - **Steps:** a switch, off by default. When it is on, you also mark the whole and half steps between the notes (below).
 
@@ -333,7 +335,7 @@ button) switch each on or off:
 - **Roman numerals.** A key is in the middle with its staff and signature, and the six chords of the key that fit on the
   circle are lit. One of them is outlined. Press its Roman numeral.
 
-All of them are on buttons at the bottom, laid out like the Keyboard Identification screen: the letters in the middle row,
+All of them are on buttons at the bottom, laid out like the Keyboard Note Identification screen: the letters in the middle row,
 the sharps above them and the flats below. For the minor keys the buttons read Am, F♯m and so on. You can also type: a letter,
 <kbd>Shift</kbd> and a letter for a sharp, or <kbd>Ctrl</kbd> and a letter for a flat. The numerals are on <kbd>1</kbd> to <kbd>6</kbd>.
 

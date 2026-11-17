@@ -21,4 +21,16 @@ Display definitions and links beside a searchable term list.
 **Constructor**
 
 Build the glossary and select its first term.
+
+### GlossaryPage.hideEvent
+
+```python
+def hideEvent(event: QHideEvent) -> None
+```
+
+End the example when leaving the glossary.
+
+**Parameters**
+
+- `event` (*QHideEvent*): The notification that the glossary has been hidden.
 {% endraw %}

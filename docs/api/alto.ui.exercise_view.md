@@ -95,6 +95,7 @@ def note_name(
     note: Note,
     *,
     key: int | None = None,
+    minor: bool = False,
 ) -> str
 ```
 
@@ -104,6 +105,7 @@ Return a note's name as it is written, with its octave: F♯4.
 
 - `note` (*Note*): The note.
 - `key` (*int or None, default None*): The major key signature for scale degrees. Without a key context, degrees fall back to letter names. Keyword-only.
+- `minor` (*bool, default False*): Use natural minor scale degrees. Keyword-only.
 
 **Returns**
 
@@ -123,6 +125,7 @@ def note_words(
     note: Note,
     *,
     key: int | None = None,
+    minor: bool = False,
 ) -> str
 ```
 
@@ -132,6 +135,7 @@ Return a note's name in words, for a screen reader: "F sharp 4".
 
 - `note` (*Note*): The note.
 - `key` (*int or None, default None*): The major key signature for scale degrees. Without a key context, use letter names. Keyword-only.
+- `minor` (*bool, default False*): Use natural minor scale degrees. Keyword-only.
 
 **Returns**
 

@@ -332,11 +332,12 @@ PLAY = '<path d="M8 5.5v13l11-6.5z" fill="COLOR" stroke="COLOR" stroke-width="1.
 # white keys are 6.2 times as long as they are wide; black keys are 0.58 as wide and 0.63 as long.
 # Black-key centers match KeyboardWidget: slightly offset from the white-key boundaries within each group.
 # Leave room above the shared keyboard artwork for the interval icon's bracket.
-_WHITE_KEY = 'y="5.56" width="2.7" height="16.74" rx="0.35" fill="none" stroke="COLOR" stroke-width="0.65"'
+# Keep the key fills and dividers fixed so they read as piano keys in every theme.
+_WHITE_KEY = 'y="5.56" width="2.7" height="16.74" rx="0.35" fill="#ffffff" stroke="#202020" stroke-width="0.65"'
 EXERCISE_KEYBOARD = "".join(
     f'<rect x="{x:.2f}" {_WHITE_KEY}/>' for x in (2.55, 5.25, 7.95, 10.65, 13.35, 16.05, 18.75)
 ) + "".join(
-    f'<rect x="{x:.3f}" y="5.56" width="1.566" height="10.5462" rx="0.2" fill="COLOR"/>'
+    f'<rect x="{x:.3f}" y="5.56" width="1.566" height="10.5462" rx="0.2" fill="#202020"/>'
     for x in (4.278, 7.356, 12.189, 15.267, 18.345)
 )
 

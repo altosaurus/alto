@@ -39,7 +39,7 @@ SCALE_IDENTIFICATION = Lesson(
                 explanation="Both are D: the scale begins on D4 and ends on D5.",
             ),
             text=(
-                "<p>The exercise shows an ascending scale from its tonic to the same note an octave higher. "
+                "<p>The exercise shows a scale from its tonic to the same note an octave away. "
                 "Read the clef and name the first note, including its accidental: that is the scale key.</p>"
                 "<p>The staff key signature does not by itself identify the scale. Apply its sharps or flats, "
                 "then any accidentals written beside the notes.</p>"
@@ -65,7 +65,7 @@ SCALE_IDENTIFICATION = Lesson(
                 "<p>Harmonic minor raises natural minor's seventh degree: <b>W H W W H 3H H</b>. "
                 "3H means three semitones, an augmented second.</p>"
                 "<p>Ascending melodic minor raises degrees 6 and 7: <b>W H W W W W H</b>. "
-                "This exercise uses the ascending form. Switch between the three minor types on the right; "
+                "The scale explorer shows the ascending form. Switch between the three minor types on the right; "
                 "watch degrees 6 and 7, and click the 3H gap in harmonic minor to hear it.</p>"
             ),
         ),

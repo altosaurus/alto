@@ -469,7 +469,7 @@ def test_search_filters_tiles_and_navigation_and_clear_restores_them(window: Mai
     """
     window.search_field.setText("  KEYBOARD  ")
     assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
-        "Keyboard Identification",
+        "Keyboard Note Identification",
         "Keyboard Interval Identification",
     ]
     assert [name for name, item in window._items.items() if not item.isHidden()] == [KeyboardNotes, KeyboardIntervals]
@@ -579,7 +579,7 @@ def test_standalone_search_keeps_its_focus_highlighting(window: MainWindow) -> N
     assert window.search_row.property("focusWithin") is False
     window.search_field.setText("keyboard")
     assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
-        "Keyboard Identification",
+        "Keyboard Note Identification",
         "Keyboard Interval Identification",
     ]
 
