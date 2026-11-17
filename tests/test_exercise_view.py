@@ -189,7 +189,10 @@ def test_a_change_in_the_settings_asks_a_new_question_straight_away(app: QApplic
     assert view.question is not before
 
 
-def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(app: QApplication) -> None:
+def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Check that the choices have number key shortcuts when there are few enough, and that a two-part answer has keys too.
 
@@ -197,7 +200,10 @@ def test_the_choices_have_number_key_shortcuts_when_there_are_few_enough(app: QA
     ----------
     app : QApplication
         The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Temporarily limit the selected keys.
     """
+    monkeypatch.setattr(settings.key_signatures, "keys", {0, 1})
     view = view_of(KeySignatures())
     assert [b.toolTip() for b in view.buttons] == [f"Key {i + 1}" for i in range(len(view.buttons))]
     arpeggio = view_of(ArpeggioNames())

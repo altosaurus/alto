@@ -525,11 +525,26 @@ class KeySignatures(Exercise):
         >>> KeySignatures().refresh(old).caption
         '_ minor'
         """
-        if question.caption or not question.show_staff:
+        if not question.show_staff:
             return question
         for mode in SCALES:
             if question.prompt == f"Which {MODE_WORDS.get(mode, f'{mode} scale')} has this key signature?":
-                return replace(question, caption=_blank_scale(mode))
+                choices = list(
+                    dict.fromkeys(
+                        mode_tonic(c, mode=selected_mode).name
+                        for selected_mode in settings.key_signatures.active_modes()
+                        for c in settings.key_signatures.active_keys()
+                    ),
+                )
+                return replace(
+                    question,
+                    caption=question.caption or _blank_scale(mode),
+                    choices=choices,
+                    grid={
+                        choice: (0 if "♯" in choice else 2 if "♭" in choice else 1, "CDEFGAB".index(choice[0]))
+                        for choice in choices
+                    },
+                )
         return question
 
     def generate(self, rng: random.Random) -> Question:
@@ -602,12 +617,21 @@ class KeySignatures(Exercise):
         ('G', '_ Major', True)
         """
         correct = tonic.name
-        near = [mode_tonic(c, mode=mode).name for c in range(count - 2, count + 3) if abs(c) <= 7]
-        everyone = [mode_tonic(c, mode=mode).name for c in range(-7, 8)]
+        # Offer only tonics represented by the key signatures enabled in settings.
+        # Different signatures can spell to the same tonic in some modes, so
+        # preserve order while removing duplicates.
+        enabled = settings.key_signatures.active_keys()
+        allowed = list(
+            dict.fromkeys(
+                mode_tonic(c, mode=selected_mode).name
+                for selected_mode in settings.key_signatures.active_modes()
+                for c in enabled
+            ),
+        )
         choices = pick_distractors(
             correct,
-            pool=near + everyone,
-            n=5,
+            pool=allowed,
+            n=len(allowed) - 1,
             rng=rng,
         )
         word = MODE_WORDS.get(mode, f"{mode} scale")
@@ -615,6 +639,7 @@ class KeySignatures(Exercise):
         return Question(
             f"Which {word} has this key signature?",
             choices=choices,
+            grid={choice: (0 if "♯" in choice else 2 if "♭" in choice else 1, "CDEFGAB".index(choice[0])) for choice in choices},
             answer=correct,
             clef=clef,
             key=count,

@@ -45,7 +45,7 @@ package = ["pyinstaller>=6.10"]  # to build the Linux and Windows downloads: see
 alto = "alto.__main__:main"
 
 [tool.setuptools.package-data]
-alto = ["assets/piano/*", "assets/samples/*/*", "assets/ui/*", "assets/fonts/*", "assets/icon*"]
+alto = ["assets/piano/*", "assets/samples/*/*", "assets/ui/*", "assets/fonts/*", "assets/licenses/*", "assets/icon*"]
 
 [tool.setuptools.packages.find]
 include = ["alto*"]

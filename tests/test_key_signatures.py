@@ -151,7 +151,7 @@ def test_reading_a_signature_shows_a_staff_and_asks_for_the_tonic() -> None:
         assert q.show_staff and q.staff == [] and q.clef == "alto" and q.key == 2
         assert q.prompt == "Which Dorian scale has this key signature?"
         assert q.caption == "_ Dorian"  # written under the staff, where the tonic goes
-        assert q.answer == "E" and q.answer in q.choices and len(q.choices) == 6 and len(set(q.choices)) == 6
+        assert q.answer == "E" and q.choices == ["E"]
         assert q.explanation.endswith("E F♯ G A B C♯ D E")  # E Dorian, up to its octave
         assert "2 sharps: E Dorian" in q.explanation
 
@@ -491,3 +491,17 @@ def test_a_question_stored_before_captions_is_captioned_when_it_comes_round_agai
     asked = [learner.pick(KeySignatures(), rng=rng, now=2.0) for _ in range(200)]
     replayed = [q for q in asked if q.item_key() == old.item_key()]
     assert replayed and all(q.caption == "_ minor" for q in replayed)
+
+
+def test_choices_include_all_selected_modes_and_keys() -> None:
+    """Keep the full selected tonic set, including G sharp, on every question."""
+    expected = {"C", "D", "E", "F", "G", "A", "B", "C♯", "D♯", "F♯", "G♯", "A♯", "C♭", "D♭", "E♭", "G♭", "A♭", "B♭"}
+    for question in questions(30, keys=set(range(-7, 8)), modes={MAJOR, MINOR}):
+        assert set(question.choices) == expected
+        assert question.grid is not None
+        assert question.grid["G♯"] == (0, 4)
+        assert question.grid["C"] == (1, 0)
+        assert question.grid["B♭"] == (2, 6)
+        refreshed = KeySignatures().refresh(question)
+        assert set(refreshed.choices) == expected
+        assert refreshed.grid == question.grid

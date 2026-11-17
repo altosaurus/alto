@@ -52,3 +52,11 @@ square: the alto clef in `icon.svg` and the treble clef in `icon-treble.svg`.
 ## Software dependencies
 
 - PySide6 / Qt for Python (LGPL-3.0 or GPL-3.0 or commercial), numpy (BSD-3-Clause). pytest (MIT) is used for tests only.
+
+## Iconoir icons (`alto/ui/icons.py`)
+
+The GitHub and music-double-note (Exercises) icons are from [Iconoir](https://github.com/iconoir-icons/iconoir), under the
+[MIT licence](alto/assets/licenses/LICENSE-iconoir.txt).
+Their paths are unchanged; their colors follow the application theme. The music-double-note icon's note heads are filled.
+
+Copyright (c) 2021 Luca Burgio. The full licence is bundled at the path linked above.
