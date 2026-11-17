@@ -39,7 +39,7 @@ for the exercise, since reading a note takes less time than spelling a scale:
 
 | Exercise                                                                              | Par time |
 |---------------------------------------------------------------------------------------|----------|
-| Note Identification, Keyboard Identification                                          | 3 s      |
+| Note Identification, Keyboard Note Identification                                          | 3 s      |
 | Key Signature Identification, Clef Basics                                             | 5 s      |
 | Interval Identification, Keyboard Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s      |
 | Circle of Fifths                                                                      | 7 s      |

@@ -55,6 +55,7 @@ from PySide6.QtWidgets import (
     QRadioButton,
     QScrollArea,
     QStackedWidget,
+    QTabWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -98,13 +99,13 @@ from alto.theory.pitch import (
     MAJOR_KEYS,
     Note,
 )
-from alto.theory.scales import INVERSION_NAMES
+from alto.theory.scales import INVERSION_NAMES, mode_tonic
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
 )
 from alto.ui.colors import blend
-from alto.ui.degree_text import degree_tooltip
+from alto.ui.degree_text import DegreeCheckBox, degree_tooltip
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.interval_range import IntervalRangeSlider
 from alto.ui.keyboard import KeyboardSpan
@@ -2078,6 +2079,38 @@ def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None:
     saved.setValue("keyboardIntervals/buttonCount", cfg.answer_button_limit())
 
 
+class _LabeledKeyCheckBox(QCheckBox):
+    """
+    Keep the signature and its separate label in the same click target.
+
+    Examples
+    --------
+    >>> _LabeledKeyCheckBox().isCheckable()
+    True
+    """
+
+    def hitButton(self, pos: QPoint) -> bool:
+        """
+        Accept clicks anywhere inside the labeled checkbox.
+
+        Parameters
+        ----------
+        pos : QPoint
+            The click position in widget coordinates.
+
+        Returns
+        -------
+        bool
+            Whether the click is inside the widget.
+
+        Examples
+        --------
+        >>> _LabeledKeyCheckBox().hitButton(QPoint(-1, -1))
+        False
+        """
+        return self.rect().contains(pos)
+
+
 class KeyChecklist(QWidget):
     """
     Checkboxes for the 15 major keys, flats on the left and sharps on the right.
@@ -2103,6 +2136,8 @@ class KeyChecklist(QWidget):
         self,
         selected: set[int],
         *,
+        allow_empty: bool = False,
+        key_names: dict[int, str] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -2112,6 +2147,10 @@ class KeyChecklist(QWidget):
         ----------
         selected : set of int
             The key signatures to check initially.
+        allow_empty : bool, default False
+            Allow every key to be unchecked. Keyword-only.
+        key_names : dict of int to str or None, default None
+            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2121,35 +2160,64 @@ class KeyChecklist(QWidget):
         15
         """
         super().__init__(parent)
-        self.boxes = {k: QCheckBox() for k in range(-7, 8)}
-        for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
-            description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
-            _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
-        # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
-        outer = QVBoxLayout(self)
-        outer.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        outer.setSpacing(10)
-        natural = QFrame()
-        natural.setObjectName("keyGroup")  # styled in style.py
-        natural_lay = QVBoxLayout(natural)
-        natural_lay.addWidget(self.boxes[0])
-        outer.addWidget(natural)
-        marked = QFrame()
-        marked.setObjectName("keyGroup")
-        grid = QGridLayout(marked)
-        for n in range(1, 8):
-            grid.addWidget(self.boxes[-n], n - 1, 0)
-            grid.addWidget(self.boxes[n], n - 1, 1)
-        outer.addWidget(marked)
+        self.allow_empty = allow_empty
+        checkbox = _LabeledKeyCheckBox if key_names is not None else QCheckBox
+        self.boxes = {k: checkbox() for k in range(-7, 8)}
+        if key_names is not None:
+            grid = QGridLayout(self)
+            grid.setContentsMargins(0, 0, 0, 0)
+            grid.setHorizontalSpacing(6)
+            for count, box in self.boxes.items():
+                name = key_names[count]
+                signature = _key_label(count).split("·")[1].strip()
+                description = f"{name}, {signature}" if count else f"{name}, no sharps or flats"
+                box.setText(name)
+                box.setToolTip(description)
+                box.setAccessibleName(description)
+                picture = KeySignaturePicture(count, scale=0.9)
+                picture.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+                label_width = box.sizeHint().width()
+                contents = QHBoxLayout(box)
+                contents.setContentsMargins(label_width + 4, 0, 0, 0)
+                contents.addWidget(picture, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+                box.setMinimumWidth(label_width + 4 + picture.width())
+                box.setMinimumHeight(picture.height())
+                if count:
+                    grid.addWidget(box, abs(count), int(count > 0))
+                else:
+                    grid.addWidget(box, 0, 0, 1, 2)
+            for column in range(2):
+                grid.setColumnStretch(column, 1)
+        else:
+            for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
+                description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
+                _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
+            # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
+            outer = QVBoxLayout(self)
+            outer.setContentsMargins(
+                0,
+                0,
+                0,
+                0,
+            )
+            outer.setSpacing(10)
+            natural = QFrame()
+            natural.setObjectName("keyGroup")  # styled in style.py
+            natural_lay = QVBoxLayout(natural)
+            natural_lay.addWidget(self.boxes[0])
+            outer.addWidget(natural)
+            marked = QFrame()
+            marked.setObjectName("keyGroup")
+            grid = QGridLayout(marked)
+            for n in range(1, 8):
+                grid.addWidget(self.boxes[-n], n - 1, 0)
+                grid.addWidget(self.boxes[n], n - 1, 1)
+            outer.addWidget(marked)
         for k, box in self.boxes.items():
             box.setChecked(k in selected)
             box.toggled.connect(self._toggled)
-        _guard_last(list(self.boxes.values()))
+        if not self.allow_empty:
+            _guard_last(list(self.boxes.values()))
 
     def selected(self) -> set[int]:
         """
@@ -2180,7 +2248,8 @@ class KeyChecklist(QWidget):
         >>> got
         [1]
         """
-        _guard_last(list(self.boxes.values()))
+        if not self.allow_empty:
+            _guard_last(list(self.boxes.values()))
         self.changed.emit()
 
 
@@ -2211,6 +2280,8 @@ class KeySignaturePage(QWidget):
         enabled: bool,
         *,
         selected: set[int],
+        allow_empty: bool = False,
+        key_names: dict[int, str] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -2222,6 +2293,10 @@ class KeySignaturePage(QWidget):
             Whether key signatures are on.
         selected : set of int
             The key signatures to check initially. Keyword-only.
+        allow_empty : bool, default False
+            Allow every key to be unchecked. Keyword-only.
+        key_names : dict of int to str or None, default None
+            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -2243,11 +2318,12 @@ class KeySignaturePage(QWidget):
         self.switch_row = _ToggleRow("Use key signatures")
         self.switch_row.setOn(enabled)
         self.switch_row.switched.connect(self._switched)
-        self.checklist = KeyChecklist(selected)
+        self.checklist = KeyChecklist(selected, allow_empty=allow_empty, key_names=key_names)
         self.checklist.changed.connect(self.changed)
         self.checklist.setEnabled(enabled)  # the keys only matter while key signatures are on
         lay.addWidget(self.switch_row)
-        lay.addWidget(QLabel("Draw from these keys:"))
+        self.keys_label = QLabel("Draw from these keys:")
+        lay.addWidget(self.keys_label)
         lay.addWidget(self.checklist)
 
     def enabled(self) -> bool:
@@ -2660,9 +2736,7 @@ def load_construction() -> None:
     >>> store().setValue("construction/accidentals", "true")
     >>> load_construction()
     >>> settings.construction.accidentals
-    True
-    >>> store().setValue("construction/accidentals", "false")
-    >>> load_construction()
+    False
     """
     saved_settings = store()
     cfg = settings.construction
@@ -2670,18 +2744,84 @@ def load_construction() -> None:
     if saved is not None:
         text = saved if isinstance(saved, str) else ",".join(saved)
         cfg.clefs = {c for c in text.split(",") if c in settings.RANGE_KEYS} or cfg.clefs
-    cfg.accidentals = text_value(saved_settings, key="construction/accidentals", default="false").lower() == "true"
-    cfg.key_signature = text_value(saved_settings, key="construction/keySignature", default="false").lower() == "true"
+    cfg.question_type = (
+        "notes" if text_value(saved_settings, key="construction/questionType", default="scale") == "notes" else "scale"
+    )
+    degrees = text_value(saved_settings, key="construction/degrees", default="")
+    cfg.degrees = {n for n in range(1, 8) if str(n) in degrees.split(",")} or set(range(1, 8))
+    cfg.octave = text_value(saved_settings, key="construction/octave", default="true").lower() == "true"
+    cfg.accidentals = False  # ignore the retired setting in existing profiles
+    mode = text_value(saved_settings, key="construction/keyMode", default="major")
+    cfg.major = mode != "minor"
+    cfg.minor = mode in {"minor", "both"}
+    staff_keys = text_value(saved_settings, key="construction/staffKeys", default="0")
+    cfg.staff_keys = {int(k) for k in staff_keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or {0}
+    cfg.key_signature = True
+    used_signatures = text_value(saved_settings, key="construction/keySignature", default="false").lower() == "true"
     keys = text_value(saved_settings, key="construction/keys", default="")
     if keys:
         cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
+    minor_keys = text_value(saved_settings, key="construction/minorKeys", default="")
+    cfg.minor_keys = {int(k) for k in minor_keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or None
+    if not used_signatures:
+        cfg.keys = {0}
+        cfg.minor_keys = {0}
+
+
+class _ScaleKeyPicker(QTabWidget):
+    """
+    Select major and minor keys independently.
+
+    Examples
+    --------
+    >>> _ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
+    2
+    """
+
+    def __init__(self, *, major_keys: set[int], minor_keys: set[int]) -> None:
+        """
+        Build one checklist per mode.
+
+        Parameters
+        ----------
+        major_keys : set of int
+            Selected major signatures. Keyword-only.
+        minor_keys : set of int
+            Selected minor signatures. Keyword-only.
+
+        Examples
+        --------
+        >>> _ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
+        1
+        """
+        super().__init__()
+        major_names = {count: f"{name}M" for count, name in MAJOR_KEYS.items()}
+        self.major_keys = KeyChecklist(major_keys, allow_empty=True, key_names=major_names)
+        minor_names = {count: f"{mode_tonic(count, mode='Natural minor (Aeolian)').name}m" for count in range(-7, 8)}
+        self.minor_keys = KeyChecklist(
+            minor_keys,
+            allow_empty=True,
+            key_names=minor_names,
+        )
+        self.setObjectName("settingsTabs")
+        self.setAccessibleName("Key lists")
+        for label, checklist in (
+            ("Major", self.major_keys),
+            ("Minor", self.minor_keys),
+        ):
+            tab = QWidget()
+            tab_layout = QVBoxLayout(tab)
+            tab_layout.addWidget(checklist)
+            tab_layout.addStretch()
+            self.addTab(tab, label)
+        self.setCurrentIndex(0 if major_keys else 1)
 
 
 class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
     """
     The settings of the note construction exercise: a menu with a page for the staff and one for the keys.
 
-    The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+    The menu has Clefs, Staff Key, Question Type, and Octave. Edits are live: each changes the settings, saves them and
     emits `changed`.
 
     Attributes
@@ -2692,7 +2832,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         The menu and its pages.
     boxes : dict of str to QCheckBox
         The clef checkboxes, including the grand staff.
-    key_page : KeySignaturePage
+    key_tabs : QTabWidget
         The key signature sub-page.
 
     Examples
@@ -2721,7 +2861,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         Examples
         --------
         >>> NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-        3
+        4
         """
         super().__init__(parent)
         self.cfg = cfg
@@ -2749,16 +2889,18 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self.clefs_row.clicked.connect(lambda: self._go(1))
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
-        self.accidentals_row = _ToggleRow("Accidentals")
-        self.accidentals_row.setToolTip("Also ask for sharps and flats")
-        self.accidentals_row.setOn(cfg.accidentals)
-        self.accidentals_row.switched.connect(self._accidentals_toggled)
-        self.keys_row = _Row("Key signatures")  # opens a page: use them or not, and which keys
-        self.keys_row.setToolTip("Draw a key signature that applies to the note")
+        self.staff_key_row = _Row("Staff Key")
+        self.staff_key_row.clicked.connect(lambda: self._go(3))
+        self.staff_keys_diagram = KeyDiagram()
+        self.staff_key_row.attach(self.staff_keys_diagram)
+        self.keys_row = _Row("Question Type")
+        self.keys_row.setToolTip("Choose note name or scale key questions")
         self.keys_row.clicked.connect(lambda: self._go(2))
-        self.keys_diagram = KeyDiagram()
-        self.keys_row.attach(self.keys_diagram)
-        for row in (self.clefs_row, self.accidentals_row, self.keys_row):
+        self.octave_row = _ToggleRow("Octave")
+        self.octave_row.setToolTip("Show and require a specific octave")
+        self.octave_row.setOn(cfg.octave)
+        self.octave_row.switched.connect(self._octave_toggled)
+        for row in (self.clefs_row, self.staff_key_row, self.keys_row, self.octave_row):
             mlay.addWidget(row)
         mlay.addStretch()
 
@@ -2771,11 +2913,53 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         )
 
         # layer 2: key signatures
-        self.key_page = KeySignaturePage(cfg.key_signature, selected=cfg.keys)
-        self.key_page.changed.connect(self._keys_edited)
-        keys_page = _subpage("Key signatures", body=self.key_page, back=lambda: self._go(0))
+        if not cfg.key_signature:
+            cfg.key_signature = True
+            cfg.keys = {0}
+            cfg.minor_keys = {0}
+        self.key_tabs = _ScaleKeyPicker(
+            major_keys=cfg.keys if cfg.major else set(),
+            minor_keys=(cfg.minor_keys or cfg.keys) if cfg.minor else set(),
+        )
+        self.major_keys = self.key_tabs.major_keys
+        self.minor_keys = self.key_tabs.minor_keys
+        self.minor_keys.changed.connect(self._keys_edited)
+        self.major_keys.changed.connect(self._keys_edited)
+        question_body = QWidget()
+        question_layout = QVBoxLayout(question_body)
+        question_layout.setContentsMargins(0, 0, 0, 0)
+        notes_only = QRadioButton("Notes Only")
+        self.scale_key_choice = QRadioButton("Scale and Degree")
+        question_layout.addWidget(notes_only)
+        question_layout.addWidget(self.scale_key_choice)
+        notes_only.setChecked(cfg.question_type == "notes")
+        self.scale_key_choice.setChecked(cfg.question_type == "scale")
+        scale_options = QWidget()
+        scale_layout = QVBoxLayout(scale_options)
+        scale_layout.setContentsMargins(0, 0, 0, 0)
+        scale_layout.addWidget(QLabel("Keys"))
+        scale_layout.addWidget(self.key_tabs)
+        self.degree_choices = ChoiceChecklist(
+            [("Degrees", [(degree, f"{degree}̂") for degree in range(1, 8)])],
+            selected=cfg.degrees,
+        )
+        for degree, box in self.degree_choices.boxes.items():
+            box.setAccessibleName(f"Degree {degree}")
+        self.degree_choices.changed.connect(self._degrees_edited)
+        scale_layout.addWidget(self.degree_choices)
+        scale_layout.addStretch()
+        self.scale_key_scroll = _scrolling(scale_options)
+        question_layout.addWidget(self.scale_key_scroll, 1)
+        self.scale_key_scroll.setVisible(self.scale_key_choice.isChecked())
+        question_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.scale_key_choice.toggled.connect(self._question_type_changed)
+        keys_page = _subpage("Question Type", body=question_body, back=lambda: self._go(0), fill=True)
 
-        for page in (menu, clefs_page, keys_page):
+        self.staff_keys = KeyChecklist(cfg.staff_keys or {0})
+        self.staff_keys.changed.connect(self._staff_keys_edited)
+        staff_page = _subpage("Staff Key", body=_scrolling(self.staff_keys), back=lambda: self._go(0), fill=True)
+
+        for page in (menu, clefs_page, keys_page, staff_page):
             self.stack.addWidget(page)
         self._refresh_summaries()
 
@@ -2786,7 +2970,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         Parameters
         ----------
         index : int
-            0 for the menu, 1 for the Staff page, 2 for the key signatures.
+            0 for the menu, 1 for the Staff page, 2 for Question Type, and 3 for Staff Key.
 
         Examples
         --------
@@ -2821,21 +3005,86 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
 
         Examples
         --------
-        >>> cfg_ = settings.ConstructionSettings(accidentals=True)
-        >>> panel = NoteConstructionSettingsPanel(cfg_)
-        >>> panel._save_and_emit()
-        >>> str(store().value("construction/accidentals"))
-        'true'
-        >>> cfg_.accidentals = False
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
         >>> panel._save_and_emit()
         """
         saved_settings = store()
         cfg = self.cfg
         saved_settings.setValue("construction/clefs", ",".join(c for c in settings.RANGE_KEYS if c in cfg.clefs))
-        saved_settings.setValue("construction/accidentals", "true" if cfg.accidentals else "false")
-        saved_settings.setValue("construction/keySignature", "true" if cfg.key_signature else "false")
+        saved_settings.setValue("construction/keySignature", "true")
+        saved_settings.setValue("construction/questionType", cfg.question_type)
+        saved_settings.setValue("construction/degrees", ",".join(str(n) for n in sorted(cfg.degrees)))
+        saved_settings.setValue("construction/octave", "true" if cfg.octave else "false")
+        saved_settings.setValue("construction/staffKeys", ",".join(str(k) for k in sorted(cfg.staff_keys or {0})))
+        saved_settings.setValue("construction/keyMode", ("both" if cfg.major else "minor") if cfg.minor else "major")
         saved_settings.setValue("construction/keys", ",".join(str(k) for k in cfg.active_keys()))
+        saved_settings.setValue("construction/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys or cfg.keys)))
         self.changed.emit()
+
+    def _degrees_edited(self) -> None:
+        """
+        Save the scale degrees selected for questions.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._degrees_edited()
+        """
+        self.cfg.degrees = self.degree_choices.selected()
+        self._save_and_emit()
+
+    def _question_type_changed(self, scale_key: bool) -> None:
+        """
+        Save the question type and show the scale key lists when relevant.
+
+        Parameters
+        ----------
+        scale_key : bool
+            Whether to ask for a scale degree.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._question_type_changed(False)
+        >>> panel.cfg.question_type
+        'notes'
+        """
+        self.cfg.question_type = "scale" if scale_key else "notes"
+        self.scale_key_scroll.setVisible(scale_key)
+        self._show_keys()
+        self._save_and_emit()
+
+    def _octave_toggled(self, on: bool) -> None:
+        """
+        Save whether questions require a specific octave.
+
+        Parameters
+        ----------
+        on : bool
+            Whether to require the specified octave.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._octave_toggled(False)
+        >>> panel.cfg.octave
+        False
+        """
+        self.cfg.octave = on
+        self._save_and_emit()
+
+    def _staff_keys_edited(self) -> None:
+        """
+        Save the signatures selected for the staff.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._staff_keys_edited()
+        """
+        self.cfg.staff_keys = self.staff_keys.selected()
+        self.staff_keys_diagram.set_keys(self.cfg.staff_keys)
+        self._save_and_emit()
 
     def _clefs_edited(self) -> None:
         """
@@ -2855,25 +3104,6 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         _guard_last(list(self.boxes.values()))  # the last checked choice can't be unchecked
         self._save_and_emit()
 
-    def _accidentals_toggled(self, on: bool) -> None:
-        """
-        Take the Accidentals switch into the settings, save it and say so.
-
-        Parameters
-        ----------
-        on : bool
-            Whether sharps and flats are asked.
-
-        Examples
-        --------
-        >>> cfg = settings.ConstructionSettings()
-        >>> NoteConstructionSettingsPanel(cfg)._accidentals_toggled(True)
-        >>> cfg.accidentals
-        True
-        """
-        self.cfg.accidentals = on
-        self._save_and_emit()
-
     def _show_keys(self) -> None:
         """
         Update the menu's key signature summary.
@@ -2883,14 +3113,11 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
         >>> panel._show_keys()
         >>> panel.keys_row.value.text()
-        'Off'
+        'Scale and Degree'
         """
-        _show_keys(
-            self.keys_row,
-            diagram=self.keys_diagram,
-            enabled=self.cfg.key_signature,
-            keys=set(self.cfg.active_keys()),
-        )
+        self.staff_keys_diagram.set_keys(self.cfg.staff_keys or {0})
+        _guard_last([*self.major_keys.boxes.values(), *self.minor_keys.boxes.values()])
+        self.keys_row.value.setText("Notes Only" if self.cfg.question_type == "notes" else "Scale and Degree")
 
     def _keys_edited(self) -> None:
         """
@@ -2900,13 +3127,18 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         --------
         >>> cfg = settings.ConstructionSettings()
         >>> panel = NoteConstructionSettingsPanel(cfg)
-        >>> panel.key_page.switch_row.setOn(True)
-        >>> panel._keys_edited()
+        >>> panel.major_keys.boxes[1].setChecked(True)
         >>> cfg.key_signature
         True
         """
-        self.cfg.key_signature = self.key_page.enabled()
-        self.cfg.keys = self.key_page.selected()
+        major_keys = self.major_keys.selected()
+        minor_keys = self.minor_keys.selected()
+        self.cfg.major = bool(major_keys)
+        self.cfg.minor = bool(minor_keys)
+        if major_keys:
+            self.cfg.keys = major_keys
+        if minor_keys:
+            self.cfg.minor_keys = minor_keys
         self._show_keys()
         self._save_and_emit()
 
@@ -3013,7 +3245,7 @@ class ChoiceChecklist(QWidget):
                 heading.setStyleSheet("color: gray;")
                 lay.addWidget(heading)
             for key, label in items:
-                box = QCheckBox(label)
+                box = DegreeCheckBox(label) if "̂" in label else QCheckBox(label)
                 box.setChecked(key in selected)
                 box.toggled.connect(self._toggled)
                 self.boxes[key] = box
@@ -3914,10 +4146,31 @@ def _load_key_settings(
     keys = text_value(saved_settings, key=f"{prefix}/keys", default="")
     if keys:
         cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
+    if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+        minor_key = f"{prefix}/minorKeys"
+        if saved_settings.contains(minor_key):
+            cfg.minor_keys = {
+                int(k)
+                for k in text_value(saved_settings, key=minor_key, default="").split(",")
+                if k.lstrip("-").isdigit() and abs(int(k)) <= 7
+            }
+            if saved_settings.contains(f"{prefix}/keys") and not keys and cfg.minor_keys:
+                cfg.keys = set()
+        else:
+            cfg.minor_keys = None
     if isinstance(cfg, settings.ScaleConstructionSettings):
         cfg.steps = text_value(saved_settings, key=f"{prefix}/steps", default="false").lower() == "true"
         cfg.octave = text_value(saved_settings, key=f"{prefix}/octave", default="false").lower() == "true"
     if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+        if isinstance(cfg, settings.ScaleIdentificationSettings):
+            question_type = text_value(saved_settings, key=f"{prefix}/questionType", default="combined")
+            cfg.question_type = question_type if question_type in {"mode", "key"} else "combined"
+            cfg.button_mode = (
+                "all" if text_value(saved_settings, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
+            )
+            cfg.button_count = max(2, min(10, int_value(saved_settings, key=f"{prefix}/buttonCount", default=6)))
+        motion = text_value(saved_settings, key=f"{prefix}/motion", default="ascending")
+        cfg.motion = motion if motion in {"ascending", "descending"} else "ascending"
         staff_keys = text_value(saved_settings, key=f"{prefix}/staffKeys", default="")
         if staff_keys:
             cfg.staff_keys = {
@@ -4082,20 +4335,13 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         )  # these have a signature for the staff and one for the scale
         self.clefs_row = _Row("Clefs")
         self.modes_row = _Row("Scales")
-        self.keys_row = _Row(
-            "Scale Key"
-            if isinstance(cfg, settings.ScaleIdentificationSettings)
-            else "Scale keys"
-            if scales
-            else "Key signatures",
-        )  # short, so that the name fits beside its picture
-        self.staff_keys_row: _Row | None = (
-            _Row("Staff Key" if isinstance(cfg, settings.ScaleIdentificationSettings) else "Staff keys") if scales else None
-        )
+        self.keys_row = _Row("Scale Key" if scales else "Key signatures")
+        self.staff_keys_row: _Row | None = _Row("Staff Key") if scales else None
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.keys_diagram = KeyDiagram()
-        self.keys_row.attach(self.keys_diagram)
+        if not scales:
+            self.keys_row.attach(self.keys_diagram)
         self.staff_keys_diagram = KeyDiagram()
         if self.staff_keys_row is not None:
             self.staff_keys_row.attach(self.staff_keys_diagram)
@@ -4103,6 +4349,14 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         if self.staff_keys_row is not None:
             menu_rows.append(self.staff_keys_row)  # the staff's key and the scale's are next to each other
         menu_rows.append(self.keys_row)
+        if scales:
+            self.motion_row = _Row("Motion")
+            menu_rows.append(self.motion_row)
+        if isinstance(cfg, settings.ScaleIdentificationSettings):
+            self.buttons_row = _Row("Buttons")
+            menu_rows.append(self.buttons_row)
+            self.question_type_row = _Row("Question Type")
+            menu_rows.append(self.question_type_row)
         for index, row in enumerate(menu_rows, 1):
             row.clicked.connect(lambda _=False, i=index: self._go(i))
             mlay.addWidget(row)
@@ -4153,7 +4407,15 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         modes_page = _subpage("Scales", body=modes_body, back=lambda: self._go(0))
 
         # layer 2: the key signatures asked
-        self.key_list = KeyChecklist(cfg.keys)
+        if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+            self.scale_keys = _ScaleKeyPicker(
+                major_keys=set(cfg.active_keys()) if cfg.minor_keys is None else cfg.keys,
+                minor_keys=set(cfg.active_keys()) if cfg.minor_keys is None else cfg.minor_keys,
+            )
+            self.key_list = self.scale_keys.major_keys
+            self.scale_keys.minor_keys.changed.connect(self._keys_edited)
+        else:
+            self.key_list = KeyChecklist(cfg.keys)
         self.key_list.changed.connect(self._keys_edited)
         pages = [menu, clefs_page, modes_page]
         self.staff_key_list: KeyChecklist | None = None
@@ -4178,10 +4440,81 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             )
             staff_lay.addWidget(staff_key_list)
             staff_lay.addWidget(staff_note)
-            pages.append(_subpage("Staff keys", body=staff_body, back=lambda: self._go(0)))
-            pages.append(_subpage("Scale keys", body=self.key_list, back=lambda: self._go(0)))
+            pages.append(_subpage("Staff Key", body=staff_body, back=lambda: self._go(0)))
+            pages.append(_subpage("Scale Key", body=_scrolling(self.scale_keys), back=lambda: self._go(0), fill=True))
+            motion_body = QWidget()
+            motion_layout = QVBoxLayout(motion_body)
+            motion_layout.setContentsMargins(0, 0, 0, 0)
+            for direction in ("ascending", "descending"):
+                radio = QRadioButton(direction.title())
+                motion_layout.addWidget(radio)
+                radio.setChecked(cfg.motion == direction)
+                radio.toggled.connect(lambda checked, value=direction: self._motion_edited(value, checked=checked))
+            pages.append(_subpage("Motion", body=motion_body, back=lambda: self._go(0)))
         else:
             pages.append(_subpage("Key signatures", body=self.key_list, back=lambda: self._go(0)))
+
+        if isinstance(cfg, settings.ScaleIdentificationSettings):
+            body = QWidget()
+            layout = QVBoxLayout(body)
+            layout.setContentsMargins(0, 0, 0, 0)
+            limited = QRadioButton("Limited")
+            all_buttons = QRadioButton("All")
+            layout.addWidget(limited)
+            count_row = QWidget()
+            count_layout = QHBoxLayout(count_row)
+            count_layout.setContentsMargins(0, 0, 0, 0)
+            count_label = QLabel("Button count")
+            count = FieldComboBox()
+            count.setAccessibleName("Button count")
+            count_label.setBuddy(count)
+            for value in range(2, 11):
+                count.addItem(str(value), value)
+            count.setCurrentIndex(count.findData(cfg.button_count))
+            count_layout.addWidget(count_label)
+            count_layout.addWidget(count, 1)
+            layout.addWidget(count_row)
+            layout.addWidget(all_buttons)
+            limited.setChecked(cfg.button_mode == "limited")
+            all_buttons.setChecked(cfg.button_mode == "all")
+            count_row.setVisible(limited.isChecked())
+
+            def save_buttons() -> None:
+                """
+                Save the button mode and count when their controls change.
+
+                Examples
+                --------
+                Open the Buttons page and choose All to save that mode.
+                """
+                cfg.button_mode = "limited" if limited.isChecked() else "all"
+                cfg.button_count = count.currentData()
+                count_row.setVisible(limited.isChecked())
+                self._save_and_emit()
+
+            limited.toggled.connect(save_buttons)
+            count.currentIndexChanged.connect(save_buttons)
+            pages.append(_subpage("Buttons", body=body, back=lambda: self._go(0)))
+
+            question_types = ChoiceChecklist(
+                [("", [("key", "Key"), ("mode", "Mode")])],
+                selected={"key", "mode"} if cfg.question_type == "combined" else {cfg.question_type},
+            )
+
+            def save_question_type() -> None:
+                """
+                Save the selected parts of the scale question.
+
+                Examples
+                --------
+                Clear Key on the Question Type page to save Mode alone.
+                """
+                selected = question_types.selected()
+                cfg.question_type = "combined" if len(selected) == 2 else next(iter(selected), "combined")
+                self._save_and_emit()
+
+            question_types.changed.connect(save_question_type)
+            pages.append(_subpage("Question Type", body=question_types, back=lambda: self._go(0)))
 
         for page in pages:
             self.stack.addWidget(page)
@@ -4224,12 +4557,12 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.clef_pictures.set_clefs(cfg.active_clefs())
         modes = cfg.active_modes()
         self.modes_row.value.setText(f"{len(modes)} of {len(settings.KEY_MODES)}")
-        _show_keys(
-            self.keys_row,
-            diagram=self.keys_diagram,
-            enabled=True,
-            keys=set(cfg.active_keys()),
-        )
+        if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+            minor_keys = self.scale_keys.minor_keys
+            _guard_last([*self.key_list.boxes.values(), *minor_keys.boxes.values()])
+            self.keys_row.value.setText(f"{len(self.key_list.selected())} major · {len(minor_keys.selected())} minor")
+        else:
+            _show_keys(self.keys_row, diagram=self.keys_diagram, enabled=True, keys=set(cfg.active_keys()))
         if self.staff_keys_row is not None and isinstance(
             cfg,
             (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
@@ -4257,13 +4590,48 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         cfg = self.cfg
         saved_settings.setValue(f"{self.prefix}/clefs", ",".join(cfg.active_clefs()))
         saved_settings.setValue(f"{self.prefix}/modes", "|".join(cfg.active_modes()))
-        saved_settings.setValue(f"{self.prefix}/keys", ",".join(str(k) for k in cfg.active_keys()))
+        keys = cfg.active_keys()
+        if (
+            isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings))
+            and cfg.minor_keys is not None
+        ):
+            keys = sorted(cfg.keys)
+            saved_settings.setValue(f"{self.prefix}/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys)))
+        saved_settings.setValue(f"{self.prefix}/keys", ",".join(str(k) for k in keys))
         if isinstance(cfg, settings.ScaleConstructionSettings):
             saved_settings.setValue(f"{self.prefix}/steps", "true" if cfg.steps else "false")
             saved_settings.setValue(f"{self.prefix}/octave", "true" if cfg.octave else "false")
         if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+            saved_settings.setValue(f"{self.prefix}/motion", cfg.motion)
             saved_settings.setValue(f"{self.prefix}/staffKeys", ",".join(str(k) for k in cfg.active_staff_keys()))
+        if isinstance(cfg, settings.ScaleIdentificationSettings):
+            saved_settings.setValue(f"{self.prefix}/questionType", cfg.question_type)
+            saved_settings.setValue(f"{self.prefix}/buttonMode", cfg.button_mode)
+            saved_settings.setValue(f"{self.prefix}/buttonCount", cfg.button_count)
         self.changed.emit()
+
+    def _motion_edited(self, direction: str, *, checked: bool) -> None:
+        """
+        Save the selected direction for this scale exercise.
+
+        Parameters
+        ----------
+        direction : str
+            The scale direction to save.
+        checked : bool
+            Whether the direction was selected. Keyword-only.
+
+        Examples
+        --------
+        >>> cfg = settings.ScaleIdentificationSettings()
+        >>> panel = KeySignatureSettingsPanel(cfg)
+        >>> panel._motion_edited("descending", checked=True)
+        >>> cfg.motion
+        'descending'
+        """
+        if checked and isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+            self.cfg.motion = direction
+            self._save_and_emit()
 
     def _clefs_edited(self) -> None:
         """
@@ -4376,6 +4744,9 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         False
         """
         self.cfg.keys = self.key_list.selected()
+        if isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
+            self.cfg.minor_keys = self.scale_keys.minor_keys.selected()
+            self._refresh_summaries()
         self._save_and_emit()
 
 

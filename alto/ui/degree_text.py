@@ -31,6 +31,7 @@ from PySide6.QtGui import (
     QPen,
 )
 from PySide6.QtWidgets import (
+    QCheckBox,
     QLabel,
     QPushButton,
     QStyle,
@@ -189,6 +190,30 @@ class DegreeButton(QPushButton):
         painter.setPen(self.palette().color(QPalette.ColorRole.ButtonText))
         rect = self.style().subElementRect(QStyle.SubElement.SE_PushButtonContents, option, self)
         draw_degree_text(painter, rect=QRectF(rect), text=self.text())
+
+
+class DegreeCheckBox(QCheckBox):
+    """Draw the scale degree caret centered above the checkbox label's digit."""
+
+    def paintEvent(self, event: QPaintEvent) -> None:
+        """Paint the native checkbox and use the shared scale degree renderer for its label."""
+        if "̂" not in self.text():
+            super().paintEvent(event)
+            return
+        option = QStyleOptionButton()
+        self.initStyleOption(option)
+        style = self.style()
+        rect = style.subElementRect(QStyle.SubElement.SE_CheckBoxContents, option, self)
+        option.text = ""
+        painter = QPainter(self)
+        style.drawControl(QStyle.ControlElement.CE_CheckBox, option, painter, self)
+        painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
+        draw_degree_text(
+            painter,
+            rect=QRectF(rect),
+            text=self.text(),
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+        )
 
 
 class DegreeLabel(QLabel):

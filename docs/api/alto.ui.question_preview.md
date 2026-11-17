@@ -62,7 +62,7 @@ Build the popup.
 ```pycon
 >>> from alto.theory.pitch import Note
 >>> question_ = Question("", choices=["C"], answer="C", keyboard=Note.parse("C4"))
->>> QuestionPreview("Keyboard Identification", question=question_).minimumWidth()
+>>> QuestionPreview("Keyboard Note Identification", question=question_).minimumWidth()
 560
 ```
 {% endraw %}

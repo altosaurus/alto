@@ -16,10 +16,10 @@ so its keys work at once. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> mov
 | Keys                                                                                       | What it does                                                                                                                             |
 |--------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | <kbd>1</kbd> to <kbd>9</kbd>                                                               | Press the matching answer button, counting from the left. Available when an exercise has nine answers or fewer.                          |
-| <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>A</kbd> <kbd>B</kbd> | Keyboard Identification and Circle of Fifths: the natural note or key of that name. A minor key is typed as the major key of its letter. |
-| <kbd>Shift</kbd>+a letter, <kbd>Ctrl</kbd>+a letter                                        | Keyboard Identification and Circle of Fifths: the sharp (<kbd>Shift</kbd>) or the flat (<kbd>Ctrl</kbd>) of that note or key.            |
+| <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>A</kbd> <kbd>B</kbd> | Keyboard Note Identification and Circle of Fifths: the natural note or key of that name. A minor key is typed as the major key of its letter. |
+| <kbd>Shift</kbd>+a letter, <kbd>Ctrl</kbd>+a letter                                        | Keyboard Note Identification and Circle of Fifths: the sharp (<kbd>Shift</kbd>) or the flat (<kbd>Ctrl</kbd>) of that note or key.            |
 | <kbd>1</kbd> to <kbd>6</kbd>                                                               | Circle of Fifths, Roman numerals: I, ii, iii, IV, V and vi. For a key with two names (such as B and C♭) press the key of each name.     |
-| <kbd>1</kbd> to <kbd>9</kbd>                                                               | Keyboard Identification with the octave asked: the octave, typed as its number.                                                          |
+| <kbd>1</kbd> to <kbd>9</kbd>                                                               | Keyboard Note Identification with the octave asked: the octave, typed as its number.                                                          |
 | <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>                                        | Arpeggio Identification: the inversion, which is the second row of buttons. The chord type is on <kbd>1</kbd> to <kbd>4</kbd>.           |
 
 With scale-degree answers, digits name the degrees. In a bank with more than nine choices, add <kbd>Shift</kbd> for a sharp
@@ -85,7 +85,7 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 | Action                        | Where                                                        | What it does                                                                             |
 |-------------------------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------|
 | Click the staff               | Note Construction, Scale Construction                        | Place the note.                                                                          |
-| Right-click the staff         | Note Construction and Scale Construction with accidentals on | Step through no sign, sharp, flat and natural.                                           |
+| Right-click the staff         | Note Construction, Scale Construction                         | Step through no sign, sharp, flat and natural.                                           |
 | Turn the wheel over the staff | Scale Construction                                           | Step through the signs while notes are placed, then switch between whole and half steps. |
 | Double-click a row            | Database: Answers or Questions                               | Preview that question.                                                                   |
 | Click a column heading        | Database                                                     | Sort by that column.                                                                     |

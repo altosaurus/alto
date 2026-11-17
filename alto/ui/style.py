@@ -90,6 +90,26 @@ QPushButton[primary="true"] {{ background: {accent}; border-color: {accent}; col
 QPushButton[primary="true"]:hover {{ background: {accent}; border-color: palette(text); }}
 QPushButton[primary="true"]:disabled {{ background: {accent_dim}; border-color: {accent_dim}; color: palette(highlighted-text); }}
 
+/* A thin accent underline marks the active settings tab. */
+QTabWidget#settingsTabs::pane {{
+    top: -1px;
+    border: 0;
+    border-top: 1px solid palette(mid);
+}}
+QTabWidget#settingsTabs QTabBar::tab {{
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 6px 14px;
+    background: transparent;
+    color: palette(text);
+}}
+QTabWidget#settingsTabs QTabBar::tab:hover {{ color: palette(highlight); }}
+QTabWidget#settingsTabs QTabBar::tab:selected {{
+    border-bottom-color: palette(highlight);
+    color: palette(highlight);
+}}
+QTabWidget#settingsTabs QTabBar::tab:focus {{ background: {nav_hover}; }}
+
 /* Text boxes and drop-down lists that are marked as fields: rounded, with the same heavier lower edge as the buttons. */
 QLineEdit[field="true"], QComboBox[field="true"] {{
     border: 1px solid {edge};
@@ -194,12 +214,13 @@ QListWidget#categories {{
     padding: 6px 0px;
 }}
 QListWidget#categories::item {{ padding: 4px 8px; margin: 1px 6px; border-radius: {r2}px; color: palette(text); }}
-QTextBrowser#glossaryDefinition, QScrollArea#glossaryActivities {{
+QScrollArea#glossaryDefinition, QScrollArea#glossaryActivities {{
     background: palette(window);
     border: 1px solid palette(mid);
     border-radius: {rp}px;
 }}
-QTextBrowser#glossaryDefinition, QScrollArea#glossaryActivities {{ padding: 6px; }}
+QScrollArea#glossaryDefinition, QScrollArea#glossaryActivities {{ padding: 6px; }}
+QTextBrowser#glossaryText {{ background: palette(window); border: 0; }}
 QListWidget#categories[glossaryBox="true"] {{ background: palette(window); }}
 QLineEdit#glossarySearch {{ background: palette(window); }}
 QListWidget#categories::item:hover {{ background: {nav_hover}; }}

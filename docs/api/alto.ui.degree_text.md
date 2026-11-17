@@ -107,6 +107,22 @@ Keep the native button appearance and position degree accents explicitly.
 False
 ```
 
+## DegreeCheckBox
+
+```python
+class DegreeCheckBox(QCheckBox)
+```
+
+Draw the scale degree caret centered above the checkbox label's digit.
+
+### DegreeCheckBox.paintEvent
+
+```python
+def paintEvent(event: QPaintEvent) -> None
+```
+
+Paint the native checkbox and use the shared scale degree renderer for its label.
+
 ## DegreeLabel
 
 ```python

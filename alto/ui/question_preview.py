@@ -76,7 +76,7 @@ class QuestionPreview(QDialog):
         --------
         >>> from alto.theory.pitch import Note
         >>> question_ = Question("", choices=["C"], answer="C", keyboard=Note.parse("C4"))
-        >>> QuestionPreview("Keyboard Identification", question=question_).minimumWidth()
+        >>> QuestionPreview("Keyboard Note Identification", question=question_).minimumWidth()
         560
         """
         super().__init__(parent)
@@ -104,7 +104,7 @@ class QuestionPreview(QDialog):
             staff.show_notes(
                 notes,
                 clef=q.clef,
-                key=q.key,
+                key=q.key if q.staff_signature is None else q.staff_signature,
                 value=q.value,
                 caption=q.caption,
             )
@@ -186,10 +186,14 @@ class QuestionPreview(QDialog):
         """
         q = self.question
         if q.construct is not None:
+            naming = app_settings.note_names.naming
+            if q.notes_only and naming in app_settings.DEGREE_NAMINGS:
+                naming = "letters"
             return spell(
                 q.construct,
-                naming=app_settings.note_names.naming,
+                naming=naming,
                 key=q.key,
-                octave=True,
+                octave=not q.any_octave,
+                minor=q.minor,
             )
         return q.answer

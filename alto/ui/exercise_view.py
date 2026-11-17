@@ -216,6 +216,7 @@ def note_name(
     note: Note,
     *,
     key: int | None = None,
+    minor: bool = False,
 ) -> str:
     """
     Return a note's name as it is written, with its octave: F♯4.
@@ -226,6 +227,9 @@ def note_name(
         The note.
     key : int or None, default None
         The major key signature for scale degrees. Without a key context, degrees fall back to letter names. Keyword-only.
+
+    minor : bool, default False
+        Use natural minor scale degrees. Keyword-only.
 
     Returns
     -------
@@ -245,6 +249,7 @@ def note_name(
         naming=naming,
         key=key or 0,
         octave=True,
+        minor=minor,
     )
 
 
@@ -252,6 +257,7 @@ def note_words(
     note: Note,
     *,
     key: int | None = None,
+    minor: bool = False,
 ) -> str:
     """
     Return a note's name in words, for a screen reader: "F sharp 4".
@@ -262,6 +268,9 @@ def note_words(
         The note.
     key : int or None, default None
         The major key signature for scale degrees. Without a key context, use letter names. Keyword-only.
+
+    minor : bool, default False
+        Use natural minor scale degrees. Keyword-only.
 
     Returns
     -------
@@ -276,8 +285,8 @@ def note_words(
     naming = app_settings.note_names.naming
     if naming in app_settings.DEGREE_NAMINGS and key is not None:
         if naming == "functions":
-            return f"{spell(note, naming=naming, key=key).lower()}, octave {note.octave}"
-        degree = spell(note, naming="degrees", key=key).replace("̂", "")
+            return f"{spell(note, naming=naming, key=key, minor=minor).lower()}, octave {note.octave}"
+        degree = spell(note, naming="degrees", key=key, minor=minor).replace("̂", "")
         signs = {"♯": "sharp ", "♭": "flat ", "𝄪": "double sharp ", "𝄫": "double flat "}
         label = f"degree {degree[-1]}"
         return f"{signs.get(degree[0], '')}{label}, octave {note.octave}"
@@ -631,7 +640,13 @@ class ExerciseView(QWidget):
             0,
         )
         lay.addLayout(top)
-        lay.addWidget(self.prompt)
+        self.prompt.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        self.prompt.setWordWrap(True)
+        prompt_row = QHBoxLayout()
+        prompt_row.addStretch(1)
+        prompt_row.addWidget(self.prompt, 100)
+        prompt_row.addStretch(1)
+        lay.addLayout(prompt_row)
         lay.addWidget(self.staff, alignment=Qt.AlignmentFlag.AlignHCenter)  # a capped staff sits in the middle
         lay.addWidget(self.circle, 1)
         lay.addWidget(self.fork, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -646,25 +661,25 @@ class ExerciseView(QWidget):
         lay.addWidget(self.answer_row)
         lay.addWidget(self.key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.keyboard)
-        choice_row = QHBoxLayout()  # the buttons' area in the middle, with the room that is left over on either side
-        choice_row.addStretch(1)
-        choice_row.addWidget(self.choice_area, 100)
-        choice_row.addWidget(self.interval_answers, 100)
-        choice_row.addStretch(1)
+        answers = QWidget()
+        answers.setMaximumWidth(self.CHOICE_MAX_WIDTH)
+        answer_layout = QVBoxLayout(answers)
+        answer_layout.setContentsMargins(0, 0, 0, 0)
         self.quality_label = QLabel("Quality")
-        lay.addWidget(self.quality_label)
-        lay.addLayout(choice_row)
+        answer_layout.addWidget(self.quality_label)
+        answer_layout.addWidget(self.choice_area)
+        answer_layout.addWidget(self.interval_answers)
         self.interval_label = QLabel("Interval")
-        lay.addWidget(self.interval_label)
-        self.octave_row = QWidget()  # shown only when the answer needs an octave as well as a name
+        answer_layout.addWidget(self.interval_label)
+        self.octave_row = QWidget()  # shown only when the answer has a second part
         self.octave_box = QHBoxLayout(self.octave_row)
-        self.octave_box.setContentsMargins(
-            0,
-            4,
-            0,
-            0,
-        )
-        lay.addWidget(self.octave_row)
+        self.octave_box.setContentsMargins(0, 4, 0, 0)
+        answer_layout.addWidget(self.octave_row)
+        answer_row = QHBoxLayout()
+        answer_row.addStretch(1)
+        answer_row.addWidget(answers, 100)
+        answer_row.addStretch(1)
+        lay.addLayout(answer_row)
         lay.addStretch()
         outer = QHBoxLayout(self)
         outer.addWidget(main, 1)
@@ -1085,7 +1100,7 @@ class ExerciseView(QWidget):
         if clef:
             self.clef_input.reset(list(app_settings.CLEF_SYMBOLS), caption=q.caption)
         if construct:
-            self.input_staff.reset(q.clef, key=q.key, caption=q.caption)
+            self.input_staff.reset(q.clef, key=q.key if q.staff_signature is None else q.staff_signature, caption=q.caption)
         if q.construct_scale is not None:
             self.scale_input.reset_scale(
                 q.clef,
@@ -1114,6 +1129,7 @@ class ExerciseView(QWidget):
             value=q.value,
             caption=q.caption,
         )
+        self.prompt.setMaximumWidth(self.staff.maximumWidth() if not self.staff.isHidden() else self.CHOICE_MAX_WIDTH)
         for b in self.buttons:
             b.setShortcut(QKeySequence())  # a button waiting to be deleted must not share its key with the new one
             b.hide()
@@ -1127,7 +1143,9 @@ class ExerciseView(QWidget):
             and (app_settings.keyboard_intervals.all_interval_buttons or len(q.choices) > 6)
         )
         compact_intervals = isinstance(self.exercise, KeyboardIntervals) and bool(q.octaves)
-        self.quality_label.setVisible(compact_intervals)
+        scale_buttons = bool(q.octaves) and q.second_label == "Mode"
+        self.quality_label.setText("Tonic" if scale_buttons else "Quality")
+        self.quality_label.setVisible(compact_intervals or scale_buttons)
         self.interval_label.setText("Interval" if compact_intervals else q.second_label)
         self.interval_label.setVisible(bool(q.octaves))
         self.choice_area.setVisible(not interval_bank)
@@ -1170,7 +1188,8 @@ class ExerciseView(QWidget):
         self.octave_row.setVisible(bool(q.octaves))
         if q.octaves:
             second_keys = second_row_keys(keys, labels=q.octaves)
-            number_bank = AnswerBank() if isinstance(self.exercise, KeyboardIntervals) and len(q.octaves) > 10 else None
+            wrap_second = scale_buttons or (isinstance(self.exercise, KeyboardIntervals) and len(q.octaves) > 10)
+            number_bank = AnswerBank() if wrap_second else None
             number_buttons = []
             for i, octave in enumerate(q.octaves):
                 b = QPushButton(octave)
@@ -1186,7 +1205,7 @@ class ExerciseView(QWidget):
                     number_buttons.append(b)
                 self.buttons.append(b)
             if number_bank is not None:
-                number_bank.setAccessibleName("Interval number buttons")
+                number_bank.setAccessibleName("Mode buttons" if scale_buttons else "Interval number buttons")
                 number_bank.set_buttons(number_buttons)
                 self.octave_box.addWidget(number_bank, 1)
         self._update_score()
@@ -1435,13 +1454,13 @@ class ExerciseView(QWidget):
         if not q or q.construct is None or self.answered or self._busy:
             return
         ok = q.check_placed(note)
-        self._record(ok, choice=note_name(note, key=q.key))
+        self._record(ok, choice=note_name(note, key=None if q.notes_only else q.key, minor=q.minor))
         self.input_staff.locked = True
         if ok:
             self.answered = True
             self._flash_note("#2e7d32")
             if self.exercise.has_sound:
-                sounds.play_notes([[q.construct]])
+                sounds.play_notes([[note]])
             self._advance.start(600)
         else:
             self.missed = True
@@ -1617,8 +1636,10 @@ class ExerciseView(QWidget):
             head = "Note to place"
         caret = staff.caret_note()
         if caret is not None:
-            key = q.key if q.construct is not None else None
-            return f"{head}: {note_name(caret, key=key)}", f"{head}: {note_words(caret, key=key)}"
+            key = q.key if q.construct is not None and not q.notes_only else None
+            display = note_name(caret, key=key, minor=q.minor)
+            spoken = note_words(caret, key=key, minor=q.minor)
+            return f"{head}: {display}", f"{head}: {spoken}"
         if q.construct_scale is None:  # a single note has no number to put in front of the advice
             return (
                 "Press ↑ or ↓ to choose a note, then Return to place it.",

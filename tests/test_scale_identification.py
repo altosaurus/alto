@@ -9,6 +9,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import pytest
+from PySide6.QtWidgets import QCheckBox, QRadioButton
 
 from alto import settings
 from alto.audio import sounds
@@ -22,6 +23,7 @@ from alto.theory.scales import (
     mode_tonic,
 )
 from alto.ui import icons
+from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import EXERCISE_ICONS
 from alto.ui.main_window import MainWindow
@@ -78,13 +80,19 @@ def test_settings_are_saved_loaded_and_isolated_from_construction(app: QApplicat
     assert panel.cfg is settings.scale_identification
     assert panel.staff_keys_row is not None and panel.staff_key_list is not None
     assert panel.octave_row is None and panel.steps_row is None
+    motion = {button.text(): button for button in panel.findChildren(QRadioButton)}
+    assert motion["Ascending"].isChecked()
+    motion["Descending"].click()
+    assert motion["Descending"].isChecked() and not motion["Ascending"].isChecked()
     panel.boxes["alto"].setChecked(True)
     panel.staff_key_list.boxes[-2].setChecked(True)
     panel.key_list.boxes[5].setChecked(False)
     assert exercise.settings_signature() != before
     settings.scale_identification.staff_keys = {0}
     settings.scale_identification.keys = set(range(-7, 8))
+    settings.scale_identification.motion = "ascending"
     load_scale_identification()
+    assert settings.scale_identification.motion == "descending" and settings.scale_construction.motion == "ascending"
     assert settings.scale_identification.staff_keys == {0, -2}
     assert "alto" in settings.scale_identification.clefs and 5 not in settings.scale_identification.keys
     assert settings.scale_construction.staff_keys == {0} and 5 in settings.scale_construction.keys
@@ -110,6 +118,71 @@ def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(app: QApplicat
     assert view.question is not None and view.staff.isVisible()
     view.buttons[view.question.choices.index(view.question.answer)].click()
     assert view.answered
+
+
+def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QApplication) -> None:
+    """
+    Switch answer modes through Settings and submit a two-part answer.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    exercise = ScaleIdentification()
+    panel = settings_panel_for(exercise)
+    assert isinstance(panel, KeySignatureSettingsPanel)
+    count = panel.findChild(FieldComboBox)
+    assert count is not None
+    count.setCurrentIndex(count.findData(4))
+    assert len(exercise.generate(random.Random(3)).choices) == 4
+    all_buttons = next(button for button in panel.findChildren(QRadioButton) if button.text() == "All")
+    all_buttons.click()
+    load_scale_identification()
+    assert settings.scale_identification.button_mode == "all"
+    assert settings.scale_identification.button_count == 4
+
+    view = ExerciseView(exercise, rng=random.Random(3))
+    assert view.question is not None
+    assert len(view.question.choices) == 21 and len(view.question.octaves or []) == 7
+    tonic, mode = view.question.answer.split(" ", 1)
+    buttons = {button.text(): button for button in view.buttons}
+    buttons[mode].click()
+    assert not view.answered
+    buttons[tonic].click()
+    assert view.answered
+    view.close()
+
+
+@pytest.mark.parametrize(("label", "answer"), [("Mode", "Major"), ("Key", "C")])
+def test_question_type_asks_for_one_part(app: QApplication, label: str, answer: str) -> None:
+    """
+    Save a question type and check that it accepts the requested part alone.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    label : str
+        The question type to keep selected.
+    answer : str
+        The expected answer.
+    """
+    exercise = ScaleIdentification()
+    panel = settings_panel_for(exercise)
+    assert isinstance(panel, KeySignatureSettingsPanel)
+    boxes = {box.text(): box for box in panel.findChildren(QCheckBox) if box.text() in {"Key", "Mode"}}
+    assert all(box.isChecked() for box in boxes.values())
+    boxes["Key" if label == "Mode" else "Mode"].click()
+    assert boxes[label].isChecked() and not boxes[label].isEnabled()
+    load_scale_identification()
+    cfg = settings.scale_identification
+    cfg.keys, cfg.modes = {0}, {"Major (Ionian)"}
+    for button_mode in ("limited", "all"):
+        cfg.button_mode = button_mode
+        question = exercise.generate(random.Random(4))
+        assert question.answer == answer and answer in question.choices
+        assert question.octaves is None and question.check(answer)
 
 
 def test_empty_selections_have_usable_defaults() -> None:

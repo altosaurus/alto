@@ -8,7 +8,7 @@ Examples
 --------
 >>> from alto.exercises import REGISTRY
 >>> [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Identification', 'Note Construction']
+['Note Identification', 'Keyboard Note Identification', 'Note Construction']
 """
 
 from __future__ import annotations
@@ -941,7 +941,7 @@ def _scale_material(
     Returns
     -------
     tuple of (str, int, str, int, list of Note)
-        Mode, scale signature, clef, staff signature and eight ascending notes.
+        Mode, scale signature, clef, staff signature and eight notes in the selected motion.
 
     Examples
     --------
@@ -949,8 +949,15 @@ def _scale_material(
     >>> len(material[-1])
     8
     """
-    mode = rng.choice(cfg.active_modes())
-    count = rng.choice(cfg.active_keys())
+    minor_mode = "Natural minor (Aeolian)"
+    modes = cfg.active_modes()
+    if cfg.minor_keys is None:
+        mode = rng.choice(modes)
+        count = rng.choice(cfg.active_keys())
+    else:
+        available = [mode for mode in modes if (cfg.minor_keys if mode == minor_mode else cfg.keys)]
+        mode = rng.choice(available or (["Major (Ionian)"] if cfg.keys else [minor_mode]))
+        count = rng.choice(sorted(cfg.minor_keys if mode == minor_mode else cfg.keys) or [0])
     clef = rng.choice(cfg.active_clefs())
     staff_key = rng.choice(cfg.active_staff_keys())
     notes = _scale_notes(
@@ -960,13 +967,15 @@ def _scale_material(
         mode=mode,
         exact_octave=isinstance(cfg, settings.ScaleConstructionSettings) and cfg.octave,
     )
+    if cfg.motion == "descending":
+        notes.reverse()
     return mode, count, clef, staff_key, notes
 
 
 @register
 class ScaleIdentification(Exercise):
     """
-    Identify the tonic and type of an ascending scale drawn on a staff.
+    Identify the tonic and type of a scale drawn on a staff.
 
     Examples
     --------
@@ -994,7 +1003,20 @@ class ScaleIdentification(Exercise):
         >>> ScaleIdentification().settings_signature().startswith("[")
         True
         """
-        return signature(settings.scale_identification)
+        cfg = settings.scale_identification
+        # Keep existing ascending reviews under their original settings signature.
+        parts = vars(cfg).copy()
+        if cfg.motion == "ascending":
+            del parts["motion"]
+        if cfg.button_mode == "limited":
+            del parts["button_mode"]
+        if cfg.button_mode == "all" or cfg.button_count == 6:
+            del parts["button_count"]
+        if cfg.question_type == "combined":
+            del parts["question_type"]
+        if cfg.minor_keys is None:
+            del parts["minor_keys"]
+        return signature(parts)
 
     def instructions(self) -> str:
         """
@@ -1011,17 +1033,18 @@ class ScaleIdentification(Exercise):
         True
         """
         return (
-            "<b>Scale Identification</b><br>Read the ascending scale on the staff and choose its tonic and scale type. "
+            "<b>Scale Identification</b><br>Read the scale on the staff and choose its tonic and scale type. "
             "The first and last notes are the tonic, one octave apart. Read the clef, key signature and each note's "
             "accidental, then use the whole and half steps to identify the scale or mode. "
             "The staff's key signature need not be the scale's own: written accidentals show where they differ. "
-            "Use Settings to choose Clefs, Scales, Staff Key and Scale Key. "
+            "Use Settings to choose Clefs, Scales, Staff Key, Scale Key, Motion, Buttons, and Question Type. "
+            "When asked for both with All buttons, choose the tonic and mode in either order. "
             "You can press an answer's number instead of clicking its button: 1 is the first."
         )
 
     def generate(self, rng: random.Random) -> Question:
         """
-        Draw an ascending octave and offer scale names without revealing the answer on the staff.
+        Draw a one-octave scale and offer scale names without revealing the answer on the staff.
 
         Parameters
         ----------
@@ -1039,20 +1062,41 @@ class ScaleIdentification(Exercise):
         >>> q.staff[0][0].name == q.staff[-1][0].name and not q.caption
         True
         """
-        mode, _, clef, staff_key, notes = _scale_material(rng, cfg=settings.scale_identification)
+        cfg = settings.scale_identification
+        mode, _, clef, staff_key, notes = _scale_material(rng, cfg=cfg)
         tonic = notes[0]
-        answer = f"{tonic.name} {_blank_scale(mode)[2:]}"
-        pool = [f"{tonic.name} {_blank_scale(m)[2:]}" for m in settings.scale_identification.active_modes()]
-        pool += [f"{mode_tonic(k, mode=mode).name} {_blank_scale(mode)[2:]}" for k in range(-7, 8)]
-        choices = pick_distractors(answer, pool=pool, n=5, rng=rng)
+        kind = _blank_scale(mode)[2:]
+        modes = [_blank_scale(m)[2:] for m in settings.KEY_MODES]
+        tonics = [Note.from_diatonic(letter, accidental=sign).name for sign in (-1, 0, 1) for letter in range(7)]
+        all_buttons = cfg.button_mode == "all"
+        combined = cfg.question_type == "combined"
+        if cfg.question_type == "mode":
+            prompt, answer, pool = "Identify the mode on the staff.", kind, modes
+        elif cfg.question_type == "key":
+            prompt, answer, pool = "Identify the tonic of the scale on the staff.", tonic.name, tonics
+        else:
+            prompt, answer = "Identify the scale on the staff.", f"{tonic.name} {kind}"
+            pool = [f"{tonic.name} {_blank_scale(m)[2:]}" for m in cfg.active_modes()]
+            pool += [f"{mode_tonic(k, mode=mode).name} {kind}" for k in range(-7, 8)]
+        if all_buttons:
+            choices = modes if cfg.question_type == "mode" else tonics
+            grid = {choice: divmod(i, 7) for i, choice in enumerate(choices)}
+        else:
+            choices = pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng)
+            grid = {choice: divmod(i, 5) for i, choice in enumerate(choices)} if len(choices) > 6 else None
+        split_buttons = all_buttons and combined
         return Question(
-            "Identify the scale on the staff.",
+            prompt,
             choices=choices,
             answer=answer,
+            grid=grid,
+            octaves=modes if split_buttons else None,
+            second_label="Mode" if split_buttons else "Octave",
+            joiner=" " if split_buttons else "",
             staff=[[note] for note in notes],
             clef=clef,
             key=staff_key,
-            explanation=f"{answer}: " + " ".join(note.name for note in notes),
+            explanation=f"{tonic.name} {kind}: " + " ".join(note.name for note in notes),
         )
 
 
@@ -1087,7 +1131,14 @@ class ScaleConstruction(Exercise):
         >>> ScaleConstruction().settings_signature().startswith("[")
         True
         """
-        return signature(settings.scale_construction)
+        cfg = settings.scale_construction
+        # Keep existing ascending reviews under their original settings signature.
+        parts = vars(cfg).copy()
+        if cfg.motion == "ascending":
+            del parts["motion"]
+        if cfg.minor_keys is None:
+            del parts["minor_keys"]
+        return signature(parts)
 
     def instructions(self) -> str:
         """
@@ -1106,13 +1157,13 @@ class ScaleConstruction(Exercise):
         text = [
             (
                 "<b>Scale Construction</b><br>The name of a scale is under the blank staff. Click the staff to place its "
-                "notes from left to right, going up from the first note to the same note an octave higher: eight notes in "
+                "notes from left to right in the requested direction, ending an octave from the first note: eight notes in "
                 "all. The note follows the pointer, and each click puts it in the next place. "
                 + (
                     "The name says which octave the first note is in, such as G2 Major: start on that note, G in octave 2 "
-                    "(middle C is C4), and place the whole scale above it."
+                    "(middle C is C4), and place the remaining notes in the requested direction."
                     if settings.scale_construction.octave
-                    else "Any octave will do, as long as all eight notes are in the same one."
+                    else "Any octave will do for the first note. End one octave away."
                 )
             ),
             (
@@ -1148,7 +1199,7 @@ class ScaleConstruction(Exercise):
         )
         text.append(
             "A mode uses the signature of a major key, started from another degree: D Dorian has the notes of C major, "
-            "started from D. Use the sliders button to choose the clefs, the scales, the key signatures and whether to "
+            "started from D. Use the sliders button to choose the clefs, the scales, the key signatures, Motion, and whether to "
             "mark the steps.",
         )
         return "<br><br>".join(text)
@@ -1165,7 +1216,8 @@ class ScaleConstruction(Exercise):
         Returns
         -------
         Question
-            A blank staff captioned with the scale, such as 'D Major'; `construct_scale` is its eight notes, going up an octave.
+            A blank staff captioned with the scale, such as 'D Major'. The eight notes in the selected
+            direction are stored in `construct_scale`.
 
         Examples
         --------
@@ -1181,14 +1233,18 @@ class ScaleConstruction(Exercise):
         tonic = notes[0]
         kind = _blank_scale(mode)[2:]  # "Major", "minor", "Dorian"
         name = f"{tonic.name}{tonic.octave} {kind}" if cfg.octave else f"{tonic.name} {kind}"  # "G2 Major", or "G Major"
-        steps = ["W" if b.midi - a.midi == 2 else "H" for a, b in zip(notes, notes[1:], strict=False)] if cfg.steps else None
-        explanation = f"{name}: " + " ".join(n.name for n in notes)
+        steps = ["W" if abs(b.midi - a.midi) == 2 else "H" for a, b in zip(notes, notes[1:], strict=False)] if cfg.steps else None
+        motion = "descending" if notes[0].midi > notes[-1].midi else "ascending"
+        direction = f" {motion}" if cfg.motion != "ascending" else ""
+        caption = f"{name} ({motion})" if direction else name
+        explanation = f"{caption}: " + " ".join(n.name for n in notes)
         if steps:
             explanation += f" ({' '.join(steps)})"
         if staff_key and staff_key != count:  # a signature that is not the scale's own: say so
             explanation += f". The staff has {format_key_signature(staff_key)}, but the scale has {format_key_signature(count)}"
         return Question(
-            f"Place the notes of the {name} scale on the staff" + (", then mark its whole and half steps." if steps else "."),
+            f"Place the notes of the {name}{direction} scale on the staff"
+            + (", then mark its whole and half steps." if steps else "."),
             choices=[],
             answer=" ".join(f"{n.name}{n.octave}" for n in notes),
             clef=clef,
@@ -1197,7 +1253,7 @@ class ScaleConstruction(Exercise):
             construct_steps=steps,
             exact_octave=cfg.octave,
             accidentals=True,
-            caption=name,
+            caption=caption,
             explanation=explanation,
         )
 
@@ -1918,7 +1974,7 @@ class KeyboardNotes(Exercise):
     True
     """
 
-    name = "Keyboard Identification"
+    name = "Keyboard Note Identification"
     category = "Notation"
     description = "Name the highlighted key on a piano keyboard."
     par_seconds = 3.0
@@ -1956,7 +2012,7 @@ class KeyboardNotes(Exercise):
         cfg = settings.keyboard
         text = [
             (
-                "<b>Keyboard Identification</b><br>One key on the keyboard is highlighted. Press the button with its name, "
+                "<b>Keyboard Note Identification</b><br>One key on the keyboard is highlighted. Press the button with its name, "
                 "or type its name on the keyboard: the letter for a natural, Shift and the letter for a sharp, Ctrl and "
                 "the letter for a flat."
             ),
@@ -1964,7 +2020,7 @@ class KeyboardNotes(Exercise):
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
             text = [
                 (
-                    "<b>Keyboard Identification</b><br>Name the highlighted key by its scale degree, 1–7, in the major key "
+                    "<b>Keyboard Note Identification</b><br>Name the highlighted key by its scale degree, 1–7, in the major key "
                     "of the signature. Without a key signature, use C major. Altered degrees have a prefix, such "
                     "as ♭3 or ♯4. Type the degree digit; add Shift for a sharp or Ctrl for a flat, "
                     "and Alt for a double alteration."
@@ -2127,7 +2183,26 @@ class NoteConstruction(Exercise):
         >>> NoteConstruction().settings_signature().startswith("[")
         True
         """
-        return signature(settings.construction, settings.note_names.naming)
+        cfg = settings.construction
+        parts = vars(cfg).copy()
+        if cfg.question_type == "notes" or cfg.degrees == set(range(1, 8)):
+            del parts["degrees"]
+        if cfg.octave:
+            del parts["octave"]
+        if cfg.staff_keys is None:
+            del parts["staff_keys"]
+        if cfg.question_type == "notes":
+            for field in ("keys", "minor_keys", "major", "minor", "key_signature"):
+                del parts[field]
+        else:
+            del parts["question_type"]
+            if not cfg.minor:
+                del parts["minor"]
+            if not cfg.minor or not cfg.major:
+                del parts["major"]
+            if not cfg.minor or not cfg.key_signature or cfg.minor_keys is None or cfg.minor_keys == cfg.keys:
+                del parts["minor_keys"]
+        return signature(parts, settings.note_names.naming)
 
     def instructions(self) -> str:
         """
@@ -2147,33 +2222,32 @@ class NoteConstruction(Exercise):
         text = [
             (
                 "<b>Note Construction</b><br>A note name is shown. Click the staff where that note belongs. The octave "
-                "counts: the number says which C-to-B you mean, and middle C is C4. On a grand staff, click the upper "
+                "counts when shown: the number says which C-to-B you mean, and middle C is C4. Otherwise, any octave works. "
+                "On a grand staff, click the upper"
                 "staff for notes from middle C up and the lower staff for the notes below it."
             ),
         ]
-        if settings.note_names.naming in settings.DEGREE_NAMINGS:
+        if cfg.question_type == "scale" and settings.note_names.naming in settings.DEGREE_NAMINGS:
             text.append(
-                "The question gives a scale degree in the named major key, plus an octave. Degree 1 is the tonic; "
-                "a prefix such as ♭3 or ♯4 lowers or raises the degree. Without a key signature, use C major. "
+                "The question gives a scale degree in the named key. Degree 1 is the tonic; "
+                "a prefix such as ♭3 or ♯4 lowers or raises the degree. "
                 "The octave is the written note's C-to-B octave, not a count from the tonic.",
             )
         if cfg.key_signature:
             text.append(
-                "A key signature is drawn at the start of the staff. It already applies to every note of that "
+                "A key signature is drawn at the start of the staff according to Staff Key. It applies to every note of that "
                 "letter, so in G major you place F♯ on the F line with no sign. A note that the key does not "
-                "give you needs its own sign.",
+                "give you needs its own sign. The staff signature may differ from the key named in the prompt.",
             )
-        if cfg.accidentals:
-            text.append(
-                "To give a note its own sign, choose ♯, ♮ or ♭ first, then click the staff. You can also right "
-                "click the staff to step through them. ♮ cancels a sharp or flat from the key signature. Only the "
-                "exact spelling counts, so G♯ is not A♭.",
-            )
+        text.append(
+            "Choose ♯, ♮ or ♭ before placing a note, or right-click the staff to cycle through the signs. "
+            "♮ cancels a sharp or flat from the key signature. Only the exact spelling counts.",
+        )
         text.append(
             "You can do all of this without the mouse. The Up and Down arrows (or the Higher and Lower buttons) move the "
             "note a line or space, and Page Up and Page Down (or the Octave buttons) an octave. Typing a letter from A to G "
-            "jumps to the nearest note with that name. Press Return (or Place note) to place it."
-            + (" The Left and Right arrows, or the keys + - and 0, choose a sign." if cfg.accidentals else ""),
+            "jumps to the nearest note with that name. Press Return (or Place note) to place it. "
+            "The Left and Right arrows, or the keys + - and 0, choose a sign.",
         )
         text.append("A wrong click shows the note you placed so you can adjust and try again.")
         return "<br><br>".join(text)
@@ -2201,43 +2275,66 @@ class NoteConstruction(Exercise):
         cfg = settings.construction
         clef = rng.choice(cfg.active_clefs())
         lo, hi = settings.DEFAULT_RANGES[clef]
-        count = rng.choice(cfg.active_keys()) if cfg.key_signature else 0
-        diatonic = rng.randint(lo, hi)
-        implied = key_accidental(diatonic % 7, count=count)  # what the key signature already does to this letter
+        notes_only = cfg.question_type == "notes"
+        minor = not notes_only and cfg.minor and (not cfg.major or rng.choice((False, True)))
+        keys = sorted(cfg.minor_keys) if minor and cfg.minor_keys else cfg.active_keys()
+        count = rng.choice(keys) if cfg.key_signature and not notes_only else 0
+        tonic = mode_tonic(count, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[count]
+        key_name = f"{tonic} {'minor' if minor else 'major'}"
+        if notes_only or not cfg.degrees or cfg.degrees == set(range(1, 8)):
+            diatonic = rng.randint(lo, hi)
+        else:
+            tonic_letter = (4 * count + (5 if minor else 0)) % 7
+            positions = [d for d in range(lo, hi + 1) if (d - tonic_letter) % 7 + 1 in cfg.degrees]
+            diatonic = rng.choice(positions)
+        staff_keys = sorted(cfg.staff_keys) if cfg.staff_keys is not None else [count]
+        staff_signature = rng.choice(staff_keys) if len(staff_keys) > 1 else (staff_keys[0] if staff_keys else 0)
+        implied = key_accidental(diatonic % 7, count=staff_signature if notes_only else count)
         accidental = implied
         if cfg.accidentals and rng.random() < (0.4 if cfg.key_signature else 0.5):
             accidental = rng.choice([a for a in (-1, 0, 1) if a != implied])  # a sign that differs from the key
         note = Note.from_diatonic(diatonic, accidental=accidental)
         naming = settings.note_names.naming
+        if notes_only and naming in settings.DEGREE_NAMINGS:
+            naming = "letters"
         name = spell(
             note,
             naming=naming,
             key=count,
-            octave=True,
+            octave=cfg.octave,
+            minor=minor,
         )
-        prompt = f"Place {name} on the staff."
+        prompt = name if notes_only else f"Place {name} on the staff."
         if naming in settings.DEGREE_NAMINGS:
-            degree = spell(note, naming=naming, key=count)
-            target = f"the {degree}" if naming == "functions" else f"degree {degree}"
-            prompt = f"Place {target}, octave {note.octave}, in {MAJOR_KEYS[count]} major."
+            degree = spell(note, naming=naming, key=count, minor=minor)
+            if naming == "degrees":
+                octave = str(note.octave).translate(str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋")) if cfg.octave else ""
+                prompt = f"{tonic}{'m' if minor else 'M'} {degree}{octave}"
+            else:
+                target = f"the {degree}" if naming == "functions" else f"degree {degree}"
+                register = f", octave {note.octave}," if cfg.octave else ""
+                prompt = f"Place {target}{register} in {key_name}."
+        staff_accidental = key_accidental(note.letter, count=staff_signature)
         explanation = ""
-        if cfg.key_signature and count:
-            key_name = f"{MAJOR_KEYS[count]} major ({format_key_signature(count)})"
-            word = {1: "sharp", -1: "flat", 0: "natural"}
-            if accidental == implied and implied:
-                explanation = f"In {key_name} the key signature already makes this a {word[implied]}, so it needs no sign."
-            elif accidental != implied:
-                explanation = f"In {key_name} this note needs its own {word[accidental]} sign."
+        word = {1: "sharp", -1: "flat", 0: "natural"}
+        if accidental != staff_accidental:
+            explanation = f"{note.name} needs a {word[accidental]} on this staff."
+        elif staff_accidental:
+            explanation = f"The staff signature already makes this note {word[staff_accidental]}, so it needs no sign."
         return Question(
             prompt,
             choices=[],
             answer=name,
             clef=clef,
             construct=note,
-            accidentals=cfg.accidentals,
+            any_octave=not cfg.octave,
+            notes_only=notes_only,
+            accidentals=True,
             key=count,
+            minor=minor,
+            staff_signature=staff_signature if staff_signature != count else None,
             explanation=explanation,
-            caption=prompt if naming in settings.DEGREE_NAMINGS else "",
+            caption=prompt if notes_only or naming in settings.DEGREE_NAMINGS else "",
         )
 
 

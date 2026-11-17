@@ -24,3 +24,12 @@
 
 - For exercise button groups described by a label, place the label above the buttons, rather than beside them.
   Keep the label and its buttons visible or hidden together, and apply this consistently to answer and input controls.
+
+
+## Glossary entries
+
+- Match existing glossary entries with a definition, a short explanation, relevant practice links, and an interactive visual
+  example. Use the shared example controls to cycle through examples and play their notes when the concept involves sound.
+- Choose an illustration that lets the learner see or hear the defining feature. For an interval, show both endpoints.
+  Derive playback and step labels from the displayed pitches. Inspect rendered examples at narrow and wide pane sizes,
+  including ledger lines, accidentals, and key signatures where relevant.

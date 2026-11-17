@@ -646,7 +646,8 @@ def test_the_answer_buttons_have_room_around_them_and_a_widest_area(app: QApplic
     assert margins.left() > 0 and margins.top() > 0 and view.choice_box.spacing() > 0  # padding around them
     rows = {b.geometry().y() for b in view.buttons}
     assert len(view.buttons) == 9 and len(rows) == 2  # nine clefs in two rows of five and four, not one long row
-    left, right = view.choice_area.geometry().left(), view.width() - view.choice_area.geometry().right()
+    left = view.choice_area.mapTo(view, QPoint()).x()
+    right = view.width() - left - view.choice_area.width()
     assert abs(left - right) <= 40  # in the middle
 
 

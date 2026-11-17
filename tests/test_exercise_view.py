@@ -325,9 +325,9 @@ def test_right_click_steps_through_the_signs(construction: ExerciseView) -> None
     assert construction.input_staff.accidental is None
 
 
-def test_right_click_does_nothing_without_the_sign_buttons(app: QApplication) -> None:
+def test_right_click_cycles_note_construction_signs(app: QApplication) -> None:
     """
-    Check that right click does nothing without the sign buttons.
+    Check that right click cycles signs in Note Construction.
 
     Parameters
     ----------
@@ -337,7 +337,7 @@ def test_right_click_does_nothing_without_the_sign_buttons(app: QApplication) ->
     settings.construction.accidentals = False
     view = view_of(NoteConstruction())
     view.input_staff.accidental_cycled.emit()
-    assert view.input_staff.accidental is None
+    assert view.input_staff.accidental == 1
     other = view_of(KeySignatures())
     other._cycle_accidental()  # not a construction question at all
 
