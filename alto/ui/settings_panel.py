@@ -2080,9 +2080,34 @@ def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None:
 
 
 class _LabeledKeyCheckBox(QCheckBox):
-    """Keep the signature and its separate label in the same click target."""
+    """
+    Keep the signature and its separate label in the same click target.
+
+    Examples
+    --------
+    >>> _LabeledKeyCheckBox().isCheckable()
+    True
+    """
 
     def hitButton(self, pos: QPoint) -> bool:
+        """
+        Accept clicks anywhere inside the labeled checkbox.
+
+        Parameters
+        ----------
+        pos : QPoint
+            The click position in widget coordinates.
+
+        Returns
+        -------
+        bool
+            Whether the click is inside the widget.
+
+        Examples
+        --------
+        >>> _LabeledKeyCheckBox().hitButton(QPoint(-1, -1))
+        False
+        """
         return self.rect().contains(pos)
 
 
@@ -2744,9 +2769,31 @@ def load_construction() -> None:
 
 
 class _ScaleKeyPicker(QTabWidget):
-    """Select major and minor keys independently."""
+    """
+    Select major and minor keys independently.
+
+    Examples
+    --------
+    >>> _ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
+    2
+    """
 
     def __init__(self, *, major_keys: set[int], minor_keys: set[int]) -> None:
+        """
+        Build one checklist per mode.
+
+        Parameters
+        ----------
+        major_keys : set of int
+            Selected major signatures. Keyword-only.
+        minor_keys : set of int
+            Selected minor signatures. Keyword-only.
+
+        Examples
+        --------
+        >>> _ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
+        1
+        """
         super().__init__()
         major_names = {count: f"{name}M" for count, name in MAJOR_KEYS.items()}
         self.major_keys = KeyChecklist(major_keys, allow_empty=True, key_names=major_names)
@@ -2814,7 +2861,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         Examples
         --------
         >>> NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-        3
+        4
         """
         super().__init__(parent)
         self.cfg = cfg
@@ -2902,8 +2949,8 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         scale_layout.addWidget(self.degree_choices)
         scale_layout.addStretch()
         self.scale_key_scroll = _scrolling(scale_options)
-        self.scale_key_scroll.setVisible(self.scale_key_choice.isChecked())
         question_layout.addWidget(self.scale_key_scroll, 1)
+        self.scale_key_scroll.setVisible(self.scale_key_choice.isChecked())
         question_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scale_key_choice.toggled.connect(self._question_type_changed)
         keys_page = _subpage("Question Type", body=question_body, back=lambda: self._go(0), fill=True)
@@ -2975,24 +3022,66 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self.changed.emit()
 
     def _degrees_edited(self) -> None:
-        """Save the scale degrees selected for questions."""
+        """
+        Save the scale degrees selected for questions.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._degrees_edited()
+        """
         self.cfg.degrees = self.degree_choices.selected()
         self._save_and_emit()
 
     def _question_type_changed(self, scale_key: bool) -> None:
-        """Save the question type and show the scale key lists when relevant."""
+        """
+        Save the question type and show the scale key lists when relevant.
+
+        Parameters
+        ----------
+        scale_key : bool
+            Whether to ask for a scale degree.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._question_type_changed(False)
+        >>> panel.cfg.question_type
+        'notes'
+        """
         self.cfg.question_type = "scale" if scale_key else "notes"
         self.scale_key_scroll.setVisible(scale_key)
         self._show_keys()
         self._save_and_emit()
 
     def _octave_toggled(self, on: bool) -> None:
-        """Save whether questions require a specific octave."""
+        """
+        Save whether questions require a specific octave.
+
+        Parameters
+        ----------
+        on : bool
+            Whether to require the specified octave.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._octave_toggled(False)
+        >>> panel.cfg.octave
+        False
+        """
         self.cfg.octave = on
         self._save_and_emit()
 
     def _staff_keys_edited(self) -> None:
-        """Save the signatures selected for the staff."""
+        """
+        Save the signatures selected for the staff.
+
+        Examples
+        --------
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
+        >>> panel._staff_keys_edited()
+        """
         self.cfg.staff_keys = self.staff_keys.selected()
         self.staff_keys_diagram.set_keys(self.cfg.staff_keys)
         self._save_and_emit()
@@ -4391,6 +4480,13 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             count_row.setVisible(limited.isChecked())
 
             def save_buttons() -> None:
+                """
+                Save the button mode and count when their controls change.
+
+                Examples
+                --------
+                Open the Buttons page and choose All to save that mode.
+                """
                 cfg.button_mode = "limited" if limited.isChecked() else "all"
                 cfg.button_count = count.currentData()
                 count_row.setVisible(limited.isChecked())
@@ -4406,6 +4502,13 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             )
 
             def save_question_type() -> None:
+                """
+                Save the selected parts of the scale question.
+
+                Examples
+                --------
+                Clear Key on the Question Type page to save Mode alone.
+                """
                 selected = question_types.selected()
                 cfg.question_type = "combined" if len(selected) == 2 else next(iter(selected), "combined")
                 self._save_and_emit()
@@ -4508,7 +4611,24 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.changed.emit()
 
     def _motion_edited(self, direction: str, *, checked: bool) -> None:
-        """Save the selected direction for this scale exercise."""
+        """
+        Save the selected direction for this scale exercise.
+
+        Parameters
+        ----------
+        direction : str
+            The scale direction to save.
+        checked : bool
+            Whether the direction was selected. Keyword-only.
+
+        Examples
+        --------
+        >>> cfg = settings.ScaleIdentificationSettings()
+        >>> panel = KeySignatureSettingsPanel(cfg)
+        >>> panel._motion_edited("descending", checked=True)
+        >>> cfg.motion
+        'descending'
+        """
         if checked and isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             self.cfg.motion = direction
             self._save_and_emit()

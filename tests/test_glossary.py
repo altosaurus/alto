@@ -10,7 +10,14 @@ from alto.ui.glossary import TERMS, GlossaryPage
 
 
 def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> None:
-    """Cycle every term, checking each diagram, its musical intervals, and the pitches sent to playback."""
+    """
+    Cycle every term, checking each diagram, its musical intervals, and the pitches sent to playback.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     page = GlossaryPage()
     page.show()
     with patch("alto.ui.glossary.sounds.preview") as preview, patch("alto.ui.glossary.sounds.stop_all") as stop:
@@ -49,7 +56,14 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
 
 
 def test_glossary_scale_fits_after_resizing(app: QApplication) -> None:
-    """Keep both the longest staff and the complete definition reachable when the pane changes shape."""
+    """
+    Keep both the longest staff and the complete definition reachable when the pane changes shape.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     page = GlossaryPage()
     page.search.setText("major scale")
     page.show()

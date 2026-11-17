@@ -121,7 +121,14 @@ def test_replacement_keeps_the_icon_and_shows_an_answerable_staff(app: QApplicat
 
 
 def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QApplication) -> None:
-    """Switch answer modes through Settings and submit a two-part answer."""
+    """
+    Switch answer modes through Settings and submit a two-part answer.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
     exercise = ScaleIdentification()
     panel = settings_panel_for(exercise)
     assert isinstance(panel, KeySignatureSettingsPanel)
@@ -149,7 +156,18 @@ def test_scale_button_settings_limit_choices_or_accept_a_tonic_and_mode(app: QAp
 
 @pytest.mark.parametrize(("label", "answer"), [("Mode", "Major"), ("Key", "C")])
 def test_question_type_asks_for_one_part(app: QApplication, label: str, answer: str) -> None:
-    """Save a question type and check that it accepts the requested part alone."""
+    """
+    Save a question type and check that it accepts the requested part alone.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    label : str
+        The question type to keep selected.
+    answer : str
+        The expected answer.
+    """
     exercise = ScaleIdentification()
     panel = settings_panel_for(exercise)
     assert isinstance(panel, KeySignatureSettingsPanel)

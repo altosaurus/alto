@@ -402,8 +402,10 @@ def test_note_construction_key_signature() -> None:
         cfg.accidentals,
         cfg.key_signature,
         set(cfg.keys),
+        cfg.staff_keys,
     )
     try:
+        cfg.staff_keys = None
         rng = random.Random(12)
         cfg.clefs, cfg.key_signature, cfg.keys, cfg.accidentals = {"treble"}, True, {2, -3}, False
         qs = [NoteConstruction().generate(rng) for _ in range(400)]
@@ -418,9 +420,9 @@ def test_note_construction_key_signature() -> None:
         differing = [q for q in qs if construct_of(q).accidental != key_accidental(construct_of(q).letter, count=q.key)]
         assert differing and len(differing) < len(qs)
         assert any(construct_of(q).accidental == 0 for q in differing)  # an explicit natural
-        assert all("needs its own" in q.explanation for q in differing)
+        assert all(" on this staff" in q.explanation for q in differing)
 
         cfg.key_signature = False  # off: no signature, and the old behavior
         assert {NoteConstruction().generate(rng).key for _ in range(100)} == {0}
     finally:
-        cfg.clefs, cfg.accidentals, cfg.key_signature, cfg.keys = old
+        cfg.clefs, cfg.accidentals, cfg.key_signature, cfg.keys, cfg.staff_keys = old

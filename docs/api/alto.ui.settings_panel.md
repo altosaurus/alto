@@ -805,7 +805,7 @@ Build the panel for a set of settings.
 
 ```pycon
 >>> NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-3
+4
 ```
 
 ## load_arpeggio
