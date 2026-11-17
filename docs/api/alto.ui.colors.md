@@ -2,11 +2,11 @@
 title: alto.ui.colors
 parent: api
 package: alto.ui
-order: 27
+order: 28
 permalink: /api/alto.ui.colors/
 ---
 {% raw %}
-Mixing colours. The interface blends palette colours to get its soft tints and highlights.
+Mixing colors. The interface blends palette colors to get its soft tints and highlights.
 
 **Examples**
 
@@ -26,17 +26,17 @@ def blend(
 ) -> QColor
 ```
 
-Return the colour a given fraction of the way from one colour to another.
+Return the color a given fraction of the way from one color to another.
 
 **Parameters**
 
-- `a` (*QColor*): The colour at 0.
-- `b` (*QColor*): The colour at 1. Keyword-only.
+- `a` (*QColor*): The color at 0.
+- `b` (*QColor*): The color at 1. Keyword-only.
 - `t` (*float*): How far from `a` to `b`: 0 is `a`, 1 is `b`, 0.5 is halfway. Keyword-only.
 
 **Returns**
 
-- *QColor*: The blended colour.
+- *QColor*: The blended color.
 
 **Examples**
 
@@ -58,17 +58,17 @@ def blend_name(
 ) -> str
 ```
 
-Return the hex name of a blended colour, for use in a stylesheet.
+Return the hex name of a blended color, for use in a stylesheet.
 
 **Parameters**
 
-- `a` (*QColor*): The colour at 0.
-- `b` (*QColor*): The colour at 1. Keyword-only.
+- `a` (*QColor*): The color at 0.
+- `b` (*QColor*): The color at 1. Keyword-only.
 - `t` (*float*): How far from `a` to `b`. Keyword-only.
 
 **Returns**
 
-- *str*: The colour as '#rrggbb'.
+- *str*: The color as '#rrggbb'.
 
 **Examples**
 

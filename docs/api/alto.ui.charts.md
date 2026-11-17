@@ -2,11 +2,11 @@
 title: alto.ui.charts
 parent: api
 package: alto.ui
-order: 24
+order: 25
 permalink: /api/alto.ui.charts/
 ---
 {% raw %}
-Small charts drawn with QPainter, in the application's theme colours.
+Small charts drawn with QPainter, in the application's theme colors.
 
 Stacked bars, a line, horizontal bars and a calendar heatmap. Each has a title, draws a message when there is nothing to
 show, and explains the bar or square under the pointer in a tooltip.
@@ -70,7 +70,7 @@ Questions per period, the first-try right ones in green with the missed ones sta
 
 **Attributes**
 
-- `right` (*list of int*): Questions right first time, per period.
+- `right` (*list of int*): Questions right on the first try, per period.
 - `wrong` (*list of int*): Questions missed, per period.
 
 **Examples**
@@ -114,7 +114,7 @@ Show a count of right and missed questions for each period.
 **Parameters**
 
 - `labels` (*sequence of str*): The label of each period.
-- `right` (*sequence of int*): Questions right first time in each period. Keyword-only.
+- `right` (*sequence of int*): Questions right on the first try in each period. Keyword-only.
 - `wrong` (*sequence of int*): Questions missed in each period. Keyword-only.
 
 **Examples**
@@ -168,7 +168,7 @@ Explain the bar under the pointer in a tooltip.
 >>> chart = StackedBarChart("Questions")
 >>> chart.resize(400, 300)
 >>> chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
->>> point = QPointF(chart._centres()[0], chart._plot().center().y())
+>>> point = QPointF(chart._centers()[0], chart._plot().center().y())
 >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
 ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
 ```
@@ -200,7 +200,7 @@ Periods with no answers leave a gap rather than a zero.
 **Examples**
 
 ```pycon
->>> chart = LineChart("Right first time", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
+>>> chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
 >>> chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
 >>> chart.values
 [40.0, None, 80.0]
@@ -292,7 +292,7 @@ Say what the value under the pointer is in a tooltip.
 >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
 >>> chart.resize(400, 300)
 >>> chart.set_data(["a", "b"], values=[2.0, 3.0])
->>> point = QPointF(chart._centres()[0], chart._plot().center().y())
+>>> point = QPointF(chart._centers()[0], chart._plot().center().y())
 >>> chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
 ...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
 ```
@@ -319,7 +319,7 @@ One bar per name, on a fixed 0-100 scale, each with its value at the end.
 **Examples**
 
 ```pycon
->>> chart = HBarChart("Right first time, by exercise")
+>>> chart = HBarChart("Right on the first try, by exercise")
 >>> chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
 >>> len(chart.rows)
 2

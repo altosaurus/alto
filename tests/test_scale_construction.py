@@ -280,7 +280,7 @@ def test_the_scale_is_right_in_any_octave_so_long_as_all_of_it_is_in_the_same_on
             Note(n.octave - (1 if i < 4 else 0), letter=n.letter, accidental=n.accidental)
             for i, n in enumerate(q.construct_scale)
         ]
-        assert not q.check_scale(low_half)  # the first half an octave down: not one scale any more
+        assert not q.check_scale(low_half)  # the first half an octave down: no longer one scale
 
 
 def test_only_the_exact_notes_in_order_are_right() -> None:
@@ -294,7 +294,7 @@ def test_only_the_exact_notes_in_order_are_right() -> None:
     assert not q.check_scale(scale[:-1]) and not q.check_scale([*scale, scale[0]])
     assert not q.check_scale([*scale[:2][::-1], *scale[2:]])  # the right notes in the wrong order
     enharmonic = [Note.from_diatonic(n.diatonic, accidental=n.accidental + 1) if n.accidental == -1 else n for n in scale]
-    assert not q.check_scale(enharmonic)  # B♭ is not A♯ spelt B♮ and the like
+    assert not q.check_scale(enharmonic)  # B♭ is not A♯ spelled B♮ and the like
     assert not Question("no scale", choices=["a"], answer="a").check_scale(scale)
 
 
@@ -371,9 +371,9 @@ def test_each_click_fills_the_next_place_from_the_left(app: QApplication) -> Non
     assert len(staff.notes) == 4 and len(changes) == 4
 
 
-def test_the_next_note_follows_the_pointer_in_the_next_place_in_a_lighter_colour(app: QApplication) -> None:
+def test_the_next_note_follows_the_pointer_in_the_next_place_in_a_lighter_color(app: QApplication) -> None:
     """
-    Check that the note under the pointer is shown in the next place and in its own colour, and goes when the pointer leaves.
+    Check that the note under the pointer is shown in the next place and in its own color, and goes when the pointer leaves.
 
     Parameters
     ----------
@@ -517,7 +517,7 @@ def test_the_sign_is_used_up_by_each_note(app: QApplication) -> None:
 
 def test_right_click_steps_through_no_sign_sharp_and_flat(app: QApplication) -> None:
     """
-    Check that right clicking the staff steps through no sign, a sharp and a flat, and round again.
+    Check that right clicking the staff steps through no sign, a sharp and a flat, and around again.
 
     Parameters
     ----------
@@ -590,7 +590,7 @@ def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
         token: int,
     ) -> None:
         """
-        Pass a note's colouring on, noting which columns are green afterwards.
+        Pass a note's coloring on, noting which columns are green afterwards.
 
         Parameters
         ----------
@@ -633,12 +633,12 @@ def test_the_notes_turn_green_on_time_even_with_the_sound_off(
     assert view.question is not first and view.scale_input.column_colors == {}
 
 
-def test_a_scale_that_was_playing_does_not_colour_the_next_questions_staff(
+def test_a_scale_that_was_playing_does_not_color_the_next_questions_staff(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that changing a setting while a scale plays does not leave the old scale colouring notes on the new, blank staff.
+    Check that changing a setting while a scale plays does not leave the old scale coloring notes on the new, blank staff.
 
     Parameters
     ----------
@@ -1104,7 +1104,7 @@ def test_during_note_placement_the_wheel_steps_through_the_signs(app: QApplicati
 
 def test_the_wheel_cycles_none_sharp_flat_and_round_again_and_the_sign_is_used_by_the_next_note(app: QApplication) -> None:
     """
-    Check on the screen that the wheel goes none, sharp, flat and round, lights the sign buttons, and is used up by a note.
+    Check on the screen that the wheel goes none, sharp, flat and back around, lights the sign buttons, and is used up by a note.
 
     Parameters
     ----------
@@ -1118,7 +1118,7 @@ def test_the_wheel_cycles_none_sharp_flat_and_round_again_and_the_sign_is_used_b
     for delta in (120, 120, 120, 120, -120, -120, -120):
         roll(staff, delta=delta)
         seen.append(staff.accidental)
-    assert seen == [1, -1, None, 1, None, -1, 1]  # up goes none, sharp, flat; down goes back, and both wrap round
+    assert seen == [1, -1, None, 1, None, -1, 1]  # up goes none, sharp, flat; down goes back, and both wrap around
     assert view.accidental_buttons[1].isChecked() and not view.accidental_buttons[-1].isChecked()
     click(staff, Note.parse("F4"))
     assert str(staff.notes[0]) == "F♯4" and staff.accidental is None and not view.accidental_buttons[1].isChecked()
@@ -1249,9 +1249,9 @@ def test_undo_takes_back_the_steps_before_the_notes(app: QApplication) -> None:
     assert staff.steps == [] and len(staff.notes) == 2 and not staff.placing_steps
 
 
-def test_the_lines_of_a_step_are_drawn_above_the_notes_they_join_and_take_their_own_colour(app: QApplication) -> None:
+def test_the_lines_of_a_step_are_drawn_above_the_notes_they_join_and_take_their_own_color(app: QApplication) -> None:
     """
-    Check that on the staff the step is drawn above the notes, not under the staff, and that its colour can be its own.
+    Check that on the staff the step is drawn above the notes, not under the staff, and that its color can be its own.
 
     Parameters
     ----------
@@ -1280,7 +1280,7 @@ def test_the_lines_of_a_step_are_drawn_above_the_notes_they_join_and_take_their_
         for x in range(tinted.width())
         if tinted.pixelColor(x, y).red() > 150 > tinted.pixelColor(x, y).green()
     ]
-    assert red and max(y for _, y in red) < bottom  # the first step takes its own colour
+    assert red and max(y for _, y in red) < bottom  # the first step takes its own color
     assert len({x for x, _ in red}) < 400  # and only the first, not the second
 
 
@@ -1645,7 +1645,7 @@ def test_natural_is_one_of_the_signs_the_wheel_and_right_click_step_through_on_a
     app: QApplication,
 ) -> None:
     """
-    Check that with a signature on the staff the signs are none, sharp, flat and natural, round again, as in note construction.
+    Check that with a signature on the staff the signs are none, sharp, flat and natural, around again, as in note construction.
 
     Parameters
     ----------
@@ -1734,7 +1734,7 @@ def test_the_names_of_the_rows_fit_beside_their_pictures(app: QApplication) -> N
     """
     Check that no row of the settings menu has its name cut off, even in a font wider than the usual one.
 
-    The keys are all ticked, so that the pictures are as wide as they get, and the pane has the width it has in the window.
+    The keys are all checked, so that the pictures are as wide as they get, and the pane has the width it has in the window.
 
     Parameters
     ----------

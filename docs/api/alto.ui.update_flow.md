@@ -2,7 +2,7 @@
 title: alto.ui.update_flow
 parent: api
 package: alto.ui
-order: 61
+order: 64
 permalink: /api/alto.ui.update_flow/
 ---
 {% raw %}
@@ -199,7 +199,7 @@ A small window with a bar that keeps moving and a Cancel button, shown while som
 **Attributes**
 
 - `ended` (*bool*): Whether the asking has ended, by an answer, a failure or a cancel.
-- `cancelled` (*bool*): Whether the person cancelled it.
+- `canceled` (*bool*): Whether the person canceled it.
 
 **Constructor**
 
@@ -261,7 +261,7 @@ Ask, showing the window until there is an answer.
 
 ```pycon
 >>> # noinspection PyTypeChecker
->>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").cancelled
+>>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").canceled
 False
 ```
 
@@ -352,7 +352,7 @@ Ask, showing the window until there is an answer.
 
 ```pycon
 >>> # noinspection PyTypeChecker
->>> ReleaseDialog(None).cancelled
+>>> ReleaseDialog(None).canceled
 False
 ```
 

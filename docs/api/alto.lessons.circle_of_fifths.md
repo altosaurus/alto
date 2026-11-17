@@ -8,7 +8,7 @@ permalink: /api/alto.lessons.circle_of_fifths/
 {% raw %}
 The lesson on the circle of fifths, taught from nothing.
 
-It covers what a key is, what a fifth is, how the circle counts sharps and flats, and what the inner ring and the neighbours of a
+It covers what a key is, what a fifth is, how the circle counts sharps and flats, and what the inner ring and the neighbors of a
 key mean.
 
 **Examples**
@@ -174,10 +174,10 @@ Ask for the relative minor of a major key, answered on the circle.
 True
 ```
 
-## neighbour_task
+## neighbor_task
 
 ```python
-def neighbour_task(rng: random.Random) -> Task
+def neighbor_task(rng: random.Random) -> Task
 ```
 
 Ask for the key a fifth above or below a random key, answered on the circle.
@@ -193,7 +193,7 @@ Ask for the key a fifth above or below a random key, answered on the circle.
 **Examples**
 
 ```pycon
->>> task = neighbour_task(random.Random(5))
+>>> task = neighbor_task(random.Random(5))
 >>> ring, at = next(iter(task.cells))
 >>> ring, at in range(12)
 ('outer', True)

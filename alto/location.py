@@ -2,7 +2,7 @@
 Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`.
 
 Without `ALTO_HOME` they are in the usual places for the system. With it, both are in that folder instead, so a copy of Alto
-that is being worked on can have its own history and settings, apart from the copy that is used for practising.
+that is being worked on can have its own history and settings, apart from the copy that is used for practicing.
 
 Examples
 --------

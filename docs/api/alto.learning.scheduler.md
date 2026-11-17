@@ -113,7 +113,7 @@ def weight(
 Return how likely a question is to be picked, relative to the others.
 
 A question just seen is held back for a while, long for an easy one and short for a hard one, so what you have
-learned is not repeated straight away but what you struggle with returns within the minute.
+learned is not repeated right away but what you struggle with returns within the minute.
 
 **Parameters**
 

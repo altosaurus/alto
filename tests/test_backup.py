@@ -107,7 +107,7 @@ def forge(
 
 
 def test_importing_a_backup_into_a_clean_install_restores_every_row_exactly(
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     tmp_path: Path,
 ) -> None:
     """
@@ -115,13 +115,13 @@ def test_importing_a_backup_into_a_clean_install_restores_every_row_exactly(
 
     Parameters
     ----------
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    source = practised_learner(60).db
-    practised_learner(30, name="Ben", db=source)
+    source = practiced_learner(60).db
+    practiced_learner(30, name="Ben", db=source)
     path = tmp_path / "all.altobackup"
     info = write_backup(source, settings={}, path=path)
     clean = Database()
@@ -132,7 +132,7 @@ def test_importing_a_backup_into_a_clean_install_restores_every_row_exactly(
 
 
 def test_a_restored_database_works_as_before(
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     tmp_path: Path,
 ) -> None:
     """
@@ -140,12 +140,12 @@ def test_a_restored_database_works_as_before(
 
     Parameters
     ----------
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    source = practised_learner(30).db
+    source = practiced_learner(30).db
     ada = source.profiles()[0]
     write_backup(source, settings={}, path=tmp_path / "a.altobackup")
     target = Database(tmp_path / "target.db")

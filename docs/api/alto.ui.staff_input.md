@@ -2,7 +2,7 @@
 title: alto.ui.staff_input
 parent: api
 package: alto.ui
-order: 52
+order: 55
 permalink: /api/alto.ui.staff_input/
 ---
 {% raw %}
@@ -38,7 +38,7 @@ the note that would be placed: `move_cursor` and `jump_to_letter` move it, and `
 - `caret_moved` (*Signal*): Emitted when the caret moves.
 - `accidental` (*int or None*): The sign you chose (-1 flat, 0 natural, 1 sharp); None follows the key signature.
 - `locked` (*bool*): Ignore the mouse (while feedback is showing).
-- `caret` (*int or None*): The staff step of the note that the keyboard would place, as `Note.diatonic` counts them; None until the keyboard or a click has put it somewhere. Once it has a place the note is shown in the preview colour while the pointer is away.
+- `caret` (*int or None*): The staff step of the note that the keyboard would place, as `Note.diatonic` counts them; None until the keyboard or a click has put it somewhere. Once it has a place the note is shown in the preview color while the pointer is away.
 
 **Examples**
 
@@ -295,7 +295,7 @@ Draw a single note on the staff, or clear it.
 **Parameters**
 
 - `note` (*Note or None*): The note to draw; None clears the staff.
-- `color` (*QColor or None, default None*): The colour to draw it in; the notation's own ink if None. Keyword-only.
+- `color` (*QColor or None, default None*): The color to draw it in; the notation's own ink if None. Keyword-only.
 
 **Examples**
 
@@ -339,7 +339,7 @@ has put the caret somewhere.
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Show the note under the pointer, in a lighter colour.
+Show the note under the pointer, in a lighter color.
 
 **Parameters**
 
@@ -422,8 +422,8 @@ A staff you click to place the notes of a scale one after another, left to right
 The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
 moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.
 
-When steps are asked for, once all the notes are placed two lines rise from each pair of neighbouring notes to a point
-above them (a wedge). The step to be marked next is shown there, in the preview colour, as "W" (whole) or "H" (half).
+When steps are asked for, once all the notes are placed two lines rise from each pair of neighboring notes to a point
+above them (a wedge). The step to be marked next is shown there, in the preview color, as "W" (whole) or "H" (half).
 The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.
 
 **Attributes**
@@ -594,7 +594,7 @@ Show the pointer's note in the next place, or take it away.
 **Parameters**
 
 - `note` (*Note or None*): The note to show; None shows none.
-- `color` (*QColor or None, default None*): Unused: the note under the pointer is always drawn in the preview colour. Keyword-only.
+- `color` (*QColor or None, default None*): Unused: the note under the pointer is always drawn in the preview color. Keyword-only.
 
 **Examples**
 
@@ -811,7 +811,7 @@ Bases: `StaffWidget`
 A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.
 
 The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
-follows the pointer from place to place, in a lighter colour, until you click. Without the mouse, `move_caret` moves it,
+follows the pointer from place to place, in a lighter color, until you click. Without the mouse, `move_caret` moves it,
 `step_symbol` switches the symbol and `place_caret` places it.
 
 **Attributes**
@@ -903,7 +903,7 @@ Choose a symbol.
 def step_symbol(direction: int) -> None
 ```
 
-Choose the next symbol of the options, or the one before, going round.
+Choose the next symbol of the options, or the one before, going around.
 
 **Parameters**
 
@@ -1038,11 +1038,11 @@ True
 def set_clef_color(color: QColor | None) -> None
 ```
 
-Draw the placed symbol in a colour, for feedback, or back in black.
+Draw the placed symbol in a color, for feedback, or back in black.
 
 **Parameters**
 
-- `color` (*QColor or None*): The colour; None for black.
+- `color` (*QColor or None*): The color; None for black.
 
 **Examples**
 
@@ -1059,7 +1059,7 @@ True
 def mouseMoveEvent(event: QMouseEvent) -> None
 ```
 
-Show the symbol in the place under the pointer, in a lighter colour.
+Show the symbol in the place under the pointer, in a lighter color.
 
 **Parameters**
 

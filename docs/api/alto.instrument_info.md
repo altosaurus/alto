@@ -114,7 +114,7 @@ Describe the coverage in a sentence for the instrument settings.
 
 **Returns**
 
-- *str*: The number of notes, the range, and how complete it is (the spacing, when the notes are well apart). Missing notes are shifted from a neighbour.
+- *str*: The number of notes, the range, and how complete it is (the spacing, when the notes are well apart). Missing notes are shifted from a neighbor.
 
 **Examples**
 
@@ -122,11 +122,11 @@ Describe the coverage in a sentence for the instrument settings.
 >>> coverage(range(60, 73)).describe()
 '13 notes, C4 to C5, every semitone'
 >>> coverage([60, 62, 64, 65]).describe()
-'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbour.'
+'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
 >>> coverage(range(48, 73, 2)).describe()
-'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbour.'
+'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
 >>> coverage(range(21, 109, 3)).describe()
-'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbour.'
+'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
 ```
 
 ## coverage
@@ -135,7 +135,7 @@ Describe the coverage in a sentence for the instrument settings.
 def coverage(midis: Iterable[int]) -> Coverage
 ```
 
-Summarise the notes that have a recording.
+Summarize the notes that have a recording.
 
 **Parameters**
 

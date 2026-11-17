@@ -302,7 +302,7 @@ that start together. Nothing plays while muted unless
 def stop_all() -> None
 ```
 
-Silence every note at once, and cancel any fade-outs under way.
+Silence every note at once, and cancel any fade-outs underway.
 
 **Examples**
 

@@ -2,7 +2,7 @@
 title: alto.ui.engraving
 parent: api
 package: alto.ui
-order: 30
+order: 32
 permalink: /api/alto.ui.engraving/
 ---
 {% raw %}
@@ -88,12 +88,12 @@ def draw_note(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     stem_down: bool = False,
 ) -> None
 ```
 
-Draw a note with its head centred on a point.
+Draw a note with its head centered on a point.
 
 The head, then a stem and (for the short values) a flag, placed on the font's anchors.
 
@@ -102,10 +102,10 @@ The head, then a stem and (for the short values) a flag, placed on the font's an
 - `p` (*QPainter*): The painter to draw with.
 - `font` (*str*): A key of `_FILES`. Keyword-only.
 - `value` (*str*): "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second". Keyword-only.
-- `x` (*float*): The head's centre, in pixels. Keyword-only.
-- `y` (*float*): The head's centre, in pixels. Keyword-only.
+- `x` (*float*): The head's center, in pixels. Keyword-only.
+- `y` (*float*): The head's center, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines in pixels. Keyword-only.
-- `colour` (*QColor*): The colour. Keyword-only.
+- `color` (*QColor*): The color. Keyword-only.
 - `stem_down` (*bool, default False*): Draw the stem down. Keyword-only.
 
 **Examples**
@@ -115,7 +115,7 @@ The head, then a stem and (for the short values) a flag, placed on the font's an
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
 >>> painter = QPainter(image)
->>> draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, colour=QColor("black"))
+>>> draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, color=QColor("black"))
 >>> painter.end()
 True
 >>> image.pixelColor(50, 60).lightness() < 128
@@ -133,7 +133,7 @@ def draw_clef(
     x: float,
     bottom: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
 ) -> None
 ```
 
@@ -147,7 +147,7 @@ Draw a clef with its left edge at a point.
 - `x` (*float*): The clef's left edge, in pixels. Keyword-only.
 - `bottom` (*float*): The y position of the staff's bottom line, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines in pixels. Keyword-only.
-- `colour` (*QColor*): The colour. Keyword-only.
+- `color` (*QColor*): The color. Keyword-only.
 
 **Examples**
 
@@ -156,7 +156,7 @@ Draw a clef with its left edge at a point.
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
 >>> painter = QPainter(image)
->>> draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, colour=QColor("black"))
+>>> draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, color=QColor("black"))
 >>> painter.end()
 True
 >>> any(image.pixelColor(x_, y).lightness() < 128 for x_ in range(10, 40) for y in range(20, 90))
@@ -204,7 +204,7 @@ def draw_accidental(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     fit: float | None = None,
 ) -> float
 ```
@@ -219,7 +219,7 @@ Draw a sharp, flat or natural with its left edge at a point.
 - `x` (*float*): The glyph's left edge, in pixels. Keyword-only.
 - `y` (*float*): The glyph's reference line, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines in pixels. Keyword-only.
-- `colour` (*QColor*): The colour. Keyword-only.
+- `color` (*QColor*): The color. Keyword-only.
 - `fit` (*float or None, default None*): If given, shrink the glyph to be no wider than this many pixels. Keyword-only.
 
 **Returns**
@@ -232,8 +232,8 @@ Draw a sharp, flat or natural with its left edge at a point.
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> painter = QPainter(image)
->>> normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, colour=QColor("black"))
->>> squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, colour=QColor("black"), fit=5.0)
+>>> normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"))
+>>> squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"), fit=5.0)
 >>> painter.end()
 True
 >>> squeezed <= 5.0 < normal
@@ -250,7 +250,7 @@ def draw_brace(
     x: float,
     y0: float,
     y1: float,
-    colour: QColor,
+    color: QColor,
     width: float,
 ) -> bool
 ```
@@ -264,7 +264,7 @@ Draw the font's brace stretched between two heights, for a grand staff.
 - `x` (*float*): The brace's right edge, in pixels. Keyword-only.
 - `y0` (*float*): The top, in pixels. Keyword-only.
 - `y1` (*float*): The bottom, in pixels. Keyword-only.
-- `colour` (*QColor*): The colour. Keyword-only.
+- `color` (*QColor*): The color. Keyword-only.
 - `width` (*float*): How wide to draw it, in pixels. Keyword-only.
 
 **Returns**
@@ -277,7 +277,7 @@ Draw the font's brace stretched between two heights, for a grand staff.
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> painter = QPainter(image)
->>> draw_brace(painter, font="bravura", x=30, y0=10, y1=90, colour=QColor("black"), width=12)
+>>> draw_brace(painter, font="bravura", x=30, y0=10, y1=90, color=QColor("black"), width=12)
 True
 >>> painter.end()
 True

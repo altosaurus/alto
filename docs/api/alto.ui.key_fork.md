@@ -2,7 +2,7 @@
 title: alto.ui.key_fork
 parent: api
 package: alto.ui
-order: 36
+order: 39
 permalink: /api/alto.ui.key_fork/
 ---
 {% raw %}
@@ -35,7 +35,7 @@ Return where a signature sits on the fork.
 
 **Returns**
 
-- *QPointF*: The centre of its number, in the widget's coordinates.
+- *QPointF*: The center of its number, in the widget's coordinates.
 
 **Examples**
 
@@ -60,7 +60,7 @@ Return the way along the fork from the end of the stem to a signature.
 
 **Returns**
 
-- *list of QPointF*: The points to pass through: the stem's end, round the bend of the U to the tine and then each number up to the one asked.
+- *list of QPointF*: The points to pass through: the stem's end, around the bend of the U to the tine and then each number up to the one asked.
 
 **Examples**
 
@@ -85,7 +85,7 @@ def path_between(
 
 Return the way along the fork from one signature to another.
 
-The circle goes back along the tine it is on, round the U and out along the other, never across the gap between the tines.
+The circle goes back along the tine it is on, around the U and out along the other, never across the gap between the tines.
 
 **Parameters**
 
@@ -103,7 +103,7 @@ The circle goes back along the tine it is on, round the U and out along the othe
 True
 >>> path_between(1, b=-1)[0] == node_position(1) and path_between(1, b=-1)[-1] == node_position(-1)
 True
->>> any(abs(p.x() - APEX_X) < 1e-9 for p in path_between(1, b=-1))  # it goes round the U, through its apex
+>>> any(abs(p.x() - APEX_X) < 1e-9 for p in path_between(1, b=-1))  # it goes around the U, through its apex
 True
 ```
 
@@ -151,7 +151,7 @@ Return the point on the fork's line that is closest to a point.
 
 **Returns**
 
-- *QPointF*: The closest point on the way from the last sharp, round the U, to the last flat.
+- *QPointF*: The closest point on the way from the last sharp, around the U, to the last flat.
 
 **Examples**
 
@@ -201,7 +201,7 @@ Draw a natural sign: two upright lines joined by two slanting bars.
 - `p` (*QPainter*): The painter to draw with.
 - `center` (*QPointF*): The middle of the sign. Keyword-only.
 - `height` (*float*): How tall it is, in pixels. Keyword-only.
-- `color` (*QColor*): The colour of the lines. Keyword-only.
+- `color` (*QColor*): The color of the lines. Keyword-only.
 
 **Examples**
 
@@ -294,11 +294,11 @@ Choose a signature and move the circle to it.
 def set_marker_color(color: QColor | None) -> None
 ```
 
-Colour the circle, for a right or wrong answer.
+Color the circle, for a right or wrong answer.
 
 **Parameters**
 
-- `color` (*QColor or None*): The colour to use, or None for the highlight colour.
+- `color` (*QColor or None*): The color to use, or None for the highlight color.
 
 **Examples**
 
@@ -445,7 +445,7 @@ def wheelEvent(event: QWheelEvent) -> None
 
 Move the circle one number along the fork for each notch of the wheel.
 
-Rolling up goes towards more sharps and down towards more flats, passing through the natural sign.
+Rolling up goes toward more sharps and down toward more flats, passing through the natural sign.
 
 **Parameters**
 

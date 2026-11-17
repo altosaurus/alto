@@ -177,6 +177,88 @@ Make two notes whose interval is to be named.
 True
 ```
 
+## KeyboardIntervals
+
+```python
+class KeyboardIntervals(Exercise)
+```
+
+Identify the ascending interval between two highlighted piano keys.
+
+**Attributes**
+
+- `INTERVALS` (*tuple of str*): Conventional names for every distance on the piano, including compound intervals and combined tritone answers.
+
+**Examples**
+
+```pycon
+>>> q = KeyboardIntervals().generate(random.Random(5))
+>>> len(q.keyboard_notes), q.answer in q.choices, q.staff
+(2, True, [])
+```
+
+### KeyboardIntervals.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the keyboard range and selected intervals for stored-question reviews.
+
+**Returns**
+
+- *str*: The settings that determine which questions can be asked.
+
+**Examples**
+
+```pycon
+>>> bool(KeyboardIntervals().settings_signature())
+True
+```
+
+### KeyboardIntervals.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to identify an interval from two highlighted keys.
+
+**Returns**
+
+- *str*: HTML explaining interval names and enharmonic ambiguity on the keyboard.
+
+**Examples**
+
+```pycon
+>>> "A4 / d5" in KeyboardIntervals().instructions()
+True
+```
+
+### KeyboardIntervals.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Highlight two distinct keys at a selected interval within the chosen range.
+
+**Parameters**
+
+- `rng` (*random.Random*): The random number generator.
+
+**Returns**
+
+- *Question*: Two highlighted keys and either a limited number of choices or a fixed bank for every selected interval. A prompt is returned if none are selected.
+
+**Examples**
+
+```pycon
+>>> q = KeyboardIntervals().generate(random.Random(7))
+>>> 1 <= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi <= 12
+True
+```
+
 ## KeySignatures
 
 ```python

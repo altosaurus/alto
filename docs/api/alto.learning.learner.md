@@ -57,7 +57,7 @@ Create a learner for one profile.
 **Parameters**
 
 - `db` (*Database*): The database to read and write.
-- `profile` (*Profile*): The profile that is practising. Keyword-only.
+- `profile` (*Profile*): The profile that is practicing. Keyword-only.
 
 **Constructor examples**
 
@@ -84,7 +84,7 @@ Return the next question: a mix of new ones and ones asked before under the same
 
 **Parameters**
 
-- `exercise` (*Exercise*): The exercise being practised.
+- `exercise` (*Exercise*): The exercise being practiced.
 - `rng` (*random.Random*): The random number generator used to make new questions and to draw one. Keyword-only.
 - `avoid` (*str or None, default None*): The `item_key` of the question just asked, so it does not come straight back. Keyword-only.
 - `now` (*float or None, default None*): The current time as a timestamp; the clock is used if None. Keyword-only.
@@ -124,7 +124,7 @@ Log one answer and update what is known about the question.
 
 **Parameters**
 
-- `exercise` (*Exercise*): The exercise being practised.
+- `exercise` (*Exercise*): The exercise being practiced.
 - `question` (*Question*): The question that was answered. Keyword-only.
 - `answer` (*str*): What was answered. Keyword-only.
 - `correct` (*bool*): Whether the answer was right. Keyword-only.

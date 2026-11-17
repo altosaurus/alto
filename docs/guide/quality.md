@@ -14,7 +14,7 @@ is the reasoning.
 | Layer | Catches | Where | When it runs |
 |---|---|---|---|
 | **Doctests** | a docstring example that no longer matches the code | every `>>>` line under `alto/` | with `pytest` |
-| **Unit and widget tests** | wrong behaviour | `tests/` | with `pytest` |
+| **Unit and widget tests** | wrong behavior | `tests/` | with `pytest` |
 | **Docstring check** | missing or incomplete documentation | `tests/test_docstrings.py` | with `pytest` |
 | **Docs checks** | a screenshot or API page out of date | `tests/test_docs.py`, `tests/test_api_docs.py`, `scripts/check-docs.sh` | with `pytest`, and on push |
 | **Ruff** | style, unused code, import order, many bugs | `ruff format`, `ruff check` | on commit, in CI |
@@ -47,7 +47,7 @@ Two `conftest.py` files set the stage.
 - **`tests/conftest.py`** serves the tests: the same isolation, a session-wide `app` fixture, and an automatic fixture that, around
   every test, resets the exercise settings to their defaults, resets the keyboard and notation styles, clears the saved settings,
   turns sound off, closes every window and closes every database a test left open. That is why tests do not affect each other:
-  each starts from the same state. `practised_learner` builds a learner with months of made-up answers for tests that need
+  each starts from the same state. `practiced_learner` builds a learner with months of made-up answers for tests that need
   history.
 
 ### What to test
@@ -65,7 +65,7 @@ Two `conftest.py` files set the stage.
 1. Write it so that it fails first. A test that has never failed has not been shown to test anything.
 2. One reason to fail. If it asserts five unrelated things, you cannot tell which broke.
 3. Seed every random source. A flaky test teaches people to ignore red.
-4. Do not test private details if a public behaviour says the same thing. The exceptions are private helpers that are hard to
+4. Do not test private details if a public behavior says the same thing. The exceptions are private helpers that are hard to
    reach through the public interface (the animations' final states, for example).
 5. Keep durations short: `QTest.qWait` costs real time.
 
@@ -137,7 +137,7 @@ Alto is installed from source today. When you want to cut a release:
 3. **Migrations.** If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
    copy `alto.db` first.
 4. **Regenerate** screenshots and the API pages, and check [Your data]({{ '/data/' | relative_url }}) is still true.
-5. **Update the licence notices** in `THIRD_PARTY_NOTICES.md` if you added fonts or recordings, and check their licences allow
+5. **Update the license notices** in `THIRD_PARTY_NOTICES.md` if you added fonts or recordings, and check their licenses allow
    redistribution.
 6. **Build** the package: `python -m pip install build` then `python -m build` produces a source distribution and a wheel in `dist/`.
    Open the wheel (it is a zip) and check that the fonts and recordings are inside; `pyproject.toml` lists them under

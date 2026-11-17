@@ -2,7 +2,7 @@
 Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes.
 
 Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
-as the label of a choice. Colours come from the palette, so they work in light and dark themes.
+as the label of a choice. Colors come from the palette, so they work in light and dark themes.
 
 Examples
 --------
@@ -61,7 +61,7 @@ CLEF_NAMES = {
     "baritone_c": "Baritone (C clef)",
 }  # the two ways of writing the baritone clef
 VALUE_NAMES = {
-    "breve": "Breve",
+    "breve": "Double whole note",
     "whole": "Whole",
     "half": "Half",
     "quarter": "Quarter",
@@ -80,14 +80,14 @@ def symbol_icon(
     """
     Draw a clef symbol on its own, without a staff, as an icon.
 
-    The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centred.
+    The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centered.
 
     Parameters
     ----------
     symbol : str
         "G", "C" or "F".
     color : QColor
-        The colour to draw it in. Keyword-only.
+        The color to draw it in. Keyword-only.
     height : int, default 56
         The icon's height in pixels, which is also as wide as it is. Keyword-only.
 
@@ -191,9 +191,9 @@ class _Picture(QWidget):
         """
         self.setFixedSize(round(width * self.scale), round(height * self.scale))
 
-    def _colours(self) -> tuple[QColor, QColor]:
+    def _colors(self) -> tuple[QColor, QColor]:
         """
-        Return the colours to draw with.
+        Return the colors to draw with.
 
         Returns
         -------
@@ -202,7 +202,7 @@ class _Picture(QWidget):
 
         Examples
         --------
-        >>> ink, line_ = _Picture()._colours()
+        >>> ink, line_ = _Picture()._colors()
         >>> ink.isValid() and line_.isValid()
         True
         """
@@ -242,7 +242,7 @@ class _Picture(QWidget):
         x0: float,
         x1: float,
         y: float,
-        colour: QColor,
+        color: QColor,
         width: float = 1.0,
     ) -> None:
         """
@@ -260,8 +260,8 @@ class _Picture(QWidget):
             The right end. Keyword-only.
         y : float
             The height of the line. Keyword-only.
-        colour : QColor
-            The colour. Keyword-only.
+        color : QColor
+            The color. Keyword-only.
         width : float, default 1.0
             The thickness in picture units. Keyword-only.
 
@@ -273,7 +273,7 @@ class _Picture(QWidget):
         >>> painter = QPainter(image)
         >>> picture = _Picture()
         >>> picture._dev = 1.0  # one device pixel per picture unit
-        >>> picture._hline(painter, x0=0, x1=20, y=10, colour=QColor("black"))
+        >>> picture._hline(painter, x0=0, x1=20, y=10, color=QColor("black"))
         >>> painter.end()
         True
         >>> image.pixelColor(10, 10).lightness() < 128
@@ -284,7 +284,7 @@ class _Picture(QWidget):
         y = (int(y * d) + 0.5) / d if n % 2 else round(y * d) / d
         p.setPen(
             QPen(
-                colour,
+                color,
                 n / d,
                 Qt.PenStyle.SolidLine,
                 Qt.PenCapStyle.FlatCap,
@@ -300,7 +300,7 @@ class _Picture(QWidget):
         x: float,
         y0: float,
         y1: float,
-        colour: QColor,
+        color: QColor,
         width: float = 1.0,
     ) -> None:
         """
@@ -316,8 +316,8 @@ class _Picture(QWidget):
             The top end. Keyword-only.
         y1 : float
             The bottom end. Keyword-only.
-        colour : QColor
-            The colour. Keyword-only.
+        color : QColor
+            The color. Keyword-only.
         width : float, default 1.0
             The thickness in picture units. Keyword-only.
 
@@ -329,7 +329,7 @@ class _Picture(QWidget):
         >>> painter = QPainter(image)
         >>> picture = _Picture()
         >>> picture._dev = 1.0
-        >>> picture._vline(painter, x=10, y0=0, y1=20, colour=QColor("black"))
+        >>> picture._vline(painter, x=10, y0=0, y1=20, color=QColor("black"))
         >>> painter.end()
         True
         >>> image.pixelColor(10, 10).lightness() < 128
@@ -340,7 +340,7 @@ class _Picture(QWidget):
         x = (int(x * d) + 0.5) / d if n % 2 else round(x * d) / d
         p.setPen(
             QPen(
-                colour,
+                color,
                 n / d,
                 Qt.PenStyle.SolidLine,
                 Qt.PenCapStyle.FlatCap,
@@ -384,7 +384,7 @@ class _Picture(QWidget):
         x1: float,
         bottom: float,
         gap: float,
-        colour: QColor,
+        color: QColor,
     ) -> None:
         """
         Draw five staff lines.
@@ -401,8 +401,8 @@ class _Picture(QWidget):
             The height of the bottom line. Keyword-only.
         gap : float
             The distance between lines. Keyword-only.
-        colour : QColor
-            The colour. Keyword-only.
+        color : QColor
+            The color. Keyword-only.
 
         Examples
         --------
@@ -412,7 +412,7 @@ class _Picture(QWidget):
         >>> painter = QPainter(image)
         >>> picture = _Picture()
         >>> picture._dev = 1.0
-        >>> picture._staff(painter, x0=0, x1=40, bottom=30, gap=5, colour=QColor("black"))
+        >>> picture._staff(painter, x0=0, x1=40, bottom=30, gap=5, color=QColor("black"))
         >>> painter.end()
         True
         """
@@ -422,7 +422,7 @@ class _Picture(QWidget):
                 x0=x0,
                 x1=x1,
                 y=bottom - n * gap,
-                colour=colour,
+                color=color,
                 width=0.65,
             )
 
@@ -548,7 +548,7 @@ class ClefPictures(_Picture):
         False
         """
         p = self._painter()
-        text, line = self._colours()
+        text, line = self._colors()
         for i, clef in enumerate(self.clefs):
             x = i * (self.W + self.SPACING)
             if clef == "grand":
@@ -565,7 +565,7 @@ class ClefPictures(_Picture):
                 x1=x + self.W - 1,
                 bottom=24.0,
                 gap=self.GAP,
-                colour=line,
+                color=line,
             )
             # noinspection PyProtectedMember
             StaffWidget._draw_clef(
@@ -596,9 +596,9 @@ class ClefPictures(_Picture):
         x : float
             The left edge, in picture units. Keyword-only.
         text : QColor
-            The colour of the clefs and brace. Keyword-only.
+            The color of the clefs and brace. Keyword-only.
         line : QColor
-            The colour of the staff lines. Keyword-only.
+            The color of the staff lines. Keyword-only.
 
         Examples
         --------
@@ -621,7 +621,7 @@ class ClefPictures(_Picture):
                 x1=x + self.W - 1,
                 bottom=bottom,
                 gap=gap,
-                colour=line,
+                color=line,
             )
             # noinspection PyProtectedMember
             StaffWidget._draw_clef(
@@ -638,7 +638,7 @@ class ClefPictures(_Picture):
             x=x + 5,
             y0=tops[0],
             y1=tops[1] + 4 * gap,
-            colour=line,
+            color=line,
             width=0.65,
         )
         # noinspection PyProtectedMember
@@ -661,8 +661,8 @@ class ValuePictures(_Picture):
     ----------
     values : list of str
         The note values shown, keys of `VALUE_NAMES`.
-    centre_stemless : bool
-        Whether the breve and whole note sit at the picture's vertical centre.
+    center_stemless : bool
+        Whether the double whole note and whole note sit at the picture's vertical center.
 
     Examples
     --------
@@ -679,7 +679,7 @@ class ValuePictures(_Picture):
         values: list[str] | None = None,
         *,
         scale: float = 1.0,
-        centre_stemless: bool = False,
+        center_stemless: bool = False,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -691,19 +691,19 @@ class ValuePictures(_Picture):
             The note values to show.
         scale : float, default 1.0
             How much to enlarge it. Keyword-only.
-        centre_stemless : bool, default False
-            Put the breve and whole note at the picture's vertical centre, so beside a line of text they line up with the middle
-            of the text; the others keep their heads low so their stems fit above. Keyword-only.
+        center_stemless : bool, default False
+            Center double whole notes and whole notes vertically so they align with the middle of adjacent text.
+            Other notes keep their heads low so their stems fit above. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
         Examples
         --------
-        >>> ValuePictures(["half"], centre_stemless=True).centre_stemless
+        >>> ValuePictures(["half"], center_stemless=True).center_stemless
         True
         """
         super().__init__(scale, parent=parent)
-        self.centre_stemless = centre_stemless
+        self.center_stemless = center_stemless
         self.values: list[str] = []
         self.set_values(values or [])
 
@@ -774,11 +774,11 @@ class ValuePictures(_Picture):
         False
         """
         p = self._painter()
-        text, _line = self._colours()
+        text, _line = self._colors()
         for i, value in enumerate(self.values):
             x = i * (self.W + self.SPACING)
-            wide = value in ("breve", "whole")  # the heads without stems are wider, so centre them in the box
-            y = self.H / 2 if wide and self.centre_stemless else self.HEAD_Y
+            wide = value in ("breve", "whole")  # the heads without stems are wider, so center them in the box
+            y = self.H / 2 if wide and self.center_stemless else self.HEAD_Y
             # drawn by the same routine as the staff, so the symbol matches the one in the exercise
             # noinspection PyProtectedMember
             StaffWidget._note(
@@ -816,7 +816,7 @@ class KeySignaturePicture(_Picture):
 
     H, GAP, STEP = 40, 6.0, 8.0
     ORDER = {1: "F5 C5 G5 D5 A4 E5 B4", -1: "B4 E5 A4 D5 G4 C5 F4"}  # where each sign is written, in order
-    CENTRE = {1: 6, -1: 4}  # the height (half-gaps above the bottom line) drawn in the middle of the picture
+    CENTER = {1: 6, -1: 4}  # the height (half-gaps above the bottom line) drawn in the middle of the picture
 
     def __init__(
         self,
@@ -886,7 +886,7 @@ class KeySignaturePicture(_Picture):
         sign: int,
         x: float,
         y: float,
-        colour: QColor,
+        color: QColor,
     ) -> None:
         """
         Draw one sharp, flat or natural sign.
@@ -901,8 +901,8 @@ class KeySignaturePicture(_Picture):
             The sign's left edge, in picture units. Keyword-only.
         y : float
             The sign's reference line. Keyword-only.
-        colour : QColor
-            The colour. Keyword-only.
+        color : QColor
+            The color. Keyword-only.
 
         Examples
         --------
@@ -911,7 +911,7 @@ class KeySignaturePicture(_Picture):
         >>> image.fill(QColor("white"))
         >>> painter = QPainter(image)
         >>> picture = KeySignaturePicture(1)
-        >>> picture._sign(painter, sign=1, x=5, y=20, colour=QColor("black"))
+        >>> picture._sign(painter, sign=1, x=5, y=20, color=QColor("black"))
         >>> painter.end()
         True
         """
@@ -924,11 +924,11 @@ class KeySignaturePicture(_Picture):
                 x=x,
                 y=y + 0.2 * self.GAP,
                 gap=self.GAP,
-                colour=colour,
+                color=color,
                 fit=self.STEP - 0.8,
             )
             return
-        p.setPen(QPen(colour, 1.0))
+        p.setPen(QPen(color, 1.0))
         f = QFont("DejaVu Sans")
         f.setPixelSize(int(self.GAP * 2.6))
         p.setFont(f)
@@ -949,7 +949,7 @@ class KeySignaturePicture(_Picture):
         False
         """
         p = self._painter()
-        text, _line = self._colours()
+        text, _line = self._colors()
         mid = self.H / 2
         if not self.key:
             self._sign(
@@ -957,7 +957,7 @@ class KeySignaturePicture(_Picture):
                 sign=0,
                 x=2,
                 y=mid,
-                colour=text,
+                color=text,
             )
             return
         kind = 1 if self.key > 0 else -1
@@ -967,8 +967,8 @@ class KeySignaturePicture(_Picture):
                 p,
                 sign=kind,
                 x=2 + i * self.STEP,
-                y=mid - (steps - self.CENTRE[kind]) * self.GAP / 2,
-                colour=text,
+                y=mid - (steps - self.CENTER[kind]) * self.GAP / 2,
+                color=text,
             )
 
 
@@ -1067,7 +1067,7 @@ class RangePictures(_Picture):
         y: float,
         bottom: float,
         gap: float,
-        colour: QColor,
+        color: QColor,
         steps: int,
     ) -> None:
         """
@@ -1078,15 +1078,15 @@ class RangePictures(_Picture):
         p : QPainter
             The painter to draw with.
         x : float
-            The head's centre, in picture units. Keyword-only.
+            The head's center, in picture units. Keyword-only.
         y : float
             The head's height. Keyword-only.
         bottom : float
             The height of the staff's bottom line. Keyword-only.
         gap : float
             The distance between staff lines. Keyword-only.
-        colour : QColor
-            The colour. Keyword-only.
+        color : QColor
+            The color. Keyword-only.
         steps : int
             How many half-gaps the note is above the bottom line; negative below it. Keyword-only.
 
@@ -1098,7 +1098,7 @@ class RangePictures(_Picture):
         >>> painter = QPainter(image)
         >>> pictures = RangePictures()
         >>> pictures._dev = 1.0
-        >>> pictures._note_head(painter, x=20, y=34, bottom=30, gap=4, colour=QColor("black"), steps=-4)
+        >>> pictures._note_head(painter, x=20, y=34, bottom=30, gap=4, color=QColor("black"), steps=-4)
         >>> painter.end()
         True
         """
@@ -1114,7 +1114,7 @@ class RangePictures(_Picture):
                 x0=x - 4.2,
                 x1=x + 4.2,
                 y=bottom - s_ * gap / 2,
-                colour=colour,
+                color=color,
                 width=0.65,
             )
         # a whole note, a little larger than the staff gap so it reads
@@ -1124,7 +1124,7 @@ class RangePictures(_Picture):
             x=x,
             y=y,
             gap=gap * 1.45,
-            color=colour,
+            color=color,
             value="whole",
             stem_down=False,
             font=current_style().font,
@@ -1145,7 +1145,7 @@ class RangePictures(_Picture):
         False
         """
         p = self._painter()
-        text, line = self._colours()
+        text, line = self._colors()
         for i, (clef, lo, hi) in enumerate(self.items):
             x = i * (self.W + self.SPACING)
             p.save()
@@ -1167,7 +1167,7 @@ class RangePictures(_Picture):
                         x1=x + self.W - 1,
                         bottom=b,
                         gap=gap,
-                        colour=line,
+                        color=line,
                     )
                     # noinspection PyProtectedMember
                     StaffWidget._draw_clef(
@@ -1184,7 +1184,7 @@ class RangePictures(_Picture):
                     x=x + 6,
                     y0=7,
                     y1=29,
-                    colour=line,
+                    color=line,
                     width=0.65,
                 )
                 # noinspection PyProtectedMember
@@ -1206,7 +1206,7 @@ class RangePictures(_Picture):
                     x1=x + self.W - 1,
                     bottom=25.0,
                     gap=gap,
-                    colour=line,
+                    color=line,
                 )
                 # noinspection PyProtectedMember
                 StaffWidget._draw_clef(
@@ -1228,7 +1228,7 @@ class RangePictures(_Picture):
                     y=y,
                     bottom=bottoms[staff],
                     gap=gap,
-                    colour=text,
+                    color=text,
                     steps=steps,
                 )
             p.restore()
@@ -1236,7 +1236,7 @@ class RangePictures(_Picture):
 
 class NamePicture(_Picture):
     """
-    How notes are named: C, D and E on a staff, labelled with letters, solfège syllables or scale degrees.
+    How notes are named: C, D and E on a staff, labeled with letters, solfège syllables or scale degrees.
 
     Attributes
     ----------
@@ -1349,7 +1349,7 @@ class NamePicture(_Picture):
         False
         """
         p = self._painter()
-        text, line = self._colours()
+        text, line = self._colors()
         gap, bottom = 2.4, 17.0
         self._staff(
             p,
@@ -1357,7 +1357,7 @@ class NamePicture(_Picture):
             x1=self.W - 1,
             bottom=bottom,
             gap=gap,
-            colour=line,
+            color=line,
         )
         # noinspection PyProtectedMember
         StaffWidget._draw_clef(
@@ -1388,7 +1388,7 @@ class NamePicture(_Picture):
                     x0=x - 3.4,
                     x1=x + 3.4,
                     y=y,
-                    colour=text,
+                    color=text,
                     width=0.65,
                 )
             # noinspection PyProtectedMember

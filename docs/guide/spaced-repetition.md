@@ -58,7 +58,7 @@ the territory of the **multi-armed bandit** problem and the **exploration versus
 
 A flash-card program has a *deck*: a fixed set of cards. Alto does not. The question "name this note" has thousands of variants
 (every clef, range, key signature, note value, and naming style), generated on demand. Most variants are asked once, perhaps
-never again. A scheduler that depends on **due dates** per card would be waiting for cards that may never come round.
+never again. A scheduler that depends on **due dates** per card would be waiting for cards that may never come around.
 
 So Alto's `Learner` does two things at once, and then draws:
 
@@ -101,7 +101,7 @@ linearly to zero at par, then a penalty growing to +1.0 at four times par. For `
 
 A worked history, with `par_seconds = 3`: start at 1.5. A wrong answer in 4 s: 3.0. A right answer on the retry: 2.8. Then
 three quick right answers (1.5 s each, each -0.5 and -0.6): 1.7, 0.6, 0.0. The idea is that a question you *know* becomes
-unremarkable in about three confident answers, and a question you keep missing climbs towards the ceiling.
+unremarkable in about three confident answers, and a question you keep missing climbs toward the ceiling.
 
 ### From strain to the chance of being asked
 
@@ -209,7 +209,7 @@ q15 asked 57 times, strain 5.05     (hard: asked most)
 q19 asked 56 times, strain 5.04
 ```
 
-That is the intended behaviour: the hard questions get about twenty times the attention of the easy ones, and the easy ones
+That is the intended behavior: the hard questions get about twenty times the attention of the easy ones, and the easy ones
 are still asked occasionally (new items, the random replays, and the floor on recency). Try halving `WEIGHT_SLOPE` and see how
 the spread flattens. A real evaluation would also model *forgetting* (a right-answer chance that falls with time since last
 seen) and look at long-run accuracy, as research on schedulers does.

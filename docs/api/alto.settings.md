@@ -204,7 +204,7 @@ Return the range of notes that may be asked on a clef.
 ```pycon
 >>> NoteNameSettings().range_for("treble")
 (22, 52)
->>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given the wrong way round
+>>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
 (30, 40)
 ```
 
@@ -281,6 +281,127 @@ Return the key signatures to draw from, lowest first.
 ```pycon
 >>> KeyboardSettings().active_keys()
 [-3, -2, -1, 0, 1, 2, 3]
+```
+
+## keyboard_interval_name
+
+```python
+def keyboard_interval_name(distance: int) -> str
+```
+
+Name a keyboard interval by its distance, including compound intervals.
+
+**Parameters**
+
+- `distance` (*int*): The distance in half steps, from 1 through the full piano span.
+
+**Returns**
+
+- *str*: A conventional interval name, with both spellings for tritones.
+
+**Raises**
+
+- *ValueError*: If the distance cannot occur between two distinct piano keys.
+
+**Examples**
+
+```pycon
+>>> keyboard_interval_name(13), keyboard_interval_name(18), keyboard_interval_name(24)
+('m9', 'A11 / d12', 'P15')
+>>> keyboard_interval_name(87)
+'m52'
+```
+
+## KeyboardIntervalSettings
+
+```python
+KeyboardIntervalSettings(
+    low: int = KEYBOARD_DEFAULT[0],
+    high: int = KEYBOARD_DEFAULT[1],
+    intervals: set[int] = field(default_factory=lambda: set(range(1, 13))),
+    all_interval_buttons: bool = False,
+    compact_buttons: bool = False,
+    button_count: int = 6,
+)
+```
+
+The keyboard range and interval distances used for keyboard interval identification.
+
+**Attributes**
+
+- `low` (*int*): The lowest key, as a MIDI number. Keyword-only.
+- `high` (*int*): The highest key, inclusive. Keyword-only.
+- `intervals` (*set of int*): Selected distances in half steps, up to the full piano span. Keyword-only.
+- `button_count` (*int, default 6*): Maximum answer buttons in limited mode. Keyword-only.
+- `compact_buttons` (*bool, default False*): Answer with separate quality-letter and interval-number buttons. Keyword-only.
+- `all_interval_buttons` (*bool, default False*): Show a fixed answer button for every selected interval instead of a limited number of choices. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> KeyboardIntervalSettings().bounds()
+(48, 72)
+```
+
+### KeyboardIntervalSettings.answer_button_limit
+
+```python
+def answer_button_limit() -> int
+```
+
+Return the requested count within the supported range of 1 to 87 buttons.
+
+**Returns**
+
+- *int*: The bounded maximum number of answer buttons in limited mode.
+
+**Examples**
+
+```pycon
+>>> KeyboardIntervalSettings().answer_button_limit()
+6
+>>> KeyboardIntervalSettings(button_count=0).answer_button_limit()
+1
+```
+
+### KeyboardIntervalSettings.bounds
+
+```python
+def bounds() -> tuple[int, int]
+```
+
+Return a piano range containing at least two distinct keys.
+
+**Returns**
+
+- *tuple of (int, int)*: Sorted bounds within the full piano range, widened by one key if necessary.
+
+**Examples**
+
+```pycon
+>>> KeyboardIntervalSettings(low=60, high=60).bounds()
+(60, 61)
+```
+
+### KeyboardIntervalSettings.active_intervals
+
+```python
+def active_intervals() -> list[int]
+```
+
+Return selected interval distances that fit the keyboard range.
+
+**Returns**
+
+- *list of int*: Sorted positive distances that fit; empty if none are selected. Invalid nonempty selections use a minor second.
+
+**Examples**
+
+```pycon
+>>> KeyboardIntervalSettings(low=60, high=64, intervals={3, 4, 12}).active_intervals()
+[3, 4]
+>>> KeyboardIntervalSettings(intervals=set()).active_intervals()
+[]
 ```
 
 ## ConstructionSettings
@@ -800,8 +921,8 @@ The settings of the circle of fifths exercise.
 **Attributes**
 
 - `questions` (*set of str*): The kinds of question to ask, keys of `CIRCLE_QUESTIONS`: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.
-- `scheme` (*str*): The key of the colour scheme the circle is drawn in: a preset of `alto.circle_schemes` or one of `customs`.
-- `customs` (*list of CustomRecord*): The colour schemes the user made.
+- `scheme` (*str*): The key of the color scheme the circle is drawn in: a preset of `alto.circle_schemes` or one of `customs`.
+- `customs` (*list of CustomRecord*): The color schemes the user made.
 
 **Examples**
 
@@ -841,11 +962,11 @@ Return the kinds of question to ask, in the order they are listed.
 def active_scheme() -> Scheme
 ```
 
-Return the colour scheme to draw the circle in.
+Return the color scheme to draw the circle in.
 
 **Returns**
 
-- *Scheme*: The chosen scheme, or the default one if the choice is not a scheme any more (a deleted one of the user's own).
+- *Scheme*: The chosen scheme, or the default if the saved choice is no longer available, such as a deleted custom scheme.
 
 **Examples**
 

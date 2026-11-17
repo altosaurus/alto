@@ -102,7 +102,7 @@ class SidebarToggle(QToolButton):
         >>> button.toolTip()
         'Show exercise list'
         """
-        color = self.palette().color(QPalette.ColorRole.WindowText)  # same colour as the sound and settings icons
+        color = self.palette().color(QPalette.ColorRole.WindowText)  # same color as the sound and settings icons
         self.setIcon(svg_icon(SIDEBAR_OPEN if is_open else SIDEBAR_CLOSED, color=color))
         self.setToolTip(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
         self.setAccessibleName(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
@@ -336,7 +336,7 @@ class SegmentedControl(QFrame):
         """
         Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.
 
-        A change of theme rebuilds the main window, so the control there is drawn afresh in the new colours. One that stays, as in
+        A change of theme rebuilds the main window, so the control there is drawn afresh in the new colors. One that stays, as in
         the settings, is restyled by calling this.
 
         Examples

@@ -65,7 +65,7 @@ The answers given in one period (an hour, day, week or month), for the charts.
 def accuracy() -> float | None
 ```
 
-Return the percentage of questions in the period that were right first time.
+Return the percentage of questions in the period that were right on the first try.
 
 **Returns**
 
@@ -118,7 +118,7 @@ How practice is going on one exercise.
 
 - `exercise` (*str*): The exercise's class name.
 - `questions` (*int*): How many questions were answered. Keyword-only.
-- `accuracy` (*float*): The percentage right first time. Keyword-only.
+- `accuracy` (*float*): The percentage right on the first try. Keyword-only.
 - `median_seconds` (*float*): The typical time to a first answer, in seconds. Keyword-only.
 
 **Examples**
@@ -168,7 +168,7 @@ Stats(
     attempts: int = 0,
     median_seconds: float | None = None,
     practice_seconds: float = 0.0,
-    days_practised: int = 0,
+    days_practiced: int = 0,
     granularity: str = 'day',
     buckets: list[Bucket] = field(default_factory=list),
     by_exercise: list[ExerciseStats] = field(default_factory=list),
@@ -184,11 +184,11 @@ Everything the statistics screen shows.
 - `first_right` (*int, default 0*): How many were right on the first answer. Keyword-only.
 - `attempts` (*int, default 0*): How many answers were given in all, including repeats. Keyword-only.
 - `median_seconds` (*float or None*): The typical time to a first answer. Keyword-only.
-- `practice_seconds` (*float, default 0.0*): Time spent practising, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.
-- `days_practised` (*int, default 0*): On how many different days there were answers. Keyword-only.
+- `practice_seconds` (*float, default 0.0*): Time spent practicing, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.
+- `days_practiced` (*int, default 0*): On how many different days there were answers. Keyword-only.
 - `granularity` (*str, default "day"*): The size of the chart periods: "hour", "day", "week" or "month". Keyword-only.
 - `buckets` (*list of Bucket*): One per period, oldest first. Keyword-only.
-- `by_exercise` (*list of ExerciseStats*): One per exercise practised, sorted by name. Keyword-only.
+- `by_exercise` (*list of ExerciseStats*): One per exercise practiced, sorted by name. Keyword-only.
 - `hardest` (*list of HardQuestion*): The questions that need most practice. Keyword-only.
 
 **Examples**
@@ -207,7 +207,7 @@ True
 def accuracy() -> float | None
 ```
 
-Return the percentage of questions that were right first time.
+Return the percentage of questions that were right on the first try.
 
 **Returns**
 
@@ -231,7 +231,7 @@ Return the average number of answers it took per question.
 
 **Returns**
 
-- *float or None*: 1.0 if every question was answered right first time; None if no questions were answered.
+- *float or None*: 1.0 if every question was answered right on the first try; None if no questions were answered.
 
 **Examples**
 

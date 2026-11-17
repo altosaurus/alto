@@ -42,11 +42,11 @@ def click(circle: ExplorableCircle, *, ring: str, place: int) -> None:
         The place on the circle.
     """
     from_middle = 0.87 if ring == "outer" else 0.62
-    centre, radius = circle.geometry_of()
+    center, radius = circle.geometry_of()
     angle = math.radians(30 * place)
     point = QPoint(
-        round(centre.x() + from_middle * radius * math.sin(angle)),
-        round(centre.y() - from_middle * radius * math.cos(angle)),
+        round(center.x() + from_middle * radius * math.sin(angle)),
+        round(center.y() - from_middle * radius * math.cos(angle)),
     )
     QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=point)
 
@@ -82,14 +82,14 @@ def test_a_click_in_the_middle_clears_the_pick(app: QApplication) -> None:
     circle = ExplorableCircle()
     circle.resize(500, 500)
     click(circle, ring="outer", place=3)
-    centre, _ = circle.geometry_of()
-    QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(round(centre.x()), round(centre.y())))
+    center, _ = circle.geometry_of()
+    QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(round(center.x()), round(center.y())))
     assert circle.cell is None and circle.signature is None and circle.title == "Circle of fifths"
 
 
 def test_the_arrow_keys_move_the_pick_round_and_between_the_rings(app: QApplication) -> None:
     """
-    Check that the arrow keys walk round the circle, switch rings and clear the pick, so no mouse is needed.
+    Check that the arrow keys walk around the circle, switch rings and clear the pick, so no mouse is needed.
 
     Parameters
     ----------
@@ -138,4 +138,4 @@ def test_the_explanation_is_right_for_every_key() -> None:
         assert f"<b>{names[0]} major</b>" in text
         assert len(accidentals_of(SIGNATURES[place])) == abs(SIGNATURES[place])
         assert (" sharp" in text.split("</p>")[0].replace("no sharps", "")) == (SIGNATURES[place] > 0)
-        assert ("also be spelt" in text) == (len(names) == 2)
+        assert ("also be spelled" in text) == (len(names) == 2)

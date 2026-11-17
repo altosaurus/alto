@@ -2,7 +2,7 @@
 title: alto.ui.home
 parent: api
 package: alto.ui
-order: 33
+order: 35
 permalink: /api/alto.ui.home/
 ---
 {% raw %}
@@ -53,7 +53,7 @@ Build a card.
 
 **Parameters**
 
-- `icon` (*str*): The inside of a 24 by 24 SVG, drawn in the text colour. Keyword-only.
+- `icon` (*str*): The inside of a 24 by 24 SVG, drawn in the text color. Keyword-only.
 - `category` (*str*): The small heading above the name. Keyword-only.
 - `name` (*str*): The name. Keyword-only.
 - `about` (*str*): A line of description, which is also the tooltip. Keyword-only.
@@ -119,7 +119,7 @@ def lesson_card(
 ) -> TileCard
 ```
 
-Make the card of a lesson: the icon of the exercise that practises the same topic, and how far through it you are.
+Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.
 
 **Parameters**
 

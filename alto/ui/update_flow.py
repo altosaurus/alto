@@ -341,8 +341,8 @@ class WaitDialog(QDialog):
     ----------
     ended : bool
         Whether the asking has ended, by an answer, a failure or a cancel.
-    cancelled : bool
-        Whether the person cancelled it.
+    canceled : bool
+        Whether the person canceled it.
     """
 
     def __init__(
@@ -365,7 +365,7 @@ class WaitDialog(QDialog):
         self.setWindowTitle(CHECK_TITLE)
         self.setModal(True)
         self.ended = False
-        self.cancelled = False
+        self.canceled = False
         lay = QVBoxLayout(self)
         lay.addWidget(QLabel(text))
         bar = QProgressBar()
@@ -380,7 +380,7 @@ class WaitDialog(QDialog):
     def reject(self) -> None:
         """Cancel the asking."""
         if not self.ended:
-            self.cancelled = True
+            self.canceled = True
             self.ended = True
             self._stop()
         super().reject()
@@ -436,7 +436,7 @@ class CheckDialog(WaitDialog):
         Examples
         --------
         >>> # noinspection PyTypeChecker
-        >>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").cancelled
+        >>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").canceled
         False
         """
         program, arguments = self._command
@@ -496,7 +496,7 @@ class ReleaseFetcher(QObject):
             The object that owns it.
         """
         super().__init__(parent)
-        self._cancelled = False
+        self._canceled = False
 
     def start(self, *, seconds: int) -> None:
         """
@@ -507,12 +507,12 @@ class ReleaseFetcher(QObject):
         seconds : int
             How long to wait for GitHub. Keyword-only.
         """
-        self._cancelled = False
+        self._canceled = False
         threading.Thread(target=self._work, args=(seconds,), daemon=True).start()
 
     def cancel(self) -> None:
         """Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up."""
-        self._cancelled = True
+        self._canceled = True
 
     def _work(self, seconds: int) -> None:
         """
@@ -524,7 +524,7 @@ class ReleaseFetcher(QObject):
             How long to wait for GitHub.
         """
         status, text = updates.fetch_text(updates.RELEASES_API, seconds=seconds)
-        if not self._cancelled:
+        if not self._canceled:
             try:
                 self.done.emit(status, text)
             except RuntimeError:  # the window was closed, and with it this object, while the thread waited
@@ -567,7 +567,7 @@ class ReleaseDialog(WaitDialog):
         Examples
         --------
         >>> # noinspection PyTypeChecker
-        >>> ReleaseDialog(None).cancelled
+        >>> ReleaseDialog(None).canceled
         False
         """
         self.fetcher.start(seconds=RELEASE_SECONDS)
@@ -825,7 +825,7 @@ def check_release(
     """
     asking = ReleaseDialog(parent)
     asking.run()
-    if asking.cancelled:
+    if asking.canceled:
         return
     release = asking.release
     if release is None:
@@ -890,7 +890,7 @@ def check_main(
         return
     check = CheckDialog(parent, source=Source(source.url, commit=source.commit), git=git)  # the default branch, not a tag
     check.run()
-    if check.cancelled:
+    if check.canceled:
         return
     latest = check.commit
     if not latest:

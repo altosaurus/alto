@@ -2,7 +2,7 @@
 title: alto.ui.circle
 parent: api
 package: alto.ui
-order: 25
+order: 26
 permalink: /api/alto.ui.circle/
 ---
 {% raw %}
@@ -26,7 +26,7 @@ and its name (or its Roman numeral) is blank until the answer is right.
 ```python
 def wedge_path(
     *,
-    centre: QPointF,
+    center: QPointF,
     inner: float,
     outer: float,
     index: int,
@@ -37,7 +37,7 @@ Return the outline of one wedge of a ring.
 
 **Parameters**
 
-- `centre` (*QPointF*): The middle of the circle.
+- `center` (*QPointF*): The middle of the circle.
 - `inner` (*float*): The radius of the wedge's inner edge, in pixels. Keyword-only.
 - `outer` (*float*): The radius of its outer edge. Keyword-only.
 - `index` (*int*): Which wedge: 0 is the one at the top and they go clockwise. Keyword-only.
@@ -49,7 +49,7 @@ Return the outline of one wedge of a ring.
 **Examples**
 
 ```pycon
->>> shape = wedge_path(centre=QPointF(100, 100), inner=40, outer=90, index=0)
+>>> shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
 >>> shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
 (True, False)
 ```
@@ -59,17 +59,17 @@ Return the outline of one wedge of a ring.
 ```python
 def wedge_middle(
     *,
-    centre: QPointF,
+    center: QPointF,
     radius: float,
     index: int,
 ) -> QPointF
 ```
 
-Return the point in the middle of a wedge, at a given distance from the centre.
+Return the point in the middle of a wedge, at a given distance from the center.
 
 **Parameters**
 
-- `centre` (*QPointF*): The middle of the circle.
+- `center` (*QPointF*): The middle of the circle.
 - `radius` (*float*): How far out, in pixels. Keyword-only.
 - `index` (*int*): Which wedge, clockwise from the top. Keyword-only.
 
@@ -80,9 +80,9 @@ Return the point in the middle of a wedge, at a given distance from the centre.
 **Examples**
 
 ```pycon
->>> wedge_middle(centre=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
+>>> wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
 (100.0, 50.0)
->>> round(wedge_middle(centre=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way round: to the right
+>>> round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
 150
 ```
 
@@ -98,18 +98,18 @@ def wedge_color(
 ) -> QColor
 ```
 
-Return the colour of a wedge in a colour scheme: quiet when it is not being talked about and bright when it is.
+Return the color of a wedge in a color scheme: quiet when it is not being talked about and bright when it is.
 
 **Parameters**
 
 - `index` (*int*): Which wedge, clockwise from the top.
 - `inner` (*bool*): Whether it is in the inner ring. Keyword-only.
 - `lift` (*float, default 0.0*): How bright it is, from 0 (quiet) to 1 (lit). Keyword-only.
-- `scheme` (*Scheme or None, default None*): The colour scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
+- `scheme` (*Scheme or None, default None*): The color scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
 
 **Returns**
 
-- *QColor*: The colour.
+- *QColor*: The color.
 
 **Examples**
 
@@ -133,16 +133,16 @@ True
 def write_text(
     p: QPainter,
     *,
-    centre: QPointF,
+    center: QPointF,
     text: str,
     pixels: float,
     weight: QFont.Weight,
-    colour: QColor,
+    color: QColor,
     max_width: float | None = None,
 ) -> None
 ```
 
-Write a line of text centred on a point, with its sharps and flats drawn as the notation font draws them.
+Write a line of text centered on a point, with its sharps and flats drawn as the notation font draws them.
 
 The letters are in the app's own font. Its ♭ is the shape of a small "b", though, and does not look like a flat sign, so
 the sharps, flats and naturals are the glyphs of the notation style that the staff is drawn in, sized to the letters.
@@ -150,11 +150,11 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 **Parameters**
 
 - `p` (*QPainter*): The painter to draw with.
-- `centre` (*QPointF*): The middle of the line. Keyword-only.
+- `center` (*QPointF*): The middle of the line. Keyword-only.
 - `text` (*str*): What to write, such as "B♭m" or "F♯ major". Keyword-only.
 - `pixels` (*float*): The size of the letters. Keyword-only.
 - `weight` (*QFont.Weight*): How heavy they are. Keyword-only.
-- `colour` (*QColor*): The colour. Keyword-only.
+- `color` (*QColor*): The color. Keyword-only.
 - `max_width` (*float or None, default None*): The widest the line may be. A longer line is written smaller to fit. Keyword-only.
 
 **Examples**
@@ -164,7 +164,7 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 >>> image = QImage(120, 60, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("black"))
 >>> painter = QPainter(image)
->>> write_text(painter, centre=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, colour=QColor("white"))
+>>> write_text(painter, center=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, color=QColor("white"))
 >>> painter.end()
 True
 >>> any(image.pixelColor(x, 30).lightness() > 128 for x in range(20, 100))
@@ -407,7 +407,7 @@ The circle fits the widget as a square in the middle of it, but no larger than `
 
 **Returns**
 
-- *tuple of QPointF and float*: The centre and the radius, in pixels.
+- *tuple of QPointF and float*: The center and the radius, in pixels.
 
 **Examples**
 

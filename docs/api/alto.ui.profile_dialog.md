@@ -2,11 +2,11 @@
 title: alto.ui.profile_dialog
 parent: api
 package: alto.ui
-order: 46
+order: 49
 permalink: /api/alto.ui.profile_dialog/
 ---
 {% raw %}
-Choosing who is practising. There is no password: a profile is just a name that keeps its own history.
+Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.
 
 **Examples**
 
@@ -31,7 +31,7 @@ ProfileDialog(
 
 Bases: `QDialog`
 
-Ask who is practising: a first name on launch, then a list to switch between.
+Ask who is practicing: a first name on launch, then a list to switch between.
 
 On first launch (no profiles yet) it asks for a name. Afterwards it lists the profiles to switch between and lets you add
 another.

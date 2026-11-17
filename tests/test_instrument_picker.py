@@ -109,7 +109,7 @@ def row_labels(picker: InstrumentPicker) -> list[str]:
 
 def test_every_instrument_is_listed_once_and_the_one_in_use_is_selected_and_ticked(picker: InstrumentPicker) -> None:
     """
-    Check that every instrument is listed once and the one in use is selected and ticked.
+    Check that every instrument is listed once and the one in use is selected and checked.
 
     Parameters
     ----------
@@ -195,8 +195,8 @@ def test_using_an_instrument_switches_to_it_and_ticks_it(picker: InstrumentPicke
     use = picker.buttons["marimba"][0]
     assert use.text() == "In use" and not use.isEnabled()
     items = [picker.list.item(i) for i in range(picker.list.count())]
-    ticked = [item.data(Qt.ItemDataRole.UserRole) for item in items if "✓" in item.text()]
-    assert ticked == ["Marimba"]
+    checked = [item.data(Qt.ItemDataRole.UserRole) for item in items if "✓" in item.text()]
+    assert checked == ["Marimba"]
 
 
 def test_an_instrument_with_no_recordings_cannot_be_chosen(
@@ -264,9 +264,9 @@ def test_double_clicking_an_entry_uses_the_way_of_playing_already_in_use_or_the_
     assert sounds.instrument == "viola_plucked"  # the one in use stays
 
 
-def test_a_theme_change_redraws_the_summary_in_the_new_colours(picker: InstrumentPicker) -> None:
+def test_a_theme_change_redraws_the_summary_in_the_new_colors(picker: InstrumentPicker) -> None:
     """
-    Check that a theme change redraws the summary in the new colours.
+    Check that a theme change redraws the summary in the new colors.
 
     Parameters
     ----------

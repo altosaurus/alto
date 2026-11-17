@@ -49,6 +49,8 @@ from PySide6.QtWidgets import (
     QLabel,
     QLayout,
     QPushButton,
+    QScrollArea,
+    QStackedWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -60,7 +62,10 @@ from alto.exercises.base import (
     Exercise,
     Question,
 )
-from alto.exercises.library import ScaleIdentification
+from alto.exercises.library import (
+    KeyboardIntervals,
+    ScaleIdentification,
+)
 from alto.learning import Learner
 from alto.settings import spell
 from alto.theory.pitch import (
@@ -68,6 +73,7 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import format_key_signature
+from alto.ui.answer_bank import AnswerBank
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import blend
 from alto.ui.degree_text import (
@@ -284,7 +290,7 @@ def note_words(
 
 class ExerciseView(QWidget):
     """
-    The screen for practising one exercise.
+    The screen for practicing one exercise.
 
     Attributes
     ----------
@@ -293,13 +299,13 @@ class ExerciseView(QWidget):
     REFERENCE_WIDTH : int
         The width of the reference pane when it is open, in pixels.
     exercise : Exercise
-        The exercise being practised.
+        The exercise being practiced.
     learner : Learner or None
         Records every answer and chooses what to ask next; None asks at random.
     rng : random.Random
         The random number generator for new questions.
     correct : int
-        Questions answered right first time.
+        Questions answered right on the first try.
     total : int
         Questions answered.
     streak : int
@@ -309,7 +315,7 @@ class ExerciseView(QWidget):
     answered : bool
         True once the question has been answered right.
     missed : bool
-        True once the question has been answered wrong, so it no longer counts towards the score.
+        True once the question has been answered wrong, so it no longer counts toward the score.
     buttons : list of QPushButton
         The answer buttons on screen.
     settings_panel : QWidget or None
@@ -363,7 +369,7 @@ class ExerciseView(QWidget):
         Parameters
         ----------
         exercise : Exercise
-            The exercise to practise.
+            The exercise to practice.
         rng : random.Random or None, default None
             The random number generator; a fresh one if None. Keyword-only.
         parent : QWidget or None, default None
@@ -466,14 +472,17 @@ class ExerciseView(QWidget):
         self.place_status.setWordWrap(True)
         self.place_status.setAccessibleName("What to do next")
         self.pitch_row = QWidget()  # lower / higher, to move the note on the staff without the mouse
-        prow = QHBoxLayout(self.pitch_row)
+        prow_group = QVBoxLayout(self.pitch_row)
+        prow_group.setContentsMargins(0, 0, 0, 0)
+        prow_group.addWidget(QLabel("Note"))
+        prow = QHBoxLayout()
+        prow_group.addLayout(prow)
         prow.setContentsMargins(
             0,
             4,
             0,
             0,
         )
-        prow.addWidget(QLabel("Note"))
         self.pitch_buttons = {}
         for name, text, steps, tip in (
             ("octave_down", "Octave ↓", -7, "An octave lower (Page Down)"),
@@ -489,14 +498,17 @@ class ExerciseView(QWidget):
             self.pitch_buttons[name] = b
             prow.addWidget(b, 1)
         self.accidental_row = QWidget()  # sharp / natural / flat, for questions that need an accidental
-        arow = QHBoxLayout(self.accidental_row)
+        arow_group = QVBoxLayout(self.accidental_row)
+        arow_group.setContentsMargins(0, 0, 0, 0)
+        arow_group.addWidget(QLabel("Accidental"))
+        arow = QHBoxLayout()
+        arow_group.addLayout(arow)
         arow.setContentsMargins(
             0,
             4,
             0,
             0,
         )
-        arow.addWidget(QLabel("Accidental"))
         self.accidental_group = QButtonGroup(self)
         self.accidental_group.setExclusive(False)
         self.accidental_buttons = {}
@@ -513,14 +525,17 @@ class ExerciseView(QWidget):
             self.accidental_buttons[acc] = b
             arow.addWidget(b, 1)
         self.step_row = QWidget()  # whole / half, for marking the steps between the notes of a scale
-        srow = QHBoxLayout(self.step_row)
+        srow_group = QVBoxLayout(self.step_row)
+        srow_group.setContentsMargins(0, 0, 0, 0)
+        srow_group.addWidget(QLabel("Step"))
+        srow = QHBoxLayout()
+        srow_group.addLayout(srow)
         srow.setContentsMargins(
             0,
             4,
             0,
             0,
         )
-        srow.addWidget(QLabel("Step"))
         self.step_group = QButtonGroup(self)
         self.step_buttons = {}
         for step, name in (("W", "Whole step"), ("H", "Half step")):
@@ -555,6 +570,8 @@ class ExerciseView(QWidget):
             8,
         )
         self.choice_box.setSpacing(10)
+        self.interval_answers = AnswerBank()
+        self.interval_answers.hide()
         self._pair_token = 0  # counts questions, so a pending 'try again' reset can tell it is out of date
         self.destroyed.connect(lambda: setattr(self, "_pair_token", -1))  # invalidate queued playback callbacks on deletion
         self._pending: dict[str, tuple[str, QPushButton]] = {}
@@ -632,8 +649,13 @@ class ExerciseView(QWidget):
         choice_row = QHBoxLayout()  # the buttons' area in the middle, with the room that is left over on either side
         choice_row.addStretch(1)
         choice_row.addWidget(self.choice_area, 100)
+        choice_row.addWidget(self.interval_answers, 100)
         choice_row.addStretch(1)
+        self.quality_label = QLabel("Quality")
+        lay.addWidget(self.quality_label)
         lay.addLayout(choice_row)
+        self.interval_label = QLabel("Interval")
+        lay.addWidget(self.interval_label)
         self.octave_row = QWidget()  # shown only when the answer needs an octave as well as a name
         self.octave_box = QHBoxLayout(self.octave_row)
         self.octave_box.setContentsMargins(
@@ -848,6 +870,67 @@ class ExerciseView(QWidget):
         self.sound_btn.setToolTip("Sound on (click to mute)" if sounds.enabled else "Muted (click to unmute)")
         self.sound_btn.setAccessibleName("Sound on" if sounds.enabled else "Sound muted")
 
+    def settings_state(self) -> tuple[bool, int, int] | None:
+        """
+        Remember the exercise settings pane, selected page, and scroll position before a theme rebuild.
+
+        Returns
+        -------
+        tuple of (bool, int, int) or None
+            Whether the pane is open, its page index, and its vertical scroll position; None without settings.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> ExerciseView(NoteNames(), rng=random.Random(1)).settings_state()
+        (False, 0, 0)
+        """
+        panel = self.settings_panel
+        if panel is None or self.gear is None:
+            return None
+        stack = panel.findChild(QStackedWidget)
+        page = stack.currentWidget() if stack is not None else panel
+        scroll = page.findChild(QScrollArea) if page is not None else None
+        return (
+            self.gear.isChecked(),
+            stack.currentIndex() if stack is not None else 0,
+            (scroll.verticalScrollBar().value() if scroll is not None else 0),
+        )
+
+    def restore_settings_state(self, state: tuple[bool, int, int]) -> None:
+        """
+        Restore exercise settings navigation immediately after rebuilding the view.
+
+        Parameters
+        ----------
+        state : tuple of (bool, int, int)
+            Whether the pane was open, the selected page, and its vertical scroll position.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
+        >>> view.restore_settings_state((True, 0, 0))
+        >>> view.settings_state()
+        (True, 0, 0)
+        """
+        panel = self.settings_panel
+        if panel is None or self.gear is None:
+            return
+        open_, index, position = state
+        stack = panel.findChild(QStackedWidget)
+        if stack is not None and 0 <= index < stack.count():
+            stack.setCurrentIndex(index)
+        self.gear.setChecked(open_)
+        self._pane_anim.stop()
+        self.pane.setMaximumWidth(self.PANE_WIDTH if open_ else 0)
+        self.pane.setVisible(open_)
+        page = stack.currentWidget() if stack is not None else panel
+        scroll = page.findChild(QScrollArea) if page is not None else None
+        if scroll is not None:
+            bar = scroll.verticalScrollBar()
+            QTimer.singleShot(0, scroll, lambda: bar.setValue(position))
+
     def _toggle_pane(self, open_: bool) -> None:
         """
         Slide the settings pane open or closed.
@@ -967,7 +1050,7 @@ class ExerciseView(QWidget):
         (False, True)
         """
         self._advance.stop()
-        for animation in self._anims:  # a fade still running would colour buttons that are about to be replaced
+        for animation in self._anims:  # a fade still running would color buttons that are about to be replaced
             animation.stop()
             animation.deleteLater()
         self._anims.clear()
@@ -1015,11 +1098,14 @@ class ExerciseView(QWidget):
             for b in self.accidental_buttons.values():
                 b.setChecked(False)
         self._show_placement_rows()
-        self.keyboard.setVisible(q.keyboard is not None)
+        self.keyboard.setVisible(q.keyboard is not None or bool(q.keyboard_notes))
         self.key_staff.setVisible(q.key_staff)
         self.key_staff.show_notes([], clef="treble", key=q.key)
         self.keyboard.max_key_width = 30.0 if q.key_staff else 38.0  # leave room for the staff above
-        self.keyboard.show_key(q.keyboard.midi if q.keyboard else None, span=q.keyboard_range)
+        if q.keyboard_notes:
+            self.keyboard.show_keys([note.midi for note in q.keyboard_notes], span=q.keyboard_range)
+        else:
+            self.keyboard.show_key(q.keyboard.midi if q.keyboard else None, span=q.keyboard_range)
         self.staff.key_room = MAX_ACCIDENTALS if q.build_key else 0  # the staff does not change width as the signature does
         self.staff.show_notes(
             q.staff,
@@ -1030,10 +1116,22 @@ class ExerciseView(QWidget):
         )
         for b in self.buttons:
             b.setShortcut(QKeySequence())  # a button waiting to be deleted must not share its key with the new one
+            b.hide()
             b.deleteLater()
         self.buttons = []
         for col in range(self.choice_box.columnCount()):
             self.choice_box.setColumnStretch(col, 0)
+        interval_bank = (
+            isinstance(self.exercise, KeyboardIntervals)
+            and not q.octaves
+            and (app_settings.keyboard_intervals.all_interval_buttons or len(q.choices) > 6)
+        )
+        compact_intervals = isinstance(self.exercise, KeyboardIntervals) and bool(q.octaves)
+        self.quality_label.setVisible(compact_intervals)
+        self.interval_label.setText("Interval" if compact_intervals else q.second_label)
+        self.interval_label.setVisible(bool(q.octaves))
+        self.choice_area.setVisible(not interval_bank)
+        self.interval_answers.setVisible(interval_bank and bool(q.choices))
         keys = choice_keys(q.choices)
         for i, c in enumerate(q.choices):
             b = DegreeButton(c)
@@ -1055,10 +1153,13 @@ class ExerciseView(QWidget):
             else:
                 b.clicked.connect(lambda _=False, choice=c, btn=b: self.submit(choice, button=btn))
             row, col = q.grid[c] if q.grid else (0, i)
-            self.choice_box.addWidget(b, row, col)
+            if not interval_bank:
+                self.choice_box.addWidget(b, row, col)
             self.buttons.append(b)
-        for col in {(q.grid[c][1] if q.grid else i) for i, c in enumerate(q.choices)}:
-            self.choice_box.setColumnStretch(col, 1)  # equal-width columns
+        self.interval_answers.set_buttons(list(self.buttons) if interval_bank else [])
+        if not interval_bank:
+            for col in {(q.grid[c][1] if q.grid else i) for i, c in enumerate(q.choices)}:
+                self.choice_box.setColumnStretch(col, 1)  # equal-width columns
         while self.octave_box.count():
             item = self.octave_box.takeAt(0)
             widget = item.widget() if item is not None else None
@@ -1068,8 +1169,9 @@ class ExerciseView(QWidget):
                 widget.deleteLater()
         self.octave_row.setVisible(bool(q.octaves))
         if q.octaves:
-            self.octave_box.addWidget(QLabel(q.second_label))
             second_keys = second_row_keys(keys, labels=q.octaves)
+            number_bank = AnswerBank() if isinstance(self.exercise, KeyboardIntervals) and len(q.octaves) > 10 else None
+            number_buttons = []
             for i, octave in enumerate(q.octaves):
                 b = QPushButton(octave)
                 b.setMinimumHeight(40)
@@ -1078,19 +1180,26 @@ class ExerciseView(QWidget):
                     b.setToolTip(f"Key {second_keys[i]}")
                 b.setCheckable(True)
                 b.clicked.connect(lambda _=False, text=octave, btn=b: self._pick("octave", text=text, button=btn))
-                self.octave_box.addWidget(b, 1)
+                if number_bank is None:
+                    self.octave_box.addWidget(b, 1)
+                else:
+                    number_buttons.append(b)
                 self.buttons.append(b)
+            if number_bank is not None:
+                number_bank.setAccessibleName("Interval number buttons")
+                number_bank.set_buttons(number_buttons)
+                self.octave_box.addWidget(number_bank, 1)
         self._update_score()
 
     @staticmethod
     def _style(color: QColor) -> str:
         """
-        Return the style sheet that colours an answer button.
+        Return the style sheet that colors an answer button.
 
         Parameters
         ----------
         color : QColor
-            The background colour, with white text on it.
+            The background color, with white text on it.
 
         Returns
         -------
@@ -1112,16 +1221,16 @@ class ExerciseView(QWidget):
         staff: bool = False,
     ) -> None:
         """
-        Fade a button (and optionally the notes) from the staff's ink to a colour over a short time.
+        Fade a button (and optionally the notes) from the staff's ink to a color over a short time.
 
         Parameters
         ----------
         button : QPushButton
-            The button to colour.
+            The button to color.
         target : str
-            The colour to fade to, such as '#2e7d32'. Keyword-only.
+            The color to fade to, such as '#2e7d32'. Keyword-only.
         staff : bool, default False
-            Also colour the notes on the staff, or the highlighted key. Keyword-only.
+            Also color the notes on the staff, or the highlighted key. Keyword-only.
 
         Examples
         --------
@@ -1139,7 +1248,7 @@ class ExerciseView(QWidget):
 
         def step(t: float) -> None:
             """
-            Set the colours for one moment of the fade.
+            Set the colors for one moment of the fade.
 
             Parameters
             ----------
@@ -1154,7 +1263,7 @@ class ExerciseView(QWidget):
             button.setStyleSheet(self._style(c))
             if staff:
                 self.staff.set_note_color(c if t > 0 else None)
-                if self.question and self.question.keyboard:
+                if self.question and (self.question.keyboard or self.question.keyboard_notes):
                     self.keyboard.set_highlight_color(c if t > 0 else self.palette().color(QPalette.ColorRole.Highlight))
 
         anim.valueChanged.connect(step)
@@ -1236,7 +1345,7 @@ class ExerciseView(QWidget):
         """
         Step to the next sign after a right click on the staff, or to the one before when the wheel is turned the other way.
 
-        The order is no sign, sharp, flat and (under a key signature) natural, then round again. It does nothing unless the
+        The order is no sign, sharp, flat and (under a key signature) natural, then around again. It does nothing unless the
         question asks for signs.
 
         Parameters
@@ -1253,7 +1362,7 @@ class ExerciseView(QWidget):
         True
         >>> from alto.exercises.library import ScaleConstruction
         >>> view = ExerciseView(ScaleConstruction(), rng=random.Random(1))
-        >>> view._cycle_accidental(-1)  # back from no sign goes round to the flat
+        >>> view._cycle_accidental(-1)  # back from no sign goes around to the flat
         >>> view.scale_input.accidental
         -1
         """
@@ -1274,12 +1383,12 @@ class ExerciseView(QWidget):
 
     def _flash_note(self, target: str) -> None:
         """
-        Fade the placed note from the staff's ink to a colour.
+        Fade the placed note from the staff's ink to a color.
 
         Parameters
         ----------
         target : str
-            The colour to fade to, such as '#c62828'.
+            The color to fade to, such as '#c62828'.
 
         Examples
         --------
@@ -1879,12 +1988,12 @@ class ExerciseView(QWidget):
 
     def _flash_clef(self, target: str) -> None:
         """
-        Fade the placed clef from black to a colour.
+        Fade the placed clef from black to a color.
 
         Parameters
         ----------
         target : str
-            The colour to fade to, such as '#c62828'.
+            The color to fade to, such as '#c62828'.
 
         Examples
         --------
@@ -1986,12 +2095,12 @@ class ExerciseView(QWidget):
 
     def _flash_fork(self, target: str) -> None:
         """
-        Fade the fork's circle from the ink colour to a colour.
+        Fade the fork's circle from the ink color to a color.
 
         Parameters
         ----------
         target : str
-            The colour to fade to, such as '#c62828'.
+            The color to fade to, such as '#c62828'.
 
         Examples
         --------
@@ -2019,7 +2128,7 @@ class ExerciseView(QWidget):
         """
         Count an answer and log it.
 
-        Only the first attempt at a question counts towards the score and the streak. Each attempt is recorded with its time,
+        Only the first attempt at a question counts toward the score and the streak. Each attempt is recorded with its time,
         measured from the question appearing (first attempt) or the previous attempt.
 
         Parameters
@@ -2215,7 +2324,7 @@ class ExerciseView(QWidget):
             self.answered = True  # the other buttons stay as they are; only the one pressed animates
             identified_scale = isinstance(self.exercise, ScaleIdentification)
             self._flash(button, target="#2e7d32", staff=not identified_scale)
-            notes = q.staff or ([[q.keyboard]] if q.keyboard else [])
+            notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
             if identified_scale:
                 token = self._pair_token
                 sounds.play_notes(
@@ -2273,7 +2382,7 @@ class ExerciseView(QWidget):
 
     def _update_score(self) -> None:
         """
-        Show the score, the percentage right first time, and the streak.
+        Show the score, the percentage right on the first try, and the streak.
 
         Examples
         --------

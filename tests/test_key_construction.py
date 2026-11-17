@@ -464,7 +464,7 @@ def test_the_circle_travels_along_the_fork_never_across_the_gap(app: QApplicatio
     way = path_between(2, b=-2)
     assert way[0] == node_position(2) and way[-1] == node_position(-2)
     xs = {p.x() for p in way}
-    assert min(xs) == pytest.approx(APEX_X)  # it goes round the U, through its apex
+    assert min(xs) == pytest.approx(APEX_X)  # it goes around the U, through its apex
     fork = KeyFork()
     fork.set_value(2)
     QTest.qWait(40)
@@ -475,7 +475,7 @@ def test_the_circle_travels_along_the_fork_never_across_the_gap(app: QApplicatio
 
 def test_the_bend_of_the_fork_is_curved_and_so_is_the_circles_way_round_it(app: QApplication) -> None:
     """
-    Check that the circle goes round the U of the fork on a curve, in small steps, with no corner.
+    Check that the circle goes around the U of the fork on a curve, in small steps, with no corner.
 
     Parameters
     ----------

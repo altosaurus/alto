@@ -235,7 +235,7 @@ def test_the_baritone_clef_is_either_the_f_clef_on_the_middle_line_or_the_c_clef
 
 def test_the_wheel_and_a_right_click_choose_the_symbol(app: QApplication) -> None:
     """
-    Check that the wheel goes through the symbols both ways, going round, and that a right click goes on to the next.
+    Check that the wheel goes through the symbols both ways, going around, and that a right click goes on to the next.
 
     Parameters
     ----------
@@ -247,7 +247,7 @@ def test_the_wheel_and_a_right_click_choose_the_symbol(app: QApplication) -> Non
     staff.wheelEvent(turn(120))
     assert staff.selected == "C"
     staff.wheelEvent(turn(-240))
-    assert staff.selected == "F"  # back past the first, round to the last
+    assert staff.selected == "F"  # back past the first, around to the last
     staff.wheelEvent(turn(60))
     staff.wheelEvent(turn(60))  # half a notch is saved up, not lost
     assert staff.selected == "G"
@@ -317,7 +317,7 @@ def test_the_symbol_is_drawn_where_the_pointer_is_and_where_it_was_placed(app: Q
     staff.clear_placed()
     assert staff.grab().toImage() == blank
     staff.move_caret(0)
-    assert staff.grab().toImage() != blank  # the one that would be placed, in a lighter colour
+    assert staff.grab().toImage() != blank  # the one that would be placed, in a lighter color
     staff.clear_placed()
     staff.caret = 14  # on the third ledger line above: the lines it sits on are drawn too
     ledger = staff.grab().toImage()

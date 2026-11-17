@@ -45,7 +45,7 @@ pytest --cov --cov-report=term-missing
 ### Which checks run for which change
 
 Neither the workflows nor the pre-push hook run everything for every change. `scripts/changed_tests.py` looks at the files that
-changed and decides, and anything it does not recognise is a reason to run everything:
+changed and decides, and anything it does not recognize is a reason to run everything:
 
 - **Only docs** (`docs/**` and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
   with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.
@@ -227,7 +227,7 @@ them. A few habits keep them quiet:
 In code, suppress a false positive narrowly, with `# noinspection <Inspection>` on the line above the statement or the
 function, and say why when it is not obvious. A few things that are not obvious:
 
-- `PyUnusedLocal` is not honoured for the parameters of a fake that has to match what it replaces; delete them explicitly
+- `PyUnusedLocal` is not honored for the parameters of a fake that has to match what it replaces; delete them explicitly
   (`del volume, kwargs`) instead.
 - Read saved text with `text_value` in `alto/ui/store.py`, not `str(settings.value(...))`, which PyCharm flags and Pyright
   needs.
@@ -270,25 +270,25 @@ notation font and included in the statistics.
    the terms. This is what the summary in the Sound settings shows.
 4. Credit the recordings in `THIRD_PARTY_NOTICES.md` and the folder's `SOURCE.txt`.
 
-Only add recordings whose licence allows redistribution.
+Only add recordings whose license allows redistribution.
 
 ## Adding a notation font
 
 Alto draws notes with fonts that follow the [SMuFL](https://www.smufl.org/) standard.
 
-1. Put the font file and its licence in `alto/assets/fonts/`.
+1. Put the font file and its license in `alto/assets/fonts/`.
 2. Add its stem anchors and engraving defaults to `engraving.json`, read from the font's SMuFL metadata file.
 3. Register the file name in `_FILES` in `alto/ui/engraving.py`.
 4. Add a `NotationStyle` to `STYLES` in `alto/ui/notation.py`.
 5. Record the font in `THIRD_PARTY_NOTICES.md`.
 
-Only add fonts whose licence allows redistribution, such as the SIL Open Font License.
+Only add fonts whose license allows redistribution, such as the SIL Open Font License.
 
 ## Adding a keyboard style
 
-Add a `KeyboardStyle` to `STYLES` in `alto/ui/keyboard_styles.py`: the colours of the naturals and sharps, and any extras such as
+Add a `KeyboardStyle` to `STYLES` in `alto/ui/keyboard_styles.py`: the colors of the naturals and sharps, and any extras such as
 a case, felt, bone caps or stop knobs. The settings page, the keyboard and the range picker all read from that list, so nothing
-else needs changing. Add a row to the table in `docs/settings.md`. The colours named after materials in the builder are `MATERIALS` in the same file.
+else needs to be changed. Add a row to the table in `docs/settings.md`. The colors named after materials in the builder are `MATERIALS` in the same file.
 
 ## Versions of the docs
 
@@ -423,7 +423,7 @@ PYTHON=/path/to/python3.13 sh scripts/build-linux.sh
 
 The script makes a clean virtual environment under `.package-build/`, installs Alto and PyInstaller (the `package` extra in
 `pyproject.toml`) in it, freezes Alto with `packaging/alto.spec`, and packs the result with `packaging/linux/install.sh`, a
-README, the licence and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
+README, the license and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
 frozen program says `Alto <version>` and that it opens its window (under Qt's offscreen platform, with its own data folder, so a
 real profile is never touched).
 

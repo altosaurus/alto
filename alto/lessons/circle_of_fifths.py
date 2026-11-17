@@ -1,7 +1,7 @@
 """
 The lesson on the circle of fifths, taught from nothing.
 
-It covers what a key is, what a fifth is, how the circle counts sharps and flats, and what the inner ring and the neighbours of a
+It covers what a key is, what a fifth is, how the circle counts sharps and flats, and what the inner ring and the neighbors of a
 key mean.
 
 Examples
@@ -28,7 +28,7 @@ from alto.theory.fifths import (
     accidentals_of,
 )
 
-LETTERS = "CDEFGAB"  # the note names, in order, which wrap round: after B comes C
+LETTERS = "CDEFGAB"  # the note names, in order, which wrap around: after B comes C
 
 
 def key_name(ring: str, *, place: int) -> str:
@@ -213,7 +213,7 @@ def relative_task(rng: random.Random) -> Task:
     )
 
 
-def neighbour_task(rng: random.Random) -> Task:
+def neighbor_task(rng: random.Random) -> Task:
     """
     Ask for the key a fifth above or below a random key, answered on the circle.
 
@@ -229,7 +229,7 @@ def neighbour_task(rng: random.Random) -> Task:
 
     Examples
     --------
-    >>> task = neighbour_task(random.Random(5))
+    >>> task = neighbor_task(random.Random(5))
     >>> ring, at = next(iter(task.cells))
     >>> ring, at in range(12)
     ('outer', True)
@@ -315,7 +315,7 @@ CIRCLE_OF_FIFTHS = Lesson(
                 "B♭ has two (B♭ and E♭), and so on. The flats come in the order sharps do, backwards: <b>B E A D G C F</b>.</p>"
                 "<p>At the bottom, the two directions meet. F♯ major (six sharps) and G♭ major (six flats) are the same keys "
                 "on the "
-                "piano, spelt two ways. That is why that wedge, and two others, have two names.</p>"
+                "piano, spelled two ways. That is why that wedge, and two others, have two names.</p>"
             ),
             circle="explore",
             make_task=flats_task,
@@ -332,7 +332,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             make_task=relative_task,
         ),
         Step(
-            title="A key and its neighbours",
+            title="A key and its neighbors",
             text=(
                 "<p>Keys that sit next to each other on the circle have almost all their notes in common: only one note is "
                 "different. That makes them the closest relatives, and music often moves between them.</p>"
@@ -341,7 +341,7 @@ CIRCLE_OF_FIFTHS = Lesson(
                 "chords of the key. Click any key to see its chords lit, with the minor ones on the inner ring.</p>"
             ),
             circle="explore",
-            make_task=neighbour_task,
+            make_task=neighbor_task,
         ),
         Step(
             title="What you can do now",
@@ -351,7 +351,7 @@ CIRCLE_OF_FIFTHS = Lesson(
                 "<li>Clockwise is a fifth up and one more sharp. Counterclockwise is a fifth down and one more flat.</li>"
                 "<li>The number of steps from C is the number of sharps or flats.</li>"
                 "<li>The inner ring has each major key's relative minor, with the same key signature.</li>"
-                "<li>The neighbours of a key are its IV and its V.</li>"
+                "<li>The neighbors of a key are its IV and its V.</li>"
                 "</ul>"
                 "<p>The Circle of Fifths exercise asks these things, and remembers the ones you find hard. The reference pane "
                 "beside it holds this circle to look things up on.</p>"

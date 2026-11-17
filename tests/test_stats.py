@@ -85,7 +85,7 @@ def fill() -> tuple[Database, Profile, Profile]:
     a, b = A(), B()
     qa, qb = a.generate(rng), b.generate(rng)
     la, lb = Learner(db, profile=ada), Learner(db, profile=ben)
-    # Ada, two days ago: A right first time (2 s), A wrong then right (4 s then 3 s)
+    # Ada, two days ago: A right on the first try (2 s), A wrong then right (4 s then 3 s)
     la.record(
         a,
         question=qa,
@@ -147,7 +147,7 @@ def test_collects_first_attempt_accuracy_and_extra_attempts() -> None:
     accuracy, attempts = s.accuracy, s.attempts_per_question
     assert accuracy is not None and attempts is not None
     assert round(accuracy) == 33 and round(attempts, 2) == 1.33
-    assert s.days_practised == 2
+    assert s.days_practiced == 2
     assert s.median_seconds == 4.0  # first attempts took 2, 4 and 6 s
 
 
@@ -254,17 +254,17 @@ def test_nothing_recorded_gives_empty_stats() -> None:
 
 
 def test_daily_counts_count_first_answers_per_local_day_and_follow_the_exercise(
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that daily counts count first answers per local day and follow the exercise.
 
     Parameters
     ----------
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner()
+    learner = practiced_learner()
     now = time.time()
     everything = stats.daily_counts(learner.db, profile_ids=[learner.profile.id], now=now)
     assert everything and datetime.fromtimestamp(now).date() >= max(everything)

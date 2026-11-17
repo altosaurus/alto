@@ -19,10 +19,10 @@ Processing as for the other instruments (mono 22.05 kHz, 10 ms before the onset,
 under 0.9).
 
 viola_bowed: mezzo-forte (mf), 45 notes, every semitone from C3 to A6 (MIDI 48 to 93) except D#3, which failed the
-harmonic check; Alto pitch-shifts a neighbour for that one. Each note is cut to 2.2 s with a 0.4 s fade-out.
+harmonic check; Alto pitch-shifts a neighbor for that one. Each note is cut to 2.2 s with a 0.4 s fade-out.
   C string C3-D3 and E3-A3, G string A#3-B3 (G3-B3 run) and C4-C#4 (C4-B4 run), D string D4-B4 and C5-B5,
   A string C6-A6.
-  Because every semitone is stored, Alto does not have to borrow a neighbouring note, which would change the tone.
+  Because every semitone is stored, Alto does not have to borrow a neighboring note, which would change the tone.
 
 viola_plucked: fortissimo (ff), 20 notes, every second semitone from C3 to F#6 (MIDI 48 to 90). Notes are cut where the
 sound has died away (0.6 to 1.6 s) with a short fade-out.

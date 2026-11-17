@@ -1,5 +1,5 @@
 """
-Start Alto: `python -m alto` opens the main window for the profile that is practising.
+Start Alto: `python -m alto` opens the main window for the profile that is practicing.
 
 Examples
 --------
@@ -47,7 +47,7 @@ def main() -> int:
     Returns
     -------
     int
-        The exit code: 0 if the profile dialog was cancelled or the version was asked for, otherwise what the event loop returned.
+        The exit code: 0 if the profile dialog was canceled or the version was asked for, otherwise what the event loop returned.
 
     Examples
     --------

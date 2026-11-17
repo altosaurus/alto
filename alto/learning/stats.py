@@ -41,7 +41,7 @@ from alto.learning.database import Database
 from alto.theory.pitch import Note
 from alto.theory.scales import format_key_signature
 
-IDLE_CAP_S = 120.0  # one answer counts for at most this long towards practice time, so leaving the app open does not inflate it
+IDLE_CAP_S = 120.0  # one answer counts for at most this long toward practice time, so leaving the app open does not inflate it
 
 
 @dataclass
@@ -79,7 +79,7 @@ class Bucket:
     @property
     def accuracy(self) -> float | None:
         """
-        Return the percentage of questions in the period that were right first time.
+        Return the percentage of questions in the period that were right on the first try.
 
         Returns
         -------
@@ -125,7 +125,7 @@ class ExerciseStats:
     questions : int
         How many questions were answered. Keyword-only.
     accuracy : float
-        The percentage right first time. Keyword-only.
+        The percentage right on the first try. Keyword-only.
     median_seconds : float
         The typical time to a first answer, in seconds. Keyword-only.
 
@@ -190,15 +190,15 @@ class Stats:
     median_seconds : float or None
         The typical time to a first answer. Keyword-only.
     practice_seconds : float, default 0.0
-        Time spent practising, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.
-    days_practised : int, default 0
+        Time spent practicing, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.
+    days_practiced : int, default 0
         On how many different days there were answers. Keyword-only.
     granularity : str, default "day"
         The size of the chart periods: "hour", "day", "week" or "month". Keyword-only.
     buckets : list of Bucket
         One per period, oldest first. Keyword-only.
     by_exercise : list of ExerciseStats
-        One per exercise practised, sorted by name. Keyword-only.
+        One per exercise practiced, sorted by name. Keyword-only.
     hardest : list of HardQuestion
         The questions that need most practice. Keyword-only.
 
@@ -216,7 +216,7 @@ class Stats:
     attempts: int = 0
     median_seconds: float | None = None
     practice_seconds: float = 0.0
-    days_practised: int = 0
+    days_practiced: int = 0
     granularity: str = "day"
     buckets: list[Bucket] = field(default_factory=list)
     by_exercise: list[ExerciseStats] = field(default_factory=list)
@@ -225,7 +225,7 @@ class Stats:
     @property
     def accuracy(self) -> float | None:
         """
-        Return the percentage of questions that were right first time.
+        Return the percentage of questions that were right on the first try.
 
         Returns
         -------
@@ -247,7 +247,7 @@ class Stats:
         Returns
         -------
         float or None
-            1.0 if every question was answered right first time; None if no questions were answered.
+            1.0 if every question was answered right on the first try; None if no questions were answered.
 
         Examples
         --------
@@ -480,6 +480,8 @@ def describe(question: Question) -> str:
         what = f"{clef}: {format_key_signature(question.key)}. {question.prompt}"
     elif question.prompt:
         what = question.prompt
+    elif question.keyboard_notes:
+        what = "Keys " + " – ".join(spelled(note) for note in question.keyboard_notes)
     elif question.keyboard:
         what = f"Key {spelled(question.keyboard)}"
         if question.key:
@@ -624,7 +626,7 @@ def collect(
                 b.first_right += ok
                 b.times.append(seconds)
         out.buckets = list(buckets.values())
-        out.days_practised = len(days)
+        out.days_practiced = len(days)
         out.median_seconds = statistics.median(times) if times else None
         out.by_exercise = sorted(
             (

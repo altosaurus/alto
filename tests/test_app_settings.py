@@ -14,6 +14,7 @@ import pytest
 pytest.importorskip("PySide6")
 from PySide6.QtCore import (
     QEvent,
+    QPoint,
     Qt,
 )
 from PySide6.QtGui import (
@@ -108,7 +109,7 @@ def test_every_theme_card_has_three_pictures_and_the_system_one_is_cut_in_two(di
         card = dialog.card(family)
         assert [thumb.other is not None for thumb in card.thumbs.values()] == [False, False, True], family
         light, dark, system = card.thumbs.values()
-        assert system.colours == light.colours and system.other == dark.colours
+        assert system.colors == light.colors and system.other == dark.colors
         assert not light.grab().isNull() and not system.grab().isNull()
 
 
@@ -157,7 +158,7 @@ def test_hidden_settings_pages_are_built_on_first_visit_and_reused(dialog: AppSe
 
 def test_a_page_first_opened_after_a_theme_change_uses_the_new_palette(dialog: AppSettingsDialog) -> None:
     """
-    Check that a page built after changing themes inherits the current colours.
+    Check that a page built after changing themes inherits the current colors.
 
     Parameters
     ----------
@@ -316,9 +317,9 @@ def test_clicking_a_keyboard_card_applies_the_style(dialog: AppSettingsDialog) -
     assert keyboard_styles.current().key == "harpsichord-french"
 
 
-def test_the_builder_colours_each_part_and_selects_the_custom_style(dialog: AppSettingsDialog) -> None:
+def test_the_builder_colors_each_part_and_selects_the_custom_style(dialog: AppSettingsDialog) -> None:
     """
-    Check that the builder colours each part and selects the custom style.
+    Check that the builder colors each part and selects the custom style.
 
     Parameters
     ----------
@@ -326,13 +327,13 @@ def test_the_builder_colours_each_part_and_selects_the_custom_style(dialog: AppS
         The dialog under test.
     """
     dialog.categories.setCurrentRow(3)
-    dialog.builder._set("naturals", colour="#ead9aa")  # boxwood
-    assert keyboard_styles.current().key == "custom" and keyboard_styles.custom_colours()["naturals"] == "#ead9aa"
+    dialog.builder._set("naturals", color="#ead9aa")  # boxwood
+    assert keyboard_styles.current().key == "custom" and keyboard_styles.custom_colors()["naturals"] == "#ead9aa"
     assert dialog.keyboard_cards["custom"].isChecked()
     assert dialog.keyboard_cards["custom"].keys.style_override.white[0] == "#ead9aa"  # the card previews it
-    dialog.builder._set("felt", colour="#7d1f27")
-    dialog.builder._set("felt", colour=None)  # an optional part can be left out
-    assert keyboard_styles.custom_colours()["felt"] is None and keyboard_styles.current().felt is None
+    dialog.builder._set("felt", color="#7d1f27")
+    dialog.builder._set("felt", color=None)  # an optional part can be left out
+    assert keyboard_styles.custom_colors()["felt"] is None and keyboard_styles.current().felt is None
     assert dialog.builder.swatches["felt"].text() == "none"
 
 
@@ -354,12 +355,12 @@ def test_the_builder_has_a_chip_for_every_material_and_none_for_optional_parts(d
     assert keyboard_styles.current().key == "custom"
 
 
-def test_the_builder_opens_the_colour_picker_and_keeps_a_chosen_colour(
+def test_the_builder_opens_the_color_picker_and_keeps_a_chosen_color(
     dialog: AppSettingsDialog,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that the builder opens the colour picker and keeps a chosen colour.
+    Check that the builder opens the color picker and keeps a chosen color.
 
     Parameters
     ----------
@@ -369,15 +370,15 @@ def test_the_builder_opens_the_colour_picker_and_keeps_a_chosen_colour(
         Replaces settings, functions or attributes for the length of the test.
     """
     dialog.categories.setCurrentRow(3)
-    picked = iter([QColor("#336699"), QColor()])  # then the dialog is cancelled
+    picked = iter([QColor("#336699"), QColor()])  # then the dialog is canceled
     monkeypatch.setattr(app_settings.QColorDialog, "getColor", lambda *a, **k: next(picked))
     dialog.builder.swatches["case"].click()
-    assert keyboard_styles.custom_colours()["case"] == "#336699"
+    assert keyboard_styles.custom_colors()["case"] == "#336699"
     dialog.builder.swatches["case"].click()
-    assert keyboard_styles.custom_colours()["case"] == "#336699"  # cancelled: unchanged
+    assert keyboard_styles.custom_colors()["case"] == "#336699"  # canceled: unchanged
 
 
-def test_a_theme_with_colours_of_its_own_sets_the_palette_and_gives_it_back(app: QApplication) -> None:
+def test_a_theme_with_colors_of_its_own_sets_the_palette_and_gives_it_back(app: QApplication) -> None:
     """
     Check that Studio sets the application's palette, that Studio Night is dark, and that going back to System lets go of it.
 
@@ -484,7 +485,7 @@ def test_a_system_version_of_a_theme_is_light_or_dark_as_the_desktop_is(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that the System version of a theme uses its light colours on a light desktop and its dark colours on a dark one.
+    Check that the System version of a theme uses its light colors on a light desktop and its dark colors on a dark one.
 
     Parameters
     ----------
@@ -515,7 +516,7 @@ def test_a_system_version_of_a_theme_is_light_or_dark_as_the_desktop_is(
 
 def test_the_themes_are_made_from_their_seeds_in_a_light_and_a_dark_version(app: QApplication) -> None:
     """
-    Check the generated themes: a pair each, unique keys, dark ones dark, and the colours the preview page showed.
+    Check the generated themes: a pair each, unique keys, dark ones dark, and the colors the preview page showed.
 
     Parameters
     ----------
@@ -534,9 +535,9 @@ def test_the_themes_are_made_from_their_seeds_in_a_light_and_a_dark_version(app:
     assert theme.family_of("sage_auto") == ("sage", "system") and theme.variant_key("default", version="system") == "system"
 
 
-def test_the_card_writes_out_the_window_accent_and_ink_colours_of_each_version(app: QApplication) -> None:
+def test_the_card_writes_out_the_window_accent_and_ink_colors_of_each_version(app: QApplication) -> None:
     """
-    Check that the Light and Dark rows of a card say the window, accent and ink colours in hexadecimal, and the others do not.
+    Check that the Light and Dark rows of a card say the window, accent and ink colors in hexadecimal, and the others do not.
 
     Parameters
     ----------
@@ -555,9 +556,9 @@ def test_the_card_writes_out_the_window_accent_and_ink_colours_of_each_version(a
 
 def test_the_squares_of_a_theme_are_beside_its_pictures_and_not_at_the_bottom(app: QApplication) -> None:
     """
-    Check that the Light and Dark rows of a card have the squares of their colours.
+    Check that the Light and Dark rows of a card have the squares of their colors.
 
-    "Always light" and "Always dark" are gone from a theme that has its own colours.
+    "Always light" and "Always dark" are gone from a theme that has its own colors.
 
     Parameters
     ----------
@@ -577,7 +578,7 @@ def test_the_squares_of_a_theme_are_beside_its_pictures_and_not_at_the_bottom(ap
     texts = [label.text() for label in card.findChildren(QLabel)]
     assert "Always light." not in texts and "Always dark." not in texts and "Light or dark as the desktop is." in texts
     plain = [label.text() for label in ThemeCard("default").findChildren(QLabel)]
-    assert "Always light." in plain and "Always dark." in plain  # the desktop's own colours have no squares to show
+    assert "Always light." in plain and "Always dark." in plain  # the desktop's own colors have no squares to show
 
 
 @pytest.fixture
@@ -621,20 +622,20 @@ def test_a_theme_can_be_made_saved_and_used(
     editor = dialog.theme_editor
     dialog.theme_list.setCurrentItem(dialog.new_theme_item)
     assert dialog.theme_pages.currentWidget() is editor and theme.saved_theme() == "system"  # nothing is used while it is made
-    editor.name_edit.setText("Harbour Lights")
-    editor.colours["light"]["accent"] = "#ff00aa"
+    editor.name_edit.setText("Harbor Lights")
+    editor.colors["light"]["accent"] = "#ff00aa"
     sage_row = editor.start_from.findData("sage")
     editor.start_from.setCurrentIndex(sage_row)
-    editor.start_from.activated.emit(sage_row)  # choosing a theme in the list takes its colours, with no button to press
-    editor.colours["dark"]["accent"] = "#00ffcc"
+    editor.start_from.activated.emit(sage_row)  # choosing a theme in the list takes its colors, with no button to press
+    editor.colors["dark"]["accent"] = "#00ffcc"
     editor.save_button.click()
     records = theme.user_records()
-    assert len(records) == 1 and records[0]["name"] == "Harbour Lights"
+    assert len(records) == 1 and records[0]["name"] == "Harbor Lights"
     sage = theme.custom_theme("sage")
     assert sage is not None and records[0]["dark"]["accent"] == "#00ffcc" and records[0]["light"]["window"] == sage.window
     family = records[0]["id"]
     assert family.startswith("my_") and family in dialog.theme_items and family in dialog.theme_cards
-    assert dialog.theme_list.item(0).text() == "MY THEMES" and dialog.theme_items[family].text() == "Harbour Lights"
+    assert dialog.theme_list.item(0).text() == "MY THEMES" and dialog.theme_items[family].text() == "Harbor Lights"
     assert dialog.theme_pages.currentWidget() is dialog.card_page(family)
     assert theme.saved_theme() == f"{family}_auto"  # in the version that was last chosen: System
     assert theme.custom_theme(f"{family}_dark") is not None and theme.scheme_of(f"{family}_dark") == Qt.ColorScheme.Dark
@@ -653,9 +654,9 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that a theme of the user's own has a Change colours button, and that the colour picker changes a colour.
+    Check that a theme of the user's own has a Change colors button, and that the color picker changes a color.
 
-    Deleting a theme asks first, and goes back to the desktop's colours if it was in use.
+    Deleting a theme asks first, and goes back to the desktop's colors if it was in use.
 
     Parameters
     ----------
@@ -666,8 +667,8 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
     """
-    colours = {part: "#112233" for part in theme.PARTS}
-    theme.upsert_user_theme(theme.ThemeRecord(id="my_test", name="Mine", light=dict(colours), dark=dict(colours)))
+    colors = {part: "#112233" for part in theme.PARTS}
+    theme.upsert_user_theme(theme.ThemeRecord(id="my_test", name="Mine", light=dict(colors), dark=dict(colors)))
     dialog = AppSettingsDialog()
     dialog.categories.setCurrentRow(1)
     dialog.show()
@@ -682,8 +683,8 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
         dialog.theme_pages.currentWidget() is editor and editor.name_edit.text() == "Mine" and not editor.delete_button.isHidden()
     )
     monkeypatch.setattr(theme_editor.QColorDialog, "getColor", lambda *args, **kwargs: QColor("#abcdef"))
-    editor.buttons["light"]["accent"].click()  # the picker answers with a colour
-    assert editor.colours["light"]["accent"] == "#abcdef"
+    editor.buttons["light"]["accent"].click()  # the picker answers with a color
+    assert editor.colors["light"]["accent"] == "#abcdef"
     editor.name_edit.setText("Mine, changed")
     editor.save_button.click()
     assert [(r["name"], r["light"]["accent"]) for r in theme.user_records()] == [("Mine, changed", "#abcdef")]
@@ -696,7 +697,7 @@ def test_a_theme_that_was_made_can_be_changed_and_deleted(
     assert theme.family_of(theme.saved_theme())[0] == "my_test"
     editor.delete_button.click()
     assert theme.user_records() == [] and "my_test" not in dialog.theme_items
-    assert theme.saved_theme() == "system"  # it was in use, so the desktop's own colours are back
+    assert theme.saved_theme() == "system"  # it was in use, so the desktop's own colors are back
     dialog.close()
 
 
@@ -760,12 +761,12 @@ def test_the_editors_buttons_stay_in_view_at_the_top_and_its_fields_take_the_app
     dialog.close()
 
 
-def test_choosing_in_start_from_takes_the_colours_at_once_and_there_is_no_copy_button(
+def test_choosing_in_start_from_takes_the_colors_at_once_and_there_is_no_copy_button(
     app: QApplication,
     no_user_themes: None,
 ) -> None:
     """
-    Check that picking a theme in "Start from" changes the colours straight away, and that the button that did it is gone.
+    Check that picking a theme in "Start from" changes the colors right away, and that the button that did it is gone.
 
     Parameters
     ----------
@@ -775,27 +776,27 @@ def test_choosing_in_start_from_takes_the_colours_at_once_and_there_is_no_copy_b
         Clears the themes of the user's own.
     """
     editor = ThemeEditor()
-    assert "Copy its colours" not in [button.text() for button in editor.findChildren(QPushButton)]
+    assert "Copy its colors" not in [button.text() for button in editor.findChildren(QPushButton)]
     studio, pine = theme.custom_theme("studio"), theme.custom_theme("pine_dark")
     assert studio is not None and pine is not None
-    assert editor.colours["light"]["window"] == studio.window  # a new theme starts as Studio
+    assert editor.colors["light"]["window"] == studio.window  # a new theme starts as Studio
     row = editor.start_from.findData("pine")
     editor.start_from.setCurrentIndex(row)
     editor.start_from.activated.emit(row)
-    assert editor.colours["dark"]["window"] == pine.window and editor.pictures["dark"].colours["window"] == pine.window
-    editor.load(theme.ThemeRecord(id="my_x", name="X", light=dict(editor.colours["light"]), dark=dict(editor.colours["dark"])))
+    assert editor.colors["dark"]["window"] == pine.window and editor.pictures["dark"].colors["window"] == pine.window
+    editor.load(theme.ThemeRecord(id="my_x", name="X", light=dict(editor.colors["light"]), dark=dict(editor.colors["dark"])))
     offered = [editor.start_from.itemData(row) for row in range(editor.start_from.count())]
     assert editor.start_from.currentData() is None and "my_x" not in offered  # it does not offer itself
     editor.start_from.activated.emit(0)  # the line that asks for a choice takes nothing
-    assert editor.colours["dark"]["window"] == pine.window
+    assert editor.colors["dark"]["window"] == pine.window
     editor.show()
     name_left = editor.name_edit.mapTo(editor, editor.name_edit.rect().topLeft()).x()
     assert name_left == editor.start_from.mapTo(editor, editor.start_from.rect().topLeft()).x()  # the fields line up
 
 
-def test_the_editors_colour_buttons_light_up_on_hover_and_show_a_hand(app: QApplication, no_user_themes: None) -> None:
+def test_the_editors_color_buttons_light_up_on_hover_and_show_a_hand(app: QApplication, no_user_themes: None) -> None:
     """
-    Check that every colour button has a hover ring that shows on its colour, a pointing hand, and a tooltip that says to click.
+    Check that every color button has a hover ring that shows on its color, a pointing hand, and a tooltip that says to click.
 
     Parameters
     ----------
@@ -808,17 +809,17 @@ def test_the_editors_colour_buttons_light_up_on_hover_and_show_a_hand(app: QAppl
     for version in ("light", "dark"):
         for part in theme.PARTS:
             button = editor.buttons[version][part]
-            ring = "#ffffff" if QColor(editor.colours[version][part]).lightness() < 140 else "#1a1a1a"
-            assert f"QPushButton:hover {{ border: 3px solid {ring}; }}" in button.styleSheet()  # a ring that shows on its colour
+            ring = "#ffffff" if QColor(editor.colors[version][part]).lightness() < 140 else "#1a1a1a"
+            assert f"QPushButton:hover {{ border: 3px solid {ring}; }}" in button.styleSheet()  # a ring that shows on its color
             assert button.cursor().shape() == Qt.CursorShape.PointingHandCursor
             assert button.toolTip().startswith("Click to change")
     first = editor.buttons["light"]["window"]
-    assert editor.colours["light"]["window"] in first.styleSheet()  # and it still shows its own colour
+    assert editor.colors["light"]["window"] in first.styleSheet()  # and it still shows its own color
 
 
-def test_the_code_beside_a_colour_lights_up_with_the_colour(app: QApplication, no_user_themes: None) -> None:
+def test_the_code_beside_a_color_lights_up_with_the_color(app: QApplication, no_user_themes: None) -> None:
     """
-    Check that pointing at a colour button makes the hex code beside it bold and dark, and that leaving puts it back.
+    Check that pointing at a color button makes the hex code beside it bold and dark, and that leaving puts it back.
 
     Parameters
     ----------
@@ -833,6 +834,9 @@ def test_the_code_beside_a_colour_lights_up_with_the_colour(app: QApplication, n
     button, code = editor.buttons["dark"]["accent"], editor._values["dark"]["accent"]
     other = editor._values["light"]["accent"]
     assert "bold" not in code.styleSheet()
+    # Ensure a real enter event even if an earlier test left the pointer at this screen position.
+    QTest.mouseMove(editor, QPoint(1, 1))
+    app.processEvents()
     QTest.mouseMove(button, button.rect().center())
     QTest.qWait(50)
     assert "bold" in code.styleSheet() and "palette(text)" in code.styleSheet()

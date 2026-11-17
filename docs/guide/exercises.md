@@ -101,7 +101,7 @@ Things to notice:
   questions from *every registered exercise* and checks both. A new exercise is covered the moment it is registered.
 - **Distractors.** The wrong answers matter as much as the right one. `pick_distractors(correct, pool=..., n=..., rng=...)` in
   `base.py` returns the right answer shuffled in with `n` others drawn from a pool; use it, or write your own, with plausible
-  wrong answers (for intervals: the neighbouring qualities, not random words). A question where only one answer is
+  wrong answers (for intervals: the neighboring qualities, not random words). A question where only one answer is
   conceivable teaches nothing.
 - **Where the logic lives.** Anything about music itself (spelling, intervals, scales) belongs in `alto/theory/`, with tests,
   and is *used* by the exercise. If your `generate` contains theory, move it.

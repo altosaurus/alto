@@ -1,0 +1,59 @@
+<div id="alto-icon-options">
+  <div class="viz-carousel viz-dotted-background" aria-label="Tiles and navigation icon pairs">
+    <section data-variant="Grid and sidebar"><div class="ai-product" data-tiles="layout-grid" data-pane="panel-left"></div></section>
+    <section data-variant="Grid and open pane" hidden><div class="ai-product" data-tiles="grid-2x2" data-pane="panel-left-open"></div></section>
+    <section data-variant="Cards and list" hidden><div class="ai-product" data-tiles="panels-top-left" data-pane="list"></div></section>
+    <section data-variant="Compact grid and tree" hidden><div class="ai-product" data-tiles="grid-3x3" data-pane="list-tree"></div></section>
+    <section data-variant="Dashboard and columns" hidden><div class="ai-product" data-tiles="layout-dashboard" data-pane="columns-2"></div></section>
+    <section data-variant="Grid and panel toggle" hidden><div class="ai-product" data-tiles="layout-grid" data-pane="panel-left-right-dashed"></div></section>
+  </div>
+</div>
+<style>
+#alto-icon-options {--ai-bg:light-dark(#efefef,#202124);--ai-paper:light-dark(#fff,#292b2f);--ai-ink:light-dark(#24272a,#eceef0);--ai-border:light-dark(#c7cace,#4d5258);--ai-soft:light-dark(#e1e3e6,#34373c);--ai-focus:light-dark(#287caf,#82b7e6);color:var(--ai-ink)}
+#alto-icon-options * {box-sizing:border-box}
+#alto-icon-options .ai-product {font:400 14px/1.5 system-ui,sans-serif;background:var(--ai-bg);padding:24px;min-height:370px;border:1px solid var(--ai-border);border-radius:10px}
+#alto-icon-options h2 {font:500 16px/1.5 system-ui,sans-serif;margin:0 0 16px}
+#alto-icon-options .ai-pairs {display:flex;gap:30px;flex-wrap:wrap;margin-bottom:26px}
+#alto-icon-options .ai-choice {display:flex;align-items:center;gap:12px}
+#alto-icon-options .ai-choice svg {width:22px;height:22px}
+#alto-icon-options .ai-toolbar {display:flex;gap:12px;align-items:center;padding:16px 0}
+#alto-icon-options .ai-sections {display:flex;border:1px solid var(--ai-border);border-radius:6px;overflow:hidden}
+#alto-icon-options button {font:inherit;background:transparent;color:var(--ai-ink);border:none;padding:8px 11px;display:inline-flex;align-items:center;justify-content:center;min-height:36px}
+#alto-icon-options button:hover {background:var(--ai-soft)}
+#alto-icon-options button:focus-visible {outline:2px solid var(--ai-focus);outline-offset:-2px}
+#alto-icon-options .ai-sections button+button {border-left:1px solid var(--ai-border)}
+#alto-icon-options .ai-sections button[aria-pressed="true"] {background:var(--ai-soft);color:var(--ai-focus)}
+#alto-icon-options .ai-divider {height:22px;width:1px;background:var(--ai-border)}
+#alto-icon-options .ai-view {border-radius:6px}
+#alto-icon-options .ai-search {max-width:240px;padding:7px 10px;border:1px solid var(--ai-border);border-radius:8px;display:flex;gap:8px;align-items:center;margin-bottom:22px}
+#alto-icon-options .ai-stage {background:var(--ai-paper);border-top:1px solid var(--ai-border);padding:18px;display:flex;align-items:center;gap:14px;min-height:72px}
+#alto-icon-options .ai-product svg {flex-shrink:0}
+@media(max-width:440px){#alto-icon-options .ai-product {padding:16px;min-height:400px}#alto-icon-options .ai-pairs {gap:16px}}
+@media(pointer:coarse){#alto-icon-options button {min-width:44px;min-height:44px}}
+</style>
+<script>
+(() => {
+ const root=document.getElementById('alto-icon-options');
+ const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
+ const refreshIcons=()=>{if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:18,height:18}});};
+ root.querySelectorAll('.ai-product').forEach(product=>{
+  let pane=false;
+  product.innerHTML=`<div class="ai-pairs"><div class="ai-choice">${icon(product.dataset.tiles)}<span>Tiles</span></div><div class="ai-choice">${icon(product.dataset.pane)}<span>Navigation pane</span></div></div><h2>Quiet toolbar</h2><div class="ai-toolbar"><div class="ai-sections" role="group" aria-label="Exercises or Lessons"><button type="button" aria-label="Exercises" data-tooltip="Exercises" aria-pressed="true">${icon('list-checks')}</button><button type="button" aria-label="Lessons" data-tooltip="Lessons" aria-pressed="false">${icon('graduation-cap')}</button></div><span class="ai-divider"></span><button class="ai-view" type="button"></button></div><div class="ai-search">${icon('search')}<span>Search exercises…</span></div><div class="ai-stage" aria-live="polite"></div>`;
+  const view=product.querySelector('.ai-view');
+  const stage=product.querySelector('.ai-stage');
+  const render=()=>{
+   view.innerHTML=icon(pane?product.dataset.tiles:product.dataset.pane);
+   view.setAttribute('aria-label',pane?'Return to tiles':'Show navigation pane');
+   view.setAttribute('data-tooltip',pane?'Return to tiles':'Show navigation pane');
+   stage.innerHTML=icon(pane?product.dataset.pane:product.dataset.tiles)+`<span>${pane?'Navigation pane open':'Tiles open'}</span>`;
+   refreshIcons();
+  };
+  view.addEventListener('click',()=>{pane=!pane;render();});
+  product.querySelectorAll('.ai-sections button').forEach(button=>button.addEventListener('click',()=>{
+   product.querySelectorAll('.ai-sections button').forEach(peer=>peer.setAttribute('aria-pressed',String(peer===button)));
+   product.querySelector('.ai-search span').textContent=`Search ${button.getAttribute('aria-label').toLowerCase()}…`;
+  }));
+  render();
+ });
+})();
+</script>

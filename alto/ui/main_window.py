@@ -97,6 +97,7 @@ from alto.ui.settings_panel import (
     load_key_construction,
     load_key_signatures,
     load_keyboard,
+    load_keyboard_intervals,
     load_note_names,
     load_scale_construction,
     load_scale_identification,
@@ -151,6 +152,8 @@ class _PageState:
     ----------
     exercise : type of Exercise or None
         The retained exercise's class.
+    exercise_settings : tuple of (bool, int, int) or None
+        Whether exercise settings are open, the selected settings page, and its scroll position.
     lesson : tuple of (str, int) or None
         The retained lesson's key and step.
     active : str
@@ -175,6 +178,7 @@ class _PageState:
     """
 
     exercise: type[Exercise] | None = None
+    exercise_settings: tuple[bool, int, int] | None = None
     lesson: tuple[str, int] | None = None
     active: str = "empty"
     lesson_parent: str = "home"
@@ -273,7 +277,7 @@ class MainWindow(QMainWindow):
     APP_TITLE : str
         The title shown on the start screen.
     learner : Learner or None
-        Who is practising, and their history; None practises without recording.
+        Who is practicing, and their history; None practices without recording.
     nav : QListWidget
         The exercise list.
     stack : QStackedWidget
@@ -313,7 +317,7 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         learner : Learner or None, default None
-            Who is practising. Without one, nothing is recorded and the statistics buttons are hidden.
+            Who is practicing. Without one, nothing is recorded and the statistics buttons are hidden.
 
         Examples
         --------
@@ -337,7 +341,7 @@ class MainWindow(QMainWindow):
         self._workspace_page: ExerciseView | LessonsPage | None = None
         self._lesson_return: tuple[QWidget | None, str] | None = None
         self._settings: AppSettingsDialog | None = None  # the settings, while they are open
-        self.learner = learner  # who is practising, and their history; None practises without recording
+        self.learner = learner  # who is practicing, and their history; None practices without recording
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
         saved_geometry = store().value("ui/windowGeometry", QByteArray())
@@ -434,7 +438,7 @@ class MainWindow(QMainWindow):
         # A transparent, frameless popup lets the stylesheet's rounded corners show without a square backdrop.
         menu.setWindowFlags(menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
         menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text colour
+        glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text color
         self.profile_action = menu.addAction(svg_icon(icons.PROFILE, color=glyph, size=18), "")
         self.profile_action.triggered.connect(self.switch_profile)
         settings_action = menu.addAction(svg_icon(icons.GEAR, color=glyph, size=18), "Settings…")
@@ -481,6 +485,7 @@ class MainWindow(QMainWindow):
 
         load_note_names()
         load_keyboard()
+        load_keyboard_intervals()
         load_construction()
         load_arpeggio()
         load_key_signatures()
@@ -514,7 +519,7 @@ class MainWindow(QMainWindow):
 
         root = QWidget()
         lay = QVBoxLayout(root)
-        # Navigation on the left, data tools on the right, with the activity title centred.
+        # Navigation on the left, data tools on the right, with the activity title centered.
         self.title_label = QLabel(self.APP_TITLE)
         self.title_label.setStyleSheet("font-size: 14pt; font-weight: bold;")
         buttons = QHBoxLayout()
@@ -964,7 +969,7 @@ class MainWindow(QMainWindow):
             self,
             "About Alto",
             f"<h3>Alto {updates.installed_version()}</h3>"
-            "<p>Learn and practise music theory with interactive exercises and lessons.</p>",
+            "<p>Learn and practice music theory with interactive exercises and lessons.</p>",
         )
 
     def open_settings(self) -> None:
@@ -1009,6 +1014,7 @@ class MainWindow(QMainWindow):
         for name in (
             "note_names",
             "keyboard",
+            "keyboard_intervals",
             "construction",
             "arpeggio",
             "key_signatures",
@@ -1051,7 +1057,7 @@ class MainWindow(QMainWindow):
 
     def rebuild(self) -> None:
         """
-        Make the window's contents again in the same window, so every icon and colour is drawn in the new theme.
+        Make the window's contents again in the same window, so every icon and color is drawn in the new theme.
 
         The window itself stays, so it does not vanish and reappear. The page that was open is shown again, with the list
         already open or closed as it was, not sliding.
@@ -1098,6 +1104,7 @@ class MainWindow(QMainWindow):
         parent = self._lesson_return[0] if self._lesson_return else self.home
         return _PageState(
             exercise=type(self._exercise_page.exercise) if self._exercise_page is not None else None,
+            exercise_settings=self._exercise_page.settings_state() if self._exercise_page is not None else None,
             lesson=(self._lesson_page.view.lesson.key, self._lesson_page.view.current) if self._lesson_page is not None else None,
             active="lesson" if isinstance(self._workspace_page, LessonsPage) else "exercise" if self._workspace_page else "empty",
             lesson_parent="exercise" if isinstance(parent, ExerciseView) else "empty" if parent is self.empty_page else "home",
@@ -1142,6 +1149,8 @@ class MainWindow(QMainWindow):
         """
         if state.exercise is not None:
             self.open_exercise(state.exercise)
+            if self._exercise_page is not None and state.exercise_settings is not None:
+                self._exercise_page.restore_settings_state(state.exercise_settings)
         if state.lesson is not None:
             self.open_lessons(state.lesson[0])
             if self._lesson_page is not None:
@@ -1211,7 +1220,7 @@ class MainWindow(QMainWindow):
             return
         page = GlossaryPage()
         page.lesson_requested.connect(self.open_lessons)
-        page.exercise_requested.connect(self._practise)
+        page.exercise_requested.connect(self._practice)
         self._open_overlay(page, title="Glossary")
 
     def open_stats(self) -> None:
@@ -1412,7 +1421,7 @@ class MainWindow(QMainWindow):
 
     def _toggle_tiles_workspace(self) -> None:
         """
-        Switch between the tile catalogue and the workspace while keeping the activity in place.
+        Switch between the tile catalog and the workspace while keeping the activity in place.
 
         Examples
         --------
@@ -1473,7 +1482,7 @@ class MainWindow(QMainWindow):
         old = self._lesson_page
         page = old if old is not None and old.view.lesson.key == lesson else LessonsPage(lesson)
         if page is not old:
-            page.practise_requested.connect(self._practise)
+            page.practice_requested.connect(self._practice)
             page.back.connect(self._leave_lesson)
             page.view.stepped.connect(self.lesson_nav.select_step)
             self.stack.addWidget(page)
@@ -1639,7 +1648,7 @@ class MainWindow(QMainWindow):
         if heading is not None:
             heading.setHidden(not group_visible)
 
-    def _practise(self, name: str) -> None:
+    def _practice(self, name: str) -> None:
         """
         Leave the lessons and open the exercise that a lesson ends with.
 
@@ -1651,7 +1660,7 @@ class MainWindow(QMainWindow):
         Examples
         --------
         >>> window = MainWindow()
-        >>> window._practise("CircleOfFifths")
+        >>> window._practice("CircleOfFifths")
         >>> window.title_label.text()
         'Circle of Fifths'
         """
@@ -1822,7 +1831,7 @@ class MainWindow(QMainWindow):
         profiles = db.profiles()
         self.learner.profile = db.profile(int_value(store(), key="profile/last", default=-1)) or profiles[0]
         apply_theme(saved_theme())
-        self.rebuild()  # a new window loads every setting, and draws every icon and colour in the theme again
+        self.rebuild()  # a new window loads every setting, and draws every icon and color in the theme again
 
     def show_home(self) -> None:
         """

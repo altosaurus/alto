@@ -2,7 +2,7 @@
 title: alto.ui.instrument_picker
 parent: api
 package: alto.ui
-order: 35
+order: 37
 permalink: /api/alto.ui.instrument_picker/
 ---
 {% raw %}
@@ -65,7 +65,7 @@ Remember the instrument in use.
 def tokens(widget: QWidget) -> dict[str, str]
 ```
 
-Return the summary page's colours.
+Return the summary page's colors.
 
 All are mixed from the system palette so they follow its light or dark theme.
 
@@ -75,15 +75,15 @@ All are mixed from the system palette so they follow its light or dark theme.
 
 **Returns**
 
-- *dict of str to str*: Colour name to '#rrggbb': accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a text colour and a soft background (such as good and good_soft).
+- *dict of str to str*: Color name to '#rrggbb': accent, accent_soft, muted, line, panel and well, and for each of good, warn and bad a text color and a soft background (such as good and good_soft).
 
 **Examples**
 
 ```pycon
->>> colours = tokens(QWidget())
->>> sorted(colours)[:3]
+>>> colors = tokens(QWidget())
+>>> sorted(colors)[:3]
 ['accent', 'accent_soft', 'bad']
->>> colours["panel"].startswith("#")
+>>> colors["panel"].startswith("#")
 True
 ```
 
@@ -203,7 +203,7 @@ Fill the summary page for an entry from what is known about it and what is on di
 def changeEvent(event: QEvent) -> None
 ```
 
-Redraw the summary page when the palette changes, so its colours follow the theme.
+Redraw the summary page when the palette changes, so its colors follow the theme.
 
 **Parameters**
 

@@ -1,5 +1,5 @@
 """
-Scale-degree carets are visibly centred above their numbers rather than beside them.
+Scale-degree carets are visibly centered above their numbers rather than beside them.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 
 @pytest.mark.parametrize("digit", list("1234567"))
 @pytest.mark.parametrize("family", ["Sans Serif", "Liberation Sans"])
-def test_caret_ink_is_centred_above_digit(
+def test_caret_ink_is_centered_above_digit(
     app: QApplication,
     *,
     digit: str,

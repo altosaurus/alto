@@ -80,7 +80,7 @@ INFO: dict[str, InstrumentInfo] = {
         includes="Medium dynamic (layer 8 of 16), a recording every minor third from A0 to C8",
         terms=SALAMANDER_TERMS,
         note="Each note is trimmed to 2.5 seconds with a fade-out. The notes between the recordings are shifted from a "
-        "neighbour by at most a semitone. The highest notes are a little sharp, up to about 60 cents at C8, as in a "
+        "neighbor by at most a semitone. The highest notes are a little sharp, up to about 60 cents at C8, as in a "
         "real piano's stretch tuning. Notes outside A0 to C8 are synthesized.",
     ),
     "flute": InstrumentInfo(
@@ -90,7 +90,7 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Sonja Feig",
         recorded="April 2000, anechoic chamber, Neumann KM 84 microphone",
         includes="Without vibrato, fortissimo",
-        note="Every semitone from B3 to C♯7 is recorded, so Alto does not have to borrow a neighbouring note. "
+        note="Every semitone from B3 to C♯7 is recorded, so Alto does not have to borrow a neighboring note. "
         "The highest notes are played a little sharp, up to about 45 cents (nearly half a semitone), as recorded.",
     ),
     "horn": InstrumentInfo(
@@ -100,7 +100,7 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Jessica Wiskus",
         recorded="27 July 1997, anechoic chamber, Neumann KM 84 microphone, 5 feet away",
         includes="Fortissimo",
-        note="Every semitone from A♯1 to F5 is recorded, so Alto does not have to borrow a neighbouring note. "
+        note="Every semitone from A♯1 to F5 is recorded, so Alto does not have to borrow a neighboring note. "
         "The lowest notes are played a little flat, up to about 45 cents, as recorded.",
     ),
     "viola_bowed": InstrumentInfo(
@@ -110,7 +110,7 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Manuel Tabora, on a viola by Anton Krutz (2001)",
         recorded="11 May 2012, anechoic chamber, Earthworks QTC40 microphones",
         includes="Bowed (arco), mezzo-forte, on the C, G, D and A strings",
-        note="Nearly every semitone is recorded, so Alto rarely has to borrow a neighbouring note. "
+        note="Nearly every semitone is recorded, so Alto rarely has to borrow a neighboring note. "
         "The source files declare 44.1 kHz but hold 96 kHz audio, so Alto reads them at 96 kHz.",
     ),
     "viola_plucked": InstrumentInfo(
@@ -120,7 +120,7 @@ INFO: dict[str, InstrumentInfo] = {
         performer="Manuel Tabora, on a viola by Anton Krutz (2001)",
         recorded="11 May 2012, anechoic chamber, Earthworks QTC40 microphones",
         includes="Plucked (pizzicato), fortissimo, on the C, D and A strings",
-        note="The weakest and most ringing plucks were left out, so Alto shifts a neighbouring note for those. "
+        note="The weakest and most ringing plucks were left out, so Alto shifts a neighboring note for those. "
         "The source files declare 44.1 kHz but hold 96 kHz audio, so Alto reads them at 96 kHz.",
     ),
     "marimba": InstrumentInfo(
@@ -199,18 +199,18 @@ class Coverage:
         -------
         str
             The number of notes, the range, and how complete it is (the spacing, when the notes are well apart). Missing notes
-            are shifted from a neighbour.
+            are shifted from a neighbor.
 
         Examples
         --------
         >>> coverage(range(60, 73)).describe()
         '13 notes, C4 to C5, every semitone'
         >>> coverage([60, 62, 64, 65]).describe()
-        '4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbour.'
+        '4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
         >>> coverage(range(48, 73, 2)).describe()
-        '13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbour.'
+        '13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
         >>> coverage(range(21, 109, 3)).describe()
-        '30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbour.'
+        '30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
         """
         if self.lowest is None or self.highest is None:  # no notes installed
             return "None installed"
@@ -218,15 +218,15 @@ class Coverage:
         if self.gaps == 0:
             return text + ", every semitone"
         if self.gaps <= max(2, (self.highest - self.lowest + 1) // 10):
-            return f"{text}, almost every semitone. The few missing notes are shifted from a neighbour."
+            return f"{text}, almost every semitone. The few missing notes are shifted from a neighbor."
         step = round((self.highest - self.lowest) / (self.count - 1))
         spacing = {2: "second", 3: "third", 4: "fourth"}.get(step, f"{step}th")
-        return f"{text}, about every {spacing} semitone. The other notes are shifted from a neighbour."
+        return f"{text}, about every {spacing} semitone. The other notes are shifted from a neighbor."
 
 
 def coverage(midis: Iterable[int]) -> Coverage:
     """
-    Summarise the notes that have a recording.
+    Summarize the notes that have a recording.
 
     Parameters
     ----------

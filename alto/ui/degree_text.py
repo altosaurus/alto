@@ -47,12 +47,12 @@ def draw_degree_text(
     alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter,
 ) -> None:
     """
-    Draw text with each combining circumflex centred above its preceding digit.
+    Draw text with each combining circumflex centered above its preceding digit.
 
     Parameters
     ----------
     painter : QPainter
-        The active painter, with the desired font and colour.
+        The active painter, with the desired font and color.
     rect : QRectF
         The rectangle in which to align the text. Keyword-only.
     text : str
@@ -102,12 +102,12 @@ def draw_degree_text(
         if not prefix or prefix[-1] not in "1234567":
             continue
         ink = metrics.tightBoundingRect(prefix[-1])
-        centre = x + metrics.horizontalAdvance(prefix[:-1]) + ink.center().x()
+        center = x + metrics.horizontalAdvance(prefix[:-1]) + ink.center().x()
         bottom = y + ink.top() - max(1.0, metrics.capHeight() * 0.12)
         half_width = max(1.2, ink.width() * 0.4)
-        path = QPainterPath(QPointF(centre - half_width, bottom))
-        path.lineTo(centre, bottom - max(1.0, metrics.capHeight() * 0.2))
-        path.lineTo(centre + half_width, bottom)
+        path = QPainterPath(QPointF(center - half_width, bottom))
+        path.lineTo(center, bottom - max(1.0, metrics.capHeight() * 0.2))
+        path.lineTo(center + half_width, bottom)
         painter.drawPath(path)
     painter.restore()
 
@@ -124,7 +124,7 @@ def degree_tooltip(text: str) -> str:
     Returns
     -------
     str
-        Plain text or HTML containing the explicitly centred carets.
+        Plain text or HTML containing the explicitly centered carets.
 
     Examples
     --------
@@ -203,7 +203,7 @@ class DegreeLabel(QLabel):
 
     def paintEvent(self, event: QPaintEvent) -> None:
         """
-        Paint degree labels with carets centred above their numbers.
+        Paint degree labels with carets centered above their numbers.
 
         Parameters
         ----------

@@ -79,14 +79,14 @@ MAX_BRIGHTNESS = 0.42  # the brightest a wedge looks, so that white names stay e
 SIGN_GAP = 0.3  # how big the notation font's sharps and flats are drawn beside text, as a fraction of the letters' height
 SIGNS = {"♯": 1, "♭": -1, "♮": 0}  # the characters that are drawn as the notation font's own glyphs, and their signs
 GLOW_MS = 450  # how long a right answer takes to brighten its wedge
-WRONG_COLOUR = QColor("#c62828")  # the red that a wrong answer turns its button, used for the cell as well
+WRONG_COLOR = QColor("#c62828")  # the red that a wrong answer turns its button, used for the cell as well
 MAX_RADIUS = 320.0  # the largest the circle is drawn, in pixels: past this the names are bigger than they need to be to read
-WRONG_MS = 900  # how long a wrong answer shows its warning colour
+WRONG_MS = 900  # how long a wrong answer shows its warning color
 
 
 def wedge_path(
     *,
-    centre: QPointF,
+    center: QPointF,
     inner: float,
     outer: float,
     index: int,
@@ -96,7 +96,7 @@ def wedge_path(
 
     Parameters
     ----------
-    centre : QPointF
+    center : QPointF
         The middle of the circle.
     inner : float
         The radius of the wedge's inner edge, in pixels. Keyword-only.
@@ -112,13 +112,13 @@ def wedge_path(
 
     Examples
     --------
-    >>> shape = wedge_path(centre=QPointF(100, 100), inner=40, outer=90, index=0)
+    >>> shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
     >>> shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
     (True, False)
     """
     start = 90.0 + WEDGE / 2 - WEDGE * index  # the angle of its counterclockwise edge, in Qt's counterclockwise degrees
-    outer_box = QRectF(centre.x() - outer, centre.y() - outer, 2 * outer, 2 * outer)
-    inner_box = QRectF(centre.x() - inner, centre.y() - inner, 2 * inner, 2 * inner)
+    outer_box = QRectF(center.x() - outer, center.y() - outer, 2 * outer, 2 * outer)
+    inner_box = QRectF(center.x() - inner, center.y() - inner, 2 * inner, 2 * inner)
     path = QPainterPath()
     path.arcMoveTo(outer_box, start)
     path.arcTo(outer_box, start, -WEDGE)
@@ -129,16 +129,16 @@ def wedge_path(
 
 def wedge_middle(
     *,
-    centre: QPointF,
+    center: QPointF,
     radius: float,
     index: int,
 ) -> QPointF:
     """
-    Return the point in the middle of a wedge, at a given distance from the centre.
+    Return the point in the middle of a wedge, at a given distance from the center.
 
     Parameters
     ----------
-    centre : QPointF
+    center : QPointF
         The middle of the circle.
     radius : float
         How far out, in pixels. Keyword-only.
@@ -152,13 +152,13 @@ def wedge_middle(
 
     Examples
     --------
-    >>> wedge_middle(centre=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
+    >>> wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
     (100.0, 50.0)
-    >>> round(wedge_middle(centre=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way round: to the right
+    >>> round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
     150
     """
     angle = math.radians(-90 + WEDGE * index)  # the screen's y grows downwards, so clockwise is increasing
-    return QPointF(centre.x() + radius * math.cos(angle), centre.y() + radius * math.sin(angle))
+    return QPointF(center.x() + radius * math.cos(angle), center.y() + radius * math.sin(angle))
 
 
 def wedge_color(
@@ -169,7 +169,7 @@ def wedge_color(
     scheme: Scheme | None = None,
 ) -> QColor:
     """
-    Return the colour of a wedge in a colour scheme: quiet when it is not being talked about and bright when it is.
+    Return the color of a wedge in a color scheme: quiet when it is not being talked about and bright when it is.
 
     Parameters
     ----------
@@ -180,12 +180,12 @@ def wedge_color(
     lift : float, default 0.0
         How bright it is, from 0 (quiet) to 1 (lit). Keyword-only.
     scheme : Scheme or None, default None
-        The colour scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
+        The color scheme; the one chosen in the circle of fifths settings if None. Keyword-only.
 
     Returns
     -------
     QColor
-        The colour.
+        The color.
 
     Examples
     --------
@@ -202,22 +202,22 @@ def wedge_color(
     True
     """
     chosen = scheme or settings.circle.active_scheme()
-    red, green, blue = chosen.colour("inner" if inner else "outer", place=index, lift=lift)
+    red, green, blue = chosen.color("inner" if inner else "outer", place=index, lift=lift)
     return QColor.fromRgbF(red, green, blue)
 
 
 def write_text(
     p: QPainter,
     *,
-    centre: QPointF,
+    center: QPointF,
     text: str,
     pixels: float,
     weight: QFont.Weight,
-    colour: QColor,
+    color: QColor,
     max_width: float | None = None,
 ) -> None:
     """
-    Write a line of text centred on a point, with its sharps and flats drawn as the notation font draws them.
+    Write a line of text centered on a point, with its sharps and flats drawn as the notation font draws them.
 
     The letters are in the app's own font. Its ♭ is the shape of a small "b", though, and does not look like a flat sign, so
     the sharps, flats and naturals are the glyphs of the notation style that the staff is drawn in, sized to the letters.
@@ -226,7 +226,7 @@ def write_text(
     ----------
     p : QPainter
         The painter to draw with.
-    centre : QPointF
+    center : QPointF
         The middle of the line. Keyword-only.
     text : str
         What to write, such as "B♭m" or "F♯ major". Keyword-only.
@@ -234,8 +234,8 @@ def write_text(
         The size of the letters. Keyword-only.
     weight : QFont.Weight
         How heavy they are. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
     max_width : float or None, default None
         The widest the line may be. A longer line is written smaller to fit. Keyword-only.
 
@@ -245,7 +245,7 @@ def write_text(
     >>> image = QImage(120, 60, QImage.Format.Format_ARGB32)
     >>> image.fill(QColor("black"))
     >>> painter = QPainter(image)
-    >>> write_text(painter, centre=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, colour=QColor("white"))
+    >>> write_text(painter, center=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, color=QColor("white"))
     >>> painter.end()
     True
     >>> any(image.pixelColor(x, 30).lightness() > 128 for x in range(20, 100))
@@ -286,15 +286,15 @@ def write_text(
     if max_width is not None and sum(widths) > max_width:  # too wide: write it smaller, so that it fits
         pixels *= max_width / sum(widths)
         metrics, gap, pad, widths = measure(pixels)
-    left = centre.x() - sum(widths) / 2
-    baseline = centre.y() + metrics.capHeight() / 2
+    left = center.x() - sum(widths) / 2
+    baseline = center.y() + metrics.capHeight() / 2
     p.save()
     p.setFont(font)
-    p.setPen(colour)
+    p.setPen(color)
     for run, width in zip(runs, widths, strict=True):
-        if notation and run in SIGNS:  # a flat's bowl sits on the baseline; a sharp or natural is centred on the capitals
+        if notation and run in SIGNS:  # a flat's bowl sits on the baseline; a sharp or natural is centered on the capitals
             middle = baseline - 0.55 * gap if SIGNS[run] < 0 else baseline - metrics.capHeight() / 2
-            draw_accidental(p, font=notation, sign=SIGNS[run], x=left + pad, y=middle, gap=gap, colour=colour)
+            draw_accidental(p, font=notation, sign=SIGNS[run], x=left + pad, y=middle, gap=gap, color=color)
         else:
             p.drawText(QPointF(left, baseline), run)
         left += width
@@ -642,7 +642,7 @@ class FifthsCircle(QWidget):
         step: Callable[[float], object],
     ) -> None:
         """
-        Run an animation from 0 to 1 over a time, calling a function with how far it has got.
+        Run an animation from 0 to 1 over a time, calling a function with its progress.
 
         Parameters
         ----------
@@ -734,7 +734,7 @@ class FifthsCircle(QWidget):
         Returns
         -------
         tuple of QPointF and float
-            The centre and the radius, in pixels.
+            The center and the radius, in pixels.
 
         Examples
         --------
@@ -747,8 +747,8 @@ class FifthsCircle(QWidget):
         >>> circle.geometry_of()[1] == MAX_RADIUS
         True
         """
-        centre = QPointF(self.width() / 2, self.height() / 2)
-        return centre, min(max(min(self.width(), self.height()) / 2 - 4.0, 10.0), MAX_RADIUS)
+        center = QPointF(self.width() / 2, self.height() / 2)
+        return center, min(max(min(self.width(), self.height()) / 2 - 4.0, 10.0), MAX_RADIUS)
 
     def paintEvent(self, _: QPaintEvent) -> None:
         """
@@ -769,7 +769,7 @@ class FifthsCircle(QWidget):
         """
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        centre, radius = self.geometry_of()
+        center, radius = self.geometry_of()
         scheme = settings.circle.active_scheme()
         rings = {"outer": (OUTER_FROM * radius, radius), "inner": (DISC * radius, OUTER_FROM * radius)}
         p.setPen(
@@ -778,11 +778,11 @@ class FifthsCircle(QWidget):
         for index in range(12):
             for ring, (inner, outer) in rings.items():
                 shade = wedge_color(index, inner=ring == "inner", lift=self.lift_of(ring, place=index), scheme=scheme)
-                shape = wedge_path(centre=centre, inner=inner, outer=outer, index=index)
+                shape = wedge_path(center=center, inner=inner, outer=outer, index=index)
                 p.setBrush(shade)
                 p.drawPath(shape)
                 if self._warning is not None and self._warning[:2] == (ring, index):
-                    hot = QColor(WRONG_COLOUR)
+                    hot = QColor(WRONG_COLOR)
                     hot.setAlphaF(self._warning[2])
                     p.setBrush(hot)
                     p.drawPath(shape)
@@ -796,16 +796,16 @@ class FifthsCircle(QWidget):
             p.setBrush(Qt.BrushStyle.NoBrush)
             p.setPen(
                 QPen(self.palette().color(QPalette.ColorRole.WindowText), max(radius / 100, 2.0)),
-            )  # the text colour shows in either theme
-            p.drawPath(wedge_path(centre=centre, inner=inner, outer=outer, index=place))
-        self._draw_labels(p, centre=centre, radius=radius, scheme=scheme)
-        self._draw_disc(p, centre=centre, radius=radius)
+            )  # the text color shows in either theme
+            p.drawPath(wedge_path(center=center, inner=inner, outer=outer, index=place))
+        self._draw_labels(p, center=center, radius=radius, scheme=scheme)
+        self._draw_disc(p, center=center, radius=radius)
 
     def _draw_labels(
         self,
         p: QPainter,
         *,
-        centre: QPointF,
+        center: QPointF,
         radius: float,
         scheme: Scheme,
     ) -> None:
@@ -816,12 +816,12 @@ class FifthsCircle(QWidget):
         ----------
         p : QPainter
             The painter to draw with.
-        centre : QPointF
+        center : QPointF
             The middle of the circle. Keyword-only.
         radius : float
             The radius of the circle, in pixels. Keyword-only.
         scheme : Scheme
-            The colour scheme, which says what colour the names are. Keyword-only.
+            The color scheme, which says what color the names are. Keyword-only.
 
         Examples
         --------
@@ -829,7 +829,7 @@ class FifthsCircle(QWidget):
         >>> image = QImage(300, 300, QImage.Format.Format_ARGB32)
         >>> painter = QPainter(image)
         >>> from alto.circle_schemes import preset
-        >>> FifthsCircle()._draw_labels(painter, centre=QPointF(150, 150), radius=140, scheme=preset("midnight"))
+        >>> FifthsCircle()._draw_labels(painter, center=QPointF(150, 150), radius=140, scheme=preset("midnight"))
         >>> painter.end()
         True
         """
@@ -839,7 +839,7 @@ class FifthsCircle(QWidget):
             ("outer", MAJORS, (OUTER_FROM + 1.0) / 2, OUTER_TEXT),
         ):
             for index in sorted(self.shown[ring]):
-                at = wedge_middle(centre=centre, radius=middle * radius, index=index)
+                at = wedge_middle(center=center, radius=middle * radius, index=index)
                 asked = (ring, index) == self.target or (given == ring and self.target is not None and index == self.target[1])
                 self._write(
                     p,
@@ -848,7 +848,7 @@ class FifthsCircle(QWidget):
                     numeral=self.numerals.get((ring, index), ""),
                     size=radius * size,
                     weight=QFont.Weight.Bold if ring == "outer" or asked else QFont.Weight.Medium,
-                    colours=scheme.names(),
+                    colors=scheme.names(),
                 )
 
     @staticmethod
@@ -860,10 +860,10 @@ class FifthsCircle(QWidget):
         numeral: str,
         size: float,
         weight: QFont.Weight,
-        colours: dict[str, str],
+        colors: dict[str, str],
     ) -> None:
         """
-        Write what a cell says, stacked and centred: the key's name, its other name smaller and greyer, and its numeral.
+        Write what a cell says, stacked and centered: the key's name, its other name smaller and grayer, and its numeral.
 
         Parameters
         ----------
@@ -872,15 +872,15 @@ class FifthsCircle(QWidget):
         at : QPointF
             The middle of the text. Keyword-only.
         names : tuple of str
-            The key's names; the first is the main one, the second (if any) is the same key spelt another way. Keyword-only.
+            The key's names; the first is the main one, the second (if any) is the same key spelled another way. Keyword-only.
         numeral : str
             The Roman numeral of the chord, or "" for none. Keyword-only.
         size : float
             The size of the main name's letters, in pixels. Keyword-only.
         weight : QFont.Weight
             How heavy the main name is. Keyword-only.
-        colours : dict of str to str
-            The colours of the writing, from `Scheme.text`: "ink" for the name, "muted" for the rest. Keyword-only.
+        colors : dict of str to str
+            The colors of the writing, from `Scheme.text`: "ink" for the name, "muted" for the rest. Keyword-only.
 
         Examples
         --------
@@ -890,27 +890,27 @@ class FifthsCircle(QWidget):
         >>> from alto.circle_schemes import preset
         >>> inks = preset("spectrum").names()
         >>> FifthsCircle._write(
-        ...     painter, at=QPointF(50, 50), names=("B", "C♭"), numeral="V", size=14, weight=QFont.Weight.Bold, colours=inks
+        ...     painter, at=QPointF(50, 50), names=("B", "C♭"), numeral="V", size=14, weight=QFont.Weight.Bold, colors=inks
         ... )
         >>> painter.end()
         True
         """
-        lines = [(names[0], size, weight, QColor(colours["ink"]))]
+        lines = [(names[0], size, weight, QColor(colors["ink"]))]
         if len(names) > 1:
-            lines.append((f"/{names[1]}", size * 0.78, QFont.Weight.Normal, QColor(colours["muted"])))
+            lines.append((f"/{names[1]}", size * 0.78, QFont.Weight.Normal, QColor(colors["muted"])))
         if numeral:
-            lines.append((numeral, size * 0.85, QFont.Weight.Normal, QColor(colours["muted"])))
+            lines.append((numeral, size * 0.85, QFont.Weight.Normal, QColor(colors["muted"])))
         heights = [pixels * 1.3 for _, pixels, _, _ in lines]
         top = at.y() - sum(heights) / 2
-        for (text, pixels, heavy, colour), height in zip(lines, heights, strict=True):
-            write_text(p, centre=QPointF(at.x(), top + height / 2), text=text, pixels=pixels, weight=heavy, colour=colour)
+        for (text, pixels, heavy, color), height in zip(lines, heights, strict=True):
+            write_text(p, center=QPointF(at.x(), top + height / 2), text=text, pixels=pixels, weight=heavy, color=color)
             top += height
 
     def _draw_disc(
         self,
         p: QPainter,
         *,
-        centre: QPointF,
+        center: QPointF,
         radius: float,
     ) -> None:
         """
@@ -920,7 +920,7 @@ class FifthsCircle(QWidget):
         ----------
         p : QPainter
             The painter to draw with.
-        centre : QPointF
+        center : QPointF
             The middle of the circle. Keyword-only.
         radius : float
             The radius of the circle, in pixels. Keyword-only.
@@ -930,7 +930,7 @@ class FifthsCircle(QWidget):
         >>> from PySide6.QtGui import QImage
         >>> image = QImage(300, 300, QImage.Format.Format_ARGB32)
         >>> painter = QPainter(image)
-        >>> FifthsCircle()._draw_disc(painter, centre=QPointF(150, 150), radius=140)
+        >>> FifthsCircle()._draw_disc(painter, center=QPointF(150, 150), radius=140)
         >>> painter.end()
         True
         """
@@ -938,17 +938,17 @@ class FifthsCircle(QWidget):
         window, text = self.palette().color(QPalette.ColorRole.Window), self.palette().color(QPalette.ColorRole.WindowText)
         p.setPen(QPen(blend(window, b=text, t=0.2), max(radius / 160, 1.0)))
         p.setBrush(window)  # the disc is the app's own background, light or dark
-        p.drawEllipse(centre, r, r)
+        p.drawEllipse(center, r, r)
         pale = text
         if self.signature is not None:
             gap = r * 0.115
-            bottom = centre.y() + gap * 1.0 - r * 0.2
+            bottom = center.y() + gap * 1.0 - r * 0.2
             p.setPen(QPen(blend(window, b=text, t=0.5), 1.2))
             for line in range(5):
                 y = bottom - line * gap
-                p.drawLine(QPointF(centre.x() - r * 0.62, y), QPointF(centre.x() + r * 0.62, y))
+                p.drawLine(QPointF(center.x() - r * 0.62, y), QPointF(center.x() + r * 0.62, y))
             font = current_style().font
-            left = centre.x() - r * 0.55
+            left = center.x() - r * 0.55
             # noinspection PyProtectedMember
             StaffWidget._draw_clef(p, clef="treble", x=left, bottom=bottom, gap=gap, color=pale, font=font)
             draw_key_signature(
@@ -962,22 +962,22 @@ class FifthsCircle(QWidget):
                 step=gap * 1.15,
                 font=font,
             )
-        top = centre.y() + (r * 0.32 if self.signature is not None else -r * 0.06)  # under the staff, or in the middle
+        top = center.y() + (r * 0.32 if self.signature is not None else -r * 0.06)  # under the staff, or in the middle
         write_text(
             p,
-            centre=QPointF(centre.x(), top),
+            center=QPointF(center.x(), top),
             text=self.title,
             pixels=r * 0.2,
             weight=QFont.Weight.DemiBold,
-            colour=pale,
+            color=pale,
             max_width=r * 1.6,
         )
         write_text(
             p,
-            centre=QPointF(centre.x(), top + r * 0.26),
+            center=QPointF(center.x(), top + r * 0.26),
             text=self.subtitle,
             pixels=r * 0.14,
             weight=QFont.Weight.Normal,
-            colour=blend(window, b=text, t=0.65),
+            color=blend(window, b=text, t=0.65),
             max_width=r * 1.45,
         )

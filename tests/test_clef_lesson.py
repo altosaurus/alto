@@ -61,7 +61,7 @@ def clean_lessons() -> Iterator[None]:
     store().remove("lessons")
 
 
-def test_the_lesson_is_listed_with_the_exercise_that_practises_it(app: QApplication, clean_lessons: None) -> None:
+def test_the_lesson_is_listed_with_the_exercise_that_practices_it(app: QApplication, clean_lessons: None) -> None:
     """
     Check that the lesson is after the circle of fifths lesson, is in the notation group and has a card with the exercise's icon.
 
@@ -196,7 +196,7 @@ def test_a_clef_task_can_be_answered_wrong_twice_and_is_then_given(app: QApplica
 
 def test_the_lesson_page_opens_and_the_last_step_offers_the_exercise(app: QApplication, clean_lessons: None) -> None:
     """
-    Check that the page opens the lesson by its key and that the last step's button asks to practise Clef Basics.
+    Check that the page opens the lesson by its key and that the last step's button asks to practice Clef Basics.
 
     Parameters
     ----------
@@ -207,11 +207,11 @@ def test_the_lesson_page_opens_and_the_last_step_offers_the_exercise(app: QAppli
     """
     page = LessonsPage("clef-basics", step=len(CLEF_BASICS.steps) - 1)
     asked: list[str] = []
-    page.practise_requested.connect(asked.append)
+    page.practice_requested.connect(asked.append)
     assert page.view.counter.text() == "Step 10 of 10"
     step_view = page.view.pages.currentWidget()
     assert isinstance(step_view, StepView)
-    step_view.practise_button.click()
+    step_view.practice_button.click()
     assert asked == ["ClefBasics"]
 
 

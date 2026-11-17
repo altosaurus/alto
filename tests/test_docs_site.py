@@ -226,7 +226,7 @@ def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is
     bar = layout[layout.index('<div class="top-actions">') : layout.index("</header>")]
     assert bar.index('id="version-slot"') < bar.index('id="theme-button"') < bar.index('class="icon-link"')
     button = bar[bar.index('id="theme-button"') : bar.index("</button>", bar.index('id="theme-button"'))]
-    assert 'aria-label="Colour theme"' in button and 'aria-haspopup="menu"' in button
+    assert 'aria-label="Color theme"' in button and 'aria-haspopup="menu"' in button
     assert ">Light<" not in button and ">Dark<" not in button  # no words on the button itself
     menu = bar[bar.index('id="theme-menu"') : bar.index('class="icon-link"')]
     assert "hidden>" in menu and ">Light<" in menu and ">Dark<" in menu and ">System<" in menu
@@ -293,7 +293,7 @@ def test_an_old_address_is_sent_to_the_same_page_in_latest_by_the_404_page() -> 
     """Check that the 404 page moves a visitor of /alto/getting-started/ to /alto/latest/getting-started/, and does not loop."""
     page = (SITE_ROOT / "404.html").read_text(encoding="utf-8")
     assert 'var root = "@SITE_PATH@"' in page and 'location.replace(root + "/latest/" + rest' in page
-    assert 'first === "latest"' in page and 'first === "dev"' in page  # a missing page inside a version is not sent round again
+    assert 'first === "latest"' in page and 'first === "dev"' in page  # a missing page inside a version is not sent around again
 
 
 def test_the_dropdown_reads_the_list_of_versions_from_the_site_and_warns_on_dev_and_on_old_versions() -> None:
@@ -410,33 +410,33 @@ def test_every_icon_has_its_size_written_on_it_and_the_files_it_needs_are_stampe
     assert "downloads.js' | relative_url }}?v={{ site.time" in pages["home"]
 
 
-def _brightness(colour: str) -> float:
+def _brightness(color: str) -> float:
     """
-    Give the relative luminance of a colour written as "#rrggbb", as the web accessibility guidelines define it.
+    Give the relative luminance of a color written as "#rrggbb", as the web accessibility guidelines define it.
 
     Parameters
     ----------
-    colour : str
-        The colour.
+    color : str
+        The color.
 
     Returns
     -------
     float
         0 for black up to 1 for white.
     """
-    parts = [int(colour[index : index + 2], 16) / 255 for index in (1, 3, 5)]
+    parts = [int(color[index : index + 2], 16) / 255 for index in (1, 3, 5)]
     linear = [value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4 for value in parts]
     return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
 
 
 def _contrast(first: str, second: str) -> float:
     """
-    Give the contrast ratio of two colours, from 1 (the same) to 21 (black on white).
+    Give the contrast ratio of two colors, from 1 (the same) to 21 (black on white).
 
     Parameters
     ----------
     first : str
-        One colour, "#rrggbb".
+        One color, "#rrggbb".
     second : str
         The other.
 
@@ -452,19 +452,19 @@ def _contrast(first: str, second: str) -> float:
 @pytest.mark.parametrize("block", [":root {", ':root:not([data-theme="light"]) {', ':root[data-theme="dark"] {'])
 def test_the_download_buttons_are_readable_and_stand_out_in_light_and_dark(block: str) -> None:
     """
-    Check each theme's button colour: its words are readable on it (4.5 to 1) and the button stands out from the page (3 to 1).
+    Check each theme's button color: its words are readable on it (4.5 to 1) and the button stands out from the page (3 to 1).
 
     Parameters
     ----------
     block : str
-        The start of the block of colours: light, dark by the system's setting, and dark by choice.
+        The start of the block of colors: light, dark by the system's setting, and dark by choice.
     """
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     start = css.index(block)
-    colours = css[start : css.index("}", start)]
-    button = re.search(r"--button:\s*(#[0-9a-fA-F]{6})", colours)
-    words = re.search(r"--button-text:\s*(#[0-9a-fA-F]{6})", colours)
-    page = re.search(r"--bg:\s*(#[0-9a-fA-F]{6})", colours)
+    colors = css[start : css.index("}", start)]
+    button = re.search(r"--button:\s*(#[0-9a-fA-F]{6})", colors)
+    words = re.search(r"--button-text:\s*(#[0-9a-fA-F]{6})", colors)
+    page = re.search(r"--bg:\s*(#[0-9a-fA-F]{6})", colors)
     assert button and words and page
     assert _contrast(button.group(1), words.group(1)) >= 4.5
     assert _contrast(button.group(1), page.group(1)) >= 3.0
@@ -576,7 +576,7 @@ def test_every_page_in_the_sidebar_ends_with_links_to_the_previous_and_the_next_
         'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children | sort: "order"' in layout
     )
     assert "entries[forloop.index]" in layout and "entries[before]" in layout and "{% break %}" in layout
-    assert "forloop.index0 > 0" in layout  # the first page has no previous one, and must not wrap round to the last
+    assert "forloop.index0 > 0" in layout  # the first page has no previous one, and must not wrap around to the last
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".page-nav { display: flex; justify-content: space-between;" in css
     assert (
@@ -635,13 +635,13 @@ def test_the_exercise_icons_of_the_docs_are_the_ones_the_app_draws() -> None:
     """Check that the sprite in `docs/_includes` is up to date with `alto/ui/icons.py`, and holds an icon for every exercise."""
     sprite = (DOCS / "_includes" / "exercise-icons.html").read_text(encoding="utf-8")
     assert sprite == _icons_script().render()  # run scripts/exercise_icons.py after a change to the icons
-    assert "COLOR" not in sprite and "currentColor" in sprite  # tinted by the page's own colour, so that dark mode works
+    assert "COLOR" not in sprite and "currentColor" in sprite  # tinted by the page's own color, so that dark mode works
     for cls in REGISTRY:
         assert f'id="ex-{cls.__name__}"' in sprite
 
 
 def test_each_card_on_the_home_page_has_its_exercises_icon_and_name() -> None:
-    """Check the cards under What you can practise: one for each exercise, with its icon before its name, and the icon sized."""
+    """Check the cards under What you can practice: one for each exercise, with its icon before its name, and the icon sized."""
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     assert "{% include exercise-icons.html %}" in home
     cards = home[home.index('<ul class="cards">') : home.index("</ul>", home.index('<ul class="cards">'))]
@@ -717,11 +717,11 @@ def test_the_release_notes_script_shows_unreleased_only_while_it_has_notes_and_t
     assert "scripts/release_notes.py" in (DOCS / "development.md").read_text(encoding="utf-8")
 
 
-def test_the_exercises_page_describes_the_circles_colour_schemes_in_words() -> None:
-    """Check the Colours section: the fourteen presets and the five ways to make one. The exercise settings are never pictured."""
+def test_the_exercises_page_describes_the_circles_color_schemes_in_words() -> None:
+    """Check the Colors section: the fourteen presets and the five ways to make one. The exercise settings are never pictured."""
     page = (DOCS / "exercises.md").read_text(encoding="utf-8")
-    colours = " ".join(page[page.index("### Colours") : page.index("### Keys with two names")].split())
-    assert "fourteen presets" in colours and "Cyan to indigo" in colours and "Create your own" in colours
-    for way in ("One colour", "Two rings", "By key signature", "Distance from C", "Round the circle"):
-        assert way in colours, way
-    assert "shot.html" not in colours
+    colors = " ".join(page[page.index("### Colors") : page.index("### Keys with two names")].split())
+    assert "fourteen presets" in colors and "Cyan to indigo" in colors and "Create your own" in colors
+    for way in ("One color", "Two rings", "By key signature", "Distance from C", "Around the circle"):
+        assert way in colors, way
+    assert "shot.html" not in colors

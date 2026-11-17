@@ -2,7 +2,7 @@
 title: alto.ui.stats_dialog
 parent: api
 package: alto.ui
-order: 53
+order: 56
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}
@@ -152,9 +152,9 @@ Create a tile showing a dash until it is given a value.
 **Constructor examples**
 
 ```pycon
->>> tile = Tile("Days practised")
+>>> tile = Tile("Days practiced")
 >>> tile.caption.text()
-'Days practised'
+'Days practiced'
 ```
 
 ### Tile.show_value

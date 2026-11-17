@@ -75,7 +75,7 @@ def test_a_profile_with_no_answers_gets_an_invitation_not_numbers(app: QApplicat
 
 def test_the_numbers_come_from_the_active_profiles_answers(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that the numbers come from the active profiles answers.
@@ -84,10 +84,10 @@ def test_the_numbers_come_from_the_active_profiles_answers(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner()
+    learner = practiced_learner()
     other = learner.db.add_profile("Someone else")
     other_learner = Learner(learner.db, profile=other)
     ex = REGISTRY[0]()
@@ -114,7 +114,7 @@ def test_the_numbers_come_from_the_active_profiles_answers(
 
 def test_every_timeframe_and_exercise_can_be_chosen(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that every timeframe and exercise can be chosen.
@@ -123,10 +123,10 @@ def test_every_timeframe_and_exercise_can_be_chosen(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = StatsPage(practised_learner())
+    page = StatsPage(practiced_learner())
     counts = {}
     for i in range(page.timeframe.count()):
         page.timeframe.setCurrentIndex(i)
@@ -147,7 +147,7 @@ def test_every_timeframe_and_exercise_can_be_chosen(
 
 def test_back_is_offered_by_a_button_and_by_escape(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that back is offered by a button and by escape.
@@ -156,10 +156,10 @@ def test_back_is_offered_by_a_button_and_by_escape(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = StatsPage(practised_learner(30))
+    page = StatsPage(practiced_learner(30))
     spy = QSignalSpy(page.back)
     escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
     assert len(escape) == 1
@@ -169,7 +169,7 @@ def test_back_is_offered_by_a_button_and_by_escape(
 
 def test_a_name_is_kept_for_exercises_the_page_no_longer_knows(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that a name is kept for exercises the page no longer knows.
@@ -178,10 +178,10 @@ def test_a_name_is_kept_for_exercises_the_page_no_longer_knows(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = StatsPage(practised_learner(30))
+    page = StatsPage(practiced_learner(30))
     assert page._names()[REGISTRY[0].__name__] == REGISTRY[0].name
     assert stats_dialog.Tile("caption").caption.text() == "caption"
 
@@ -207,7 +207,7 @@ def all_time_page(learner: Learner) -> StatsPage:
 
 def test_clicking_a_bar_lists_the_answers_of_that_period(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that clicking a bar lists exactly the answers given in its period, and highlights the period in all three charts.
@@ -216,10 +216,10 @@ def test_clicking_a_bar_lists_the_answers_of_that_period(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner()
+    learner = practiced_learner()
     page = all_time_page(learner)
     assert page.detail.isHidden()
     busiest = max(range(len(page.volume.labels)), key=lambda i: page.volume.right[i] + page.volume.wrong[i])
@@ -238,7 +238,7 @@ def test_clicking_a_bar_lists_the_answers_of_that_period(
 
 def test_clicking_the_same_element_again_or_the_close_button_closes_the_list(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that the list of answers closes, and the highlight goes, when the same element is clicked again or Close is pressed.
@@ -247,10 +247,10 @@ def test_clicking_the_same_element_again_or_the_close_button_closes_the_list(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = all_time_page(practised_learner())
+    page = all_time_page(practiced_learner())
     busiest = max(range(len(page.volume.labels)), key=lambda i: page.volume.right[i] + page.volume.wrong[i])
     page.volume.clicked.emit(busiest)
     page.volume.clicked.emit(busiest)
@@ -262,7 +262,7 @@ def test_clicking_the_same_element_again_or_the_close_button_closes_the_list(
 
 def test_clicking_an_exercise_lists_only_its_answers(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that clicking an exercise's row lists answers to that exercise only.
@@ -271,10 +271,10 @@ def test_clicking_an_exercise_lists_only_its_answers(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = all_time_page(practised_learner())
+    page = all_time_page(practiced_learner())
     assert page._stats is not None and len(page._stats.by_exercise) > 1
     page.by_exercise.clicked.emit(1)
     name = page._names()[page._stats.by_exercise[1].exercise]
@@ -287,7 +287,7 @@ def test_clicking_an_exercise_lists_only_its_answers(
 
 def test_clicking_a_day_of_the_calendar_lists_that_days_answers(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that clicking a day lists the answers given on it, however long a timeframe the other charts cover.
@@ -296,10 +296,10 @@ def test_clicking_a_day_of_the_calendar_lists_that_days_answers(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner()
+    learner = practiced_learner()
     page = StatsPage(learner)
     page.timeframe.setCurrentIndex(page.timeframe.findText("Today"))  # the calendar ignores the timeframe
     day = max(page.heatmap.counts, key=lambda d: page.heatmap.counts[d])
@@ -310,7 +310,7 @@ def test_clicking_a_day_of_the_calendar_lists_that_days_answers(
 
 def test_changing_a_filter_closes_the_list_of_answers(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that choosing another exercise or timeframe closes the list, since its numbers would no longer match.
@@ -319,10 +319,10 @@ def test_changing_a_filter_closes_the_list_of_answers(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = all_time_page(practised_learner())
+    page = all_time_page(practiced_learner())
     page.by_exercise.clicked.emit(0)
     assert not page.detail.isHidden()
     page.timeframe.setCurrentIndex(page.timeframe.findText("Last 7 days"))
@@ -331,7 +331,7 @@ def test_changing_a_filter_closes_the_list_of_answers(
 
 def test_a_long_list_of_answers_says_how_many_are_shown(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
@@ -341,13 +341,13 @@ def test_a_long_list_of_answers_says_how_many_are_shown(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
     """
     monkeypatch.setattr(stats_dialog, "DETAIL_LIMIT", 3)
-    page = all_time_page(practised_learner())
+    page = all_time_page(practiced_learner())
     page.by_exercise.clicked.emit(0)
     assert page.answers.proxy.rowCount() == 3 and "Showing the newest 3" in page.detail_note.text()
     page._close_detail()

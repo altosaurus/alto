@@ -112,7 +112,7 @@ class Scene:
     new : sequence of Sprite
         The cards that are arriving.
     direction : int
-        1 when going towards the lessons, -1 when coming back.
+        1 when going toward the lessons, -1 when coming back.
 
     Examples
     --------
@@ -246,7 +246,7 @@ def crossfade(scene: Scene) -> None:
 
 def slide(scene: Scene) -> None:
     """
-    Set the sprites for a slide: both sets move sideways, towards the side of the switch that was pressed.
+    Set the sprites for a slide: both sets move sideways, toward the side of the switch that was pressed.
 
     Parameters
     ----------
@@ -511,7 +511,7 @@ class Motion:
     fade : bool
         True to fade between solid and clear; False to keep it solid, and hide it only once it is out of the way.
     reveal : str
-        "" for none, or "side" or "centre" to uncover it from one side or from the middle.
+        "" for none, or "side" or "center" to uncover it from one side or from the middle.
 
     Examples
     --------
@@ -740,7 +740,7 @@ def _pose(
     sprite.sy = max(grow * (1.0 + (motion.sy - 1.0) * away), 0.0)
     if motion.reveal:
         sprite.reveal = min(max(done, 0.0), 1.0) if arrives else 1.0 - min(max(done, 0.0), 1.0)
-        sprite.reveal_from = 0 if motion.reveal == "centre" else scene.direction
+        sprite.reveal_from = 0 if motion.reveal == "center" else scene.direction
 
 
 def built(
@@ -868,7 +868,7 @@ TRANSITIONS: tuple[Transition, ...] = (
     Transition(
         "slide",
         "Slide sideways",
-        "Both sets slide, towards the side of the switch you pressed.",
+        "Both sets slide, toward the side of the switch you pressed.",
         slide,
         lambda scene: 340.0,
     ),
@@ -939,7 +939,7 @@ TRANSITIONS: tuple[Transition, ...] = (
     made(
         "gather",
         label="Gather",
-        about="The new cards come in from the edges towards the middle.",
+        about="The new cards come in from the edges toward the middle.",
         leaving=Motion(length=200.0),
         arriving=Motion(length=360.0, per_card=60.0, start=60.0, order="inward", scale=0.8),
     ),
@@ -1004,7 +1004,7 @@ TRANSITIONS: tuple[Transition, ...] = (
         label="Curtain",
         about="The new cards are revealed from the middle outwards, like a curtain opening.",
         leaving=Motion(length=480.0),
-        arriving=Motion(length=480.0, reveal="centre"),
+        arriving=Motion(length=480.0, reveal="center"),
     ),
     made(
         "stream",
@@ -1254,7 +1254,7 @@ class TransitionCanvas(QWidget):
         new : list of Sprite
             The photographs of the cards that are arriving. Keyword-only.
         direction : int
-            1 when going towards the lessons, -1 when coming back. Keyword-only.
+            1 when going toward the lessons, -1 when coming back. Keyword-only.
 
         Examples
         --------

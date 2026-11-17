@@ -44,14 +44,14 @@ def section_item(
     palette: QPalette,
 ) -> QListWidgetItem:
     """
-    Make a section label for a list: small, grey capitals that cannot be selected.
+    Make a section label for a list: small, gray capitals that cannot be selected.
 
     Parameters
     ----------
     text : str
         The heading, which is shown in capitals.
     palette : QPalette
-        The palette to take the grey from. Keyword-only.
+        The palette to take the gray from. Keyword-only.
 
     Returns
     -------

@@ -1,12 +1,12 @@
 ---
-title: alto.ui.circle_colours
+title: alto.ui.circle_colors
 parent: api
 package: alto.ui
-order: 26
-permalink: /api/alto.ui.circle_colours/
+order: 27
+permalink: /api/alto.ui.circle_colors/
 ---
 {% raw %}
-The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.
+The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.
 
 **Examples**
 
@@ -22,7 +22,7 @@ The pages of the circle of fifths settings that choose its colours: a grid of sc
 def blank(key: str) -> CustomRecord
 ```
 
-Make the scheme a new one starts as: colours by key signature, from cyan through blue to indigo, on dark wedges.
+Make the scheme a new one starts as: colors by key signature, from cyan through blue to indigo, on dark wedges.
 
 **Parameters**
 
@@ -52,7 +52,7 @@ SchemeThumb(
 
 Bases: `QPushButton`
 
-A small picture of the circle in a colour scheme, to click to choose the scheme.
+A small picture of the circle in a color scheme, to click to choose the scheme.
 
 **Attributes**
 
@@ -73,7 +73,7 @@ Build the picture.
 
 **Parameters**
 
-- `scheme` (*Scheme*): The colour scheme to draw.
+- `scheme` (*Scheme*): The color scheme to draw.
 - `size` (*int, default 112*): Its width and height in pixels. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
@@ -111,7 +111,7 @@ Return the size it asks for.
 def paintEvent(_: QPaintEvent) -> None
 ```
 
-Draw the circle, with one cell asked and its relative lit, and a ring round it when it is the chosen scheme.
+Draw the circle, with one cell asked and its relative lit, and a ring around it when it is the chosen scheme.
 
 **Parameters**
 
@@ -133,7 +133,7 @@ SchemePage(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The page that lists the colour schemes: the presets, the user's own, and a button to make another.
+The page that lists the color schemes: the presets, the user's own, and a button to make another.
 
 **Attributes**
 
@@ -188,7 +188,7 @@ Fill the page: a picture and a name for each scheme, with the current one marked
 ```pycon
 >>> page = SchemePage()
 >>> from alto.circle_schemes import record_of
->>> mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+>>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
 >>> page.load(current="custom-1", customs=[mine])
 >>> page.thumbs["custom-1"].isChecked(), page.thumbs["midnight"].isChecked()
 (True, False)
@@ -202,20 +202,20 @@ SchemeEditor(parent: QWidget | None = None)
 
 Bases: `QWidget`
 
-The editor for a colour scheme of the user's own: a name, how its colours are made, and the colours.
+The editor for a color scheme of the user's own: a name, how its colors are made, and the colors.
 
-The colours are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
+The colors are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
 edited.
 
 **Attributes**
 
 - `saved` (*Signal*): Emitted with the record when Save is clicked.
 - `deleted` (*Signal*): Emitted with the scheme's key when Delete is clicked (only an existing scheme can be deleted).
-- `cancelled` (*Signal*): Emitted when Cancel is clicked.
+- `canceled` (*Signal*): Emitted when Cancel is clicked.
 - `name` (*QLineEdit*): The name.
-- `mode` (*QComboBox*): How the colours are made: a key of `MODES` is each item's data.
+- `mode` (*QComboBox*): How the colors are made: a key of `MODES` is each item's data.
 - `wedges` (*QComboBox*): Whether the wedges are dark, with light names, or light, with dark names.
-- `swatches` (*list of QPushButton*): One button for each colour the mode takes; the others are hidden.
+- `swatches` (*list of QPushButton*): One button for each color the mode takes; the others are hidden.
 - `preview` (*SchemeThumb*): The picture of the scheme as it is.
 
 **Examples**
@@ -265,7 +265,7 @@ Start editing a scheme, or a new one.
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
 >>> editor.name.text(), editor.delete_button.isHidden()
-('My colours', True)
+('My colors', True)
 ```
 
 ### SchemeEditor.record
@@ -278,41 +278,41 @@ Return the scheme as it is being edited.
 
 **Returns**
 
-- *CustomRecord*: Its key, name, mode, colours and whether its wedges are light.
+- *CustomRecord*: Its key, name, mode, colors and whether its wedges are light.
 
 **Examples**
 
 ```pycon
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
->>> editor.record()["colours"]
+>>> editor.record()["colors"]
 ['#1fa7c9', '#2f6bd0', '#6a4fe0']
 ```
 
-### SchemeEditor.set_colour
+### SchemeEditor.set_color
 
 ```python
-def set_colour(
+def set_color(
     index: int,
     *,
-    colour: str,
+    color: str,
 ) -> None
 ```
 
-Set one of the colours.
+Set one of the colors.
 
 **Parameters**
 
-- `index` (*int*): Which colour of the mode: 0, 1 or 2.
-- `colour` (*str*): The colour, "#rrggbb". Keyword-only.
+- `index` (*int*): Which color of the mode: 0, 1 or 2.
+- `color` (*str*): The color, "#rrggbb". Keyword-only.
 
 **Examples**
 
 ```pycon
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
->>> editor.set_colour(0, colour="#ff0000")
->>> editor.record()["colours"][0]
+>>> editor.set_color(0, color="#ff0000")
+>>> editor.record()["colors"][0]
 '#ff0000'
 ```
 {% endraw %}

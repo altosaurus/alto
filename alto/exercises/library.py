@@ -400,6 +400,136 @@ class IntervalNames(Exercise):
         )
 
 
+@register
+class KeyboardIntervals(Exercise):
+    """
+    Identify the ascending interval between two highlighted piano keys.
+
+    Attributes
+    ----------
+    INTERVALS : tuple of str
+        Conventional names for every distance on the piano, including compound intervals and combined tritone answers.
+
+    Examples
+    --------
+    >>> q = KeyboardIntervals().generate(random.Random(5))
+    >>> len(q.keyboard_notes), q.answer in q.choices, q.staff
+    (2, True, [])
+    """
+
+    name = "Keyboard Interval Identification"
+    category = "Intervals"
+    description = "Name the interval between two highlighted piano keys."
+    par_seconds = 6.0
+    INTERVALS = settings.KEYBOARD_INTERVAL_NAMES
+
+    def settings_signature(self) -> str:
+        """
+        Identify the keyboard range and selected intervals for stored-question reviews.
+
+        Returns
+        -------
+        str
+            The settings that determine which questions can be asked.
+
+        Examples
+        --------
+        >>> bool(KeyboardIntervals().settings_signature())
+        True
+        """
+        return signature(settings.keyboard_intervals)
+
+    def instructions(self) -> str:
+        """
+        Explain how to identify an interval from two highlighted keys.
+
+        Returns
+        -------
+        str
+            HTML explaining interval names and enharmonic ambiguity on the keyboard.
+
+        Examples
+        --------
+        >>> "A4 / d5" in KeyboardIntervals().instructions()
+        True
+        """
+        return (
+            "<b>Keyboard Interval Identification</b><br>Two piano keys are highlighted. Identify the interval from the "
+            "lower key to the higher key. Intervals beyond an octave are included when they fit the selected range.<br><br>"
+            "Count the half steps between "
+            "the keys, including black keys: adjacent keys are one half step apart. P means perfect, M means major, "
+            "and m means minor.<br><br>A keyboard shows pitches without their written spellings. Use the standard "
+            "interval name for each distance. Six half steps form a tritone, labeled <b>A4 / d5</b> because an augmented "
+            "fourth and a diminished fifth use the same keys.<br><br>Use Settings to choose the keyboard range and "
+            "the intervals to practice. Only intervals that fit the selected range are available. Click an answer or "
+            "press its number."
+        )
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Highlight two distinct keys at a selected interval within the chosen range.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The random number generator.
+
+        Returns
+        -------
+        Question
+            Two highlighted keys and either a limited number of choices or a fixed bank for every selected interval.
+            A prompt is returned if none are selected.
+
+        Examples
+        --------
+        >>> q = KeyboardIntervals().generate(random.Random(7))
+        >>> 1 <= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi <= 12
+        True
+        """
+        cfg = settings.keyboard_intervals
+        lo, hi = cfg.bounds()
+        intervals = cfg.active_intervals()
+        if not intervals:
+            return Question("Select at least one interval in Settings to continue.", choices=[], answer="")
+        distance = rng.choice(intervals)
+        lower = rng.randint(lo, hi - distance)
+        notes = [
+            _spelled(midi, letter=letter, accidental=accidental)
+            for midi in (lower, lower + distance)
+            for letter, accidental in _key_spellings(midi % 12, count=None)[:1]
+        ]
+        answer = self.INTERVALS[distance - 1]
+        pool = [self.INTERVALS[value - 1] for value in intervals]
+        choices = (
+            pool
+            if cfg.all_interval_buttons
+            else pick_distractors(
+                answer,
+                pool=pool,
+                n=cfg.answer_button_limit() - 1,
+                rng=rng,
+            )
+        )
+        numbers: list[str] | None = None
+        accepted: tuple[str, ...] = ()
+        if cfg.compact_buttons:
+            spellings = [name for interval in pool for name in interval.split(" / ")]
+            choices = [quality for quality in ("P", "M", "m", "A", "d") if any(name.startswith(quality) for name in spellings)]
+            numbers = sorted({name[1:] for name in spellings}, key=lambda number: int(number))
+            accepted = tuple(answer.split(" / "))
+        return Question(
+            "",
+            choices=choices,
+            octaves=numbers,
+            second_label="Number" if cfg.compact_buttons else "Octave",
+            accept=accepted,
+            answer=answer,
+            keyboard_notes=notes,
+            keyboard_range=(lo, hi),
+            explanation=f"The highlighted keys are {distance} half step{'s' if distance != 1 else ''} apart: {answer}.",
+        )
+
+
 def _scale_name(mode: str) -> str:
     """
     Return the mode's name as it follows a tonic.
@@ -1001,7 +1131,7 @@ class ScaleConstruction(Exercise):
         if settings.scale_construction.steps:
             text.append(
                 "Once the eight notes are placed, mark the steps between them. Two lines rise from each pair of "
-                "neighbouring notes to a point above them, and the point takes W for a whole step or H for a half step. "
+                "neighboring notes to a point above them, and the point takes W for a whole step or H for a half step. "
                 "Turn the mouse wheel, right click, press the W and H buttons or keys, or use the arrow keys to choose, "
                 "then click the staff (or press Return) to mark it and move on to the next pair.",
             )
@@ -2176,7 +2306,7 @@ class ClefBasics(Exercise):
         if settings.clef_basics.active_type() == "identification":
             return (
                 "<b>Clef Basics: Clef Identification</b><br>A clef is drawn on a staff. Press the button with its name. The "
-                "C clef is the alto, tenor, mezzo-soprano or soprano clef, by the line it is centred on (the line of middle C); "
+                "C clef is the alto, tenor, mezzo-soprano or soprano clef, by the line it is centered on (the line of middle C); "
                 "the G clef is the treble clef, or the French violin clef on the bottom line; the F clef is the bass clef, "
                 "the baritone clef on the middle line, or the subbass clef on the top line. The baritone clef can also be "
                 "written as a C clef on the top line.<br><br>Use the sliders button to choose which clefs are asked for, and "
@@ -2185,7 +2315,7 @@ class ClefBasics(Exercise):
         return (
             "<b>Clef Basics: Clef Construction</b><br>The staff is blank and the name of a clef is shown. Every clef is one of "
             "three symbols, the G clef, the C clef or the F clef, put on a line: the G clef circles the G line, the F clef has "
-            "its dots round the F line, and a C clef is centred on middle C. So the mezzo-soprano clef is the C clef on the "
+            "its dots around the F line, and a C clef is centered on middle C. So the mezzo-soprano clef is the C clef on the "
             "second line.<br><br>Choose the symbol with the buttons under the staff, the mouse wheel or a right click, then "
             "click where it goes. The clef can be tried on the lines, the spaces and the ledger lines above and below the "
             "staff, but only one place is right, except for the baritone clef, which is the F clef on the middle line or the "

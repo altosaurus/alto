@@ -1,4 +1,4 @@
-"""Sound: the synthesised and recorded instruments, the engine that plays notes, and the volume and fade rules."""
+"""Sound: the synthesized and recorded instruments, the engine that plays notes, and the volume and fade rules."""
 
 from __future__ import annotations
 
@@ -261,7 +261,7 @@ def test_every_instrument_has_recordings_and_covers_the_notes() -> None:
         for midi, path in list(files.items())[:3]:
             audio, rate = read_wav(path)
             assert np.isfinite(audio).all() and np.abs(audio).max() > 0.05 and len(audio) > rate // 2, (inst.key, midi)
-        # any staff note gets a file: a recording or a pitch-shifted neighbour
+        # any staff note gets a file: a recording or a pitch-shifted neighbor
         for midi in (
             40,
             61,

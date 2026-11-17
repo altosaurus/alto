@@ -2,7 +2,7 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 48
+order: 51
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
@@ -206,8 +206,8 @@ Pick the cell that is clicked; a click in the middle clears the pick.
 >>> from PySide6.QtTest import QTest
 >>> circle = ExplorableCircle()
 >>> circle.resize(400, 400)
->>> centre, radius = circle.geometry_of()
->>> QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+>>> center, radius = circle.geometry_of()
+>>> QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
 >>> circle.cell
 ('outer', 0)
 ```
@@ -232,8 +232,8 @@ Light the cell under the pointer, and show a hand over the ones that can be pick
 >>> circle = ExplorableCircle()
 >>> circle.resize(400, 400)
 >>> circle.show()
->>> centre, radius = circle.geometry_of()
->>> QTest.mouseMove(circle, QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+>>> center, radius = circle.geometry_of()
+>>> QTest.mouseMove(circle, QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
 >>> circle.hover
 ('outer', 0)
 ```
@@ -266,7 +266,7 @@ True
 def keyPressEvent(event: QKeyEvent) -> None
 ```
 
-Move the pick with the arrow keys: Left and Right round the circle, Up and Down between the rings.
+Move the pick with the arrow keys: Left and Right around the circle, Up and Down between the rings.
 
 Escape clears the pick, and Home picks C major.
 

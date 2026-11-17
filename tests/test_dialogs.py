@@ -32,7 +32,7 @@ if TYPE_CHECKING:
         QWidget,
     )
 
-# -- choosing who is practising -------------------------------------------------------------------------------------
+# -- choosing who is practicing -------------------------------------------------------------------------------------
 
 
 def test_the_first_time_it_asks_for_a_name_and_creates_the_profile(app: QApplication) -> None:
@@ -224,12 +224,12 @@ def test_a_single_profile_is_used_without_asking_but_several_are_asked_about(
     assert int(store().value("profile/last")) == chosen.id  # and the choice is remembered
 
 
-def test_with_no_profile_a_new_one_is_made_or_the_start_is_cancelled(
+def test_with_no_profile_a_new_one_is_made_or_the_start_is_canceled(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that with no profile a new one is made or the start is cancelled.
+    Check that with no profile a new one is made or the start is canceled.
 
     Parameters
     ----------

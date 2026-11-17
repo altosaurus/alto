@@ -2,14 +2,14 @@
 title: alto.ui.pictures
 parent: api
 package: alto.ui
-order: 45
+order: 48
 permalink: /api/alto.ui.pictures/
 ---
 {% raw %}
 Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes.
 
 Each picture is drawn in fixed units and then scaled, so the same picture serves as a summary in a menu row and, larger,
-as the label of a choice. Colours come from the palette, so they work in light and dark themes.
+as the label of a choice. Colors come from the palette, so they work in light and dark themes.
 
 **Examples**
 
@@ -33,12 +33,12 @@ def symbol_icon(
 
 Draw a clef symbol on its own, without a staff, as an icon.
 
-The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centred.
+The G, C and F clefs are drawn the same size as they are on a staff, so the three look alike beside one another, and centered.
 
 **Parameters**
 
 - `symbol` (*str*): "G", "C" or "F".
-- `color` (*QColor*): The colour to draw it in. Keyword-only.
+- `color` (*QColor*): The color to draw it in. Keyword-only.
 - `height` (*int, default 56*): The icon's height in pixels, which is also as wide as it is. Keyword-only.
 
 **Returns**
@@ -177,7 +177,7 @@ ValuePictures(
     values: list[str] | None = None,
     *,
     scale: float = 1.0,
-    centre_stemless: bool = False,
+    center_stemless: bool = False,
     parent: QWidget | None = None,
 )
 ```
@@ -189,7 +189,7 @@ Note values as engraved symbols (no staff), each with its head on the same basel
 **Attributes**
 
 - `values` (*list of str*): The note values shown, keys of `VALUE_NAMES`.
-- `centre_stemless` (*bool*): Whether the breve and whole note sit at the picture's vertical centre.
+- `center_stemless` (*bool*): Whether the double whole note and whole note sit at the picture's vertical center.
 
 **Examples**
 
@@ -207,13 +207,13 @@ Create the picture.
 
 - `values` (*list of str or None, default None*): The note values to show.
 - `scale` (*float, default 1.0*): How much to enlarge it. Keyword-only.
-- `centre_stemless` (*bool, default False*): Put the breve and whole note at the picture's vertical centre, so beside a line of text they line up with the middle of the text; the others keep their heads low so their stems fit above. Keyword-only.
+- `center_stemless` (*bool, default False*): Center double whole notes and whole notes vertically so they align with the middle of adjacent text. Other notes keep their heads low so their stems fit above. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
 
 ```pycon
->>> ValuePictures(["half"], centre_stemless=True).centre_stemless
+>>> ValuePictures(["half"], center_stemless=True).center_stemless
 True
 ```
 
@@ -485,7 +485,7 @@ NamePicture(
 
 Bases: `_Picture`
 
-How notes are named: C, D and E on a staff, labelled with letters, solfège syllables or scale degrees.
+How notes are named: C, D and E on a staff, labeled with letters, solfège syllables or scale degrees.
 
 **Attributes**
 

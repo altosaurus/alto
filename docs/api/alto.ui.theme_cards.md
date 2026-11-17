@@ -2,14 +2,14 @@
 title: alto.ui.theme_cards
 parent: api
 package: alto.ui
-order: 57
+order: 60
 permalink: /api/alto.ui.theme_cards/
 ---
 {% raw %}
 The card of a theme in the settings.
 
 A card is one theme: its name, three pictures of the window one above another that can be clicked (light, dark, and System,
-which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colours.
+which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colors.
 
 **Examples**
 
@@ -19,26 +19,26 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 ['sage', 'sage_auto', 'sage_dark']
 ```
 
-## colours_of
+## colors_of
 
 ```python
-def colours_of(key: str) -> dict[str, str]
+def colors_of(key: str) -> dict[str, str]
 ```
 
-Give the colours of a theme's picture.
+Give the colors of a theme's picture.
 
 **Parameters**
 
-- `key` (*str*): A theme's key: "light", "dark", or a theme with colours of its own, light or dark.
+- `key` (*str*): A theme's key: "light", "dark", or a theme with colors of its own, light or dark.
 
 **Returns**
 
-- *dict of str to str*: The window, panel, outline, text, faint and chosen colours, and a tint for the chosen row.
+- *dict of str to str*: The window, panel, outline, text, faint and chosen colors, and a tint for the chosen row.
 
 **Examples**
 
 ```pycon
->>> colours_of("dark")["window"], colours_of("studio")["window"]
+>>> colors_of("dark")["window"], colors_of("studio")["window"]
 ('#2b2b2b', '#eceef1')
 ```
 
@@ -48,7 +48,7 @@ Give the colours of a theme's picture.
 ThemeThumb(
     key: str,
     *,
-    colours: dict[str, str],
+    colors: dict[str, str],
     other: dict[str, str] | None = None,
     scale: float = 1.0,
     parent: QWidget | None = None,
@@ -62,14 +62,14 @@ A small picture of the window in a theme, to click to choose the theme.
 **Attributes**
 
 - `theme_key` (*str*): The key of the theme it chooses.
-- `colours` (*dict of str to str*): The colours it is drawn in.
-- `other` (*dict of str to str or None*): The colours of the dark half, for a picture that is cut through on a slant; None for a plain one.
+- `colors` (*dict of str to str*): The colors it is drawn in.
+- `other` (*dict of str to str or None*): The colors of the dark half, for a picture that is cut through on a slant; None for a plain one.
 - `scale_by` (*float*): How many times bigger than the smallest size it is drawn.
 
 **Examples**
 
 ```pycon
->>> ThemeThumb("dark", colours=DARK).theme_key
+>>> ThemeThumb("dark", colors=DARK).theme_key
 'dark'
 ```
 
@@ -80,15 +80,15 @@ Build the picture.
 **Parameters**
 
 - `key` (*str*): The theme it chooses.
-- `colours` (*dict of str to str*): The colours of the picture, or of its light half.
-- `other` (*dict of str to str or None, default None*): The colours of its dark half, for a picture cut through on a slant. Keyword-only.
+- `colors` (*dict of str to str*): The colors of the picture, or of its light half.
+- `other` (*dict of str to str or None, default None*): The colors of its dark half, for a picture cut through on a slant. Keyword-only.
 - `scale` (*float, default 1.0*): How many times bigger than the smallest size to draw it. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
 
 ```pycon
->>> ThemeThumb("system", colours=LIGHT, other=DARK).width(), ThemeThumb("light", colours=LIGHT, scale=2.0).width()
+>>> ThemeThumb("system", colors=LIGHT, other=DARK).width(), ThemeThumb("light", colors=LIGHT, scale=2.0).width()
 (116, 232)
 ```
 
@@ -107,7 +107,7 @@ Draw the window, cut through on a slant if it has two halves, with an outline th
 **Examples**
 
 ```pycon
->>> ThemeThumb("light", colours=LIGHT).grab().isNull()
+>>> ThemeThumb("light", colors=LIGHT).grab().isNull()
 False
 ```
 
@@ -124,7 +124,7 @@ ThemeCard(
 
 Bases: `QFrame`
 
-The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colours.
+The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colors.
 
 The pictures are Light, Dark and System. The System one is cut through on a slant, light on one side and dark on the other,
 because that version is light or dark as the desktop is.
@@ -135,7 +135,7 @@ because that version is light or dark as the desktop is.
 - `thumbs` (*dict of str to ThemeThumb*): The three pictures, by the key of the theme each chooses.
 - `change_button` (*QPushButton or None*): Opens the editor; only a theme the user made has one.
 - `chosen` (*Signal*): Emitted with the key of the theme when one of the pictures is clicked.
-- `edit_requested` (*Signal*): Emitted with the key of the theme when its Change colours button is pressed; only a theme the user made has one.
+- `edit_requested` (*Signal*): Emitted with the key of the theme when its Change colors button is pressed; only a theme the user made has one.
 
 **Examples**
 

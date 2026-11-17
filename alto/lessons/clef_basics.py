@@ -119,8 +119,8 @@ def line_task(rng: random.Random) -> Task:
     clef = rng.choice(["treble", "bass", "alto", "tenor", "mezzo", "soprano"])
     return Task(
         prompt=f"On which line is the <b>{CLEF_NAMES[clef].lower()}</b> clef written?",
-        hint="Count the lines from the bottom. The G clef circles the G line, the F clef has its dots round the F line, and a C "
-        "clef is centred on middle C.",
+        hint="Count the lines from the bottom. The G clef circles the G line, the F clef has its dots around the F line, and a C "
+        "clef is centered on middle C.",
         explanation=f"The {CLEF_NAMES[clef].lower()} clef is the {CLEF_SYMBOL_NAMES[SYMBOLS[clef]]} on the "
         f"{LINES[LINE_OF[clef]].lower()}.",
         choices=LINES,
@@ -197,11 +197,11 @@ CLEF_BASICS = Lesson(
         Step(
             title="The C clef and middle C",
             text=(
-                "<p>The C clef is centred on a line, and that line is <b>middle C</b>. Its four common positions give four "
+                "<p>The C clef is centered on a line, and that line is <b>middle C</b>. Its four common positions give four "
                 "clefs, named for the voices they suited: <b>soprano</b> on the bottom line, <b>mezzo-soprano</b> on the "
                 "second, <b>alto</b> on the middle and <b>tenor</b> on the fourth.</p>"
                 "<p>Look at the staves on the right. The same note, middle C, is written on each, and each time it is on the "
-                "line the clef is centred on. The alto clef is the one violas read.</p>"
+                "line the clef is centered on. The alto clef is the one violas read.</p>"
             ),
             staves=(
                 Staff(clef="soprano", note="C4", caption="Soprano: the bottom line"),

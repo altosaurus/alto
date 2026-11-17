@@ -51,9 +51,9 @@ class Dialogs:
     Attributes
     ----------
     save_to : str
-        The file the save dialog returns; empty means the user cancelled.
+        The file the save dialog returns; empty means the user canceled.
     open_from : str
-        The file the open dialog returns; empty means the user cancelled.
+        The file the open dialog returns; empty means the user canceled.
     answer : QMessageBox.StandardButton
         What the user answers when asked whether to replace everything.
     shown : list of tuple
@@ -142,7 +142,7 @@ def test_the_suggested_name_carries_the_date_and_the_extension() -> None:
 
 def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     dialogs: Dialogs,
     tmp_path: Path,
 ) -> None:
@@ -153,14 +153,14 @@ def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     dialogs : Dialogs
         Stands in for the dialogs.
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    learner = practised_learner(30)
+    learner = practiced_learner(30)
     dialogs.save_to = str(tmp_path / "mine")
     written = backup_flow.export_backup(QApplication.activeWindow() or MainWindow(), db=learner.db)
     assert written is not None
@@ -171,13 +171,13 @@ def test_exporting_writes_one_file_with_the_extension_and_says_what_it_holds(
     assert dialogs.shown[-1][0] == "information" and str(written) in dialogs.shown[-1][1]
 
 
-def test_cancelling_the_export_or_failing_to_write_changes_nothing_and_says_so(
+def test_canceling_the_export_or_failing_to_write_changes_nothing_and_says_so(
     app: QApplication,
     dialogs: Dialogs,
     tmp_path: Path,
 ) -> None:
     """
-    Check that cancelling writes nothing and shows nothing, and that a file that cannot be written is explained.
+    Check that canceling writes nothing and shows nothing, and that a file that cannot be written is explained.
 
     Parameters
     ----------
@@ -203,7 +203,7 @@ def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
     tmp_path: Path,
 ) -> None:
     """
-    Check that cancelling, a file that is not a backup, a backup with nobody in it and answering No each change nothing.
+    Check that canceling, a file that is not a backup, a backup with nobody in it and answering No each change nothing.
 
     Parameters
     ----------
@@ -219,7 +219,7 @@ def test_an_import_that_is_refused_or_declined_leaves_everything_as_it_was(
     store().setValue("ui/theme", "light")
     before, saved = rows(db), export_settings()
     window = MainWindow()
-    assert backup_flow.import_backup(window, db=db) is False  # cancelled at the file dialog
+    assert backup_flow.import_backup(window, db=db) is False  # canceled at the file dialog
     junk = tmp_path / "junk.altobackup"
     junk.write_bytes(b"not a backup")
     dialogs.open_from = str(junk)
@@ -265,7 +265,7 @@ def test_the_question_before_replacing_says_what_the_backup_holds(
 
 def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     dialogs: Dialogs,
     tmp_path: Path,
 ) -> None:
@@ -276,14 +276,14 @@ def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     dialogs : Dialogs
         Stands in for the dialogs.
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    here = practised_learner(30, db=Database(tmp_path / "data" / "alto.db")).db
+    here = practiced_learner(30, db=Database(tmp_path / "data" / "alto.db")).db
     original = rows(here)
     other = Database()
     other.add_profile("Ben")
@@ -299,7 +299,7 @@ def test_an_import_saves_a_copy_of_what_it_replaces_so_it_can_be_undone(
 
 def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_changed(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     dialogs: Dialogs,
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
@@ -311,7 +311,7 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     dialogs : Dialogs
         Stands in for the dialogs.
@@ -323,8 +323,8 @@ def test_importing_a_backup_into_a_clean_install_leaves_it_as_if_nothing_had_cha
     applied: list[str] = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(mw, "apply_theme", applied.append)
-    learner = practised_learner(90, db=Database(tmp_path / "old" / "alto.db"))
-    practised_learner(40, name="Ben", db=learner.db)
+    learner = practiced_learner(90, db=Database(tmp_path / "old" / "alto.db"))
+    practiced_learner(40, name="Ben", db=learner.db)
     remember_profile(learner.profile)
     settings.note_names.clefs = {"alto"}
     save_note_names()

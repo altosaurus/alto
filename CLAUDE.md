@@ -1,5 +1,7 @@
 # Code style for Alto
 
+Use American English spelling, grammar, vocabulary, and idioms in code, comments, docstrings, documentation, and user-facing text.
+
 These are the author's rules. Ruff enforces some of them; the rest are only enforced by following this file. When Ruff cannot
 enforce a rule, follow it anyway in every line you write or touch.
 
@@ -30,6 +32,24 @@ enforce a rule, follow it anyway in every line you write or touch.
 - Only the first parameter of a function may be positional; the rest are keyword-only, and every call names them
   (`Note(3, letter=1)`), tests included.
 - Line length 130, double quotes.
+
+## UI consistency
+
+- Match dropdowns to Alto's existing controls. Use `FieldComboBox` from `alto/ui/dropdown.py`; it marks the field for the
+  shared theme-aware styles in `alto/ui/style.py` and rounds the popup's outer window as well as its item view.
+- Dropdown popup corners must be visibly rounded. Styling only the closed field or inner list is insufficient: retain
+  the shared popup mask and verify the open menu, including after resizing and scrolling.
+- Preserve the shared rounded border, padding, chevron, focus highlight, and popup colors. Avoid borderless native controls
+  or local style overrides unless the user explicitly requests a different appearance.
+- Keep long lists scrollable and verify that the closed control, longest notation, and popup fit their intended pane with
+  the application stylesheet applied. Use palette colors so light, dark, and custom themes remain consistent.
+
+- Match arrow buttons to Alto's shared button styling in `alto/ui/style.py`. Reuse `_arrow()` in settings panels;
+  elsewhere, mark `QToolButton` controls with `setProperty("arrowButton", True)`.
+- Preserve the shared rounded border, heavier lower edge, palette colors, and hover, focus, pressed, and disabled states.
+  Avoid local styling and hardcoded arrow colors unless the user explicitly requests a different appearance.
+- Give arrow buttons descriptive tooltips and accessible names. Preserve auto-repeat for endpoint adjustments and check
+  that buttons and adjacent labels fit the actual pane with the application stylesheet applied.
 
 ## Docstrings and types
 
@@ -77,6 +97,16 @@ These choices were made with the user; preserve them when continuing work on the
   Include a magnifying glass in the search field, a clear action, and an accessible search label.
 - List: sort terms alphabetically. Give rows enough height and spacing that selection highlights do not overlap neighboring
   words. Filtering selects a visible match and shows an explicit empty state when no terms match.
+- Term names: use lowercase in the list and entry heading unless a term is a proper noun. Preserve the entry's defined
+  casing rather than automatically capitalizing headings.
+- Boxes: use consistent rounded corners, thin borders, and generous whitespace between edges and content. Match the
+  Lessons panels' theme background (`palette(window)`) in the term list, description, related activities, and search field.
+- Alignment: the description box's top edge aligns with the search field's top edge; the related activities box's bottom
+  edge aligns with the term list's bottom edge. Avoid extra inner column margins that offset these edges.
+- Description layout: use one large rounded box for the explanation and any interactive example. Keep examples compact
+  rather than stretching a staff with only a few notes across the page. On wide layouts, wrap explanation text around the
+  example, with its top flush with the first paragraph below the term heading. On narrow layouts, stack the example above
+  the text within the same box.
 - Content: provide more depth than a textbook's back-of-book glossary, while keeping each term to one concise page.
   Explain the concept, practical reading or listening guidance, and common pitfalls. Small notation examples and modest
   interactivity are welcome; avoid turning an entry into a multi-page lesson.
@@ -84,6 +114,9 @@ These choices were made with the user; preserve them when continuing work on the
   relevant to the term and identify the written pitch and clef.
 - Related activities: use an **Exercises / Lessons** switch to toggle clickable activity tiles, rather than text links.
   Display tiles horizontally. Clicking a tile opens that exercise or lesson directly.
+- Theme changes: preserve the current page instead of navigating away from the glossary. Retain the selected term,
+  search filter, example index, related activities tab, and description scroll position, as well as the previous screen
+  reached through Back. Bind deferred layout and scroll callbacks to their widgets' lifetimes.
 - Initial terms: pitch, octave, octave register, staff, ledger lines, clef, grand staff.
 - Implementation: `alto/ui/glossary.py` contains entries, examples, filtering, and activity tiles; `alto/ui/main_window.py`
   owns the toolbar entry and navigation; `alto/ui/icons.py` contains the chosen icon. Related activities currently use

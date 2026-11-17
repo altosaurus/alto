@@ -5,7 +5,7 @@ order: 13
 permalink: /guide/reading/
 ---
 The first part of this page is a glossary of terms used in the guide and in the code, each with something to search for. The second
-is a reading list by subject, favouring books, peer-reviewed papers, standards and official documentation over blog posts.
+is a reading list by subject, favoring books, peer-reviewed papers, standards and official documentation over blog posts.
 Web addresses change; the authors, titles and years are given so you can find a source even after a link has moved.
 
 ## A suggested order for learning
@@ -15,7 +15,7 @@ If you are new to some of this, this order builds on itself.
 1. **The program as a user.** Run it, use every exercise, open every settings pane, look at the statistics and the database page.
 2. **Python's less common features**: [Python beyond the basics]({{ '/guide/python/' | relative_url }}), with *Fluent Python* beside it.
 3. **Qt's model**: [Qt and PySide6]({{ '/guide/qt/' | relative_url }}); build a ten-line window that draws a rectangle and responds to a click.
-4. **One small change** in `alto/ui`: alter a colour, a radius, a duration. See [Styling]({{ '/guide/styling/' | relative_url }}) and
+4. **One small change** in `alto/ui`: alter a color, a radius, a duration. See [Styling]({{ '/guide/styling/' | relative_url }}) and
    [Animation]({{ '/guide/animation/' | relative_url }}).
 5. **One new exercise**: [Building an exercise]({{ '/guide/exercises/' | relative_url }}). It touches the data model, the tests and the docs, in a small way.
 6. **A change to the scheduler**, tested by simulation: [Spaced repetition]({{ '/guide/spaced-repetition/' | relative_url }}).
@@ -37,7 +37,7 @@ showing. See [Data]({{ '/guide/data/' | relative_url }}).
 
 **Bit depth.** How many bits store each audio sample. Alto uses 16. Search: *quantisation*, *dynamic range*.
 
-**Bounding box (ink box).** The smallest rectangle around a glyph's shape; used to centre a notehead. Search: *glyph metrics*.
+**Bounding box (ink box).** The smallest rectangle around a glyph's shape; used to center a notehead. Search: *glyph metrics*.
 
 **Brace.** The curly bracket joining the two staves of a grand staff.
 
@@ -86,7 +86,7 @@ mezzo-soprano, baritone).
 
 **Interleaving.** Mixing different kinds of problem in one practice session.
 
-**Item key.** A 20-character hash that identifies a question, so the same question is recognised when it returns.
+**Item key.** A 20-character hash that identifies a question, so the same question is recognized when it returns.
 `Question.item_key()`.
 
 **Keyword-only argument.** A parameter that must be given by name, written after a bare `*` in the definition.
@@ -112,7 +112,7 @@ mezzo-soprano, baritone).
 
 **Painter (`QPainter`).** The object that draws shapes, text and images onto a widget or image.
 
-**Palette (`QPalette`).** A widget's table of named colours (`Window`, `Base`, `Text`, `Highlight` ...).
+**Palette (`QPalette`).** A widget's table of named colors (`Window`, `Base`, `Text`, `Highlight` ...).
 
 **PCM.** Pulse-code modulation: audio stored as a list of sample values. WAV files carry PCM.
 
@@ -120,7 +120,7 @@ mezzo-soprano, baritone).
 
 **Property animation.** Animating a named property of a Qt object. `QPropertyAnimation`.
 
-**Resampling.** Changing the sample rate or reading samples at a different speed, by interpolating between neighbours.
+**Resampling.** Changing the sample rate or reading samples at a different speed, by interpolating between neighbors.
 
 **Retrieval practice / testing effect.** Recalling an answer strengthens memory more than rereading it.
 
@@ -183,7 +183,7 @@ voices.
 - Donald A. Norman, *The Design of Everyday Things*, revised ed. (Basic Books, 2013).
 - Steve Krug, *Don't Make Me Think, Revisited* (New Riders, 2014).
 - Edward R. Tufte, *The Visual Display of Quantitative Information*, 2nd ed. (Graphics Press, 2001).
-- Cynthia A. Brewer, *Designing Better Maps* (Esri Press, 2005): colour schemes for ordered and categorical data.
+- Cynthia A. Brewer, *Designing Better Maps* (Esri Press, 2005): color schemes for ordered and categorical data.
 - Charles Poynton, *Digital Video and HD*, 2nd ed. (Morgan Kaufmann, 2012).
 - Ellen Lupton, *Thinking with Type*, 2nd ed. (Princeton Architectural Press, 2010).
 - *Web Content Accessibility Guidelines 2.1*, W3C, w3.org/TR/WCAG21.

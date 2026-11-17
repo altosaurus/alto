@@ -21,7 +21,7 @@ The pieces Alto draws:
   "this is G above middle C". A bass clef puts F below middle C on the second line from the top. A C clef says "middle C is
   here" and can sit on any line (alto, tenor, soprano, mezzo-soprano, and the baritone variants).
 - The **key signature** is the group of sharps or flats after the clef.
-- A **note** has a **notehead** (filled, open or breve), usually a **stem**, and for short notes **flags**. Accidentals (sharp,
+- A **note** has a **notehead** (filled, open or double whole), usually a **stem**, and for short notes **flags**. Accidentals (sharp,
   flat, natural) go in front of the head.
 - **Ledger lines** are short extra lines for notes above or below the staff.
 - The **grand staff** joins a treble and a bass staff with a **brace**.
@@ -107,7 +107,7 @@ font's metadata: line, stem and ledger thickness and the stem anchors.
    taken once at 100 pixels to the em (so one staff space is 25 units) and cached with `@cache`.
 2. The code works out where the glyph's **origin** belongs and moves and scales the outline there: `_place` builds a
    `QTransform` that translates to the position and scales by `gap / 25`.
-3. The outline is **filled** with the current colour.
+3. The outline is **filled** with the current color.
 
 Why not simply call `drawText`? Because text drawing positions glyphs by the font's advance widths and snaps to the pixel grid
 ("hinting"), which makes noteheads wobble by a pixel and defeats the anchors. Filling the outline gives exact positions in
@@ -118,8 +118,8 @@ A note is built from parts, the way an engraver would:
 ```python
 # alto/ui/engraving.py: draw_note, simplified
 left, _, right, _ = _ink(font, name="noteheadBlack")  # the head's ink box, in staff spaces
-ox = x - (left + right) / 2 * gap  # centre the drawn head on x
-_fill(p, path=_place(_outline(font, name="noteheadBlack"), x=ox, y=y, gap=gap), colour=colour)
+ox = x - (left + right) / 2 * gap  # center the drawn head on x
+_fill(p, path=_place(_outline(font, name="noteheadBlack"), x=ox, y=y, gap=gap), color=color)
 
 ax, ay = _anchor(font, name="noteheadBlack", anchor="stemUpSE")  # where an up-stem attaches
 thick = _metrics(font)["stem"] * gap  # stem width from the font
@@ -177,9 +177,9 @@ p = QPainter(image)
 p.setRenderHint(QPainter.RenderHint.Antialiasing)
 for i in range(5):
     p.drawLine(20, bottom - i * gap, 280, bottom - i * gap)
-engraving.draw_clef(p, font="bravura", clef="treble", x=30, bottom=bottom, gap=gap, colour=QColor("black"))
+engraving.draw_clef(p, font="bravura", clef="treble", x=30, bottom=bottom, gap=gap, color=QColor("black"))
 engraving.draw_note(
-    p, font="bravura", value="quarter", x=140, y=bottom - 6 * gap / 2, gap=gap, colour=QColor("black"), stem_down=True
+    p, font="bravura", value="quarter", x=140, y=bottom - 6 * gap / 2, gap=gap, color=QColor("black"), stem_down=True
 )
 p.end()
 image.save("/tmp/notation-example.png")
@@ -189,7 +189,7 @@ Change `font="bravura"` to `"leland"` or `"petaluma"` and compare. Change `6` to
 
 ## Adding a notation font
 
-The steps are in [For developers]({{ '/development/' | relative_url }}). In outline: put the `.otf` and its licence in
+The steps are in [For developers]({{ '/development/' | relative_url }}). In outline: put the `.otf` and its license in
 `alto/assets/fonts/`, add its numbers to `engraving.json` from the font's SMuFL metadata, register the file in `_FILES`, and add
 a `NotationStyle`. Fonts without full SMuFL metadata may need the fallback numbers in `_anchor`. The test suite draws every style
 and checks that something appears (`tests/test_rendering.py`). Look at the result by eye too: a wrong anchor still draws, just

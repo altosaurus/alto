@@ -70,7 +70,7 @@ class Learner:
         db : Database
             The database to read and write.
         profile : Profile
-            The profile that is practising. Keyword-only.
+            The profile that is practicing. Keyword-only.
 
         Examples
         --------
@@ -96,7 +96,7 @@ class Learner:
         Parameters
         ----------
         exercise : Exercise
-            The exercise being practised.
+            The exercise being practiced.
         rng : random.Random
             The random number generator used to make new questions and to draw one. Keyword-only.
         avoid : str or None, default None
@@ -162,7 +162,7 @@ class Learner:
         Parameters
         ----------
         exercise : Exercise
-            The exercise being practised.
+            The exercise being practiced.
         question : Question
             The question that was answered. Keyword-only.
         answer : str

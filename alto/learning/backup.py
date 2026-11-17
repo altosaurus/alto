@@ -197,7 +197,7 @@ def _digest(data: bytes) -> str:
     Parameters
     ----------
     data : bytes
-        What to summarise.
+        What to summarize.
 
     Returns
     -------

@@ -1,0 +1,212 @@
+<div id="alto-navigation-ideas" class="viz-carousel" aria-label="Alto navigation proposals">
+  <section data-variant="Left navigation" aria-label="Left navigation proposal"><div class="an-app" id="an-shared"></div></section>
+  <section data-variant="Workspace tabs" aria-label="Workspace tabs proposal" hidden><div class="an-app" id="an-tabs"></div></section>
+  <section data-variant="Library drawer" aria-label="Library drawer proposal" hidden><div class="an-app" id="an-drawer"></div></section>
+</div>
+<!--suppress CssUnusedSymbol -->
+<style>
+#alto-navigation-ideas .an-app {
+  --an-bg: light-dark(#f3f2ef,#1c1d21);
+  --an-paper: light-dark(#fffefa,#28292d);
+  --an-ink: light-dark(#252729,#ecebe7);
+  --an-muted: light-dark(#636767,#b0b3b5);
+  --an-line: light-dark(#d8dad6,#43454a);
+  --an-hover: light-dark(#e8eae5,#373a3e);
+  --an-selected: light-dark(#dbe8de,#344c40);
+  --an-selected-ink: light-dark(#244631,#d4eddb);
+  color:var(--an-ink); background:var(--an-bg); border:1px solid var(--an-line); border-radius:12px;
+  font:400 14px/1.45 system-ui,sans-serif; min-height:760px; overflow:clip;
+}
+#alto-navigation-ideas .an-app * {box-sizing:border-box}
+#alto-navigation-ideas .an-app button {font:inherit; color:inherit; cursor:default; border:1px solid transparent; background:transparent; border-radius:6px; padding:8px 11px; text-align:left; min-height:38px}
+#alto-navigation-ideas .an-app button:hover {background:var(--an-hover)}
+#alto-navigation-ideas .an-app button:focus-visible {outline:2px solid var(--an-selected-ink); outline-offset:2px}
+#alto-navigation-ideas .an-app button[aria-pressed="true"], #alto-navigation-ideas .an-app button[aria-current="page"] {background:var(--an-selected);color:var(--an-selected-ink)}
+#alto-navigation-ideas .an-app button:disabled {opacity:.5;cursor:default}
+#alto-navigation-ideas .an-top {display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--an-line)}
+#alto-navigation-ideas .an-logo {font-weight:500;letter-spacing:.06em}
+#alto-navigation-ideas .an-topnav {display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-left:auto}
+#alto-navigation-ideas .an-leftnav {display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+#alto-navigation-ideas .an-leftnav .an-tiles {border-color:var(--an-line);margin-left:6px}
+#alto-navigation-ideas .an-subnav {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+#alto-navigation-ideas .an-workspace {display:grid;grid-template-columns:212px minmax(0,1fr);min-height:625px}
+#alto-navigation-ideas .an-workspace.an-collapsed {grid-template-columns:minmax(0,1fr)}
+#alto-navigation-ideas .an-sidebar {padding:18px 12px;border-right:1px solid var(--an-line)}
+#alto-navigation-ideas .an-sideheading {padding:7px 10px;font-weight:500}
+#alto-navigation-ideas .an-listpicker {font:500 14px/1.45 system-ui,sans-serif;color:var(--an-ink);background:var(--an-paper);border:1px solid var(--an-line);border-radius:6px;width:100%;padding:9px 10px;margin-bottom:12px}
+#alto-navigation-ideas .an-category {padding:17px 10px 5px;color:var(--an-muted);font-size:12px;letter-spacing:.04em}
+#alto-navigation-ideas .an-links {display:flex;flex-direction:column;gap:3px}
+#alto-navigation-ideas .an-links button {width:100%}
+#alto-navigation-ideas .an-lessonsteps {margin:3px 0 8px 12px;border-left:1px solid var(--an-line);padding-left:6px;display:flex;flex-direction:column;gap:2px}
+#alto-navigation-ideas .an-lessonsteps button {font-size:12px}
+#alto-navigation-ideas .an-grouphead {display:flex;align-items:center;gap:5px;margin:3px 0 7px}
+#alto-navigation-ideas .an-grouphead button {flex:1;font-weight:500}
+#alto-navigation-ideas .an-grouphead .an-smallbutton {flex:0;font-weight:400;font-size:12px}
+#alto-navigation-ideas .an-content {min-width:0;padding:22px 24px 28px}
+#alto-navigation-ideas .an-content h2 {font:500 20px/1.35 system-ui,sans-serif;margin:0}
+#alto-navigation-ideas .an-content h3 {font:500 16px/1.4 system-ui,sans-serif;margin:0}
+#alto-navigation-ideas .an-eyebrow {color:var(--an-muted);font-size:12px;margin-bottom:5px}
+#alto-navigation-ideas .an-headingrow {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:23px}
+#alto-navigation-ideas .an-outline {border-color:var(--an-line)!important;background:var(--an-paper)!important}
+#alto-navigation-ideas .an-back {margin-bottom:18px}
+#alto-navigation-ideas .an-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+#alto-navigation-ideas .an-grid button {display:flex;flex-direction:column;align-items:flex-start;gap:18px;min-height:124px;padding:18px;border-color:var(--an-line);background:var(--an-paper)}
+#alto-navigation-ideas .an-grid button:hover {border-color:var(--an-muted)}
+#alto-navigation-ideas .an-tilemark {color:var(--an-muted);font-size:12px}
+#alto-navigation-ideas .an-tiletitle {font-weight:500}
+#alto-navigation-ideas .an-staff {position:relative;min-height:214px;background:var(--an-paper);border-radius:12px;margin:24px 0;display:flex;align-items:center;justify-content:center}
+#alto-navigation-ideas .an-stafflines {position:absolute;left:12%;right:12%;top:75px;height:65px;display:flex;flex-direction:column;justify-content:space-between}
+#alto-navigation-ideas .an-stafflines i {display:block;height:1px;background:var(--an-ink);opacity:.65}
+#alto-navigation-ideas .an-clef {position:absolute;left:14%;top:44px;font:400 85px/1.4 Georgia,serif}
+#alto-navigation-ideas .an-note {position:absolute;left:54%;top:91px;width:23px;height:15px;border-radius:50%;transform:rotate(-16deg);background:var(--an-ink)}
+#alto-navigation-ideas .an-answerrow {display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#alto-navigation-ideas .an-answerrow button {text-align:center;flex:1;min-width:42px;border-color:var(--an-line);background:var(--an-paper)}
+#alto-navigation-ideas .an-status {color:var(--an-muted);font-size:12px;min-height:26px;margin-top:16px}
+#alto-navigation-ideas .an-nextrow {display:flex;justify-content:flex-end;margin-top:18px}
+#alto-navigation-ideas .an-reading {background:var(--an-paper);border-radius:12px;padding:26px;margin:24px 0;min-height:240px}
+#alto-navigation-ideas .an-reading p {margin:14px 0;color:var(--an-ink)}
+#alto-navigation-ideas .an-empty {min-height:440px;display:grid;place-items:center;text-align:center;color:var(--an-muted)}
+#alto-navigation-ideas .an-symbols {display:flex;justify-content:space-around;gap:14px;margin:25px 0}
+#alto-navigation-ideas .an-symbols span {font:400 52px/1.4 Georgia,serif;text-align:center}
+#alto-navigation-ideas .an-symbols small {display:block;font:400 12px/1.5 system-ui,sans-serif}
+#alto-navigation-ideas .an-lessonnav {display:flex;gap:12px;align-items:center;justify-content:space-between}
+#alto-navigation-ideas .an-progress {font-size:12px;color:var(--an-muted)}
+#alto-navigation-ideas .an-tabbar {display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:8px 16px;border-bottom:1px solid var(--an-line)}
+@media(max-width:650px) {
+ #alto-navigation-ideas .an-app {min-height:1180px}
+ #alto-navigation-ideas .an-workspace {grid-template-columns:minmax(0,1fr);min-height:920px;align-content:start}
+ #alto-navigation-ideas .an-sidebar {border-right:0;border-bottom:1px solid var(--an-line);padding:12px}
+ #alto-navigation-ideas .an-links {display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ #alto-navigation-ideas .an-links .an-category,#alto-navigation-ideas .an-lessonsteps {grid-column:1/-1}
+ #alto-navigation-ideas .an-content {padding:20px 16px}
+ #alto-navigation-ideas .an-top {padding:12px;gap:8px}
+ #alto-navigation-ideas .an-topnav {gap:0}
+ #alto-navigation-ideas .an-topnav button {padding:8px}
+ #alto-navigation-ideas .an-grid {gap:8px}
+ #alto-navigation-ideas .an-grid button {padding:12px;min-height:130px}
+ #alto-navigation-ideas .an-staff {min-height:190px}
+}
+</style>
+<script>
+(() => {
+ const root = document.getElementById('alto-navigation-ideas');
+ // noinspection JSUnresolvedReference
+ const host = window.openai;
+ const exerciseNames = ['Note Identification','Note Construction','Keyboard Identification','Clef Basics','Circle of Fifths'];
+ const lessonNames = ['Clef Basics','The Circle of Fifths'];
+ const steps = ['What a clef does','Three symbols','The G clef','The F clef','The C clef and middle C'];
+ const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+ const button = (action,label,attrs='') => `<button type="button" data-action="${action}" ${attrs}>${label}</button>`;
+ const models = ['shared','tabs','drawer'].map(variant => ({
+  variant, el:document.getElementById('an-'+variant), sidebar:variant === 'tabs', mode:'Exercises', page:variant==='shared'?'catalogue':'exercise',
+  exercise:'Note Identification', lesson:null, step:1, question:variant==='shared'?1:8, answer:'', previous:variant==='shared'?null:'exercise',
+  exerciseStates:variant==='shared'?{}:{'Note Identification':{question:8,answer:''}}
+ }));
+ function remember() {
+  if (!host?.setWidgetState) return;
+  const snapshots = models.map(({el,...model})=>model);
+  host.setWidgetState({modelContent:{proposal:'Alto navigation',designs:['Left navigation','Workspace tabs','Library drawer']},privateContent:{version:3,navigation:snapshots}}).catch(()=>{});
+ }
+ function restore(saved) {
+  const snapshots=saved?.privateContent?.navigation;
+  if (saved?.privateContent?.version!==3 || !Array.isArray(snapshots)) return;
+  models.forEach(model=>{
+   const item=snapshots.find(s=>s.variant===model.variant);
+   if (!item || !['exercise','lesson','catalogue','empty','statistics','database'].includes(item.page)) return;
+   ['sidebar','mode','page','exercise','lesson','step','question','answer','previous','exerciseStates','utilityReturn'].forEach(key=>{if(item[key]!==undefined) model[key]=item[key];});
+  });
+ }
+ function sideItems(model,mode) {
+  if(mode==='Exercises') return `<div class="an-links"><div class="an-category">NOTATION</div>${exerciseNames.slice(0,4).map(name=>button('exercise',escape(name),`data-name="${escape(name)}" ${model.page==='exercise'&&model.exercise===name?'aria-current="page"':''}`)).join('')}<div class="an-category">SCALES &amp; KEYS</div>${button('exercise','Circle of Fifths','data-name="Circle of Fifths"')}</div>`;
+  return `<div class="an-links">${lessonNames.map(name=>button('lesson',escape(name),`data-name="${escape(name)}" ${model.page==='lesson'&&model.lesson===name?'aria-current="page"':''}`)+(model.lesson===name?`<div class="an-lessonsteps">${steps.slice(0,3).map((title,index)=>button('step',escape(title),`data-step="${index}" ${model.page==='lesson'&&model.step===index?'aria-current="page"':''}`)).join('')}</div>`:'')).join('')}</div>`;
+ }
+ function sidebar(model) {
+  if(!model.sidebar) return '';
+  if(model.variant==='shared') return `<aside class="an-sidebar" aria-label="${model.mode} list"><div class="an-sideheading">${model.mode}</div>${sideItems(model,model.mode)}</aside>`;
+  const picker=`<select class="an-listpicker" data-action="list-mode" aria-label="Left navigation list">${['Exercises','Lessons'].map(mode=>`<option value="${mode}" ${mode===model.mode?'selected':''}>${mode}</option>`).join('')}</select>`;
+  const tiles=model.variant==='drawer'?button('catalogue','Browse tiles',`data-mode="${model.mode}" class="an-smallbutton"`):'';
+  return `<aside class="an-sidebar" aria-label="${model.mode} list">${picker}${tiles}${sideItems(model,model.mode)}</aside>`;
+ }
+ function catalogue(model) {
+  const isExercise=model.mode==='Exercises';
+  const returnName=model.previous==='lesson'&&model.lesson?model.lesson:model.exercise;
+  const back=model.previous?button('resume',`← Return to ${escape(returnName)}`,'class="an-back an-outline"'):'';
+  return `${back}<div class="an-headingrow"><div><div class="an-eyebrow">Library</div><h2>${model.mode}</h2></div></div><div class="an-grid">${(isExercise?exerciseNames:lessonNames).map((name,index)=>{
+   const current=isExercise?Boolean(model.exerciseStates[name]):model.lesson===name;
+   const detail=current?(isExercise?`Continue · Question ${model.exerciseStates[name].question}`:`Continue · Step ${model.step+1}`):(isExercise?'Practice':'Read lesson');
+   return button(isExercise?'exercise':'lesson',`<span class="an-tilemark">${isExercise?(index<4?'Notation':'Scales &amp; keys'):'Lesson'}</span><span class="an-tiletitle">${escape(name)}</span><span class="an-tilemark">${detail}</span>`,`data-name="${escape(name)}"`);
+  }).join('')}</div>`;
+ }
+ function exercise(model) {
+  return `<div class="an-headingrow"><div><div class="an-eyebrow">Exercises</div><h2>${escape(model.exercise)}</h2></div><span class="an-progress">Question ${model.question}</span></div><div class="an-staff" role="img" aria-label="A note on a treble staff"><div class="an-stafflines">${'<i></i>'.repeat(5)}</div><span class="an-clef" aria-hidden="true">𝄞</span><span class="an-note" aria-hidden="true"></span></div><div class="an-answerrow" aria-label="Note answers">${['C','D','E','F','G','A','B'].map(note=>button('answer',note,`data-note="${note}" aria-pressed="${model.answer===note}"`)).join('')}</div><div class="an-status" aria-live="polite">${model.answer?`Answer selected: ${model.answer}`:''}</div><div class="an-nextrow">${button('next-question','Next question','class="an-outline"')}</div>`;
+ }
+ function lesson(model) {
+  const title=steps[model.step];
+  return `<div class="an-headingrow"><div><div class="an-eyebrow">Lessons</div><h2>${escape(model.lesson)}</h2></div><span class="an-progress">Step ${model.step+1} of ${steps.length}</span></div><article class="an-reading"><h3>${escape(title)}</h3><p>A clef tells you which notes the staff’s lines and spaces represent.</p><div class="an-symbols"><span>𝄞<small>G clef</small></span><span>𝄢<small>F clef</small></span><span>𝄡<small>C clef</small></span></div></article><div class="an-lessonnav">${button('previous-step','← Previous',model.step===0?'disabled':'')}<span class="an-progress">${escape(title)}</span>${button('next-step','Next →',model.step===steps.length-1?'disabled':'')}</div>`;
+ }
+ function render(model) {
+  let navigation='';
+  if(model.variant==='drawer') navigation=button('sidebar','Library',`aria-expanded="${model.sidebar}"`);
+  const tabbar=model.variant==='tabs'?`<nav class="an-tabbar" aria-label="Workspace tabs">${button('catalogue','Library',`data-mode="${model.mode}" aria-pressed="${model.page==='catalogue'}"`)}${button('exercise',escape(model.exercise),`data-name="${escape(model.exercise)}" aria-pressed="${model.page==='exercise'}"`)}${model.lesson?button('lesson',escape(model.lesson),`data-name="${escape(model.lesson)}" aria-pressed="${model.page==='lesson'}"`):''}</nav>`:'';
+  const toggle=model.variant==='tabs'?button('sidebar',model.sidebar?'Hide list':'Show list',`aria-expanded="${model.sidebar}"`):'';
+  let header=`<header class="an-top"><span class="an-logo">ALTO</span>${toggle}<nav class="an-topnav" aria-label="Main navigation">${navigation}</nav></header>`;
+  if(model.variant==='shared') {
+   const modes=['Exercises','Lessons'].map(mode=>button('nav-mode',mode,`data-mode="${mode}" aria-pressed="${model.mode===mode}"`)).join('');
+   const paneLabel=model.sidebar?'Tiles':'Navigation Pane';
+   const pane=button('pane-view',paneLabel,`class="an-tiles" aria-label="${model.sidebar?'Return to tiles':'Show navigation pane'}"`);
+   header=`<header class="an-top"><nav class="an-leftnav" aria-label="Navigation pane">${modes}${pane}</nav><span class="an-logo">ALTO</span><nav class="an-topnav" aria-label="Data and statistics">${button('utility','Statistics','data-page="statistics"')}${button('utility','Database','data-page="database"')}</nav></header>`;
+  }
+  const utility=model.page==='statistics'||model.page==='database';
+  const title=utility?(model.page==='statistics'?'Statistics':'Database'):model.page==='empty'?'Select an activity':model.page==='catalogue'?model.mode:model.page==='exercise'?model.exercise:model.lesson;
+  const empty=`<div class="an-empty" role="status" aria-live="polite">Select ${model.mode==='Exercises'?'an exercise':'a lesson'} to begin.</div>`;
+  const utilityContent=`${button('close-utility','← Return to activity','class="an-back an-outline"')}<h2>${title}</h2><div class="an-reading"><p>No recorded practice sessions yet.</p></div>`;
+  model.el.innerHTML=`${header}${tabbar}<div class="an-workspace ${model.sidebar?'':'an-collapsed'}">${sidebar(model)}<main class="an-content" aria-label="${escape(title)}">${utility?utilityContent:model.page==='empty'?empty:model.page==='catalogue'?catalogue(model):model.page==='exercise'?exercise(model):lesson(model)}</main></div>`;
+ }
+ function setPane(model,show) {
+  if(['exercise','lesson'].includes(model.page))model.previous=model.page;
+  model.sidebar=show;
+  model.page=show?(model.previous||'empty'):'catalogue';
+ }
+ function act(model,target) {
+  switch(target.dataset.action) {
+   case 'sidebar': model.sidebar=!model.sidebar; break;
+   case 'pane-view': setPane(model,!model.sidebar);break;
+   case 'nav-mode': model.mode=target.dataset.mode;break;
+   case 'list-mode': if(['Exercises','Lessons'].includes(target.value))model.mode=target.value;break;
+   case 'utility': if(!['statistics','database'].includes(model.page))model.utilityReturn=model.page;model.page=target.dataset.page;break;
+   case 'close-utility': model.page=model.utilityReturn||'catalogue';break;
+   case 'catalogue': if(['exercise','lesson'].includes(model.page))model.previous=model.page;model.page='catalogue';model.mode=target.dataset.mode||model.mode;break;
+   case 'resume': model.page=model.previous==='lesson'&&model.lesson?'lesson':'exercise';if(model.variant==='shared')model.sidebar=true;break;
+   case 'exercise': {
+    if(model.exerciseStates[model.exercise])model.exerciseStates[model.exercise]={question:model.question,answer:model.answer};
+    model.exercise=target.dataset.name; const saved=model.exerciseStates[model.exercise]||{question:1,answer:''};
+    model.question=saved.question;model.answer=saved.answer;model.exerciseStates[model.exercise]={...saved};model.page='exercise';model.previous='exercise';if(model.variant==='shared')model.sidebar=true;break;
+   }
+   case 'lesson': model.lesson=target.dataset.name;model.page='lesson';model.previous='lesson';if(model.variant==='shared')model.sidebar=true;break;
+   case 'step': model.page='lesson';model.step=Number(target.dataset.step);break;
+   case 'next-step': model.step=Math.min(steps.length-1,model.step+1);break;
+   case 'previous-step': model.step=Math.max(0,model.step-1);break;
+   case 'answer': model.answer=target.dataset.note;model.exerciseStates[model.exercise]={question:model.question,answer:model.answer};break;
+   case 'next-question': model.question++;model.answer='';model.exerciseStates[model.exercise]={question:model.question,answer:''};break;
+  }
+  render(model);remember();
+ }
+ restore(host?.widgetState);
+ models.forEach(model=>{
+  render(model);
+  model.el.addEventListener('click',event=>{
+   const target=event.target.closest('button[data-action]');if(target&&root.contains(target)&&!target.disabled)act(model,target);
+  });
+  model.el.addEventListener('change',event=>{
+   const target=event.target.closest('select[data-action="list-mode"]');if(target&&root.contains(target))act(model,target);
+  });
+  if(globalThis.Tweak){
+   // noinspection JSUnresolvedReference
+   const tweak=new globalThis.Tweak({container:model.el,onChange:()=>{if(model.variant==='shared')setPane(model,model.sidebar);render(model);}});
+   // noinspection JSUnresolvedReference
+   tweak.addToggle(model,'sidebar',{label:model.variant==='drawer'?'Library open':'Sidebar open'});
+  }
+ });
+ window.addEventListener('openai:set_globals',event=>{restore(event.detail?.globals?.widgetState);models.forEach(render);});
+})();
+</script>

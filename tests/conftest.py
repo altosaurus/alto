@@ -85,6 +85,7 @@ def _isolated_state() -> Iterator[None]:
     names = (
         "note_names",
         "keyboard",
+        "keyboard_intervals",
         "construction",
         "arpeggio",
         "key_signatures",
@@ -115,7 +116,7 @@ def _isolated_state() -> Iterator[None]:
 
 
 @pytest.fixture
-def practised_learner() -> Callable[..., Learner]:
+def practiced_learner() -> Callable[..., Learner]:
     """
     Provide a function that makes a profile with answers spread over the last `days` days, some wrong first and some slow.
 

@@ -68,7 +68,7 @@ STYLES = (
     NotationStyle(
         "leland",
         label="Leland",
-        note="MuseScore 4's font. Light and modern, modelled on SCORE.",
+        note="MuseScore 4's font. Light and modern, modeled on SCORE.",
         font="leland",
     ),
     NotationStyle(

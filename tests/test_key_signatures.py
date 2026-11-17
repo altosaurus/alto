@@ -174,7 +174,7 @@ def test_the_staffs_the_modes_and_the_keys_are_chosen_from_the_settings() -> Non
 
 def test_a_settings_choice_with_nothing_ticked_falls_back_to_something_sensible() -> None:
     """
-    Check that a settings choice with nothing ticked falls back to something sensible.
+    Check that a settings choice with nothing checked falls back to something sensible.
     """
     cfg = settings.key_signatures
     cfg.clefs, cfg.modes, cfg.keys = set(), set(), set()

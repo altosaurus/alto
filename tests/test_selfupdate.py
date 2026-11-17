@@ -27,7 +27,7 @@ from alto import (
 from alto.selfupdate import (
     Prepared,
     Target,
-    UpdateCancelled,
+    UpdateCanceled,
     UpdateError,
 )
 from releases import (
@@ -91,7 +91,7 @@ def nothing(done: int, total: int) -> None:  # noqa: PLR0917  (a progress callba
 
 def never() -> bool:
     """
-    Say that nobody has cancelled.
+    Say that nobody has canceled.
 
     Returns
     -------
@@ -107,7 +107,7 @@ def fetch(
     path: str,
     destination: Path,
     max_bytes: int = 10_000_000,
-    cancelled: Callable[[], bool] = never,
+    canceled: Callable[[], bool] = never,
 ) -> str:
     """
     Download a file of the server with the real function.
@@ -122,7 +122,7 @@ def fetch(
         Where to write it.
     max_bytes : int, default 10_000_000
         The most to accept.
-    cancelled : Callable
+    canceled : Callable
         Says whether to stop.
 
     Returns
@@ -136,7 +136,7 @@ def fetch(
         allowed=server.base,
         max_bytes=max_bytes,
         progress=nothing,
-        cancelled=cancelled,
+        canceled=canceled,
     )
 
 
@@ -250,7 +250,7 @@ def test_a_download_is_written_hashed_and_reports_its_progress(server: Server, t
         allowed=server.base,
         max_bytes=1_000_000,
         progress=lambda done, total: seen.append((done, total)),
-        cancelled=never,
+        canceled=never,
     )
     assert (tmp_path / "file").read_bytes() == data and result == hashlib.sha256(data).hexdigest()
     assert seen[-1] == (len(data), len(data)) and [done for done, _ in seen] == sorted(done for done, _ in seen)
@@ -278,12 +278,12 @@ def test_a_download_from_an_address_that_is_not_the_releases_is_refused_before_a
             allowed=server.base,
             max_bytes=10,
             progress=nothing,
-            cancelled=never,
+            canceled=never,
         )
     assert server.requests == [] and not (tmp_path / "x").exists()
 
 
-def test_a_download_that_fails_too_large_or_is_cancelled_leaves_nothing_behind(server: Server, tmp_path: Path) -> None:
+def test_a_download_that_fails_too_large_or_is_canceled_leaves_nothing_behind(server: Server, tmp_path: Path) -> None:
     """
     Check the three ways a download can end badly: no such file, a file over the size allowed, and a cancel.
 
@@ -299,8 +299,8 @@ def test_a_download_that_fails_too_large_or_is_cancelled_leaves_nothing_behind(s
         fetch(server, path="/releases/download/v1/missing", destination=tmp_path / "a")
     with pytest.raises(UpdateError, match="larger than expected"):
         fetch(server, path="/releases/download/v1/big", destination=tmp_path / "b", max_bytes=1000)
-    with pytest.raises(UpdateCancelled):
-        fetch(server, path="/releases/download/v1/big", destination=tmp_path / "c", cancelled=lambda: True)
+    with pytest.raises(UpdateCanceled):
+        fetch(server, path="/releases/download/v1/big", destination=tmp_path / "c", canceled=lambda: True)
     assert not list(tmp_path.iterdir())
 
 
@@ -473,7 +473,7 @@ def prepare(
         base=server.base,
         status=said.append,
         progress=nothing,
-        cancelled=never,
+        canceled=never,
     )
     return prepared, said
 
@@ -628,7 +628,7 @@ def test_an_update_is_refused_with_no_key_a_foreign_key_or_a_computer_it_has_no_
 
 def test_a_cancel_during_the_download_stops_it_with_nothing_left(server: Server, keys: Keys, tmp_path: Path) -> None:
     """
-    Check that cancelling once the package begins to download ends in a cancel, not an error, and leaves no part file.
+    Check that canceling once the package begins to download ends in a cancel, not an error, and leaves no part file.
 
     Parameters
     ----------
@@ -655,7 +655,7 @@ def test_a_cancel_during_the_download_stops_it_with_nothing_left(server: Server,
 
     work = tmp_path / "work"
     work.mkdir()
-    with pytest.raises(UpdateCancelled):
+    with pytest.raises(UpdateCanceled):
         selfupdate.prepare_update(
             release,
             target=Target("linux", folder=tmp_path, prefix=tmp_path),
@@ -665,7 +665,7 @@ def test_a_cancel_during_the_download_stops_it_with_nothing_left(server: Server,
             base=server.base,
             status=said,
             progress=nothing,
-            cancelled=lambda: cancel["now"],
+            canceled=lambda: cancel["now"],
         )
     assert not list(work.glob("*.part")) and not (work / NAME).exists()
 

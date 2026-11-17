@@ -64,8 +64,8 @@ Two classes in `base.py` are the whole interface between the exercises and the r
 
 - **`Question`** says everything needed to show and mark one question: a prompt, the answer buttons, the notes to draw (or a
   keyboard key to highlight, or a note to place), the clef, a key signature, an explanation. It serializes with
-  `to_dict`/`from_dict`, and `item_key()` gives it a stable 20-character identity, so the same question can be recognised
-  when it comes round again.
+  `to_dict`/`from_dict`, and `item_key()` gives it a stable 20-character identity, so the same question can be recognized
+  when it comes around again.
 - **`Exercise`** has a `name`, a `category`, a `description`, a `par_seconds` (how long a good first answer takes) and
   `generate(rng)`, which returns a `Question`. An exercise that reads settings overrides `settings_signature()`, so stored
   questions are only replayed while those settings are unchanged.
@@ -112,7 +112,7 @@ Notes are played from recordings of real instruments (University of Iowa samples
 global `Sounds` object loads and caches `QSoundEffect`s on demand. Where an instrument has no recording for a note, it takes the
 nearest recording and shifts the pitch (`shift_pitch`). Sustained instruments fade out as the next note begins. The piano is
 the Salamander Grand Piano (`alto/assets/piano/`, a recording every minor third from A0 to C8), and notes outside that range are
-synthesised in code (`synth_piano`).
+synthesized in code (`synth_piano`).
 `instrument_info.py` holds the facts shown about each
 instrument's recordings.
 
@@ -164,7 +164,7 @@ offered the release's download page.
    buttons the `Question` asks for.
 2. An answer goes to `submit()`, which marks it with `Question.check()`, flashes the button, and calls `_record()`.
 3. `_record()` times the answer from the question appearing (or the previous attempt) and passes it to `Learner.record()`. Only
-   the first attempt counts towards the score and streak.
+   the first attempt counts toward the score and streak.
 4. A right answer plays a sound (unless the sound is off, or the exercise has none) and the next question follows. A wrong one
    lets you try again.
 
@@ -179,20 +179,20 @@ Everything is drawn with `QPainter`, not made from images, so it scales and foll
   a note. **`keyboard.py`** draws a piano to real proportions, and a miniature of all 88 keys for choosing a range.
 - **`engraving.py`** loads the SMuFL music fonts in `alto/assets/fonts/` (Bravura, Leland and others) and reads their
   metrics, so noteheads, stems and clefs are engraved the way each font intends. **`notation.py`** is the choice of font and the
-  baritone clef style. **`keyboard_styles.py`** is the keyboard's look, with a builder for custom colours.
+  baritone clef style. **`keyboard_styles.py`** is the keyboard's look, with a builder for custom colors.
 - **`pictures.py`** holds the small illustrations in the settings panes: clefs, note values, key signatures and ranges.
   **`charts.py`** has the statistics charts, **`icons.py`** the tinted SVG icons, **`style.py`** the application stylesheet
-  and **`theme.py`** the light, dark or system colour scheme.
+  and **`theme.py`** the light, dark or system color scheme.
 
 `notation.py` and `keyboard_styles.py` must repaint what is on screen when the style changes, but the staff and keyboard
-modules import them, not the other way round. So they call hooks that `staff.py` and `keyboard.py` register at import
+modules import them, not the other way around. So they call hooks that `staff.py` and `keyboard.py` register at import
 (`on_redraw`).
 
 ### Saved settings
 
-`store.py` is a thin layer over `QSettings` (the organisation and application are both "alto"). The window and the panels read
+`store.py` is a thin layer over `QSettings` (the organization and application are both "alto"). The window and the panels read
 and write through it. The theme, notation font, keyboard style, instrument and the exercise settings are all saved there, not
-in the database. Changing the theme builds a fresh `MainWindow` (`rebuild()`) so every icon and colour is drawn again.
+in the database. Changing the theme builds a fresh `MainWindow` (`rebuild()`) so every icon and color is drawn again.
 
 ## Where things are stored
 

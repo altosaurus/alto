@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 50
+order: 53
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -502,6 +502,42 @@ Save the keyboard exercise settings.
 True
 ```
 
+## load_keyboard_intervals
+
+```python
+def load_keyboard_intervals() -> None
+```
+
+Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.
+
+**Examples**
+
+```pycon
+>>> load_keyboard_intervals()
+>>> settings.keyboard_intervals.bounds()[0] < settings.keyboard_intervals.bounds()[1]
+True
+```
+
+## save_keyboard_intervals
+
+```python
+def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None
+```
+
+Save the keyboard interval range and selected distances.
+
+**Parameters**
+
+- `cfg` (*KeyboardIntervalSettings*): The settings to save.
+
+**Examples**
+
+```pycon
+>>> save_keyboard_intervals(settings.KeyboardIntervalSettings())
+>>> int(store().value("keyboardIntervals/low"))
+48
+```
+
 ## KeyChecklist
 
 ```python
@@ -516,11 +552,11 @@ Bases: `QWidget`
 
 Checkboxes for the 15 major keys, flats on the left and sharps on the right.
 
-At least one stays checked. Each is labelled with a picture of its signature.
+At least one stays checked. Each is labeled with a picture of its signature.
 
 **Attributes**
 
-- `changed` (*Signal*): Emitted after a box is ticked or unticked.
+- `changed` (*Signal*): Emitted after a box is checked or unchecked.
 - `boxes` (*dict of int to QCheckBox*): The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).
 
 **Examples**
@@ -536,7 +572,7 @@ Build the checklist.
 
 **Parameters**
 
-- `selected` (*set of int*): The key signatures to tick at first.
+- `selected` (*set of int*): The key signatures to check initially.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -552,7 +588,7 @@ Build the checklist.
 def selected() -> set[int]
 ```
 
-Return the ticked key signatures.
+Return the checked key signatures.
 
 **Returns**
 
@@ -601,7 +637,7 @@ Build the page.
 **Parameters**
 
 - `enabled` (*bool*): Whether key signatures are on.
-- `selected` (*set of int*): The key signatures to tick at first. Keyword-only.
+- `selected` (*set of int*): The key signatures to check initially. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -637,7 +673,7 @@ True
 def selected() -> set[int]
 ```
 
-Return the ticked key signatures.
+Return the checked key signatures.
 
 **Returns**
 
@@ -794,17 +830,19 @@ ChoiceChecklist(
     groups: list[tuple[str, list[tuple[object, str]]]],
     *,
     selected: set,
+    allow_empty: bool = False,
     parent: QWidget | None = None,
 )
 ```
 
 Bases: `QWidget`
 
-Checkboxes for a list of choices, optionally under small headings. At least one stays checked.
+Checkboxes for a list of choices, optionally under headings and allowing an empty selection.
 
 **Attributes**
 
-- `changed` (*Signal*): Emitted after a box is ticked or unticked.
+- `changed` (*Signal*): Emitted after a box is checked or unchecked.
+- `allow_empty` (*bool*): Whether all choices may be unchecked.
 - `boxes` (*dict*): The checkbox of each choice, by its key.
 
 **Examples**
@@ -823,7 +861,8 @@ Build the checklist.
 **Parameters**
 
 - `groups` (*list of tuple of (str, list of tuple of (object, str))*): The headings and, under each, the choices as (key, label); an empty heading shows none.
-- `selected` (*set*): The keys to tick at first. Keyword-only.
+- `selected` (*set*): The keys to check initially. Keyword-only.
+- `allow_empty` (*bool, default False*): Allow all choices to be unchecked. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -841,17 +880,66 @@ Build the checklist.
 def selected() -> set
 ```
 
-Return the ticked choices.
+Return the checked choices.
 
 **Returns**
 
-- *set*: The keys of the ticked boxes.
+- *set*: The keys of the checked boxes.
 
 **Examples**
 
 ```pycon
 >>> ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
 {0, 1}
+```
+
+## KeyboardIntervalSettingsPanel
+
+```python
+KeyboardIntervalSettingsPanel(
+    cfg: settings.KeyboardIntervalSettings,
+    *,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `ExerciseSettingsPanel`
+
+Range and interval selection pages for keyboard interval identification.
+
+**Attributes**
+
+- `cfg` (*KeyboardIntervalSettings*): The settings being edited.
+- `stack` (*SlideStack*): The settings menu, range page, and interval page.
+- `span` (*KeyboardSpan*): The draggable range selector.
+- `interval_range` (*QWidget*): The interval range controls directly below Select all.
+- `interval_slider` (*IntervalRangeSlider*): The two-handle interval selector.
+- `interval_low_label, interval_high_label` (*FieldComboBox*): Clickable endpoint notation with scrollable interval lists.
+- `interval_page` (*ChoiceChecklist*): The interval checkboxes, keyed by distance in half steps.
+
+**Examples**
+
+```pycon
+>>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+>>> panel.stack.count()
+3
+```
+
+**Constructor**
+
+Build the range selector and interval checklist.
+
+**Parameters**
+
+- `cfg` (*KeyboardIntervalSettings*): The settings to edit.
+- `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+>>> panel.low_label.text(), panel.high_label.text()
+('C3', 'C5')
 ```
 
 ## ArpeggioSettingsPanel
@@ -1143,7 +1231,7 @@ def load_circle() -> None
 Load the saved circle of fifths settings into the shared settings object.
 
 Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
+saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
 
 **Examples**
 
@@ -1191,27 +1279,27 @@ CircleSettingsPanel(
 
 Bases: `ExerciseSettingsPanel`
 
-The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.
+The settings of the circle of fifths exercise: which kinds of question to ask, and the colors of the circle.
 
-The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+The menu has two rows. Questions opens a page of switches. Colors opens a page of color schemes to choose from, with a
 button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
-of question emits `changed`, and a new colour scheme emits `restyled`, which keeps the question.
+of question emits `changed`, and a new color scheme emits `restyled`, which keeps the question.
 
 **Attributes**
 
 - `cfg` (*CircleSettings*): The settings being edited.
-- `stack` (*SlideStack*): The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.
+- `stack` (*SlideStack*): The menu and its pages: the menu, the questions, the color schemes and the editor of a scheme.
 - `questions_row` (*_Row*): The menu row for the questions.
-- `colours_row` (*_Row*): The menu row for the colours; its value is the name of the chosen scheme.
+- `colors_row` (*_Row*): The menu row for the colors; its value is the name of the chosen scheme.
 - `questions` (*ChoiceChecklist*): The kinds of question: relative major, relative minor and Roman numerals.
-- `schemes` (*SchemePage*): The colour schemes.
+- `schemes` (*SchemePage*): The color schemes.
 - `editor` (*SchemeEditor*): The editor of a scheme of your own.
 
 **Examples**
 
 ```pycon
 >>> panel = CircleSettingsPanel(settings.CircleSettings())
->>> panel.questions_row.value.text(), panel.colours_row.value.text()
+>>> panel.questions_row.value.text(), panel.colors_row.value.text()
 ('3 of 3', 'Cyan to indigo')
 ```
 
@@ -1227,7 +1315,7 @@ Build the panel for a set of settings.
 **Constructor examples**
 
 ```pycon
->>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+>>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
 ```
 

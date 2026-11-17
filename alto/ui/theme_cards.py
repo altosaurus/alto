@@ -2,7 +2,7 @@
 The card of a theme in the settings.
 
 A card is one theme: its name, three pictures of the window one above another that can be clicked (light, dark, and System,
-which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colours.
+which is cut through on a slant to show it is light or dark as the desktop is) and the squares of its colors.
 
 Examples
 --------
@@ -42,7 +42,7 @@ from alto.ui.theme import (
     CustomTheme,
     custom_theme,
     families,
-    preview_colours,
+    preview_colors,
     variant_key,
 )
 
@@ -57,7 +57,7 @@ LIGHT = dict(
     faint="#b9b9b9",
     accent="#3b8ed0",
     tint="#c9dce8",
-)  # the colours of the picture of the desktop's light theme
+)  # the colors of the picture of the desktop's light theme
 TIPS = {
     "light": "Always light.",
     "dark": "Always dark.",
@@ -74,28 +74,28 @@ DARK = dict(
 )  # and of its dark theme
 
 
-def colours_of(key: str) -> dict[str, str]:
+def colors_of(key: str) -> dict[str, str]:
     """
-    Give the colours of a theme's picture.
+    Give the colors of a theme's picture.
 
     Parameters
     ----------
     key : str
-        A theme's key: "light", "dark", or a theme with colours of its own, light or dark.
+        A theme's key: "light", "dark", or a theme with colors of its own, light or dark.
 
     Returns
     -------
     dict of str to str
-        The window, panel, outline, text, faint and chosen colours, and a tint for the chosen row.
+        The window, panel, outline, text, faint and chosen colors, and a tint for the chosen row.
 
     Examples
     --------
-    >>> colours_of("dark")["window"], colours_of("studio")["window"]
+    >>> colors_of("dark")["window"], colors_of("studio")["window"]
     ('#2b2b2b', '#eceef1')
     """
     custom = custom_theme(key)
     if custom is not None:
-        return preview_colours(custom)
+        return preview_colors(custom)
     return DARK if key == "dark" else LIGHT
 
 
@@ -107,16 +107,16 @@ class ThemeThumb(QPushButton):
     ----------
     theme_key : str
         The key of the theme it chooses.
-    colours : dict of str to str
-        The colours it is drawn in.
+    colors : dict of str to str
+        The colors it is drawn in.
     other : dict of str to str or None
-        The colours of the dark half, for a picture that is cut through on a slant; None for a plain one.
+        The colors of the dark half, for a picture that is cut through on a slant; None for a plain one.
     scale_by : float
         How many times bigger than the smallest size it is drawn.
 
     Examples
     --------
-    >>> ThemeThumb("dark", colours=DARK).theme_key
+    >>> ThemeThumb("dark", colors=DARK).theme_key
     'dark'
     """
 
@@ -124,7 +124,7 @@ class ThemeThumb(QPushButton):
         self,
         key: str,
         *,
-        colours: dict[str, str],
+        colors: dict[str, str],
         other: dict[str, str] | None = None,
         scale: float = 1.0,
         parent: QWidget | None = None,
@@ -136,10 +136,10 @@ class ThemeThumb(QPushButton):
         ----------
         key : str
             The theme it chooses.
-        colours : dict of str to str
-            The colours of the picture, or of its light half.
+        colors : dict of str to str
+            The colors of the picture, or of its light half.
         other : dict of str to str or None, default None
-            The colours of its dark half, for a picture cut through on a slant. Keyword-only.
+            The colors of its dark half, for a picture cut through on a slant. Keyword-only.
         scale : float, default 1.0
             How many times bigger than the smallest size to draw it. Keyword-only.
         parent : QWidget or None, default None
@@ -147,12 +147,12 @@ class ThemeThumb(QPushButton):
 
         Examples
         --------
-        >>> ThemeThumb("system", colours=LIGHT, other=DARK).width(), ThemeThumb("light", colours=LIGHT, scale=2.0).width()
+        >>> ThemeThumb("system", colors=LIGHT, other=DARK).width(), ThemeThumb("light", colors=LIGHT, scale=2.0).width()
         (116, 232)
         """
         super().__init__(parent)
         self.theme_key = key
-        self.colours = colours
+        self.colors = colors
         self.other = other
         self.scale_by = scale
         self.setCheckable(True)
@@ -171,7 +171,7 @@ class ThemeThumb(QPushButton):
 
         Examples
         --------
-        >>> ThemeThumb("light", colours=LIGHT).grab().isNull()
+        >>> ThemeThumb("light", colors=LIGHT).grab().isNull()
         False
         """
         painter = QPainter(self)
@@ -181,7 +181,7 @@ class ThemeThumb(QPushButton):
         clip = QPainterPath()
         clip.addRoundedRect(area, 7, 7)
         painter.setClipPath(clip)
-        self._mock(painter, area=area, colours=self.colours)
+        self._mock(painter, area=area, colors=self.colors)
         if self.other is not None:
             half = QPainterPath()
             half.addPolygon(
@@ -195,7 +195,7 @@ class ThemeThumb(QPushButton):
                 ),
             )
             painter.setClipPath(half.intersected(clip))
-            self._mock(painter, area=area, colours=self.other)
+            self._mock(painter, area=area, colors=self.other)
         painter.setClipping(False)
         painter.setBrush(Qt.BrushStyle.NoBrush)
         chosen = self.isChecked()
@@ -209,7 +209,7 @@ class ThemeThumb(QPushButton):
         painter: QPainter,
         *,
         area: QRectF,
-        colours: dict[str, str],
+        colors: dict[str, str],
     ) -> None:
         """
         Draw a small picture of a window: a list on the left, a staff with notes and a button on the right.
@@ -220,51 +220,51 @@ class ThemeThumb(QPushButton):
             The painter to draw with.
         area : QRectF
             Where to draw it. Keyword-only.
-        colours : dict of str to str
-            The colours to draw it in. Keyword-only.
+        colors : dict of str to str
+            The colors to draw it in. Keyword-only.
 
         Examples
         --------
         >>> from PySide6.QtGui import QImage
         >>> image = QImage(120, 80, QImage.Format.Format_ARGB32)
         >>> brush = QPainter(image)
-        >>> ThemeThumb._mock(brush, area=QRectF(0, 0, 120, 80), colours=LIGHT)
+        >>> ThemeThumb._mock(brush, area=QRectF(0, 0, 120, 80), colors=LIGHT)
         >>> brush.end()
         True
         >>> image.pixelColor(2, 2).name()
         '#efefef'
         """
-        painter.fillRect(area, QColor(colours["window"]))
+        painter.fillRect(area, QColor(colors["window"]))
         side = QRectF(area.left() + 6, area.top() + 6, 32, area.height() - 12)
-        painter.setPen(QPen(QColor(colours["line"]), 1))
-        painter.setBrush(QColor(colours["panel"]))
+        painter.setPen(QPen(QColor(colors["line"]), 1))
+        painter.setBrush(QColor(colors["panel"]))
         painter.drawRoundedRect(side, 4, 4)
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(colours["tint"]))
+        painter.setBrush(QColor(colors["tint"]))
         painter.drawRoundedRect(QRectF(side.left() + 3, side.top() + 5, side.width() - 6, 8), 3, 3)
-        painter.setBrush(QColor(colours["faint"]))
+        painter.setBrush(QColor(colors["faint"]))
         for number in range(3):
             line = QRectF(side.left() + 5, side.top() + 19 + number * 10, side.width() - 14 - number * 4, 3.5)
             painter.drawRoundedRect(line, 2, 2)
         card = QRectF(side.right() + 6, area.top() + 6, area.right() - side.right() - 12, area.height() - 12)
-        painter.setPen(QPen(QColor(colours["line"]), 1))
-        painter.setBrush(QColor(colours["panel"]))
+        painter.setPen(QPen(QColor(colors["line"]), 1))
+        painter.setBrush(QColor(colors["panel"]))
         painter.drawRoundedRect(card, 4, 4)
-        painter.setPen(QPen(QColor(colours["ink"]), 0.7))
+        painter.setPen(QPen(QColor(colors["ink"]), 0.7))
         top = card.top() + 10
         for number in range(5):
             painter.drawLine(QPointF(card.left() + 5, top + number * 4.5), QPointF(card.right() - 5, top + number * 4.5))
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(colours["ink"]))
+        painter.setBrush(QColor(colors["ink"]))
         for x, row in ((14, 4), (27, 3), (40, 1), (53, 2)):
             painter.drawEllipse(QPointF(card.left() + x, top + row * 2.25), 2.8, 2.2)
-        painter.setBrush(QColor(colours["accent"]))
+        painter.setBrush(QColor(colors["accent"]))
         painter.drawRoundedRect(QRectF(card.left() + 5, card.bottom() - 15, 26, 9), 3.5, 3.5)
 
 
 class ThemeCard(QFrame):
     """
-    The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colours.
+    The card of one theme: its name, three clickable pictures one above another, and with each the squares of its colors.
 
     The pictures are Light, Dark and System. The System one is cut through on a slant, light on one side and dark on the other,
     because that version is light or dark as the desktop is.
@@ -280,7 +280,7 @@ class ThemeCard(QFrame):
     chosen : Signal
         Emitted with the key of the theme when one of the pictures is clicked.
     edit_requested : Signal
-        Emitted with the key of the theme when its Change colours button is pressed; only a theme the user made has one.
+        Emitted with the key of the theme when its Change colors button is pressed; only a theme the user made has one.
 
     Examples
     --------
@@ -338,9 +338,9 @@ class ThemeCard(QFrame):
         self._captions: dict[str, QLabel] = {}
         for version, caption in VERSIONS:  # the three pictures are one above another, each with what it is beside it
             key = variant_key(family, version=version)
-            colours = colours_of(variant_key(family, version="dark" if version == "dark" else "light"))
-            other = colours_of(variant_key(family, version="dark")) if version == "system" else None
-            thumb = ThemeThumb(key, colours=colours, other=other, scale=scale)
+            colors = colors_of(variant_key(family, version="dark" if version == "dark" else "light"))
+            other = colors_of(variant_key(family, version="dark")) if version == "system" else None
+            thumb = ThemeThumb(key, colors=colors, other=other, scale=scale)
             thumb.clicked.connect(lambda _=False, k=key: self.chosen.emit(k))
             thumb.setAccessibleName(f"{label}, {caption}")
             thumb.setToolTip(TIPS[version])
@@ -349,7 +349,7 @@ class ThemeCard(QFrame):
             words.addStretch(1)
             words.addWidget(text)
             custom = custom_theme(key)
-            if custom is not None and version != "system":  # a theme's own colours, as squares, and written out as the page did
+            if custom is not None and version != "system":  # a theme's own colors, as squares, and written out as the page did
                 words.addLayout(self._chips(custom))
                 values = QLabel(f"window {custom.window}   accent {custom.accent}   ink {custom.ink}")
                 values.setStyleSheet("color: gray; font-family: monospace; font-size: 9pt;")
@@ -368,16 +368,16 @@ class ThemeCard(QFrame):
             self.thumbs[key] = thumb
             self._captions[key] = text
         if family.startswith(USER_PREFIX):
-            change = self.change_button = QPushButton("Change colours…")
-            change.setToolTip("Change the name and colours of this theme, or delete it")
+            change = self.change_button = QPushButton("Change colors…")
+            change.setToolTip("Change the name and colors of this theme, or delete it")
             change.clicked.connect(lambda: self.edit_requested.emit(family))
             lay.addWidget(change, alignment=Qt.AlignmentFlag.AlignLeft)
-        lay.addStretch(1)  # a card that is shorter than its neighbour keeps its contents together at the top
+        lay.addStretch(1)  # a card that is shorter than its neighbor keeps its contents together at the top
 
     @staticmethod
     def _chips(theme: CustomTheme) -> QHBoxLayout:
         """
-        Make the row of squares of one theme's colours.
+        Make the row of squares of one theme's colors.
 
         Parameters
         ----------
@@ -387,7 +387,7 @@ class ThemeCard(QFrame):
         Returns
         -------
         QHBoxLayout
-            A square for the window, panel, outline, quiet text, text, accent and track colours.
+            A square for the window, panel, outline, quiet text, text, accent and track colors.
 
         Examples
         --------
@@ -400,9 +400,9 @@ class ThemeCard(QFrame):
         for part in ("window", "panel", "line", "muted", "ink", "accent", "track"):
             chip = QFrame()
             chip.setFixedSize(18, 18)
-            colour = getattr(theme, part)
-            chip.setToolTip(f"{part} {colour}")
-            chip.setStyleSheet(f"background: {colour}; border: 1px solid rgba(128, 128, 128, 90); border-radius: 4px;")
+            color = getattr(theme, part)
+            chip.setToolTip(f"{part} {color}")
+            chip.setStyleSheet(f"background: {color}; border: 1px solid rgba(128, 128, 128, 90); border-radius: 4px;")
             row.addWidget(chip)
         row.addStretch(1)
         return row

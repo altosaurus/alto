@@ -175,7 +175,7 @@ def test_the_reference_pane_slides_open_beside_the_settings_and_shuts_them(app: 
 
 def test_a_change_in_the_settings_asks_a_new_question_straight_away(app: QApplication) -> None:
     """
-    Check that a change in the settings asks a new question straight away.
+    Check that a change in the settings asks a new question right away.
 
     Parameters
     ----------
@@ -484,7 +484,7 @@ def test_a_right_answer_fades_the_staff_notes_to_green(app: QApplication) -> Non
     view = view_of(NoteNames(), seed=2)
     q = asked(view)
     next(b for b in view.buttons if b.text() == q.answer).click()
-    QTest.qWait(450)  # the colour fades in over about 350 ms
+    QTest.qWait(450)  # the color fades in over about 350 ms
     assert view.staff.note_color is not None and view.staff.note_color.green() > view.staff.note_color.red()
     view._advance.stop()
 
@@ -551,9 +551,9 @@ def test_a_wrong_pair_clears_itself_unless_a_new_question_has_come(app: QApplica
 # -- the music stays a readable size in a wide window -----------------------------------------------------------------
 
 
-def test_in_a_wide_window_the_staff_is_capped_and_centred(app: QApplication) -> None:
+def test_in_a_wide_window_the_staff_is_capped_and_centered(app: QApplication) -> None:
     """
-    Check that in a wide window the staff is capped and centred.
+    Check that in a wide window the staff is capped and centered.
 
     Parameters
     ----------
@@ -569,7 +569,7 @@ def test_in_a_wide_window_the_staff_is_capped_and_centred(app: QApplication) -> 
     parent = staff.parentWidget()
     assert parent is not None
     left, right = staff.x(), parent.width() - staff.x() - staff.width()
-    assert left > 200 and abs(left - right) <= 2  # centred
+    assert left > 200 and abs(left - right) <= 2  # centered
     view.hide()
 
 

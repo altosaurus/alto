@@ -68,7 +68,7 @@ def test_the_table_model_shows_text_sorts_by_value_and_right_aligns_numbers(app:
 
 def test_the_answers_table_lists_every_answer_newest_first(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that the answers table lists every answer newest first.
@@ -77,10 +77,10 @@ def test_the_answers_table_lists_every_answer_newest_first(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner(30)
+    learner = practiced_learner(30)
     page = DatabasePage(learner)
     total = learner.db.count_attempts(learner.profile.id)
     assert page.proxy.rowCount() == total and f"{total:,} answers by Ada." in page.note.text()
@@ -100,7 +100,7 @@ def test_the_answers_table_lists_every_answer_newest_first(
 
 def test_a_long_history_says_how_much_of_it_is_shown(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
@@ -110,19 +110,19 @@ def test_a_long_history_says_how_much_of_it_is_shown(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
     """
     monkeypatch.setattr(database_page, "ROW_LIMIT", 5)
-    page = DatabasePage(practised_learner(60))
+    page = DatabasePage(practiced_learner(60))
     assert page.proxy.rowCount() == 5 and "Showing the newest 5." in page.note.text()
 
 
 def test_the_questions_and_profiles_tables(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Test the questions and profiles tables.
@@ -131,10 +131,10 @@ def test_the_questions_and_profiles_tables(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner(30)
+    learner = practiced_learner(30)
     Learner(learner.db, profile=learner.db.add_profile("Ben"))
     page = DatabasePage(learner)
     page.tabs["questions"].click()
@@ -144,14 +144,14 @@ def test_the_questions_and_profiles_tables(
     page.tabs["profiles"].click()
     assert page.proxy.rowCount() == 2 and page.note.text().startswith("2 profiles.")
     assert [page.proxy.index(r, 0).data() for r in range(2)] == ["Ada", "Ben"]  # alphabetical
-    only = DatabasePage(practised_learner(3, name="Solo"))
+    only = DatabasePage(practiced_learner(3, name="Solo"))
     only.tabs["profiles"].click()
     assert only.note.text() == "1 profile."
 
 
 def test_searching_narrows_every_table_and_says_so(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that searching narrows every table and says so.
@@ -160,10 +160,10 @@ def test_searching_narrows_every_table_and_says_so(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner(60)
+    learner = practiced_learner(60)
     page = DatabasePage(learner)
     everything = page.proxy.rowCount()
     page.search.setText("Right")
@@ -175,21 +175,21 @@ def test_searching_narrows_every_table_and_says_so(
     assert page.proxy.rowCount() == everything and "match the search" not in page.note.text()
 
 
-def test_questions_whose_record_is_gone_or_unreadable_are_labelled(
+def test_questions_whose_record_is_gone_or_unreadable_are_labeled(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
-    Check that questions whose record is gone or unreadable are labelled.
+    Check that questions whose record is gone or unreadable are labeled.
 
     Parameters
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    learner = practised_learner(3)
+    learner = practiced_learner(3)
     pid = learner.profile.id
     db = learner.db
     db.add_attempt(
@@ -236,7 +236,7 @@ def test_questions_whose_record_is_gone_or_unreadable_are_labelled(
 
 def test_double_clicking_a_row_shows_the_question_it_is_about(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
@@ -246,7 +246,7 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
@@ -293,7 +293,7 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
 
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(database_page, "QuestionPreview", Preview)
-    learner = practised_learner(30)
+    learner = practiced_learner(30)
     page = DatabasePage(learner)
     page._preview(page.proxy.index(0, 0))
     assert opened[-1] == "exec"
@@ -344,7 +344,7 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
 
 def test_back_is_offered_by_a_button_and_by_escape(
     app: QApplication,
-    practised_learner: Callable[..., Learner],
+    practiced_learner: Callable[..., Learner],
 ) -> None:
     """
     Check that back is offered by a button and by escape.
@@ -353,10 +353,10 @@ def test_back_is_offered_by_a_button_and_by_escape(
     ----------
     app : QApplication
         The shared Qt application.
-    practised_learner : Callable[..., Learner]
+    practiced_learner : Callable[..., Learner]
         Builds a learner with a history of answers.
     """
-    page = DatabasePage(practised_learner(3))
+    page = DatabasePage(practiced_learner(3))
     spy = QSignalSpy(page.back)
     escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
     escape[0].activated.emit()

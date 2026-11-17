@@ -60,7 +60,7 @@ Profile(
 )
 ```
 
-A person who practises: their answers are kept apart from everyone else's.
+A person who practices: their answers are kept apart from everyone else's.
 
 **Attributes**
 
@@ -97,7 +97,7 @@ What a profile's history says about one question.
 
 - `strain` (*float*): How much practice the question needs; higher means it comes back sooner.
 - `seen` (*int*): How many times the question was shown and answered. Keyword-only.
-- `first_try_right` (*int*): How many of those showings were answered right first time. Keyword-only.
+- `first_try_right` (*int*): How many of those showings were answered right on the first try. Keyword-only.
 - `wrong_attempts` (*int*): How many wrong answers there have been in all. Keyword-only.
 - `total_first_ms` (*int*): Time to the first answer, summed over the showings, in milliseconds. Keyword-only.
 - `last_seen` (*float*): When the question was last answered, as a timestamp. Keyword-only.

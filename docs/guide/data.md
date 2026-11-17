@@ -183,11 +183,11 @@ What this means when you change the program:
    an older backup is brought up to date by `_migrate` as it is restored.
 2. **A new saved preference** is in backups automatically, whatever its key. Keep values to text, numbers, true and false, lists
    and bytes, which is what the backup format can hold.
-3. **Anything stored somewhere else**, such as a file in the data folder, a new `QSettings` organisation, or state kept only in
+3. **Anything stored somewhere else**, such as a file in the data folder, a new `QSettings` organization, or state kept only in
    memory that the user would expect to survive, is *not* in a backup. Add it to `write_backup` and `import_backup`, and extend
    `tests/test_backup_flow.py`, whose end-to-end test is the statement of the promise.
 4. **A change to the backup format itself** (the files in the zip, or the manifest) must raise `FORMAT` in `backup.py` and keep
-   reading the old one. A file with a format number above the running version's is refused, which is the safe behaviour for a
+   reading the old one. A file with a format number above the running version's is refused, which is the safe behavior for a
    backup made by a later Alto.
 5. **Schema compatibility only goes one way.** A backup from an older schema is migrated; one from a newer schema is refused,
    because the older program cannot know what the newer one added.
@@ -206,9 +206,9 @@ deliberately, and to describe where users will look. The one network feature tod
 ## Words to search for
 
 *ACID* (what a transaction guarantees). *Write-ahead logging* (SQLite's `journal_mode = WAL`, a faster and more concurrent journal;
-Alto uses the default). *Schema migration, schema versioning.* *Event sourcing, append-only log.* *Normalisation* (why `items` and
+Alto uses the default). *Schema migration, schema versioning.* *Event sourcing, append-only log.* *Normalization* (why `items` and
 `attempts` are separate tables). *Upsert.* *Index, covering index, query plan* (`EXPLAIN QUERY PLAN`). *ORM* (object-relational
-mapper; Alto does not use one, deliberately). *Serialisation* (JSON for the question payload).
+mapper; Alto does not use one, deliberately). *Serialization* (JSON for the question payload).
 
 ## Further reading
 

@@ -1,7 +1,7 @@
 """
 The application-wide settings dialog.
 
-It holds the colour theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
+It holds the color theme, the notation font, the keyboard style, the transitions, the instrument and what updates follow.
 
 Changes apply as soon as they are made. Each style is a card that previews it.
 
@@ -352,7 +352,7 @@ class KeyboardCard(QPushButton):
         """
         Redraw the preview in a style.
 
-        The custom card follows the colours being edited.
+        The custom card follows the colors being edited.
 
         Parameters
         ----------
@@ -373,15 +373,15 @@ class KeyboardCard(QPushButton):
 
 class KeyboardBuilder(QFrame):
     """
-    Rows for colouring each part of a keyboard.
+    Rows for coloring each part of a keyboard.
 
-    Each has a swatch that opens the colour picker, and chips for colours named after materials. Changing anything selects
+    Each has a swatch that opens the color picker, and chips for colors named after materials. Changing anything selects
     the Custom style.
 
     Attributes
     ----------
     changed : Signal
-        Emitted after a part is recoloured.
+        Emitted after a part is recolored.
     swatches : dict of str to QPushButton
         The swatch of each part ("naturals", "sharps", "case", "felt" and "caps").
 
@@ -396,7 +396,7 @@ class KeyboardBuilder(QFrame):
 
     def __init__(self, parent: QWidget | None = None) -> None:
         """
-        Build the rows and show each part's current colour.
+        Build the rows and show each part's current color.
 
         Parameters
         ----------
@@ -419,7 +419,7 @@ class KeyboardBuilder(QFrame):
         lay.setSpacing(6)
         lay.addWidget(QLabel("<b>Build your own</b>"))
         about = QLabel(
-            "Choose a colour for each part, from a material or with the colour picker. "
+            "Choose a color for each part, from a material or with the color picker. "
             "Changing any part switches to the Custom style.",
         )
         about.setWordWrap(True)
@@ -435,21 +435,21 @@ class KeyboardBuilder(QFrame):
             swatch = QPushButton()
             swatch.setFixedSize(46, 24)
             swatch.setCursor(Qt.CursorShape.PointingHandCursor)
-            swatch.setToolTip(f"Pick a colour for the {label.lower()}")
+            swatch.setToolTip(f"Pick a color for the {label.lower()}")
             swatch.clicked.connect(lambda _=False, p=part, t=label: self._pick(p, title=t))
             row.addWidget(swatch)
             row.addSpacing(6)
             self.swatches[part] = swatch
             if optional:
-                none = self._chip("None", colour=None)
+                none = self._chip("None", color=None)
                 none.setText("✕")
-                none.clicked.connect(lambda _=False, p=part: self._set(p, colour=None))
+                none.clicked.connect(lambda _=False, p=part: self._set(p, color=None))
                 row.addWidget(none)
             else:
                 row.addSpacing(24)  # line the chips up with the rows that have a None chip
-            for material, colour in keyboard_styles.MATERIALS:
-                chip = self._chip(f"{material}  {colour}", colour=colour)
-                chip.clicked.connect(lambda _=False, p=part, c=colour: self._set(p, colour=c))
+            for material, color in keyboard_styles.MATERIALS:
+                chip = self._chip(f"{material}  {color}", color=color)
+                chip.clicked.connect(lambda _=False, p=part, c=color: self._set(p, color=c))
                 row.addWidget(chip)
             row.addStretch(1)
             lay.addLayout(row)
@@ -459,17 +459,17 @@ class KeyboardBuilder(QFrame):
     def _chip(
         tip: str,
         *,
-        colour: str | None,
+        color: str | None,
     ) -> QToolButton:
         """
-        Make a small round colour chip.
+        Make a small round color chip.
 
         Parameters
         ----------
         tip : str
-            The tooltip, such as the material's name and colour.
-        colour : str or None
-            The chip's colour, or None for the "leave this part out" chip.
+            The tooltip, such as the material's name and color.
+        color : str or None
+            The chip's color, or None for the "leave this part out" chip.
 
         Returns
         -------
@@ -478,7 +478,7 @@ class KeyboardBuilder(QFrame):
 
         Examples
         --------
-        >>> chip_ = KeyboardBuilder._chip("Ivory  #f1e5c6", colour="#f1e5c6")
+        >>> chip_ = KeyboardBuilder._chip("Ivory  #f1e5c6", color="#f1e5c6")
         >>> chip_.toolTip()
         'Ivory  #f1e5c6'
         """
@@ -486,29 +486,29 @@ class KeyboardBuilder(QFrame):
         chip.setFixedSize(20, 20)
         chip.setToolTip(tip)
         chip.setCursor(Qt.CursorShape.PointingHandCursor)
-        if colour:
-            chip.setStyleSheet(f"QToolButton {{ background: {colour}; border: 1px solid {RIM}; border-radius: 10px; }}")
+        if color:
+            chip.setStyleSheet(f"QToolButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 10px; }}")
         else:
             chip.setStyleSheet(f"QToolButton {{ border: 1px solid {RIM}; border-radius: 10px; color: gray; }}")
         return chip
 
     def refresh(self) -> None:
         """
-        Show each part's current colour on its swatch.
+        Show each part's current color on its swatch.
 
         Examples
         --------
         >>> builder = KeyboardBuilder()
         >>> builder.refresh()
-        >>> builder.swatches["naturals"].text()  # a colour is set, so the swatch shows it, not "none"
+        >>> builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
         ''
         """
-        for part, colour in keyboard_styles.custom_colours().items():
+        for part, color in keyboard_styles.custom_colors().items():
             swatch = self.swatches[part]
-            swatch.setText("" if colour else "none")
+            swatch.setText("" if color else "none")
             swatch.setStyleSheet(
-                f"QPushButton {{ background: {colour}; border: 1px solid {RIM}; border-radius: 6px; }}"
-                if colour
+                f"QPushButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 6px; }}"
+                if color
                 else f"QPushButton {{ border: 1px dashed {RIM}; border-radius: 6px; color: gray; }}",
             )
 
@@ -516,30 +516,30 @@ class KeyboardBuilder(QFrame):
         self,
         part: str,
         *,
-        colour: str | None,
+        color: str | None,
     ) -> None:
         """
-        Recolour a part (or leave it out) and switch to the custom style.
+        Recolor a part (or leave it out) and switch to the custom style.
 
         Parameters
         ----------
         part : str
             "naturals", "sharps", "case", "felt" or "caps".
-        colour : str or None
-            The new colour, or None to leave an optional part out. Keyword-only.
+        color : str or None
+            The new color, or None to leave an optional part out. Keyword-only.
 
         Examples
         --------
         >>> builder = KeyboardBuilder()
         >>> changes = []
         >>> _ = builder.changed.connect(lambda: changes.append(1))
-        >>> builder._set("naturals", colour="#ffffff")
-        >>> keyboard_styles.custom_colours()["naturals"], changes
+        >>> builder._set("naturals", color="#ffffff")
+        >>> keyboard_styles.custom_colors()["naturals"], changes
         ('#ffffff', [1])
-        >>> builder._set("naturals", colour=keyboard_styles.DEFAULT_CUSTOM["naturals"])
+        >>> builder._set("naturals", color=keyboard_styles.DEFAULT_CUSTOM["naturals"])
         >>> keyboard_styles.set_style(keyboard_styles.DEFAULT)
         """
-        keyboard_styles.set_custom_colour(part, colour=colour)
+        keyboard_styles.set_custom_color(part, color=color)
         self.refresh()
         self.changed.emit()
 
@@ -550,7 +550,7 @@ class KeyboardBuilder(QFrame):
         title: str,
     ) -> None:
         """
-        Open the colour picker for a part and apply the colour chosen.
+        Open the color picker for a part and apply the color chosen.
 
         Parameters
         ----------
@@ -563,10 +563,10 @@ class KeyboardBuilder(QFrame):
         --------
         >>> KeyboardBuilder()._pick("case", title="Case")  # doctest: +SKIP
         """
-        current = keyboard_styles.custom_colours()[part] or "#ffffff"
-        colour = QColorDialog.getColor(QColor(current), self, f"Colour for the {title.lower()}")
-        if colour.isValid():
-            self._set(part, colour=colour.name())
+        current = keyboard_styles.custom_colors()[part] or "#ffffff"
+        color = QColorDialog.getColor(QColor(current), self, f"Color for the {title.lower()}")
+        if color.isValid():
+            self._set(part, color=color.name())
 
 
 class AppSettingsDialog(QDialog):
@@ -745,7 +745,7 @@ class AppSettingsDialog(QDialog):
         about: str,
     ) -> None:
         """
-        Add a heading and a line of grey explanation to a layout.
+        Add a heading and a line of gray explanation to a layout.
 
         Parameters
         ----------
@@ -772,7 +772,7 @@ class AppSettingsDialog(QDialog):
     @staticmethod
     def _about(text: str) -> QLabel:
         """
-        Make a line of grey explanatory text.
+        Make a line of gray explanatory text.
 
         Parameters
         ----------
@@ -826,7 +826,7 @@ class AppSettingsDialog(QDialog):
         """
         Build the Appearance page.
 
-        It has four sections, selected in the left pane: the colour theme, the notation style, the keyboard style and the
+        It has four sections, selected in the left pane: the color theme, the notation style, the keyboard style and the
         transitions.
 
         Returns
@@ -1031,7 +1031,7 @@ class AppSettingsDialog(QDialog):
         self.theme_pages = QStackedWidget()
         self.theme_editor = ThemeEditor()
         self.theme_editor.saved.connect(self._save_theme)
-        self.theme_editor.cancelled.connect(self._fill_themes)
+        self.theme_editor.canceled.connect(self._fill_themes)
         self.theme_editor.deleted.connect(self._delete_theme)
         self.theme_pages.addWidget(self.theme_editor)
         self.theme_cards = {}
@@ -1251,7 +1251,7 @@ class AppSettingsDialog(QDialog):
 
     def _delete_theme(self, family: str) -> None:
         """
-        Delete a theme the user made, after asking. If it was in use, the desktop's own colours are used instead.
+        Delete a theme the user made, after asking. If it was in use, the desktop's own colors are used instead.
 
         Parameters
         ----------
@@ -1275,7 +1275,7 @@ class AppSettingsDialog(QDialog):
             return
         if (
             family_of(saved_theme())[0] == family
-        ):  # in use: the desktop's own colours first, while the theme can still be let go of
+        ):  # in use: the desktop's own colors first, while the theme can still be let go of
             self._version = "system"
             self.choose_theme("system")
         delete_user_theme(family)
@@ -1513,7 +1513,7 @@ class AppSettingsDialog(QDialog):
         True
         """
         page, lay = self._page()
-        lay.addWidget(self._about("How the piano keyboard looks: the colours and materials of its keys."))
+        lay.addWidget(self._about("How the piano keyboard looks: the colors and materials of its keys."))
         grid = QGridLayout()
         grid.setSpacing(10)
         group = QButtonGroup(self)
@@ -1537,7 +1537,7 @@ class AppSettingsDialog(QDialog):
 
     def _custom_edited(self) -> None:
         """
-        Show the result of recolouring a part on the Custom card and make it the chosen one.
+        Show the result of recoloring a part on the Custom card and make it the chosen one.
 
         Examples
         --------
@@ -1640,12 +1640,12 @@ class AppSettingsDialog(QDialog):
 
     def choose_theme(self, key: str) -> None:
         """
-        Switch the colour theme, remember it, and note that the window should be rebuilt in it.
+        Switch the color theme, remember it, and note that the window should be rebuilt in it.
 
         Parameters
         ----------
         key : str
-            "system", "light" or "dark", or the key of a theme with colours of its own.
+            "system", "light" or "dark", or the key of a theme with colors of its own.
 
         Examples
         --------

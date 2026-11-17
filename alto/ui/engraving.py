@@ -361,10 +361,10 @@ def _fill(
     p: QPainter,
     *,
     path: QPainterPath,
-    colour: QColor,
+    color: QColor,
 ) -> None:
     """
-    Fill a path with a colour and no outline.
+    Fill a path with a color and no outline.
 
     Parameters
     ----------
@@ -372,8 +372,8 @@ def _fill(
         The painter to draw with.
     path : QPainterPath
         What to fill. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
 
     Examples
     --------
@@ -383,7 +383,7 @@ def _fill(
     >>> painter = QPainter(image)
     >>> square = QPainterPath()
     >>> square.addRect(QRectF(5, 5, 10, 10))
-    >>> _fill(painter, path=square, colour=QColor("black"))
+    >>> _fill(painter, path=square, color=QColor("black"))
     >>> painter.end()
     True
     >>> image.pixelColor(10, 10).lightness() < 128
@@ -391,7 +391,7 @@ def _fill(
     """
     p.save()
     p.setPen(Qt.PenStyle.NoPen)
-    p.setBrush(colour)
+    p.setBrush(color)
     p.drawPath(path)
     p.restore()
 
@@ -404,11 +404,11 @@ def draw_note(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     stem_down: bool = False,
 ) -> None:
     """
-    Draw a note with its head centred on a point.
+    Draw a note with its head centered on a point.
 
     The head, then a stem and (for the short values) a flag, placed on the font's anchors.
 
@@ -421,13 +421,13 @@ def draw_note(
     value : str
         "breve", "whole", "half", "quarter", "eighth", "sixteenth" or "thirty_second". Keyword-only.
     x : float
-        The head's centre, in pixels. Keyword-only.
+        The head's center, in pixels. Keyword-only.
     y : float
-        The head's centre, in pixels. Keyword-only.
+        The head's center, in pixels. Keyword-only.
     gap : float
         The distance between staff lines in pixels. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
     stem_down : bool, default False
         Draw the stem down. Keyword-only.
 
@@ -437,7 +437,7 @@ def draw_note(
     >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, colour=QColor("black"))
+    >>> draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, color=QColor("black"))
     >>> painter.end()
     True
     >>> image.pixelColor(50, 60).lightness() < 128
@@ -445,7 +445,7 @@ def draw_note(
     """
     head_name = HEADS.get(value, "noteheadBlack")
     left, _, right, _ = _ink(font, name=head_name)
-    ox, oy = x - (left + right) / 2 * gap, y  # the head's origin, with the drawn head centred on the line or space
+    ox, oy = x - (left + right) / 2 * gap, y  # the head's origin, with the drawn head centered on the line or space
     _fill(
         p,
         path=_place(
@@ -454,7 +454,7 @@ def draw_note(
             y=oy,
             gap=gap,
         ),
-        colour=colour,
+        color=color,
     )
     if value in ("breve", "whole"):
         return
@@ -468,7 +468,7 @@ def draw_note(
     top, bottom = (sy, end) if stem_down else (end, sy)
     p.save()
     p.setPen(Qt.PenStyle.NoPen)
-    p.setBrush(colour)
+    p.setBrush(color)
     p.drawRect(
         QRectF(
             left,
@@ -490,7 +490,7 @@ def draw_note(
                 y=end + fy * gap,
                 gap=gap,
             ),
-            colour=colour,
+            color=color,
         )
 
 
@@ -517,7 +517,7 @@ def draw_clef(
     x: float,
     bottom: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
 ) -> None:
     """
     Draw a clef with its left edge at a point.
@@ -536,8 +536,8 @@ def draw_clef(
         The y position of the staff's bottom line, in pixels. Keyword-only.
     gap : float
         The distance between staff lines in pixels. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
 
     Examples
     --------
@@ -545,7 +545,7 @@ def draw_clef(
     >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
     >>> image.fill(QColor("white"))
     >>> painter = QPainter(image)
-    >>> draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, colour=QColor("black"))
+    >>> draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, color=QColor("black"))
     >>> painter.end()
     True
     >>> any(image.pixelColor(x_, y).lightness() < 128 for x_ in range(10, 40) for y in range(20, 90))
@@ -560,7 +560,7 @@ def draw_clef(
             y=bottom - line * gap,
             gap=gap,
         ),
-        colour=colour,
+        color=color,
     )
 
 
@@ -604,7 +604,7 @@ def draw_accidental(
     x: float,
     y: float,
     gap: float,
-    colour: QColor,
+    color: QColor,
     fit: float | None = None,
 ) -> float:
     """
@@ -624,8 +624,8 @@ def draw_accidental(
         The glyph's reference line, in pixels. Keyword-only.
     gap : float
         The distance between staff lines in pixels. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
     fit : float or None, default None
         If given, shrink the glyph to be no wider than this many pixels. Keyword-only.
 
@@ -639,8 +639,8 @@ def draw_accidental(
     >>> from PySide6.QtGui import QImage
     >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
     >>> painter = QPainter(image)
-    >>> normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, colour=QColor("black"))
-    >>> squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, colour=QColor("black"), fit=5.0)
+    >>> normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"))
+    >>> squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"), fit=5.0)
     >>> painter.end()
     True
     >>> squeezed <= 5.0 < normal
@@ -659,7 +659,7 @@ def draw_accidental(
             gap=gap,
             scale=k,
         ),
-        colour=colour,
+        color=color,
     )
     return width * k
 
@@ -671,7 +671,7 @@ def draw_brace(
     x: float,
     y0: float,
     y1: float,
-    colour: QColor,
+    color: QColor,
     width: float,
 ) -> bool:
     """
@@ -689,8 +689,8 @@ def draw_brace(
         The top, in pixels. Keyword-only.
     y1 : float
         The bottom, in pixels. Keyword-only.
-    colour : QColor
-        The colour. Keyword-only.
+    color : QColor
+        The color. Keyword-only.
     width : float
         How wide to draw it, in pixels. Keyword-only.
 
@@ -704,7 +704,7 @@ def draw_brace(
     >>> from PySide6.QtGui import QImage
     >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
     >>> painter = QPainter(image)
-    >>> draw_brace(painter, font="bravura", x=30, y0=10, y1=90, colour=QColor("black"), width=12)
+    >>> draw_brace(painter, font="bravura", x=30, y0=10, y1=90, color=QColor("black"), width=12)
     True
     >>> painter.end()
     True
@@ -717,5 +717,5 @@ def draw_brace(
     t.translate(x - width, y0)
     t.scale(width / box.width(), (y1 - y0) / box.height())
     t.translate(-box.left(), -box.top())
-    _fill(p, path=t.map(outline), colour=colour)
+    _fill(p, path=t.map(outline), color=color)
     return True

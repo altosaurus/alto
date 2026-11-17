@@ -6,14 +6,14 @@ order: 2
 permalink: /api/alto.circle_schemes/
 ---
 {% raw %}
-The colour schemes of the circle of fifths: the presets, and the schemes a user makes.
+The color schemes of the circle of fifths: the presets, and the schemes a user makes.
 
-A scheme says what colour each of the 24 cells of the circle is when it is quiet and when it is lit, and whether its wedges
+A scheme says what color each of the 24 cells of the circle is when it is quiet and when it is lit, and whether its wedges
 are light, with dark names. The circle blends between the two as a cell brightens. The disc in the middle is not part of a
-scheme: it takes the colours of the app's theme. Nothing here needs Qt, so the schemes can be tested, saved and shown anywhere;
+scheme: it takes the colors of the app's theme. Nothing here needs Qt, so the schemes can be tested, saved and shown anywhere;
 `alto.ui.circle` turns them into pictures.
 
-A colour is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
+A color is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
 
 **Examples**
 
@@ -21,7 +21,7 @@ A colour is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
 >>> scheme = preset("cyan-indigo")
 >>> scheme.name, scheme.light
 ('Cyan to indigo', False)
->>> round(scheme.colour("outer", place=0, lift=1.0)[2], 2) > round(scheme.colour("outer", place=0, lift=0.0)[2], 2)
+>>> round(scheme.color("outer", place=0, lift=1.0)[2], 2) > round(scheme.color("outer", place=0, lift=0.0)[2], 2)
 True
 ```
 
@@ -31,7 +31,7 @@ True
 class CellMaker(Protocol)
 ```
 
-A function that gives the cell at a place on a ring its quiet and lit colours.
+A function that gives the cell at a place on a ring its quiet and lit colors.
 
 ## CustomRecord
 
@@ -45,8 +45,8 @@ A scheme of the user's own, as it is saved.
 
 - `id` (*str*): Its key, such as "custom-1".
 - `name` (*str*): What the user called it.
-- `mode` (*str*): How its colours are made: a key of `MODES`.
-- `colours` (*list of str*): The colours the mode takes, as "#rrggbb": what a cell looks like when it is lit.
+- `mode` (*str*): How its colors are made: a key of `MODES`.
+- `colors` (*list of str*): The colors the mode takes, as "#rrggbb": what a cell looks like when it is lit.
 - `light` (*bool*): Whether the wedges are light, with dark names.
 
 ## Scheme
@@ -61,7 +61,7 @@ Scheme(
 )
 ```
 
-A colour scheme for the circle.
+A color scheme for the circle.
 
 **Attributes**
 
@@ -69,12 +69,12 @@ A colour scheme for the circle.
 - `name` (*str*): Its name, as the settings show it.
 - `description` (*str*): A sentence about it.
 - `light` (*bool*): Whether the wedges are light, with dark names, instead of dark with white names.
-- `cells` (*dict of str to tuple of (tuple of float, tuple of float)*): For each ring ("outer" and "inner"), the 12 cells' quiet and lit colours, clockwise from the top.
+- `cells` (*dict of str to tuple of (tuple of float, tuple of float)*): For each ring ("outer" and "inner"), the 12 cells' quiet and lit colors, clockwise from the top.
 
-### Scheme.colour
+### Scheme.color
 
 ```python
-def colour(
+def color(
     ring: str,
     *,
     place: int,
@@ -82,7 +82,7 @@ def colour(
 ) -> tuple[float, float, float]
 ```
 
-Return the colour of a cell as it is lit.
+Return the color of a cell as it is lit.
 
 **Parameters**
 
@@ -97,10 +97,10 @@ Return the colour of a cell as it is lit.
 **Examples**
 
 ```pycon
->>> red, green, blue = preset("spectrum").colour("outer", place=0, lift=1.0)
+>>> red, green, blue = preset("spectrum").color("outer", place=0, lift=1.0)
 >>> red > green and red > blue
 True
->>> preset("spectrum").colour("outer", place=6, lift=0.0)[0] < 0.2
+>>> preset("spectrum").color("outer", place=6, lift=0.0)[0] < 0.2
 True
 ```
 
@@ -110,7 +110,7 @@ True
 def names() -> dict[str, str]
 ```
 
-Return the colours of the names written on the wedges.
+Return the colors of the names written on the wedges.
 
 **Returns**
 
@@ -127,21 +127,21 @@ Return the colours of the names written on the wedges.
 
 ```python
 def rgb_of(
-    colour: Hsl,
+    color: Hsl,
     *,
     capped: bool,
 ) -> tuple[float, float, float]
 ```
 
-Turn a colour into red, green and blue, keeping a dark circle's cells from getting too bright.
+Turn a color into red, green and blue, keeping a dark circle's cells from getting too bright.
 
-Yellows and greens look far brighter than blues of the same lightness, so on dark wedges a colour that is brighter than
+Yellows and greens look far brighter than blues of the same lightness, so on dark wedges a color that is brighter than
 white names can stand is brought down to the limit.
 
 **Parameters**
 
-- `colour` (*tuple of float*): The hue, saturation and lightness.
-- `capped` (*bool*): Whether to bring a too bright colour down. Keyword-only.
+- `color` (*tuple of float*): The hue, saturation and lightness.
+- `capped` (*bool*): Whether to bring a too bright color down. Keyword-only.
 
 **Returns**
 
@@ -163,7 +163,7 @@ True
 def hex_of(rgb: tuple[float, float, float]) -> str
 ```
 
-Write a colour as "#rrggbb".
+Write a color as "#rrggbb".
 
 **Parameters**
 
@@ -171,7 +171,7 @@ Write a colour as "#rrggbb".
 
 **Returns**
 
-- *str*: The colour as hexadecimal.
+- *str*: The color as hexadecimal.
 
 **Examples**
 
@@ -186,11 +186,11 @@ Write a colour as "#rrggbb".
 def hsl_of(text: str) -> Hsl
 ```
 
-Read a colour written as "#rrggbb".
+Read a color written as "#rrggbb".
 
 **Parameters**
 
-- `text` (*str*): The colour.
+- `text` (*str*): The color.
 
 **Returns**
 
@@ -263,7 +263,7 @@ def record_of(
     *,
     name: str,
     mode: str,
-    colours: list[str],
+    colors: list[str],
     light: bool = False,
 ) -> CustomRecord
 ```
@@ -274,8 +274,8 @@ Make the record of a scheme of the user's own.
 
 - `key` (*str*): Its key, such as "custom-1".
 - `name` (*str*): Its name. Keyword-only.
-- `mode` (*str*): How its colours are made: a key of `MODES`. Keyword-only.
-- `colours` (*list of str*): The colours the mode takes, as "#rrggbb". Keyword-only.
+- `mode` (*str*): How its colors are made: a key of `MODES`. Keyword-only.
+- `colors` (*list of str*): The colors the mode takes, as "#rrggbb". Keyword-only.
 - `light` (*bool, default False*): Whether the wedges are light. Keyword-only.
 
 **Returns**
@@ -285,7 +285,7 @@ Make the record of a scheme of the user's own.
 **Examples**
 
 ```pycon
->>> record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])["light"]
+>>> record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])["light"]
 False
 ```
 
@@ -303,16 +303,16 @@ Check one saved scheme of the user's own, and tidy it.
 
 **Returns**
 
-- *CustomRecord or None*: The record, with a name of at most 40 characters, or None if anything in it is missing or wrong: an unknown mode, a colour that is not "#rrggbb", or the wrong number of colours for the mode.
+- *CustomRecord or None*: The record, with a name of at most 40 characters, or None if anything in it is missing or wrong: an unknown mode, a color that is not "#rrggbb", or the wrong number of colors for the mode.
 
 **Examples**
 
 ```pycon
->>> good = record_of("custom-1", name="Mine", mode="rings", colours=["#2f6bd0", "#18a0c0"])
+>>> good = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"])
 >>> clean_record(good) == good
 True
->>> few = record_of("custom-1", name="Mine", mode="rings", colours=["#2f6bd0"])
->>> unknown = record_of("custom-1", name="Mine", mode="nope", colours=["#2f6bd0", "#18a0c0"])
+>>> few = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0"])
+>>> unknown = record_of("custom-1", name="Mine", mode="nope", colors=["#2f6bd0", "#18a0c0"])
 >>> clean_record(few) is None, clean_record(unknown) is None
 (True, True)
 >>> clean_record("not a record") is None
@@ -327,7 +327,7 @@ def custom_scheme(record: CustomRecord) -> Scheme
 
 Make a scheme from one of the user's own records.
 
-The colours in a record are what a cell looks like when lit; the quiet cells are the same hue, calmer and darker (or, on a
+The colors in a record are what a cell looks like when lit; the quiet cells are the same hue, calmer and darker (or, on a
 light wedges, paler).
 
 **Parameters**
@@ -341,7 +341,7 @@ light wedges, paler).
 **Examples**
 
 ```pycon
->>> scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colours=["#2f6bd0", "#18a0c0"]))
+>>> scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"]))
 >>> scheme.key, scheme.name, scheme.light
 ('custom-1', 'Mine', False)
 >>> scheme.cells["outer"][0][1][0] != scheme.cells["inner"][0][1][0]  # two rings, two hues
@@ -392,7 +392,7 @@ Read the user's own schemes back, leaving out any that are not valid and any bey
 ```pycon
 >>> load_customs("not json"), load_customs("[1, 2]")
 ([], [])
->>> one = record_of("custom-1", name="A", mode="single", colours=["#2f6bd0"])
+>>> one = record_of("custom-1", name="A", mode="single", colors=["#2f6bd0"])
 >>> [r["id"] for r in load_customs(dump_customs([one, one]))]  # a repeated key is dropped
 ['custom-1']
 ```
@@ -444,7 +444,7 @@ Return a key that none of the user's schemes has.
 **Examples**
 
 ```pycon
->>> taken = [record_of("custom-1", name="", mode="single", colours=[])]
+>>> taken = [record_of("custom-1", name="", mode="single", colors=[])]
 >>> next_custom_key([]), next_custom_key(taken)
 ('custom-1', 'custom-2')
 ```

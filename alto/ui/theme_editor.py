@@ -1,5 +1,5 @@
 """
-The editor for a theme of the user's own: a name, and a colour for every part of its light and dark versions.
+The editor for a theme of the user's own: a name, and a color for every part of its light and dark versions.
 
 Examples
 --------
@@ -20,7 +20,6 @@ from PySide6.QtCore import (
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QColorDialog,
-    QComboBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -32,6 +31,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.ui.dropdown import FieldComboBox
 from alto.ui.theme import (
     PART_NAMES,
     PARTS,
@@ -40,28 +40,28 @@ from alto.ui.theme import (
     custom_theme,
     families,
     new_family_id,
-    preview_colours,
+    preview_colors,
 )
 from alto.ui.theme_cards import ThemeThumb
 
-QUIET = "color: gray; font-family: monospace; font-size: 9pt;"  # how the code beside a colour looks
-LIT = "color: palette(text); font-family: monospace; font-size: 9pt; font-weight: bold;"  # and while its colour is pointed at
+QUIET = "color: gray; font-family: monospace; font-size: 9pt;"  # how the code beside a color looks
+LIT = "color: palette(text); font-family: monospace; font-size: 9pt; font-weight: bold;"  # and while its color is pointed at
 DEFAULT_NAME = "My theme"
 START_FROM = "studio"  # the theme a new one starts as, until another is chosen
 
 
 def theme_of(
-    colours: dict[str, str],
+    colors: dict[str, str],
     *,
     dark: bool,
 ) -> CustomTheme:
     """
-    Make a theme from a set of colours, to draw a picture of it.
+    Make a theme from a set of colors, to draw a picture of it.
 
     Parameters
     ----------
-    colours : dict of str to str
-        A colour for every part, as "#rrggbb".
+    colors : dict of str to str
+        A color for every part, as "#rrggbb".
     dark : bool
         True if it is the dark version. Keyword-only.
 
@@ -81,33 +81,33 @@ def theme_of(
         label="",
         note="",
         dark=dark,
-        window=colours["window"],
-        panel=colours["panel"],
-        ink=colours["ink"],
-        muted=colours["muted"],
-        line=colours["line"],
-        accent=colours["accent"],
-        track=colours["track"],
+        window=colors["window"],
+        panel=colors["panel"],
+        ink=colors["ink"],
+        muted=colors["muted"],
+        line=colors["line"],
+        accent=colors["accent"],
+        track=colors["track"],
     )
 
 
 class ThemeEditor(QWidget):
     """
-    A form to make a theme, or change one: its name, and the colours of its light and dark versions.
+    A form to make a theme, or change one: its name, and the colors of its light and dark versions.
 
-    A small picture of each version follows the colours as they are chosen. Choosing a theme in the "Start from" list takes its
-    colours at once.
+    A small picture of each version follows the colors as they are chosen. Choosing a theme in the "Start from" list takes its
+    colors at once.
 
     Attributes
     ----------
     name_edit : QLineEdit
         The theme's name.
-    start_from : QComboBox
-        The themes whose colours can be taken; choosing one takes them.
-    colours : dict of str to dict of str to str
-        The colours being made, by "light" or "dark", and then by part.
+    start_from : FieldComboBox
+        The themes whose colors can be taken; choosing one takes them.
+    colors : dict of str to dict of str to str
+        The colors being made, by "light" or "dark", and then by part.
     buttons : dict of str to dict of str to QPushButton
-        The button of each colour, which opens the colour picker, by version and part.
+        The button of each color, which opens the color picker, by version and part.
     pictures : dict of str to ThemeThumb
         The picture of each version.
     save_button : QPushButton
@@ -116,7 +116,7 @@ class ThemeEditor(QWidget):
         Deletes the theme; it is only there for a theme that has been saved.
     saved : Signal
         Emitted with the theme's key when it is saved.
-    cancelled : Signal
+    canceled : Signal
         Emitted when the editing is given up.
     deleted : Signal
         Emitted with the theme's key when it is deleted.
@@ -128,7 +128,7 @@ class ThemeEditor(QWidget):
     """
 
     saved = Signal(str)
-    cancelled = Signal()
+    canceled = Signal()
     deleted = Signal(str)
 
     def __init__(self, parent: QWidget | None = None) -> None:
@@ -142,16 +142,16 @@ class ThemeEditor(QWidget):
 
         Examples
         --------
-        >>> sorted(ThemeEditor().colours)
+        >>> sorted(ThemeEditor().colors)
         ['dark', 'light']
         """
         super().__init__(parent)
         self._family = ""  # the key of the theme being changed; empty for a new one
-        self.colours: dict[str, dict[str, str]] = {"light": {}, "dark": {}}
+        self.colors: dict[str, dict[str, str]] = {"light": {}, "dark": {}}
         self.buttons: dict[str, dict[str, QPushButton]] = {"light": {}, "dark": {}}
         self.pictures: dict[str, ThemeThumb] = {}
         self._values: dict[str, dict[str, QLabel]] = {"light": {}, "dark": {}}
-        self._beside: dict[QObject, QLabel] = {}  # the code written beside each colour button
+        self._beside: dict[QObject, QLabel] = {}  # the code written beside each color button
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             0,
@@ -163,13 +163,13 @@ class ThemeEditor(QWidget):
         self.heading = QLabel()
         self.heading.setStyleSheet("font-weight: bold; font-size: 12pt;")
         self.save_button = QPushButton("Save")
-        self.save_button.setProperty("primary", True)  # filled with the accent colour, in style.py
+        self.save_button.setProperty("primary", True)  # filled with the accent color, in style.py
         self.save_button.setDefault(True)
         self.save_button.setToolTip("Keep this theme and use it")
         self.save_button.clicked.connect(lambda: self.saved.emit(self._family))
         cancel = QPushButton("Cancel")
         cancel.setToolTip("Give up the changes")
-        cancel.clicked.connect(self.cancelled)
+        cancel.clicked.connect(self.canceled)
         self.delete_button = QPushButton("Delete theme")
         self.delete_button.clicked.connect(lambda: self.deleted.emit(self._family))
         header = QHBoxLayout()
@@ -196,10 +196,10 @@ class ThemeEditor(QWidget):
         self.name_edit.textChanged.connect(self._name_changed)
         top.addWidget(self.name_edit, 0, 1)
         top.addWidget(QLabel("Start from"), 1, 0)
-        self.start_from = QComboBox()
+        self.start_from = FieldComboBox()
         self.start_from.setProperty("field", True)
-        self.start_from.setAccessibleName("Theme to take the colours of")
-        self.start_from.activated.connect(lambda _index: self._copy_start())  # choosing one takes its colours at once
+        self.start_from.setAccessibleName("Theme to take the colors of")
+        self.start_from.activated.connect(lambda _index: self._copy_start())  # choosing one takes its colors at once
         top.addWidget(self.start_from, 1, 1)
         top.setColumnStretch(1, 1)
         body.addLayout(top)
@@ -208,8 +208,8 @@ class ThemeEditor(QWidget):
         for version, title in (("light", "Light version"), ("dark", "Dark version")):
             column = QVBoxLayout()
             column.addWidget(QLabel(f"<b>{title}</b>"))
-            picture = ThemeThumb(version, colours={}, scale=1.0)
-            picture.setEnabled(False)  # a picture of the colours as they are made, nothing to click
+            picture = ThemeThumb(version, colors={}, scale=1.0)
+            picture.setEnabled(False)  # a picture of the colors as they are made, nothing to click
             self.pictures[version] = picture
             column.addWidget(picture)
             grid = QGridLayout()
@@ -219,12 +219,12 @@ class ThemeEditor(QWidget):
                 button = QPushButton()
                 button.setFixedSize(56, 26)
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
-                button.setToolTip(f"Click to change the colour of the {PART_NAMES[part].lower()}")
+                button.setToolTip(f"Click to change the color of the {PART_NAMES[part].lower()}")
                 button.setAccessibleName(f"{title}, {PART_NAMES[part]}")
                 button.clicked.connect(lambda _=False, v=version, p=part: self._choose(v, part=p))
                 value = QLabel()
                 value.setStyleSheet(QUIET)
-                button.installEventFilter(self)  # the code beside a colour lights up with it
+                button.installEventFilter(self)  # the code beside a color lights up with it
                 self._beside[button] = value
                 grid.addWidget(QLabel(PART_NAMES[part]), row, 0)
                 grid.addWidget(button, row, 1)
@@ -247,7 +247,7 @@ class ThemeEditor(QWidget):
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (a Qt override, with Qt's own name and arguments)
         """
-        Light up the code written beside a colour while the pointer is over the colour.
+        Light up the code written beside a color while the pointer is over the color.
 
         Parameters
         ----------
@@ -259,7 +259,7 @@ class ThemeEditor(QWidget):
         Returns
         -------
         bool
-            Always False: the colour button still gets the event.
+            Always False: the color button still gets the event.
 
         Examples
         --------
@@ -294,7 +294,7 @@ class ThemeEditor(QWidget):
         (True, 'My theme')
         """
         self.start_from.clear()
-        self.start_from.addItem("Choose a theme to take its colours…", None)
+        self.start_from.addItem("Choose a theme to take its colors…", None)
         own = record["id"] if record is not None else ""
         for family, label, _note in families():
             if family != own and custom_theme(family) is not None and custom_theme(f"{family}_dark") is not None:
@@ -309,8 +309,8 @@ class ThemeEditor(QWidget):
             self._family = record["id"]
             self.heading.setText("Change theme")
             self.name_edit.setText(record["name"])
-            self.colours = {"light": dict(record["light"]), "dark": dict(record["dark"])}
-            self._show_colours()
+            self.colors = {"light": dict(record["light"]), "dark": dict(record["dark"])}
+            self._show_colors()
         self.delete_button.setVisible(record is not None)
 
     def record(self) -> ThemeRecord:
@@ -320,24 +320,24 @@ class ThemeEditor(QWidget):
         Returns
         -------
         ThemeRecord
-            The key, the name and the colours of both versions.
+            The key, the name and the colors of both versions.
 
         Examples
         --------
         >>> editor = ThemeEditor()
-        >>> editor.record()["light"]["window"] == editor.colours["light"]["window"]
+        >>> editor.record()["light"]["window"] == editor.colors["light"]["window"]
         True
         """
         return ThemeRecord(
             id=self._family,
             name=self.name_edit.text().strip() or DEFAULT_NAME,
-            light=dict(self.colours["light"]),
-            dark=dict(self.colours["dark"]),
+            light=dict(self.colors["light"]),
+            dark=dict(self.colors["dark"]),
         )
 
     def _copy_start(self) -> None:
         """
-        Take the colours of the theme chosen in "Start from", for both versions.
+        Take the colors of the theme chosen in "Start from", for both versions.
 
         The line that asks for a choice takes nothing.
 
@@ -346,7 +346,7 @@ class ThemeEditor(QWidget):
         >>> from alto.ui.theme import CUSTOM_THEMES
         >>> editor = ThemeEditor()
         >>> editor._copy_start()
-        >>> editor.colours["light"]["window"] == CUSTOM_THEMES[0].window
+        >>> editor.colors["light"]["window"] == CUSTOM_THEMES[0].window
         True
         """
         family = self.start_from.currentData()
@@ -355,8 +355,8 @@ class ThemeEditor(QWidget):
         for version, key in (("light", family), ("dark", f"{family}_dark")):
             theme = custom_theme(key)
             if theme is not None:
-                self.colours[version] = {part: str(getattr(theme, part)) for part in PARTS}
-        self._show_colours()
+                self.colors[version] = {part: str(getattr(theme, part)) for part in PARTS}
+        self._show_colors()
 
     def _choose(
         self,
@@ -365,7 +365,7 @@ class ThemeEditor(QWidget):
         part: str,
     ) -> None:
         """
-        Open the colour picker for one colour, and take what is chosen.
+        Open the color picker for one color, and take what is chosen.
 
         Parameters
         ----------
@@ -378,10 +378,10 @@ class ThemeEditor(QWidget):
         --------
         >>> ThemeEditor()._choose  # doctest: +SKIP
         """
-        chosen = QColorDialog.getColor(QColor(self.colours[version][part]), self, f"{PART_NAMES[part]}, {version} version")
+        chosen = QColorDialog.getColor(QColor(self.colors[version][part]), self, f"{PART_NAMES[part]}, {version} version")
         if chosen.isValid():
-            self.colours[version][part] = chosen.name()
-            self._show_colours()
+            self.colors[version][part] = chosen.name()
+            self._show_colors()
 
     def _name_changed(self, text: str) -> None:
         """
@@ -401,29 +401,29 @@ class ThemeEditor(QWidget):
         """
         self.save_button.setEnabled(bool(text.strip()))
 
-    def _show_colours(self) -> None:
+    def _show_colors(self) -> None:
         """
-        Show the colours on their buttons, in words, and in the two pictures.
+        Show the colors on their buttons, in words, and in the two pictures.
 
         Examples
         --------
         >>> editor = ThemeEditor()
-        >>> editor._show_colours()
-        >>> editor.pictures["light"].colours["window"] == editor.colours["light"]["window"]
+        >>> editor._show_colors()
+        >>> editor.pictures["light"].colors["window"] == editor.colors["light"]["window"]
         True
         """
         for version in ("light", "dark"):
             for part in PARTS:
-                colour = self.colours[version][part]
+                color = self.colors[version][part]
                 ring = (
-                    "#ffffff" if QColor(colour).lightness() < 140 else "#1a1a1a"
-                )  # a ring that shows on this colour, whatever it is
+                    "#ffffff" if QColor(color).lightness() < 140 else "#1a1a1a"
+                )  # a ring that shows on this color, whatever it is
                 self.buttons[version][part].setStyleSheet(
-                    f"QPushButton {{ background: {colour}; border: 1px solid gray; border-radius: 5px; }}"
-                    f"QPushButton:hover {{ border: 3px solid {ring}; }}"  # shows that the colour can be changed
+                    f"QPushButton {{ background: {color}; border: 1px solid gray; border-radius: 5px; }}"
+                    f"QPushButton:hover {{ border: 3px solid {ring}; }}"  # shows that the color can be changed
                     f"QPushButton:pressed {{ border: 3px solid {ring}; padding-top: 1px; }}",
                 )
-                self._values[version][part].setText(colour)
+                self._values[version][part].setText(color)
             picture = self.pictures[version]
-            picture.colours = preview_colours(theme_of(self.colours[version], dark=version == "dark"))
+            picture.colors = preview_colors(theme_of(self.colors[version], dark=version == "dark"))
             picture.update()

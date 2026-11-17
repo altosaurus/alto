@@ -2,7 +2,7 @@
 title: alto.ui.widgets
 parent: api
 package: alto.ui
-order: 62
+order: 65
 permalink: /api/alto.ui.widgets/
 ---
 {% raw %}
@@ -260,7 +260,7 @@ def restyle() -> None
 
 Style the control from the palette now in use: a rounded track with the chosen choice raised and tinted.
 
-A change of theme rebuilds the main window, so the control there is drawn afresh in the new colours. One that stays, as in
+A change of theme rebuilds the main window, so the control there is drawn afresh in the new colors. One that stays, as in
 the settings, is restyled by calling this.
 
 **Examples**

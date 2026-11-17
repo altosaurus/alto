@@ -28,8 +28,8 @@ Almost everything is adjustable.
 - **Notation in the font you like.** Eleven music fonts, from the polished look of Finale Maestro, Leland and Bravura to
   handwritten jazz styles. Every staff in the app follows your choice.
 - **Light, dark or follow your desktop.** The theme switches instantly.
-- **Practise exactly what you need.** Choose the clefs (the grand staff, treble, bass, alto, tenor, soprano, mezzo-soprano or baritone), the range of
-  notes, the key signatures, the note values from the breve to the thirty-second note, letter or solfège names, and
+- **Practice exactly what you need.** Choose the clefs (the grand staff, treble, bass, alto, tenor, soprano, mezzo-soprano or baritone), the range of
+  notes, the key signatures, the note values from the double whole note to the thirty-second note, letter or solfège names, and
   whether sharps, flats and naturals appear.
 - **Choose the sound.** Pick the instrument that plays your answers.
 
@@ -68,7 +68,7 @@ Every answer goes into a local database under your profile. Alto scores each que
 
 Alto is released under the [MIT License](LICENSE). There are no accounts and no tracking.
 Your history is one SQLite file on your computer that you can back up, move or open with any SQLite tool. The bundled
-music fonts and recordings all come with their licences, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+music fonts and recordings all come with their licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Built for Linux
 
@@ -80,7 +80,7 @@ the Linux version. Alto may run on macOS too, but there is no package for it and
 ## Download
 
 Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs installing. See
+carry their own Python and Qt, so nothing else needs to be installed. See
 [Getting started](https://altosaurus.github.io/alto/latest/getting-started/) for how to install, update and uninstall them.
 
 ## Get started from the source
@@ -117,5 +117,5 @@ recipes such as adding an exercise or a notation font.
 
 ## License
 
-[MIT](LICENSE). The bundled fonts and recordings keep their authors' licences; see
+[MIT](LICENSE). The bundled fonts and recordings keep their authors' licenses; see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

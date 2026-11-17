@@ -129,11 +129,11 @@ One page of a lesson.
 
 - `title` (*str*): The heading.
 - `text` (*str*): What to read, as simple HTML.
-- `circle` (*str*): How the circle of fifths is shown: "none" for no circle, "rest" for a picture that does not respond, "explore" for one that can be clicked, or "walk" for one that can also be walked round with two buttons.
+- `circle` (*str*): How the circle of fifths is shown: "none" for no circle, "rest" for a picture that does not respond, "explore" for one that can be clicked, or "walk" for one that can also be walked around with two buttons.
 - `hear` (*tuple of tuple of str*): Notes to play from a Hear it button, as columns of note names such as "C4"; empty for no button.
 - `hear_label` (*str*): What the Hear it button says.
 - `make_task` (*callable or None*): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
-- `closing` (*bool*): True for the last step, which offers to practise.
+- `closing` (*bool*): True for the last step, which offers to practice.
 - `staves` (*tuple of Staff*): Staves to show beside the words, one above another, instead of the circle; empty for none.
 - `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task's clef.
 - `scale` (*str*): Scale type for an interactive notation diagram; empty for none.
@@ -171,7 +171,7 @@ A lesson: a title, a line about it, and its steps.
 - `summary` (*str*): A short line for its card.
 - `category` (*str*): The group it belongs to on the list, such as "Scales & Keys".
 - `steps` (*tuple of Step*): The pages, in order.
-- `exercise` (*str*): The class name of the exercise that practises it, which the last page offers.
+- `exercise` (*str*): The class name of the exercise that practices it, which the last page offers.
 
 **Examples**
 

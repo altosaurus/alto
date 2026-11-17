@@ -92,7 +92,7 @@ def reach(
         press(view, "PgUp")
     while target.diatonic - staff.caret <= -7:
         press(view, "PgDown")
-    for _ in range(5):  # the signs go round in a cycle of four at most
+    for _ in range(5):  # the signs go around in a cycle of four at most
         if staff.caret_note() == target:
             return
         press(view, "Right")
@@ -294,7 +294,7 @@ def test_a_letter_jumps_to_the_nearest_note_with_that_name(app: QApplication) ->
 
 def test_the_note_at_the_caret_is_shown_and_takes_the_chosen_sign_and_the_signature(app: QApplication) -> None:
     """
-    Check that the caret's note is drawn in the preview colour, follows the sign chosen, and follows the key signature.
+    Check that the caret's note is drawn in the preview color, follows the sign chosen, and follows the key signature.
 
     Parameters
     ----------

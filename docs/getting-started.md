@@ -10,14 +10,14 @@ permalink: /getting-started/
 - A desktop operating system that runs Qt 6: Linux, macOS or Windows.
 - Alto installs [PySide6](https://doc.qt.io/qtforpython-6/) (6.8 or newer) and numpy for you.
 
-The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs installing. Only the
+The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs to be installed. Only the
 "Noto Music" style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
 change the notation style in [Settings]({{ '/settings/' | relative_url }}).
 
 ## Download and install
 
 Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs installing.
+carry their own Python and Qt, so nothing else needs to be installed.
 
 **Linux.** Download `alto-<version>-linux-x86_64.tar.gz`, unpack it, and in the folder it makes run:
 
@@ -77,7 +77,7 @@ OK.
 download only if the signature on the list is valid, the signed list names that file, and the file's SHA-256 hash is the one
 listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.
 
-To get changes as soon as they are merged, before they are released, tick **Follow the main branch** in **Settings →
+To get changes as soon as they are merged, before they are released, select **Follow the main branch** in **Settings →
 Updates**. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
 script, and may be less stable than a release; a packaged copy always follows releases.
 
