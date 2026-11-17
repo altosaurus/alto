@@ -15,6 +15,7 @@ from PySide6.QtTest import QTest
 
 from alto import settings
 from alto.exercises.library import (
+    KeyboardIntervals,
     KeyboardNotes,
     NoteNames,
 )
@@ -469,10 +470,11 @@ def test_search_filters_tiles_and_navigation_and_clear_restores_them(window: Mai
     window.search_field.setText("  KEYBOARD  ")
     assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
         "Keyboard Identification",
+        "Keyboard Interval Identification",
     ]
-    assert [name for name, item in window._items.items() if not item.isHidden()] == [KeyboardNotes]
+    assert [name for name, item in window._items.items() if not item.isHidden()] == [KeyboardNotes, KeyboardIntervals]
     headings = [window.nav.item(i) for i in range(window.nav.count()) if window.nav.item(i).flags() == Qt.ItemFlag.NoItemFlags]
-    assert [heading.text() for heading in headings if not heading.isHidden()] == ["NOTATION"]
+    assert [heading.text() for heading in headings if not heading.isHidden()] == ["NOTATION", "INTERVALS"]
     window.search_field.clear()
     assert all(not card.isHidden() for card in window.home.cards)
     assert all(not item.isHidden() for item in window._items.values())
@@ -578,6 +580,7 @@ def test_standalone_search_keeps_its_focus_highlighting(window: MainWindow) -> N
     window.search_field.setText("keyboard")
     assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
         "Keyboard Identification",
+        "Keyboard Interval Identification",
     ]
 
 
