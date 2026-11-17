@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794873402">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -687,6 +687,18 @@ True
 'Key Signature Identification'
 </code></pre>
 
+<h3 id="mainwindowshow_about">MainWindow.show_about</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_about</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the application name, installed version and purpose.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; window.show_about()  # doctest: +SKIP
+</code></pre>
+
 <h3 id="mainwindowopen_settings">MainWindow.open_settings</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">open_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1199,8 +1211,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794873402" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794873402" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
