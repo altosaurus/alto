@@ -187,20 +187,64 @@ class _PageState:
 
 
 class _AdjacentSubmenu(QMenu):
-    """Place the popup flush with the parent menu's outer edge."""
+    """
+    Place the popup flush with the parent menu's outer edge.
+
+    Examples
+    --------
+    >>> parent = QMenu()
+    >>> submenu = _AdjacentSubmenu("Help", parent)
+    >>> submenu.title()
+    'Help'
+    """
 
     def showEvent(self, event: QShowEvent) -> None:
+        """
+        Align the popup after it opens and after deferred platform placement.
+
+        Parameters
+        ----------
+        event : QShowEvent
+            The popup's show event.
+
+        Examples
+        --------
+        >>> submenu = _AdjacentSubmenu("Help")
+        >>> submenu.showEvent(QShowEvent())
+        """
         super().showEvent(event)
         self._align_edge()
         # Qt/platform popup placement can run after showEvent returns.
-        QTimer.singleShot(0, self._align_edge)
+        QTimer.singleShot(0, self, self._align_edge)
 
     def moveEvent(self, event: QMoveEvent) -> None:
+        """
+        Restore edge alignment if Qt moves an open submenu.
+
+        Parameters
+        ----------
+        event : QMoveEvent
+            The popup's move event.
+
+        Examples
+        --------
+        >>> from PySide6.QtCore import QPoint
+        >>> submenu = _AdjacentSubmenu("Help")
+        >>> submenu.moveEvent(QMoveEvent(QPoint(1, 1), QPoint()))
+        """
         super().moveEvent(event)
         if self.isVisible():
             self._align_edge()
 
     def _align_edge(self) -> None:
+        """
+        Place a visible submenu beside its parent within the screen bounds.
+
+        Examples
+        --------
+        >>> submenu = _AdjacentSubmenu("Help")
+        >>> submenu._align_edge()  # hidden menus keep their position
+        """
         if not self.isVisible():
             return
         parent = self.parentWidget()
@@ -909,7 +953,13 @@ class MainWindow(QMainWindow):
         view.setFocus()
 
     def show_about(self) -> None:
-        """Show the application name, installed version and purpose."""
+        """
+        Show the application name, installed version and purpose.
+
+        Examples
+        --------
+        >>> window.show_about()  # doctest: +SKIP
+        """
         QMessageBox.about(
             self,
             "About Alto",
@@ -1129,7 +1179,7 @@ class MainWindow(QMainWindow):
                 page._example_index = example
                 if term:
                     page._update_example()
-                QTimer.singleShot(0, lambda: page.definition.verticalScrollBar().setValue(scroll))
+                QTimer.singleShot(0, page, lambda: page.definition.verticalScrollBar().setValue(scroll))
 
     def _show_profile(self) -> None:
         """

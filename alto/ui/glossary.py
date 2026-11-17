@@ -167,7 +167,7 @@ class _DescriptionBrowser(QTextBrowser):
         fmt.setBottomMargin(12)
         self.example_frame = cursor.insertFrame(fmt)
         self.example.show()
-        QTimer.singleShot(0, self._place_example)
+        QTimer.singleShot(0, self, self._place_example)
 
     def _place_example(self, *_: object) -> None:
         frame = getattr(self, "example_frame", None)

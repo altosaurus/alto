@@ -211,6 +211,12 @@ def show_about() -> None
 
 Show the application name, installed version and purpose.
 
+**Examples**
+
+```pycon
+>>> window.show_about()  # doctest: +SKIP
+```
+
 ### MainWindow.open_settings
 
 ```python

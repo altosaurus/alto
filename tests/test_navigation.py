@@ -582,7 +582,14 @@ def test_standalone_search_keeps_its_focus_highlighting(window: MainWindow) -> N
 
 
 def test_glossary_location_survives_theme_rebuild(window: MainWindow) -> None:
-    """Keep the glossary and its selected content when applying a theme."""
+    """
+    Keep the glossary and its selected content when applying a theme.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window under test.
+    """
     window.open_exercise(NoteNames)
     window.open_glossary()
     page = window.stack.currentWidget()
