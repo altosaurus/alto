@@ -180,6 +180,14 @@ QListWidget#categories {{
     padding: 6px 0px;
 }}
 QListWidget#categories::item {{ padding: 4px 8px; margin: 1px 6px; border-radius: {r2}px; color: palette(text); }}
+QTextBrowser#glossaryDefinition, QScrollArea#glossaryActivities {{
+    background: palette(window);
+    border: 1px solid palette(mid);
+    border-radius: {rp}px;
+}}
+QTextBrowser#glossaryDefinition, QScrollArea#glossaryActivities {{ padding: 6px; }}
+QListWidget#categories[glossaryBox="true"] {{ background: palette(window); }}
+QLineEdit#glossarySearch {{ background: palette(window); }}
 QListWidget#categories::item:hover {{ background: {nav_hover}; }}
 QListWidget#categories::item:selected, QListWidget#categories::item:selected:active,
 QListWidget#categories::item:selected:!active {{ background: {nav_selected}; color: {accent}; }}

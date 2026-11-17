@@ -1,7 +1,7 @@
 """A searchable glossary of the notation terms used in Alto."""
 
-from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtGui import QKeySequence, QPalette, QShortcut
+from PySide6.QtCore import QSize, Qt, QTimer, Signal
+from PySide6.QtGui import QKeySequence, QPalette, QResizeEvent, QShortcut, QTextCursor, QTextFrameFormat
 from PySide6.QtWidgets import (
     QGridLayout,
     QHBoxLayout,
@@ -140,6 +140,61 @@ EXAMPLES = {
 }
 
 
+class _DescriptionBrowser(QTextBrowser):
+    """Wrap rich text around a live example anchored in a floating text frame."""
+
+    def set_example(self, example: QWidget) -> None:
+        self.example = example
+        example.setParent(self.viewport())
+        self.verticalScrollBar().valueChanged.connect(self._place_example)
+        self.document().documentLayout().documentSizeChanged.connect(self._place_example)
+
+    def setHtml(self, html: str) -> None:
+        self.example_frame = None
+        super().setHtml(html)
+
+    def reserve_example(self) -> None:
+        cursor = QTextCursor(self.document())
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
+        fmt = QTextFrameFormat()
+        fmt.setPosition(
+            QTextFrameFormat.Position.FloatRight if self.viewport().width() >= 500 else QTextFrameFormat.Position.InFlow,
+        )
+        fmt.setWidth(250)
+        fmt.setHeight(self.example.sizeHint().height())
+        fmt.setLeftMargin(18)
+        fmt.setBottomMargin(12)
+        self.example_frame = cursor.insertFrame(fmt)
+        self.example.show()
+        QTimer.singleShot(0, self._place_example)
+
+    def _place_example(self, *_: object) -> None:
+        frame = getattr(self, "example_frame", None)
+        if frame is None:
+            return
+        rect = self.document().documentLayout().frameBoundingRect(frame)
+        self.example.setGeometry(
+            round(rect.x()) + 18 - self.horizontalScrollBar().value(),
+            round(rect.y()) - self.verticalScrollBar().value(),
+            232,
+            self.example.sizeHint().height(),
+        )
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        super().resizeEvent(event)
+        frame = getattr(self, "example_frame", None)
+        if frame is not None:
+            fmt = frame.frameFormat()
+            position = (
+                QTextFrameFormat.Position.FloatRight if self.viewport().width() >= 500 else QTextFrameFormat.Position.InFlow
+            )
+            if fmt.position() != position:
+                fmt.setPosition(position)
+                frame.setFrameFormat(fmt)
+        self._place_example()
+
+
 class GlossaryPage(QWidget):
     """Display definitions and links beside a searchable term list."""
 
@@ -154,7 +209,9 @@ class GlossaryPage(QWidget):
         sidebar = QWidget()
         sidebar.setMaximumWidth(260)
         sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setContentsMargins(0, 0, 0, 0)
         self.search = QLineEdit()
+        self.search.setObjectName("glossarySearch")
         self.search.setProperty("field", True)
         self.search.setPlaceholderText("Search terms…")
         self.search.setAccessibleName("Search glossary terms")
@@ -165,6 +222,7 @@ class GlossaryPage(QWidget):
         )
         self.terms = QListWidget()
         self.terms.setObjectName("categories")
+        self.terms.setProperty("glossaryBox", True)
         self.terms.setSpacing(2)
         for term in sorted(TERMS):
             row = QListWidgetItem(term)
@@ -173,13 +231,17 @@ class GlossaryPage(QWidget):
         sidebar_layout.addWidget(self.search)
         sidebar_layout.addWidget(self.terms)
         layout.addWidget(sidebar)
-        self.definition = QTextBrowser()
+        self.definition = _DescriptionBrowser()
+        self.definition.setObjectName("glossaryDefinition")
+        self.definition.document().setDocumentMargin(14)
         self.definition.setOpenLinks(False)
         self.definition.setAccessibleName("Term definition and related activities")
         main = QVBoxLayout()
+        main.setContentsMargins(0, 0, 0, 0)
         main.addWidget(self.definition, 3)
-        demo = QHBoxLayout()
+        demo = QVBoxLayout()
         self.example_staff = StaffWidget(gap=7, margin=4, compact=True)
+        self.example_staff.setFixedWidth(210)
         demo.addWidget(self.example_staff, 1)
         demo_controls = QVBoxLayout()
         self.example_label = QLabel()
@@ -192,15 +254,18 @@ class GlossaryPage(QWidget):
         demo_controls.addWidget(hear)
         demo.addLayout(demo_controls)
         self.demo = QWidget()
+        demo.setContentsMargins(0, 0, 0, 0)
         self.demo.setLayout(demo)
-        main.addWidget(self.demo)
+        self.definition.set_example(self.demo)
         self.activity_switch = SegmentedControl(["Exercises", "Lessons"])
         self.activity_switch.chosen.connect(self._show_activities)
         main.addWidget(self.activity_switch, alignment=Qt.AlignmentFlag.AlignLeft)
         self.activity_body = QWidget()
         self.activity_tiles = QGridLayout(self.activity_body)
+        self.activity_tiles.setContentsMargins(14, 14, 14, 14)
         self.activity_tiles.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         scroll = QScrollArea()
+        scroll.setObjectName("glossaryActivities")
         scroll.setWidgetResizable(True)
         scroll.setWidget(self.activity_body)
         main.addWidget(scroll, 2)
@@ -229,11 +294,14 @@ class GlossaryPage(QWidget):
             self._show_activities(self.activity_switch.current())
             return
         self.definition.setHtml(
-            f"<h2>{item.text().capitalize()}</h2><p>{TERMS[item.text()][0]}</p>{DETAILS[item.text()]}",
+            f"<h2>{item.text()}</h2><p>{TERMS[item.text()][0]}</p>{DETAILS[item.text()]}",
         )
         self._example_index = 0
-        self.demo.show()
-        self._update_example()
+        if item.text() in EXAMPLES:
+            self._update_example()
+            self.definition.reserve_example()
+        else:
+            self.demo.hide()
         self._show_activities(self.activity_switch.current())
 
     def _show_activities(self, mode: int) -> None:

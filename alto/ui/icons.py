@@ -386,10 +386,13 @@ NAVIGATION_CLOSE = (
     + '<path d="m17 9-3 3 3 3" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
-# Exercises: a checklist.
+# Exercises: Iconoir music-double-note with filled note heads (MIT; see THIRD_PARTY_NOTICES.md).
 EXERCISES = (
-    '<path d="M4 6.5l1.6 1.6L8.4 5M4 12.5l1.6 1.6L8.4 11M4 18.5l1.6 1.6L8.4 17M12.5 7h8M12.5 13h8M12.5 19h8" '
-    'fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+    '<g stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+    '<path d="M20 14V3L9 5V16" fill="none"/>'
+    '<path d="M17 19H18C19.1046 19 20 18.1046 20 17V14H17C15.8954 14 15 14.8954 15 16V17C15 18.1046 15.8954 19 17 19Z" fill="COLOR"/>'
+    '<path d="M6 21H7C8.10457 21 9 20.1046 9 19V16H6C4.89543 16 4 16.8954 4 18V19C4 20.1046 4.89543 21 6 21Z" fill="COLOR"/>'
+    "</g>"
 )
 
 # Lessons: a mortarboard.
@@ -451,6 +454,14 @@ EXERCISE_CLEFS = f'<path transform="translate(6.07 3.00) scale(0.18)" d="{_CLEF_
 
 # Menu icons (24x24, outlined like the others): restart and the application's settings.
 _MENU = 'fill="none" stroke="COLOR" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
+CODE = f'<path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16" {_MENU}/>'
+# Iconoir GitHub icon; MIT licence and attribution in THIRD_PARTY_NOTICES.md.
+GITHUB = (
+    '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+    '<path d="M16 22.0268V19.1568C16.0375 18.68 15.9731 18.2006 15.811 17.7506C15.6489 17.3006 15.3929 16.8902 15.06 16.5468C18.2 16.1968 21.5 15.0068 21.5 9.54679C21.4997 8.15062 20.9627 6.80799 20 5.79679C20.4558 4.5753 20.4236 3.22514 19.91 2.02679C19.91 2.02679 18.73 1.67679 16 3.50679C13.708 2.88561 11.292 2.88561 8.99999 3.50679C6.26999 1.67679 5.08999 2.02679 5.08999 2.02679C4.57636 3.22514 4.54413 4.5753 4.99999 5.79679C4.03011 6.81549 3.49251 8.17026 3.49999 9.57679C3.49999 14.9968 6.79998 16.1868 9.93998 16.5768C9.61098 16.9168 9.35725 17.3222 9.19529 17.7667C9.03334 18.2112 8.96679 18.6849 8.99999 19.1568V22.0268"/>'
+    '<path d="M9 20.0267C6 20.9999 3.5 20.0267 2 17.0267"/></g>'
+)
+INFO = f'<circle cx="12" cy="12" r="9" {_MENU}/><path d="M12 11v6" {_MENU}/><circle cx="12" cy="7" r="1" fill="COLOR"/>'
 RESTART = f'<path d="M19 12a7 7 0 1 1-2.05-4.95M17.6 3.6v4h-4" {_MENU}/>'
 GEAR = (
     f'<circle cx="12" cy="12" r="3" {_MENU}/><circle cx="12" cy="12" r="6.4" {_MENU}/>'

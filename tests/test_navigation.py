@@ -23,6 +23,7 @@ from alto.learning import (
     Learner,
 )
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.glossary import GlossaryPage
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
 
@@ -578,3 +579,28 @@ def test_standalone_search_keeps_its_focus_highlighting(window: MainWindow) -> N
     assert [card.accessibleName().split(",")[0] for card in window.home.cards if not card.isHidden()] == [
         "Keyboard Identification",
     ]
+
+
+def test_glossary_location_survives_theme_rebuild(window: MainWindow) -> None:
+    """Keep the glossary and its selected content when applying a theme."""
+    window.open_exercise(NoteNames)
+    window.open_glossary()
+    page = window.stack.currentWidget()
+    assert isinstance(page, GlossaryPage)
+    page.search.setText("octave")
+    for row in range(page.terms.count()):
+        if page.terms.item(row).text() == "octave register":
+            page.terms.setCurrentRow(row)
+            break
+    page.activity_switch.set_current(1)
+    page._show_activities(1)
+    page._next_example()
+    window.rebuild()
+    restored = window.stack.currentWidget()
+    assert isinstance(restored, GlossaryPage)
+    assert restored.search.text() == "octave"
+    assert restored.terms.currentItem().text() == "octave register"
+    assert restored.activity_switch.current() == 1
+    assert restored._example_index == 1
+    window.close_overlay()
+    assert isinstance(window.stack.currentWidget(), ExerciseView)

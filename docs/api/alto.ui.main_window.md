@@ -203,6 +203,14 @@ Show an exercise.
 'Key Signature Identification'
 ```
 
+### MainWindow.show_about
+
+```python
+def show_about() -> None
+```
+
+Show the application name, installed version and purpose.
+
 ### MainWindow.open_settings
 
 ```python

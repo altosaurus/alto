@@ -1133,7 +1133,7 @@ class ExerciseView(QWidget):
         """
         end, start = QColor(target), QColor("black")
         anim = QVariantAnimation(self)
-        anim.setDuration(350)
+        anim.setDuration(180)
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
 
@@ -1291,7 +1291,7 @@ class ExerciseView(QWidget):
         """
         end, start = QColor(target), QColor("black")
         anim = QVariantAnimation(self)
-        anim.setDuration(350)
+        anim.setDuration(180)
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
         anim.valueChanged.connect(lambda t: self._input().set_note_color(blend(start, b=end, t=t)))
@@ -1333,7 +1333,7 @@ class ExerciseView(QWidget):
             self._flash_note("#2e7d32")
             if self.exercise.has_sound:
                 sounds.play_notes([[q.construct]])
-            self._advance.start(1200)
+            self._advance.start(600)
         else:
             self.missed = True
             self._busy = True
@@ -1356,7 +1356,7 @@ class ExerciseView(QWidget):
                 self.input_staff.refresh_preview()  # the note at the caret comes back, for the keyboard
                 self._show_placement_rows()
 
-            QTimer.singleShot(900, retry)
+            QTimer.singleShot(450, retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -1739,7 +1739,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(900, retry)
+            QTimer.singleShot(450, retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -1852,7 +1852,7 @@ class ExerciseView(QWidget):
         self._flash_clef("#2e7d32" if ok else "#c62828")
         if ok:
             self.answered = True
-            self._advance.start(1200)
+            self._advance.start(600)
         else:
             self.missed = True
             self._busy = True
@@ -1873,7 +1873,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(900, retry)
+            QTimer.singleShot(450, retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -1896,7 +1896,7 @@ class ExerciseView(QWidget):
         """
         end, start = QColor(target), QColor("black")
         anim = QVariantAnimation(self)
-        anim.setDuration(350)
+        anim.setDuration(180)
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
         anim.valueChanged.connect(lambda t: self.clef_input.set_clef_color(blend(start, b=end, t=t)))
@@ -1958,7 +1958,7 @@ class ExerciseView(QWidget):
         self._flash_fork("#2e7d32" if ok else "#c62828")
         if ok:
             self.answered = True
-            self._advance.start(1200)
+            self._advance.start(600)
         else:
             self.missed = True
             self._busy = True
@@ -1980,7 +1980,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(900, retry)
+            QTimer.singleShot(450, retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -2003,7 +2003,7 @@ class ExerciseView(QWidget):
         """
         end, start = QColor(target), self.palette().color(QPalette.ColorRole.Highlight)
         anim = QVariantAnimation(self)
-        anim.setDuration(350)
+        anim.setDuration(180)
         anim.setStartValue(0.0)
         anim.setEndValue(1.0)
         anim.valueChanged.connect(lambda t: self.fork.set_marker_color(blend(start, b=end, t=t)))
@@ -2152,7 +2152,7 @@ class ExerciseView(QWidget):
             self._pending = {}
             self._busy = False
 
-        QTimer.singleShot(700, reset)
+        QTimer.singleShot(400, reset)
 
     def submit(
         self,
@@ -2231,7 +2231,7 @@ class ExerciseView(QWidget):
             else:
                 sounds.play_correct(self.streak)
             if not identified_scale:
-                self._advance.start(1200)
+                self._advance.start(600)
         else:
             self.missed = True
             button.setEnabled(False)

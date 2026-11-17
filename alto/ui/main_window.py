@@ -23,13 +23,18 @@ from PySide6.QtCore import (
     QProcess,
     QSize,
     Qt,
+    QTimer,
+    QUrl,
     QVariantAnimation,
 )
 from PySide6.QtGui import (
     QCloseEvent,
+    QDesktopServices,
     QGuiApplication,
     QKeySequence,
+    QMoveEvent,
     QPalette,
+    QShowEvent,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -43,6 +48,7 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QMainWindow,
     QMenu,
+    QMessageBox,
     QSplitter,
     QStackedWidget,
     QToolButton,
@@ -173,10 +179,41 @@ class _PageState:
     active: str = "empty"
     lesson_parent: str = "home"
     overlay: str | None = None
+    glossary: tuple[str, str, int, int, int] | None = None
     mode: str = "exercises"
     pane: bool = False
     sidebar: bool = True
     search: str = ""
+
+
+class _AdjacentSubmenu(QMenu):
+    """Place the popup flush with the parent menu's outer edge."""
+
+    def showEvent(self, event: QShowEvent) -> None:
+        super().showEvent(event)
+        self._align_edge()
+        # Qt/platform popup placement can run after showEvent returns.
+        QTimer.singleShot(0, self._align_edge)
+
+    def moveEvent(self, event: QMoveEvent) -> None:
+        super().moveEvent(event)
+        if self.isVisible():
+            self._align_edge()
+
+    def _align_edge(self) -> None:
+        if not self.isVisible():
+            return
+        parent = self.parentWidget()
+        if not isinstance(parent, QMenu):
+            return
+        edge = parent.frameGeometry()
+        x = edge.x() + edge.width()
+        screen = parent.screen().availableGeometry()
+        if x + self.width() > screen.x() + screen.width():
+            x = edge.x() - self.width()
+        offset = x - self.frameGeometry().x()
+        if offset:
+            self.move(self.x() + offset, self.y())
 
 
 class MainWindow(QMainWindow):
@@ -370,6 +407,22 @@ class MainWindow(QMainWindow):
         self.update_action = menu.addAction(svg_icon(icons.UPDATE, color=glyph, size=18), "Check for updates…")
         self.update_action.setToolTip("See whether a newer Alto is available, and install it")
         self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
+        help_menu = _AdjacentSubmenu("Help", menu)
+        help_menu.setIcon(svg_icon(icons.HELP, color=glyph, size=18))
+        menu.addMenu(help_menu)
+        help_menu.setObjectName("appMenu")
+        help_menu.setWindowFlags(
+            help_menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint,
+        )
+        help_menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        documentation = help_menu.addAction(svg_icon(icons.BOOK, color=glyph, size=18), "Documentation")
+        documentation.triggered.connect(
+            lambda: QDesktopServices.openUrl(QUrl("https://altosaurus.github.io/alto/getting-started/")),
+        )
+        github = help_menu.addAction(svg_icon(icons.GITHUB, color=glyph, size=18), "GitHub")
+        github.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto")))
+        about = help_menu.addAction(svg_icon(icons.INFO, color=glyph, size=18), "About")
+        about.triggered.connect(self.show_about)
         menu.addSeparator()
         restart = menu.addAction(svg_icon(icons.RESTART, color=glyph, size=18), "Restart")
         restart.setShortcut(QKeySequence("Ctrl+R"))
@@ -855,6 +908,15 @@ class MainWindow(QMainWindow):
         self._drop(old)
         view.setFocus()
 
+    def show_about(self) -> None:
+        """Show the application name, installed version and purpose."""
+        QMessageBox.about(
+            self,
+            "About Alto",
+            f"<h3>Alto {updates.installed_version()}</h3>"
+            "<p>Learn and practise music theory with interactive exercises and lessons.</p>",
+        )
+
     def open_settings(self) -> None:
         """
         Open the application settings without blocking the window, or bring them forward if they are already open.
@@ -993,6 +1055,17 @@ class MainWindow(QMainWindow):
             if isinstance(self._overlay, StatsPage)
             else "database"
             if isinstance(self._overlay, DatabasePage)
+            else "glossary"
+            if isinstance(self._overlay, GlossaryPage)
+            else None,
+            glossary=(
+                self._overlay.search.text(),
+                self._overlay.terms.currentItem().text() if self._overlay.terms.currentItem() else "",
+                self._overlay.activity_switch.current(),
+                getattr(self._overlay, "_example_index", 0),
+                self._overlay.definition.verticalScrollBar().value(),
+            )
+            if isinstance(self._overlay, GlossaryPage)
             else None,
             mode=self.home.mode,
             pane=self._pane_view,
@@ -1041,6 +1114,22 @@ class MainWindow(QMainWindow):
             self.open_stats()
         elif state.overlay == "database":
             self.open_database()
+        elif state.overlay == "glossary":
+            self.open_glossary()
+            if isinstance(self._overlay, GlossaryPage) and state.glossary is not None:
+                page = self._overlay
+                search, term, mode, example, scroll = state.glossary
+                page.search.setText(search)
+                for row in range(page.terms.count()):
+                    if page.terms.item(row).text() == term:
+                        page.terms.setCurrentRow(row)
+                        break
+                page.activity_switch.set_current(mode)
+                page._show_activities(mode)
+                page._example_index = example
+                if term:
+                    page._update_example()
+                QTimer.singleShot(0, lambda: page.definition.verticalScrollBar().setValue(scroll))
 
     def _show_profile(self) -> None:
         """
