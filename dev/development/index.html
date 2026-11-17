@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -554,7 +563,7 @@ change that adds code should add a test for it; <code class="language-plaintext 
 <h3 id="which-checks-run-for-which-change">Which checks run for which change</h3>
 
 <p>Neither the workflows nor the pre-push hook run everything for every change. <code class="language-plaintext highlighter-rouge">scripts/changed_tests.py</code> looks at the files that
-changed and decides, and anything it does not recognise is a reason to run everything:</p>
+changed and decides, and anything it does not recognize is a reason to run everything:</p>
 
 <ul>
   <li><strong>Only docs</strong> (<code class="language-plaintext highlighter-rouge">docs/**</code> and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
@@ -747,7 +756,7 @@ only the next statement.</li>
 function, and say why when it is not obvious. A few things that are not obvious:</p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">PyUnusedLocal</code> is not honoured for the parameters of a fake that has to match what it replaces; delete them explicitly
+  <li><code class="language-plaintext highlighter-rouge">PyUnusedLocal</code> is not honored for the parameters of a fake that has to match what it replaces; delete them explicitly
 (<code class="language-plaintext highlighter-rouge">del volume, kwargs</code>) instead.</li>
   <li>Read saved text with <code class="language-plaintext highlighter-rouge">text_value</code> in <code class="language-plaintext highlighter-rouge">alto/ui/store.py</code>, not <code class="language-plaintext highlighter-rouge">str(settings.value(...))</code>, which PyCharm flags and Pyright
 needs.</li>
@@ -794,27 +803,27 @@ the terms. This is what the summary in the Sound settings shows.</li>
   <li>Credit the recordings in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> and the folder’s <code class="language-plaintext highlighter-rouge">SOURCE.txt</code>.</li>
 </ol>
 
-<p>Only add recordings whose licence allows redistribution.</p>
+<p>Only add recordings whose license allows redistribution.</p>
 
 <h2 id="adding-a-notation-font">Adding a notation font</h2>
 
 <p>Alto draws notes with fonts that follow the <a href="https://www.smufl.org/">SMuFL</a> standard.</p>
 
 <ol>
-  <li>Put the font file and its licence in <code class="language-plaintext highlighter-rouge">alto/assets/fonts/</code>.</li>
+  <li>Put the font file and its license in <code class="language-plaintext highlighter-rouge">alto/assets/fonts/</code>.</li>
   <li>Add its stem anchors and engraving defaults to <code class="language-plaintext highlighter-rouge">engraving.json</code>, read from the font’s SMuFL metadata file.</li>
   <li>Register the file name in <code class="language-plaintext highlighter-rouge">_FILES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/engraving.py</code>.</li>
   <li>Add a <code class="language-plaintext highlighter-rouge">NotationStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/notation.py</code>.</li>
   <li>Record the font in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>.</li>
 </ol>
 
-<p>Only add fonts whose licence allows redistribution, such as the SIL Open Font License.</p>
+<p>Only add fonts whose license allows redistribution, such as the SIL Open Font License.</p>
 
 <h2 id="adding-a-keyboard-style">Adding a keyboard style</h2>
 
-<p>Add a <code class="language-plaintext highlighter-rouge">KeyboardStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/keyboard_styles.py</code>: the colours of the naturals and sharps, and any extras such as
+<p>Add a <code class="language-plaintext highlighter-rouge">KeyboardStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/keyboard_styles.py</code>: the colors of the naturals and sharps, and any extras such as
 a case, felt, bone caps or stop knobs. The settings page, the keyboard and the range picker all read from that list, so nothing
-else needs changing. Add a row to the table in <code class="language-plaintext highlighter-rouge">docs/settings.md</code>. The colours named after materials in the builder are <code class="language-plaintext highlighter-rouge">MATERIALS</code> in the same file.</p>
+else needs to be changed. Add a row to the table in <code class="language-plaintext highlighter-rouge">docs/settings.md</code>. The colors named after materials in the builder are <code class="language-plaintext highlighter-rouge">MATERIALS</code> in the same file.</p>
 
 <h2 id="versions-of-the-docs">Versions of the docs</h2>
 
@@ -963,7 +972,7 @@ prints the version of the copy you run.</p>
 
 <p>The script makes a clean virtual environment under <code class="language-plaintext highlighter-rouge">.package-build/</code>, installs Alto and PyInstaller (the <code class="language-plaintext highlighter-rouge">package</code> extra in
 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>) in it, freezes Alto with <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code>, and packs the result with <code class="language-plaintext highlighter-rouge">packaging/linux/install.sh</code>, a
-README, the licence and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
+README, the license and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
 frozen program says <code class="language-plaintext highlighter-rouge">Alto &lt;version&gt;</code> and that it opens its window (under Qt’s offscreen platform, with its own data folder, so a
 real profile is never touched).</p>
 
@@ -1096,7 +1105,7 @@ use, and which exercise you were in.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1144,8 +1153,8 @@ use, and which exercise you were in.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

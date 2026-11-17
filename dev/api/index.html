@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -509,7 +518,7 @@
     </tr>
     <tr>
       <td><a href="alto.circle_schemes/">alto.circle_schemes</a></td>
-      <td>The colour schemes of the circle of fifths: the presets, and the schemes a user makes.</td>
+      <td>The color schemes of the circle of fifths: the presets, and the schemes a user makes.</td>
     </tr>
     <tr>
       <td><a href="alto.instrument_info/">alto.instrument_info</a></td>
@@ -663,6 +672,10 @@
   </thead>
   <tbody>
     <tr>
+      <td><a href="alto.ui.answer_bank/">alto.ui.answer_bank</a></td>
+      <td>A responsive, scrollable grid for large banks of answer buttons.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.app_settings/">alto.ui.app_settings</a></td>
       <td>The application-wide settings dialog.</td>
     </tr>
@@ -672,19 +685,19 @@
     </tr>
     <tr>
       <td><a href="alto.ui.charts/">alto.ui.charts</a></td>
-      <td>Small charts drawn with QPainter, in the application’s theme colours.</td>
+      <td>Small charts drawn with QPainter, in the application’s theme colors.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.circle/">alto.ui.circle</a></td>
       <td>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</td>
     </tr>
     <tr>
-      <td><a href="alto.ui.circle_colours/">alto.ui.circle_colours</a></td>
-      <td>The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.</td>
+      <td><a href="alto.ui.circle_colors/">alto.ui.circle_colors</a></td>
+      <td>The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.colors/">alto.ui.colors</a></td>
-      <td>Mixing colours. The interface blends palette colours to get its soft tints and highlights.</td>
+      <td>Mixing colors. The interface blends palette colors to get its soft tints and highlights.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.database_page/">alto.ui.database_page</a></td>
@@ -693,6 +706,10 @@
     <tr>
       <td><a href="alto.ui.degree_text/">alto.ui.degree_text</a></td>
       <td>Draw scale-degree carets above their digits without relying on font-specific combining accents.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.dropdown/">alto.ui.dropdown</a></td>
+      <td>Shared dropdown fields with rounded popup windows.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.engraving/">alto.ui.engraving</a></td>
@@ -712,11 +729,15 @@
     </tr>
     <tr>
       <td><a href="alto.ui.icons/">alto.ui.icons</a></td>
-      <td>Small monochrome icons drawn from SVG, tinted with the current theme’s text colour.</td>
+      <td>Small monochrome icons drawn from SVG, tinted with the current theme’s text color.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.instrument_picker/">alto.ui.instrument_picker</a></td>
       <td>Choosing the instrument that plays notes, with a summary of what each one is made from.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.interval_range/">alto.ui.interval_range</a></td>
+      <td>A two-handle slider for selecting interval distances without changing the keyboard range.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.key_fork/">alto.ui.key_fork</a></td>
@@ -728,7 +749,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.keyboard_styles/">alto.ui.keyboard_styles</a></td>
-      <td>Keyboard styles: the colours and materials the on-screen piano keys are drawn in.</td>
+      <td>Keyboard styles: the colors and materials the on-screen piano keys are drawn in.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.lesson/">alto.ui.lesson</a></td>
@@ -760,7 +781,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.profile_dialog/">alto.ui.profile_dialog</a></td>
-      <td>Choosing who is practising. There is no password: a profile is just a name that keeps its own history.</td>
+      <td>Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.question_preview/">alto.ui.question_preview</a></td>
@@ -800,7 +821,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.theme/">alto.ui.theme</a></td>
-      <td>The colour theme: follow the system, force light or dark, or use a theme with colours of its own.</td>
+      <td>The color theme: follow the system, force light or dark, or use a theme with colors of its own.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.theme_cards/">alto.ui.theme_cards</a></td>
@@ -808,7 +829,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.theme_editor/">alto.ui.theme_editor</a></td>
-      <td>The editor for a theme of the user’s own: a name, and a colour for every part of its light and dark versions.</td>
+      <td>The editor for a theme of the user’s own: a name, and a color for every part of its light and dark versions.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.transition_preview/">alto.ui.transition_preview</a></td>
@@ -930,7 +951,7 @@
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -978,8 +999,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

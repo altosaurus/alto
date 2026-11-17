@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -524,7 +533,7 @@ explanation that ties them together.</p>
       <td><a href="/alto/dev/guide/qt/">Qt and PySide6</a></td>
     </tr>
     <tr>
-      <td>Change how the program looks (colours, themes, stylesheets, icons, custom widgets)</td>
+      <td>Change how the program looks (colors, themes, stylesheets, icons, custom widgets)</td>
       <td><a href="/alto/dev/guide/styling/">Styling beyond QtWidgets</a></td>
     </tr>
     <tr>
@@ -621,7 +630,7 @@ from first principles and ends with a reading list.</li>
 
 <ol>
   <li>Find the code. Search the <a href="/alto/dev/api/">API reference</a> or run <code class="language-plaintext highlighter-rouge">grep -rn "name" alto/</code>.</li>
-  <li>Read the docstring and its example. Open a Python shell and run the example with small changes until the behaviour is clear.</li>
+  <li>Read the docstring and its example. Open a Python shell and run the example with small changes until the behavior is clear.</li>
   <li>Write a failing test for the change first, in <code class="language-plaintext highlighter-rouge">tests/</code>. It tells you when you are done.</li>
   <li>Make the change. Run <code class="language-plaintext highlighter-rouge">pytest -x -q</code> often, since most mistakes show up in seconds.</li>
   <li>Run the full checks listed in <a href="/alto/dev/guide/orientation/">Getting oriented</a> before you commit.</li>
@@ -639,7 +648,7 @@ Property animation. Offscreen platform. Doctest. Fixture. Monkeypatch.</em></p>
 
 <h2 id="a-word-on-the-reading-lists">A word on the reading lists</h2>
 
-<p>Each chapter ends with further reading. They favour books, peer-reviewed papers, standards and official documentation over
+<p>Each chapter ends with further reading. They favor books, peer-reviewed papers, standards and official documentation over
 blog posts. Where a source is on the author’s own site (as the Stanford audio books are), it is there because it is the
 primary source. Web addresses change, so the lists give authors, titles, publishers and years, which are enough to find a
 book or paper even when a link has gone. Treat the addresses as hints.</p>
@@ -703,7 +712,7 @@ book or paper even when a link has gone. Treat the addresses as hints.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -751,8 +760,8 @@ book or paper even when a link has gone. Treat the addresses as hints.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

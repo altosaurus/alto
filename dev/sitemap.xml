@@ -61,6 +61,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.theory.scales/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.answer_bank/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.app_settings/</loc>
 </url>
 <url>
@@ -73,7 +76,7 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.circle/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.circle_colours/</loc>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.circle_colors/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.colors/</loc>
@@ -83,6 +86,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.degree_text/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.dropdown/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.engraving/</loc>
@@ -101,6 +107,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.instrument_picker/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.interval_range/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.key_fork/</loc>

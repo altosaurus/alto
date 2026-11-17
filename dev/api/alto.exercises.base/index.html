@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -517,6 +526,7 @@ a new exercise needs no new interface code.</p>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
     <span class="n">grid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">keyboard</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">keyboard_notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">key_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">keyboard_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">octaves</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
@@ -555,6 +565,7 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (single notes only). Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">grid</code> (<em>dict of str to tuple of (int, int) or None</em>): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard</code> (<em>Note or None</em>): A piano key to highlight, instead of drawing a staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keyboard_notes</code> (<em>list of Note</em>): Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key_staff</code> (<em>bool, default False</em>): Draw <code class="language-plaintext highlighter-rouge">key</code> as a small key-signature staff above the keyboard. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_range</code> (<em>tuple of (int, int) or None</em>): The keys (MIDI numbers, inclusive) the keyboard picture should show. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">octaves</code> (<em>list of str or None</em>): When set, the answer is a choice button plus one of these second-row buttons. Keyword-only.</li>
@@ -772,7 +783,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">item_key</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return a stable identity for the question, so the same one can be recognised when it comes round again.</p>
+<p>Return a stable identity for the question, so the same one can be recognized when it comes around again.</p>
 
 <p>It covers what is asked and where it is drawn, but not the note value or the order of the buttons.</p>
 
@@ -1225,7 +1236,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1273,8 +1284,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

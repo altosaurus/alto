@@ -4,7 +4,7 @@
 
 The links below are the latest release's docs. Older releases are under their version, such as /v0.0.0/, and /dev/ is the development version.
 
-- [Home](https://altosaurus.github.io/alto/latest/): what Alto is and what you can practise
+- [Home](https://altosaurus.github.io/alto/latest/): what Alto is and what you can practice
 - [Getting started](https://altosaurus.github.io/alto/latest/getting-started/): download, install, update and uninstall
 - [Exercises](https://altosaurus.github.io/alto/latest/exercises/): every exercise and its options
 - [Practice](https://altosaurus.github.io/alto/latest/practice/): how the spaced repetition schedule works

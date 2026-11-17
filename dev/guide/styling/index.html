@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -489,10 +498,10 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Styling beyond QtWidgets</h1>
-          <p>Out of the box, Qt widgets look like whatever platform they run on: grey rectangles on Windows, rounded and translucent on
+          <p>Out of the box, Qt widgets look like whatever platform they run on: gray rectangles on Windows, rounded and translucent on
 macOS. Alto wants one consistent look with rounded corners, soft highlights and a light and a dark theme, and some pieces
 (the staff, the keyboard, the switches, the charts) that no standard widget provides. This chapter explains the layers Qt gives
-you for appearance, which one Alto uses for what, and the colour and design ideas behind the choices.</p>
+you for appearance, which one Alto uses for what, and the color and design ideas behind the choices.</p>
 
 <h2 id="four-layers-of-appearance">Four layers of appearance</h2>
 
@@ -501,8 +510,8 @@ you for appearance, which one Alto uses for what, and the colour and design idea
 <ol>
   <li><strong>The style (<code class="language-plaintext highlighter-rouge">QStyle</code>).</strong> The object that knows how to draw every standard widget: a button, a scroll bar, a check box. On
 each platform Qt picks the native one. <em>Fusion</em> is a built-in cross-platform style that looks the same everywhere.</li>
-  <li><strong>The palette (<code class="language-plaintext highlighter-rouge">QPalette</code>).</strong> A table of named colours (<em>roles</em>) that the style draws with: <code class="language-plaintext highlighter-rouge">Window</code> (the background),
-<code class="language-plaintext highlighter-rouge">Base</code> (the background of lists and text boxes), <code class="language-plaintext highlighter-rouge">Text</code>, <code class="language-plaintext highlighter-rouge">Highlight</code> (the selection colour), <code class="language-plaintext highlighter-rouge">Mid</code>, <code class="language-plaintext highlighter-rouge">Midlight</code>, <code class="language-plaintext highlighter-rouge">Dark</code>, and
+  <li><strong>The palette (<code class="language-plaintext highlighter-rouge">QPalette</code>).</strong> A table of named colors (<em>roles</em>) that the style draws with: <code class="language-plaintext highlighter-rouge">Window</code> (the background),
+<code class="language-plaintext highlighter-rouge">Base</code> (the background of lists and text boxes), <code class="language-plaintext highlighter-rouge">Text</code>, <code class="language-plaintext highlighter-rouge">Highlight</code> (the selection color), <code class="language-plaintext highlighter-rouge">Mid</code>, <code class="language-plaintext highlighter-rouge">Midlight</code>, <code class="language-plaintext highlighter-rouge">Dark</code>, and
 so on. Each role has three states: active, inactive and disabled.</li>
   <li><strong>Style sheets (QSS).</strong> A subset of CSS that overrides how standard widgets are drawn: borders, radii, backgrounds, padding.</li>
   <li><strong>Custom painting.</strong> Overriding <code class="language-plaintext highlighter-rouge">paintEvent</code> and drawing the widget yourself with <code class="language-plaintext highlighter-rouge">QPainter</code>.</li>
@@ -521,7 +530,7 @@ so on. Each role has three states: active, inactive and disabled.</li>
   <tbody>
     <tr>
       <td>Light, dark or follow-the-system</td>
-      <td>Palette (through the colour scheme)</td>
+      <td>Palette (through the color scheme)</td>
       <td><code class="language-plaintext highlighter-rouge">alto/ui/theme.py</code></td>
     </tr>
     <tr>
@@ -535,16 +544,16 @@ so on. Each role has three states: active, inactive and disabled.</li>
       <td><code class="language-plaintext highlighter-rouge">settings_panel.py</code>, <code class="language-plaintext highlighter-rouge">app_settings.py</code>, <code class="language-plaintext highlighter-rouge">charts.py</code>, <code class="language-plaintext highlighter-rouge">staff.py</code>, <code class="language-plaintext highlighter-rouge">keyboard.py</code></td>
     </tr>
     <tr>
-      <td>Monochrome icons that match the text colour</td>
+      <td>Monochrome icons that match the text color</td>
       <td>SVG, tinted and rendered</td>
       <td><code class="language-plaintext highlighter-rouge">alto/ui/icons.py</code></td>
     </tr>
   </tbody>
 </table>
 
-<h2 id="themes-the-colour-scheme-and-the-palette">Themes: the colour scheme and the palette</h2>
+<h2 id="themes-the-color-scheme-and-the-palette">Themes: the color scheme and the palette</h2>
 
-<p>Since Qt 6.8 you can tell Qt which colour scheme to use: <code class="language-plaintext highlighter-rouge">QGuiApplication.styleHints().setColorScheme(Qt.ColorScheme.Dark)</code>.
+<p>Since Qt 6.8 you can tell Qt which color scheme to use: <code class="language-plaintext highlighter-rouge">QGuiApplication.styleHints().setColorScheme(Qt.ColorScheme.Dark)</code>.
 Qt then switches the palette. <code class="language-plaintext highlighter-rouge">Qt.ColorScheme.Unknown</code> means “follow the operating system”. <code class="language-plaintext highlighter-rouge">apply_theme</code> does exactly this,
 then builds the style sheet from the new palette:</p>
 
@@ -556,7 +565,7 @@ then builds the style sheet from the new palette:</p>
 
 <p>The chosen theme is saved (<code class="language-plaintext highlighter-rouge">ui/theme</code>) and applied again at start-up, before any window exists.</p>
 
-<p>The rule that makes theming work: <strong>take colours from the palette, never from a constant.</strong> A widget that paints with
+<p>The rule that makes theming work: <strong>take colors from the palette, never from a constant.</strong> A widget that paints with
 <code class="language-plaintext highlighter-rouge">palette.color(QPalette.ColorRole.Text)</code> is correct in both themes; one that paints with <code class="language-plaintext highlighter-rouge">QColor("black")</code> is correct in one.
 The staff is deliberately a white “paper” in both themes, because music reads best black on white; that is a design decision,
 not an oversight.</p>
@@ -566,7 +575,7 @@ not an oversight.</p>
 <p>QSS looks like CSS and mostly behaves like it, with differences that matter.</p>
 
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span>
-    <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="err">&lt;</span><span class="n">edge</span> <span class="n">colour</span><span class="err">&gt;</span><span class="p">;</span>
+    <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="err">&lt;</span><span class="n">edge</span> <span class="n">color</span><span class="err">&gt;</span><span class="p">;</span>
     <span class="nl">border-bottom-width</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>           <span class="c">/* a heavier lower edge lifts the button off the page */</span>
     <span class="nl">border-radius</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
     <span class="nl">padding</span><span class="p">:</span> <span class="m">6px</span> <span class="m">12px</span><span class="p">;</span>
@@ -592,7 +601,7 @@ checked, hover and disabled states too, as <code class="language-plaintext highl
 limited to <code class="language-plaintext highlighter-rouge">qlineargradient</code> and <code class="language-plaintext highlighter-rouge">qradialgradient</code>. For those, paint it yourself.</li>
 </ul>
 
-<p>Alto’s sheet is one Python string template in <code class="language-plaintext highlighter-rouge">alto/ui/style.py</code>, filled with <code class="language-plaintext highlighter-rouge">str.format</code> using colours computed from the
+<p>Alto’s sheet is one Python string template in <code class="language-plaintext highlighter-rouge">alto/ui/style.py</code>, filled with <code class="language-plaintext highlighter-rouge">str.format</code> using colors computed from the
 current palette:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="n">_TEMPLATE</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">RADIUS</span><span class="o">=</span><span class="n">RADIUS</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">dark</span><span class="p">,</span> <span class="n">accent</span><span class="o">=</span><span class="n">accent_c</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span> <span class="n">nav_hover</span><span class="o">=</span><span class="n">blend_name</span><span class="p">(</span><span class="n">window_c</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">text_c</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.07</span><span class="p">),</span> <span class="p">...)</span>
@@ -600,12 +609,12 @@ current palette:</p>
 
 <p>Because <code class="language-plaintext highlighter-rouge">.format</code> treats <code class="language-plaintext highlighter-rouge">{</code> and <code class="language-plaintext highlighter-rouge">}</code> as fields, every brace that is really CSS is doubled in the template. If you add a rule
 and get a <code class="language-plaintext highlighter-rouge">KeyError</code> or <code class="language-plaintext highlighter-rouge">IndexError</code>, you forgot to double a brace. The sheet is rebuilt on every theme change, since the
-colours come from the palette.</p>
+colors come from the palette.</p>
 
 <h2 id="painting-your-own-widgets">Painting your own widgets</h2>
 
 <p>When no sheet can do it, draw it. The <code class="language-plaintext highlighter-rouge">Switch</code> in <code class="language-plaintext highlighter-rouge">settings_panel.py</code> is a good small example: about thirty lines of
-<code class="language-plaintext highlighter-rouge">paintEvent</code> give a pill-shaped track whose colour is a blend between the “off” and “on” palette colours, and a white knob
+<code class="language-plaintext highlighter-rouge">paintEvent</code> give a pill-shaped track whose color is a blend between the “off” and “on” palette colors, and a white knob
 that slides.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">track</span> <span class="o">=</span> <span class="n">blend</span><span class="p">(</span><span class="n">off</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">on</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">_pos</span><span class="p">)</span>  <span class="c1"># _pos goes 0 -&gt; 1 while the knob slides
@@ -620,38 +629,38 @@ that slides.</p>
 <ul>
   <li><strong>State in numbers, drawing from numbers.</strong> The widget holds <code class="language-plaintext highlighter-rouge">_pos</code>, a float. Animation changes the number and calls
 <code class="language-plaintext highlighter-rouge">update()</code>. Painting reads the number. There is no separate “off look” and “on look”.</li>
-  <li><strong><code class="language-plaintext highlighter-rouge">blend(a, b=, t=)</code></strong> in <code class="language-plaintext highlighter-rouge">alto/ui/colors.py</code> mixes two colours linearly. It is the workhorse: hover tints, disabled states,
+  <li><strong><code class="language-plaintext highlighter-rouge">blend(a, b=, t=)</code></strong> in <code class="language-plaintext highlighter-rouge">alto/ui/colors.py</code> mixes two colors linearly. It is the workhorse: hover tints, disabled states,
 the fade on a right or wrong answer.</li>
   <li><strong>Read the palette inside <code class="language-plaintext highlighter-rouge">paintEvent</code>,</strong> not in <code class="language-plaintext highlighter-rouge">__init__</code>, so a theme change shows up on the next repaint.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">sizeHint()</code></strong> must be right, or layouts will squash the widget.</li>
   <li><strong>Keep drawing code free of side effects.</strong> <code class="language-plaintext highlighter-rouge">paintEvent</code> can be called at any time and as often as Qt likes.</li>
 </ul>
 
-<h2 id="colour-the-ideas-worth-knowing">Colour: the ideas worth knowing</h2>
+<h2 id="color-the-ideas-worth-knowing">Color: the ideas worth knowing</h2>
 
 <ul>
-  <li><strong>sRGB and gamma.</strong> Screen colours are stored in sRGB, which is not linear in light. Mixing two sRGB colours with plain
+  <li><strong>sRGB and gamma.</strong> Screen colors are stored in sRGB, which is not linear in light. Mixing two sRGB colors with plain
 arithmetic, as <code class="language-plaintext highlighter-rouge">blend</code> does, gives a result a little darker in the middle than a physically correct mix. For UI tints that is
 fine and common. For anything that must be perceptually even (a heat map), use a designed palette. See Poynton in the reading
 list.</li>
   <li><strong>Contrast.</strong> Text must be readable against its background. The WCAG guidelines define a contrast ratio from the relative
-luminance of two colours and ask for at least 4.5:1 for body text. When you add a colour, check it in both themes.</li>
-  <li><strong>Do not rely on colour alone.</strong> About one man in twelve cannot distinguish red from green. Alto marks right and wrong answers
+luminance of two colors and ask for at least 4.5:1 for body text. When you add a color, check it in both themes.</li>
+  <li><strong>Do not rely on color alone.</strong> About one man in twelve cannot distinguish red from green. Alto marks right and wrong answers
 with green and red flashes, and shows the explanation as text as well. If you add a chart
-that needs red against green to be read, add a second cue (position, a label, a pattern) or pick a colour-blind-safe pair
+that needs red against green to be read, add a second cue (position, a label, a pattern) or pick a color-blind-safe pair
 such as blue and orange.</li>
   <li><strong>Sequential palettes.</strong> The review heatmap uses one hue in steps of lightness, which reads as “more”. That is the right choice
 for ordered data. Cynthia Brewer’s ColorBrewer scheme names (sequential, diverging, qualitative) are the vocabulary.</li>
-  <li><strong>Alpha.</strong> A colour with transparency (<code class="language-plaintext highlighter-rouge">setAlpha(110)</code>) is the cheapest way to dim something, as <code class="language-plaintext highlighter-rouge">Switch</code> does when disabled.</li>
+  <li><strong>Alpha.</strong> A color with transparency (<code class="language-plaintext highlighter-rouge">setAlpha(110)</code>) is the cheapest way to dim something, as <code class="language-plaintext highlighter-rouge">Switch</code> does when disabled.</li>
 </ul>
 
 <h2 id="icons">Icons</h2>
 
 <p><code class="language-plaintext highlighter-rouge">alto/ui/icons.py</code> holds icons as snippets of SVG with the word <code class="language-plaintext highlighter-rouge">COLOR</code> where the fill goes. <code class="language-plaintext highlighter-rouge">svg_icon(inner, color=...)</code>
 replaces it, renders the SVG with <code class="language-plaintext highlighter-rouge">QSvgRenderer</code> into a pixmap twice the size, sets the <strong>device pixel ratio</strong> to 2 so it is
-sharp on a high-resolution screen, and returns a <code class="language-plaintext highlighter-rouge">QIcon</code>. Pass the text colour from the palette and the icon matches the theme.</p>
+sharp on a high-resolution screen, and returns a <code class="language-plaintext highlighter-rouge">QIcon</code>. Pass the text color from the palette and the icon matches the theme.</p>
 
-<p>Because the colour is baked into the pixmap when the icon is made, an icon does not change by itself when the theme changes.
+<p>Because the color is baked into the pixmap when the icon is made, an icon does not change by itself when the theme changes.
 That is why changing the theme builds a fresh <code class="language-plaintext highlighter-rouge">MainWindow</code> (<code class="language-plaintext highlighter-rouge">rebuild()</code>): it is simpler than finding and refreshing every
 icon, and a theme change is rare.</p>
 
@@ -671,7 +680,7 @@ if a font is missing on the machine, Qt substitutes one silently.</p>
   <li><strong>Elevation</strong> is the impression that a surface sits above another; Alto fakes it with the heavier lower border on buttons.
 <code class="language-plaintext highlighter-rouge">QGraphicsDropShadowEffect</code> makes real shadows but costs performance on every repaint.</li>
   <li><strong>Affordance</strong> is what a control’s appearance says about what you can do with it. A raised button invites pressing.</li>
-  <li><strong>Design tokens</strong> are named values (a radius, a spacing, an accent colour) used everywhere instead of literals. <code class="language-plaintext highlighter-rouge">RADIUS</code> in
+  <li><strong>Design tokens</strong> are named values (a radius, a spacing, an accent color) used everywhere instead of literals. <code class="language-plaintext highlighter-rouge">RADIUS</code> in
 <code class="language-plaintext highlighter-rouge">style.py</code> is one; changing it changes every corner.</li>
   <li><strong>Skeuomorphism and flat design</strong> are the two ends of a style spectrum. Alto sits in the middle: flat, with small cues.</li>
   <li><strong>A spacing scale</strong> (multiples of 4 or 8 pixels) keeps layouts feeling regular.</li>
@@ -687,7 +696,7 @@ toggle that sets <code class="language-plaintext highlighter-rouge">data-theme</
 <h2 id="a-checklist-for-a-new-themed-widget">A checklist for a new themed widget</h2>
 
 <ol>
-  <li>Take every colour from the palette or from <code class="language-plaintext highlighter-rouge">blend</code> of palette colours.</li>
+  <li>Take every color from the palette or from <code class="language-plaintext highlighter-rouge">blend</code> of palette colors.</li>
   <li>Paint in <code class="language-plaintext highlighter-rouge">paintEvent</code>; change state, then call <code class="language-plaintext highlighter-rouge">update()</code>.</li>
   <li>Set a correct <code class="language-plaintext highlighter-rouge">sizeHint</code>.</li>
   <li>Look at it in both themes, with the screenshot script or by running the app and switching.</li>
@@ -702,7 +711,7 @@ toggle that sets <code class="language-plaintext highlighter-rouge">data-theme</
   <li><em>Web Content Accessibility Guidelines (WCAG) 2.1</em>, World Wide Web Consortium Recommendation, w3.org/TR/WCAG21: the
 “Contrast (Minimum)” criterion, 1.4.3, and “Use of Color”, 1.4.1.</li>
   <li>Charles Poynton, <em>Digital Video and HD: Algorithms and Interfaces</em>, 2nd ed. (Morgan Kaufmann, 2012): gamma, luminance and
-colour spaces from the source.</li>
+color spaces from the source.</li>
   <li>Cynthia A. Brewer, <em>Designing Better Maps: A Guide for GIS Users</em> (Esri Press, 2005): the thinking behind ColorBrewer.</li>
   <li>Edward R. Tufte, <em>The Visual Display of Quantitative Information</em>, 2nd ed. (Graphics Press, 2001): charts, ink and clutter.</li>
   <li>Donald A. Norman, <em>The Design of Everyday Things</em>, revised ed. (Basic Books, 2013): affordances and feedback.</li>
@@ -782,7 +791,7 @@ colour spaces from the source.</li>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -830,8 +839,8 @@ colour spaces from the source.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

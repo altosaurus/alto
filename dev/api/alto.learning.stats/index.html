@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -547,7 +556,7 @@ Later attempts at the same showing show up as extra attempts per question, not a
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Return the percentage of questions in the period that were right first time.</p>
+<p>Return the percentage of questions in the period that were right on the first try.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -601,7 +610,7 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): The exercise’s class name.</li>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>int</em>): How many questions were answered. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">accuracy</code> (<em>float</em>): The percentage right first time. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accuracy</code> (<em>float</em>): The percentage right on the first try. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">median_seconds</code> (<em>float</em>): The typical time to a first answer, in seconds. Keyword-only.</li>
 </ul>
 
@@ -650,7 +659,7 @@ True
     <span class="n">attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">median_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">practice_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">days_practised</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">days_practiced</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'day'</span><span class="p">,</span>
     <span class="n">buckets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Bucket</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">by_exercise</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ExerciseStats</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
@@ -667,11 +676,11 @@ True
   <li><code class="language-plaintext highlighter-rouge">first_right</code> (<em>int, default 0</em>): How many were right on the first answer. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">attempts</code> (<em>int, default 0</em>): How many answers were given in all, including repeats. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">median_seconds</code> (<em>float or None</em>): The typical time to a first answer. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">practice_seconds</code> (<em>float, default 0.0</em>): Time spent practising, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">days_practised</code> (<em>int, default 0</em>): On how many different days there were answers. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">practice_seconds</code> (<em>float, default 0.0</em>): Time spent practicing, with a cap on each answer so leaving the app open does not inflate it. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">days_practiced</code> (<em>int, default 0</em>): On how many different days there were answers. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">granularity</code> (<em>str, default “day”</em>): The size of the chart periods: “hour”, “day”, “week” or “month”. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">buckets</code> (<em>list of Bucket</em>): One per period, oldest first. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">by_exercise</code> (<em>list of ExerciseStats</em>): One per exercise practised, sorted by name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">by_exercise</code> (<em>list of ExerciseStats</em>): One per exercise practiced, sorted by name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">hardest</code> (<em>list of HardQuestion</em>): The questions that need most practice. Keyword-only.</li>
 </ul>
 
@@ -689,7 +698,7 @@ True
 <span class="k">def</span> <span class="nf">accuracy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Return the percentage of questions that were right first time.</p>
+<p>Return the percentage of questions that were right on the first try.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -714,7 +723,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>float or None</em>: 1.0 if every question was answered right first time; None if no questions were answered.</li>
+  <li><em>float or None</em>: 1.0 if every question was answered right on the first try; None if no questions were answered.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1015,7 +1024,7 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1063,8 +1072,8 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

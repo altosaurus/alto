@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -514,7 +523,7 @@ is the reasoning.</p>
     </tr>
     <tr>
       <td><strong>Unit and widget tests</strong></td>
-      <td>wrong behaviour</td>
+      <td>wrong behavior</td>
       <td><code class="language-plaintext highlighter-rouge">tests/</code></td>
       <td>with <code class="language-plaintext highlighter-rouge">pytest</code></td>
     </tr>
@@ -583,7 +592,7 @@ leftover widgets so Python’s exit does not crash (see <a href="/alto/dev/guide
   <li><strong><code class="language-plaintext highlighter-rouge">tests/conftest.py</code></strong> serves the tests: the same isolation, a session-wide <code class="language-plaintext highlighter-rouge">app</code> fixture, and an automatic fixture that, around
 every test, resets the exercise settings to their defaults, resets the keyboard and notation styles, clears the saved settings,
 turns sound off, closes every window and closes every database a test left open. That is why tests do not affect each other:
-each starts from the same state. <code class="language-plaintext highlighter-rouge">practised_learner</code> builds a learner with months of made-up answers for tests that need
+each starts from the same state. <code class="language-plaintext highlighter-rouge">practiced_learner</code> builds a learner with months of made-up answers for tests that need
 history.</li>
 </ul>
 
@@ -605,7 +614,7 @@ play a sound or open a real dialog.</li>
   <li>Write it so that it fails first. A test that has never failed has not been shown to test anything.</li>
   <li>One reason to fail. If it asserts five unrelated things, you cannot tell which broke.</li>
   <li>Seed every random source. A flaky test teaches people to ignore red.</li>
-  <li>Do not test private details if a public behaviour says the same thing. The exceptions are private helpers that are hard to
+  <li>Do not test private details if a public behavior says the same thing. The exceptions are private helpers that are hard to
 reach through the public interface (the animations’ final states, for example).</li>
   <li>Keep durations short: <code class="language-plaintext highlighter-rouge">QTest.qWait</code> costs real time.</li>
 </ol>
@@ -683,7 +692,7 @@ MINOR.</li>
   <li><strong>Migrations.</strong> If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
 copy <code class="language-plaintext highlighter-rouge">alto.db</code> first.</li>
   <li><strong>Regenerate</strong> screenshots and the API pages, and check <a href="/alto/dev/data/">Your data</a> is still true.</li>
-  <li><strong>Update the licence notices</strong> in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> if you added fonts or recordings, and check their licences allow
+  <li><strong>Update the license notices</strong> in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> if you added fonts or recordings, and check their licenses allow
 redistribution.</li>
   <li><strong>Build</strong> the package: <code class="language-plaintext highlighter-rouge">python -m pip install build</code> then <code class="language-plaintext highlighter-rouge">python -m build</code> produces a source distribution and a wheel in <code class="language-plaintext highlighter-rouge">dist/</code>.
 Open the wheel (it is a zip) and check that the fonts and recordings are inside; <code class="language-plaintext highlighter-rouge">pyproject.toml</code> lists them under
@@ -806,7 +815,7 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -854,8 +863,8 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

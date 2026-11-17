@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -499,11 +508,11 @@ from going wrong, and the design rules that decide how long and in what manner t
 <p>An animation changes a value over time. Everything else follows from that sentence.</p>
 
 <ul>
-  <li>Pick a <strong>value</strong> that describes the look: a number from 0 to 1, a position, a width, a colour.</li>
+  <li>Pick a <strong>value</strong> that describes the look: a number from 0 to 1, a position, a width, a color.</li>
   <li>Pick a <strong>start</strong> and an <strong>end</strong> and a <strong>duration</strong>.</li>
   <li>At each tick Qt computes where the value is on its way (a number between the start and the end, shaped by an <strong>easing
 curve</strong>) and hands it to you.</li>
-  <li>You apply it: move something, resize it, set a colour, call <code class="language-plaintext highlighter-rouge">update()</code> and repaint with it.</li>
+  <li>You apply it: move something, resize it, set a color, call <code class="language-plaintext highlighter-rouge">update()</code> and repaint with it.</li>
 </ul>
 
 <p>A screen refreshes about 60 times a second, so a 200 ms animation is roughly twelve frames. Qt drives the ticks from its
@@ -522,7 +531,7 @@ event loop, which means they stop if you block the loop. That is why the first r
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">QVariantAnimation</code></td>
-      <td>Animates <em>any</em> value (a float, a colour, a point) and calls a function with each value: <code class="language-plaintext highlighter-rouge">valueChanged</code>. The general tool.</td>
+      <td>Animates <em>any</em> value (a float, a color, a point) and calls a function with each value: <code class="language-plaintext highlighter-rouge">valueChanged</code>. The general tool.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">QPropertyAnimation</code></td>
@@ -560,7 +569,7 @@ which Qt’s set is based on.</p>
 
 <p>Rules of thumb that most design systems agree on: use ease-<strong>out</strong> for things <em>entering</em> or responding to the user (they arrive
 and settle); ease-<strong>in</strong> for things <em>leaving</em> (they accelerate away); ease-<strong>in-out</strong> for things that move from one place to
-another on screen; and <strong>linear</strong> only for colour fades, rotations and progress bars, where no physical object is implied.</p>
+another on screen; and <strong>linear</strong> only for color fades, rotations and progress bars, where no physical object is implied.</p>
 
 <h2 id="altos-animations-one-at-a-time">Alto’s animations, one at a time</h2>
 
@@ -598,7 +607,7 @@ and the final state is set in <code class="language-plaintext highlighter-rouge"
 
 <p>The exercise’s settings pane opens by animating <code class="language-plaintext highlighter-rouge">maximumWidth</code> of the pane from 0 to <code class="language-plaintext highlighter-rouge">PANE_WIDTH</code> (<code class="language-plaintext highlighter-rouge">QPropertyAnimation(self.pane,
 b"maximumWidth", self)</code>, 220 ms, <code class="language-plaintext highlighter-rouge">OutCubic</code>). The layout does the rest: as the pane’s allowed width grows, the layout gives it
-the room and shrinks its neighbour. This is a common Qt trick: <strong>animate a constraint, not a position</strong>, and let the layout
+the room and shrinks its neighbor. This is a common Qt trick: <strong>animate a constraint, not a position</strong>, and let the layout
 move everything. The pane is hidden when it finishes at zero (<code class="language-plaintext highlighter-rouge">_pane_settled</code>) so it takes no space and cannot be tabbed into.</p>
 
 <h3 id="the-sidebar-animate-the-splitter">The sidebar: animate the splitter</h3>
@@ -616,14 +625,14 @@ clicking the toggle in the middle of a slide reverses smoothly instead of jumpin
 <h3 id="the-switch-knob-animate-a-number-paint-from-it">The switch knob: animate a number, paint from it</h3>
 
 <p><code class="language-plaintext highlighter-rouge">Switch</code> (also in <code class="language-plaintext highlighter-rouge">settings_panel.py</code>) holds a float <code class="language-plaintext highlighter-rouge">_pos</code> between 0 and 1. A <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> of 140 ms moves <code class="language-plaintext highlighter-rouge">_pos</code>, and
-each tick calls <code class="language-plaintext highlighter-rouge">update()</code>. <code class="language-plaintext highlighter-rouge">paintEvent</code> draws the track colour as <code class="language-plaintext highlighter-rouge">blend(off, b=on, t=self._pos)</code> and the knob at
-<code class="language-plaintext highlighter-rouge">margin + r + _pos * travel</code>. One number drives both the colour and the position, so they cannot disagree. The class
+each tick calls <code class="language-plaintext highlighter-rouge">update()</code>. <code class="language-plaintext highlighter-rouge">paintEvent</code> draws the track color as <code class="language-plaintext highlighter-rouge">blend(off, b=on, t=self._pos)</code> and the knob at
+<code class="language-plaintext highlighter-rouge">margin + r + _pos * travel</code>. One number drives both the color and the position, so they cannot disagree. The class
 <code class="language-plaintext highlighter-rouge">setChecked</code> skips the animation (<strong>“no animation when set programmatically”</strong>) so that loading a setting at start-up does not
 make every switch slide.</p>
 
-<h3 id="the-rightwrong-flash-animate-a-colour">The right/wrong flash: animate a colour</h3>
+<h3 id="the-rightwrong-flash-animate-a-color">The right/wrong flash: animate a color</h3>
 
-<p><code class="language-plaintext highlighter-rouge">ExerciseView._flash</code> fades an answer button from black to green or red in 350 ms with a <strong>linear</strong> curve, because it is a colour
+<p><code class="language-plaintext highlighter-rouge">ExerciseView._flash</code> fades an answer button from black to green or red in 350 ms with a <strong>linear</strong> curve, because it is a color
 fade. It uses <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> with a start of 0.0 and an end of 1.0 and in its callback computes <code class="language-plaintext highlighter-rouge">blend(start, b=end, t=t)</code>
 and sets the button’s style sheet from the result. The animations are kept in a list (<code class="language-plaintext highlighter-rouge">self._anims</code>) that is cleared when the next
 question appears, so nothing animates a button that no longer exists.</p>
@@ -643,7 +652,7 @@ one, and start from the <em>current</em> value, not from a remembered end. Other
   <li><strong>Set the end state in <code class="language-plaintext highlighter-rouge">finished</code>.</strong> Do not rely on the last tick landing exactly on the end value.</li>
   <li><strong>Guard against re-entry.</strong> Ignore a request while a transition is running (<code class="language-plaintext highlighter-rouge">SlideStack</code>), or cancel and restart (the sidebar).
 Decide deliberately which; the one you did not decide on is the one with the bug.</li>
-  <li><strong>Cancel late callbacks with a token.</strong> A <code class="language-plaintext highlighter-rouge">QTimer.singleShot</code> cannot be cancelled once scheduled. If the callback might fire
+  <li><strong>Cancel late callbacks with a token.</strong> A <code class="language-plaintext highlighter-rouge">QTimer.singleShot</code> cannot be canceled once scheduled. If the callback might fire
 after the state has moved on (a new question has appeared), have it compare a counter it captured against the current one and
 do nothing if they differ. <code class="language-plaintext highlighter-rouge">ExerciseView._pair_token</code> and <code class="language-plaintext highlighter-rouge">Sounds._sequence_run</code> do this.</li>
   <li><strong>Do not animate loading.</strong> Setting a value from saved settings should jump, not animate (see <code class="language-plaintext highlighter-rouge">Switch.setChecked</code>).</li>
@@ -655,7 +664,7 @@ widget sixty times a second is not. If a widget is expensive to draw, draw it on
 
 <p>Tests run the event loop long enough for an animation to finish: <code class="language-plaintext highlighter-rouge">QTest.qWait(300)</code> after triggering a 220 ms slide, then
 assert the end state. A shorter wait asserts the middle. <code class="language-plaintext highlighter-rouge">tests/test_settings_panels.py</code> has a <code class="language-plaintext highlighter-rouge">slide()</code> helper that waits
-300 ms for a page to finish sliding, and <code class="language-plaintext highlighter-rouge">SlideStack.sliding</code> reports whether a slide is under way. To test that your code ignores a request
+300 ms for a page to finish sliding, and <code class="language-plaintext highlighter-rouge">SlideStack.sliding</code> reports whether a slide is underway. To test that your code ignores a request
 during a slide, call it twice in a row and assert one slide happened.</p>
 
 <p>Because tests wait in real time, keep durations short. There is no virtual clock in Qt’s animation framework.</p>
@@ -788,7 +797,7 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -836,8 +845,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -521,7 +530,7 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
   <li><code class="language-plaintext highlighter-rouge">caret_moved</code> (<em>Signal</em>): Emitted when the caret moves.</li>
   <li><code class="language-plaintext highlighter-rouge">accidental</code> (<em>int or None</em>): The sign you chose (-1 flat, 0 natural, 1 sharp); None follows the key signature.</li>
   <li><code class="language-plaintext highlighter-rouge">locked</code> (<em>bool</em>): Ignore the mouse (while feedback is showing).</li>
-  <li><code class="language-plaintext highlighter-rouge">caret</code> (<em>int or None</em>): The staff step of the note that the keyboard would place, as <code class="language-plaintext highlighter-rouge">Note.diatonic</code> counts them; None until the keyboard or a click has put it somewhere. Once it has a place the note is shown in the preview colour while the pointer is away.</li>
+  <li><code class="language-plaintext highlighter-rouge">caret</code> (<em>int or None</em>): The staff step of the note that the keyboard would place, as <code class="language-plaintext highlighter-rouge">Note.diatonic</code> counts them; None until the keyboard or a click has put it somewhere. Once it has a place the note is shown in the preview color while the pointer is away.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -781,7 +790,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): The note to draw; None clears the staff.</li>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): The colour to draw it in; the notation’s own ink if None. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): The color to draw it in; the notation’s own ink if None. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -822,7 +831,7 @@ has put the caret somewhere.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the note under the pointer, in a lighter colour.</p>
+<p>Show the note under the pointer, in a lighter color.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -905,8 +914,8 @@ has put the caret somewhere.</p>
 <p>The next note follows the pointer, snapped to a line or space, in the place it will take. Each click puts it there and
 moves on to the next place. The places are all drawn from the start, so the notes do not move as more are placed.</p>
 
-<p>When steps are asked for, once all the notes are placed two lines rise from each pair of neighbouring notes to a point
-above them (a wedge). The step to be marked next is shown there, in the preview colour, as “W” (whole) or “H” (half).
+<p>When steps are asked for, once all the notes are placed two lines rise from each pair of neighboring notes to a point
+above them (a wedge). The step to be marked next is shown there, in the preview color, as “W” (whole) or “H” (half).
 The mouse wheel or a right click changes it, and a left click marks it and moves on to the next pair.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1079,7 +1088,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): The note to show; None shows none.</li>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): Unused: the note under the pointer is always drawn in the preview colour. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None, default None</em>): Unused: the note under the pointer is always drawn in the preview color. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1289,7 +1298,7 @@ While steps are marked each notch switches between whole and half. Once everythi
 <p>A blank staff on which you put a clef symbol: choose the G, C or F clef, then click where it goes.</p>
 
 <p>The symbol can go on any line or space of the staff and on the three ledger lines and spaces above and below it, and
-follows the pointer from place to place, in a lighter colour, until you click. Without the mouse, <code class="language-plaintext highlighter-rouge">move_caret</code> moves it,
+follows the pointer from place to place, in a lighter color, until you click. Without the mouse, <code class="language-plaintext highlighter-rouge">move_caret</code> moves it,
 <code class="language-plaintext highlighter-rouge">step_symbol</code> switches the symbol and <code class="language-plaintext highlighter-rouge">place_caret</code> places it.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1382,7 +1391,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">step_symbol</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Choose the next symbol of the options, or the one before, going round.</p>
+<p>Choose the next symbol of the options, or the one before, going around.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1515,12 +1524,12 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_clef_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the placed symbol in a colour, for feedback, or back in black.</p>
+<p>Draw the placed symbol in a color, for feedback, or back in black.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The colour; None for black.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The color; None for black.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1536,7 +1545,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the symbol in the place under the pointer, in a lighter colour.</p>
+<p>Show the symbol in the place under the pointer, in a lighter color.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1896,6 +1905,15 @@ False
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.staff/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.staff</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.stats_dialog/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.stats_dialog<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1912,7 +1930,7 @@ False
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1960,8 +1978,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

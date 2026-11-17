@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>alto.ui.circle_colours · Alto</title>
+  <title>alto.ui.circle_colors · Alto</title>
   <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
   
   
-  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.circle_colours/">
+  <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.circle_colors/">
   <meta name="robots" content="noindex">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="alto.ui.circle_colours · Alto">
+  <meta property="og:title" content="alto.ui.circle_colors · Alto">
   <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
-  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.circle_colours/">
+  <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.circle_colors/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
   
@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/" aria-current="page">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/" aria-current="page">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -488,9 +497,9 @@
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
         <article>
-          <h1>alto.ui.circle_colours</h1>
+          <h1>alto.ui.circle_colors</h1>
           
-<p>The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.</p>
+<p>The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -504,7 +513,7 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">blank</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CustomRecord</span>
 </code></pre></div></div>
 
-<p>Make the scheme a new one starts as: colours by key signature, from cyan through blue to indigo, on dark wedges.</p>
+<p>Make the scheme a new one starts as: colors by key signature, from cyan through blue to indigo, on dark wedges.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -536,7 +545,7 @@
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A small picture of the circle in a colour scheme, to click to choose the scheme.</p>
+<p>A small picture of the circle in a color scheme, to click to choose the scheme.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -559,7 +568,7 @@
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>Scheme</em>): The colour scheme to draw.</li>
+  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>Scheme</em>): The color scheme to draw.</li>
   <li><code class="language-plaintext highlighter-rouge">size</code> (<em>int, default 112</em>): Its width and height in pixels. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
@@ -596,7 +605,7 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the circle, with one cell asked and its relative lit, and a ring round it when it is the chosen scheme.</p>
+<p>Draw the circle, with one cell asked and its relative lit, and a ring around it when it is the chosen scheme.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -618,7 +627,7 @@ False
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The page that lists the colour schemes: the presets, the user’s own, and a button to make another.</p>
+<p>The page that lists the color schemes: the presets, the user’s own, and a button to make another.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -675,7 +684,7 @@ False
 
 <pre><code class="language-pycon">&gt;&gt;&gt; page = SchemePage()
 &gt;&gt;&gt; from alto.circle_schemes import record_of
-&gt;&gt;&gt; mine = record_of("custom-1", name="Mine", mode="single", colours=["#2f6bd0"])
+&gt;&gt;&gt; mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
 &gt;&gt;&gt; page.load(current="custom-1", customs=[mine])
 &gt;&gt;&gt; page.thumbs["custom-1"].isChecked(), page.thumbs["midnight"].isChecked()
 (True, False)
@@ -688,9 +697,9 @@ False
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>The editor for a colour scheme of the user’s own: a name, how its colours are made, and the colours.</p>
+<p>The editor for a color scheme of the user’s own: a name, how its colors are made, and the colors.</p>
 
-<p>The colours are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
+<p>The colors are what a cell looks like when lit; the quiet cells are made from them. A picture shows the result as it is
 edited.</p>
 
 <p><strong>Attributes</strong></p>
@@ -698,11 +707,11 @@ edited.</p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">saved</code> (<em>Signal</em>): Emitted with the record when Save is clicked.</li>
   <li><code class="language-plaintext highlighter-rouge">deleted</code> (<em>Signal</em>): Emitted with the scheme’s key when Delete is clicked (only an existing scheme can be deleted).</li>
-  <li><code class="language-plaintext highlighter-rouge">cancelled</code> (<em>Signal</em>): Emitted when Cancel is clicked.</li>
+  <li><code class="language-plaintext highlighter-rouge">canceled</code> (<em>Signal</em>): Emitted when Cancel is clicked.</li>
   <li><code class="language-plaintext highlighter-rouge">name</code> (<em>QLineEdit</em>): The name.</li>
-  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>QComboBox</em>): How the colours are made: a key of <code class="language-plaintext highlighter-rouge">MODES</code> is each item’s data.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>QComboBox</em>): How the colors are made: a key of <code class="language-plaintext highlighter-rouge">MODES</code> is each item’s data.</li>
   <li><code class="language-plaintext highlighter-rouge">wedges</code> (<em>QComboBox</em>): Whether the wedges are dark, with light names, or light, with dark names.</li>
-  <li><code class="language-plaintext highlighter-rouge">swatches</code> (<em>list of QPushButton</em>): One button for each colour the mode takes; the others are hidden.</li>
+  <li><code class="language-plaintext highlighter-rouge">swatches</code> (<em>list of QPushButton</em>): One button for each color the mode takes; the others are hidden.</li>
   <li><code class="language-plaintext highlighter-rouge">preview</code> (<em>SchemeThumb</em>): The picture of the scheme as it is.</li>
 </ul>
 
@@ -753,7 +762,7 @@ edited.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
 &gt;&gt;&gt; editor.load(None, taken=[])
 &gt;&gt;&gt; editor.name.text(), editor.delete_button.isHidden()
-('My colours', True)
+('My colors', True)
 </code></pre>
 
 <h3 id="schemeeditorrecord">SchemeEditor.record</h3>
@@ -766,45 +775,48 @@ edited.</p>
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>CustomRecord</em>: Its key, name, mode, colours and whether its wedges are light.</li>
+  <li><em>CustomRecord</em>: Its key, name, mode, colors and whether its wedges are light.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
 &gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.record()["colours"]
+&gt;&gt;&gt; editor.record()["colors"]
 ['#1fa7c9', '#2f6bd0', '#6a4fe0']
 </code></pre>
 
-<h3 id="schemeeditorset_colour">SchemeEditor.set_colour</h3>
+<h3 id="schemeeditorset_color">SchemeEditor.set_color</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_colour</span><span class="p">(</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span>
     <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">colour</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Set one of the colours.</p>
+<p>Set one of the colors.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): Which colour of the mode: 0, 1 or 2.</li>
-  <li><code class="language-plaintext highlighter-rouge">colour</code> (<em>str</em>): The colour, “#rrggbb”. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): Which color of the mode: 0, 1 or 2.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>str</em>): The color, “#rrggbb”. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
 &gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.set_colour(0, colour="#ff0000")
-&gt;&gt;&gt; editor.record()["colours"][0]
+&gt;&gt;&gt; editor.set_color(0, color="#ff0000")
+&gt;&gt;&gt; editor.record()["colors"][0]
 '#ff0000'
 </code></pre>
 
 
+          
+          
+          
           
           
           
@@ -984,7 +996,7 @@ edited.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1032,8 +1044,8 @@ edited.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

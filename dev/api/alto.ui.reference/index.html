@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794889557">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794932210">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +44,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -327,6 +327,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -339,7 +342,7 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.colors/">colors</a></li>
@@ -349,6 +352,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.dropdown/">dropdown</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
@@ -367,6 +373,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.key_fork/">key_fork</a></li>
@@ -692,8 +701,8 @@ True
 &gt;&gt;&gt; from PySide6.QtTest import QTest
 &gt;&gt;&gt; circle = ExplorableCircle()
 &gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; centre, radius = circle.geometry_of()
-&gt;&gt;&gt; QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+&gt;&gt;&gt; center, radius = circle.geometry_of()
+&gt;&gt;&gt; QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
 &gt;&gt;&gt; circle.cell
 ('outer', 0)
 </code></pre>
@@ -718,8 +727,8 @@ True
 &gt;&gt;&gt; circle = ExplorableCircle()
 &gt;&gt;&gt; circle.resize(400, 400)
 &gt;&gt;&gt; circle.show()
-&gt;&gt;&gt; centre, radius = circle.geometry_of()
-&gt;&gt;&gt; QTest.mouseMove(circle, QPoint(int(centre.x()), int(centre.y() - 0.9 * radius)))
+&gt;&gt;&gt; center, radius = circle.geometry_of()
+&gt;&gt;&gt; QTest.mouseMove(circle, QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
 &gt;&gt;&gt; circle.hover
 ('outer', 0)
 </code></pre>
@@ -751,7 +760,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Move the pick with the arrow keys: Left and Right round the circle, Up and Down between the rings.</p>
+<p>Move the pick with the arrow keys: Left and Right around the circle, Up and Down between the rings.</p>
 
 <p>Escape clears the pick, and Home picks C major.</p>
 
@@ -1127,6 +1136,15 @@ True
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.question_preview/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.question_preview</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.scale_explorer/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.scale_explorer<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1143,7 +1161,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1191,8 +1209,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794889557" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794889557" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794932210" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794932210" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
