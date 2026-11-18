@@ -64,6 +64,7 @@ from alto.exercises.base import (
     Question,
 )
 from alto.exercises.library import (
+    IntervalNames,
     KeyboardIntervals,
     ScaleIdentification,
 )
@@ -1143,6 +1144,8 @@ class ExerciseView(QWidget):
             and not q.octaves
             and (app_settings.keyboard_intervals.all_interval_buttons or len(q.choices) > 6)
         )
+        if isinstance(self.exercise, IntervalNames):
+            interval_bank = app_settings.intervals.button_mode == "all" or len(q.choices) > 6
         compact_intervals = isinstance(self.exercise, KeyboardIntervals) and bool(q.octaves)
         scale_buttons = bool(q.octaves) and q.second_label == "Mode"
         self.quality_label.setText("Tonic" if scale_buttons else "Quality")

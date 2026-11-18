@@ -94,6 +94,7 @@ from alto.ui.settings_panel import (
     load_circle,
     load_clef_basics,
     load_construction,
+    load_intervals,
     load_key_construction,
     load_key_signatures,
     load_keyboard,
@@ -485,6 +486,7 @@ class MainWindow(QMainWindow):
         self.addAction(quit_action)
 
         load_note_names()
+        load_intervals()
         load_keyboard()
         load_keyboard_intervals()
         load_construction()
@@ -1017,6 +1019,7 @@ class MainWindow(QMainWindow):
         import_settings(retained)
         for name in (
             "note_names",
+            "intervals",
             "keyboard",
             "keyboard_intervals",
             "construction",

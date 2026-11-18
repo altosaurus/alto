@@ -12,6 +12,7 @@ from alto import settings
 from alto.audio import sounds
 from alto.exercises.library import (
     ArpeggioNames,
+    ChordQualities,
     CircleOfFifths,
     IntervalNames,
     KeyboardNotes,
@@ -104,7 +105,7 @@ def test_an_exercise_with_fixed_rules_has_no_settings_button(app: QApplication) 
     app : QApplication
         The shared Qt application.
     """
-    view = view_of(IntervalNames())
+    view = view_of(ChordQualities())
     assert view.settings_panel is None and not hasattr(view, "gear") and not hasattr(view, "pane")
 
 

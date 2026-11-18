@@ -303,12 +303,7 @@ class NoteNames(Exercise):
 @register
 class IntervalNames(Exercise):
     """
-    Name the interval between two notes, up to an octave.
-
-    Attributes
-    ----------
-    QUALITIES : dict of int to str
-        For each interval number, the qualities that can occur, separated by spaces.
+    Name the interval between two written notes.
 
     Examples
     --------
@@ -340,19 +335,34 @@ class IntervalNames(Exercise):
             "<b>Interval Identification</b><br>Two notes are shown. Name the interval from the lower note to the "
             "higher one.<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
-            "d (diminished).<br><br>You can press an answer's number instead of the button: 1 is the first."
+            "d (diminished). Turn off Quality to answer with the number alone. Use Display to choose how the two notes "
+            "appear. You can click an answer or use the shortcut shown on its button."
         )
 
-    QUALITIES = {
-        1: "P A d",
-        2: "M m A d",
-        3: "M m A d",
-        4: "P A d",
-        5: "P A d",
-        6: "M m A d",
-        7: "M m A d",
-        8: "P",
-    }
+    def settings_signature(self) -> str:
+        """
+        Identify the settings used to generate and grade the interval.
+
+        Returns
+        -------
+        str
+            The stored-question review signature.
+
+        Examples
+        --------
+        >>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
+        ''
+        """
+        cfg = settings.intervals
+        if cfg == settings.IntervalSettings():
+            return ""
+        parts = vars(cfg).copy()
+        if cfg.button_mode == "limited" and cfg.button_count == 6:
+            # Match questions saved before the Buttons setting existed.
+            del parts["button_mode"], parts["button_count"]
+        elif cfg.button_mode == "all":
+            del parts["button_count"]
+        return signature(parts)
 
     def generate(self, rng: random.Random) -> Question:
         """
@@ -374,30 +384,40 @@ class IntervalNames(Exercise):
         >>> q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
         True
         """
-        clef = rng.choice(("treble", "bass"))
-        low = _random_note(rng, clef=clef, accidentals=True)
-        number = rng.randint(2, 8)
-        quality = rng.choice(self.QUALITIES[number].split())
-        iv = Interval(number, quality=quality)
+        cfg = settings.intervals
+        selected = [iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals]
+        if not selected:
+            return Question("Select an interval in Settings to continue.", choices=[], answer="")
+        smallest = min(iv.number for iv in selected)
+        clefs = []
+        for clef in cfg.active_clefs():
+            bottom, top = cfg.range_for(clef)
+            if top - bottom + 1 >= smallest:
+                clefs.append(clef)
+        if not clefs:
+            return Question("Widen a clef’s Range or choose a smaller interval in Settings.", choices=[], answer="")
+        clef = rng.choice(clefs)
+        bottom, top = cfg.range_for(clef)
+        available = [iv for iv in selected if iv.number <= top - bottom + 1]
+        iv = rng.choice(available)
+        position = rng.randint(bottom, top - iv.number + 1)
+        natural = Note.from_diatonic(position)
+        upper_accidental = natural.transpose(iv).accidental
+        accidental = rng.choice([acc for acc in (-1, 0, 1) if abs(acc + upper_accidental) <= 1])
+        low = Note.from_diatonic(position, accidental=accidental)
         high = low.transpose(iv)
-        if abs(high.accidental) > 1 or abs(low.accidental) > 1:
-            return self.generate(rng)
-        pool = [f"{q}{n}" for n, qs in self.QUALITIES.items() if n > 1 for q in qs.split()]
-        near = [f"{q}{number}" for q in self.QUALITIES[number].split()]
-        choices = pick_distractors(
-            iv.short,
-            pool=near + pool,
-            n=5,
-            rng=rng,
-        )
-        expl = f"{low} to {high}: {QUALITY_NAMES[quality]} {number}, {iv.semitones} semitones."
+        display = rng.choice(sorted(cfg.displays))
+        staff = [[low, high]] if display == "Harmonic" else [[low], [high]]
+        answer = iv.short if cfg.quality else str(iv.number)
+        pool = list(dict.fromkeys(other.short if cfg.quality else str(other.number) for other in available))
         return Question(
-            "",
-            choices=choices,
-            answer=iv.short,
-            staff=[[low], [high]],
+            "" if cfg.quality else "What is the interval number?",
+            choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
+            answer=answer,
+            staff=staff,
             clef=clef,
-            explanation=expl,
+            key=rng.choice(sorted(cfg.staff_keys)),
+            explanation=f"{low} to {high}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
         )
 
 

@@ -148,11 +148,22 @@ In the exercise settings you can choose:
 
 ## Interval Identification
 
-Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.
+Name the interval between the two written notes. On first use, the notes ascend on a treble or bass staff, and the exercise asks for both quality and number.
 
 An interval has a quality and a number. The number counts the letter names it spans, including both notes. The quality
 is **P** (perfect), **M** (major), **m** (minor), **A** (augmented) or **d** (diminished). So C to E is M3, and C to E♭
 is m3.
+
+- **Clefs** chooses which staves can appear, including the grand staff.
+- **Range** sets the lowest and highest written notes for each checked clef. Both notes must fit.
+- **Staff Key** selects the signatures drawn on the staff. Choose zero for a blank signature.
+- **Display** has two checkboxes. **Melodic** shows the lower note followed by the higher one. **Harmonic** shows both together. Check both to mix them.
+- **Quality** is on by default. Switch it off to answer **3** for either C–E or C–E♭.
+- **Intervals** selects the spellings you want to practice, including compound intervals through a fifteenth.
+  Drag the handles to select a span of interval numbers, then check individual spellings. **Select all** can temporarily include every spelling.
+  Only selected intervals that fit the range can be asked. If none fit, widen the range or choose a smaller interval.
+- **Buttons** defaults to **Limited**, with six answers. Choose a **Button count** from 2 to 10. The count includes the correct answer.
+  Choose **All** to show every selected interval that fits the current staff range. With **Quality** off, each interval number appears once.
 
 {% include shot.html src="intervals.png" alt="Interval Identification showing two notes and the interval buttons" %}
 

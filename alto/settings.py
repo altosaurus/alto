@@ -30,6 +30,7 @@ from alto.notation_terms import MARKS
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     LETTERS,
+    Interval,
     Note,
     key_accidental,
 )
@@ -240,7 +241,65 @@ def diatonic_name(d: int) -> str:
 
 
 @dataclass
-class NoteNameSettings:
+class StaffRangeSettings:
+    """
+    Selected clefs and inclusive pitch limits for each staff.
+
+    Examples
+    --------
+    >>> StaffRangeSettings().active_clefs()
+    ['treble', 'bass']
+    """
+
+    clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of RANGE_KEYS, so "grand" is allowed
+    _: KW_ONLY
+    ranges: dict[str, tuple[int, int]] = field(default_factory=dict)  # overrides of DEFAULT_RANGES
+
+    def active_clefs(self) -> list[str]:
+        """
+        Return the clefs to draw from, in canonical order.
+
+        Returns
+        -------
+        list of str
+            The chosen clefs, or the treble clef if none are chosen.
+
+        Examples
+        --------
+        >>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+        ['tenor', 'grand']
+        >>> NoteNameSettings(clefs=set()).active_clefs()
+        ['treble']
+        """
+        return [c for c in RANGE_KEYS if c in self.clefs] or ["treble"]
+
+    def range_for(self, clef: str) -> tuple[int, int]:
+        """
+        Return the range of notes that may be asked on a clef.
+
+        Parameters
+        ----------
+        clef : str
+            A key of `DEFAULT_RANGES`.
+
+        Returns
+        -------
+        tuple of (int, int)
+            The lowest and highest staff step, inclusive; the user's override if there is one, otherwise the default.
+
+        Examples
+        --------
+        >>> NoteNameSettings().range_for("treble")
+        (22, 52)
+        >>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
+        (30, 40)
+        """
+        lo, hi = self.ranges.get(clef, DEFAULT_RANGES[clef])
+        return (lo, hi) if lo <= hi else (hi, lo)
+
+
+@dataclass
+class NoteNameSettings(StaffRangeSettings):
     """
     The settings of the note identification exercise.
 
@@ -268,32 +327,12 @@ class NoteNameSettings:
     (['bass'], [2])
     """
 
-    clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of RANGE_KEYS, so "grand" is allowed
     _: KW_ONLY
-    ranges: dict[str, tuple[int, int]] = field(default_factory=dict)  # overrides of DEFAULT_RANGES
     key_signatures: set[int] = field(default_factory=lambda: {0})  # sharps (+) / flats (-) of the keys to use
     note_values: set[str] = field(default_factory=lambda: {"whole"})
     naming: str = "letters"  # key of NAMINGS
     accidentals: bool = False  # also ask notes with explicit sharps/flats/naturals
     require_octave: bool = False  # the answer also includes the note's written octave
-
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to draw from, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-        ['tenor', 'grand']
-        >>> NoteNameSettings(clefs=set()).active_clefs()
-        ['treble']
-        """
-        return [c for c in RANGE_KEYS if c in self.clefs] or ["treble"]
 
     def active_keys(self) -> list[int]:
         """
@@ -327,32 +366,40 @@ class NoteNameSettings:
         """
         return [v for v in NOTE_VALUES if v in self.note_values] or ["whole"]
 
-    def range_for(self, clef: str) -> tuple[int, int]:
-        """
-        Return the range of notes that may be asked on a clef.
-
-        Parameters
-        ----------
-        clef : str
-            A key of `DEFAULT_RANGES`.
-
-        Returns
-        -------
-        tuple of (int, int)
-            The lowest and highest staff step, inclusive; the user's override if there is one, otherwise the default.
-
-        Examples
-        --------
-        >>> NoteNameSettings().range_for("treble")
-        (22, 52)
-        >>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
-        (30, 40)
-        """
-        lo, hi = self.ranges.get(clef, DEFAULT_RANGES[clef])
-        return (lo, hi) if lo <= hi else (hi, lo)
-
 
 note_names = NoteNameSettings()
+
+INTERVAL_DISPLAYS = ("Melodic", "Harmonic")
+WRITTEN_INTERVALS = {
+    f"{quality}{number}": Interval(number, quality=quality)
+    for number in range(1, 16)
+    for quality in (("P",) if number == 1 else ("P", "A", "d") if number % 7 in (1, 4, 5) else ("m", "M", "A", "d"))
+}
+
+
+@dataclass
+class IntervalSettings(StaffRangeSettings):
+    """
+    Staff signatures, presentations, answer format and spelled intervals for Interval Identification.
+
+    Examples
+    --------
+    >>> IntervalSettings().quality
+    True
+    """
+
+    _: KW_ONLY
+    staff_keys: set[int] = field(default_factory=lambda: {0})
+    displays: set[str] = field(default_factory=lambda: {"Melodic"})
+    button_mode: str = "limited"
+    button_count: int = 6
+    quality: bool = True
+    intervals: set[str] = field(
+        default_factory=lambda: {name for name, iv in WRITTEN_INTERVALS.items() if 2 <= iv.number <= 7 or name == "P8"},
+    )
+
+
+intervals = IntervalSettings()
 
 # Keyboard exercise: the whole piano is A0..C8 (MIDI 21..108); by default it asks C3..C5.
 KEYBOARD_FULL = (21, 108)

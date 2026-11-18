@@ -20,6 +20,8 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
+
 - Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.
 - Double-clicking a row in **Questions that need practice** opens the saved question and its answer.
 - A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.

@@ -91,13 +91,76 @@ Return the name and octave of the natural note on a staff step.
 'E4'
 ```
 
+## StaffRangeSettings
+
+```python
+StaffRangeSettings(
+    clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
+    *,
+    ranges: dict[str, tuple[int, int]] = field(default_factory=dict),
+)
+```
+
+Selected clefs and inclusive pitch limits for each staff.
+
+**Examples**
+
+```pycon
+>>> StaffRangeSettings().active_clefs()
+['treble', 'bass']
+```
+
+### StaffRangeSettings.active_clefs
+
+```python
+def active_clefs() -> list[str]
+```
+
+Return the clefs to draw from, in canonical order.
+
+**Returns**
+
+- *list of str*: The chosen clefs, or the treble clef if none are chosen.
+
+**Examples**
+
+```pycon
+>>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+['tenor', 'grand']
+>>> NoteNameSettings(clefs=set()).active_clefs()
+['treble']
+```
+
+### StaffRangeSettings.range_for
+
+```python
+def range_for(clef: str) -> tuple[int, int]
+```
+
+Return the range of notes that may be asked on a clef.
+
+**Parameters**
+
+- `clef` (*str*): A key of `DEFAULT_RANGES`.
+
+**Returns**
+
+- *tuple of (int, int)*: The lowest and highest staff step, inclusive; the user's override if there is one, otherwise the default.
+
+**Examples**
+
+```pycon
+>>> NoteNameSettings().range_for("treble")
+(22, 52)
+>>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
+(30, 40)
+```
+
 ## NoteNameSettings
 
 ```python
 NoteNameSettings(
-    clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
     *,
-    ranges: dict[str, tuple[int, int]] = field(default_factory=dict),
     key_signatures: set[int] = field(default_factory=lambda: {0}),
     note_values: set[str] = field(default_factory=lambda: {'whole'}),
     naming: str = 'letters',
@@ -105,6 +168,8 @@ NoteNameSettings(
     require_octave: bool = False,
 )
 ```
+
+Bases: `StaffRangeSettings`
 
 The settings of the note identification exercise.
 
@@ -124,27 +189,6 @@ The settings of the note identification exercise.
 >>> cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
 >>> cfg.active_clefs(), cfg.active_keys()
 (['bass'], [2])
-```
-
-### NoteNameSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to draw from, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-['tenor', 'grand']
->>> NoteNameSettings(clefs=set()).active_clefs()
-['treble']
 ```
 
 ### NoteNameSettings.active_keys
@@ -185,29 +229,29 @@ Return the note values to draw, from longest to shortest.
 ['whole', 'half']
 ```
 
-### NoteNameSettings.range_for
+## IntervalSettings
 
 ```python
-def range_for(clef: str) -> tuple[int, int]
+IntervalSettings(
+    *,
+    staff_keys: set[int] = field(default_factory=lambda: {0}),
+    displays: set[str] = field(default_factory=lambda: {'Melodic'}),
+    button_mode: str = 'limited',
+    button_count: int = 6,
+    quality: bool = True,
+    intervals: set[str] = field(default_factory=lambda: {name for name, iv in WRITTEN_INTERVALS.items() if 2 <= iv.number <= 7 or name == 'P8'}),
+)
 ```
 
-Return the range of notes that may be asked on a clef.
+Bases: `StaffRangeSettings`
 
-**Parameters**
-
-- `clef` (*str*): A key of `DEFAULT_RANGES`.
-
-**Returns**
-
-- *tuple of (int, int)*: The lowest and highest staff step, inclusive; the user's override if there is one, otherwise the default.
+Staff signatures, presentations, answer format and spelled intervals for Interval Identification.
 
 **Examples**
 
 ```pycon
->>> NoteNameSettings().range_for("treble")
-(22, 52)
->>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
-(30, 40)
+>>> IntervalSettings().quality
+True
 ```
 
 ## key_name

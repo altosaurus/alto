@@ -120,11 +120,7 @@ True
 class IntervalNames(Exercise)
 ```
 
-Name the interval between two notes, up to an octave.
-
-**Attributes**
-
-- `QUALITIES` (*dict of int to str*): For each interval number, the qualities that can occur, separated by spaces.
+Name the interval between two written notes.
 
 **Examples**
 
@@ -151,6 +147,25 @@ Return the help text for the exercise.
 ```pycon
 >>> "quality followed by a number" in IntervalNames().instructions()
 True
+```
+
+### IntervalNames.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the settings used to generate and grade the interval.
+
+**Returns**
+
+- *str*: The stored-question review signature.
+
+**Examples**
+
+```pycon
+>>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
+''
 ```
 
 ### IntervalNames.generate

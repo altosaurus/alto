@@ -74,6 +74,7 @@ from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
     ClefBasics,
+    IntervalNames,
     KeyboardIntervals,
     KeyboardNotes,
     KeySignatureConstruction,
@@ -1488,7 +1489,203 @@ class ExerciseSettingsPanel(QWidget):
     restyled = Signal()
 
 
-class NoteNameSettingsPanel(ExerciseSettingsPanel):
+class _StaffRangePanel(ExerciseSettingsPanel):
+    """
+    Shared navigation and per-clef pitch range editors.
+
+    Examples
+    --------
+    Note and interval identification both open Range on page two.
+    """
+
+    cfg: settings.StaffRangeSettings
+    stack: SlideStack
+
+    _persist: Callable[[], None]
+    clef_pictures: ClefPictures
+    range_pictures: RangePictures
+    range_row: _Row
+
+    def _refresh_summaries(self) -> None:
+        """
+        Refresh the exercise-specific main menu previews.
+
+        Examples
+        --------
+        Returning from Range refreshes its staff preview.
+        """
+        clefs = self.cfg.active_clefs()
+        self.clef_pictures.set_clefs(clefs)
+        self.range_pictures.set_items([(c, *self.cfg.range_for(c)) for c in clefs])
+        self.range_row.fit()
+
+    def _save_and_emit(self) -> None:
+        """
+        Persist changes for this exercise and request a new question.
+
+        Examples
+        --------
+        Editing the bass range saves it under the current exercise.
+        """
+        self._persist()
+        self.changed.emit()
+
+    def _range_page(self) -> QWidget:
+        """
+        Build the scrollable page used to edit pitch limits.
+
+        Returns
+        -------
+        QWidget
+            The titled Range submenu.
+
+        Examples
+        --------
+        Each checked clef gets its own range editor when the page opens.
+        """
+        self.range_body = QWidget()
+        self.range_lay = QVBoxLayout(self.range_body)
+        self.range_lay.setContentsMargins(
+            6,
+            4,
+            10,
+            8,
+        )
+        self.range_editors: dict[str, RangeEditor] = {}
+        # Restoring a pane after a theme change selects its page directly.
+        self.stack.currentChanged.connect(
+            lambda index: self._build_range_rows() if index == 2 and not self.range_editors else None,
+        )
+        scroll = QScrollArea()
+        scroll.setWidget(self.range_body)
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        return _subpage(
+            "Range",
+            body=scroll,
+            back=lambda: self._go(0),
+            fill=True,
+        )
+
+    # navigation
+    def _go(self, index: int) -> None:
+        """
+        Slide to a page, refreshing it first.
+
+        Going back to the menu refreshes its summaries; going to the Range page builds its rows. A request made during a slide is
+        ignored.
+
+        Parameters
+        ----------
+        index : int
+            0 for the menu, 1 for Clefs, 2 for Range, or an exercise-specific page.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> panel._go(2)
+        >>> sorted(panel.range_editors), panel.stack.sliding
+        (['bass', 'treble'], True)
+        """
+        if self.stack.sliding or index == self.stack.currentIndex():
+            return  # ignore clicks mid-transition
+        if index == 0:
+            self._refresh_summaries()
+        elif index == 2:
+            self._build_range_rows()
+        self.stack.slide_to(index)
+
+    def _active_keys(self) -> list[str]:
+        """
+        Return the clefs in use.
+
+        Returns
+        -------
+        list of str
+            The chosen clefs, which the range editors and summaries are for.
+
+        Examples
+        --------
+        >>> NoteNameSettingsPanel(NoteNameSettings(clefs={"alto"}))._active_keys()
+        ['alto']
+        """
+        return self.cfg.active_clefs()
+
+    # range page
+    def _build_range_rows(self) -> None:
+        """
+        Build a range editor for each clef in use, and a button to reset them to the defaults.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings(clefs={"treble"}))
+        >>> panel._build_range_rows()
+        >>> list(panel.range_editors)
+        ['treble']
+        """
+        while self.range_lay.count():
+            item = self.range_lay.takeAt(0)
+            widget = item.widget() if item is not None else None
+            if widget is not None:
+                widget.deleteLater()
+        self.range_editors = {}
+        for key in self._active_keys():
+            low, high = self.cfg.range_for(key)
+            editor = RangeEditor(key, low=low, high=high)
+            editor.edited.connect(self._range_edited)
+            self.range_editors[key] = editor
+            self.range_lay.addWidget(editor)
+        reset = QPushButton("Reset to defaults")
+        reset.clicked.connect(self._reset_ranges)
+        self.range_lay.addWidget(reset)
+        self.range_lay.addStretch()
+
+    def _range_edited(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        self,
+        key: str,
+        low: int,
+        high: int,
+    ) -> None:
+        """
+        Take a changed range into the settings, save it and say so.
+
+        Parameters
+        ----------
+        key : str
+            The clef.
+        low : int
+            The lowest note, as a staff step.
+        high : int
+            The highest note.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> panel._range_edited("treble", 30, 40)
+        >>> panel.cfg.ranges
+        {'treble': (30, 40)}
+        """
+        self.cfg.ranges[key] = (low, high)
+        self._save_and_emit()
+
+    def _reset_ranges(self) -> None:
+        """
+        Go back to the default ranges and show them.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings(ranges={"treble": (30, 40)}))
+        >>> panel._reset_ranges()
+        >>> panel.cfg.ranges
+        {}
+        """
+        self.cfg.ranges.clear()
+        self._build_range_rows()
+        self._save_and_emit()
+
+
+class NoteNameSettingsPanel(_StaffRangePanel):
     """
     The settings of the note identification exercise: a menu leading to a page for each group of settings.
 
@@ -1544,7 +1741,8 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         6
         """
         super().__init__(parent)
-        self.cfg = cfg
+        self._persist = save_note_names
+        self.cfg: NoteNameSettings = cfg
         self.stack = SlideStack()
         outer = QVBoxLayout(self)
         outer.setContentsMargins(
@@ -1610,26 +1808,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         )
 
         # layer 2: range
-        self.range_body = QWidget()
-        self.range_lay = QVBoxLayout(self.range_body)
-        self.range_lay.setContentsMargins(
-            6,
-            4,
-            10,
-            8,
-        )
-        self.range_editors: dict[str, RangeEditor] = {}
-        scroll = QScrollArea()
-        scroll.setWidget(self.range_body)
-        scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        range_page = _subpage(
-            "Range",
-            body=scroll,
-            back=lambda: self._go(0),
-            fill=True,
-        )
+        range_page = self._range_page()
 
         # layer 2: key signatures, each drawn as it would be written (flats on the left, sharps on the right)
         self.key_list = KeyChecklist(cfg.key_signatures)
@@ -1703,50 +1882,6 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         _guard_last(list(self.value_boxes.values()))
         self._refresh_summaries()
 
-    # navigation
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing it first.
-
-        Going back to the menu refreshes its summaries; going to the Range page builds its rows. A request made during a slide is
-        ignored.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for Clefs, 2 for Range, then Key signatures, Note values and Note names.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel._go(2)
-        >>> sorted(panel.range_editors), panel.stack.sliding
-        (['bass', 'treble'], True)
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return  # ignore clicks mid-transition
-        if index == 0:
-            self._refresh_summaries()
-        elif index == 2:
-            self._build_range_rows()
-        self.stack.slide_to(index)
-
-    def _active_keys(self) -> list[str]:
-        """
-        Return the clefs in use.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, which the range editors and summaries are for.
-
-        Examples
-        --------
-        >>> NoteNameSettingsPanel(NoteNameSettings(clefs={"alto"}))._active_keys()
-        ['alto']
-        """
-        return self.cfg.active_clefs()
-
     def _refresh_summaries(self) -> None:
         """
         Update the menu's summaries (the clef, range, key, value and naming pictures) from the settings.
@@ -1758,10 +1893,7 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         >>> panel.clef_pictures.toolTip()
         'Bass, Tenor'
         """
-        keys = self._active_keys()
-        self.clef_pictures.set_clefs(keys)
-        self.range_pictures.set_items([(k, *self.cfg.range_for(k)) for k in keys])
-        self.range_row.fit()
+        super()._refresh_summaries()
         _show_keys(
             self.keys_row,
             diagram=self.keys_diagram,
@@ -1874,95 +2006,6 @@ class NoteNameSettingsPanel(ExerciseSettingsPanel):
         """
         self.cfg.require_octave = on
         self._save_and_emit()
-
-    def _save_and_emit(self) -> None:
-        """
-        Save the note identification settings and emit `changed`.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> got = []
-        >>> _ = panel.changed.connect(lambda: got.append(1))
-        >>> panel._save_and_emit()
-        >>> got
-        [1]
-        """
-        save_note_names()
-        self.changed.emit()
-
-    # range page
-    def _build_range_rows(self) -> None:
-        """
-        Build a range editor for each clef in use, and a button to reset them to the defaults.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(clefs={"treble"}))
-        >>> panel._build_range_rows()
-        >>> list(panel.range_editors)
-        ['treble']
-        """
-        while self.range_lay.count():
-            item = self.range_lay.takeAt(0)
-            widget = item.widget() if item is not None else None
-            if widget is not None:
-                widget.deleteLater()
-        self.range_editors = {}
-        for key in self._active_keys():
-            low, high = self.cfg.range_for(key)
-            editor = RangeEditor(key, low=low, high=high)
-            editor.edited.connect(self._range_edited)
-            self.range_editors[key] = editor
-            self.range_lay.addWidget(editor)
-        reset = QPushButton("Reset to defaults")
-        reset.clicked.connect(self._reset_ranges)
-        self.range_lay.addWidget(reset)
-        self.range_lay.addStretch()
-
-    def _range_edited(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
-        self,
-        key: str,
-        low: int,
-        high: int,
-    ) -> None:
-        """
-        Take a changed range into the settings, save it and say so.
-
-        Parameters
-        ----------
-        key : str
-            The clef.
-        low : int
-            The lowest note, as a staff step.
-        high : int
-            The highest note.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel._range_edited("treble", 30, 40)
-        >>> panel.cfg.ranges
-        {'treble': (30, 40)}
-        """
-        self.cfg.ranges[key] = (low, high)
-        self._save_and_emit()
-
-    def _reset_ranges(self) -> None:
-        """
-        Go back to the default ranges and show them.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(ranges={"treble": (30, 40)}))
-        >>> panel._reset_ranges()
-        >>> panel.cfg.ranges
-        {}
-        """
-        self.cfg.ranges.clear()
-        save_note_names()
-        self._build_range_rows()
-        self.changed.emit()
 
 
 def load_keyboard() -> None:
@@ -3287,6 +3330,319 @@ class ChoiceChecklist(QWidget):
         if not self.allow_empty:
             _guard_last(list(self.boxes.values()))
         self.changed.emit()
+
+
+def _buttons_page(
+    cfg: settings.IntervalSettings,
+    *,
+    changed: Callable[[], None],
+    back: Callable[[], None],
+) -> QWidget:
+    """
+    Build the shared Limited and All answer-button submenu.
+
+    Parameters
+    ----------
+    cfg : IntervalSettings
+        The exercise that owns the button mode and count.
+    changed : callable
+        Save and apply an edit.
+    back : callable
+        Return to the exercise settings menu.
+
+    Returns
+    -------
+    QWidget
+        The Buttons page with the count picker below Limited.
+
+    Examples
+    --------
+    Choosing All hides the count picker and retains its last value.
+    """
+    body = QWidget()
+    layout = QVBoxLayout(body)
+    layout.setContentsMargins(0, 0, 0, 0)
+    limited = QRadioButton("Limited")
+    all_buttons = QRadioButton("All")
+    layout.addWidget(limited)
+    count_row = QWidget()
+    count_layout = QHBoxLayout(count_row)
+    count_layout.setContentsMargins(0, 0, 0, 0)
+    count_label = QLabel("Button count")
+    count = FieldComboBox()
+    count.setAccessibleName("Button count")
+    count_label.setBuddy(count)
+    for value in range(2, 11):
+        count.addItem(str(value), value)
+    count.setCurrentIndex(count.findData(cfg.button_count))
+    count_layout.addWidget(count_label)
+    count_layout.addWidget(count, 1)
+    layout.addWidget(count_row)
+    layout.addWidget(all_buttons)
+    limited.setChecked(cfg.button_mode == "limited")
+    all_buttons.setChecked(cfg.button_mode == "all")
+    count_row.setVisible(limited.isChecked())
+
+    def save_buttons() -> None:
+        """
+        Save the button mode and count when their controls change.
+
+        Examples
+        --------
+        Open the Buttons page and choose All to save that mode.
+        """
+        cfg.button_mode = "limited" if limited.isChecked() else "all"
+        cfg.button_count = count.currentData()
+        count_row.setVisible(limited.isChecked())
+        changed()
+
+    limited.toggled.connect(save_buttons)
+    count.currentIndexChanged.connect(save_buttons)
+    return _subpage("Buttons", body=body, back=back)
+
+
+def load_intervals() -> None:
+    """
+    Restore the saved staff interval options, keeping valid choices and per-clef ranges.
+
+    Examples
+    --------
+    >>> load_intervals()
+    >>> bool(settings.intervals.active_clefs())
+    True
+    """
+    saved = store()
+    cfg = settings.intervals
+    defaults = settings.IntervalSettings()
+    cfg.clefs = (
+        set(text_value(saved, key="intervals/clefs", default="treble,bass").split(",")) & set(settings.RANGE_KEYS)
+        or defaults.clefs
+    )
+    cfg.displays = (
+        set(text_value(saved, key="intervals/display", default="Melodic").split(",")) & set(settings.INTERVAL_DISPLAYS)
+        or defaults.displays
+    )
+    cfg.quality = text_value(saved, key="intervals/quality", default="true") != "false"
+    cfg.button_mode = "all" if text_value(saved, key="intervals/buttonMode", default="limited") == "all" else "limited"
+    try:
+        cfg.button_count = max(2, min(10, int_value(saved, key="intervals/buttonCount", default=6)))
+    except ValueError:
+        cfg.button_count = defaults.button_count
+    keys = text_value(saved, key="intervals/staffKeys", default="0").split(",")
+    cfg.staff_keys = {key for key in range(-7, 8) if str(key) in keys} or {0}
+    names = text_value(saved, key="intervals/intervals", default=",".join(defaults.intervals))
+    cfg.intervals = set(names.split(",")) & settings.WRITTEN_INTERVALS.keys()
+    cfg.ranges = {}
+    for clef, (minimum, maximum) in RANGE_LIMITS.items():
+        bounds = text_value(saved, key=f"intervals/range/{clef}", default="").split(",")
+        if len(bounds) == 2 and all(value.isdecimal() for value in bounds):
+            low, high = map(int, bounds)
+            if minimum <= low <= high <= maximum:
+                cfg.ranges[clef] = (low, high)
+
+
+class IntervalSettingsPanel(_StaffRangePanel):
+    """
+    Choose the notation and answer format for written intervals.
+
+    Examples
+    --------
+    >>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
+    7
+    """
+
+    def __init__(self, cfg: settings.IntervalSettings) -> None:
+        """
+        Build the menu and its six submenus.
+
+        Parameters
+        ----------
+        cfg : IntervalSettings
+            The interval exercise settings.
+
+        Examples
+        --------
+        >>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.isOn()
+        True
+        """
+        super().__init__()
+        self.cfg: settings.IntervalSettings = cfg
+        self._persist = self._save
+        self.stack = SlideStack()
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(self.stack)
+        menu = QWidget()
+        layout = QVBoxLayout(menu)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(QLabel("<h3>Settings</h3>"))
+        self.stack.addWidget(menu)
+        self.clefs_row = _Row("Clefs")
+        self.clef_pictures = ClefPictures()
+        self.clefs_row.attach(self.clef_pictures)
+        self.range_row = _Row("Range", tall=True)
+        self.range_pictures = RangePictures(max_width=ROW_PICTURE_WIDTH)
+        self.range_row.attach(self.range_pictures)
+        self.staff_key_row = _Row("Staff Key")
+        self.key_diagram = KeyDiagram()
+        self.staff_key_row.attach(self.key_diagram)
+        self.display_row = _Row("Display")
+        self.quality_row = _ToggleRow("Quality")
+        self.quality_row.setToolTip("Require the interval’s quality as well as its number")
+        self.quality_row.setOn(cfg.quality)
+        self.intervals_row = _Row("Intervals")
+        self.buttons_row = _Row("Buttons")
+        for index, row in enumerate(
+            (self.clefs_row, self.range_row, self.staff_key_row, self.display_row, self.intervals_row, self.buttons_row),
+            1,
+        ):
+            if row is self.intervals_row:
+                layout.addWidget(self.quality_row)
+            row.clicked.connect(lambda _checked=False, page=index: self._go(page))
+            layout.addWidget(row)
+        layout.addStretch()
+
+        self.boxes, clefs = _clefs_page(
+            settings.RANGE_KEYS,
+            selected=cfg.clefs,
+            edited=self._save_and_emit,
+            back=lambda: self._go(0),
+        )
+        self.stack.addWidget(clefs)
+        self.stack.addWidget(self._range_page())
+        self.staff_keys = KeyChecklist(cfg.staff_keys)
+        self.display = ChoiceChecklist([("", [(style, style) for style in settings.INTERVAL_DISPLAYS])], selected=cfg.displays)
+        self.interval_list = ChoiceChecklist(
+            [
+                (title, [(name, name) for name, iv in settings.WRITTEN_INTERVALS.items() if lo <= iv.number <= hi])
+                for title, lo, hi in (("Simple intervals", 1, 8), ("Compound intervals", 9, 15))
+            ],
+            selected=cfg.intervals,
+            allow_empty=True,
+        )
+        for title, picker in (("Staff Key", self.staff_keys), ("Display", self.display)):
+            self.stack.addWidget(_subpage(title, body=_scrolling(picker), back=lambda: self._go(0), fill=True))
+            picker.changed.connect(self._save_and_emit)
+
+        intervals = QWidget()
+        interval_layout = QVBoxLayout(intervals)
+        interval_layout.setContentsMargins(0, 0, 0, 0)
+        self.select_all = _ToggleRow("Select all")
+        self._previous_intervals = set(cfg.intervals)
+        self.select_all.switched.connect(self._select_all)
+        interval_layout.addWidget(self.select_all)
+        self.interval_span = QLabel()
+        interval_layout.addWidget(self.interval_span)
+        self.slider = IntervalRangeSlider()
+        self.slider.edited.connect(self._select_span)
+        interval_layout.addWidget(self.slider)
+        interval_layout.addWidget(self.interval_list)
+        self.interval_list.changed.connect(self._save_and_emit)
+        self.stack.addWidget(_subpage("Intervals", body=_scrolling(intervals), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
+        self.quality_row.switched.connect(self._save_and_emit)
+        self._refresh_summaries()
+
+    def _select_all(self, on: bool) -> None:
+        """
+        Temporarily include all spellings or restore the previous checks.
+
+        Parameters
+        ----------
+        on : bool
+            Whether all intervals should be selected.
+
+        Examples
+        --------
+        Switch Select all off again to return to practicing thirds.
+        """
+        if on:
+            self._previous_intervals = set(self.cfg.intervals)
+        self._set_intervals(set(settings.WRITTEN_INTERVALS) if on else self._previous_intervals)
+
+    def _select_span(self, low: int, high: int) -> None:  # noqa: PLR0917 (Qt passes both endpoints positionally)
+        """
+        Check every spelling whose written interval number is between the handles.
+
+        Parameters
+        ----------
+        low, high : int
+            Inclusive written interval numbers.
+
+        Examples
+        --------
+        Set both ends to three to check all the thirds.
+        """
+        self._set_intervals({name for name, iv in settings.WRITTEN_INTERVALS.items() if low <= iv.number <= high})
+
+    def _set_intervals(self, names: set[str]) -> None:
+        """
+        Apply a bulk interval selection in one edit.
+
+        Parameters
+        ----------
+        names : set of str
+            Checked interval spellings.
+
+        Examples
+        --------
+        Moving a slider handle generates one new question.
+        """
+        for name, box in self.interval_list.boxes.items():
+            box.blockSignals(True)
+            box.setChecked(name in names)
+            box.blockSignals(False)
+        self._save_and_emit()
+
+    def _refresh_summaries(self) -> None:
+        """
+        Show the selected clefs, ranges, signatures, displays and interval count.
+
+        Examples
+        --------
+        >>> IntervalSettingsPanel(settings.IntervalSettings()).display_row.value.text()
+        'Melodic'
+        """
+        super()._refresh_summaries()
+        _show_keys(self.staff_key_row, diagram=self.key_diagram, enabled=True, keys=self.cfg.staff_keys)
+        self.display_row.value.setText(", ".join(d for d in settings.INTERVAL_DISPLAYS if d in self.cfg.displays))
+        self.buttons_row.value.setText(self.cfg.button_mode.title())
+        numbers = [settings.WRITTEN_INTERVALS[name].number for name in self.cfg.intervals]
+        low, high = min(numbers, default=1), max(numbers, default=1)
+        self.slider.set_range(low, high=high, maximum=15, active=bool(numbers))
+        self.interval_span.setText(f"Interval numbers  {low}–{high}" if numbers else "No intervals selected")
+        if self.cfg.intervals != set(settings.WRITTEN_INTERVALS):
+            self.select_all.setOn(False)
+        count = len(self.cfg.intervals)
+        self.intervals_row.value.setText(f"{count} selected" if count else "None")
+
+    def _save(self) -> None:
+        """
+        Save the current selection and update its menu previews.
+
+        Examples
+        --------
+        Editing a pitch limit saves it for its own clef.
+        """
+        cfg = self.cfg
+        cfg.clefs = {c for c, box in self.boxes.items() if box.isChecked()}
+        _guard_last(self.boxes.values())
+        cfg.staff_keys = self.staff_keys.selected()
+        cfg.displays = self.display.selected()
+        cfg.quality = self.quality_row.isOn()
+        cfg.intervals = self.interval_list.selected()
+        saved = store()
+        saved.setValue("intervals/buttonMode", cfg.button_mode)
+        saved.setValue("intervals/buttonCount", cfg.button_count)
+        saved.setValue("intervals/clefs", ",".join(sorted(cfg.clefs)))
+        saved.setValue("intervals/staffKeys", ",".join(map(str, sorted(cfg.staff_keys))))
+        saved.setValue("intervals/display", ",".join(sorted(cfg.displays)))
+        saved.setValue("intervals/quality", "true" if cfg.quality else "false")
+        saved.setValue("intervals/intervals", ",".join(sorted(cfg.intervals)))
+        saved.remove("intervals/range")
+        for clef, (low, high) in cfg.ranges.items():
+            saved.setValue(f"intervals/range/{clef}", f"{low},{high}")
+        self._refresh_summaries()
 
 
 class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
@@ -5516,13 +5872,15 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     >>> from alto.exercises.library import IntervalNames, NoteNames
     >>> type(settings_panel_for(NoteNames())).__name__
     'NoteNameSettingsPanel'
-    >>> settings_panel_for(IntervalNames()) is None
-    True
+    >>> type(settings_panel_for(IntervalNames())).__name__
+    'IntervalSettingsPanel'
     """
     if isinstance(exercise, NotationIdentification):
         return NotationSettingsPanel()
     if isinstance(exercise, NoteNames):
         return NoteNameSettingsPanel(settings.note_names)
+    if isinstance(exercise, IntervalNames):
+        return IntervalSettingsPanel(settings.intervals)
     if isinstance(exercise, KeyboardIntervals):
         return KeyboardIntervalSettingsPanel(settings.keyboard_intervals)
     if isinstance(exercise, KeyboardNotes):
