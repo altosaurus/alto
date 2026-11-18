@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 """
-Choose the tests that a change could affect, so that a push is not checked by the whole suite when a few files changed.
+Classify pull requests for CI and list pytest targets for a local change.
 
     python scripts/changed_tests.py                    # what the working tree changed since it left origin/main
-    python scripts/changed_tests.py --kind             # "docs" or "code", for the workflows
-    python scripts/changed_tests.py --base A --head B  # the files that changed between two commits
+    python scripts/changed_tests.py --kind             # "skip", "docs", or "code" for pull requests
+    python scripts/changed_tests.py --base A --head B  # changes introduced by B since it diverged from A
 
 It prints `all`, or the paths to give to pytest (nothing at all when nothing changed). The rules are meant to be safe, so that a
 test is never skipped by mistake, and anything they do not know is a reason to run `all`:
 
+- Repository housekeeping (.gitignore, .git-blame-ignore-revs, and local previews under work/) needs no tests.
 - Only docs (anything under `docs/`, and the Markdown files at the top) run the tests that read the docs.
 - A change to a module of `alto` or to a test runs the tests that import it, directly or through other modules, and the
   doctests of the modules that import it, plus the tests that read the whole code base or the docs.
@@ -22,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -38,6 +40,28 @@ WHOLE_CODE_TESTS = (
     *DOCS_TESTS,
     "tests/test_docstrings.py",
 )  # these read every module or every page, so any code change reaches them
+
+
+def paths_affecting_tests(files: list[str]) -> list[str]:
+    """
+    Remove repository housekeeping paths before selecting tests.
+
+    Parameters
+    ----------
+    files : list of str
+        Changed paths relative to the repository root.
+
+    Returns
+    -------
+    list of str
+        Paths that can affect the tests.
+
+    Examples
+    --------
+    >>> paths_affecting_tests([".gitignore", "work/preview.html", "docs/index.md"])
+    ['docs/index.md']
+    """
+    return [path for path in files if path not in {".gitignore", ".git-blame-ignore-revs"} and not path.startswith("work/")]
 
 
 def is_docs(path: str) -> bool:
@@ -188,6 +212,7 @@ def choose(files: list[str], *, root: Path = ROOT) -> str | list[str]:
     >>> choose(["pyproject.toml"])
     'all'
     """
+    files = paths_affecting_tests(files)
     if not files:
         return []
     if all(is_docs(path) for path in files):
@@ -255,17 +280,19 @@ def changed_files(*, base: str | None, head: str | None) -> list[str]:
             ).stdout.strip()
             or "HEAD"
         )
-    command = ["git", "diff", "--name-only", base] + ([head] if head else [])
-    files = set(subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True).stdout.split())
+    # A PR owns changes since its merge base. Inspect both sides of moves across scope boundaries.
+    compare = f"{base}...{head}" if head else base
+    command = ["git", "diff", "--no-renames", "--name-only", "-z", compare, "--"]
+    files = set(os.fsdecode(subprocess.check_output(command, cwd=ROOT)).split("\0"))
     if head is None:
         untracked = subprocess.run(
-            ["git", "ls-files", "--others", "--exclude-standard"],
+            ["git", "ls-files", "--others", "--exclude-standard", "-z"],
             cwd=ROOT,
             check=True,
             capture_output=True,
-            text=True,
-        ).stdout.split()
-        files.update(untracked)
+        ).stdout
+        files.update(os.fsdecode(untracked).split("\0"))
+    files.discard("")
     return sorted(files)
 
 
@@ -299,12 +326,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--kind",
         action="store_true",
-        help='print "docs" if only the docs changed and "code" if anything else did',
+        help='print the pull request scope: "skip", "docs", or "code"',
     )
     arguments = parser.parse_args(argv)
     files = arguments.files if arguments.files is not None else changed_files(base=arguments.base, head=arguments.head)
     if arguments.kind:
-        print("docs" if files and all(is_docs(path) for path in files) else "code")
+        inputs = paths_affecting_tests(files)
+        if not inputs:
+            print("skip")
+        else:
+            print("docs" if all(is_docs(path) for path in inputs) else "code")
         return 0
     chosen = choose(files)
     print(chosen if isinstance(chosen, str) else " ".join(chosen))

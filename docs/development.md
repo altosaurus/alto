@@ -46,17 +46,21 @@ sh scripts/run-tests.sh --patch-coverage
 
 The pre-push hook runs the full pytest suite once and checks the resulting coverage against the branch diff from
 `origin/main`. Fetch the target branch first and set `ALTO_COVERAGE_BASE` when targeting another branch.
-GitHub uses the pull request’s base commit, or the previous commit on a push to main. The GitHub workflows select their checks by change type:
+On pull requests, GitHub selects pytest and coverage using the changes since the branch diverged from its base.
 
-- **Only docs** (`docs/**` and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
-  with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.
-- **A change to `alto/` or to a test:** the full test suite, including doctests and documentation checks.
-- **Anything else** (a script, a workflow, `pyproject.toml`, a `conftest.py`, the packaging files, a picture): everything.
+| Pull request changes | Pytest | Coverage |
+| --- | --- | --- |
+| Only local previews (`work/**`), `.gitignore`, or `.git-blame-ignore-revs` | Skip | Report success after checking the file list |
+| Documentation under `docs/` or top-level Markdown, optionally mixed with the housekeeping files above | Run the documentation tests on Python 3.14 | Report success after checking the file list |
+| Anything else, including application assets, dependencies, packaging, tests, or workflows | Run the full suite on the oldest and newest supported Python | Measure coverage and enforce patch coverage |
 
-In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
-and a push to `main` runs every supported version. A new push to a pull request cancels the runs still going for the old one.
-The Coverage job also reports a successful check for documentation-only pull requests, so it can be required on
-`main` without leaving those pull requests waiting for a status.
+Ruff and Pyright run on pull requests that change Python source, type stubs, or inputs to the
+respective tool. For example, a Ruff configuration change runs Ruff, a change to
+`scripts/typecheck.sh` runs Pyright, and a change to `pyproject.toml` runs both.
+The Docs check builds the site for changes under `docs/`, to `CHANGELOG.md`, or to its workflow.
+
+Pushes to `main` run the full suite on every supported Python version, along with Ruff, Pyright,
+and coverage. A new push to a pull request cancels its previous run.
 
 ## Keeping Alto fast
 
@@ -134,10 +138,6 @@ The test suite and Pyright run when you **push**, not on every commit, so commit
 error stops the push. Run the commit checks by hand with `pre-commit run --all-files`, the push checks with
 `pre-commit run --all-files --hook-stage pre-push`, and update the pinned hook versions with `pre-commit autoupdate`.
 
-## Linting
-
-Alto uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting. It is installed with the `dev` extra and
-configured in `pyproject.toml` (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
 ### Merged local branches
 
 Run `pre-commit install` again in an existing clone to install the post-merge hook. When a merge or
@@ -157,6 +157,10 @@ sh scripts/prune-branches.sh --dry-run
 The preview refreshes `origin` and lists eligible local branches. The automatic hook uses the
 references already in your clone and only deletes local branches.
 
+## Linting
+
+Alto uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting. It is installed with the `dev` extra and
+configured in `pyproject.toml` (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
 130-character line limit).
 
 ```bash

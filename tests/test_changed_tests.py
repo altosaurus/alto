@@ -7,6 +7,8 @@ import re
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import pytest
+
 if TYPE_CHECKING:
     from types import ModuleType
 
@@ -36,6 +38,29 @@ def test_a_change_to_the_docs_alone_runs_the_tests_that_read_the_docs_and_no_oth
     assert script.choose(["docs/index.md", "CHANGELOG.md"]) == list(script.DOCS_TESTS)
     assert script.choose(["docs/assets/img/home.png"]) == list(script.DOCS_TESTS)
     assert script.choose(["alto/README.md"]) == "all"  # not part of the docs, and unknown, so everything runs
+
+
+def test_preview_cleanup_and_mixed_pull_requests(capsys: pytest.CaptureFixture[str]) -> None:
+    """
+    Reproduce the file types from PR 54, then add a documentation, Python, or application asset change.
+
+    Parameters
+    ----------
+    capsys : pytest.CaptureFixture[str]
+        Capture the scope passed to the GitHub workflows.
+    """
+    script = load()
+    cleanup = [
+        ".gitignore",
+        "work/icon-candidates/index.html",
+        "work/glossary-icons/options.png",
+        "work/site/.openai/hosting.json",
+    ]
+    for extra, kind in [([], "skip"), (["README.md"], "docs"), (["scripts/run.py"], "code"), (["alto/assets/icon.svg"], "code")]:
+        assert script.main(["--kind", "--files", *cleanup, *extra]) == 0
+        assert capsys.readouterr().out.strip() == kind
+    assert script.choose(cleanup) == []
+    assert script.choose([*cleanup, "docs/index.md"]) == list(script.DOCS_TESTS)
 
 
 def test_anything_the_script_does_not_know_runs_everything() -> None:
@@ -85,6 +110,7 @@ def test_a_pull_request_runs_two_python_versions_and_a_docs_change_one_while_mai
     assert "fromJSON(needs.scope.outputs.versions)" in workflow and "changed_tests.py --kind" in workflow
     assert """versions='["3.11", "3.15"]'""" in workflow and """versions='["3.14"]'""" in workflow
     assert """ALL: '["3.11", "3.12", "3.13", "3.14", "3.15"]'""" in workflow
+    assert "if: needs.scope.outputs.kind != 'skip'" in workflow
     assert "fetch-depth: 0" in workflow  # the diff needs the history
 
 
@@ -96,12 +122,19 @@ def test_every_workflow_that_runs_on_pull_requests_cancels_what_a_new_push_makes
         assert "cancel-in-progress: ${{ github.event_name == 'pull_request' }}" in workflow or name == "docs-check", name
 
 
-def test_the_checks_of_the_code_skip_a_change_to_the_docs_alone() -> None:
-    """Check that Pyright, Ruff and Coverage ignore the docs on a pull request, and still run on every push to main."""
-    for name in ["pyright", "ruff"]:
-        workflow = (WORKFLOWS / f"{name}.yml").read_text(encoding="utf-8")
-        assert 'paths-ignore:\n      - "docs/**"\n      - "*.md"' in workflow, name
-        assert "push:\n    branches: [main]" in workflow, name
+def test_python_tool_workflows_select_source_and_their_own_configuration() -> None:
+    """Check the PR path filters and the unconditional main push triggers."""
+    yaml = pytest.importorskip("yaml")
+    for name, tool_inputs in [
+        ("pyright", ["**/py.typed", "uv.lock", "scripts/typecheck.sh"]),
+        ("ruff", ["**/*.ipynb", "**/ruff.toml"]),
+    ]:
+        trigger = yaml.load((WORKFLOWS / f"{name}.yml").read_text(), Loader=yaml.BaseLoader)["on"]
+        paths = trigger["pull_request"]["paths"]
+        assert {"**/*.py", "**/*.pyi", f".github/workflows/{name}.yml", *tool_inputs} <= set(paths)
+        assert any(pattern.endswith("pyproject.toml") for pattern in paths)
+        assert paths[-1] == "!work/**"
+        assert trigger["push"] == {"branches": ["main"]}
 
 
 def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_published() -> None:
@@ -125,4 +158,4 @@ def test_the_pre_push_hook_and_github_use_the_same_full_suite_runner() -> None:
     assert "run: sh scripts/run-tests.sh $TARGETS" in (WORKFLOWS / "tests.yml").read_text(encoding="utf-8")
     coverage = (WORKFLOWS / "codecov.yml").read_text(encoding="utf-8")
     assert "run: sh scripts/run-tests.sh --patch-coverage" in coverage
-    assert "paths-ignore:" not in coverage and "steps.scope.outputs.kind != 'docs'" in coverage
+    assert "paths-ignore:" not in coverage and "steps.scope.outputs.kind == 'code'" in coverage

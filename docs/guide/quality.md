@@ -20,7 +20,7 @@ is the reasoning.
 | **Ruff** | style, unused code, import order, many bugs | `ruff format`, `ruff check` | on commit, in CI |
 | **Pyright** | type errors | `scripts/typecheck.sh` | on push, in CI |
 | **PyCharm inspections** | more type and style warnings | the IDE | while you edit |
-| **CI** | all of the above on a clean machine and on every supported Python | `.github/workflows/` | on every pull request |
+| **CI** | checks selected by the files changed, on a clean machine | `.github/workflows/` | on every pull request |
 
 A change is done when every layer is green. None of them needs a person to remember anything.
 
@@ -101,9 +101,9 @@ After a merge or fast-forward pull on `main`, a third hook [cleans up merged loc
 
 ### Continuous integration
 
-GitHub Actions workflows in `.github/workflows/` run on every pull request and every push to `main`:
+GitHub Actions [selects checks by change type]({{ '/development/' | relative_url }}#which-checks-run-for-which-change) on pull requests. Pushes to `main` get the full checks.
 
-- **`tests.yml`** runs the suite on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
+- **`tests.yml`** runs the suite on `main` on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
   version stops being supported, drop it here and in `pyproject.toml`.
 - **`pyright.yml`** runs Pyright.
 - **`codecov.yml`** runs the tests with coverage and uploads the report. It needs a repository secret, `CODECOV_TOKEN`.
