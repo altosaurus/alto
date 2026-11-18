@@ -36,7 +36,14 @@ class ScaleExplorer(QWidget):
     'Major (Ionian)'
     """
 
-    def __init__(self, *, scale: str = "Major (Ionian)", tonic: str = "C4", editable: bool = True) -> None:
+    def __init__(
+        self,
+        *,
+        scale: str = "Major (Ionian)",
+        tonic: str = "C4",
+        editable: bool = True,
+        lesson_layout: bool = False,
+    ) -> None:
         """
         Build the scale diagram and its controls.
 
@@ -48,6 +55,8 @@ class ScaleExplorer(QWidget):
             Initial tonic with octave.
         editable : bool
             Allow changing the example; false keeps a lesson question fixed.
+        lesson_layout : bool
+            Use content-sized staff lines in the lesson pane.
 
         Examples
         --------
@@ -84,14 +93,17 @@ class ScaleExplorer(QWidget):
         controls_layout.addWidget(self.mode)
         controls.setVisible(editable)
         layout.addWidget(controls)
-        self.staff = StaffWidget(gap=9.0, margin=6.0, note_offset=55.0, side=12.0, compact=True)
+        self.staff = StaffWidget(gap=9.0, margin=6.0, note_offset=55.0, side=12.0, compact=True, lesson_layout=lesson_layout)
         self.staff.setMinimumWidth(0)
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setFixedHeight(180)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scroll.setWidget(self.staff)
-        layout.addWidget(scroll)
+        if lesson_layout:
+            layout.addWidget(self.staff, alignment=Qt.AlignmentFlag.AlignLeft)
+        else:
+            scroll = QScrollArea()
+            scroll.setWidgetResizable(True)
+            scroll.setFixedHeight(180)
+            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            scroll.setWidget(self.staff)
+            layout.addWidget(scroll)
         self.names = QLabel()
         self.names.setWordWrap(True)
         layout.addWidget(self.names)
@@ -112,7 +124,7 @@ class ScaleExplorer(QWidget):
         self.detail = QLabel()
         self.detail.setWordWrap(True)
         layout.addWidget(self.detail)
-        hear = QPushButton("♪ Hear this scale")
+        hear = QPushButton("▶  Hear this scale")
         hear.clicked.connect(self.hear)
         layout.addWidget(hear)
         self.tonic.currentIndexChanged.connect(self.refresh)

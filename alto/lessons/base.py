@@ -19,6 +19,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+from typing import Literal
 
 
 @dataclass(frozen=True)
@@ -44,6 +45,8 @@ class Task:
         The right button, if there are choices.
     clef : str
         For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.
+    key : int
+        Sharps (positive) or flats (negative) on the task staff.
 
     Examples
     --------
@@ -58,6 +61,7 @@ class Task:
     choices: tuple[str, ...] = ()
     correct: str = ""
     clef: str = ""
+    key: int = 0
 
     def check(self, answer: tuple[str, int] | str) -> bool:
         """
@@ -99,6 +103,8 @@ class Staff:
         have one, not the French violin and subbass clefs.
     caption : str
         The words under the staff.
+    key : int
+        Sharps (positive) or flats (negative) after the clef.
 
     Examples
     --------
@@ -109,6 +115,7 @@ class Staff:
     clef: str
     note: str = ""
     caption: str = ""
+    key: int = 0
 
 
 @dataclass(frozen=True)
@@ -134,15 +141,17 @@ class Step:
     closing : bool
         True for the last step, which offers to practice.
     staves : tuple of Staff
-        Staves to show beside the words, one above another, instead of the circle; empty for none.
+        Captioned staves in reading order. Adjacent examples share a panel and wrap when space is limited.
     task_staff : bool
-        Show one staff beside the words that follows the task: it draws the task's clef.
+        Show one staff beside the words that follows the task: it draws the task’s clef and key signature.
     scale : str
         Scale type for an interactive notation diagram; empty for none.
     scale_tonic : str
         Starting note of the diagram, including its octave.
     scale_explore : bool
         Allow changing the example. False hides the selectors for identification tasks.
+    hear_display : str
+        Show the playback pitches on a treble staff or keyboard ("staff" or "keyboard"). Empty hides this diagram.
     keyboard_note : str
         A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 
@@ -165,6 +174,7 @@ class Step:
     scale_tonic: str = "C4"
     scale_explore: bool = True  # false fixes the example and hides the scale's name for a question
     keyboard_note: str = ""
+    hear_display: Literal["", "staff", "keyboard"] = ""
 
 
 @dataclass(frozen=True)

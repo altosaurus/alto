@@ -170,6 +170,7 @@ StaffWidget(
     margin: float = 8.0,
     compact: bool = False,
     max_step: float | None = None,
+    lesson_layout: bool = False,
 )
 ```
 
@@ -220,6 +221,7 @@ Create an empty treble staff.
 - `margin` (*float, default 8.0*): The space kept above and below the staff for ledger lines, in gaps. Keyword-only.
 - `compact` (*bool, default False*): Size the widget to fit instead of the 220 px default. Keyword-only.
 - `max_step` (*float or None, default None*): The most width each column of notes may take: the staff then stops growing once its notes would be spread wider than that, so a few notes stay easy to read in a wide window. Keyword-only.
+- `lesson_layout` (*bool, default False*): Space the excerpt by its printed symbols and wrap at note or chord boundaries. Keyword-only.
 
 **Constructor examples**
 
@@ -276,7 +278,7 @@ A capped staff asks for its full capped width, so a layout that centers it gives
 
 **Returns**
 
-- *QSize*: The capped width and the minimum height for a staff with a `max_step`; otherwise Qt's default.
+- *QSize*: The capped width and minimum height for a lesson or a staff with a `max_step`. Other staves use Qt's default.
 
 **Examples**
 
@@ -285,6 +287,25 @@ A capped staff asks for its full capped width, so a layout that centers it gives
 >>> staff.show_notes([[Note.parse("C4")]])
 >>> staff.sizeHint().width()
 500
+```
+
+### StaffWidget.resizeEvent
+
+```python
+def resizeEvent(event: QResizeEvent) -> None
+```
+
+Reflow a lesson excerpt when its available width changes.
+
+**Parameters**
+
+- `event` (*QResizeEvent*): Previous and current widget size.
+
+**Examples**
+
+```pycon
+>>> staff = StaffWidget(lesson_layout=True)
+>>> staff.resize(300, staff.height())
 ```
 
 ### StaffWidget.highlight_column

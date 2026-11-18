@@ -33,8 +33,12 @@ Alto uses [semantic versioning](https://semver.org/).
 - Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
   exercise tile outlines are near black and other standard button outlines are graphite gray.
 
+- Lesson questions and their feedback appear together in a “Check your understanding” callout.
+
 - Lesson samples and instrument previews play at the same volume as the corresponding exercise notes.
 - Playable staff examples in lessons, the glossary, and saved answer cards highlight each note or chord as it sounds.
+
+- Lesson staves keep clefs, signatures, and notes together as the pane widens. Longer examples wrap with their clef and signature.
 
 - The documentation homepage groups practice into six topic cards that switch between light- and dark-theme screenshots.
 - Keyboard exercise icons use seven realistically proportioned white keys; the interval icon adds a span bracket.

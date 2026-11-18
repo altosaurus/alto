@@ -262,6 +262,52 @@ knowledge. When adding a lesson, place it after the ideas it uses and before les
    to use a hint. Count independent exercise practice separately. If the lesson runs long, move repeated trials
    into an exercise or split off a concept that has its own learning outcome.
 
+### Engraving lesson examples
+
+Let the music determine the width of a lesson example. Measure spacing in **staff spaces**, where one space is the
+distance between the centers of adjacent staff lines. The values below are starting points for Alto. Measure
+horizontal gaps between the visible edges of the symbols, except where the table specifies notehead centers.
+
+| Where | Starting spacing |
+| --- | --- |
+| Clef to key signature | Leave 1 staff space before the first sharp or flat and ¼ space between successive signature marks. |
+| Key signature to first note | Leave 1½ spaces before the notehead or its local accidental. With an empty signature, measure directly from the clef. |
+| Local accidental to notehead | Leave ¼ space so the sign reads with its note. Stagger accidentals in a chord as needed to clear other signs, notes, and ledger lines. |
+| Notes in a phrase | Start equal quarter notes 3½ spaces apart, measured from center to center. Give longer values more room and shorter values less. Allow clearance for flags, dots, and accidentals. Keep simultaneous pitches at the same rhythmic position. |
+| End of a short staff | End the lines about 2 spaces past the last symbol, including when the example shows only a key signature. |
+
+Anchor short examples at the left. When the pane widens, let the extra room fall beyond the staff. When a longer
+phrase needs another line, wrap at a musical boundary and repeat the clef and key signature. For paired examples,
+align the left edges and clefs, keep the staff size consistent, and align corresponding beats when comparing phrases.
+Size the white box to the wider of the music and its caption, with a small margin around both. Once the example
+fits on one line, keep the box at that width as the pane grows. Let long captions wrap below the staff in a narrow
+pane. Allow enough height for the clef, accidentals, ledger lines, and every line of the caption.
+
+Group related staves and their playback button in one bordered panel. Arrange the staves in reading order across
+the panel, with a vertical divider between neighbors on the same row. Use continuous white notation paper all
+the way to the panel border, including between staves and behind the playback button beneath the music. Use the
+theme’s light button colors on that paper. At a
+lesson content width of 760 pixels or more, align the top of the panel with the top of the explanation. Below
+that width, place the panel after the opening paragraph and before the remaining text and question. Keep paired
+staves together whenever both fit and wrap them when necessary.
+
+Put each guided question in the **Check your understanding** callout. Keep its prompt, choices, hints, explanation,
+and retry control together. Let answer buttons wrap in reading order when space is tight.
+
+Use `StaffPlayback` for a playable staff example. Its callback identifies each onset by position, so repeated notes
+light in reading order and a chord lights together. When two diagrams show the same sounding note, highlight both.
+Clear the playback highlight at the end and when changing examples.
+
+Lesson diagrams use `StaffWidget(lesson_layout=True)` in `alto/ui/lesson.py` and the lesson's scale explorer.
+The renderer measures the selected notation font and keeps each chord together when wrapping. In the scale explorer,
+a step label followed by an arrow leads to the first pitch on the next line.
+
+To check a layout change, view an F natural in G major, a three-flat bass-clef signature on its own, and a short
+run of quarter notes in both narrow and wide panes. The natural should read with the F, the flats should read as
+one group, and widening the pane should preserve the distance between the quarter notes. Also try a single note
+with a caption wider than its staff. Narrow the pane until the caption wraps, then widen it again. The last word
+should stay visible throughout, and the white box should stop growing once the caption fits on one line.
+
 ### Reviewing the lesson sequence for gaps
 
 Review the affected stretch whenever a lesson is added, moved, or substantially revised. Every few lesson changes,

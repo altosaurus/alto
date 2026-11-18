@@ -49,6 +49,16 @@
 
 ## Lessons and exercises
 
+- Keep lesson staves left-aligned. Size each white box to the wider of the music and its caption, with a small margin
+  around both. Once the example fits, widening the pane should leave extra space outside the box. In a narrow pane,
+  let long captions and phrases wrap. Check both widths against the [lesson engraving guidelines](docs/development.md#engraving-lesson-examples).
+- Route musical examples and exercise feedback through `alto.audio.sounds`. Use the shared instrument gain for every
+  playback path so the same note on the same instrument plays at the same level throughout Alto.
+- For playable staff examples, highlight each written note at its audio onset. Light chord tones together and clear the
+  playback highlight when the sample ends or the learner leaves the example.
+- Group paired lesson staves side by side with a vertical divider and put playback beneath them on the same white
+  notation paper. Extend the paper to the panel border in every theme.
+  Align the panel with the top of the text on wide panes and insert it after the opening paragraph on narrow panes.
 - Organize lessons around a musical concept. Aim for a first pass of 20 minutes or less, including guided activities.
 - Order lesson tiles from beginner to advanced. Start with no assumed knowledge and introduce each prerequisite before
   lessons that use it.

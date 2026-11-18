@@ -326,11 +326,23 @@ QMenu::separator {{ height: 1px; background: palette(midlight); margin: 5px 10px
 QSplitter::handle {{ background: transparent; }}
 QSplitter::handle:hover {{ background: palette(mid); border-radius: 2px; margin: 0 3px; }}
 
-QFrame#helpCard, QFrame#keyGroup, QFrame#detailPane {{
+QFrame#lessonKnowledgeCheck {{
+    background: {callout_fill};
+    border: none;
+    border-left: 3px solid {accent};
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}}
+QLabel#knowledgeCheckHeading {{ color: {callout_heading}; font-weight: bold; }}
+
+QFrame#lessonExampleDivider {{ background: palette(mid); border: none; }}
+QFrame#helpCard, QFrame#keyGroup, QFrame#detailPane, QFrame#lessonExample {{
     background: palette(base);
     border: 1px solid palette(mid);
     border-radius: {rp}px;
 }}
+/* Extend the white notation paper through the gutters and padding to the panel border. */
+QFrame#lessonExample[staffPaper="true"] {{ background: white; }}
 
 QScrollBar:vertical {{ background: transparent; width: 12px; margin: 2px; }}
 QScrollBar::handle:vertical {{ background: palette(mid); border-radius: 4px; min-height: 28px; }}

@@ -24,6 +24,7 @@ ScaleExplorer(
     scale: str = 'Major (Ionian)',
     tonic: str = 'C4',
     editable: bool = True,
+    lesson_layout: bool = False,
 )
 ```
 
@@ -47,6 +48,7 @@ Build the scale diagram and its controls.
 - `scale` (*str*): Initial scale type.
 - `tonic` (*str*): Initial tonic with octave.
 - `editable` (*bool*): Allow changing the example; false keeps a lesson question fixed.
+- `lesson_layout` (*bool*): Use content-sized staff lines in the lesson pane.
 
 **Constructor examples**
 

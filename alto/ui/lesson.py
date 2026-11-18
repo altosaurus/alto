@@ -20,10 +20,12 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QKeySequence,
+    QResizeEvent,
     QShortcut,
 )
 from PySide6.QtWidgets import (
     QFrame,
+    QGridLayout,
     QHBoxLayout,
     QLabel,
     QProgressBar,
@@ -50,6 +52,7 @@ from alto.ui.keyboard import KeyboardWidget
 from alto.ui.reference import ExplorableCircle
 from alto.ui.scale_explorer import ScaleExplorer
 from alto.ui.staff import StaffWidget
+from alto.ui.staff_playback import StaffPlayback
 from alto.ui.store import (
     int_value,
     store,
@@ -57,9 +60,7 @@ from alto.ui.store import (
 
 TEXT_WIDTH = 560  # the widest a paragraph is set, in pixels, so lines stay short enough to read comfortably
 CIRCLE_SIZE = 560  # the biggest the circle is in a lesson, in pixels
-STAFF_WIDTH = 520  # the widest the staves beside a lesson's words are, in pixels
-RIGHT = "#2e7d32"  # the green of a right answer, as everywhere in the app
-GENTLE = "#b26a00"  # the amber of a hint, which is not a red mark because nothing here can be failed
+LESSON_SPREAD_WIDTH = 760  # minimum lesson pane width for side-by-side reading and music
 GIVE_UP_AFTER = 2  # wrong answers before the answer is shown
 
 
@@ -108,6 +109,191 @@ def save_step(
     0
     """
     store().setValue(f"lessons/{lesson.key}/step", step)
+
+
+class _IllustratedStep(QWidget):
+    """An explanation with its captioned examples and playback, arranged for the available lesson width."""
+
+    def __init__(
+        self,
+        text: QLabel,
+        *,
+        staves: list[StaffWidget],
+        keyboard: KeyboardWidget | None,
+        playback: QPushButton | None,
+    ) -> None:
+        """
+        Group the illustrations and their playback button in one framed panel.
+
+        Parameters
+        ----------
+        text : QLabel
+            Lesson prose, with each paragraph marked in HTML.
+        staves : list of StaffWidget
+            Captioned staff illustrations in reading order.
+        keyboard : KeyboardWidget or None
+            Keyboard to show for a pitch example.
+        playback : QPushButton or None
+            Play the pitches shown in this example.
+        """
+        super().__init__()
+        self.setMinimumWidth(1)
+        self.setMaximumWidth(980)
+        self.prose = text
+        self.full_text = text.text()
+        opening, end, rest = self.full_text.partition("</p>")
+        self.opening = opening + end
+        self.rest = QLabel(rest)
+        self.rest.setTextFormat(Qt.TextFormat.RichText)
+        self.rest.setWordWrap(True)
+        self.rest.setMaximumWidth(TEXT_WIDTH)
+        self.rest.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        self.grid = QGridLayout(self)
+        self.grid.setContentsMargins(0, 0, 0, 0)
+        self.grid.setHorizontalSpacing(24)
+        self.grid.setVerticalSpacing(12)
+        self.grid.addWidget(self.prose, 0, 0, Qt.AlignmentFlag.AlignTop)
+        self.grid.addWidget(self.rest, 2, 0, Qt.AlignmentFlag.AlignTop)
+
+        self.panel = QFrame()
+        self.panel.setObjectName("lessonExample")
+        self.panel.setProperty("staffPaper", bool(staves))
+        group = QVBoxLayout(self.panel)
+        group.setContentsMargins(12, 9, 12, 9)
+        group.setSpacing(8)
+        self.staves = staves
+        self.gallery = QGridLayout()
+        self.gallery.setContentsMargins(0, 0, 0, 0)
+        self.gallery.setHorizontalSpacing(6)
+        self.gallery.setVerticalSpacing(8)
+        self.dividers = []
+        if staves:
+            group.addLayout(self.gallery)
+            for _ in staves[1:]:
+                divider = QFrame(self.panel)
+                divider.setObjectName("lessonExampleDivider")
+                divider.setFixedWidth(1)
+                self.dividers.append(divider)
+        if keyboard is not None:
+            keyboard.setMaximumWidth(300)
+            group.addWidget(keyboard)
+        if playback is not None:
+            group.addWidget(playback, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.keyboard = keyboard
+        self.wide: bool | None = None
+        self.columns = 0
+        self.arrange()
+
+    def arrange(self) -> None:
+        """Fit the examples in reading order and place the panel beside or within the text."""
+        wide = self.width() >= LESSON_SPREAD_WIDTH
+        budget = (self.width() - 24) * 10 // 21 if wide else self.width()
+        if wide != self.wide:
+            self.wide = wide
+            self.prose.setText(self.full_text if wide else self.opening)
+            self.rest.setVisible(bool(self.rest.text()) and not wide)
+            self.grid.setAlignment(Qt.AlignmentFlag.AlignTop if wide else Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+            self.grid.setColumnStretch(0, 11 if wide else 1)
+            self.grid.setColumnStretch(1, 10 if wide else 0)
+            self.grid.addWidget(
+                self.panel,
+                0 if wide else 1,
+                1 if wide else 0,
+                Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
+            )
+
+        widths = [staff.maximumWidth() for staff in self.staves]
+        gutter = 2 * self.gallery.horizontalSpacing() + 1
+        columns = len(widths)
+        while columns:
+            content_width = sum(max(widths[i::columns]) for i in range(columns)) + (columns - 1) * gutter
+            if columns == 1 or content_width + 26 <= budget:
+                break
+            columns -= 1
+        if columns != self.columns:
+            self.columns = columns
+            for index, staff in enumerate(self.staves):
+                row, col = divmod(index, columns)
+                self.gallery.addWidget(staff, row, 2 * col, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+                if index:
+                    divider = self.dividers[index - 1]
+                    if col:
+                        self.gallery.addWidget(divider, row, 2 * col - 1)
+                    else:
+                        self.gallery.removeWidget(divider)
+                    divider.setVisible(bool(col))
+        if self.keyboard is not None:
+            self.panel.setFixedWidth(min(326, max(1, budget)))
+        else:
+            self.panel.setMaximumWidth(max(1, budget))
+        self.grid.invalidate()
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """
+        Reflow the existing controls without interrupting playback or clearing answers.
+
+        Parameters
+        ----------
+        event : QResizeEvent
+            New and previous widget sizes.
+        """
+        super().resizeEvent(event)
+        if event.size().width() != event.oldSize().width():
+            self.arrange()
+
+
+class _LessonChoices(QWidget):
+    """Keep the callout's answers in reading order as its width changes."""
+
+    def __init__(self) -> None:
+        """Start with an empty, left-aligned answer row."""
+        super().__init__()
+        self.setMinimumWidth(1)
+        self.grid = QGridLayout(self)
+        self.grid.setContentsMargins(0, 0, 0, 0)
+        self.grid.setSpacing(7)
+        self.grid.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        self.buttons: list[QPushButton] = []
+
+    def set_buttons(self, buttons: list[QPushButton]) -> None:
+        """
+        Replace the previous question's answers.
+
+        Parameters
+        ----------
+        buttons : list of QPushButton
+            Buttons in reading and keyboard focus order.
+        """
+        for old in self.buttons:
+            self.grid.removeWidget(old)
+            old.hide()
+            old.deleteLater()
+        self.buttons = buttons
+        self.setVisible(bool(buttons))
+        self.arrange()
+
+    def arrange(self) -> None:
+        """Wrap buttons into as many columns as fit without truncating a label."""
+        if self.buttons:
+            spacing = self.grid.spacing()
+            widest = max(max(button.minimumWidth(), button.sizeHint().width()) for button in self.buttons)
+            columns = max(1, (self.width() + spacing) // (widest + spacing))
+            for index, button in enumerate(self.buttons):
+                row, col = divmod(index, columns)
+                self.grid.addWidget(button, row, col, Qt.AlignmentFlag.AlignLeft)
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """
+        Reflow the current answers without changing feedback or focus.
+
+        Parameters
+        ----------
+        event : QResizeEvent
+            New and previous widget sizes.
+        """
+        super().resizeEvent(event)
+        if event.size().width() != event.oldSize().width():
+            self.arrange()
 
 
 class StepView(QWidget):
@@ -176,6 +362,7 @@ class StepView(QWidget):
         self.task: Task | None = None
         self.circle: ExplorableCircle | None = None
         self.staves: list[StaffWidget] = []
+        self.playback = StaffPlayback(self, highlight=self._highlight_sample)
         self.choice_buttons: list[QPushButton] = []
         self._wrong = 0  # wrong answers to the task now being asked
         self._setting = False  # True while the program, not the learner, is picking a cell
@@ -202,14 +389,35 @@ class StepView(QWidget):
         text.setMaximumWidth(TEXT_WIDTH)
         text.setAlignment(Qt.AlignmentFlag.AlignTop)
         text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        left.addWidget(text)
+        self.hear_button: QPushButton | None = None
         if step.hear:
-            self.hear_button = QPushButton(f"♪  {step.hear_label}")
+            self.hear_button = QPushButton(f"▶  {step.hear_label}")
+            self.hear_button.setObjectName("lessonPlayback")
             self.hear_button.clicked.connect(self.hear)
-            row = QHBoxLayout()
-            row.addWidget(self.hear_button)
-            row.addStretch(1)
-            left.addLayout(row)
+        if step.staves or step.task_staff:
+            self.staves = [self._make_staff(staff) for staff in (step.staves or (Staff(clef="treble"),))]
+        if step.hear_display == "staff":
+            staff = StaffWidget(gap=8.0, side=8.0, lesson_layout=True)
+            staff.show_notes([[Note.parse(name) for name in chord] for chord in step.hear], clef="treble")
+            self.staves.append(staff)
+        keyboard = None
+        if step.keyboard_note or step.hear_display == "keyboard":
+            keyboard = KeyboardWidget()
+            keys = [step.keyboard_note] if step.keyboard_note else [name for chord in step.hear for name in chord]
+            keyboard.show_keys([Note.parse(name).midi for name in keys], span=(60, 72))
+            keyboard.setAccessibleName(f"Keyboard with {' and '.join(keys)} highlighted")
+        self.illustration: _IllustratedStep | None = None
+        if self.staves or keyboard is not None or (step.hear and step.circle == "none" and not step.scale):
+            comparisons = [staff for staff in self.staves if len(staff.columns) == 1]
+            for staff in comparisons:
+                staff.lesson_peers.update(peer for peer in comparisons if peer is not staff)
+                staff._fit_width()
+            self.illustration = _IllustratedStep(text, staves=self.staves, keyboard=keyboard, playback=self.hear_button)
+            left.addWidget(self.illustration)
+        else:
+            left.addWidget(text)
+            if self.hear_button is not None:
+                left.addWidget(self.hear_button, alignment=Qt.AlignmentFlag.AlignLeft)
         side = left
         self.info = QLabel()
         self.info.setTextFormat(Qt.TextFormat.RichText)
@@ -227,8 +435,6 @@ class StepView(QWidget):
             circle.set_interactive(step.circle != "rest")
             circle.picked.connect(lambda ring, place: self._picked(ring, place=place))
             self.circle = circle
-        if step.staves or step.task_staff:
-            self.staves = [self._make_staff(staff) for staff in (step.staves or (Staff(clef="treble"),))]
         if step.circle == "walk":
             self.walk_row = QHBoxLayout()
             self.down = QPushButton("◀  Down a fifth")
@@ -238,16 +444,24 @@ class StepView(QWidget):
             self.walk_row.addWidget(self.down)
             self.walk_row.addWidget(self.up)
             side.addLayout(self.walk_row)
+        self.info.setVisible(self.circle is not None)
         side.addWidget(self.info)
         self.task_box = QFrame()
-        self.task_box.setObjectName("settingsPane")  # the same soft outline as the panes
+        self.task_box.setObjectName("lessonKnowledgeCheck")
+        self.task_box.setMaximumWidth(TEXT_WIDTH)
+        heading = QLabel("Check your understanding")
+        heading.setObjectName("knowledgeCheckHeading")
+        self.task_box.setAccessibleName(heading.text())
         box = QVBoxLayout(self.task_box)
+        box.setContentsMargins(15, 12, 15, 12)
+        box.setSpacing(7)
+        box.addWidget(heading)
         self.prompt = QLabel()
         self.prompt.setTextFormat(Qt.TextFormat.RichText)
         self.prompt.setWordWrap(True)
-        self.choices = QHBoxLayout()
+        self.choices = _LessonChoices()
         box.addWidget(self.prompt)
-        box.addLayout(self.choices)
+        box.addWidget(self.choices)
         box.addWidget(self.feedback)
         box.addWidget(self.again, alignment=Qt.AlignmentFlag.AlignLeft)
         self.task_box.setVisible(step.make_task is not None)
@@ -269,29 +483,9 @@ class StepView(QWidget):
         lay.addWidget(scroll, 2)
         if self.circle is not None:
             lay.addWidget(self.circle, 3)  # it takes the height that is left, and is drawn as the biggest square that fits
-        if step.keyboard_note:
-            keyboard = KeyboardWidget()
-            keyboard.show_key(Note.parse(step.keyboard_note).midi, span=(60, 72))
-            keyboard.setAccessibleName(f"Keyboard with {step.keyboard_note} highlighted")
-            lay.addWidget(keyboard, 3, Qt.AlignmentFlag.AlignVCenter)
-        if self.staves:
-            holder = QWidget()  # the staves, one above another, in the middle of the space beside the words
-            stack = QVBoxLayout(holder)
-            stack.setContentsMargins(
-                0,
-                0,
-                0,
-                0,
-            )
-            stack.addStretch(1)
-            for staff_widget in self.staves:
-                stack.addWidget(staff_widget)
-            stack.addStretch(1)
-            holder.setMaximumWidth(STAFF_WIDTH)
-            lay.addWidget(holder, 3)
         self.scale_explorer: ScaleExplorer | None = None
         if step.scale:
-            explorer = ScaleExplorer(scale=step.scale, tonic=step.scale_tonic, editable=step.scale_explore)
+            explorer = ScaleExplorer(scale=step.scale, tonic=step.scale_tonic, editable=step.scale_explore, lesson_layout=True)
             self.scale_explorer = explorer
             scale_scroll = QScrollArea()
             scale_scroll.setWidgetResizable(True)
@@ -325,8 +519,8 @@ class StepView(QWidget):
         >>> StepView._make_staff(Staff(clef="alto", note="C4", caption="Alto")).caption
         'Alto'
         """
-        widget = StaffWidget(gap=8.0, margin=5.5, compact=True)
-        widget.show_notes([[Note.parse(staff.note)]] if staff.note else [], clef=staff.clef, caption=staff.caption)
+        widget = StaffWidget(gap=8.0, side=8.0, lesson_layout=True)
+        widget.show_notes([[Note.parse(staff.note)]] if staff.note else [], clef=staff.clef, key=staff.key, caption=staff.caption)
         return widget
 
     def _invitation(self) -> str:
@@ -362,8 +556,33 @@ class StepView(QWidget):
         >>> with patch.object(sounds, "enabled", False):
         ...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
         """
+        if self.scale_explorer is not None:
+            self.scale_explorer.hear(force=False)
+            return
         columns = [[Note.parse(name) for name in column] for column in self.step.hear]
-        sounds.play_notes(columns, gap_ms=330 if len(columns) > 4 else 650)
+        gap_ms = 330 if len(columns) > 4 else 650
+        if self.staves:
+            self.playback.play(columns, gap_ms=gap_ms)
+        else:
+            sounds.play_notes(columns, gap_ms=gap_ms)
+
+    def _highlight_sample(self, index: int | None) -> None:
+        """
+        Follow the phrase on its staff and light matching notes in comparison diagrams.
+
+        Parameters
+        ----------
+        index : int or None
+            Playback onset, or None when the sample ends.
+        """
+        sounding = {Note.parse(name).midi for name in self.step.hear[index]} if index is not None else set()
+        for staff in self.staves:
+            if self.step.hear_display == "staff" and staff is self.staves[-1]:
+                staff.highlight_column(index)
+            else:
+                # Each comparison diagram shows a single written note, sometimes in two equivalent spellings.
+                matches = bool(staff.columns and staff.columns[0][0].midi in sounding)
+                staff.highlight_column(0 if matches else None)
 
     def walk(self, step: int) -> None:
         """
@@ -449,24 +668,21 @@ class StepView(QWidget):
         self.prompt.setText(task.prompt)
         self.feedback.clear()
         self.again.hide()
-        while self.choices.count():
-            item = self.choices.takeAt(0)
-            widget = item.widget() if item is not None else None
-            if widget is not None:
-                widget.deleteLater()
+        self.feedback.hide()
         self.choice_buttons = []
         if (
             self.staves and self.step.task_staff
         ):  # the staff beside the words follows the task: its clef, or none to count lines on
             self.staves[0].clef_hidden = not task.clef
-            self.staves[0].show_notes([], clef=task.clef or "treble")
+            self.staves[0].show_notes([], clef=task.clef or "treble", key=task.key)
+            if self.illustration is not None:
+                self.illustration.arrange()
         for text in task.choices:
             button = QPushButton(text)
             button.setMinimumWidth(56)
             button.clicked.connect(lambda _=False, answer=text, pressed=button: self._answered(answer, button=pressed))
-            self.choices.addWidget(button)
             self.choice_buttons.append(button)
-        self.choices.addStretch(1)
+        self.choices.set_buttons(self.choice_buttons)
         if self.circle is not None:
             self._setting = True
             try:
@@ -537,8 +753,9 @@ class StepView(QWidget):
         task = self.task
         if task is None:
             return
+        self.feedback.show()
         if task.check(answer):
-            self.feedback.setText(f'<span style="color:{RIGHT}"><b>Right.</b></span> {task.explanation}')
+            self.feedback.setText(f"<b>Right.</b> {task.explanation}")
             self.again.show()
             self._lock()
             if self.circle is not None and task.cells and isinstance(answer, tuple):
@@ -548,14 +765,14 @@ class StepView(QWidget):
         if button is not None:
             button.setEnabled(False)
         if self._wrong >= GIVE_UP_AFTER:
-            self.feedback.setText(f'<span style="color:{GENTLE}"><b>Here it is.</b></span> {task.explanation}')
+            self.feedback.setText(f"<b>Here it is.</b> {task.explanation}")
             self.again.show()
             self._lock()
             if self.circle is not None and task.cells:
                 ring, place = min(task.cells)
                 self._show(self.circle, ring=ring, place=place)
         else:
-            self.feedback.setText(f'<span style="color:{GENTLE}"><b>Not quite.</b></span> {task.hint}')
+            self.feedback.setText(f"<b>Not quite.</b> {task.hint}")
 
     def _lock(self) -> None:
         """

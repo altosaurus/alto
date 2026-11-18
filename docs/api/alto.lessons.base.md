@@ -30,6 +30,7 @@ Task(
     choices: tuple[str, ...] = (),
     correct: str = '',
     clef: str = '',
+    key: int = 0,
 )
 ```
 
@@ -46,6 +47,7 @@ It is answered either by clicking a cell of the circle (`cells`) or by pressing 
 - `choices` (*tuple of str*): The buttons to choose from, for a question that is not answered on the circle.
 - `correct` (*str*): The right button, if there are choices.
 - `clef` (*str*): For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.
+- `key` (*int*): Sharps (positive) or flats (negative) on the task staff.
 
 **Examples**
 
@@ -86,6 +88,7 @@ Staff(
     clef: str,
     note: str = '',
     caption: str = '',
+    key: int = 0,
 )
 ```
 
@@ -96,6 +99,7 @@ A staff to show beside the words of a step: a clef, and perhaps a note, with a l
 - `clef` (*str*): The clef to draw, any of `alto.settings.CLEF_BASICS_CLEFS`.
 - `note` (*str*): A note to write on the staff, such as "C4"; empty for none. Only the seven clefs that have a lowest line for notes can have one, not the French violin and subbass clefs.
 - `caption` (*str*): The words under the staff.
+- `key` (*int*): Sharps (positive) or flats (negative) after the clef.
 
 **Examples**
 
@@ -121,6 +125,7 @@ Step(
     scale_tonic: str = 'C4',
     scale_explore: bool = True,
     keyboard_note: str = '',
+    hear_display: Literal['', 'staff', 'keyboard'] = '',
 )
 ```
 
@@ -135,11 +140,12 @@ One page of a lesson.
 - `hear_label` (*str*): What the Hear it button says.
 - `make_task` (*callable or None*): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
 - `closing` (*bool*): True for the last step, which offers to practice.
-- `staves` (*tuple of Staff*): Staves to show beside the words, one above another, instead of the circle; empty for none.
-- `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task's clef.
+- `staves` (*tuple of Staff*): Captioned staves in reading order. Adjacent examples share a panel and wrap when space is limited.
+- `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task’s clef and key signature.
 - `scale` (*str*): Scale type for an interactive notation diagram; empty for none.
 - `scale_tonic` (*str*): Starting note of the diagram, including its octave.
 - `scale_explore` (*bool*): Allow changing the example. False hides the selectors for identification tasks.
+- `hear_display` (*str*): Show the playback pitches on a treble staff or keyboard ("staff" or "keyboard"). Empty hides this diagram.
 - `keyboard_note` (*str*): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 
 **Examples**
