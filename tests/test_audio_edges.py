@@ -9,6 +9,7 @@ from typing import (
 )
 
 import pytest
+from PySide6.QtCore import QObject
 from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtTest import QTest
 
@@ -140,7 +141,7 @@ def test_another_instrument_shifts_the_nearest_recording(tmp_path: Path) -> None
     assert s._note_file(inst, midi=missing).exists()
 
 
-def test_a_released_note_fades_out_and_stops(app: QApplication) -> None:
+def test_a_released_note_fades_out_and_stops(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
     """
     Check that a released note fades out and stops.
 
@@ -148,13 +149,20 @@ def test_a_released_note_fades_out_and_stops(app: QApplication) -> None:
     ----------
     app : QApplication
         The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Adds the effect methods without opening an audio device.
     """
     s = Sounds()
-    fx = QSoundEffect()
-    s._release(fx)
+    fx = QObject()
+    fx.setProperty("volume", 1.0)
+    stopped = []
+    monkeypatch.setattr(fx, "volume", lambda: fx.property("volume"), raising=False)
+    monkeypatch.setattr(fx, "stop", lambda: stopped.append(True), raising=False)
+    s._release(fx)  # type: ignore[arg-type]
     assert id(fx) in s._fades
     QTest.qWait(s.FADE_MS + 150)
-    assert fx.volume() == pytest.approx(0.0, abs=0.01)
+    assert fx.property("volume") == pytest.approx(0.0, abs=0.01)
+    assert stopped == [True]
 
 
 def test_playing_a_note_again_cancels_its_fade() -> None:

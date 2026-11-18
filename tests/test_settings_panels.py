@@ -585,6 +585,8 @@ def test_the_construction_pane_opens_its_pages_and_edits_the_settings(constructi
     assert construction.stack.currentIndex() == 2
     construction.major_keys.boxes[-2].setChecked(True)
     assert cfg.key_signature and -2 in cfg.keys
+    construction.minor_keys.boxes[3].setChecked(True)
+    assert cfg.minor and cfg.minor_keys == {3}
     back(construction)
     assert construction.keys_row.value.text() == "Scale and Degree"
 

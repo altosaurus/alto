@@ -156,3 +156,19 @@ def test_a_stored_question_is_only_asked_again_under_the_settings_it_was_made_fo
         before = exercise.settings_signature()
         change()
         assert exercise.settings_signature() != before, type(exercise).__name__
+
+
+def test_stored_construction_questions_keep_distinct_practice_histories() -> None:
+    """Distinguish question variants on replay and honor the legacy hidden staff signature."""
+    q = Question("C", choices=[], answer="C", construct=Note.parse("C4"))
+    variants = [
+        Question.from_dict({**q.to_dict(), **flags})
+        for flags in ({"notes_only": True}, {"any_octave": True}, {"staff_signature": 0}, {"minor": True})
+    ]
+    assert len({item.item_key() for item in [q, *variants]}) == 5
+    assert variants[1].check_placed(Note.parse("C5"))
+    assert not variants[1].check_placed(Note.parse("C#5"))
+    legacy = q.to_dict()
+    del legacy["staff_signature"]
+    legacy["staff_key_hidden"] = True
+    assert Question.from_dict(legacy) == variants[2]

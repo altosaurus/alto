@@ -1,22 +1,26 @@
 #!/bin/sh
-# Run the tests for the pre-push hook, using the project's virtual environment if there is one.
-# Only the tests that the change could affect run (see scripts/changed_tests.py); ALTO_TEST_ALL=1 runs them all.
-# The widget tests use Qt's offscreen platform, so no display is needed.
+# Run the full pytest suite before pushing, as GitHub does for code changes.
+# GitHub can pass explicit test targets for a documentation-only change.
 cd "$(dirname "$0")/.." || exit 1
 py=.venv/bin/python
 [ -x "$py" ] || py=.venv/Scripts/python.exe
 [ -x "$py" ] || py=python
 export QT_QPA_PLATFORM=offscreen
-if [ "${ALTO_TEST_ALL:-0}" = 1 ]; then
-  exec "$py" -m pytest -q
+if [ "${1:-}" = "--patch-coverage" ]; then
+  shift
+  base=${ALTO_COVERAGE_BASE:-origin/main}
+  if [ -n "${PRE_COMMIT_REMOTE_NAME:-}" ] && [ -n "${PRE_COMMIT_TO_REF:-}" ]; then
+    if [ "$(git rev-parse HEAD)" != "$(git rev-parse "$PRE_COMMIT_TO_REF")" ] || ! git diff --quiet HEAD --; then
+      echo "Check out the commit being pushed and commit or stash pending changes before measuring its coverage." >&2
+      exit 1
+    fi
+  fi
+  if [ -n "${PRE_COMMIT_REMOTE_NAME:-}" ] && [ -n "$(git ls-files --others --exclude-standard -- 'tests/*.py' 'alto/*.py' 'benchmarks/*.py')" ]; then
+    echo "The checkout contains untracked application or test modules. Commit or move them before pushing." >&2
+    exit 1
+  fi
+  git merge-base "$base" HEAD >/dev/null || exit 1
+  "$py" -m pytest -q -o faulthandler_timeout=120 --cov --cov-report=xml --cov-report=term || exit $?
+  exec "$py" -m diff_cover.diff_cover_tool coverage.xml --compare-branch "$base" --fail-under 100
 fi
-targets=$("$py" scripts/changed_tests.py) || exec "$py" -m pytest -q
-if [ "$targets" = all ]; then
-  exec "$py" -m pytest -q
-elif [ -z "$targets" ]; then
-  echo "Nothing has changed since origin/main, so there is nothing to test."
-else
-  echo "Running the tests the change could affect (ALTO_TEST_ALL=1 runs them all):"
-  # shellcheck disable=SC2086
-  exec "$py" -m pytest -q $targets
-fi
+exec "$py" -m pytest -q -o faulthandler_timeout=120 "$@"

@@ -8,7 +8,7 @@ import random
 from typing import TYPE_CHECKING
 
 import pytest
-from PySide6.QtWidgets import QGroupBox
+from PySide6.QtWidgets import QCheckBox, QGroupBox
 
 from alto import settings
 from alto.exercises.library import (
@@ -24,6 +24,7 @@ from alto.theory.scales import (
     SCALES,
     build,
 )
+from alto.ui.degree_text import DegreeCheckBox
 from alto.ui.exercise_view import (
     ExerciseView,
     choice_keys,
@@ -377,3 +378,50 @@ def test_function_buttons_fit_the_answer_area(app: QApplication) -> None:
     keys = choice_keys(question.choices)
     assert len(set(keys)) == len(keys)
     view.close()
+
+
+def test_minor_degree_selection_and_notes_only_preview(app: QApplication) -> None:
+    """
+    Practice only the seventh in A minor and read a Notes Only question independently of degree naming.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.construction
+    cfg.key_signature, cfg.major, cfg.minor = True, False, True
+    cfg.keys, cfg.minor_keys, cfg.degrees = {0}, {0}, {7}
+    cfg.accidentals = False
+    settings.note_names.naming = "functions"
+    exercise = NoteConstruction()
+    rng = random.Random(4)
+    for _ in range(12):
+        q = exercise.generate(rng)
+        assert q.construct is not None and q.construct.name == "G"
+        assert "Subtonic" in q.answer
+    assert settings.spell(Note.parse("G#4"), naming="functions", key=0, minor=True) == "Leading tone"
+
+    cfg.question_type, cfg.octave = "notes", False
+    signature = exercise.settings_signature()
+    cfg.keys, cfg.minor_keys, cfg.degrees = {3}, {-4}, {1}
+    assert exercise.settings_signature() == signature
+    q = exercise.generate(rng)
+    assert q.construct is not None
+    assert QuestionPreview(exercise.name, question=q)._answer_text() == q.construct.name == q.answer
+
+
+def test_plain_degree_checkbox_uses_the_native_label(app: QApplication) -> None:
+    """
+    Render an ordinary checkbox label through the same native control as the settings pane.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    native, degree = QCheckBox("All degrees"), DegreeCheckBox("All degrees")
+    for box in (native, degree):
+        box.setChecked(True)
+        box.resize(140, 32)
+    assert native.grab().toImage() == degree.grab().toImage()

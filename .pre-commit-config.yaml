@@ -28,8 +28,8 @@ repos:
   - repo: local
     hooks:
       - id: pytest
-        name: pytest
-        entry: sh scripts/run-tests.sh
+        name: Full test suite and patch coverage
+        entry: sh scripts/run-tests.sh --patch-coverage
         language: system
         pass_filenames: false
         always_run: true

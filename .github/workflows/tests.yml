@@ -75,4 +75,4 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
           TARGETS: ${{ needs.scope.outputs.targets }}
-        run: python -m pytest -q $TARGETS
+        run: sh scripts/run-tests.sh $TARGETS

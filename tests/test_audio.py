@@ -9,15 +9,12 @@ import wave
 from collections.abc import Callable
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
-from PySide6.QtCore import QTimer
-from PySide6.QtMultimedia import (
-    QAudioFormat,
-    QAudioSink,
-    QSoundEffect,
-)
+from PySide6.QtCore import QObject, QTimer
+from PySide6.QtMultimedia import QAudioFormat
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
@@ -64,17 +61,19 @@ def test_melody_highlights_follow_the_audio_clock(
         "defaultAudioOutput",
         lambda: SimpleNamespace(preferredFormat=lambda: fmt),
     )
-    sink = QAudioSink(fmt)
+    sink = QObject()
     position = [0]
     calls: list[str] = []
     seen: list[int | None] = []
     path = tmp_path / "scale.wav"
     path.write_bytes(to_wav_bytes(np.zeros(SAMPLE_RATE)))
     monkeypatch.setattr(audio_module, "QAudioSink", lambda _format: sink)
-    monkeypatch.setattr(sink, "error", lambda: type("NoError", (), {"value": 0})())
-    monkeypatch.setattr(sink, "processedUSecs", lambda: position[0])
-    monkeypatch.setattr(sink, "start", lambda _buffer: calls.append("play"))
-    monkeypatch.setattr(sink, "stop", lambda: calls.append("stop"))
+    monkeypatch.setattr(sink, "setBufferSize", Mock(), raising=False)
+    monkeypatch.setattr(sink, "setVolume", Mock(), raising=False)
+    monkeypatch.setattr(sink, "error", lambda: SimpleNamespace(value=0), raising=False)
+    monkeypatch.setattr(sink, "processedUSecs", lambda: position[0], raising=False)
+    monkeypatch.setattr(sink, "start", lambda _buffer: calls.append("play"), raising=False)
+    monkeypatch.setattr(sink, "stop", lambda: calls.append("stop"), raising=False)
     monkeypatch.setattr(sink, "deleteLater", lambda: None)
     monkeypatch.setattr(player, "_preview_file", lambda *_args, **_kwargs: path)
     player.play_melody([60, 62], gap_ms=280, on_step=seen.append)
@@ -691,7 +690,9 @@ def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
         72,
         71,
     )
-    effect = QSoundEffect()
+    effect = Mock()
+    effect.setSource.side_effect = lambda url: setattr(effect.source, "return_value", url)
+    effect.isPlaying.return_value = False
     calls = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(audio_module, "QSoundEffect", lambda: effect)

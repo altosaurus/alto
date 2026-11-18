@@ -32,6 +32,7 @@ from alto.ui.settings_panel import (
     load_scale_identification,
     settings_panel_for,
 )
+from alto.ui.store import store
 
 if TYPE_CHECKING:
     from PySide6.QtWidgets import QApplication
@@ -272,3 +273,19 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
     view.next_question()
     callbacks[0](3)
     assert not view.staff.column_colors and view.staff.note_color is None
+
+
+def test_descending_scale_from_saved_minor_only_keys() -> None:
+    """Restore a minor-only selection and read the same scale in reverse when motion changes."""
+    saved = store()
+    saved.setValue("scaleIdentification/keys", "")
+    saved.setValue("scaleIdentification/minorKeys", "-2")
+    load_scale_identification()
+    cfg = settings.scale_identification
+    assert cfg.keys == set() and cfg.minor_keys == {-2}
+    cfg.modes = {"Natural minor (Aeolian)"}
+    cfg.motion = "ascending"
+    ascending = ScaleIdentification().generate(random.Random(42)).staff
+    cfg.motion = "descending"
+    descending = ScaleIdentification().generate(random.Random(42)).staff
+    assert descending == ascending[::-1]

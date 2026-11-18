@@ -515,7 +515,7 @@ class Sounds:
         Examples
         --------
         >>> from PySide6.QtMultimedia import QSoundEffect
-        >>> effect = QSoundEffect()
+        >>> effect = QSoundEffect()  # doctest: +SKIP
         >>> # noinspection PyProtectedMember
         >>> sounds._release(effect)  # doctest: +SKIP
         """

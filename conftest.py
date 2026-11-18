@@ -19,6 +19,8 @@ import pytest  # noqa: E402
 from PySide6.QtCore import QEvent  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
+from alto.audio import sounds  # noqa: E402
+
 
 @pytest.fixture(autouse=True)
 def _qt_application_for_doctests(
@@ -27,7 +29,7 @@ def _qt_application_for_doctests(
     doctest_namespace: dict,
 ) -> Iterator[None]:
     """
-    Give every doctest a Qt application, available as `app`.
+    Give every doctest a Qt application and mute its example playback.
 
     Parameters
     ----------
@@ -53,8 +55,13 @@ def _qt_application_for_doctests(
         return
 
     doctest_namespace["app"] = QApplication.instance() or QApplication([])
-    yield
-    _delete_every_widget()
+    was_enabled = sounds.enabled
+    sounds.enabled = False
+    try:
+        yield
+    finally:
+        sounds.enabled = was_enabled
+        _delete_every_widget()
 
 
 def _delete_every_widget() -> None:
