@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -599,7 +599,7 @@ is the reasoning.</p>
     </tr>
     <tr>
       <td><strong>CI</strong></td>
-      <td>all of the above on a clean machine and on every supported Python</td>
+      <td>checks selected by the files changed, on a clean machine</td>
       <td><code class="language-plaintext highlighter-rouge">.github/workflows/</code></td>
       <td>on every pull request</td>
     </tr>
@@ -686,17 +686,18 @@ checks relaxed (in <code class="language-plaintext highlighter-rouge">pyproject.
 
 <p><code class="language-plaintext highlighter-rouge">.pre-commit-config.yaml</code> installs hooks into Git. On <strong>commit</strong>: trailing whitespace, final newline, YAML and TOML validity,
 large files, <code class="language-plaintext highlighter-rouge">ruff format</code>, <code class="language-plaintext highlighter-rouge">ruff check --fix</code>. On <strong>push</strong>: the whole test suite, the docs freshness check (a warning only) and
-Pyright. If a hook changes a file the commit stops so you can look; commit again.</p>
+Pyright. If a hook changes a file the commit stops so you can look; commit again.
+After a merge or fast-forward pull on <code class="language-plaintext highlighter-rouge">main</code>, a third hook <a href="/alto/dev/development/#merged-local-branches">cleans up merged local branches</a>.</p>
 
 <h3 id="continuous-integration">Continuous integration</h3>
 
-<p>GitHub Actions workflows in <code class="language-plaintext highlighter-rouge">.github/workflows/</code> run on every pull request and every push to <code class="language-plaintext highlighter-rouge">main</code>:</p>
+<p>GitHub Actions <a href="/alto/dev/development/#which-checks-run-for-which-change">selects checks by change type</a> on pull requests. Pushes to <code class="language-plaintext highlighter-rouge">main</code> get the full checks.</p>
 
 <ul>
-  <li><strong><code class="language-plaintext highlighter-rouge">tests.yml</code></strong> runs the suite on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
+  <li><strong><code class="language-plaintext highlighter-rouge">tests.yml</code></strong> runs the suite on <code class="language-plaintext highlighter-rouge">main</code> on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
 version stops being supported, drop it here and in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">pyright.yml</code></strong> runs Pyright.</li>
-  <li><strong><code class="language-plaintext highlighter-rouge">codecov.yml</code></strong> runs the tests with coverage and uploads the report. It needs a repository secret, <code class="language-plaintext highlighter-rouge">CODECOV_TOKEN</code>.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">codecov.yml</code></strong> uploads the coverage report attached to the pytest run. It uses the repository secret <code class="language-plaintext highlighter-rouge">CODECOV_TOKEN</code> when available.</li>
 </ul>
 
 <p>The workflows install a few system libraries (<code class="language-plaintext highlighter-rouge">libegl1</code>, <code class="language-plaintext highlighter-rouge">libxkbcommon0</code> and others) because Qt’s offscreen platform needs them
@@ -875,8 +876,8 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

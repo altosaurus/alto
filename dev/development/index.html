@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -591,11 +591,12 @@ pytest
 <p>The tests that touch widgets run with Qt’s offscreen platform, so no display is needed.</p>
 
 <p>The tests never read or change your own settings, profile or history. <code class="language-plaintext highlighter-rouge">tests/conftest.py</code> points them at a throwaway
-folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under <code class="language-plaintext highlighter-rouge">alto/</code>. The pre-push hook and the GitHub Coverage job require tests
+folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under <code class="language-plaintext highlighter-rouge">alto/</code>. The pre-push hook and the pytest job that collects coverage require tests
 to execute every added or modified statement in that package. The Codecov project percentage tracks historical gaps.</p>
 
-<p>GitHub Actions runs the tests on every pull request (<code class="language-plaintext highlighter-rouge">.github/workflows/tests.yml</code>) and reports coverage to Codecov
-(<code class="language-plaintext highlighter-rouge">.github/workflows/codecov.yml</code>). To measure coverage yourself:</p>
+<p>For code pull requests and pushes to <code class="language-plaintext highlighter-rouge">main</code>, the oldest Python version in the pytest matrix (currently 3.11)
+runs the suite with coverage and checks the patch. Download the <code class="language-plaintext highlighter-rouge">pytest-coverage</code> artifact from the Tests run
+to inspect <code class="language-plaintext highlighter-rouge">coverage.xml</code>. The Codecov workflow reads that same artifact. To measure coverage locally:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh scripts/run-tests.sh <span class="nt">--patch-coverage</span>
 </code></pre></div></div>
@@ -604,19 +605,42 @@ to execute every added or modified statement in that package. The Codecov projec
 
 <p>The pre-push hook runs the full pytest suite once and checks the resulting coverage against the branch diff from
 <code class="language-plaintext highlighter-rouge">origin/main</code>. Fetch the target branch first and set <code class="language-plaintext highlighter-rouge">ALTO_COVERAGE_BASE</code> when targeting another branch.
-GitHub uses the pull request’s base commit, or the previous commit on a push to main. The GitHub workflows select their checks by change type:</p>
+On pull requests, GitHub selects pytest and coverage using the changes since the branch diverged from its base.</p>
 
-<ul>
-  <li><strong>Only docs</strong> (<code class="language-plaintext highlighter-rouge">docs/**</code> and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
-with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.</li>
-  <li><strong>A change to <code class="language-plaintext highlighter-rouge">alto/</code> or to a test:</strong> the full test suite, including doctests and documentation checks.</li>
-  <li><strong>Anything else</strong> (a script, a workflow, <code class="language-plaintext highlighter-rouge">pyproject.toml</code>, a <code class="language-plaintext highlighter-rouge">conftest.py</code>, the packaging files, a picture): everything.</li>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Pull request changes</th>
+      <th>Pytest</th>
+      <th>Coverage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Only local previews (<code class="language-plaintext highlighter-rouge">work/**</code>), <code class="language-plaintext highlighter-rouge">.gitignore</code>, or <code class="language-plaintext highlighter-rouge">.git-blame-ignore-revs</code></td>
+      <td>Skip</td>
+      <td>Skip</td>
+    </tr>
+    <tr>
+      <td>Documentation under <code class="language-plaintext highlighter-rouge">docs/</code> or top-level Markdown, optionally mixed with the housekeeping files above</td>
+      <td>Run the documentation tests on Python 3.14</td>
+      <td>Skip</td>
+    </tr>
+    <tr>
+      <td>Anything else, including application assets, dependencies, packaging, tests, or workflows</td>
+      <td>Run the full suite on the oldest and newest supported Python</td>
+      <td>Measure coverage and enforce patch coverage</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
-and a push to <code class="language-plaintext highlighter-rouge">main</code> runs every supported version. A new push to a pull request cancels the runs still going for the old one.
-The Coverage job also reports a successful check for documentation-only pull requests, so it can be required on
-<code class="language-plaintext highlighter-rouge">main</code> without leaving those pull requests waiting for a status.</p>
+<p>Ruff and Pyright run on pull requests that change Python source, type stubs, or inputs to the
+respective tool. For example, a Ruff configuration change runs Ruff, a change to
+<code class="language-plaintext highlighter-rouge">scripts/typecheck.sh</code> runs Pyright, and a change to <code class="language-plaintext highlighter-rouge">pyproject.toml</code> runs both.
+The Docs check builds the site for changes under <code class="language-plaintext highlighter-rouge">docs/</code>, to <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>, or to its workflow.</p>
+
+<p>Pushes to <code class="language-plaintext highlighter-rouge">main</code> run the full suite on every supported Python version, along with Ruff, Pyright,
+and coverage. A new push to a pull request cancels its previous run.</p>
 
 <h2 id="keeping-alto-fast">Keeping Alto fast</h2>
 
@@ -694,6 +718,24 @@ the commit stops so you can review the change, then commit again.</p>
 <p>The test suite and Pyright run when you <strong>push</strong>, not on every commit, so commits stay quick. A failing test or a type
 error stops the push. Run the commit checks by hand with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
 <code class="language-plaintext highlighter-rouge">pre-commit run --all-files --hook-stage pre-push</code>, and update the pinned hook versions with <code class="language-plaintext highlighter-rouge">pre-commit autoupdate</code>.</p>
+
+<h3 id="merged-local-branches">Merged local branches</h3>
+
+<p>Run <code class="language-plaintext highlighter-rouge">pre-commit install</code> again in an existing clone to install the post-merge hook. When a merge or
+fast-forward pull updates your checked-out <code class="language-plaintext highlighter-rouge">main</code>, the hook deletes local branches whose tips are in
+both <code class="language-plaintext highlighter-rouge">main</code> and <code class="language-plaintext highlighter-rouge">origin/main</code>. Each deletion prints the branch name and its previous commit.
+Branches with new local commits or commits incorporated only by a squash merge stay available for review.</p>
+
+<p>The hook skips every branch checked out in a worktree and always keeps <code class="language-plaintext highlighter-rouge">main</code>, <code class="language-plaintext highlighter-rouge">gh-pages</code>, and
+<code class="language-plaintext highlighter-rouge">asv-results</code>. To keep another long-running branch in this clone, add its exact name before pulling.
+Repeat the command for each branch you want to keep.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--local</span> <span class="nt">--add</span> alto.keepBranch gd_dev
+sh scripts/prune-branches.sh <span class="nt">--dry-run</span>
+</code></pre></div></div>
+
+<p>The preview refreshes <code class="language-plaintext highlighter-rouge">origin</code> and lists eligible local branches. The automatic hook uses the
+references already in your clone and only deletes local branches.</p>
 
 <h2 id="linting">Linting</h2>
 
@@ -1520,8 +1562,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
