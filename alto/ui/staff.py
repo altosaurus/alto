@@ -32,6 +32,7 @@ from PySide6.QtCore import (
 from PySide6.QtGui import (
     QColor,
     QFont,
+    QFontDatabase,
     QImage,
     QMouseEvent,
     QPainter,
@@ -1315,6 +1316,8 @@ class StaffWidget(QWidget):
         >>> image.pixelColor(50, 50).lightness() < 128
         True
         """
+        if font is None and value not in ("whole", "breve") and not QFontDatabase.hasFamily("Noto Music"):
+            font = "bravura"
         if font and value != "breve":  # the double whole note is always the square form, whatever the music font
             engraving.draw_note(
                 p,
@@ -1392,6 +1395,8 @@ class StaffWidget(QWidget):
         True
         """
         clef = clef_shape(clef)  # the baritone clef is an F clef or a C clef, as chosen in the settings
+        if font is None and not QFontDatabase.hasFamily("Noto Music"):
+            font = "bravura"
         if font:
             engraving.draw_clef(
                 p,

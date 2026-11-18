@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 from PySide6.QtCore import QEvent, QPoint, Qt
-from PySide6.QtGui import QImage
+from PySide6.QtGui import QFontDatabase, QImage
 from PySide6.QtTest import QSignalSpy, QTest
 from PySide6.QtWidgets import QToolButton
 
@@ -19,7 +19,7 @@ from alto.exercises.library import NotationIdentification
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
 from alto.ui.engraving import notation_glyph
 from alto.ui.exercise_view import ExerciseView
-from alto.ui.notation import STYLES
+from alto.ui.notation import BY_KEY, STYLES
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.settings_panel import NotationSettingsPanel, load_notation_terms
 from alto.ui.staff import StaffWidget
@@ -348,3 +348,31 @@ def test_hover_previews_the_component_that_a_staff_click_would_select(app: QAppl
     original = blue_ink(staff)
     QTest.mouseMove(staff, QPoint(10, 10))
     assert original.any() and np.array_equal(blue_ink(staff), original)
+
+
+def test_notation_uses_bundled_glyphs_without_system_music_font(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Match the Bravura component outlines when the system cannot supply Noto Music.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Simulate a system without Noto Music.
+    """
+    monkeypatch.setattr(QFontDatabase, "hasFamily", lambda family: False)
+    staff = StaffWidget()
+    staff.resize(400, 330)
+    exercise = NotationIdentification()
+    for term in ("Notehead", "Stem", "Clef"):
+        settings.notation.terms = {term}
+        question = exercise.generate(random.Random(7))
+        staff.show_notes(question.staff, value=question.value, notation_target=question.notation_target)
+        masks = []
+        for style in ("bravura", "noto"):
+            staff.notation_style = BY_KEY[style]
+            image = staff.grab().toImage().convertToFormat(QImage.Format.Format_RGBA8888)
+            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(-1, 4).astype(int)
+            masks.append(pixels[:, 2] - pixels[:, 0] > 100)
+        assert masks[0].any() and np.array_equal(*masks), term
