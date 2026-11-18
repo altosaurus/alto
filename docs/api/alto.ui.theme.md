@@ -2,7 +2,7 @@
 title: alto.ui.theme
 parent: api
 package: alto.ui
-order: 61
+order: 62
 permalink: /api/alto.ui.theme/
 ---
 {% raw %}

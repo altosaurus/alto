@@ -36,6 +36,7 @@ from alto.ui.staff import (
     MAX_STEP,
     StaffWidget,
 )
+from alto.ui.staff_playback import StaffPlayback
 
 
 class QuestionPreview(QDialog):
@@ -114,6 +115,7 @@ class QuestionPreview(QDialog):
 
         q = question
         scale = [[n] for n in q.construct_scale or []]
+        staff = None
         if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
             if q.construct_steps:  # a scale with its steps shows them above the notes
@@ -181,7 +183,11 @@ class QuestionPreview(QDialog):
         # The simple pitch player cannot perform the rhythmic, microtonal, or instrumental markings in these questions.
         if notes and (q.notation_target is None or q.notation_target[0] in ("Notehead", "Stem", "Clef", "Staff line")):
             play = QPushButton("Play")
-            play.clicked.connect(lambda: sounds.play_notes(notes))
+            if staff is not None and staff.columns == notes:
+                playback = StaffPlayback(self, highlight=staff.highlight_column)
+                play.clicked.connect(lambda: playback.play(notes))
+            else:
+                play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)
         buttons.addButton(QDialogButtonBox.StandardButton.Close)
         buttons.rejected.connect(self.accept)

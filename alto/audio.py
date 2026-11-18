@@ -159,6 +159,27 @@ class Instrument:
     variant: str = ""  # which way of playing it, within the family
     damped: bool = False  # a damper stops each note as the next begins, as on a piano played without the pedal
 
+    def playback_volume(self, level: float = 1.0) -> float:
+        """
+        Return the output volume for a note or clip played on this instrument.
+
+        Parameters
+        ----------
+        level : float, default 1.0
+            Relative amplitude. Simultaneous notes can request a lower level for each voice.
+
+        Returns
+        -------
+        float
+            Linear Qt volume between zero and one, including the instrument's gain.
+
+        Examples
+        --------
+        >>> INSTRUMENT_BY_KEY["flute"].playback_volume()
+        0.85
+        """
+        return max(0.0, min(1.0, level * self.gain))
+
 
 INSTRUMENTS = (
     Instrument(
@@ -375,6 +396,7 @@ class Sounds:
         self._melody_sink: QAudioSink | None = None
         self._melody_buffer: QBuffer | None = None
         self._sequence_run = 0  # which sequence of notes is current, so that an older one stops when a new one starts
+        self._sample_step: Callable[[int | None], object] | None = None
         self._sample_files: dict[str, dict[int, Path]] = {}
         self._dir = Path(tempfile.gettempdir()) / "alto_sounds"
 
@@ -586,7 +608,7 @@ class Sounds:
             fade = self._fades.pop(id(fx), None)  # this note may have been released a moment ago
             if fade is not None:
                 fade.stop()
-            fx.setVolume(min(1.0, volume * inst.gain))
+            fx.setVolume(inst.playback_volume(volume))
             fx.play()
             if inst.sustained or inst.damped:
                 self._sounding.append(fx)
@@ -601,6 +623,7 @@ class Sounds:
         --------
         >>> Sounds().stop_all()
         """
+        self._interrupt_sequence()
         if self._melody_sink is not None:
             self._melody_sink.stop()
             self._melody_sink.deleteLater()
@@ -654,6 +677,7 @@ class Sounds:
         """
         identity = repr(
             (
+                "full-step-duration",
                 inst.key,
                 midis,
                 step_ms,
@@ -679,7 +703,8 @@ class Sounds:
                 audio[hold:] *= np.linspace(1.0, 0.0, tail)
             notes.append(audio)
         length = max((i * gap + len(audio) for i, audio in enumerate(notes)), default=0)
-        phrase = np.zeros(length)
+        # Short recordings still need the full final beat for displays that follow the output clock.
+        phrase = np.zeros(max(length, len(midis) * gap + round(SAMPLE_RATE * tail_ms / 1000)))
         for i, audio in enumerate(notes):
             start = i * gap
             phrase[start : start + len(audio)] += audio
@@ -714,7 +739,6 @@ class Sounds:
         >>> sounds.preview("flute", midis=[60, 64, 67])  # doctest: +SKIP
         """
         self.stop_all()
-        self._sequence_run += 1
         notes = tuple(midis)
         if not notes:
             return
@@ -727,7 +751,7 @@ class Sounds:
                 effect = QSoundEffect()
                 effect.setSource(QUrl.fromLocalFile(str(path)))
                 self._preview_effects[cache_key] = effect
-            effect.setVolume(min(1.0, 0.9 * inst.gain))
+            effect.setVolume(inst.playback_volume())
             effect.play()
         except Exception as exc:  # audio must never break the instrument picker
             print(f"audio unavailable: {exc}")
@@ -818,7 +842,8 @@ class Sounds:
         """
         if self._melody_sink is not None:
             self.stop_all()
-        self._sequence_run += 1
+        else:
+            self._interrupt_sequence()
         run = self._sequence_run
         for effect in self._preview_effects.values():
             effect.stop()
@@ -838,6 +863,8 @@ class Sounds:
             effects = [self._effect(inst, midi=m) for midis, _ in steps for m in midis]
         except Exception as exc:  # audio must never break an exercise
             print(f"audio unavailable: {exc}")
+            if on_step is not None:
+                self._walk(len(steps), gap_ms=gap_ms, run=run, on_step=on_step)
             return
         deadline = time.monotonic() + 1.0
         primed = not warmup
@@ -978,6 +1005,7 @@ class Sounds:
         *,
         gap_ms: int = 450,
         warmup: bool = False,
+        force: bool = False,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -987,6 +1015,8 @@ class Sounds:
 
         Parameters
         ----------
+        force : bool
+            Play even when exercise audio is muted.
         warmup : bool
             Silently initialize audio streams before starting playback.
         columns : iterable of sequence of Note
@@ -1006,11 +1036,99 @@ class Sounds:
         """
         self._play_sequence(
             self.instrument,
-            steps=[([n.midi for n in col], min(1.0, 1.4 / len(col) ** 0.5)) for col in columns],
+            steps=[([n.midi for n in col], min(1.0, 1.4 / max(1, len(col)) ** 0.5)) for col in columns],
             gap_ms=gap_ms,
             warmup=warmup,
+            force=force,
             on_step=on_step,
         )
+
+    def _interrupt_sequence(self) -> None:
+        """
+        Invalidate scheduled steps and clear the highlighted note in an interrupted sample.
+
+        Examples
+        --------
+        >>> player = Sounds()
+        >>> player._interrupt_sequence()
+        >>> player._sequence_run
+        1
+        """
+        self._sequence_run += 1
+        previous, self._sample_step = self._sample_step, None
+        if previous is not None:
+            previous(None)
+
+    def stop_sample(self, on_step: Callable[[int | None], object]) -> None:
+        """
+        Stop a displayed sample if it still owns playback.
+
+        Parameters
+        ----------
+        on_step : callable
+            The display callback originally passed to play_sample.
+
+        Examples
+        --------
+        >>> Sounds().stop_sample(print)
+        """
+        if self._sample_step == on_step:
+            self.stop_all()
+
+    def play_sample(
+        self,
+        columns: Sequence[Sequence[Note]],
+        *,
+        gap_ms: int,
+        on_step: Callable[[int | None], object],
+        force: bool = False,
+    ) -> None:
+        """
+        Play a displayed sample and report the sounding column until it ends or is interrupted.
+
+        Parameters
+        ----------
+        columns : sequence of sequence of Note
+            Written notes in playback order, with simultaneous notes grouped together.
+        gap_ms : int
+            Time between column onsets in milliseconds.
+        on_step : callable
+            Receives each sounding column index and None to clear the display.
+        force : bool
+            Audition the sample even when exercise audio is muted.
+
+        Examples
+        --------
+        >>> player = Sounds()
+        >>> player.enabled = False
+        >>> player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
+        0
+        >>> player.stop_sample(print)
+        None
+        """
+        if not columns:
+            return
+
+        def show(index: int | None) -> None:
+            """
+            Update the display and release it after its final note.
+
+            Parameters
+            ----------
+            index : int or None
+                Column that started, or None after the last column.
+
+            Examples
+            --------
+            >>> show(None)  # doctest: +SKIP
+            """
+            if index is None:
+                self._sample_step = None
+            on_step(index)
+
+        self.stop_all()
+        self.play_notes(columns, gap_ms=gap_ms, on_step=show, force=force)
+        self._sample_step = on_step
 
     def play_melody(
         self,
@@ -1018,6 +1136,7 @@ class Sounds:
         *,
         gap_ms: int,
         on_step: Callable[[int | None], object],
+        force: bool = False,
     ) -> None:
         """
         Play a melody as one clip and synchronize highlights with processed audio frames.
@@ -1031,6 +1150,8 @@ class Sounds:
             MIDI notes in playback order.
         gap_ms : int
             Milliseconds between note onsets. Keyword-only.
+        force : bool
+            Play even when exercise audio is muted.
         on_step : callable
             Receives each sounding note's index, then None after the last note's time. Keyword-only.
 
@@ -1044,7 +1165,6 @@ class Sounds:
         [0]
         """
         self.stop_all()
-        self._sequence_run += 1
         run = self._sequence_run
         notes = tuple(midis)
         if not notes:
@@ -1060,7 +1180,7 @@ class Sounds:
             """
             self._walk(len(notes), gap_ms=gap_ms, run=run, on_step=on_step)
 
-        if not self.enabled:
+        if not (self.enabled or force):
             walk()
             return
         try:
@@ -1074,7 +1194,7 @@ class Sounds:
             pcm = self._output_pcm(path, audio_format=audio_format)
             sink = self._melody_sink = QAudioSink(audio_format)
             sink.setBufferSize(audio_format.bytesForDuration(20_000))
-            sink.setVolume(1.0)
+            sink.setVolume(inst.playback_volume())
             buffer = self._melody_buffer = QBuffer()
             buffer.setData(QByteArray(pcm))
             buffer.open(QIODevice.OpenModeFlag.ReadOnly)

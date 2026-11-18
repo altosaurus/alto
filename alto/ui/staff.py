@@ -444,6 +444,7 @@ class StaffWidget(QWidget):
         self.max_step = max_step
         self.clef = "treble"
         self.columns: list[list[Note]] = []
+        self.playback_column: int | None = None
         self.note_color: QColor | None = None  # None draws notes in the style's ink
         self.column_colors: dict[int, QColor] = {}  # a color for a column of notes by its position, over `note_color`
         self.wedges: list[str] = []  # the text of the wedge under each pair of neighboring columns; "" for none
@@ -501,6 +502,7 @@ class StaffWidget(QWidget):
         >>> staff.clef, staff.key, staff.value, staff.caption
         ('bass', -1, 'quarter', '_ Major')
         """
+        self.playback_column = None
         self.notation_target = notation_target
         if locate_notation != self.locate_notation:
             self.setMouseTracking(locate_notation)
@@ -584,6 +586,25 @@ class StaffWidget(QWidget):
         else:
             self.setMinimumHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP) + 10)
 
+    def highlight_column(self, index: int | None) -> None:
+        """
+        Highlight a sounding note or chord, preserving the staff's other markings.
+
+        Parameters
+        ----------
+        index : int or None
+            The sounding column, or None to restore its usual ink.
+
+        Examples
+        --------
+        >>> staff = StaffWidget()
+        >>> staff.highlight_column(0)
+        >>> staff.playback_column
+        0
+        """
+        self.playback_column = index
+        self.update()
+
     def set_note_color(self, color: QColor | None) -> None:
         """
         Apply feedback to the highlighted notation component or to the notes when there is no component target.
@@ -650,6 +671,8 @@ class StaffWidget(QWidget):
             focused: Component | None = self.notation_target
             if self.locate_notation and self.note_color is None:
                 focused = self._notation_at(self._hover_point) if self._hover_point is not None else None
+            if focused and focused[0] in {"Notehead", "Stem"} and focused[1] == self.playback_column:
+                focused = None  # let the sounding column use playback ink, then restore its notation marking
             accent = self.note_color or QColor("#0068af")
             self._draw_score(p, ink=lambda part: accent if part == focused else None)
 
@@ -911,7 +934,7 @@ class StaffWidget(QWidget):
         for ci, col in enumerate(self.columns):
             x = x0 + step * (ci + 0.5)
             acc_slot = 0
-            ncol = self.column_colors.get(ci, nfg)
+            ncol = self.palette().highlight().color() if ci == self.playback_column else self.column_colors.get(ci, nfg)
             p.setBrush(ncol)
             for note in sorted(col):
                 clef = staff_for(note)

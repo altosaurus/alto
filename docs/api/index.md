@@ -107,6 +107,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
 | [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |
+| [alto.ui.staff_playback](alto.ui.staff_playback/) | Connect a displayed music sample to the notes sounding on its staff. |
 | [alto.ui.stats_dialog](alto.ui.stats_dialog/) | The statistics screen: a few numbers and charts about how practice is going. |
 | [alto.ui.store](alto.ui.store/) | The application's saved settings (a thin layer over `QSettings`). |
 | [alto.ui.style](alto.ui.style/) | Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars. |

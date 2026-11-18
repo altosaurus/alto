@@ -69,14 +69,17 @@ def test_melody_highlights_follow_the_audio_clock(
     path.write_bytes(to_wav_bytes(np.zeros(SAMPLE_RATE)))
     monkeypatch.setattr(audio_module, "QAudioSink", lambda _format: sink)
     monkeypatch.setattr(sink, "setBufferSize", Mock(), raising=False)
-    monkeypatch.setattr(sink, "setVolume", Mock(), raising=False)
+    set_volume = Mock()
+    monkeypatch.setattr(sink, "setVolume", set_volume, raising=False)
     monkeypatch.setattr(sink, "error", lambda: SimpleNamespace(value=0), raising=False)
     monkeypatch.setattr(sink, "processedUSecs", lambda: position[0], raising=False)
     monkeypatch.setattr(sink, "start", lambda _buffer: calls.append("play"), raising=False)
     monkeypatch.setattr(sink, "stop", lambda: calls.append("stop"), raising=False)
     monkeypatch.setattr(sink, "deleteLater", lambda: None)
     monkeypatch.setattr(player, "_preview_file", lambda *_args, **_kwargs: path)
+    player.instrument = "flute"
     player.play_melody([60, 62], gap_ms=280, on_step=seen.append)
+    set_volume.assert_called_once_with(INSTRUMENT_BY_KEY["flute"].gain)
     timer = sink.findChild(QTimer)
     assert timer is not None and calls == ["play"] and not seen
     position[0] = 1
@@ -121,6 +124,30 @@ def test_muted_melody_has_the_same_visual_steps_and_cancels_old_callbacks(
     while pending:
         pending.pop(0)()
     assert old == [0] and current == [0, None]
+
+
+def test_staff_sample_with_unavailable_chord_audio(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Keep the staff moving when the instrument cannot load a chord.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Advances scheduled callbacks without an output device.
+    """
+    player = Sounds()
+    seen = []
+    pending = []
+    monkeypatch.setattr(audio_module.QTimer, "singleShot", lambda delay, callback: pending.append(callback))
+    monkeypatch.setattr(player, "_effect", Mock(side_effect=OSError("unavailable")))
+    player.play_sample([], gap_ms=450, on_step=seen.append)
+    assert not seen and not pending
+    player.play_sample([[Note.parse("C4"), Note.parse("E4")]], gap_ms=450, on_step=seen.append)
+    assert seen == [0]
+    pending.pop()()
+    assert seen == [0, None]
 
 
 def test_melody_tail_extends_only_the_last_note(
@@ -643,6 +670,7 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
     path = player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300)
     samples, rendered_rate = read_wav(path)
     assert rendered_rate == SAMPLE_RATE
+    assert len(samples) >= len(midis) * SAMPLE_RATE * 300 // 1000
     sounding = np.flatnonzero(np.abs(samples) > 0.01)
     onsets = sounding[np.r_[True, np.diff(sounding) > 1]]
     assert onsets.tolist() == [
@@ -702,6 +730,9 @@ def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(
     player.preview("flute", midis=midis)
     player.preview("flute", midis=midis)
     player.preview("piano", midis=midis)
+    assert [call.args[0] for call in effect.setVolume.call_args_list] == [
+        INSTRUMENT_BY_KEY[key].gain for key in ("flute", "flute", "piano")
+    ]
     assert calls[:4] == [
         ("play", "flute.wav"),
         ("stop", "flute.wav"),

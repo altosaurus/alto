@@ -94,10 +94,17 @@ Highlight and play the notes around a gap.
 ### ScaleExplorer.hear
 
 ```python
-def hear() -> None
+def hear(
+    *,
+    force: bool = True,
+) -> None
 ```
 
 Play the example using the selected instrument.
+
+**Parameters**
+
+- `force` (*bool*): Audition the scale while muted. The lesson's main Hear button follows its sound setting.
 
 **Examples**
 

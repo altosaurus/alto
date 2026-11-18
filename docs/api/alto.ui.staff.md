@@ -287,6 +287,27 @@ A capped staff asks for its full capped width, so a layout that centers it gives
 500
 ```
 
+### StaffWidget.highlight_column
+
+```python
+def highlight_column(index: int | None) -> None
+```
+
+Highlight a sounding note or chord, preserving the staff's other markings.
+
+**Parameters**
+
+- `index` (*int or None*): The sounding column, or None to restore its usual ink.
+
+**Examples**
+
+```pycon
+>>> staff = StaffWidget()
+>>> staff.highlight_column(0)
+>>> staff.playback_column
+0
+```
+
 ### StaffWidget.set_note_color
 
 ```python
