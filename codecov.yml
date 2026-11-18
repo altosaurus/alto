@@ -1,4 +1,4 @@
-# Codecov settings. The checks only report for now, so a drop in coverage does not block a pull request.
+# Report overall coverage and flag every uncovered executable patch line.
 coverage:
   status:
     project:
@@ -6,4 +6,6 @@ coverage:
         informational: true
     patch:
       default:
-        informational: true
+        informational: false
+        target: 100%
+        threshold: 0%

@@ -98,7 +98,7 @@ def test_every_workflow_that_runs_on_pull_requests_cancels_what_a_new_push_makes
 
 def test_the_checks_of_the_code_skip_a_change_to_the_docs_alone() -> None:
     """Check that Pyright, Ruff and Coverage ignore the docs on a pull request, and still run on every push to main."""
-    for name in ["pyright", "ruff", "codecov"]:
+    for name in ["pyright", "ruff"]:
         workflow = (WORKFLOWS / f"{name}.yml").read_text(encoding="utf-8")
         assert 'paths-ignore:\n      - "docs/**"\n      - "*.md"' in workflow, name
         assert "push:\n    branches: [main]" in workflow, name
@@ -115,7 +115,14 @@ def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_p
     )
 
 
-def test_the_pre_push_hook_runs_what_the_script_chooses_unless_told_to_run_everything() -> None:
-    """Check that `scripts/run-tests.sh` asks the script, and that ALTO_TEST_ALL=1 skips the choice."""
+def test_the_pre_push_hook_and_github_use_the_same_full_suite_runner() -> None:
+    """Run the full suite by default and share the runner with both GitHub test workflows."""
     hook = (ROOT / "scripts" / "run-tests.sh").read_text(encoding="utf-8")
-    assert "scripts/changed_tests.py" in hook and "ALTO_TEST_ALL" in hook
+    assert 'pytest -q -o faulthandler_timeout=120 "$@"' in hook
+    assert "changed_tests.py" not in hook
+    config = (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8")
+    assert "entry: sh scripts/run-tests.sh --patch-coverage" in config
+    assert "run: sh scripts/run-tests.sh $TARGETS" in (WORKFLOWS / "tests.yml").read_text(encoding="utf-8")
+    coverage = (WORKFLOWS / "codecov.yml").read_text(encoding="utf-8")
+    assert "run: sh scripts/run-tests.sh --patch-coverage" in coverage
+    assert "paths-ignore:" not in coverage and "steps.scope.outputs.kind != 'docs'" in coverage

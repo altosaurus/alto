@@ -32,33 +32,31 @@ pytest
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
 
 The tests never read or change your own settings, profile or history. `tests/conftest.py` points them at a throwaway
-folder, closes every window and database a test leaves open, and turns the sound off. Every line of `alto/` is covered, so a
-change that adds code should add a test for it; `pytest --cov --cov-report=term-missing` shows which lines are missed.
+folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under `alto/`. The pre-push hook and the GitHub Coverage job require tests
+to execute every added or modified statement in that package. The Codecov project percentage tracks historical gaps.
 
 GitHub Actions runs the tests on every pull request (`.github/workflows/tests.yml`) and reports coverage to Codecov
 (`.github/workflows/codecov.yml`). To measure coverage yourself:
 
 ```bash
-pytest --cov --cov-report=term-missing
+sh scripts/run-tests.sh --patch-coverage
 ```
 
 ### Which checks run for which change
 
-Neither the workflows nor the pre-push hook run everything for every change. `scripts/changed_tests.py` looks at the files that
-changed and decides, and anything it does not recognize is a reason to run everything:
+The pre-push hook runs the full pytest suite once and checks the resulting coverage against the branch diff from
+`origin/main`. Fetch the target branch first and set `ALTO_COVERAGE_BASE` when targeting another branch.
+GitHub uses the pull request’s base commit, or the previous commit on a push to main. The GitHub workflows select their checks by change type:
 
 - **Only docs** (`docs/**` and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
   with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.
-- **A change to `alto/` or to a test:** the tests that import the changed module, directly or through others, their doctests, and
-  the tests that read every module or page. The pre-push hook runs exactly these, so a small change is checked in seconds;
-  `ALTO_TEST_ALL=1 git push` runs the whole suite. The workflows run the whole suite.
+- **A change to `alto/` or to a test:** the full test suite, including doctests and documentation checks.
 - **Anything else** (a script, a workflow, `pyproject.toml`, a `conftest.py`, the packaging files, a picture): everything.
 
 In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
 and a push to `main` runs every supported version. A new push to a pull request cancels the runs still going for the old one.
-Nothing requires these checks to pass before a merge, so the ones a change skips do not leave it waiting; if you add required
-checks to the `main` ruleset, change the `paths-ignore` rules to job-level `if` conditions first, because a workflow that is skipped
-never reports and a required check would wait for it.
+The Coverage job also reports a successful check for documentation-only pull requests, so it can be required on
+`main` without leaving those pull requests waiting for a status.
 
 ## Keeping Alto fast
 

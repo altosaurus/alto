@@ -79,3 +79,22 @@ def test_glossary_scale_fits_after_resizing(app: QApplication) -> None:
         assert page.example_staff.width() >= 280
         assert page.definition_area.widget().rect().contains(demo)
     page.close()
+
+
+def test_search_without_matches_clears_the_example_and_recovers(app: QApplication) -> None:
+    """
+    Clear the example and practice links for an empty search result and restore them for the next match.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    page = GlossaryPage()
+    page.search.setText("unlisted term")
+    assert page.demo.isHidden()
+    assert "No matching terms" in page.definition.toPlainText()
+    assert page.activity_tiles.count() == 0
+    page.search.setText("major scale")
+    assert not page.demo.isHidden()
+    assert page.activity_tiles.count() > 0
