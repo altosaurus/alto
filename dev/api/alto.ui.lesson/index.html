@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -590,7 +596,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; view = StepView(LESSONS[0].steps[1], rng=random.Random(1))
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
 &gt;&gt;&gt; view.task is not None and len(view.choice_buttons) == 4
 True
 </code></pre>
@@ -609,7 +616,8 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StepView(LESSONS[0].steps[0]).circle is not None
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; StepView(CIRCLE_OF_FIFTHS.steps[0]).circle is not None
 True
 </code></pre>
 
@@ -622,7 +630,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StepView(LESSONS[0].steps[1]).hear()  # nothing sounds while muted, and nothing breaks
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; from unittest.mock import patch
+&gt;&gt;&gt; with patch.object(sounds, "enabled", False):
+...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
 </code></pre>
 
 <h3 id="stepviewwalk">StepView.walk</h3>
@@ -640,7 +651,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; view = StepView(LESSONS[0].steps[2])
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[2])
 &gt;&gt;&gt; view.walk(1)
 &gt;&gt;&gt; # noinspection PyUnresolvedReferences
 &gt;&gt;&gt; view.circle.cell
@@ -661,7 +673,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; view = StepView(LESSONS[0].steps[3], rng=random.Random(1))
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
 &gt;&gt;&gt; first = view.task
 &gt;&gt;&gt; view.ask()
 &gt;&gt;&gt; view.task is not None and view.again.isHidden()
@@ -699,7 +712,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; view = LessonView(LESSONS[0])
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+&gt;&gt;&gt; view = LessonView(CIRCLE_OF_FIFTHS)
 &gt;&gt;&gt; view.counter.text()
 'Step 1 of 8'
 &gt;&gt;&gt; view.go(to=1)
@@ -1014,6 +1028,12 @@ True
           
           
           
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.keyboard_styles/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.keyboard_styles</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.lesson_nav/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.lesson_nav<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1078,8 +1098,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

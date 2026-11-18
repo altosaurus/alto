@@ -40,10 +40,16 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.lessons.clef_basics/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.lessons.pitches_and_notes/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.lessons.scale_identification/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.location/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.notation_terms/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.selfupdate/</loc>

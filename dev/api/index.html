@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -529,6 +535,10 @@
       <td>Where Alto keeps its practice history and its settings, and how to keep them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</td>
     </tr>
     <tr>
+      <td><a href="alto.notation_terms/">alto.notation_terms</a></td>
+      <td>Notation Identification terms, grouped by subject with their score placement and SMuFL code points.</td>
+    </tr>
+    <tr>
       <td><a href="alto.selfupdate/">alto.selfupdate</a></td>
       <td>Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over.</td>
     </tr>
@@ -624,6 +634,10 @@
     <tr>
       <td><a href="alto.lessons.clef_basics/">alto.lessons.clef_basics</a></td>
       <td>The lesson on clefs, taught from nothing.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.pitches_and_notes/">alto.lessons.pitches_and_notes</a></td>
+      <td>A first lesson connecting a sound, a piano key, and a written note.</td>
     </tr>
     <tr>
       <td><a href="alto.lessons.scale_identification/">alto.lessons.scale_identification</a></td>
@@ -999,8 +1013,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

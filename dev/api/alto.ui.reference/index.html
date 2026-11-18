@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -878,9 +884,34 @@ True
 
 <p>Build a scrollable guide to tonic reading and scale patterns.</p>
 
+<h2 id="notereferencepanel">NoteReferencePanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteReferencePanel</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
+
+<p>Quick hints for reading or placing a note and a link to the introductory lesson.</p>
+
+<p><strong>Constructor</strong></p>
+
+<p>Show the hints for the current note exercise.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): The note exercise whose reference was opened.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteReferencePanel(KeyboardNotes()).lesson_button.text()
+'New to this? Take the full lesson  →'
+</code></pre>
+
 <h2 id="reference_panel_for">reference_panel_for</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reference_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReferencePanel</span> <span class="o">|</span> <span class="n">ClefReferencePanel</span> <span class="o">|</span> <span class="n">ScaleReferencePanel</span> <span class="o">|</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reference_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReferencePanel</span> <span class="o">|</span> <span class="n">ClefReferencePanel</span> <span class="o">|</span> <span class="n">ScaleReferencePanel</span> <span class="o">|</span> <span class="n">NoteReferencePanel</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
 <p>Return the reference pane for an exercise.</p>
@@ -894,19 +925,25 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>ReferencePanel or ClefReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
+  <li><em>ReferencePanel or ClefReferencePanel or ScaleReferencePanel or NoteReferencePanel or None</em>: The panel, or None for an exercise with nothing to look up.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
+&gt;&gt;&gt; isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
 (True, True)
 &gt;&gt;&gt; type(reference_panel_for(ClefBasics())).__name__
 'ClefReferencePanel'
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1209,8 +1246,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

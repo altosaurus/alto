@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -834,19 +840,19 @@ True
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div></div>
 
-<p>Send the mouse wheel to the fork, or to the clef staff, while it is showing and the mouse is over the music or Answer.</p>
+<p>Handle staff clicks in notation questions and forward wheel turns to the fork or clef staff.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">watched</code> (<em>QObject</em>): The staff or the Answer button.</li>
-  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): Anything that reaches it; only the wheel is taken.</li>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The incoming pointer or widget event.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>bool</em>: True if the fork or the clef staff took the wheel turn, False to let it go on as usual.</li>
+  <li><em>bool</em>: True when the exercise handles the event.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -870,11 +876,11 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">submit</span><span class="p">(</span>
     <span class="n">choice</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">button</span><span class="p">:</span> <span class="n">QPushButton</span><span class="p">,</span>
+    <span class="n">button</span><span class="p">:</span> <span class="n">QPushButton</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Check an answer chosen with a button.</p>
+<p>Check an answer chosen with a button or by clicking the notation.</p>
 
 <p>A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
 fades red and its button is switched off, so another can be tried.</p>
@@ -883,7 +889,7 @@ fades red and its button is switched off, so another can be tried.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">choice</code> (<em>str</em>): The text of the button that was pressed.</li>
-  <li><code class="language-plaintext highlighter-rouge">button</code> (<em>QPushButton</em>): The button. Nothing happens if it is switched off. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button</code> (<em>QPushButton or None</em>): The pressed button, or None for a staff click. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -908,6 +914,12 @@ True
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1156,8 +1168,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

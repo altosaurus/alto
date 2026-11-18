@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -500,6 +506,14 @@
           <h1>Lessons</h1>
           <p>Lessons are step-by-step walks through a topic for someone meeting it for the first time. Nothing about them is scored or recorded.</p>
 
+<p>Start with <strong>Pitches and Notes</strong> to connect a sound to a piano key and a written note. Its last step opens
+<strong>Keyboard Note Identification</strong>, <strong>Note Identification</strong>, <strong>Note Construction</strong>, or <strong>Notation Identification</strong>. Each exercise’s book button
+opens hints for that exercise and a link back to the lesson. <strong>Clef Basics</strong> then explains how to read different clefs.
+<strong>Scale Identification</strong> uses that notation to explore patterns of notes. <strong>The Circle of Fifths</strong> shows how keys and
+their signatures relate.</p>
+
+<p>When you open an exercise from a lesson, <strong>Back to lesson</strong> at the upper left of the exercise returns you to the step you left.</p>
+
 <h2 id="finding-them">Finding them</h2>
 
 <p>The home page has a switch at the top, <strong>Exercises</strong> and <strong>Lessons</strong>. Choose <strong>Lessons</strong> to see a tile for each lesson, with the
@@ -530,6 +544,7 @@ step, and <strong>Finish</strong> on the last, leave the lesson.</p>
 
 <ul>
   <li><strong>A sound to hear.</strong> A button plays the notes being described, in the instrument chosen in the settings.</li>
+  <li><strong>A keyboard.</strong> In Pitches and Notes, a highlighted piano key shows where a pitch falls among its neighbors.</li>
   <li><strong>Staves.</strong> The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
 small exercise the staff changes with the question.</li>
   <li><strong>The circle of fifths.</strong> Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have <strong>Down a
@@ -662,8 +677,8 @@ explanation, and a right answer is explained. <strong>Try another</strong> asks 
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -529,6 +535,22 @@ while function labels use words such as <strong>Raised Supertonic</strong> and <
 
 <p>The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
 that option. Changes apply to the next question right away.</p>
+
+<h2 id="notation-identification">Notation Identification</h2>
+
+<p>Choose a <strong>Question Type</strong> in the exercise settings. <strong>Answer Button</strong> is the default. A short phrase appears with one marking
+highlighted in blue. Choose its name from up to four answers or press its number key. In <strong>Click on Staff</strong>, the prompt names
+a component. Move the pointer over the music to highlight a component, then click to answer. For a notehead, stem, or staff line,
+the prompt specifies which one to find.
+Open <strong>Terms</strong> in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
+Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
+favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.</p>
+
+<p>Topics include note values and rests, clefs, accidentals and microtonal signs, meter, barlines, repeats, articulations,
+dynamics, ornaments, octave signs, and instrumental techniques. For example, you can isolate ties and slurs, compare
+quarter-tone accidentals, or practice bowing and pedal marks. For advanced markings, Alto uses the selected music font
+when it contains the symbol and the bundled Bravura font otherwise. Glyph codes follow the
+<a href="https://github.com/w3c/smufl/blob/gh-pages/metadata/glyphnames.json">Standard Music Font Layout index</a>.</p>
 
 <h2 id="keyboard-note-identification">Keyboard Note Identification</h2>
 
@@ -1118,8 +1140,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

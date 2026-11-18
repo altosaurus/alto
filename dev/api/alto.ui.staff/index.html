@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -687,7 +693,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">max_step</code> (<em>float or None</em>): The most width each column of notes may take.</li>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef being drawn (“treble”, “bass”, “alto”, “tenor”, “soprano”, “mezzo”, “baritone” or “grand”).</li>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>list of list of Note</em>): The notes drawn; each inner list is one chord or note.</li>
-  <li><code class="language-plaintext highlighter-rouge">note_color</code> (<em>QColor or None</em>): The color of the notes; None draws them in the notation style’s ink.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_color</code> (<em>QColor or None</em>): Feedback color for the highlighted notation component, or for the notes in other exercises.</li>
   <li><code class="language-plaintext highlighter-rouge">column_colors</code> (<em>dict of int to QColor</em>): The color of particular columns of notes, by position from 0; they are drawn in these instead of <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">wedges</code> (<em>list of str</em>): The step between each column and the next, such as “W” or “H”, drawn as two lines rising from the notes to a point above them, with the letter over the point; “” for none there.</li>
   <li><code class="language-plaintext highlighter-rouge">wedge_colors</code> (<em>dict of int to QColor</em>): The color of particular wedges, by position from 0. The others take the color of the note on their right, or <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
@@ -738,6 +744,8 @@ True
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">notation_target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">locate_notation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -751,6 +759,8 @@ True
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (stems are only drawn for single notes). Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text to write under the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_target</code> (<em>tuple of (str, int) or None</em>): Part and position to highlight in a notation question. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">locate_notation</code> (<em>bool, default False</em>): Render the target in ordinary ink for the learner to find. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -789,12 +799,12 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_note_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the notes in a color, for feedback, or back in the style’s ink.</p>
+<p>Apply feedback to the highlighted notation component or to the notes when there is no component target.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The color; None to use the notation style’s ink.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The feedback color. None restores the usual ink and highlight colors.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -852,7 +862,75 @@ True
 '#ffffff'
 </code></pre>
 
+<h3 id="staffwidgetmousemoveevent">StaffWidget.mouseMoveEvent</h3>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Preview the component under the pointer in Click on Staff questions.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The pointer position relative to the score.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hasMouseTracking()
+False
+</code></pre>
+
+<h3 id="staffwidgetleaveevent">StaffWidget.leaveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Clear the component preview when the pointer leaves the music.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The pointer leaving the staff.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
+</code></pre>
+
+<h3 id="staffwidgethits_notation">StaffWidget.hits_notation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hits_notation</span><span class="p">(</span><span class="n">point</span><span class="p">:</span> <span class="n">QPoint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Check for target ink within four logical pixels of a click on the score.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">point</code> (<em>QPoint</em>): Click position relative to the staff widget.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: Whether the clicked neighborhood contains the selected marking.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hits_notation(QPoint(0, 0))
+False
+</code></pre>
+
+
+          
+          
+          
+          
+          
+          
           
           
           
@@ -1164,8 +1242,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

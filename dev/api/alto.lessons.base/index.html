@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -613,6 +619,7 @@ False
     <span class="n">scale</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">scale_tonic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'C4'</span><span class="p">,</span>
     <span class="n">scale_explore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">keyboard_note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -633,6 +640,7 @@ False
   <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>str</em>): Scale type for an interactive notation diagram; empty for none.</li>
   <li><code class="language-plaintext highlighter-rouge">scale_tonic</code> (<em>str</em>): Starting note of the diagram, including its octave.</li>
   <li><code class="language-plaintext highlighter-rouge">scale_explore</code> (<em>bool</em>): Allow changing the example. False hides the selectors for identification tasks.</li>
+  <li><code class="language-plaintext highlighter-rouge">keyboard_note</code> (<em>str</em>): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -651,6 +659,7 @@ False
     <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">steps</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Step</span><span class="p">,</span> <span class="p">...],</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">related_exercises</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -665,7 +674,8 @@ False
   <li><code class="language-plaintext highlighter-rouge">summary</code> (<em>str</em>): A short line for its card.</li>
   <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str</em>): The group it belongs to on the list, such as “Scales &amp; Keys”.</li>
   <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>tuple of Step</em>): The pages, in order.</li>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): The class name of the exercise that practices it, which the last page offers.</li>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): The primary exercise offered on the last page and used for the lesson icon.</li>
+  <li><code class="language-plaintext highlighter-rouge">related_exercises</code> (<em>tuple of str</em>): Additional exercises offered on the last page, in display order.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -685,6 +695,9 @@ False
 </code></pre>
 
 
+          
+          
+          
           
           
           
@@ -879,8 +892,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

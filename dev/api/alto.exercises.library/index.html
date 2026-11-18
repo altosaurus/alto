@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794966872">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -246,6 +246,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
@@ -301,6 +304,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.scale_identification/">scale_identification</a></li>
@@ -1562,7 +1568,115 @@ True
 &gt;&gt;&gt; settings.clef_basics.question_type = "construction"
 </code></pre>
 
+<h2 id="notationidentification">NotationIdentification</h2>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NotationIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Identify the highlighted part of a written phrase.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(2))
+&gt;&gt;&gt; len(q.staff), q.answer in q.choices
+(4, True)
+</code></pre>
+
+<h3 id="notationidentificationsettings_signature">NotationIdentification.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the terms eligible for review.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The selected terms, or the original empty signature when all terms are enabled.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NotationIdentification().settings_signature()
+''
+</code></pre>
+
+<h3 id="notationidentificationinstructions">NotationIdentification.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to answer the notation question.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Help for mouse and keyboard users.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "number" in NotationIdentification().instructions()
+True
+</code></pre>
+
+<h3 id="notationidentificationrefresh">NotationIdentification.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Replace unchecked distractors in older practice questions before replay.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Stored question matching the current settings signature.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The original notation with eligible answer buttons.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.refresh(q) == q
+True
+</code></pre>
+
+<h3 id="notationidentificationgenerate">NotationIdentification.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Choose a phrase and a single visible feature to highlight.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the phrase, feature, and its position.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A short phrase with the selected marking and up to four checked answer choices.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(0))
+&gt;&gt;&gt; q.notation_target[0] == q.answer
+True
+</code></pre>
+
+
+          
+          
+          
           
           
           
@@ -1739,8 +1853,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794966872" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794966872" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
