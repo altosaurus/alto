@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -755,6 +789,7 @@ True
     <span class="o">*</span><span class="p">,</span>
     <span class="n">names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -766,6 +801,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">index</code> (<em>QModelIndex</em>): A cell of the row, in a model whose rows carry <code class="language-plaintext highlighter-rouge">ROW_ROLE</code> details.</li>
   <li><code class="language-plaintext highlighter-rouge">names</code> (<em>dict of str to str</em>): The title of each exercise, by class name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The widget the popup belongs to. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None, default None</em>): The active profile, used to open this question’s statistics. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -779,6 +815,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AnswerList</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -810,6 +847,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">names</code> (<em>dict of str to str</em>): The title of each exercise, by class name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None, default None</em>): The active profile for question statistics. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the table. Keyword-only.</li>
 </ul>
 
@@ -1042,62 +1080,6 @@ True
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.colors/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.colors</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.degree_text/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.degree_text<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1162,8 +1144,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

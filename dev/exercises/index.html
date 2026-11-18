@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/" aria-current="page">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -504,13 +538,14 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Exercises</h1>
-          <p>Alto has thirteen exercises. Each one has a <strong>?</strong> button with a short explanation, and ten of them have their own
-settings (the sliders button). The others use fixed rules, described below.</p>
+          <p>Each exercise has a <strong>?</strong> button with a short explanation. Open the sliders button to change an exercise’s settings.</p>
 
 <p><strong>Every exercise can be done with the keyboard alone, and without clicking on the staff.</strong> The answer buttons have keys,
 and where you place notes on a staff there are buttons and keys to move the note, choose its sign and place it, so the
 mouse is never needed. The keys are listed on the <a href="/alto/dev/shortcuts/">Shortcuts</a> page, and each button
 shows its key when you hover over it.</p>
+
+<p>Answer-choice exercises include <strong>Buttons</strong> in their settings. Choose <strong>All</strong> for the full answer bank or <strong>Limited</strong> to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.</p>
 
 <h2 id="note-identification">Note Identification</h2>
 
@@ -539,12 +574,18 @@ that option. Changes apply to the next question right away.</p>
 <h2 id="notation-identification">Notation Identification</h2>
 
 <p>Choose a <strong>Question Type</strong> in the exercise settings. <strong>Answer Button</strong> is the default. A short phrase appears with one marking
-highlighted in blue. Choose its name from up to four answers or press its number key. In <strong>Click on Staff</strong>, the prompt names
-a component. Move the pointer over the music to highlight a component, then click to answer. For a notehead, stem, or staff line,
-the prompt specifies which one to find.
+highlighted in blue. By default, choose its name from up to four answers or press its number key. In <strong>Click on Staff</strong>, the prompt names
+a component. Move the pointer over the music to highlight a component, then click to answer. In a repertoire excerpt, any occurrence of the named component counts. In a generated phrase, the prompt can specify
+a particular notehead, stem, or staff line.
 Open <strong>Terms</strong> in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
+<strong>Select none</strong> clears every checkbox. Check a term to start a new selection, or turn the switch off to restore your previous selection.
 Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
 favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.</p>
+
+<p>Eight piano excerpts from Schubert’s <em>Erlkönig</em> and Schumann’s <em>Schöne Fremde</em> and <em>Die Lotosblume</em> are installed with Alto.
+The composer, title, and measure numbers appear beneath the music. Try selecting <strong>Tie</strong> and <strong>Slur</strong> together to practice
+telling the two curves apart in context. Terms outside the collection use generated phrases.
+The original editions are in the public domain, and the digital scores come from the <a href="https://fourscoreandmore.org/openscore/lieder/">OpenScore Lieder corpus</a>.</p>
 
 <p>Topics include note values and rests, clefs, accidentals and microtonal signs, meter, barlines, repeats, articulations,
 dynamics, ornaments, octave signs, and instrumental techniques. For example, you can isolate ties and slurs, compare
@@ -699,11 +740,24 @@ subbass clefs, which only this exercise has.</li>
 
 <h2 id="interval-identification">Interval Identification</h2>
 
-<p>Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.</p>
+<p>Name the interval between the two written notes. On first use, the notes ascend on a treble or bass staff, and the exercise asks for both quality and number.</p>
 
 <p>An interval has a quality and a number. The number counts the letter names it spans, including both notes. The quality
 is <strong>P</strong> (perfect), <strong>M</strong> (major), <strong>m</strong> (minor), <strong>A</strong> (augmented) or <strong>d</strong> (diminished). So C to E is M3, and C to E♭
 is m3.</p>
+
+<ul>
+  <li><strong>Clefs</strong> chooses which staves can appear, including the grand staff.</li>
+  <li><strong>Range</strong> sets the lowest and highest written notes for each checked clef. Both notes must fit.</li>
+  <li><strong>Staff Key</strong> selects the signatures drawn on the staff. Choose zero for a blank signature.</li>
+  <li><strong>Display</strong> has two checkboxes. <strong>Melodic</strong> shows the lower note followed by the higher one. <strong>Harmonic</strong> shows both together. Check both to mix them.</li>
+  <li><strong>Quality</strong> is on by default. Switch it off to answer <strong>3</strong> for either C–E or C–E♭.</li>
+  <li><strong>Intervals</strong> selects the spellings you want to practice, including compound intervals through a fifteenth.
+Drag the handles to select a span of interval numbers, then check individual spellings. <strong>Select all</strong> can temporarily include every spelling.
+Only selected intervals that fit the range can be asked. If none fit, widen the range or choose a smaller interval.</li>
+  <li><strong>Buttons</strong> defaults to <strong>Limited</strong>, with six answers. Choose a <strong>Button count</strong> from 2 to 10. The count includes the correct answer.
+Choose <strong>All</strong> to show every selected interval that fits the current staff range. With <strong>Quality</strong> off, each interval number appears once.</li>
+</ul>
 
 <figure class="shot">
   <img class="for-light" src="/alto/dev/assets/img/intervals.png" alt="Interval Identification showing two notes and the interval buttons" loading="lazy" />
@@ -1067,15 +1121,6 @@ from the signature, so a natural sign appears where the chord needs one.</li>
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/getting-started/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Getting started</span></a>
             <a class="next" href="/alto/dev/practice/" rel="next"><span class="np-label">Next</span><span class="np-title">How practice adapts<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1140,8 +1185,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

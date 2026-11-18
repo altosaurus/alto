@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -522,7 +556,7 @@ the exercises to the home screen.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">Exercise</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ChoiceExercise</code></p>
 
 <p>Name the note shown on a staff.</p>
 
@@ -549,9 +583,9 @@ the exercises to the home screen.</p>
 True
 </code></pre>
 
-<h3 id="notenamessettings_signature">NoteNames.settings_signature</h3>
+<h3 id="notenamespractice_signature">NoteNames.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -587,9 +621,9 @@ True
 True
 </code></pre>
 
-<h3 id="notenamesgenerate">NoteNames.generate</h3>
+<h3 id="notenamesmake_question">NoteNames.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a note to name, on one of the chosen clefs, in a chosen key.</p>
@@ -618,13 +652,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Name the interval between two notes, up to an octave.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">QUALITIES</code> (<em>dict of int to str</em>): For each interval number, the qualities that can occur, separated by spaces.</li>
-</ul>
+<p>Name the interval between two written notes.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -650,6 +678,25 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; "quality followed by a number" in IntervalNames().instructions()
 True
+</code></pre>
+
+<h3 id="intervalnamessettings_signature">IntervalNames.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the settings used to generate and grade the interval.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The stored-question review signature.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
+''
 </code></pre>
 
 <h3 id="intervalnamesgenerate">IntervalNames.generate</h3>
@@ -764,7 +811,7 @@ True
 
 <h2 id="keysignatures">KeySignatures</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Read a key signature drawn on a staff and name the key it belongs to.</p>
@@ -776,9 +823,9 @@ True
 True
 </code></pre>
 
-<h3 id="keysignaturessettings_signature">KeySignatures.settings_signature</h3>
+<h3 id="keysignaturespractice_signature">KeySignatures.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -840,9 +887,9 @@ True
 '_ minor'
 </code></pre>
 
-<h3 id="keysignaturesgenerate">KeySignatures.generate</h3>
+<h3 id="keysignaturesmake_question">KeySignatures.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a key signature to read.</p>
@@ -1107,7 +1154,7 @@ True
 
 <h2 id="circleoffifths">CircleOfFifths</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.</p>
@@ -1119,9 +1166,9 @@ True
 True
 </code></pre>
 
-<h3 id="circleoffifthssettings_signature">CircleOfFifths.settings_signature</h3>
+<h3 id="circleoffifthspractice_signature">CircleOfFifths.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1157,9 +1204,9 @@ True
 True
 </code></pre>
 
-<h3 id="circleoffifthsgenerate">CircleOfFifths.generate</h3>
+<h3 id="circleoffifthsmake_question">CircleOfFifths.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Pick a kind of question that is switched on, and ask it.</p>
@@ -1187,7 +1234,7 @@ True
 
 <h2 id="chordqualities">ChordQualities</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Identify the quality of a triad or seventh chord in root position.</p>
@@ -1218,9 +1265,9 @@ True
 True
 </code></pre>
 
-<h3 id="chordqualitiesgenerate">ChordQualities.generate</h3>
+<h3 id="chordqualitiesmake_question">ChordQualities.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a chord in root position whose quality is to be named.</p>
@@ -1246,7 +1293,7 @@ True
 
 <h2 id="arpeggionames">ArpeggioNames</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Name the type and the inversion of a broken chord.</p>
@@ -1258,9 +1305,9 @@ True
 True
 </code></pre>
 
-<h3 id="arpeggionamessettings_signature">ArpeggioNames.settings_signature</h3>
+<h3 id="arpeggionamespractice_signature">ArpeggioNames.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1296,9 +1343,9 @@ True
 True
 </code></pre>
 
-<h3 id="arpeggionamesgenerate">ArpeggioNames.generate</h3>
+<h3 id="arpeggionamesmake_question">ArpeggioNames.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make an arpeggio on one of the chosen clefs, in a chosen position.</p>
@@ -1330,7 +1377,7 @@ True
 
 <h2 id="keyboardnotes">KeyboardNotes</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Name the highlighted key on a piano keyboard.</p>
@@ -1342,9 +1389,9 @@ True
 True
 </code></pre>
 
-<h3 id="keyboardnotessettings_signature">KeyboardNotes.settings_signature</h3>
+<h3 id="keyboardnotespractice_signature">KeyboardNotes.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1380,9 +1427,9 @@ True
 True
 </code></pre>
 
-<h3 id="keyboardnotesgenerate">KeyboardNotes.generate</h3>
+<h3 id="keyboardnotesmake_question">KeyboardNotes.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a keyboard with one key highlighted.</p>
@@ -1487,7 +1534,7 @@ True
 
 <h2 id="clefbasics">ClefBasics</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.</p>
@@ -1502,6 +1549,24 @@ True
 <h3 id="clefbasicssettings_signature">ClefBasics.settings_signature</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Use button preferences for reviews only when the learner answers with buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The signature for the active question type.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
+</code></pre>
+
+<h3 id="clefbasicspractice_signature">ClefBasics.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1537,9 +1602,9 @@ True
 True
 </code></pre>
 
-<h3 id="clefbasicsgenerate">ClefBasics.generate</h3>
+<h3 id="clefbasicsmake_question">ClefBasics.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Name a clef to place, or draw a clef to name.</p>
@@ -1570,7 +1635,7 @@ True
 
 <h2 id="notationidentification">NotationIdentification</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NotationIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NotationIdentification</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Identify the highlighted part of a written phrase.</p>
@@ -1578,13 +1643,31 @@ True
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(2))
-&gt;&gt;&gt; len(q.staff), q.answer in q.choices
-(4, True)
+&gt;&gt;&gt; bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+True
 </code></pre>
 
 <h3 id="notationidentificationsettings_signature">NotationIdentification.settings_signature</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Use button preferences for reviews only when the learner answers with buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The signature for the active question type.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
+</code></pre>
+
+<h3 id="notationidentificationpractice_signature">NotationIdentification.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Identify the terms eligible for review.</p>
@@ -1647,9 +1730,9 @@ True
 True
 </code></pre>
 
-<h3 id="notationidentificationgenerate">NotationIdentification.generate</h3>
+<h3 id="notationidentificationmake_question">NotationIdentification.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Choose a phrase and a single visible feature to highlight.</p>
@@ -1663,7 +1746,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Question</em>: A short phrase with the selected marking and up to four checked answer choices.</li>
+  <li><em>Question</em>: A short phrase with the selected marking and checked answer choices.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1674,45 +1757,6 @@ True
 </code></pre>
 
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -1853,8 +1897,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

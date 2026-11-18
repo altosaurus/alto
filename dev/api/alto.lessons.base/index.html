@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -527,6 +561,7 @@ scored or recorded.</p>
     <span class="n">choices</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -544,6 +579,7 @@ scored or recorded.</p>
   <li><code class="language-plaintext highlighter-rouge">choices</code> (<em>tuple of str</em>): The buttons to choose from, for a question that is not answered on the circle.</li>
   <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>str</em>): The right button, if there are choices.</li>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): Sharps (positive) or flats (negative) on the task staff.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -585,6 +621,7 @@ False
     <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -596,6 +633,7 @@ False
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef to draw, any of <code class="language-plaintext highlighter-rouge">alto.settings.CLEF_BASICS_CLEFS</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">note</code> (<em>str</em>): A note to write on the staff, such as “C4”; empty for none. Only the seven clefs that have a lowest line for notes can have one, not the French violin and subbass clefs.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str</em>): The words under the staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): Sharps (positive) or flats (negative) after the clef.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -620,6 +658,7 @@ False
     <span class="n">scale_tonic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'C4'</span><span class="p">,</span>
     <span class="n">scale_explore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
     <span class="n">keyboard_note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">hear_display</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s">''</span><span class="p">,</span> <span class="s">'staff'</span><span class="p">,</span> <span class="s">'keyboard'</span><span class="p">]</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -635,11 +674,12 @@ False
   <li><code class="language-plaintext highlighter-rouge">hear_label</code> (<em>str</em>): What the Hear it button says.</li>
   <li><code class="language-plaintext highlighter-rouge">make_task</code> (<em>callable or None</em>): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.</li>
   <li><code class="language-plaintext highlighter-rouge">closing</code> (<em>bool</em>): True for the last step, which offers to practice.</li>
-  <li><code class="language-plaintext highlighter-rouge">staves</code> (<em>tuple of Staff</em>): Staves to show beside the words, one above another, instead of the circle; empty for none.</li>
-  <li><code class="language-plaintext highlighter-rouge">task_staff</code> (<em>bool</em>): Show one staff beside the words that follows the task: it draws the task’s clef.</li>
+  <li><code class="language-plaintext highlighter-rouge">staves</code> (<em>tuple of Staff</em>): Captioned staves in reading order. Adjacent examples share a panel and wrap when space is limited.</li>
+  <li><code class="language-plaintext highlighter-rouge">task_staff</code> (<em>bool</em>): Show one staff beside the words that follows the task: it draws the task’s clef and key signature.</li>
   <li><code class="language-plaintext highlighter-rouge">scale</code> (<em>str</em>): Scale type for an interactive notation diagram; empty for none.</li>
   <li><code class="language-plaintext highlighter-rouge">scale_tonic</code> (<em>str</em>): Starting note of the diagram, including its octave.</li>
   <li><code class="language-plaintext highlighter-rouge">scale_explore</code> (<em>bool</em>): Allow changing the example. False hides the selectors for identification tasks.</li>
+  <li><code class="language-plaintext highlighter-rouge">hear_display</code> (<em>str</em>): Show the playback pitches on a treble staff or keyboard (“staff” or “keyboard”). Empty hides this diagram.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_note</code> (<em>str</em>): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.</li>
 </ul>
 
@@ -695,51 +735,6 @@ False
 </code></pre>
 
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -892,8 +887,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

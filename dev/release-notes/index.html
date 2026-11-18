@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/" aria-current="page">Release notes</a></li>
+            
             
             
             
@@ -516,10 +550,23 @@ Each release’s downloads are on its GitHub release.</p>
 <h3 class="no-toc" id="added">Added</h3>
 
 <ul>
+  <li>
+    <p>Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.</p>
+  </li>
+  <li>
+    <p>Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.</p>
+  </li>
+  <li>A Key Signatures lesson teaches how to read and write major and minor key signatures and links to both key signature exercises.</li>
+  <li>
+    <p>An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.</p>
+  </li>
+  <li>Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.</li>
+  <li>Double-clicking a row in <strong>Questions that need practice</strong> opens the saved question and its answer.</li>
   <li>A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.</li>
   <li>
     <p>Notation Identification lets learners name a highlighted marking or find a named component on the staff. Hovering
-previews a component before answering, and learners can choose which notation terms to practice.</p>
+previews a component before answering, and learners can choose which notation terms to practice.
+Eight public-domain piano excerpts from Schubert and Schumann put 34 of those terms in musical context.</p>
   </li>
   <li>
     <p>Keyboard Interval Identification with configurable keyboard and interval ranges, compound intervals, and Limited, All,
@@ -538,6 +585,20 @@ Note-name previews have visible text labels.</li>
 <h3 class="no-toc" id="changed">Changed</h3>
 
 <ul>
+  <li>
+    <p>Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
+exercise tile outlines are near black and other standard button outlines are graphite gray.</p>
+  </li>
+  <li>
+    <p>Lesson questions and their feedback appear together in a “Check your understanding” callout.</p>
+  </li>
+  <li>Lesson samples and instrument previews play at the same volume as the corresponding exercise notes.</li>
+  <li>
+    <p>Playable staff examples in lessons, the glossary, and saved answer cards highlight each note or chord as it sounds.</p>
+  </li>
+  <li>
+    <p>Lesson staves keep clefs, signatures, and notes together as the pane widens. Longer examples wrap with their clef and signature.</p>
+  </li>
   <li>The documentation homepage groups practice into six topic cards that switch between light- and dark-theme screenshots.</li>
   <li>Keyboard exercise icons use seven realistically proportioned white keys; the interval icon adds a span bracket.</li>
   <li>Exercise button-group labels appear above their buttons, and theme rebuilds preserve the exercise settings page.</li>
@@ -913,95 +974,6 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.widgets/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.widgets</span></a>
             <a class="next" href="/alto/dev/credits/" rel="next"><span class="np-label">Next</span><span class="np-title">License and credits<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1066,8 +1038,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

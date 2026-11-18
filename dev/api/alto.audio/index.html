@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795038628">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,13 +66,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/dev/">Home</a></li>
+            
             
             
             
@@ -97,7 +100,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/exercises/">Exercises</a></li>
+            
             
             
             
@@ -113,7 +118,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/statistics/">Statistics and database</a></li>
+            
             
             
             
@@ -129,7 +136,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/settings/">Settings</a></li>
+            
             
             
             
@@ -145,7 +154,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/dev/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +177,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/dev/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +235,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/dev/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -244,6 +261,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.notation_excerpts/">notation_excerpts</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
@@ -304,6 +324,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.clef_basics/">clef_basics</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -426,6 +452,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -433,6 +462,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -472,6 +504,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -484,6 +517,7 @@
             
             
             <li><a class="row" href="/alto/dev/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -591,6 +625,31 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 1.0
 &gt;&gt;&gt; INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
 (True, False)
+</code></pre>
+
+<h3 id="instrumentplayback_volume">Instrument.playback_volume</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">playback_volume</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Return the output volume for a note or clip played on this instrument.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">level</code> (<em>float, default 1.0</em>): Relative amplitude. Simultaneous notes can request a lower level for each voice.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>float</em>: Linear Qt volume between zero and one, including the instrument’s gain.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["flute"].playback_volume()
+0.85
 </code></pre>
 
 <h2 id="instrument_groups">instrument_groups</h2>
@@ -850,6 +909,7 @@ Starting a preview silences the one before it.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">450</span><span class="p">,</span>
     <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
@@ -861,6 +921,7 @@ Starting a preview silences the one before it.</p>
 <p><strong>Parameters</strong></p>
 
 <ul>
+  <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Play even when exercise audio is muted.</li>
   <li><code class="language-plaintext highlighter-rouge">warmup</code> (<em>bool</em>): Silently initialize audio streams before starting playback.</li>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>iterable of sequence of Note</em>): The columns of notes, as drawn on a staff.</li>
   <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int, default 450</em>): The time between columns, in milliseconds. Keyword-only.</li>
@@ -874,6 +935,56 @@ Starting a preview silences the one before it.</p>
 &gt;&gt;&gt; s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
 </code></pre>
 
+<h3 id="soundsstop_sample">Sounds.stop_sample</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">stop_sample</span><span class="p">(</span><span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Stop a displayed sample if it still owns playback.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable</em>): The display callback originally passed to play_sample.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Sounds().stop_sample(print)
+</code></pre>
+
+<h3 id="soundsplay_sample">Sounds.play_sample</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_sample</span><span class="p">(</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Play a displayed sample and report the sounding column until it ends or is interrupted.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>sequence of sequence of Note</em>): Written notes in playback order, with simultaneous notes grouped together.</li>
+  <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int</em>): Time between column onsets in milliseconds.</li>
+  <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable</em>): Receives each sounding column index and None to clear the display.</li>
+  <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Audition the sample even when exercise audio is muted.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; player = Sounds()
+&gt;&gt;&gt; player.enabled = False
+&gt;&gt;&gt; player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
+0
+&gt;&gt;&gt; player.stop_sample(print)
+None
+</code></pre>
+
 <h3 id="soundsplay_melody">Sounds.play_melody</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_melody</span><span class="p">(</span>
@@ -881,6 +992,7 @@ Starting a preview silences the one before it.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -894,6 +1006,7 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
 <ul>
   <li><code class="language-plaintext highlighter-rouge">midis</code> (<em>iterable of int</em>): MIDI notes in playback order.</li>
   <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int</em>): Milliseconds between note onsets. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Play even when exercise audio is muted.</li>
   <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable</em>): Receives each sounding note’s index, then None after the last note’s time. Keyword-only.</li>
 </ul>
 
@@ -928,38 +1041,6 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
 </code></pre>
 
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -1080,8 +1161,8 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795038628" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795038628" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
