@@ -165,6 +165,10 @@ def capture(
     suffix = "" if theme == "light" else "-dark"
     app = QApplication([])
     apply_theme(theme)
+    app.processEvents()
+    if (app.palette().window().color().lightness() < 128) != (theme == "dark"):
+        # Some platform plugins, including offscreen, ignore Qt's native color-scheme request.
+        apply_theme("studio_dark" if theme == "dark" else "studio")
 
     original = ev.ExerciseView.__init__
     # noinspection PyShadowingNames
@@ -212,6 +216,11 @@ def capture(
         width : int
             The widest the picture may be; wider ones are scaled down.
 
+        Raises
+        ------
+        RuntimeError
+            If the captured window uses the wrong theme.
+
         Examples
         --------
         >>> save(window, name="home")  # doctest: +SKIP
@@ -220,6 +229,8 @@ def capture(
             return
         wait(250)
         pixmap = widget.grab()
+        if (pixmap.toImage().pixelColor(10, 10).lightness() < 128) != (theme == "dark"):
+            raise RuntimeError(f"The {name} window did not render in the requested {theme} theme.")
         if pixmap.width() > width:
             pixmap = pixmap.scaledToWidth(width, Qt.TransformationMode.SmoothTransformation)
         pixmap.save(str(out / f"{name}{suffix}.png"), "PNG")

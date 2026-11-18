@@ -18,6 +18,8 @@ import re
 from pathlib import Path
 from urllib.parse import unquote
 
+from PySide6.QtGui import QImage
+
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "docs" / "assets" / "img"
 
@@ -58,12 +60,16 @@ def shown() -> set[str]:
 
 def test_every_picture_a_page_shows_exists_in_both_themes() -> None:
     """
-    Check that every picture a page shows exists in both themes.
+    Check the app window color in every light and dark screenshot.
     """
     assert shown()
     for name in shown():
-        assert (IMG / f"{name}.png").is_file(), f"{name}.png is missing"
-        assert (IMG / f"{name}-dark.png").is_file(), f"{name}-dark.png is missing"
+        for suffix in ("", "-dark"):
+            path = IMG / f"{name}{suffix}.png"
+            image = QImage(str(path))
+            assert not image.isNull(), path.name
+            # Sample the window background, clear of the white notation paper and piano keys.
+            assert (image.pixelColor(10, 10).lightness() < 128) == (suffix == "-dark"), path.name
 
 
 def test_every_picture_can_be_regenerated_by_the_script() -> None:
