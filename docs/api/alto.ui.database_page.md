@@ -2,7 +2,6 @@
 title: alto.ui.database_page
 parent: api
 package: alto.ui
-order: 31
 permalink: /api/alto.ui.database_page/
 ---
 {% raw %}
@@ -250,6 +249,7 @@ def open_preview(
     *,
     names: dict[str, str],
     parent: QWidget,
+    learner: Learner | None = None,
 ) -> None
 ```
 
@@ -260,6 +260,7 @@ Show the question behind a row of an answers table, if its record is still store
 - `index` (*QModelIndex*): A cell of the row, in a model whose rows carry `ROW_ROLE` details.
 - `names` (*dict of str to str*): The title of each exercise, by class name. Keyword-only.
 - `parent` (*QWidget*): The widget the popup belongs to. Keyword-only.
+- `learner` (*Learner or None, default None*): The active profile, used to open this question's statistics. Keyword-only.
 
 **Examples**
 
@@ -274,6 +275,7 @@ Show the question behind a row of an answers table, if its record is still store
 AnswerList(
     *,
     names: dict[str, str],
+    learner: Learner | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -303,6 +305,7 @@ Create an empty table.
 **Parameters**
 
 - `names` (*dict of str to str*): The title of each exercise, by class name. Keyword-only.
+- `learner` (*Learner or None, default None*): The active profile for question statistics. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the table. Keyword-only.
 
 **Constructor examples**

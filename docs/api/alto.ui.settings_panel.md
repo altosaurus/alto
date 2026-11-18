@@ -2,7 +2,6 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 55
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -418,7 +417,7 @@ NoteNameSettingsPanel(
 )
 ```
 
-Bases: `ExerciseSettingsPanel`
+Bases: `_StaffRangePanel`
 
 The settings of the note identification exercise: a menu leading to a page for each group of settings.
 
@@ -899,6 +898,54 @@ Return the checked choices.
 {0, 1}
 ```
 
+## load_intervals
+
+```python
+def load_intervals() -> None
+```
+
+Restore the saved staff interval options, keeping valid choices and per-clef ranges.
+
+**Examples**
+
+```pycon
+>>> load_intervals()
+>>> bool(settings.intervals.active_clefs())
+True
+```
+
+## IntervalSettingsPanel
+
+```python
+IntervalSettingsPanel(cfg: settings.IntervalSettings)
+```
+
+Bases: `_StaffRangePanel`
+
+Choose the notation and answer format for written intervals.
+
+**Examples**
+
+```pycon
+>>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
+7
+```
+
+**Constructor**
+
+Build the menu and its six submenus.
+
+**Parameters**
+
+- `cfg` (*IntervalSettings*): The interval exercise settings.
+
+**Constructor examples**
+
+```pycon
+>>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.isOn()
+True
+```
+
 ## KeyboardIntervalSettingsPanel
 
 ```python
@@ -1369,6 +1416,22 @@ Build the panel for a set of settings.
 4
 ```
 
+## load_choice_buttons
+
+```python
+def load_choice_buttons() -> None
+```
+
+Restore the independent button preferences for each multiple-choice exercise.
+
+**Examples**
+
+```pycon
+>>> load_choice_buttons()
+>>> NoteNames.button_settings().button_mode in {"all", "limited"}
+True
+```
+
 ## settings_panel_for
 
 ```python
@@ -1391,7 +1454,7 @@ Return the settings panel for an exercise.
 >>> from alto.exercises.library import IntervalNames, NoteNames
 >>> type(settings_panel_for(NoteNames())).__name__
 'NoteNameSettingsPanel'
->>> settings_panel_for(IntervalNames()) is None
-True
+>>> type(settings_panel_for(IntervalNames())).__name__
+'IntervalSettingsPanel'
 ```
 {% endraw %}

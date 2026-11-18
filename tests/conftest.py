@@ -40,6 +40,7 @@ from PySide6.QtWidgets import QApplication  # noqa: E402
 from alto import settings  # noqa: E402
 from alto.audio import sounds  # noqa: E402
 from alto.exercises import REGISTRY  # noqa: E402
+from alto.exercises.base import ChoiceExercise  # noqa: E402
 from alto.learning import (  # noqa: E402
     Database,
     Learner,
@@ -84,6 +85,7 @@ def _isolated_state() -> Iterator[None]:
     """
     names = (
         "note_names",
+        "intervals",
         "keyboard",
         "keyboard_intervals",
         "construction",
@@ -114,6 +116,7 @@ def _isolated_state() -> Iterator[None]:
     saved = QSettings("alto", "alto")
     saved.clear()
     saved.sync()
+    ChoiceExercise.button_settings.cache_clear()
 
 
 @pytest.fixture

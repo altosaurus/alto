@@ -2,7 +2,6 @@
 title: alto.lessons.pitches_and_notes
 parent: api
 package: alto.lessons
-order: 19
 permalink: /api/alto.lessons.pitches_and_notes/
 ---
 {% raw %}

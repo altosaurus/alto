@@ -38,8 +38,9 @@ def module_files() -> list[Path]:
 
     Examples
     --------
-    >>> [dotted(p) for p in module_files()][:2]
-    ['alto.audio', 'alto.instrument_info']
+    >>> top_level = [dotted(p) for p in module_files() if package_of(p) == "alto"]
+    >>> top_level == sorted(top_level)
+    True
     """
     files = [p for p in SOURCE.rglob("*.py") if p.name not in ("__init__.py", "__main__.py")]
     return sorted(files, key=lambda p: (package_of(p) != "alto", package_of(p), p.name))
@@ -475,11 +476,7 @@ def summary(doc: str | None) -> str:
     return " ".join(inspect.cleandoc(doc).split("\n\n")[0].split()) if doc else ""
 
 
-def render_module(
-    path: Path,
-    *,
-    order: int,
-) -> str:
+def render_module(path: Path) -> str:
     r"""
     Write the page for one module.
 
@@ -487,8 +484,6 @@ def render_module(
     ----------
     path : Path
         The source file.
-    order : int
-        Where the page goes in the contents list. Keyword-only.
 
     Returns
     -------
@@ -498,7 +493,7 @@ def render_module(
 
     Examples
     --------
-    >>> page = render_module(SOURCE / "theory" / "pitch.py", order=7)
+    >>> page = render_module(SOURCE / "theory" / "pitch.py")
     >>> page.startswith("---\ntitle: alto.theory.pitch\n")
     True
     >>> "## Note" in page
@@ -506,7 +501,7 @@ def render_module(
     """
     tree = ast.parse(path.read_text(encoding="utf-8"))
     name = dotted(path)
-    front = f"---\ntitle: {name}\nparent: api\npackage: {package_of(path)}\norder: {order}\npermalink: /api/{name}/\n---\n"
+    front = f"---\ntitle: {name}\nparent: api\npackage: {package_of(path)}\npermalink: /api/{name}/\n---\n"
     parts = [render_doc(ast.get_docstring(tree, clean=False))]
     for node in tree.body:
         if isinstance(node, ast.ClassDef) and not node.name.startswith("_"):
@@ -575,8 +570,8 @@ def build() -> dict[str, str]:
     """
     files = module_files()
     pages = {"index.md": render_index(files)}
-    for i, path in enumerate(files, start=1):
-        pages[f"{dotted(path)}.md"] = render_module(path, order=i)
+    for path in files:
+        pages[f"{dotted(path)}.md"] = render_module(path)
     return pages
 
 

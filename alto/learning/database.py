@@ -659,6 +659,7 @@ class Database:
         *,
         exercise: str | None = None,
         since: float | None = None,
+        item_key: str | None = None,
     ) -> list[sqlite3.Row]:
         """
         Return answers given, oldest first, for some profiles, an exercise and a period.
@@ -671,6 +672,8 @@ class Database:
             Only this exercise (its class name); every exercise if None. Keyword-only.
         since : float or None, default None
             Only answers from this timestamp on; the whole history if None. Keyword-only.
+        item_key : str or None, default None
+            Only answers for this question key. Pass the exercise to identify the question. Keyword-only.
 
         Returns
         -------
@@ -693,6 +696,9 @@ class Database:
             time_column="answered_at",
             since=since,
         )
+        if item_key is not None:
+            where += " AND item_key = ?"
+            args.append(item_key)
         return self.conn.execute(
             "SELECT exercise, attempt_no, correct, duration_ms, answered_at FROM attempts "
             f"WHERE {where} ORDER BY answered_at, id",

@@ -2,7 +2,6 @@
 title: alto.ui.scale_explorer
 parent: api
 package: alto.ui
-order: 54
 permalink: /api/alto.ui.scale_explorer/
 ---
 {% raw %}
@@ -24,6 +23,7 @@ ScaleExplorer(
     scale: str = 'Major (Ionian)',
     tonic: str = 'C4',
     editable: bool = True,
+    lesson_layout: bool = False,
 )
 ```
 
@@ -47,6 +47,7 @@ Build the scale diagram and its controls.
 - `scale` (*str*): Initial scale type.
 - `tonic` (*str*): Initial tonic with octave.
 - `editable` (*bool*): Allow changing the example; false keeps a lesson question fixed.
+- `lesson_layout` (*bool*): Use content-sized staff lines in the lesson pane.
 
 **Constructor examples**
 
@@ -94,10 +95,17 @@ Highlight and play the notes around a gap.
 ### ScaleExplorer.hear
 
 ```python
-def hear() -> None
+def hear(
+    *,
+    force: bool = True,
+) -> None
 ```
 
 Play the example using the selected instrument.
+
+**Parameters**
+
+- `force` (*bool*): Audition the scale while muted. The lesson's main Hear button follows its sound setting.
 
 **Examples**
 

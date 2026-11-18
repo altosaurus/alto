@@ -1,5 +1,5 @@
 """
-Exercise framework. To add an exercise: subclass Exercise, decorate with @register.
+Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks.
 
 An `Exercise` makes `Question` objects. The `Question` says what to show (a staff, a keyboard or only text), which
 buttons to offer and which answer is right. The exercise screen and the scheduler work with those two classes only, so
@@ -27,7 +27,9 @@ from dataclasses import (
     dataclass,
     field,
     is_dataclass,
+    replace,
 )
+from functools import cache
 from typing import Any
 
 from alto.theory.pitch import Note
@@ -115,6 +117,8 @@ class Question:
         Empty for an ordinary question with one answer. Keyword-only.
     notation_target : tuple of (str, int) or None
         Notation part and zero-based note column or staff line to highlight. Keyword-only.
+    notation_excerpt : str or None
+        Versioned score containing the target. Its position is an index into the excerpt manifest. Keyword-only.
     place_clef : str, default ""
         The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button.
         Empty for any other question. Keyword-only.
@@ -168,6 +172,7 @@ class Question:
     place_clef: str = ""  # the clef to put on a blank staff, as a G, C or F symbol in the right place
 
     notation_target: tuple[str, int] | None = None
+    notation_excerpt: str | None = None
 
     def check_placed(self, note: Note) -> bool:
         """
@@ -389,6 +394,8 @@ class Question:
         ]
         if self.notation_target is not None:
             data.append(self.notation_target)
+        if self.notation_excerpt is not None:
+            data.append(self.notation_excerpt)
         if self.keyboard_notes:
             data.append([spelled(n) for n in self.keyboard_notes])
         if self.notes_only:
@@ -664,6 +671,197 @@ class Exercise(ABC):
         >>> q = NoteNames().generate(random.Random(1))
         >>> q.answer in q.choices
         True
+        """
+        ...
+
+
+@dataclass
+class ButtonSettings:
+    """
+    An exercise’s choice of answer layout and maximum number of buttons per group.
+
+    Examples
+    --------
+    >>> ButtonSettings().button_mode
+    'all'
+    """
+
+    button_mode: str = "all"
+    button_count: int = 6
+
+
+class ChoiceExercise(Exercise):
+    """
+    A button-answer exercise with its own standard Buttons submenu.
+
+    Supply the eligible choices in `make_question`. Set `default_limit` to start in Limited mode.
+
+    Examples
+    --------
+    >>> from alto.exercises.library import ChordQualities
+    >>> ChordQualities.button_settings().button_mode
+    'limited'
+    """
+
+    default_limit: int | None = None
+
+    @classmethod
+    @cache
+    def button_settings(cls) -> ButtonSettings:
+        """
+        Return the preferences shared by instances of this particular exercise.
+
+        Returns
+        -------
+        ButtonSettings
+            The exercise's answer layout.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> NoteNames.button_settings().button_mode
+        'all'
+        """
+        return ButtonSettings("limited" if cls.default_limit else "all", cls.default_limit or 6)
+
+    def settings_signature(self) -> str:
+        """
+        Include custom answer layouts when deciding which questions can be replayed.
+
+        Returns
+        -------
+        str
+            The original practice signature at the historical default, or a layout-specific signature.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import ChordQualities
+        >>> ChordQualities().settings_signature()
+        ''
+        """
+        original = self.practice_signature()
+        cfg = self.button_settings()
+        limit = cfg.button_count if cfg.button_mode == "limited" else None
+        return original if limit == self.default_limit else signature(original, limit)
+
+    def practice_signature(self) -> str:
+        """
+        Identify the exercise settings other than the answer layout.
+
+        Returns
+        -------
+        str
+            The signature for questions using the default layout.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import ChordQualities
+        >>> ChordQualities().practice_signature()
+        ''
+        """
+        return ""
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Generate the musical task and apply the selected button count.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Source for the exercise and the distractor sample.
+
+        Returns
+        -------
+        Question
+            A question with its answer buttons ready for practice.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import ChordQualities
+        >>> len(ChordQualities().generate(random.Random(0)).choices)
+        5
+        """
+        return self.limit_buttons(self.make_question(rng), rng=rng)
+
+    def limit_buttons(self, question: Question, *, rng: random.Random) -> Question:
+        """
+        Limit each answer group while keeping all the buttons needed to complete the question.
+
+        Parameters
+        ----------
+        question : Question
+            The task and its eligible answer choices.
+        rng : random.Random
+            Source for sampling distractors.
+
+        Returns
+        -------
+        Question
+            The question with its chosen layout.
+
+        Examples
+        --------
+        A note and octave question keeps the correct name and octave in their respective groups.
+        """
+        cfg = self.button_settings()
+        if cfg.button_mode == "all" or max(len(question.choices), len(question.octaves or ())) <= cfg.button_count:
+            return question
+        answers = {question.answer, *question.required, *question.accept}
+        first, second = answers, set()
+        if question.octaves:
+            pairs = [(a, b) for a in question.choices for b in question.octaves if a + question.joiner + b in answers]
+            first = {a for a, _ in pairs}
+            second = {b for _, b in pairs}
+
+        def sample(options: list[str], *, keep: set[str]) -> list[str]:
+            """
+            Fill the remaining slots with distinct distractors in their original display order.
+
+            Parameters
+            ----------
+            options : list of str
+                Eligible labels for this group.
+            keep : set of str
+                Correct labels in the group.
+
+            Returns
+            -------
+            list of str
+                Selected labels.
+
+            Examples
+            --------
+            A relative-key question keeps both required enharmonic spellings.
+            """
+            if len(options) <= cfg.button_count:
+                return options
+            others = [label for label in options if label not in keep]
+            keep = keep.intersection(options)
+            keep.update(rng.sample(others, max(0, cfg.button_count - len(keep))))
+            return [label for label in options if label in keep]
+
+        choices = sample(question.choices, keep=first)
+        octaves = sample(question.octaves, keep=second) if question.octaves else None
+        return replace(question, choices=choices, octaves=octaves, grid=None if choices != question.choices else question.grid)
+
+    @abstractmethod
+    def make_question(self, rng: random.Random) -> Question:
+        """
+        Generate the task and eligible answer choices before the button limit is applied.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The exercise's random source.
+
+        Returns
+        -------
+        Question
+            The musical task.
+
+        Examples
+        --------
+        Note Identification supplies the note names appropriate to the active clef and key settings.
         """
         ...
 

@@ -5,13 +5,14 @@ nav_group: Using Alto
 permalink: /exercises/
 ---
 
-Alto has thirteen exercises. Each one has a **?** button with a short explanation, and ten of them have their own
-settings (the sliders button). The others use fixed rules, described below.
+Each exercise has a **?** button with a short explanation. Open the sliders button to change an exercise’s settings.
 
 **Every exercise can be done with the keyboard alone, and without clicking on the staff.** The answer buttons have keys,
 and where you place notes on a staff there are buttons and keys to move the note, choose its sign and place it, so the
 mouse is never needed. The keys are listed on the [Shortcuts]({{ '/shortcuts/' | relative_url }}) page, and each button
 shows its key when you hover over it.
+
+Answer-choice exercises include **Buttons** in their settings. Choose **All** for the full answer bank or **Limited** to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.
 
 ## Note Identification
 
@@ -38,12 +39,18 @@ that option. Changes apply to the next question right away.
 ## Notation Identification
 
 Choose a **Question Type** in the exercise settings. **Answer Button** is the default. A short phrase appears with one marking
-highlighted in blue. Choose its name from up to four answers or press its number key. In **Click on Staff**, the prompt names
-a component. Move the pointer over the music to highlight a component, then click to answer. For a notehead, stem, or staff line,
-the prompt specifies which one to find.
+highlighted in blue. By default, choose its name from up to four answers or press its number key. In **Click on Staff**, the prompt names
+a component. Move the pointer over the music to highlight a component, then click to answer. In a repertoire excerpt, any occurrence of the named component counts. In a generated phrase, the prompt can specify
+a particular notehead, stem, or staff line.
 Open **Terms** in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
+**Select none** clears every checkbox. Check a term to start a new selection, or turn the switch off to restore your previous selection.
 Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
 favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.
+
+Eight piano excerpts from Schubert’s *Erlkönig* and Schumann’s *Schöne Fremde* and *Die Lotosblume* are installed with Alto.
+The composer, title, and measure numbers appear beneath the music. Try selecting **Tie** and **Slur** together to practice
+telling the two curves apart in context. Terms outside the collection use generated phrases.
+The original editions are in the public domain, and the digital scores come from the [OpenScore Lieder corpus](https://fourscoreandmore.org/openscore/lieder/).
 
 Topics include note values and rests, clefs, accidentals and microtonal signs, meter, barlines, repeats, articulations,
 dynamics, ornaments, octave signs, and instrumental techniques. For example, you can isolate ties and slurs, compare
@@ -148,11 +155,22 @@ In the exercise settings you can choose:
 
 ## Interval Identification
 
-Two notes are shown. Name the interval from the lower note to the higher one, up to an octave.
+Name the interval between the two written notes. On first use, the notes ascend on a treble or bass staff, and the exercise asks for both quality and number.
 
 An interval has a quality and a number. The number counts the letter names it spans, including both notes. The quality
 is **P** (perfect), **M** (major), **m** (minor), **A** (augmented) or **d** (diminished). So C to E is M3, and C to E♭
 is m3.
+
+- **Clefs** chooses which staves can appear, including the grand staff.
+- **Range** sets the lowest and highest written notes for each checked clef. Both notes must fit.
+- **Staff Key** selects the signatures drawn on the staff. Choose zero for a blank signature.
+- **Display** has two checkboxes. **Melodic** shows the lower note followed by the higher one. **Harmonic** shows both together. Check both to mix them.
+- **Quality** is on by default. Switch it off to answer **3** for either C–E or C–E♭.
+- **Intervals** selects the spellings you want to practice, including compound intervals through a fifteenth.
+  Drag the handles to select a span of interval numbers, then check individual spellings. **Select all** can temporarily include every spelling.
+  Only selected intervals that fit the range can be asked. If none fit, widen the range or choose a smaller interval.
+- **Buttons** defaults to **Limited**, with six answers. Choose a **Button count** from 2 to 10. The count includes the correct answer.
+  Choose **All** to show every selected interval that fits the current staff range. With **Quality** off, each interval number appears once.
 
 {% include shot.html src="intervals.png" alt="Interval Identification showing two notes and the interval buttons" %}
 

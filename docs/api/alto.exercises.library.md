@@ -2,7 +2,6 @@
 title: alto.exercises.library
 parent: api
 package: alto.exercises
-order: 10
 permalink: /api/alto.exercises.library/
 ---
 {% raw %}
@@ -25,7 +24,7 @@ the exercises to the home screen.
 NoteNames(accidentals: bool = False)
 ```
 
-Bases: `Exercise`
+Bases: `ChoiceExercise`
 
 Name the note shown on a staff.
 
@@ -52,10 +51,10 @@ Create the exercise.
 True
 ```
 
-### NoteNames.settings_signature
+### NoteNames.practice_signature
 
 ```python
-def settings_signature() -> str
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -90,10 +89,10 @@ Return the help text for the exercise.
 True
 ```
 
-### NoteNames.generate
+### NoteNames.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Make a note to name, on one of the chosen clefs, in a chosen key.
@@ -120,11 +119,7 @@ True
 class IntervalNames(Exercise)
 ```
 
-Name the interval between two notes, up to an octave.
-
-**Attributes**
-
-- `QUALITIES` (*dict of int to str*): For each interval number, the qualities that can occur, separated by spaces.
+Name the interval between two written notes.
 
 **Examples**
 
@@ -151,6 +146,25 @@ Return the help text for the exercise.
 ```pycon
 >>> "quality followed by a number" in IntervalNames().instructions()
 True
+```
+
+### IntervalNames.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the settings used to generate and grade the interval.
+
+**Returns**
+
+- *str*: The stored-question review signature.
+
+**Examples**
+
+```pycon
+>>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
+''
 ```
 
 ### IntervalNames.generate
@@ -262,7 +276,7 @@ True
 ## KeySignatures
 
 ```python
-class KeySignatures(Exercise)
+class KeySignatures(ChoiceExercise)
 ```
 
 Read a key signature drawn on a staff and name the key it belongs to.
@@ -275,10 +289,10 @@ Read a key signature drawn on a staff and name the key it belongs to.
 True
 ```
 
-### KeySignatures.settings_signature
+### KeySignatures.practice_signature
 
 ```python
-def settings_signature() -> str
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -337,10 +351,10 @@ Give a stored signature question the caption on its staff that older versions di
 '_ minor'
 ```
 
-### KeySignatures.generate
+### KeySignatures.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Make a key signature to read.
@@ -603,7 +617,7 @@ True
 ## CircleOfFifths
 
 ```python
-class CircleOfFifths(Exercise)
+class CircleOfFifths(ChoiceExercise)
 ```
 
 Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.
@@ -616,10 +630,10 @@ Questions on the circle of fifths: a relative major, a relative minor, or the Ro
 True
 ```
 
-### CircleOfFifths.settings_signature
+### CircleOfFifths.practice_signature
 
 ```python
-def settings_signature() -> str
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -654,10 +668,10 @@ Return the help text for the exercise.
 True
 ```
 
-### CircleOfFifths.generate
+### CircleOfFifths.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Pick a kind of question that is switched on, and ask it.
@@ -683,7 +697,7 @@ Pick a kind of question that is switched on, and ask it.
 ## ChordQualities
 
 ```python
-class ChordQualities(Exercise)
+class ChordQualities(ChoiceExercise)
 ```
 
 Identify the quality of a triad or seventh chord in root position.
@@ -715,10 +729,10 @@ Return the help text for the exercise.
 True
 ```
 
-### ChordQualities.generate
+### ChordQualities.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Make a chord in root position whose quality is to be named.
@@ -742,7 +756,7 @@ True
 ## ArpeggioNames
 
 ```python
-class ArpeggioNames(Exercise)
+class ArpeggioNames(ChoiceExercise)
 ```
 
 Name the type and the inversion of a broken chord.
@@ -755,10 +769,10 @@ Name the type and the inversion of a broken chord.
 True
 ```
 
-### ArpeggioNames.settings_signature
+### ArpeggioNames.practice_signature
 
 ```python
-def settings_signature() -> str
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -793,10 +807,10 @@ Return the help text for the exercise.
 True
 ```
 
-### ArpeggioNames.generate
+### ArpeggioNames.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Make an arpeggio on one of the chosen clefs, in a chosen position.
@@ -824,7 +838,7 @@ True
 ## KeyboardNotes
 
 ```python
-class KeyboardNotes(Exercise)
+class KeyboardNotes(ChoiceExercise)
 ```
 
 Name the highlighted key on a piano keyboard.
@@ -837,10 +851,10 @@ Name the highlighted key on a piano keyboard.
 True
 ```
 
-### KeyboardNotes.settings_signature
+### KeyboardNotes.practice_signature
 
 ```python
-def settings_signature() -> str
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -875,10 +889,10 @@ Return the help text for the exercise.
 True
 ```
 
-### KeyboardNotes.generate
+### KeyboardNotes.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Make a keyboard with one key highlighted.
@@ -981,7 +995,7 @@ True
 ## ClefBasics
 
 ```python
-class ClefBasics(Exercise)
+class ClefBasics(ChoiceExercise)
 ```
 
 Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.
@@ -998,6 +1012,24 @@ True
 
 ```python
 def settings_signature() -> str
+```
+
+Use button preferences for reviews only when the learner answers with buttons.
+
+**Returns**
+
+- *str*: The signature for the active question type.
+
+**Examples**
+
+```pycon
+Changing Button count leaves staff-placement reviews available.
+```
+
+### ClefBasics.practice_signature
+
+```python
+def practice_signature() -> str
 ```
 
 Return what identifies the settings that shape these questions.
@@ -1032,10 +1064,10 @@ Return the help text for the exercise, for the kind of question that is being as
 True
 ```
 
-### ClefBasics.generate
+### ClefBasics.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Name a clef to place, or draw a clef to name.
@@ -1064,7 +1096,7 @@ True
 ## NotationIdentification
 
 ```python
-class NotationIdentification(Exercise)
+class NotationIdentification(ChoiceExercise)
 ```
 
 Identify the highlighted part of a written phrase.
@@ -1073,14 +1105,32 @@ Identify the highlighted part of a written phrase.
 
 ```pycon
 >>> q = NotationIdentification().generate(random.Random(2))
->>> len(q.staff), q.answer in q.choices
-(4, True)
+>>> bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+True
 ```
 
 ### NotationIdentification.settings_signature
 
 ```python
 def settings_signature() -> str
+```
+
+Use button preferences for reviews only when the learner answers with buttons.
+
+**Returns**
+
+- *str*: The signature for the active question type.
+
+**Examples**
+
+```pycon
+Changing Button count leaves staff-placement reviews available.
+```
+
+### NotationIdentification.practice_signature
+
+```python
+def practice_signature() -> str
 ```
 
 Identify the terms eligible for review.
@@ -1140,10 +1190,10 @@ Replace unchecked distractors in older practice questions before replay.
 True
 ```
 
-### NotationIdentification.generate
+### NotationIdentification.make_question
 
 ```python
-def generate(rng: random.Random) -> Question
+def make_question(rng: random.Random) -> Question
 ```
 
 Choose a phrase and a single visible feature to highlight.
@@ -1154,7 +1204,7 @@ Choose a phrase and a single visible feature to highlight.
 
 **Returns**
 
-- *Question*: A short phrase with the selected marking and up to four checked answer choices.
+- *Question*: A short phrase with the selected marking and checked answer choices.
 
 **Examples**
 

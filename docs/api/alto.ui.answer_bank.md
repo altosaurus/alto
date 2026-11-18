@@ -2,7 +2,6 @@
 title: alto.ui.answer_bank
 parent: api
 package: alto.ui
-order: 24
 permalink: /api/alto.ui.answer_bank/
 ---
 {% raw %}

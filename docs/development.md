@@ -262,6 +262,52 @@ knowledge. When adding a lesson, place it after the ideas it uses and before les
    to use a hint. Count independent exercise practice separately. If the lesson runs long, move repeated trials
    into an exercise or split off a concept that has its own learning outcome.
 
+### Engraving lesson examples
+
+Let the music determine the width of a lesson example. Measure spacing in **staff spaces**, where one space is the
+distance between the centers of adjacent staff lines. The values below are starting points for Alto. Measure
+horizontal gaps between the visible edges of the symbols, except where the table specifies notehead centers.
+
+| Where | Starting spacing |
+| --- | --- |
+| Clef to key signature | Leave 1 staff space before the first sharp or flat and ¼ space between successive signature marks. |
+| Key signature to first note | Leave 1½ spaces before the notehead or its local accidental. With an empty signature, measure directly from the clef. |
+| Local accidental to notehead | Leave ¼ space so the sign reads with its note. Stagger accidentals in a chord as needed to clear other signs, notes, and ledger lines. |
+| Notes in a phrase | Start equal quarter notes 3½ spaces apart, measured from center to center. Give longer values more room and shorter values less. Allow clearance for flags, dots, and accidentals. Keep simultaneous pitches at the same rhythmic position. |
+| End of a short staff | End the lines about 2 spaces past the last symbol, including when the example shows only a key signature. |
+
+Anchor short examples at the left. When the pane widens, let the extra room fall beyond the staff. When a longer
+phrase needs another line, wrap at a musical boundary and repeat the clef and key signature. For paired examples,
+align the left edges and clefs, keep the staff size consistent, and align corresponding beats when comparing phrases.
+Size the white box to the wider of the music and its caption, with a small margin around both. Once the example
+fits on one line, keep the box at that width as the pane grows. Let long captions wrap below the staff in a narrow
+pane. Allow enough height for the clef, accidentals, ledger lines, and every line of the caption.
+
+Group related staves and their playback button in one bordered panel. Arrange the staves in reading order across
+the panel, with a vertical divider between neighbors on the same row. Use continuous white notation paper all
+the way to the panel border, including between staves and behind the playback button beneath the music. Use the
+theme’s light button colors on that paper. At a
+lesson content width of 760 pixels or more, align the top of the panel with the top of the explanation. Below
+that width, place the panel after the opening paragraph and before the remaining text and question. Keep paired
+staves together whenever both fit and wrap them when necessary.
+
+Put each guided question in the **Check your understanding** callout. Keep its prompt, choices, hints, explanation,
+and retry control together. Let answer buttons wrap in reading order when space is tight.
+
+Use `StaffPlayback` for a playable staff example. Its callback identifies each onset by position, so repeated notes
+light in reading order and a chord lights together. When two diagrams show the same sounding note, highlight both.
+Clear the playback highlight at the end and when changing examples.
+
+Lesson diagrams use `StaffWidget(lesson_layout=True)` in `alto/ui/lesson.py` and the lesson's scale explorer.
+The renderer measures the selected notation font and keeps each chord together when wrapping. In the scale explorer,
+a step label followed by an arrow leads to the first pitch on the next line.
+
+To check a layout change, view an F natural in G major, a three-flat bass-clef signature on its own, and a short
+run of quarter notes in both narrow and wide panes. The natural should read with the F, the flats should read as
+one group, and widening the pane should preserve the distance between the quarter notes. Also try a single note
+with a caption wider than its staff. Narrow the pane until the caption wraps, then widen it again. The last word
+should stay visible throughout, and the white box should stop growing once the caption fits on one line.
+
 ### Reviewing the lesson sequence for gaps
 
 Review the affected stretch whenever a lesson is added, moved, or substantially revised. Every few lesson changes,
@@ -283,7 +329,7 @@ learner can reach the next tile without doing either.
 
 | First lesson and step that needs the skill | What the learner must do | Where it was taught | Finding and smallest repair | Recheck |
 | --- | --- | --- | --- | --- |
-| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Pitches and Notes · Read a note on the staff demonstrates G4 and A4 inside the staff. Clef Basics teaches landmark lines. | Potential practice gap. Check whether the learner can continue below the staff. If they stall, show E4 on the bottom line, D4 immediately below it, and C4 on the short extra line called a ledger line. | Open. Ask the learner to locate C4 on a fresh treble staff and explain how they found it. |
+| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Intervals · Lower the upper note traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4. | The worked example now connects the bottom line to middle C before scales. | Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it. |
 
 Prefer a short bridge at first use when it serves one lesson. Move a prerequisite earlier when several lessons rely
 on it. Add a separate lesson when the missing skill needs its own guided sequence to keep a first pass within
@@ -303,24 +349,23 @@ the guided G major example, and three for the comparison and recap.
 
 ## Adding an exercise
 
-Subclass `Exercise` in `alto/exercises/library.py`, decorate it with `@register`, and implement `generate`, which returns a
-`Question`:
+For an exercise with answer choices, subclass `ChoiceExercise` in `alto/exercises/library.py` and implement `make_question`. Supply the full set of eligible answers. Alto adds the **Buttons** submenu and applies **Limited** or **All**. A construction exercise whose buttons edit or submit an answer uses `Exercise.generate`.
 
 ```python
 @register
-class MyExercise(Exercise):
+class MyExercise(ChoiceExercise):
     name = "My exercise"
     category = "Intervals"
     description = "One line shown on the home screen."
     par_seconds = 5.0  # a good first-answer time; see How practice adapts
 
-    def generate(self, rng):
+    def make_question(self, rng):
         ...
-        return Question("What is this?", choices, answer, staff=[[note]], clef="treble")
+        return Question("What is this?", choices=choices, answer=answer, staff=[[note]], clef="treble")
 ```
 
 - `Question` describes everything the screen needs: a prompt, the answer buttons, the notes to draw, a key signature, a keyboard key to highlight, and so on.
-- If your exercise reads user settings, override `settings_signature()` and return `signature(...)` of those settings. Stored questions are only replayed while the signature is unchanged.
+- If your exercise reads user settings, override `practice_signature()` for a `ChoiceExercise` or `settings_signature()` for other exercises and return `signature(...)` of those settings. Stored questions are only replayed while the signature is unchanged.
 - Give the exercise an icon in `alto/ui/home.py` so it appears properly on the home screen.
 - Pick its `category` from the existing ones, or make a new one. `@register` places the exercise next to the others of its category, so the home screen and the exercise list show each category once, whatever order the classes are written in.
 
@@ -328,6 +373,58 @@ Everything else comes with it: the question is recorded in the database, scored 
 notation font and included in the statistics.
 
 ### Adding an exercise option
+
+#### Requesting exercise options
+
+Use the option names below when asking an agent to design or implement exercise settings. An **option** is a row in
+the exercise’s settings menu. A **choice** is a value inside that row, such as **Descending** under **Motion**.
+**Answer buttons** are the controls the learner presses during practice. The **Buttons** option configures them.
+
+| What to ask | What to expect |
+| --- | --- |
+| “Propose options for Interval Identification.” | A short table of options that fit the exercise. For each, give its menu label, what changes for the learner, the template exercise, the choices and default, and any behavior that would need new work. |
+| “Add standard Clefs to Interval Identification.” | A working Clefs row modeled on Note Identification, with the shared picker and selected-clef preview. The exercise generates questions using the checked clefs. |
+| “Use Range from Keyboard Note Identification. Default to C4–C5.” | The named exercise supplies the keyboard range editor, preview, and interactions. The requested range sets the initial endpoints. |
+
+**Standard** means to reuse the option in the table below. **From [exercise]** selects a specific variant. An explicit
+override takes precedence. For example, “default to treble and bass” sets the boxes checked on first use. “Offer only
+treble and bass” limits which boxes appear. If the request leaves the default open, preserve the target exercise’s
+current behavior where possible. Reusing a picker gives the target exercise its own saved selection unless the
+request calls for a shared preference or the exercises already share it.
+
+#### Exercise option vocabulary
+
+The template exercise gives you a place to try the option in Alto. Its panel and the named helpers are in
+`alto/ui/settings_panel.py`. Start with the option’s effect on the question or answer to choose among variants.
+
+| Option to request | What the learner gets | Template to reuse |
+| --- | --- | --- |
+| **Clefs** (also “Clef”) | A row showing the selected clef symbols. Its submenu has grouped, illustrated checkboxes. At least one stays checked. Offer the grand staff when the exercise supports questions on both staves. | **Note Identification** uses `ClefPictures` with `_clefs_page`. **Scale Construction** shows the single-staff variant of the same picker. |
+| **Range** | Low and high pitches. Staff exercises can keep a range per clef. Keyboard exercises select a span on a piano and show a miniature keyboard in the row. | **Note Identification** uses `RangeEditor` with `RangePictures`. **Keyboard Note Identification** uses `KeyboardSpan` and endpoint arrows. |
+| **Staff Key** | Check which signatures can be drawn at the start of the staff, including the blank signature. The row previews the selection. | **Scale Identification** uses `KeyChecklist` and `KeyDiagram`. |
+| **Scale Key** | Choose the musical keys used in questions. Underlined Major and Minor tabs each offer 15 signatures. Either tab may be empty if the other has a selection. The row counts selections by mode. | **Scale Identification** uses `_ScaleKeyPicker`. When both key options apply, place **Staff Key** above **Scale Key**. |
+| **Key signatures** | A single checklist of signature counts. Some exercises also let the learner turn signatures on or off. | **Note Identification** uses `KeyChecklist`. For the version with a switch inside the submenu, follow **Keyboard Note Identification** and `KeySignaturePage`. |
+| **Scales** | Check the scale types or modes that can appear, such as major, Dorian, and natural minor. | **Scale Construction** uses `ChoiceChecklist` and shows the selected count in the row. |
+| **Motion** | Choose **Ascending** or **Descending** with radio buttons. | **Scale Identification** and **Scale Construction** share this page in `KeySignatureSettingsPanel`. |
+| **Display** | Choose how the notes appear on the staff. Checked presentations can be mixed. | **Interval Identification** offers Melodic and Harmonic checkboxes. |
+| **Quality** | An inline switch requires the interval quality as part of the answer. Turning it off asks for the number alone. | **Interval Identification** uses `_ToggleRow`. |
+| **Question Type** | Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts. | **Notation Identification** has **Click on Staff** and **Answer Button** radios. **Scale Identification** has independent **Key** and **Mode** boxes. **Note Construction** shows its keys and degrees when **Scale and Degree** is selected. |
+| **Buttons** | One submenu for answer layouts. **Limited** caps the number offered, with **Button count** directly below it. **All** shows the full answer set. | **Scale Identification** and **Interval Identification** share the Limited and All submenu. **Keyboard Interval Identification** adds **Compact**, where the learner picks a quality and an interval number in either order. |
+| **Octave** | An inline switch that makes the octave part of the required answer. | **Note Construction** uses `_ToggleRow`. **Keyboard Note Identification** labels its variant **Octave number**. |
+| **Note names**, **Note values**, **Accidentals** | Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options. | **Note Identification** has the naming and value previews and the Accidentals switch. |
+| **Terms**, **Degrees**, **Arpeggio types**, **Inversions** | Check the items eligible for practice. **Terms** also restricts the distractors. **Degrees** is a section within **Scale and Degree**. | All use `ChoiceChecklist`. **Notation Identification** groups terms, **Note Construction** lists degrees, and **Arpeggio Identification** has separate pages for types and inversions. |
+| **Intervals** | Choose interval sizes individually or by endpoints. The available sizes depend on the keyboard range. | **Keyboard Interval Identification** combines `ChoiceChecklist` and `IntervalRangeSlider`. **Interval Identification** uses the slider for interval numbers and the checklist for written spellings, so A4 and d5 can be selected separately. |
+
+For exercise-specific options, use the existing exercise as the reference. Examples include **Black keys** in
+Keyboard Note Identification, **Steps** in Scale Construction, and **Questions** and **Colors** in Circle of Fifths.
+
+#### Implementing the request
+
+Start by opening the template’s settings row and tracing its panel, saved settings, and question or answer behavior.
+Reuse the shared picker, preview, and selection rules where they fit. If two exercises need the same behavior and
+it currently lives inside one panel, share that implementation while preserving the original exercise’s behavior.
+When a new option needs a distinct interaction, describe the difference from its closest template. Add a vocabulary
+entry when introducing a reusable option or variant so it can be requested by name next time.
 
 1. Give the option a row on the exercise settings menu. Use the shared `_Row` in `alto/ui/settings_panel.py` with
    the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
@@ -339,8 +436,10 @@ notation font and included in the statistics.
 3. Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
    update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
    current question. Include settings that affect question selection in the exercise’s review signature.
-4. Test the path from the exercise gear through the row and back. Verify the current choice, the effect on the
-   exercise, the updated summary, and the restored choice when reopening the app.
+4. Test the path from the exercise gear through the row and back. Verify the first-use default, the effect on
+   questions and answers, the updated summary, and the restored choice when reopening the app. For example, select
+   only bass under **Clefs**, generate questions, and check that the row preview and each staff show bass. If the
+   implementation touched a shared picker, run the original exercise’s settings tests too.
 
 ## Adding an instrument
 
@@ -411,7 +510,7 @@ The sidebar and the "On this page" list are built from the pages themselves. A p
 |---|---|
 | `nav_order` | Where it goes, lowest first. A page without one is not in the sidebar. |
 | `nav_group` | The heading it goes under (Using Alto, For developers, About). The headings open and close, and the pages of one heading must be next to each other in `nav_order`. Home has none. |
-| `children`, `parent` | A page with `children: name` is one row that links to it and opens the pages that say `parent: name`, in their `order`. Those pages can also say `package:` to be grouped under a small heading that opens and closes (the API reference). |
+| `children`, `parent` | A page with `children: name` opens the pages with `parent: name`. Guide chapters use `order` for their reading sequence. The API reference lists packages alphabetically and sorts modules by title within each package. |
 
 A heading that is also the title of a page (For developers) is that page's link, and the page is not listed again under it. Whatever holds
 the page you are on is open. Which headings you closed is remembered in the browser.
@@ -421,9 +520,7 @@ headings, and on a narrower one a box above the text. Nothing needs to be writte
 home page, says `toc: false` in its front matter. `docs/api/index.md` is written by
 `scripts/api_docs.py`, so change its front matter there.
 
-Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar's
-own order: the pages by `nav_order`, each followed by its `children` in their `order`. Nothing needs to be written for them. The first page has
-no previous link and the last no next one.
+The previous and next links at the bottom of each page follow the sidebar’s reading order.
 
 ### Building the docs
 
@@ -576,3 +673,20 @@ The release is a normal one and never a pre-release, because Alto's update check
 
 Open an issue on [GitHub](https://github.com/altosaurus/alto/issues). Say which operating system and Python version you
 use, and which exercise you were in.
+
+## Adding a notation excerpt
+
+Choose a passage whose music and source edition are in the public domain. For a modern transcription, verify the
+transcriber’s public-domain dedication as well. Record the precise source file URL, its SHA-256 digest, the historical
+edition, the part, and the measure numbers in `excerpt.json`. Add the edition to `THIRD_PARTY_NOTICES.md`.
+
+Store the extracted `score.musicxml` and its engraved `score.svg` beside the manifest under
+`alto/assets/excerpts/<work>-m<first-measure>-v<version>/`. Preserve the prevailing clefs, key, and meter.
+Give each independently selectable component a group ID such as `mark-0`, and put its Alto notation term
+at the corresponding index in the manifest’s `targets` list. Mark every visible instance of a term that can be asked.
+Keep neighboring symbols as musical context. Tintable shapes inherit their group's fill or use `currentColor` for strokes.
+
+Run `QT_QPA_PLATFORM=offscreen .venv/bin/python scripts/excerpt_hit_map.py <excerpt-directory>` to generate
+`hits.png` from the engraved ink. Inspect both answer modes at narrow and wide sizes.
+Published IDs identify saved questions. Give corrected music or a changed marker order a new version and keep the
+original directory so older answers can still be opened.

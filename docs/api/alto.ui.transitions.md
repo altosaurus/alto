@@ -2,7 +2,6 @@
 title: alto.ui.transitions
 parent: api
 package: alto.ui
-order: 65
 permalink: /api/alto.ui.transitions/
 ---
 {% raw %}

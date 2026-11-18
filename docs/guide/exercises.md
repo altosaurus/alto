@@ -34,7 +34,7 @@ A `Question` says everything about one question. Its fields are the whole vocabu
 | `grid` | Where to put each button, as `(row, column)`, instead of one row. |
 | `explanation` | Text shown after the answer says why it is right. |
 
-Because an exercise only fills in a `Question`, it never touches Qt.
+Use `ChoiceExercise.make_question` for questions answered by choosing buttons. Supply the full eligible bank. Alto adds the **Buttons** option, applies the limit, and retains required answers in each group. Use `practice_signature()` for additional question settings.
 
 ## A complete example
 
@@ -44,7 +44,7 @@ We will add "Sharps and flats": it names a major key and asks how many sharps or
 import random
 
 from alto.exercises.base import (
-    Exercise,
+    ChoiceExercise,
     Question,
     register,
 )
@@ -55,13 +55,13 @@ from alto.theory.scales import (
 
 
 @register
-class SharpsAndFlats(Exercise):
+class SharpsAndFlats(ChoiceExercise):
     name = "Sharps and flats"
     category = "Notation"
     description = "How many sharps or flats does a major key have?"
     par_seconds = 4.0
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         count = rng.randint(-7, 7)  # -7 flats ... +7 sharps
         return Question(
             f"How many sharps or flats are in {MAJOR_KEYS[count]} major?",
@@ -122,12 +122,10 @@ If users should be able to change what is asked, there are four more places to t
    (`note_names = NoteNameSettings()`). Keep it free of Qt and of saving.
 2. **The exercise reads it** when it generates a question: `settings.note_names.active_clefs()`. Because the instance is shared,
    a change takes effect on the next question.
-3. **A signature.** Override `settings_signature()` to return `signature(settings.note_names, ...)`. This is what stops a
-   stored question from coming back under settings it was not made for. It is the step people forget, and nothing fails visibly:
-   old questions simply reappear when they should not.
+3. **A signature.** For a `ChoiceExercise`, return `signature(...)` from `practice_signature()`. The framework includes the button layout when matching stored questions. Other exercises return their signature from `settings_signature()`.
 4. **A panel and persistence** in `alto/ui/settings_panel.py`: a panel class (a subclass of `ExerciseSettingsPanel` that emits
    `changed` when something is edited), `load_*` and `save_*` functions that read and write `QSettings` through
-   `store()` with `text_value` and `int_value`, a branch in `settings_panel_for`, and a call to your `load_*` in
+   `store()` with `text_value` and `int_value`, a branch in `_exercise_panel`, and a call to your `load_*` in
    `MainWindow.__init__` so settings are restored at start. The screen connects `changed` to `next_question`, so edits apply
    at once.
 

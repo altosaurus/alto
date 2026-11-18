@@ -20,9 +20,19 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.
+
+- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
+
+- A Key Signatures lesson teaches how to read and write major and minor key signatures and links to both key signature exercises.
+- An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.
+
+- Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.
+- Double-clicking a row in **Questions that need practice** opens the saved question and its answer.
 - A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.
 - Notation Identification lets learners name a highlighted marking or find a named component on the staff. Hovering
   previews a component before answering, and learners can choose which notation terms to practice.
+  Eight public-domain piano excerpts from Schubert and Schumann put 34 of those terms in musical context.
 
 - Keyboard Interval Identification with configurable keyboard and interval ranges, compound intervals, and Limited, All,
   or Compact answer buttons. Compact answers use a quality letter and an interval number.
@@ -37,6 +47,16 @@ Changes that are in the development docs and not in a release yet.
 
 ### Changed
 {: .no-toc}
+
+- Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
+  exercise tile outlines are near black and other standard button outlines are graphite gray.
+
+- Lesson questions and their feedback appear together in a “Check your understanding” callout.
+
+- Lesson samples and instrument previews play at the same volume as the corresponding exercise notes.
+- Playable staff examples in lessons, the glossary, and saved answer cards highlight each note or chord as it sounds.
+
+- Lesson staves keep clefs, signatures, and notes together as the pane widens. Longer examples wrap with their clef and signature.
 
 - The documentation homepage groups practice into six topic cards that switch between light- and dark-theme screenshots.
 - Keyboard exercise icons use seven realistically proportioned white keys; the interval icon adds a span bracket.

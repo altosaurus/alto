@@ -2,7 +2,6 @@
 title: alto.circle_schemes
 parent: api
 package: alto
-order: 2
 permalink: /api/alto.circle_schemes/
 ---
 {% raw %}

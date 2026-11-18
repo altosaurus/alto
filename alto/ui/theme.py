@@ -876,7 +876,8 @@ def apply_theme(key: str) -> None:
             if app.palette().color(QPalette.ColorRole.Window).name() == _custom_window:
                 app.setPalette(app.style().standardPalette())  # the reset did not take, so use the style's own for the scheme
             _custom_palette = False
-        stylesheet = app_style(app.palette())
+        light = custom_theme(theme.family) if theme and theme.dark else None
+        stylesheet = app_style(app.palette(), paper_palette=theme_palette(light) if light else None)
         if app.styleSheet():
             app.setStyleSheet("")  # replacing a live sheet recursively repolishes its descendants many times
         app.setStyleSheet(stylesheet)

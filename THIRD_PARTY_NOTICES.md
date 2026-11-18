@@ -23,6 +23,22 @@ All are under the SIL Open Font License 1.1 (OFL), whose texts are kept beside t
 The font names are the names their authors gave them. Alto is not affiliated with or endorsed by any of them, nor by
 Dorico, Finale, MuseScore or Verovio, which are mentioned only to say where a font is used.
 
+## Notation Identification excerpts
+
+Alto includes eight piano passages from free CC0 transcriptions in the [OpenScore Lieder catalogue](https://fourscoreandmore.org/openscore/lieder/).
+OpenScore distributes the transcriptions under its [CC0 1.0 public-domain dedication](https://github.com/OpenScore/Lieder/blob/main/LICENSE.txt).
+The historical editions used for these transcriptions are listed below.
+
+| Work | Source edition | Piano measures |
+| --- | --- | --- |
+| Franz Schubert, *Erlkönig*, D. 328, fourth version | Eusebius Mandyczewski, ed., Breitkopf & Härtel, 1895. [IMSLP 15041](https://imslp.org/wiki/Special:ReverseLookup/15041) | 1–2 and 3–4 |
+| Robert Schumann, *Schöne Fremde*, Op. 39 No. 6 | Clara Schumann, ed., Breitkopf & Härtel, 1885. [IMSLP 270920](https://imslp.org/wiki/Special:ReverseLookup/270920) | 2–3, 5, 19, and 29–30 |
+| Robert Schumann, *Die Lotosblume*, Op. 25 No. 7 | Clara Schumann, ed., Breitkopf & Härtel, plate R.S. 120. [IMSLP 270905](https://imslp.org/wiki/Special:ReverseLookup/270905) | 1–2 and 4–5 |
+
+Each passage in `alto/assets/excerpts/` includes its MusicXML, the source URL and SHA-256 digest of the downloaded MusicXML archive.
+The exercise engraving was made with Verovio 6.4.1 and Bravura. The excerpt begins with its clefs, key and meter.
+Ties, slurs, and hairpins with an endpoint outside the passage are omitted.
+
 ## Piano recordings (`alto/assets/piano/`)
 
 The piano is the Salamander Grand Piano V3 by Alexander Holm: a Yamaha C5 grand recorded with two AKG C414 microphones

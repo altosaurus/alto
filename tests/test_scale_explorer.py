@@ -41,13 +41,47 @@ def test_gap_selection_plays_and_highlights_the_same_pair(app: QApplication, mon
     """
     played = []
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(sounds, "preview", lambda key, **kwargs: played.append(kwargs["midis"]))
+    monkeypatch.setattr(sounds, "play_notes", lambda columns, **kwargs: played.append(([col[0].midi for col in columns], kwargs)))
     explorer = ScaleExplorer(scale="Harmonic minor", tonic="A4")
     explorer.steps[5].click()
     assert list(explorer.staff.column_colors) == [5, 6]
-    assert played == [(77, 80)]
+    midis, options = played[0]
+    assert midis == [77, 80] and options["force"]
+    options["on_step"](1)
+    assert explorer.staff.column_colors[6] != explorer.staff.column_colors[5]
     explorer.mode.setCurrentText("Major (Ionian)")
     assert explorer.staff.column_colors == {}
+
+
+def test_lesson_hear_uses_the_displayed_scale(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Play the transposed notes from the lesson's Hear button and highlight them in order.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the rendered melody and its audio callbacks.
+    """
+    played = []
+    monkeypatch.setattr(
+        sounds,
+        "play_notes",
+        lambda columns, **options: played.append(([col[0].midi for col in columns], options["on_step"])),
+    )
+    view = StepView(next(step for step in SCALE_IDENTIFICATION.steps if step.hear))
+    explorer = view.scale_explorer
+    assert explorer is not None and view.hear_button is not None
+    explorer.tonic.setCurrentText("D")
+    view.hear_button.click()
+    midis, highlight = played[0]
+    assert midis == [column[0].midi for column in explorer.staff.columns] and midis[0] == 62
+    for index in range(len(midis)):
+        highlight(index)
+        assert explorer.staff.column_colors[index] == explorer.palette().highlight().color().lighter(160)
+    highlight(None)
+    assert all(color == explorer.palette().highlight().color() for color in explorer.staff.column_colors.values())
 
 
 def test_lesson_questions_have_fixed_visible_notation(app: QApplication) -> None:

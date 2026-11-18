@@ -46,6 +46,9 @@ also closes when you change the exercise or the timeframe, because its numbers w
 answers cannot be clicked. The list has the same columns as the database browser below, sorts when you click a heading, and
 **double-clicking** a row previews the question. It shows the newest 500 answers, and says when there are more.
 
+Double-click any cell in **Questions that need practice** to open the saved question and its answer.
+The **Question Statistics** button on the card opens that question’s speed and accuracy graphs.
+
 {% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green, above the list of questions that need practice" caption="The Reviews calendar: a year of practice at a glance. Gaps are days off, and the darkest squares are your busiest days." %}
 
 A question counts as **right** only if your first answer was right. That is the same rule the
@@ -69,5 +72,8 @@ limited to the newest 10,000 rows each; the line above the table says when that 
 ### Previewing a question
 
 Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.
+Choose the **Question Statistics** bar chart icon in the upper-right corner to graph your practice history for that question. Each point represents one time you were asked.
+The speed graph shows seconds to your first answer. The accuracy graph shows the percentage answered correctly on the first try
+up to that point. Hover over a point for its value. You can also open these graphs from an answer in Statistics.
 
 {% include shot.html src="question-preview.png" alt="A popup showing a chord on a staff with its answer and what was answered" caption="The preview shows the notes, the correct answer, what you answered and how long it took. Play sounds the notes." %}

@@ -6,6 +6,7 @@ from unittest.mock import patch
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication
 
+from alto.audio import sounds
 from alto.ui.glossary import TERMS, GlossaryPage
 
 
@@ -20,19 +21,29 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
     """
     page = GlossaryPage()
     page.show()
-    with patch("alto.ui.glossary.sounds.preview") as preview, patch("alto.ui.glossary.sounds.stop_all") as stop:
+    with (
+        patch.object(sounds, "preview") as preview,
+        patch.object(sounds, "play_notes") as notes,
+        patch.object(sounds, "stop_all", wraps=sounds.stop_all) as stop,
+    ):
         for term, entry in TERMS.items():
             page.terms.setCurrentItem(page.terms.findItems(term, Qt.MatchFlag.MatchExactly)[0])
             for example in entry.examples:
                 assert page.example_label.text() == example.caption
                 page.hear.click()
-                midis = preview.call_args.kwargs["midis"]
-                if term in {"half step", "whole step"}:
+                if entry.keyboard:
+                    midis = preview.call_args.kwargs["midis"]
                     assert page.example_keyboard.isVisible() and page.example_staff.isHidden()
                     assert midis == [page.example_keyboard.highlight, *page.example_keyboard.additional_highlights]
                     assert midis[1] - midis[0] == (1 if term == "half step" else 2)
                 else:
+                    midis = [col[0].midi for col in notes.call_args.args[0]]
+                    assert notes.call_args.kwargs["force"]
                     staff = page.example_staff
+                    highlight = notes.call_args.kwargs["on_step"]
+                    for index in range(len(midis)):
+                        highlight(index)
+                        assert staff.playback_column == index
                     assert staff.isVisible() and page.example_keyboard.isHidden()
                     assert midis == [col[0].midi for col in staff.columns]
                     assert (staff.clef, staff.key) == (example.clef, example.signature)
@@ -51,6 +62,7 @@ def test_glossary_examples_show_and_play_the_same_pitches(app: QApplication) -> 
                 stop.reset_mock()
                 page.next_example.click()
                 stop.assert_called_once()
+                assert page.example_staff.playback_column is None
             assert page.example_label.text() == entry.examples[0].caption
     page.close()
 

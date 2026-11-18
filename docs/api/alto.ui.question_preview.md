@@ -2,7 +2,6 @@
 title: alto.ui.question_preview
 parent: api
 package: alto.ui
-order: 52
 permalink: /api/alto.ui.question_preview/
 ---
 {% raw %}
@@ -24,6 +23,7 @@ QuestionPreview(
     *,
     question: Question,
     details: list[str] | None = None,
+    statistics: Callable[[QWidget], None] | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -55,6 +55,7 @@ Build the popup.
 - `exercise_name` (*str*): The exercise's name, shown as the title.
 - `question` (*Question*): The question to show. Keyword-only.
 - `details` (*list of str or None, default None*): Extra lines of HTML, such as what was answered and how long it took. Keyword-only.
+- `statistics` (*callable or None, default None*): Opens statistics for the displayed question, with the card as its parent. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the dialog. Keyword-only.
 
 **Constructor examples**

@@ -17,8 +17,12 @@ Examples
 
 from __future__ import annotations
 
+import math
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from dataclasses import dataclass, field
+from functools import lru_cache
+from weakref import WeakSet
 
 import numpy as np
 from PySide6.QtCore import (
@@ -33,12 +37,15 @@ from PySide6.QtGui import (
     QColor,
     QFont,
     QFontDatabase,
+    QFontMetricsF,
     QImage,
     QMouseEvent,
     QPainter,
     QPainterPath,
     QPaintEvent,
     QPen,
+    QPicture,
+    QResizeEvent,
     QTransform,
 )
 from PySide6.QtWidgets import (
@@ -47,6 +54,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.notation_excerpts import excerpts
 from alto.notation_terms import MARKS
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
@@ -62,6 +70,7 @@ from alto.ui.notation import (
 )
 from alto.ui.notation import current as current_style
 from alto.ui.notes import draw_note
+from alto.ui.score_excerpt import ScoreExcerpt, score_artwork
 
 # Chord noteheads also carry their pitch so each head can be pointed to separately.
 Component = tuple[str, int] | tuple[str, int, int]
@@ -348,6 +357,111 @@ def draw_key_signature(
     p.restore()
 
 
+# Distances in staff spaces for short examples (docs/development.md, Engraving lesson examples).
+_SIGNATURE_GAP = 1.0
+_SIGN_GAP = 0.25
+_FIRST_NOTE_GAP = 1.5
+_END_GAP = 2.0
+_NOTE_ADVANCE = {"breve": 6.5, "whole": 5.5, "half": 4.5, "quarter": 3.5, "eighth": 3, "sixteenth": 2.5, "thirty_second": 2}
+
+
+@dataclass
+class _LessonSystem:
+    """
+    Positions for one line of a lesson example, in widget coordinates.
+
+    Examples
+    --------
+    >>> _LessonSystem(key_x=40, key_step=9, right=80).centers
+    []
+    """
+
+    key_x: float
+    key_step: float
+    right: float
+    first: int = 0
+    centers: list[float] = field(default_factory=list)
+    signs: list[list[float]] = field(default_factory=list)
+    bottoms: dict[str, float] = field(default_factory=dict)
+    height: float = 0
+    caption_rect: QRectF = field(default_factory=QRectF)
+
+
+@lru_cache(maxsize=256)
+def _lesson_note_bounds(font: str | None, *, value: str, gap: float, down: bool) -> QRectF:
+    """
+    Measure the same note glyph that the staff will paint, including its stem and flag.
+
+    Parameters
+    ----------
+    font : str or None
+        Selected music font.
+    value : str
+        Written note duration.
+    gap : float
+        Staff space in pixels.
+    down : bool
+        Whether the stem points down.
+
+    Returns
+    -------
+    QRectF
+        Ink bounds relative to the notehead center.
+
+    Examples
+    --------
+    >>> _lesson_note_bounds("bravura", value="quarter", gap=8, down=False).width() > 0
+    True
+    """
+    picture = QPicture()
+    with QPainter(picture) as painter:
+        StaffWidget._note(painter, x=0, y=0, gap=gap, value=value, color=QColor("black"), stem_down=down, font=font)
+    return QRectF(picture.boundingRect())
+
+
+@lru_cache(maxsize=128)
+def _lesson_header_bounds(clef: str, *, font: str | None, gap: float, key: int, hidden: bool) -> tuple[float, QRectF]:
+    """
+    Measure the clef's right edge and the vertical extent of the staff, clef, and signature.
+
+    Parameters
+    ----------
+    clef : str
+        Staff clef.
+    font : str or None
+        Selected music font.
+    gap : float
+        Staff space in pixels.
+    key : int
+        Number of sharps or negative number of flats.
+    hidden : bool
+        Hide the clef for a staff-reading question.
+
+    Returns
+    -------
+    tuple of float, QRectF
+        End of the clef and ink bounds relative to the bottom staff line.
+
+    Examples
+    --------
+    >>> end, bounds = _lesson_header_bounds("bass", font="bravura", gap=8, key=-3, hidden=False)
+    >>> end > 0 and bounds.top() <= -32
+    True
+    """
+    picture = QPicture()
+    with QPainter(picture) as painter:
+        if not hidden:
+            StaffWidget._draw_clef(painter, clef=clef, x=0, bottom=0, gap=gap, font=font)
+    clef_bounds = QRectF(picture.boundingRect())
+    bounds = clef_bounds.united(QRectF(0, -4 * gap, gap, 4 * gap))
+    if key:
+        picture = QPicture()
+        with QPainter(picture) as painter:
+            draw_key_signature(painter, clef=clef, key=key, x=0, bottom=0, gap=gap, color=QColor("black"), font=font)
+        bounds = bounds.united(QRectF(picture.boundingRect()))
+    return clef_bounds.right(), bounds
+
+
 class StaffWidget(QWidget):
     """
     A staff with notes, a clef, a key signature and, optionally, a caption.
@@ -412,6 +526,7 @@ class StaffWidget(QWidget):
         margin: float = 8.0,
         compact: bool = False,
         max_step: float | None = None,
+        lesson_layout: bool = False,
     ) -> None:
         """
         Create an empty treble staff.
@@ -433,6 +548,8 @@ class StaffWidget(QWidget):
         max_step : float or None, default None
             The most width each column of notes may take: the staff then stops growing once its notes would be spread wider than
             that, so a few notes stay easy to read in a wide window. Keyword-only.
+        lesson_layout : bool, default False
+            Space the excerpt by its printed symbols and wrap at note or chord boundaries. Keyword-only.
 
         Examples
         --------
@@ -441,9 +558,12 @@ class StaffWidget(QWidget):
         """
         super().__init__(parent)
         self.GAP, self.side, self.note_offset, self.margin, self.compact = gap, side, note_offset, margin, compact
+        self.lesson_peers: WeakSet[StaffWidget] = WeakSet()
+        self.lesson_layout = lesson_layout
         self.max_step = max_step
         self.clef = "treble"
         self.columns: list[list[Note]] = []
+        self.playback_column: int | None = None
         self.note_color: QColor | None = None  # None draws notes in the style's ink
         self.column_colors: dict[int, QColor] = {}  # a color for a column of notes by its position, over `note_color`
         self.wedges: list[str] = []  # the text of the wedge under each pair of neighboring columns; "" for none
@@ -454,6 +574,8 @@ class StaffWidget(QWidget):
         self.value = "whole"
         self.caption = ""  # text written under the staff, inside the paper
         self.notation_target: tuple[str, int] | None = None
+        self.excerpt: ScoreExcerpt | None = None
+        self._clicked_component: Component | None = None
         self.locate_notation = False
         self._hover_point: QPoint | None = None
         self._pick_geometry: tuple | None = None
@@ -473,6 +595,7 @@ class StaffWidget(QWidget):
         caption: str = "",
         notation_target: tuple[str, int] | None = None,
         locate_notation: bool = False,
+        notation_excerpt: str | None = None,
     ) -> None:
         """
         Show some notes, with a clef and a key signature.
@@ -491,6 +614,8 @@ class StaffWidget(QWidget):
             Text to write under the staff. Keyword-only.
         notation_target : tuple of (str, int) or None
             Part and position to highlight in a notation question. Keyword-only.
+        notation_excerpt : str or None
+            Versioned score to show for a repertoire question. Keyword-only.
         locate_notation : bool, default False
             Render the target in ordinary ink for the learner to find. Keyword-only.
 
@@ -501,7 +626,11 @@ class StaffWidget(QWidget):
         >>> staff.clef, staff.key, staff.value, staff.caption
         ('bass', -1, 'quarter', '_ Major')
         """
+        self.playback_column = None
         self.notation_target = notation_target
+        self.excerpt = score_artwork(excerpts()[notation_excerpt]) if notation_excerpt else None
+        self._clicked_component = None
+        self.setToolTip(self.excerpt.excerpt.credit if self.excerpt else "")
         if locate_notation != self.locate_notation:
             self.setMouseTracking(locate_notation)
         self.locate_notation = locate_notation
@@ -511,13 +640,16 @@ class StaffWidget(QWidget):
         self.note_color = None
         self._fit_height(clef)
         self._fit_width()
+        if self.excerpt:
+            self.setMaximumWidth(760)
         self.update()
 
     def _fit_width(self) -> None:
         """
-        Cap the width so that no column of notes is spread wider than `max_step`.
+        Size lesson paper to its music and caption, or limit exercise columns using `max_step`.
 
-        The room for the key signature is that of the signature drawn or of `key_room`, whichever is larger.
+        A lesson can shrink until its widest chord and longest caption word fit.
+        For an exercise, reserve room for the drawn signature or `key_room`, whichever is larger.
 
         Examples
         --------
@@ -530,6 +662,14 @@ class StaffWidget(QWidget):
         >>> staff.maximumWidth() - 500
         91
         """
+        if self.lesson_layout:
+            # A note or chord and its opening signature must fit together on one line.
+            smallest = self._lesson_systems(1)
+            self.setMinimumWidth(math.ceil(max(max(row.right, row.caption_rect.right()) for row in smallest) + self.side))
+            # A short example asks for just enough paper for the unwrapped music and caption.
+            (full,) = self._lesson_systems(16777215)  # Qt's maximum widget dimension
+            self.setMaximumWidth(math.ceil(max(full.right, full.caption_rect.right()) + self.side))
+            return
         if self.max_step is None:
             return
         left = self.side + (18.0 if self.clef == "grand" else 0.0)  # the same left edge the drawing uses
@@ -547,7 +687,7 @@ class StaffWidget(QWidget):
         Returns
         -------
         QSize
-            The capped width and the minimum height for a staff with a `max_step`; otherwise Qt's default.
+            The capped width and minimum height for a lesson or a staff with a `max_step`. Other staves use Qt's default.
 
         Examples
         --------
@@ -556,9 +696,187 @@ class StaffWidget(QWidget):
         >>> staff.sizeHint().width()
         500
         """
-        if self.max_step is None:
+        if self.max_step is None and not self.lesson_layout:
             return super().sizeHint()
         return QSize(self.maximumWidth(), self.minimumHeight())
+
+    def _positioned_notes(self, column: list[Note]) -> Iterator[tuple[Note, str, int, float]]:
+        """
+        Place chord tones on their staves, displacing adjacent noteheads as needed.
+
+        Parameters
+        ----------
+        column : list of Note
+            Pitches at one rhythmic position.
+
+        Yields
+        ------
+        tuple of Note, str, int, float
+            Pitch, staff clef, diatonic steps above its bottom line, and horizontal displacement.
+
+        Examples
+        --------
+        >>> list(StaffWidget()._positioned_notes([Note.parse("E4")]))[0][1:]
+        ('treble', 0, 0.0)
+        """
+        previous = None
+        previous_clef = ""
+        shifted = False
+        for note in sorted(column):
+            clef = self.clef
+            if clef == "grand":
+                clef = "treble" if note.diatonic >= MIDDLE_C else "bass"
+            shifted = not shifted and previous is not None and clef == previous_clef and note.diatonic - previous.diatonic <= 1
+            yield note, clef, note.diatonic - BOTTOM_LINE[clef], 1.55 * self.GAP if shifted else 0.0
+            previous, previous_clef = note, clef
+
+    def _lesson_systems(self, width: int, *, align: bool = True) -> list[_LessonSystem]:
+        """
+        Lay out lesson notes and their signs from left to right, repeating the opening on wrapped lines.
+
+        Parameters
+        ----------
+        width : int
+            Available width in pixels.
+        align : bool, default True
+            Align the noteheads of paired single-note illustrations.
+
+        Returns
+        -------
+        list of _LessonSystem
+            The origin of each note, offsets for its accidentals, staff ends, and vertical positions.
+
+        Examples
+        --------
+        >>> StaffWidget(lesson_layout=True)._lesson_systems(280)[0].right < 280
+        True
+        """
+        gap = self.GAP
+        font = (self.notation_style or current_style()).font
+        grand = self.clef == "grand"
+        clefs = ("treble", "bass") if grand else (self.clef,)
+        left = self.side + (18 if grand else 0)
+        bass_offset = (4 + GRAND_BETWEEN) * gap if grand else 0
+        opening = left
+        above = below = 0.0
+        for clef in clefs:
+            end, bounds = _lesson_header_bounds(clef, font=font, gap=gap, key=self.key, hidden=self.clef_hidden)
+            if not self.clef_hidden:
+                opening = max(opening, left + gap + end)
+            offset = bass_offset if clef == "bass" else 0
+            above = max(above, -bounds.top() - offset)
+            below = max(below, bounds.bottom() + offset - bass_offset)
+
+        def sign_width(sign: int) -> float:
+            """
+            Measure an accidental in the staff's notation style.
+
+            Parameters
+            ----------
+            sign : int
+                Alteration in half steps.
+
+            Returns
+            -------
+            float
+                Width in pixels.
+
+            Examples
+            --------
+            >>> StaffWidget(lesson_layout=True)._lesson_systems(300)[0].key_step > 0
+            True
+            """
+            if font:
+                return engraving.accidental_width(font=font, sign=sign, gap=gap)
+            sign_font = QFont("DejaVu Sans")
+            sign_font.setPixelSize(max(int(gap * 2 * 1.33), 6))
+            return QFontMetricsF(sign_font).horizontalAdvance(ACCIDENTAL_SYMBOLS[sign] or "♮")
+
+        key_x = opening + _SIGNATURE_GAP * gap
+        key_step = sign_width(1 if self.key > 0 else -1) + _SIGN_GAP * gap
+        if self.key:
+            opening = key_x + abs(self.key) * key_step - _SIGN_GAP * gap
+        tail = _END_GAP * gap
+        empty_end = max(opening + tail, left + (8 if self.clef_hidden else 0) * gap)
+        rows = [_LessonSystem(key_x, key_step, empty_end)]
+        row = rows[0]
+        advance = _NOTE_ADVANCE[self.value] * gap
+        column_metrics = []
+        for col in self.columns:
+            bounds = QRectF()
+            offsets = []
+            signs = []
+            value = self.value if len(col) == 1 else "whole"
+            for note, clef, steps, x in self._positioned_notes(col):
+                y = -steps * gap / 2 + (bass_offset if clef == "bass" else 0)
+                bounds = bounds.united(_lesson_note_bounds(font, value=value, gap=gap, down=steps >= 4).translated(x, y))
+                if steps <= -2 or steps >= 10:
+                    bounds = bounds.united(QRectF(x - gap, y, 2 * gap, 1))
+                if note.accidental != key_accidental(note.letter, count=self.key):
+                    signs.append(note.accidental)
+                    above = max(above, 2 * gap - y)
+                    below = max(below, y + 2 * gap - bass_offset)
+            start = bounds.left()
+            for sign in signs:
+                start -= _SIGN_GAP * gap + sign_width(sign)
+                offsets.append(start)
+            above = max(above, -bounds.top() + (5 * gap if self.wedges else 0))
+            below = max(below, bounds.bottom() - bass_offset)
+            column_metrics.append((start, bounds.right(), offsets))
+
+        first_center = 0.0
+        if align:
+            for peer in self.lesson_peers:
+                other = peer._lesson_systems(width, align=False)[0]
+                first_center = max(first_center, other.centers[0])
+        for index, (start, end, offsets) in enumerate(column_metrics):
+            center = opening + _FIRST_NOTE_GAP * gap - start
+            if row.centers:
+                center = max(row.centers[-1] + advance, row.right - tail + gap / 2 - start)
+                if center + end + tail > width - self.side:
+                    row = _LessonSystem(key_x, key_step, empty_end, first=index)
+                    rows.append(row)
+                    center = opening + _FIRST_NOTE_GAP * gap - start
+            if index == 0:
+                center = max(first_center, center)
+            row.centers.append(center)
+            row.signs.append(offsets)
+            row.right = center + end + tail
+
+        y = gap
+        for row in rows:
+            bottom = y + above
+            row.bottoms = {clef: bottom + (bass_offset if clef == "bass" else 0) for clef in clefs}
+            y = bottom + bass_offset + below + gap
+            row.height = y
+        if self.caption:
+            caption_font = QFont(self.font())
+            caption_font.setPixelSize(max(int(gap * 1.6), 12))
+            rect = QRectF(left, y, max(1, width - left - self.side), 10000)
+            measured = QFontMetricsF(caption_font).boundingRect(rect, Qt.TextFlag.TextWordWrap, self.caption)
+            rect.setWidth(math.ceil(measured.width()))
+            rect.setHeight(measured.height())
+            rows[-1].caption_rect = rect
+            rows[-1].height = rect.bottom() + gap
+        return rows
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """
+        Reflow a lesson excerpt when its available width changes.
+
+        Parameters
+        ----------
+        event : QResizeEvent
+            Previous and current widget size.
+
+        Examples
+        --------
+        >>> staff = StaffWidget(lesson_layout=True)
+        >>> staff.resize(300, staff.height())
+        """
+        super().resizeEvent(event)
+        if self.lesson_layout and event.size().width() != event.oldSize().width():
+            self._fit_height(self.clef)
 
     def _fit_height(self, clef: str) -> None:
         """
@@ -578,11 +896,33 @@ class StaffWidget(QWidget):
         >>> staff.minimumHeight()
         450
         """
+        if self.lesson_layout:
+            self.setFixedHeight(math.ceil(self._lesson_systems(self.width())[-1].height))
+            return
         grand_height = 2 * self.margin + 8 + GRAND_BETWEEN  # in gaps
         if self.compact:
             self.setFixedHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP))
         else:
             self.setMinimumHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP) + 10)
+
+    def highlight_column(self, index: int | None) -> None:
+        """
+        Highlight a sounding note or chord, preserving the staff's other markings.
+
+        Parameters
+        ----------
+        index : int or None
+            The sounding column, or None to restore its usual ink.
+
+        Examples
+        --------
+        >>> staff = StaffWidget()
+        >>> staff.highlight_column(0)
+        >>> staff.playback_column
+        0
+        """
+        self.playback_column = index
+        self.update()
 
     def set_note_color(self, color: QColor | None) -> None:
         """
@@ -650,6 +990,22 @@ class StaffWidget(QWidget):
             focused: Component | None = self.notation_target
             if self.locate_notation and self.note_color is None:
                 focused = self._notation_at(self._hover_point) if self._hover_point is not None else None
+            if self.excerpt:
+                if self.note_color is not None and self._clicked_component:
+                    focused = self._clicked_component
+                p.setRenderHint(QPainter.RenderHint.Antialiasing)
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(QColor("white"))
+                p.drawRoundedRect(self.rect(), CORNER_RADIUS, CORNER_RADIUS)
+                self.excerpt.paint(
+                    p,
+                    paper=QRectF(self.rect()),
+                    index=focused[1] if focused else None,
+                    color=self.note_color or QColor("#0068af"),
+                )
+                return
+            if focused and focused[0] in {"Notehead", "Stem"} and focused[1] == self.playback_column:
+                focused = None  # let the sounding column use playback ink, then restore its notation marking
             accent = self.note_color or QColor("#0068af")
             self._draw_score(p, ink=lambda part: accent if part == focused else None)
 
@@ -709,7 +1065,17 @@ class StaffWidget(QWidget):
         >>> StaffWidget().hits_notation(QPoint(0, 0))
         False
         """
-        return self.notation_target is not None and self._notation_at(point) == self.notation_target
+        component = self._notation_at(point)
+        if (
+            self.excerpt
+            and self.locate_notation
+            and component
+            and self.notation_target
+            and component[0] == self.notation_target[0]
+        ):
+            self._clicked_component = component
+            return True
+        return self.notation_target is not None and component == self.notation_target
 
     def _notation_at(self, point: QPoint) -> Component | None:
         """
@@ -730,6 +1096,12 @@ class StaffWidget(QWidget):
         >>> StaffWidget()._notation_at(QPoint(0, 0)) is None
         True
         """
+        if self.excerpt:
+            rect = self.excerpt.music_rect(QRectF(self.rect()))
+            for dx, dy in PICK_OFFSETS:
+                if component := self.excerpt.component_at(point + QPoint(dx, dy), rect=rect):
+                    return component
+            return None
         geometry = (self.size(), self.notation_style or current_style(), clef_shape(self.clef), self.font())
         if geometry != self._pick_geometry:
             self._build_pick_map()
@@ -809,42 +1181,58 @@ class StaffWidget(QWidget):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         look = self.notation_style or current_style()
         font = look.font
-        fg = QColor("black")
         line = engraving.staff_line_width(font, gap=self.GAP) if font else look.line
         p.setPen(Qt.PenStyle.NoPen)
         p.setBrush(paper)
         p.drawRoundedRect(self.rect(), CORNER_RADIUS, CORNER_RADIUS)  # the rounded "paper" behind the music
+        rows = self._lesson_systems(self.width()) if self.lesson_layout else [None]
+        for row in rows:
+            self._draw_system(p, ink=ink, row=row, font=font, line=line, caption=row is rows[-1])
+
+    def _draw_system(
+        self,
+        p: QPainter,
+        *,
+        ink: Callable[[Component], QColor | None],
+        row: _LessonSystem | None,
+        font: str | None,
+        line: float,
+        caption: bool,
+    ) -> None:
+        """
+        Paint one system using exercise columns or the measured positions of a lesson excerpt.
+
+        Parameters
+        ----------
+        p : QPainter
+            Painter using widget coordinates.
+        ink : callable
+            Resolve a component's highlight color.
+        row : _LessonSystem or None
+            Lesson geometry, or None for exercise spacing.
+        font : str or None
+            Selected music font.
+        line : float
+            Staff line thickness.
+        caption : bool
+            Draw the caption below this system.
+
+        Examples
+        --------
+        >>> staff = StaffWidget(lesson_layout=True)
+        >>> not staff.grab().isNull()
+        True
+        """
+        fg = QColor("black")
         p.setPen(QPen(fg, line))
         gap = self.GAP
         w = self.width()
         grand = self.clef == "grand"
         left, right = self.side + (18.0 if grand else 0.0), w - self.side
 
-        staves = self.staff_bottoms()
-
-        # noinspection PyShadowingNames
-        def staff_for(note: Note) -> str:
-            """
-            Return which staff a note is on.
-
-            Parameters
-            ----------
-            note : Note
-                The note to place.
-
-            Returns
-            -------
-            str
-                The staff's clef name. On a grand staff, middle C and above are on the treble staff, the rest on the bass staff.
-
-            Examples
-            --------
-            >>> staff_for(Note.parse("C4"))  # doctest: +SKIP
-            'treble'
-            """
-            if not grand:
-                return self.clef
-            return "treble" if note.diatonic >= MIDDLE_C else "bass"
+        staves = row.bottoms if row else self.staff_bottoms()
+        if row:
+            right = row.right
 
         nfg = fg if self.notation_target else (self.note_color or fg)
         term, position = self.notation_target or ("", -1)
@@ -859,16 +1247,18 @@ class StaffWidget(QWidget):
                 self._draw_clef(
                     p,
                     clef=clef,
-                    x=left + 8,
+                    x=left + (gap if row else 8),
                     bottom=bottom,
                     gap=gap,
                     color=ink((term, position) if term == "Clef" or placement == "clef" else ("Clef", 0)) or fg,
                     font=font,
                 )
-            self._draw_key_signature(
+            draw_key_signature(
                 p,
                 clef=clef,
-                x=left + 56,
+                x=row.key_x if row else left + 56,
+                key=self.key,
+                step=row.key_step if row else KEY_STEP,
                 bottom=bottom,
                 gap=gap,
                 color=ink(("Key signature", position)) or fg,
@@ -886,38 +1276,37 @@ class StaffWidget(QWidget):
                 font=font,
             )
 
-        if self.caption:
+        if caption and self.caption:
             caption_font = QFont(self.font())
             caption_font.setPixelSize(max(int(gap * 1.6), 12))
             p.setFont(caption_font)
             p.setPen(fg)
             top = max(staves.values()) + 2.5 * gap  # below the lowest staff, clear of its ledger lines
-            draw_degree_text(
-                p,
-                rect=QRectF(
-                    left,
-                    top,
-                    right - left,
-                    max(self.height() - top - gap, gap * 2),
-                ),
-                text=self.caption,
-            )
+            if row:
+                p.drawText(row.caption_rect, Qt.TextFlag.TextWordWrap | Qt.AlignmentFlag.AlignLeft, self.caption)
+            else:
+                draw_degree_text(
+                    p,
+                    rect=QRectF(left, top, right - left, max(self.height() - top - gap, gap * 2)),
+                    text=self.caption,
+                )
 
         n = max(len(self.columns), 1)
         x0 = left + self.note_offset + KEY_STEP * abs(self.key)
         step = (right - x0) / n
         p.setBrush(nfg)
         heads: dict[int, QPointF] = {}  # where the top note of each column was drawn, for the steps between them
-        for ci, col in enumerate(self.columns):
-            x = x0 + step * (ci + 0.5)
+        indices = range(row.first, row.first + len(row.centers)) if row else range(len(self.columns))
+        for ci in indices:
+            col = self.columns[ci]
+            column_x = row.centers[ci - row.first] if row else x0 + step * (ci + 0.5)
             acc_slot = 0
-            ncol = self.column_colors.get(ci, nfg)
+            ncol = self.palette().highlight().color() if ci == self.playback_column else self.column_colors.get(ci, nfg)
             p.setBrush(ncol)
-            for note in sorted(col):
-                clef = staff_for(note)
+            for note, clef, steps, shift in self._positioned_notes(col):
+                x = column_x + shift
                 bottom = staves[clef]
-                y = bottom - (note.diatonic - BOTTOM_LINE[clef]) * gap / 2
-                steps = round((bottom - y) / (gap / 2))
+                y = bottom - steps * gap / 2
                 heads[ci] = QPointF(x, min(y, heads[ci].y()) if ci in heads else y)
                 ledger_ink = ink(("Ledger line", ci)) or fg
                 p.setPen(QPen(ledger_ink, engraving.ledger_width(font, gap=gap) if font else line))
@@ -980,7 +1369,9 @@ class StaffWidget(QWidget):
                 # A sign is written only where the note differs from what the key signature already says.
                 if note.accidental != key_accidental(note.letter, count=self.key):
                     sign_ink = ink(("Accidental", ci, note.midi)) or ncol
-                    ax = x - gap * (2.3 + 1.2 * (acc_slot % 3))
+                    ax = column_x - gap * (2.3 + 1.2 * (acc_slot % 3))
+                    if row:
+                        ax = column_x + row.signs[ci - row.first][acc_slot]
                     if font:
                         engraving.draw_accidental(
                             p,
@@ -994,7 +1385,10 @@ class StaffWidget(QWidget):
                     else:
                         p.setPen(QPen(sign_ink, 1.4))
                         sign = ACCIDENTAL_SYMBOLS[note.accidental] or "♮"
-                        p.setFont(QFont("DejaVu Sans", int(gap * 2.0)))
+                        sign_font = QFont("DejaVu Sans", int(gap * 2.0))
+                        if row:
+                            sign_font.setPixelSize(max(int(gap * 2 * 1.33), 6))
+                        p.setFont(sign_font)
                         p.drawText(QPointF(ax, y + gap * 0.5), sign)
                     acc_slot += 1
         if self.notation_target:
@@ -1017,6 +1411,17 @@ class StaffWidget(QWidget):
                     gap=gap,
                     color=self.wedge_colors.get(i) or self.column_colors.get(i + 1) or nfg,
                 )
+
+            elif row and text and i in heads and i + 1 < len(self.columns):
+                # The second pitch is on the next line. Keep the interval label with its starting pitch.
+                point = heads[i]
+                label_font = QFont(self.font())
+                label_font.setPixelSize(max(int(gap * 1.25), 11))
+                label_font.setBold(True)
+                p.setFont(label_font)
+                p.setPen(self.wedge_colors.get(i) or self.column_colors.get(i + 1) or nfg)
+                bounds = QRectF(point.x() - 2 * gap, point.y() - 5.5 * gap, 4 * gap, 2 * gap)
+                p.drawText(bounds, Qt.AlignmentFlag.AlignCenter, f"{text} →")
 
     def _draw_notation_target(
         self,
@@ -1214,60 +1619,6 @@ class StaffWidget(QWidget):
         )
         p.fillRect(label, QColor("white"))  # the paper, so that a staff line does not run through the letter
         p.drawText(label, Qt.AlignmentFlag.AlignCenter, text)
-
-    def _draw_key_signature(
-        self,
-        p: QPainter,
-        *,
-        clef: str,
-        x: float,
-        bottom: float,
-        gap: float,
-        color: QColor,
-        font: str | None = None,
-    ) -> None:
-        """
-        Draw this staff's key signature.
-
-        Parameters
-        ----------
-        p : QPainter
-            The painter to draw with.
-        clef : str
-            The clef of the staff. Keyword-only.
-        x : float
-            The left edge of the first accidental, in pixels. Keyword-only.
-        bottom : float
-            The y position of the staff's bottom line. Keyword-only.
-        gap : float
-            The distance between staff lines. Keyword-only.
-        color : QColor
-            The color to draw in. Keyword-only.
-        font : str or None, default None
-            A SMuFL font to engrave with. Keyword-only.
-
-        Examples
-        --------
-        >>> from PySide6.QtGui import QImage
-        >>> staff = StaffWidget()
-        >>> staff.show_notes([], key=2)
-        >>> image = QImage(200, 120, QImage.Format.Format_ARGB32)
-        >>> image.fill(QColor("white"))
-        >>> painter = QPainter(image)
-        >>> staff._draw_key_signature(painter, clef="treble", x=10, bottom=80, gap=12, color=QColor("black"))
-        >>> painter.end()
-        True
-        """
-        draw_key_signature(
-            p,
-            clef=clef,
-            key=self.key,
-            x=x,
-            bottom=bottom,
-            gap=gap,
-            color=color,
-            font=font,
-        )
 
     @staticmethod
     def _note(
@@ -1623,8 +1974,12 @@ def _repaint_staffs() -> None:
     --------
     >>> _repaint_staffs()  # with no staffs open, nothing happens
     """
+    _lesson_header_bounds.cache_clear()  # the baritone clef shape can change within a notation style
     for w in QApplication.allWidgets():
         if isinstance(w, StaffWidget):
+            if w.lesson_layout:
+                w._fit_width()
+                w._fit_height(w.clef)
             w.update()
 
 

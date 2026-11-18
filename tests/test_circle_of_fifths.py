@@ -1046,7 +1046,7 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(app: QApplication)
     """
     view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
-    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 4
+    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 5
     assert pane.questions_row.value.text() == "3 of 3"
     assert list(pane.questions.boxes) == list(settings.CIRCLE_QUESTIONS)
     pane.questions.boxes["major"].setChecked(False)

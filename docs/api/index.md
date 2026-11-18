@@ -19,6 +19,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.circle_schemes](alto.circle_schemes/) | The color schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
+| [alto.notation_excerpts](alto.notation_excerpts/) | Public-domain piano excerpts available for offline notation practice. |
 | [alto.notation_terms](alto.notation_terms/) | Notation Identification terms, grouped by subject with their score placement and SMuFL code points. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
@@ -30,7 +31,7 @@ The exercises and the framework they are built on.
 
 | Module | What it is |
 |---|---|
-| [alto.exercises.base](alto.exercises.base/) | Exercise framework. To add an exercise: subclass Exercise, decorate with @register. |
+| [alto.exercises.base](alto.exercises.base/) | Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks. |
 | [alto.exercises.library](alto.exercises.library/) | The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction. |
 
 ## alto.learning
@@ -54,6 +55,8 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.base](alto.lessons.base/) | What a lesson is made of: steps, and the small tasks inside them. |
 | [alto.lessons.circle_of_fifths](alto.lessons.circle_of_fifths/) | The lesson on the circle of fifths, taught from nothing. |
 | [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
+| [alto.lessons.intervals](alto.lessons.intervals/) | A guided introduction to naming intervals on the staff and keyboard. |
+| [alto.lessons.key_signatures](alto.lessons.key_signatures/) | A guided lesson on reading and writing key signatures. |
 | [alto.lessons.pitches_and_notes](alto.lessons.pitches_and_notes/) | A first lesson connecting a sound, a piano key, and a written note. |
 | [alto.lessons.scale_identification](alto.lessons.scale_identification/) | Reading scales and recognizing their interval patterns. |
 
@@ -104,9 +107,11 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |
 | [alto.ui.scale_explorer](alto.ui.scale_explorer/) | Interactive notation and step patterns for learning scales. |
+| [alto.ui.score_excerpt](alto.ui.score_excerpt/) | Paint the engraved score and locate symbols from a pixel map made from the same SVG. |
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
 | [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |
+| [alto.ui.staff_playback](alto.ui.staff_playback/) | Connect a displayed music sample to the notes sounding on its staff. |
 | [alto.ui.stats_dialog](alto.ui.stats_dialog/) | The statistics screen: a few numbers and charts about how practice is going. |
 | [alto.ui.store](alto.ui.store/) | The application's saved settings (a thin layer over `QSettings`). |
 | [alto.ui.style](alto.ui.style/) | Application-wide stylesheet: rounded corners on buttons, panes, lists and scroll bars. |

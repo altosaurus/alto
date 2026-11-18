@@ -60,11 +60,14 @@ from PySide6.QtWidgets import (
 from alto import settings as app_settings
 from alto.audio import sounds
 from alto.exercises.base import (
+    ChoiceExercise,
     Exercise,
     Question,
 )
 from alto.exercises.library import (
+    IntervalNames,
     KeyboardIntervals,
+    NotationIdentification,
     ScaleIdentification,
 )
 from alto.learning import Learner
@@ -1069,6 +1072,8 @@ class ExerciseView(QWidget):
             animation.deleteLater()
         self._anims.clear()
         q = self.question = self._pick_question()
+        if self.settings_panel is not None and self.settings_panel.choice_buttons_row is not None:
+            self.settings_panel.choice_buttons_row.setVisible(bool(q.choices))
         self.answered = False
         self.missed = False
         self._attempts = 0
@@ -1126,6 +1131,7 @@ class ExerciseView(QWidget):
             clef=q.clef,
             key=0 if q.build_key else q.key,  # a signature to build starts from a blank staff
             value=q.value,
+            notation_excerpt=q.notation_excerpt,
             notation_target=q.notation_target,
             locate_notation=q.notation_target is not None and not q.choices,
             caption=q.caption,
@@ -1143,6 +1149,11 @@ class ExerciseView(QWidget):
             and not q.octaves
             and (app_settings.keyboard_intervals.all_interval_buttons or len(q.choices) > 6)
         )
+        if isinstance(self.exercise, IntervalNames):
+            interval_bank = app_settings.intervals.button_mode == "all" or len(q.choices) > 6
+        if isinstance(self.exercise, ChoiceExercise):
+            interval_bank = len(q.choices) > 6 and (not q.grid or isinstance(self.exercise, NotationIdentification))
+            self.interval_answers.setAccessibleName("Answer choices")
         compact_intervals = isinstance(self.exercise, KeyboardIntervals) and bool(q.octaves)
         scale_buttons = bool(q.octaves) and q.second_label == "Mode"
         self.quality_label.setText("Tonic" if scale_buttons else "Quality")
@@ -1947,6 +1958,7 @@ class ExerciseView(QWidget):
             and event.button() == Qt.MouseButton.LeftButton
             and watched is self.staff
             and self.staff.locate_notation
+            and not self.answered
             and self.question
         ):
             choice = self.question.answer if self.staff.hits_notation(event.position().toPoint()) else "Incorrect location"

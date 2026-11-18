@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
+from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.learning import Database
 from alto.theory.pitch import Note
@@ -281,7 +282,7 @@ def test_a_staff_question_shows_its_notes_answer_choices_and_explanation(
     """
     played = []
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr("alto.ui.question_preview.sounds.play_notes", lambda notes: played.append(notes))
+    monkeypatch.setattr("alto.audio.sounds.play_sample", lambda notes, **options: played.append(notes))
     q = Question(
         "Which?",
         choices=["major", "minor"],
@@ -301,6 +302,45 @@ def test_a_staff_question_shows_its_notes_answer_choices_and_explanation(
     close = next(b for b in dialog.findChildren(QPushButton) if b.text().replace("&", "") == "Close")
     close.click()
     assert dialog.result() == QDialog.DialogCode.Accepted
+
+
+@pytest.mark.parametrize("mark", [None, ("Notehead", 0)])
+def test_preview_animates_repeated_notes_by_position(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    mark: tuple[str, int] | None,
+) -> None:
+    """
+    Move the visible highlight between two identical notes and restore the original score.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Advances muted playback one onset at a time.
+    mark : tuple or None
+        An optional notation marking to restore after playback.
+    """
+    note = Note.parse("C4")
+    pending = []
+    monkeypatch.setattr(sounds, "enabled", False)
+    monkeypatch.setattr("alto.audio.QTimer.singleShot", lambda delay, callback: pending.append(callback))
+    question = Question("Which?", choices=["P1"], answer="P1", staff=[[note], [note]], notation_target=mark)
+    dialog = QuestionPreview("Interval", question=question)
+    dialog.show()
+    staff = dialog.findChild(StaffWidget)
+    assert staff is not None
+    before = staff.grab().toImage()
+    next(button for button in dialog.findChildren(QPushButton) if button.text() == "Play").click()
+    first = staff.grab().toImage()
+    assert first != before and staff.playback_column == 0
+    pending.pop(0)()
+    second = staff.grab().toImage()
+    assert second != first and second != before and staff.playback_column == 1
+    pending.pop(0)()
+    assert staff.grab().toImage() == before
+    dialog.close()
 
 
 @pytest.mark.parametrize("key_staff", [False, True])
@@ -355,7 +395,7 @@ def test_a_note_construction_question_shows_the_note_that_was_asked_for(
     """
     played = []
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr("alto.ui.question_preview.sounds.play_notes", lambda notes: played.append(notes))
+    monkeypatch.setattr("alto.audio.sounds.play_sample", lambda notes, **options: played.append(notes))
     settings.note_names.naming = "solfege"
     q = Question(
         "Place Sol",

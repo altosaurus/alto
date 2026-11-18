@@ -57,7 +57,7 @@ from alto.ui.charts import (
     LineChart,
     StackedBarChart,
 )
-from alto.ui.database_page import AnswerList
+from alto.ui.database_page import ROW_ROLE, AnswerList, open_preview
 
 DAY = 86400.0
 DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
@@ -404,7 +404,7 @@ class StatsPage(QWidget):
         self.detail_note.setStyleSheet("color: gray;")
         self.detail_note.setWordWrap(True)
         detail_lay.addWidget(self.detail_note)
-        self.answers = AnswerList(names=self._names())
+        self.answers = AnswerList(names=self._names(), learner=learner)
         self.answers.setMinimumHeight(240)
         self.answers.setMaximumHeight(380)
         detail_lay.addWidget(self.answers)
@@ -423,7 +423,12 @@ class StatsPage(QWidget):
         )
         self.table.verticalHeader().hide()
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table.setToolTip("Double-click a row to view the saved question.")
+        self.table.doubleClicked.connect(
+            lambda index: open_preview(index.siblingAtColumn(0), names=self._names(), parent=self, learner=self.learner),
+        )
         self.table.setShowGrid(False)
         head = self.table.horizontalHeader()
         head.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
@@ -560,6 +565,8 @@ class StatsPage(QWidget):
                 ),
             ):
                 item = QTableWidgetItem(text)
+                if col == 0:
+                    item.setData(ROW_ROLE, {"exercise": h.exercise, "item_key": h.item_key, "payload": h.payload})
                 if col >= 2:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table.setItem(row, col, item)

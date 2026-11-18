@@ -52,18 +52,18 @@ not an oversight.
 
 ## Style sheets, in practice
 
-QSS looks like CSS and mostly behaves like it, with differences that matter.
+Alto’s standard push buttons have a one-pixel border and share the ten-pixel corner radius used by its fields.
+In dark mode, exercise tile outlines are near black (`#181818`) and other standard button outlines are graphite gray (`#505050`).
+Hover tints the surface. Keyboard focus adds a second pixel to the outline and reduces the padding so the label stays in place.
+Pressed and checked buttons use the theme’s accent color.
 
 ```css
 QPushButton {
     border: 1px solid <edge color>;
-    border-bottom-width: 2px;           /* a heavier lower edge lifts the button off the page */
     border-radius: 10px;
     padding: 6px 12px;
 }
-QPushButton:hover   { border-color: palette(highlight); }
-QPushButton:pressed { border-bottom-width: 1px; padding-top: 7px; }
-QPushButton:checked { border: 2px solid palette(highlight); }
+QPushButton:focus { border: 2px solid palette(highlight); padding: 5px 11px; }
 ```
 
 - **Selectors.** `QPushButton` matches the class and its subclasses; `QListWidget#nav` matches the one with

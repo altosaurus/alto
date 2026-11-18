@@ -2,7 +2,6 @@
 title: alto.ui.style
 parent: api
 package: alto.ui
-order: 60
 permalink: /api/alto.ui.style/
 ---
 {% raw %}
@@ -20,17 +19,22 @@ Colors come from the palette so it follows the system light/dark theme.
 ## app_style
 
 ```python
-def app_style(palette: QPalette) -> str
+def app_style(
+    palette: QPalette,
+    *,
+    paper_palette: QPalette | None = None,
+) -> str
 ```
 
 Build the stylesheet for a palette.
 
-White-filled buttons with a dark border and a heavier lower edge, rounded check boxes and lists, and so on, with colors
-taken from the palette.
+Push buttons use rounded hairline borders. In dark mode, exercise tiles have near-black outlines and
+other standard buttons have graphite-gray outlines.
 
 **Parameters**
 
 - `palette` (*QPalette*): The palette to take colors from, so the style follows the light or dark theme.
+- `paper_palette` (*QPalette or None, default None*): The theme's light variant for playback on white staff paper. Dark desktop themes use Qt light colors with the desktop accent when no light variant is supplied.
 
 **Returns**
 

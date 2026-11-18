@@ -2,7 +2,6 @@
 title: alto.ui.notes
 parent: api
 package: alto.ui
-order: 48
 permalink: /api/alto.ui.notes/
 ---
 {% raw %}

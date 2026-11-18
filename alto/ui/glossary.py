@@ -30,6 +30,7 @@ from alto.ui.home import ExerciseCard, lesson_card
 from alto.ui.icons import SEARCH, svg_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.staff import StaffWidget
+from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import SegmentedControl
 
 _STEP_LABELS = {1: "H", 2: "W"}
@@ -326,6 +327,7 @@ class GlossaryPage(QWidget):
         self.example_keyboard.max_key_width = 26
         demo.addWidget(self.example_staff)
         demo.addWidget(self.example_keyboard)
+        self.playback = StaffPlayback(self, highlight=self.example_staff.highlight_column)
         self._preview_played = False
         demo_controls = QVBoxLayout()
         self.example_label = QLabel()
@@ -334,7 +336,7 @@ class GlossaryPage(QWidget):
         self.next_example = QPushButton("Next example →")
         self.next_example.clicked.connect(self._next_example)
         demo_controls.addWidget(self.next_example)
-        self.hear = QPushButton("♪ Hear note")
+        self.hear = QPushButton("▶  Hear note")
         self.hear.clicked.connect(self._hear_example)
         demo_controls.addWidget(self.hear)
         demo.addLayout(demo_controls)
@@ -437,15 +439,19 @@ class GlossaryPage(QWidget):
             )
             self.example_staff.show_notes([[note] for note in notes], clef=example.clef, key=example.signature)
         self.example_label.setText(example.caption)
-        self.hear.setText("♪ Hear note" if len(notes) == 1 else "♪ Hear example")
+        self.hear.setText("▶  Hear note" if len(notes) == 1 else "▶  Hear example")
 
     def _hear_example(self) -> None:
         """Audition the pitches in the displayed order."""
-        sounds.preview(sounds.instrument, midis=self._example_midis, step_ms=450)
-        self._preview_played = True
+        if self.example_staff.isHidden():
+            sounds.preview(sounds.instrument, midis=self._example_midis, step_ms=450)
+            self._preview_played = True
+        else:
+            self.playback.play(self.example_staff.columns, force=True)
 
     def _stop_preview(self) -> None:
         """Silence the previous example when the learner changes the display."""
+        self.playback.stop()
         if self._preview_played:
             sounds.stop_all()
             self._preview_played = False

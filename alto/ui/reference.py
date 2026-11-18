@@ -42,12 +42,17 @@ from alto.exercises.library import (
     CLEF_FACTS,
     CircleOfFifths,
     ClefBasics,
+    IntervalNames,
+    KeyboardIntervals,
     KeyboardNotes,
+    KeySignatureConstruction,
+    KeySignatures,
     NotationIdentification,
     NoteConstruction,
     NoteNames,
     ScaleIdentification,
 )
+from alto.lessons import LESSONS
 from alto.theory.fifths import (
     INTRO,
     MAJORS,
@@ -629,7 +634,26 @@ class ScaleReferencePanel(QWidget):
         lay.addWidget(scroll, 1)
 
 
-_NOTE_HINTS = {
+_READING_HINTS = {
+    KeySignatures: (
+        "<p>For major, go a half step above the last sharp or read the next-to-last flat. One flat gives F major, "
+        "and an empty signature gives C major. For minor, take the sixth note of that major scale. "
+        "For Dorian, take its second note.</p>"
+    ),
+    KeySignatureConstruction: (
+        "<p>D major needs F♯ and C♯, so choose two sharps. E♭ major needs B♭, E♭, and A♭, so choose three flats. "
+        "A minor shares the signature of C major. Choose ♮ to leave the staff empty.</p>"
+    ),
+    IntervalNames: (
+        "<p>Count letter names from the lower note to the higher, including both notes. "
+        "C to E and C to E♭ are both thirds. Count half steps to find the quality. "
+        "A major third (M3) spans four half steps, and a minor third (m3) spans three.</p>"
+    ),
+    KeyboardIntervals: (
+        "<p>Start at zero on the lower highlighted key. Count each move to the next key, black or white. "
+        "Choose m3 for three half steps, M3 for four, P4 for five, or P5 for seven. "
+        "At six half steps, use the combined A4 / d5 answer.</p>"
+    ),
     NotationIdentification: (
         "<p>Look at the shape and what it touches. The <b>notehead</b> is the oval that sits on a line or in a space. "
         "The <b>stem</b> is the vertical stroke attached to it and can point up or down.</p>"
@@ -663,7 +687,7 @@ _NOTE_HINTS = {
 
 
 class NoteReferencePanel(QWidget):
-    """Quick hints for reading or placing a note and a link to the introductory lesson."""
+    """Hints for reading notes or intervals and a link to the associated lesson."""
 
     lesson_requested = Signal(str)
 
@@ -684,10 +708,12 @@ class NoteReferencePanel(QWidget):
         super().__init__()
         layout = QVBoxLayout(self)
         self.lesson_button = QPushButton("New to this? Take the full lesson  →")
-        self.lesson_button.setToolTip("Open Pitches and Notes")
-        self.lesson_button.clicked.connect(lambda: self.lesson_requested.emit("pitches-and-notes"))
+        name = type(exercise).__name__
+        lesson = next(lesson for lesson in LESSONS if name in (lesson.exercise, *lesson.related_exercises))
+        self.lesson_button.setToolTip(f"Open {lesson.title}")
+        self.lesson_button.clicked.connect(lambda: self.lesson_requested.emit(lesson.key))
         layout.addWidget(self.lesson_button)
-        hints = QLabel(f"<h3>{exercise.name}</h3>{_NOTE_HINTS[type(exercise)]}")
+        hints = QLabel(f"<h3>{exercise.name}</h3>{_READING_HINTS[type(exercise)]}")
         hints.setWordWrap(True)
         hints.setAlignment(Qt.AlignmentFlag.AlignTop)
         hints.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
@@ -722,7 +748,7 @@ def reference_panel_for(
     >>> type(reference_panel_for(ClefBasics())).__name__
     'ClefReferencePanel'
     """
-    if type(exercise) in _NOTE_HINTS:
+    if type(exercise) in _READING_HINTS:
         return NoteReferencePanel(exercise)
     if isinstance(exercise, CircleOfFifths):
         return ReferencePanel()

@@ -10,12 +10,17 @@ Examples
 
 from __future__ import annotations
 
-from PySide6.QtCore import Qt
+from collections.abc import Callable
+
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
+    QHBoxLayout,
     QLabel,
     QPushButton,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -24,12 +29,14 @@ from alto import settings as app_settings
 from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.settings import spell
+from alto.ui import icons
 from alto.ui.circle import FifthsCircle
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.staff import (
     MAX_STEP,
     StaffWidget,
 )
+from alto.ui.staff_playback import StaffPlayback
 
 
 class QuestionPreview(QDialog):
@@ -56,6 +63,7 @@ class QuestionPreview(QDialog):
         *,
         question: Question,
         details: list[str] | None = None,
+        statistics: Callable[[QWidget], None] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -69,6 +77,8 @@ class QuestionPreview(QDialog):
             The question to show. Keyword-only.
         details : list of str or None, default None
             Extra lines of HTML, such as what was answered and how long it took. Keyword-only.
+        statistics : callable or None, default None
+            Opens statistics for the displayed question, with the card as its parent. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the dialog. Keyword-only.
 
@@ -86,7 +96,17 @@ class QuestionPreview(QDialog):
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         title = QLabel(f"<h3>{exercise_name}</h3>")
-        lay.addWidget(title)
+        header = QHBoxLayout()
+        header.addWidget(title, 1)
+        if statistics is not None:
+            stats_button = QToolButton()
+            stats_button.setIcon(icons.svg_icon(icons.BAR_CHART, color=self.palette().color(QPalette.ColorRole.ButtonText)))
+            stats_button.setIconSize(QSize(22, 22))
+            stats_button.setAccessibleName("Question Statistics")
+            stats_button.setToolTip("Question Statistics")
+            stats_button.clicked.connect(lambda: statistics(self))
+            header.addWidget(stats_button, alignment=Qt.AlignmentFlag.AlignTop)
+        lay.addLayout(header)
         if question.prompt and not question.caption:
             prompt = QLabel(question.prompt)
             prompt.setWordWrap(True)
@@ -95,6 +115,7 @@ class QuestionPreview(QDialog):
 
         q = question
         scale = [[n] for n in q.construct_scale or []]
+        staff = None
         if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
             if q.construct_steps:  # a scale with its steps shows them above the notes
@@ -106,6 +127,7 @@ class QuestionPreview(QDialog):
                 clef=q.clef,
                 key=q.key if q.staff_signature is None else q.staff_signature,
                 value=q.value,
+                notation_excerpt=q.notation_excerpt,
                 notation_target=q.notation_target,
                 caption=q.caption,
             )
@@ -162,7 +184,11 @@ class QuestionPreview(QDialog):
         # The simple pitch player cannot perform the rhythmic, microtonal, or instrumental markings in these questions.
         if notes and (q.notation_target is None or q.notation_target[0] in ("Notehead", "Stem", "Clef", "Staff line")):
             play = QPushButton("Play")
-            play.clicked.connect(lambda: sounds.play_notes(notes))
+            if staff is not None and staff.columns == notes:
+                playback = StaffPlayback(self, highlight=staff.highlight_column)
+                play.clicked.connect(lambda: playback.play(notes))
+            else:
+                play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)
         buttons.addButton(QDialogButtonBox.StandardButton.Close)
         buttons.rejected.connect(self.accept)

@@ -2,7 +2,6 @@
 title: alto.audio
 parent: api
 package: alto
-order: 1
 permalink: /api/alto.audio/
 ---
 {% raw %}
@@ -91,6 +90,29 @@ An instrument that notes can be played on, and where its recordings are.
 1.0
 >>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
 (True, False)
+```
+
+### Instrument.playback_volume
+
+```python
+def playback_volume(level: float = 1.0) -> float
+```
+
+Return the output volume for a note or clip played on this instrument.
+
+**Parameters**
+
+- `level` (*float, default 1.0*): Relative amplitude. Simultaneous notes can request a lower level for each voice.
+
+**Returns**
+
+- *float*: Linear Qt volume between zero and one, including the instrument's gain.
+
+**Examples**
+
+```pycon
+>>> INSTRUMENT_BY_KEY["flute"].playback_volume()
+0.85
 ```
 
 ## instrument_groups
@@ -346,6 +368,7 @@ def play_notes(
     *,
     gap_ms: int = 450,
     warmup: bool = False,
+    force: bool = False,
     on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
@@ -356,6 +379,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 **Parameters**
 
+- `force` (*bool*): Play even when exercise audio is muted.
 - `warmup` (*bool*): Silently initialize audio streams before starting playback.
 - `columns` (*iterable of sequence of Note*): The columns of notes, as drawn on a staff.
 - `gap_ms` (*int, default 450*): The time between columns, in milliseconds. Keyword-only.
@@ -369,6 +393,56 @@ The notes within a column sound together, a little quieter the more there are.
 >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
 ```
 
+### Sounds.stop_sample
+
+```python
+def stop_sample(on_step: Callable[[int | None], object]) -> None
+```
+
+Stop a displayed sample if it still owns playback.
+
+**Parameters**
+
+- `on_step` (*callable*): The display callback originally passed to play_sample.
+
+**Examples**
+
+```pycon
+>>> Sounds().stop_sample(print)
+```
+
+### Sounds.play_sample
+
+```python
+def play_sample(
+    columns: Sequence[Sequence[Note]],
+    *,
+    gap_ms: int,
+    on_step: Callable[[int | None], object],
+    force: bool = False,
+) -> None
+```
+
+Play a displayed sample and report the sounding column until it ends or is interrupted.
+
+**Parameters**
+
+- `columns` (*sequence of sequence of Note*): Written notes in playback order, with simultaneous notes grouped together.
+- `gap_ms` (*int*): Time between column onsets in milliseconds.
+- `on_step` (*callable*): Receives each sounding column index and None to clear the display.
+- `force` (*bool*): Audition the sample even when exercise audio is muted.
+
+**Examples**
+
+```pycon
+>>> player = Sounds()
+>>> player.enabled = False
+>>> player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
+0
+>>> player.stop_sample(print)
+None
+```
+
 ### Sounds.play_melody
 
 ```python
@@ -377,6 +451,7 @@ def play_melody(
     *,
     gap_ms: int,
     on_step: Callable[[int | None], object],
+    force: bool = False,
 ) -> None
 ```
 
@@ -389,6 +464,7 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
 
 - `midis` (*iterable of int*): MIDI notes in playback order.
 - `gap_ms` (*int*): Milliseconds between note onsets. Keyword-only.
+- `force` (*bool*): Play even when exercise audio is muted.
 - `on_step` (*callable*): Receives each sounding note's index, then None after the last note's time. Keyword-only.
 
 **Examples**

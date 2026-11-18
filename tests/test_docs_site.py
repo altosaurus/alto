@@ -572,11 +572,10 @@ def test_every_page_in_the_sidebar_ends_with_links_to_the_previous_and_the_next_
     layout = (DOCS / "_layouts" / "default.html").read_text(encoding="utf-8")
     assert 'class="page-nav"' in layout and 'rel="prev"' in layout and 'rel="next"' in layout
     assert 'id="i-prev"' in layout and 'id="i-next"' in layout
-    assert (
-        'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children | sort: "order"' in layout
-    )
-    assert "entries[forloop.index]" in layout and "entries[before]" in layout and "{% break %}" in layout
-    assert "forloop.index0 > 0" in layout  # the first page has no previous one, and must not wrap around to the last
+    assert 'where_exp: "p", "p.nav_order" | sort: "nav_order"' in layout and 'where: "parent", p.children' in layout
+    assert 'sort: "title" | group_by: "package" | sort: "name"' in layout and 'child_pages | sort: "order"' in layout
+    assert "reading_order | concat: child_pages" in layout and "reading_order[forloop.index]" in layout
+    assert "unless forloop.first" in layout and "reading_order[before]" in layout
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".page-nav { display: flex; justify-content: space-between;" in css
     assert (

@@ -38,6 +38,7 @@ from datetime import (
 from alto.exercises.base import Question
 from alto.learning import scheduler
 from alto.learning.database import Database
+from alto.notation_excerpts import excerpts
 from alto.theory.pitch import Note
 from alto.theory.scales import format_key_signature
 
@@ -159,6 +160,10 @@ class HardQuestion:
         How many times it was answered. Keyword-only.
     wrong : int
         How many wrong answers it has had. Keyword-only.
+    item_key : str
+        The stored identity used to look up this question's practice history. Keyword-only.
+    payload : str or None
+        The saved question as JSON for the preview. Keyword-only.
 
     Examples
     --------
@@ -172,6 +177,8 @@ class HardQuestion:
     strain: float
     seen: int
     wrong: int
+    item_key: str = ""
+    payload: str | None = None
 
 
 @dataclass
@@ -476,7 +483,9 @@ def describe(question: Question) -> str:
         return f"{n.name}{n.octave}"
 
     clef = question.clef.capitalize()
-    if question.show_staff:
+    if question.notation_excerpt:
+        what = excerpts()[question.notation_excerpt].credit
+    elif question.show_staff:
         what = f"{clef}: {format_key_signature(question.key)}. {question.prompt}"
     elif question.prompt:
         what = question.prompt
@@ -658,6 +667,8 @@ def collect(
                 strain=r["strain"],
                 seen=r["seen"],
                 wrong=r["wrong"],
+                item_key=r["item_key"],
+                payload=r["payload"],
             ),
         )
     return out

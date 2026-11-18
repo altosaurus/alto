@@ -2,7 +2,6 @@
 title: alto.learning.stats
 parent: api
 package: alto.learning
-order: 15
 permalink: /api/alto.learning.stats/
 ---
 {% raw %}
@@ -138,6 +137,8 @@ HardQuestion(
     strain: float,
     seen: int,
     wrong: int,
+    item_key: str = '',
+    payload: str | None = None,
 )
 ```
 
@@ -150,6 +151,8 @@ A question that needs practice, for the list on the statistics screen.
 - `strain` (*float*): How much practice it needs; higher is more. Keyword-only.
 - `seen` (*int*): How many times it was answered. Keyword-only.
 - `wrong` (*int*): How many wrong answers it has had. Keyword-only.
+- `item_key` (*str*): The stored identity used to look up this question's practice history. Keyword-only.
+- `payload` (*str or None*): The saved question as JSON for the preview. Keyword-only.
 
 **Examples**
 
