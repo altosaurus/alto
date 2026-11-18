@@ -106,7 +106,7 @@ GitHub Actions [selects checks by change type]({{ '/development/' | relative_url
 - **`tests.yml`** runs the suite on `main` on every Python version that has not reached end of life (a matrix, currently 3.11 to 3.15). When a
   version stops being supported, drop it here and in `pyproject.toml`.
 - **`pyright.yml`** runs Pyright.
-- **`codecov.yml`** runs the tests with coverage and uploads the report. It needs a repository secret, `CODECOV_TOKEN`.
+- **`codecov.yml`** uploads the coverage report attached to the pytest run. It uses the repository secret `CODECOV_TOKEN` when available.
 
 The workflows install a few system libraries (`libegl1`, `libxkbcommon0` and others) because Qt's offscreen platform needs them
 even though nothing appears on screen. If CI fails on a missing library with a message about `libGL` or `xcb`, that list is where

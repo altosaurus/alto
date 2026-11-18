@@ -32,11 +32,12 @@ pytest
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
 
 The tests never read or change your own settings, profile or history. `tests/conftest.py` points them at a throwaway
-folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under `alto/`. The pre-push hook and the GitHub Coverage job require tests
+folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under `alto/`. The pre-push hook and the pytest job that collects coverage require tests
 to execute every added or modified statement in that package. The Codecov project percentage tracks historical gaps.
 
-GitHub Actions runs the tests on every pull request (`.github/workflows/tests.yml`) and reports coverage to Codecov
-(`.github/workflows/codecov.yml`). To measure coverage yourself:
+For code pull requests and pushes to `main`, the oldest Python version in the pytest matrix (currently 3.11)
+runs the suite with coverage and checks the patch. Download the `pytest-coverage` artifact from the Tests run
+to inspect `coverage.xml`. The Codecov workflow reads that same artifact. To measure coverage locally:
 
 ```bash
 sh scripts/run-tests.sh --patch-coverage
@@ -50,8 +51,8 @@ On pull requests, GitHub selects pytest and coverage using the changes since the
 
 | Pull request changes | Pytest | Coverage |
 | --- | --- | --- |
-| Only local previews (`work/**`), `.gitignore`, or `.git-blame-ignore-revs` | Skip | Report success after checking the file list |
-| Documentation under `docs/` or top-level Markdown, optionally mixed with the housekeeping files above | Run the documentation tests on Python 3.14 | Report success after checking the file list |
+| Only local previews (`work/**`), `.gitignore`, or `.git-blame-ignore-revs` | Skip | Skip |
+| Documentation under `docs/` or top-level Markdown, optionally mixed with the housekeeping files above | Run the documentation tests on Python 3.14 | Skip |
 | Anything else, including application assets, dependencies, packaging, tests, or workflows | Run the full suite on the oldest and newest supported Python | Measure coverage and enforce patch coverage |
 
 Ruff and Pyright run on pull requests that change Python source, type stubs, or inputs to the

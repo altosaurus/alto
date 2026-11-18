@@ -116,7 +116,7 @@ def test_a_pull_request_runs_two_python_versions_and_a_docs_change_one_while_mai
 
 def test_every_workflow_that_runs_on_pull_requests_cancels_what_a_new_push_makes_stale_but_never_a_run_on_main() -> None:
     """Check the concurrency rule of the workflows that run on pull requests."""
-    for name in ["tests", "pyright", "codecov", "ruff", "package", "docs-check"]:
+    for name in ["tests", "pyright", "ruff", "package", "docs-check"]:
         workflow = (WORKFLOWS / f"{name}.yml").read_text(encoding="utf-8")
         assert "cancel-in-progress:" in workflow and "github.event.pull_request.number" in workflow, name
         assert "cancel-in-progress: ${{ github.event_name == 'pull_request' }}" in workflow or name == "docs-check", name
@@ -149,13 +149,35 @@ def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_p
 
 
 def test_the_pre_push_hook_and_github_use_the_same_full_suite_runner() -> None:
-    """Run the full suite by default and share the runner with both GitHub test workflows."""
+    """Run the full suite by default and share the coverage command with the GitHub pytest job."""
     hook = (ROOT / "scripts" / "run-tests.sh").read_text(encoding="utf-8")
     assert 'pytest -q -o faulthandler_timeout=120 "$@"' in hook
     assert "changed_tests.py" not in hook
     config = (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "entry: sh scripts/run-tests.sh --patch-coverage" in config
-    assert "run: sh scripts/run-tests.sh $TARGETS" in (WORKFLOWS / "tests.yml").read_text(encoding="utf-8")
-    coverage = (WORKFLOWS / "codecov.yml").read_text(encoding="utf-8")
-    assert "run: sh scripts/run-tests.sh --patch-coverage" in coverage
-    assert "paths-ignore:" not in coverage and "steps.scope.outputs.kind == 'code'" in coverage
+    workflow = (WORKFLOWS / "tests.yml").read_text(encoding="utf-8")
+    assert "sh scripts/run-tests.sh $TARGETS" in workflow
+    assert "sh scripts/run-tests.sh --patch-coverage" in workflow
+
+
+def test_codecov_reads_the_report_produced_by_one_pytest_matrix_job() -> None:
+    """Check the artifact handoff, the scope guard, and the patch baseline for pushes and PRs."""
+    yaml = pytest.importorskip("yaml")
+    tests = yaml.load((WORKFLOWS / "tests.yml").read_text(), Loader=yaml.BaseLoader)["jobs"]
+    producer = tests["pytest"]
+    assert "needs.scope.outputs.kind == 'code'" in producer["env"]["COVERAGE_RUN"]
+    assert "matrix.python-version == fromJSON(needs.scope.outputs.versions)[0]" in producer["env"]["COVERAGE_RUN"]
+    run = next(step for step in producer["steps"] if "run-tests.sh" in step.get("run", ""))
+    assert "github.event.pull_request.base.sha || github.event.before" in run["env"]["ALTO_COVERAGE_BASE"]
+    attach = next(step for step in producer["steps"] if step.get("uses", "").startswith("actions/upload-artifact@"))
+    assert "env.COVERAGE_RUN == 'true'" in attach["if"]
+    caller = tests["codecov"]
+    assert caller["needs"] == ["scope", "pytest"] and "needs.scope.outputs.kind == 'code'" in caller["if"]
+    consumer = yaml.load((ROOT / caller["uses"]).read_text(), Loader=yaml.BaseLoader)
+    assert set(consumer["on"]) == {"workflow_call"}
+    steps = consumer["jobs"]["upload"]["steps"]
+    download = next(step for step in steps if step.get("uses", "").startswith("actions/download-artifact@"))
+    publish = next(step for step in steps if step.get("uses", "").startswith("codecov/codecov-action@"))
+    assert download["with"]["name"] == attach["with"]["name"]
+    assert publish["with"]["files"] == attach["with"]["path"] == "coverage.xml"
+    assert all("run" not in step for step in steps)

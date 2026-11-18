@@ -58,8 +58,13 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ${{ fromJSON(needs.scope.outputs.versions) }}
+    env:
+      # The oldest version is present on both PRs and pushes to main.
+      COVERAGE_RUN: ${{ needs.scope.outputs.kind == 'code' && matrix.python-version == fromJSON(needs.scope.outputs.versions)[0] }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ env.COVERAGE_RUN == 'true' && '0' || '1' }}
 
       - uses: actions/setup-python@v5
         with:
@@ -76,6 +81,27 @@ jobs:
 
       - name: Run the tests
         env:
-          QT_QPA_PLATFORM: offscreen
+          ALTO_COVERAGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           TARGETS: ${{ needs.scope.outputs.targets }}
-        run: sh scripts/run-tests.sh $TARGETS
+        run: |
+          if [ "$COVERAGE_RUN" = true ]; then
+            sh scripts/run-tests.sh --patch-coverage
+          else
+            sh scripts/run-tests.sh $TARGETS
+          fi
+
+      - name: Attach pytest coverage report
+        if: ${{ !cancelled() && env.COVERAGE_RUN == 'true' && hashFiles('coverage.xml') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-coverage
+          path: coverage.xml
+          if-no-files-found: error
+          overwrite: true
+
+  codecov:
+    needs: [scope, pytest]
+    if: ${{ !cancelled() && needs.scope.outputs.kind == 'code' }}
+    uses: ./.github/workflows/codecov.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
