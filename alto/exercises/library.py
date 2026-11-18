@@ -2668,6 +2668,8 @@ class NotationIdentification(ChoiceExercise):
         >>> q.notation_target[0] == q.answer
         True
         """
+        if not settings.notation.terms:
+            return Question("Select a notation term in Settings to continue.", choices=[], answer="")
         phrase = rng.choice(("E4 G4 A4 G4", "B4 A4 G4 E4", "G4 B4 D5 C5", "D5 C5 A4 B4"))
         selected = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
         repertoire = passages_by_term()

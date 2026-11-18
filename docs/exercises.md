@@ -43,6 +43,7 @@ highlighted in blue. By default, choose its name from up to four answers or pres
 a component. Move the pointer over the music to highlight a component, then click to answer. In a repertoire excerpt, any occurrence of the named component counts. In a generated phrase, the prompt can specify
 a particular notehead, stem, or staff line.
 Open **Terms** in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
+**Select none** clears every checkbox. Check a term to start a new selection, or turn the switch off to restore your previous selection.
 Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
 favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.
 

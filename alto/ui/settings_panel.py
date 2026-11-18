@@ -5073,6 +5073,23 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
+def _saved_notation_terms() -> set[str]:
+    """
+    Read the last nonempty selection of notation terms.
+
+    Returns
+    -------
+    set of str
+        The saved terms that still exist, or all terms for a new profile.
+
+    Examples
+    --------
+    Switching Select none off restores these checkboxes.
+    """
+    saved = text_value(store(), key="notationIdentification/terms", default="")
+    return set(settings.NOTATION_TERMS).intersection(saved.split(",")) or set(settings.NOTATION_TERMS)
+
+
 def load_notation_terms() -> None:
     """
     Restore the question type and term selection, defaulting to Answer Button and all terms.
@@ -5085,8 +5102,8 @@ def load_notation_terms() -> None:
     """
     kind = text_value(store(), key="notationIdentification/questionType", default="button")
     settings.notation.question_type = kind if kind in settings.NOTATION_QUESTION_TYPES else "button"
-    saved = text_value(store(), key="notationIdentification/terms", default="")
-    settings.notation.terms = set(settings.NOTATION_TERMS).intersection(saved.split(",")) or set(settings.NOTATION_TERMS)
+    none = text_value(store(), key="notationIdentification/selectNone", default="false").lower() == "true"
+    settings.notation.terms = set() if none else _saved_notation_terms()
 
 
 class NotationSettingsPanel(ExerciseSettingsPanel):
@@ -5141,6 +5158,9 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         terms_body = QWidget()
         terms_layout = QVBoxLayout(terms_body)
         terms_layout.setContentsMargins(0, 0, 0, 0)
+        self.select_none = _ToggleRow("Select none")
+        self.select_none.switched.connect(lambda on: self._set_terms(set() if on else _saved_notation_terms()))
+        terms_layout.addWidget(self.select_none)
         self.group_picker = FieldComboBox()
         self.group_picker.setAccessibleName("Notation term group")
         self.group_picker.setPlaceholderText("Select a group…")
@@ -5150,6 +5170,7 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         self.terms = ChoiceChecklist(
             [(group, [(term, term) for term in terms]) for group, terms in CATALOG.items()],
             selected=settings.notation.terms,
+            allow_empty=True,
         )
         terms_layout.addWidget(_scrolling(self.terms), 1)
         self.stack.addWidget(_subpage("Terms", body=terms_body, back=lambda: self.stack.slide_to(0), fill=True))
@@ -5168,7 +5189,9 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         """
         self.type_row.value.setText(settings.NOTATION_QUESTION_TYPES[settings.notation.question_type])
         count = len(settings.notation.terms)
-        self.terms_row.value.setText("All" if count == len(settings.NOTATION_TERMS) else f"{count} selected")
+        self.select_none.setOn(count == 0)
+        summary = "All" if count == len(settings.NOTATION_TERMS) else f"{count} selected"
+        self.terms_row.value.setText(summary if count else "None")
 
     def _select_group(self, group: str) -> None:
         """
@@ -5185,12 +5208,26 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         True
         """
         selected = settings.NOTATION_TERMS if group == "All terms" else CATALOG[group]
+        self.group_picker.setCurrentIndex(-1)
+        self._set_terms(set(selected))
+
+    def _set_terms(self, selected: set[str]) -> None:
+        """
+        Apply a bulk edit and request one new question.
+
+        Parameters
+        ----------
+        selected : set of str
+            The terms to check.
+
+        Examples
+        --------
+        Select none clears every box in one edit.
+        """
         for term, box in self.terms.boxes.items():
             box.blockSignals(True)
             box.setChecked(term in selected)
             box.blockSignals(False)
-        _guard_last(self.terms.boxes.values())
-        self.group_picker.setCurrentIndex(-1)
         self._save()
 
     def _save(self) -> None:
@@ -5204,8 +5241,11 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         """
         settings.notation.question_type = next(key for key, radio in self.types.items() if radio.isChecked())
         store().setValue("notationIdentification/questionType", settings.notation.question_type)
-        settings.notation.terms = self.terms.selected()
-        store().setValue("notationIdentification/terms", ",".join(sorted(settings.notation.terms)))
+        selected = self.terms.selected()
+        if remembered := selected or settings.notation.terms:
+            store().setValue("notationIdentification/terms", ",".join(sorted(remembered)))
+        store().setValue("notationIdentification/selectNone", "false" if selected else "true")
+        settings.notation.terms = selected
         self._refresh_summaries()
         self.changed.emit()
 

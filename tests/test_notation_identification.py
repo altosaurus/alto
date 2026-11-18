@@ -152,7 +152,7 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     assert panel.terms_row.value.text() == "1 selected"
     assert view.question is not None and view.question.answer == "Notehead"
     assert view.question.choices == ["Notehead"] and len(view.buttons) == 1
-    assert not panel.terms.boxes["Notehead"].isEnabled()
+    assert panel.terms.boxes["Notehead"].isEnabled()
     assert exercise.settings_signature() != pair_signature
     settings.notation.terms = set(settings.NOTATION_TERMS)
     load_notation_terms()
@@ -161,6 +161,50 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     assert exercise.settings_signature() == ""
     next(b for b in panel.findChildren(QToolButton) if b.isVisible() and b.text() == "‹ Back").click()
     assert page_changed.wait(2000) and panel.terms_row.isVisible() and panel.terms_row.value.text() == "All"
+
+
+@pytest.mark.parametrize("mode", ["button", "staff"])
+def test_select_none_clears_and_restores_notation_terms(app: QApplication, mode: str) -> None:
+    """
+    Clear a custom selection, reopen it, and resume through the switch, a checkbox, or a group.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    mode : str
+        The question type to practice.
+    """
+    settings.notation.question_type = mode
+    original = {"Fermata", "Arpeggio sign"}
+    settings.notation.terms = original.copy()
+    view = ExerciseView(NotationIdentification(), rng=random.Random(11))
+    panel = view.settings_panel
+    assert isinstance(panel, NotationSettingsPanel)
+    changes = QSignalSpy(panel.changed)
+    panel.select_none.click()
+    assert changes.count() == 1 and panel.select_none.isOn()
+    assert not panel.terms.selected() and panel.terms_row.value.text() == "None"
+    assert view.question and not view.question.answer and "Select a notation term" in view.prompt.text()
+    assert view.staff.isHidden() and not view.buttons and not view._advance.isActive() and view.total == 0
+
+    settings.notation.terms = set(settings.NOTATION_TERMS)
+    load_notation_terms()
+    reopened = ExerciseView(NotationIdentification(), rng=random.Random(12))
+    panel = reopened.settings_panel
+    assert isinstance(panel, NotationSettingsPanel) and panel.select_none.isOn() and not panel.terms.selected()
+    panel.types["staff" if mode == "button" else "button"].click()
+    panel.select_none.click()
+    assert panel.terms.selected() == original and not panel.select_none.isOn()
+    assert reopened.question and reopened.question.answer in original
+
+    panel.select_none.click()
+    panel.terms.boxes["Tie"].click()
+    assert not panel.select_none.isOn() and reopened.question and reopened.question.answer == "Tie"
+    panel.terms.boxes["Tie"].click()
+    assert panel.select_none.isOn() and not settings.notation.terms
+    panel.group_picker.textActivated.emit("Ornaments")
+    assert not panel.select_none.isOn() and settings.notation.terms == set(CATALOG["Ornaments"])
 
 
 def test_each_notation_term_draws_a_highlight(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
