@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QListWidget,
+    QPushButton,
     QScrollArea,
     QWidget,
 )
@@ -89,6 +90,29 @@ def test_every_card_shows_its_whole_name_and_description(app: QApplication) -> N
             else:
                 assert label.sizeHint().width() <= label.width(), (cls.name, label.text())
         card.close()
+
+
+def test_home_tile_and_button_borders_follow_theme_changes(app: QApplication, request: pytest.FixtureRequest) -> None:
+    """
+    Check the resting outlines on exercise tiles, lesson tiles, and ordinary buttons across theme changes.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    request : pytest.FixtureRequest
+        Restores the system theme after the comparison.
+    """
+    request.addfinalizer(lambda: apply_theme("system"))
+    home = HomePage(REGISTRY)
+    controls = (home.cards[0], home.lesson_cards[0], QPushButton("Next"))
+    for theme, expected in (
+        ("studio_dark", ["#181818", "#505050", "#505050"]),
+        ("studio", ["#b3b6bb"] * 3),
+    ):
+        apply_theme(theme)
+        app.processEvents()
+        assert [widget.grab().toImage().pixelColor(20, 0).name() for widget in controls] == expected
 
 
 def test_the_home_screen_has_a_card_for_each_exercise_and_reports_the_one_clicked(app: QApplication) -> None:

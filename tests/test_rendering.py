@@ -807,7 +807,10 @@ def test_the_theme_is_saved_and_applied(app: QApplication) -> None:
     assert theme.saved_theme() == "system"  # an unknown choice falls back
     for key, _label in theme.THEMES:
         theme.apply_theme(key)
-        assert app.styleSheet() == app_style(app.palette())
+        family, mode = theme.family_of(key)
+        dark = mode == "dark" or (mode == "system" and theme.system_is_dark())
+        light = theme.custom_theme(family) if dark else None
+        assert app.styleSheet() == app_style(app.palette(), paper_palette=theme.theme_palette(light) if light else None)
     theme.apply_theme("system")
 
 

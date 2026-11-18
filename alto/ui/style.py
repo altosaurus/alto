@@ -11,24 +11,56 @@ Examples
 
 from pathlib import Path
 
-from PySide6.QtGui import QPalette
+from PySide6.QtGui import QColor, QPalette
 
 from alto.ui.colors import blend_name
 
 RADIUS = 10
 
 
-def app_style(palette: QPalette) -> str:
+def _button_colors(palette: QPalette) -> dict[str, str]:
+    """
+    Mix the outline, hover, pressed, and disabled colors for rounded hairline buttons.
+
+    Parameters
+    ----------
+    palette : QPalette
+        Colors of the surface hosting the button.
+
+    Returns
+    -------
+    dict of str to str
+        Hex colors for the button stylesheet.
+
+    Examples
+    --------
+    >>> _button_colors(QPalette())["button_border"].startswith("#")
+    True
+    """
+    base, text = palette.base().color(), palette.text().color()
+    accent = palette.highlight().color()
+    return {
+        "button_border": blend_name(base, b=text, t=0.31),
+        "button_hover": blend_name(base, b=accent, t=0.25),
+        "button_pressed_border": blend_name(text, b=accent, t=0.35),
+        "button_disabled_text": blend_name(palette.window().color(), b=text, t=0.44),
+    }
+
+
+def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> str:
     """
     Build the stylesheet for a palette.
 
-    White-filled buttons with a dark border and a heavier lower edge, rounded check boxes and lists, and so on, with colors
-    taken from the palette.
+    Push buttons use rounded hairline borders. In dark mode, exercise tiles have near-black outlines and
+    other standard buttons have graphite-gray outlines.
 
     Parameters
     ----------
     palette : QPalette
         The palette to take colors from, so the style follows the light or dark theme.
+    paper_palette : QPalette or None, default None
+        The theme's light variant for playback on white staff paper. Dark desktop themes use Qt light colors
+        with the desktop accent when no light variant is supplied.
 
     Returns
     -------
@@ -51,11 +83,25 @@ def app_style(palette: QPalette) -> str:
         palette.color(QPalette.ColorRole.Highlight),
     )
     window_c = palette.color(QPalette.ColorRole.Window)
-    return _TEMPLATE.format(
+    dark_surface = base_c.lightness() < 128
+    dark_hairlines = ""
+    if dark_surface:
+        for selector, border in (("QPushButton", QColor("#505050")), ("ExerciseCard", QColor("#181818"))):
+            dark_hairlines += _DARK_HAIRLINE.format(
+                button=selector,
+                border=border.name(),
+                active=blend_name(border, b=text_c, t=0.36),
+                disabled=blend_name(window_c, b=border, t=0.40),
+            )
+    sheet = _TEMPLATE.format(
         RADIUS=RADIUS,
         r2=RADIUS - 2,
         r3=RADIUS - 3,
         rp=RADIUS + 2,
+        dark_hairlines=dark_hairlines,
+        **_button_colors(palette),
+        callout_fill=blend_name(base_c, b=accent_c, t=0.12),
+        callout_heading=blend_name(text_c, b=accent_c, t=0.32),
         fill=base,
         fill_hover=base,
         fill_pressed=midlight,
@@ -70,20 +116,59 @@ def app_style(palette: QPalette) -> str:
         check=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "check.svg").as_posix(),
         chevron=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "chevron.svg").as_posix(),
     )
+    if paper_palette is None:
+        paper_palette = palette
+        if dark_surface:
+            paper_palette = QPalette(QColor("#efefef"))
+            paper_palette.setColor(QPalette.ColorRole.Highlight, accent_c)
+            paper_palette.setColor(QPalette.ColorRole.HighlightedText, palette.highlightedText().color())
+    return sheet + _PAPER_BUTTON.format(
+        button='QFrame#lessonExample[staffPaper="true"] > QPushButton#lessonPlayback',
+        base=paper_palette.base().color().name(),
+        ink=blend_name(paper_palette.buttonText().color(), b=paper_palette.mid().color(), t=0.32),
+        accent=paper_palette.highlight().color().name(),
+        on_accent=paper_palette.highlightedText().color().name(),
+        window=paper_palette.window().color().name(),
+        mid=paper_palette.mid().color().name(),
+        **_button_colors(paper_palette),
+    )
+
+
+_DARK_HAIRLINE = """
+{button} {{ border-color: {border}; }}
+{button}:hover, {button}:focus {{ border-color: {active}; }}
+{button}:pressed, {button}:checked {{ border-color: {border}; }}
+{button}:disabled {{ border-color: {disabled}; }}
+"""
+
+
+_PAPER_BUTTON = """
+{button} {{ background: {base}; color: {ink}; border-color: {button_border}; }}
+{button}:hover {{ background: {button_hover}; border-color: {accent}; }}
+{button}:focus {{ border-color: {accent}; }}
+{button}:pressed, {button}:checked {{ background: {accent}; color: {on_accent}; border-color: {button_pressed_border}; }}
+{button}:disabled {{ background: {window}; color: {button_disabled_text}; border-color: {mid}; }}
+"""
 
 
 _TEMPLATE = """
 QPushButton {{
-    border: 1px solid {edge};
-    border-bottom-width: 2px;  /* a slightly heavier lower edge lifts the button off the background */
+    border: 1px solid {button_border};
     border-radius: {RADIUS}px;
-    background: {fill};
+    background: palette(base);
+    color: palette(button-text);
     padding: 6px 12px;
 }}
-QPushButton:hover {{ background: {fill_hover}; border-color: palette(highlight); }}
-QPushButton:pressed {{ background: {fill_pressed}; border-bottom-width: 1px; padding-top: 7px; }}
-QPushButton:checked {{ border: 2px solid palette(highlight); border-bottom-width: 2px; }}
-QPushButton:disabled {{ background: palette(window); color: gray; border-color: palette(midlight); }}
+QPushButton:hover {{ background: {button_hover}; border-color: palette(highlight); }}
+QPushButton:focus {{ border: 2px solid palette(highlight); padding: 5px 11px; }}
+QPushButton:pressed, QPushButton:checked {{
+    background: {accent};
+    color: palette(highlighted-text);
+    border: 1px solid {button_pressed_border};
+    padding: 7px 12px 5px;
+}}
+QPushButton:disabled {{ background: palette(window); color: {button_disabled_text}; border-color: palette(mid); }}
+{dark_hairlines}
 
 /* The main button of a form, such as Save: filled with the accent color. */
 QPushButton[primary="true"] {{ background: {accent}; border-color: {accent}; color: palette(highlighted-text); font-weight: 600; }}
@@ -110,7 +195,7 @@ QTabWidget#settingsTabs QTabBar::tab:selected {{
 }}
 QTabWidget#settingsTabs QTabBar::tab:focus {{ background: {nav_hover}; }}
 
-/* Text boxes and drop-down lists that are marked as fields: rounded, with the same heavier lower edge as the buttons. */
+/* Fields have rounded corners and a heavier lower edge. */
 QLineEdit[field="true"], QComboBox[field="true"] {{
     border: 1px solid {edge};
     border-bottom-width: 2px;
