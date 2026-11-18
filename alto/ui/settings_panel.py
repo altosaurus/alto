@@ -69,7 +69,7 @@ from alto.circle_schemes import (
     dump_customs,
     load_customs,
 )
-from alto.exercises.base import Exercise
+from alto.exercises.base import REGISTRY, ButtonSettings, ChoiceExercise, Exercise
 from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
@@ -1485,6 +1485,8 @@ class ExerciseSettingsPanel(QWidget):
     [1]
     """
 
+    stack: SlideStack
+    choice_buttons_row: _Row | None = None
     changed = Signal()
     restyled = Signal()
 
@@ -3333,7 +3335,7 @@ class ChoiceChecklist(QWidget):
 
 
 def _buttons_page(
-    cfg: settings.IntervalSettings,
+    cfg: ButtonSettings | settings.IntervalSettings | settings.ScaleIdentificationSettings,
     *,
     changed: Callable[[], None],
     back: Callable[[], None],
@@ -3343,7 +3345,7 @@ def _buttons_page(
 
     Parameters
     ----------
-    cfg : IntervalSettings
+    cfg : ButtonSettings or IntervalSettings or ScaleIdentificationSettings
         The exercise that owns the button mode and count.
     changed : callable
         Save and apply an edit.
@@ -4813,46 +4815,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             pages.append(_subpage("Key signatures", body=self.key_list, back=lambda: self._go(0)))
 
         if isinstance(cfg, settings.ScaleIdentificationSettings):
-            body = QWidget()
-            layout = QVBoxLayout(body)
-            layout.setContentsMargins(0, 0, 0, 0)
-            limited = QRadioButton("Limited")
-            all_buttons = QRadioButton("All")
-            layout.addWidget(limited)
-            count_row = QWidget()
-            count_layout = QHBoxLayout(count_row)
-            count_layout.setContentsMargins(0, 0, 0, 0)
-            count_label = QLabel("Button count")
-            count = FieldComboBox()
-            count.setAccessibleName("Button count")
-            count_label.setBuddy(count)
-            for value in range(2, 11):
-                count.addItem(str(value), value)
-            count.setCurrentIndex(count.findData(cfg.button_count))
-            count_layout.addWidget(count_label)
-            count_layout.addWidget(count, 1)
-            layout.addWidget(count_row)
-            layout.addWidget(all_buttons)
-            limited.setChecked(cfg.button_mode == "limited")
-            all_buttons.setChecked(cfg.button_mode == "all")
-            count_row.setVisible(limited.isChecked())
-
-            def save_buttons() -> None:
-                """
-                Save the button mode and count when their controls change.
-
-                Examples
-                --------
-                Open the Buttons page and choose All to save that mode.
-                """
-                cfg.button_mode = "limited" if limited.isChecked() else "all"
-                cfg.button_count = count.currentData()
-                count_row.setVisible(limited.isChecked())
-                self._save_and_emit()
-
-            limited.toggled.connect(save_buttons)
-            count.currentIndexChanged.connect(save_buttons)
-            pages.append(_subpage("Buttons", body=body, back=lambda: self._go(0)))
+            pages.append(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
 
             question_types = ChoiceChecklist(
                 [("", [("key", "Key"), ("mode", "Mode")])],
@@ -4913,6 +4876,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         """
         cfg = self.cfg
         self.clef_pictures.set_clefs(cfg.active_clefs())
+        if isinstance(cfg, settings.ScaleIdentificationSettings):
+            self.buttons_row.value.setText(cfg.button_mode.title())
         modes = cfg.active_modes()
         self.modes_row.value.setText(f"{len(modes)} of {len(settings.KEY_MODES)}")
         if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
@@ -5853,6 +5818,31 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self._go(2)
 
 
+def load_choice_buttons() -> None:
+    """
+    Restore the independent button preferences for each multiple-choice exercise.
+
+    Examples
+    --------
+    >>> load_choice_buttons()
+    >>> NoteNames.button_settings().button_mode in {"all", "limited"}
+    True
+    """
+    saved = store()
+    for cls in REGISTRY:
+        if not issubclass(cls, ChoiceExercise):
+            continue
+        cfg = cls.button_settings()
+        prefix = f"answerButtons/{cls.__name__}"
+        mode = "limited" if cls.default_limit else "all"
+        value = text_value(saved, key=f"{prefix}/mode", default=mode)
+        cfg.button_mode = value if value in ("all", "limited") else mode
+        try:
+            cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/count", default=cls.default_limit or 6)))
+        except ValueError:
+            cfg.button_count = cls.default_limit or 6
+
+
 def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     """
     Return the settings panel for an exercise.
@@ -5874,6 +5864,75 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     'NoteNameSettingsPanel'
     >>> type(settings_panel_for(IntervalNames())).__name__
     'IntervalSettingsPanel'
+    """
+    panel = _exercise_panel(exercise)
+    if not isinstance(exercise, ChoiceExercise):
+        return panel
+
+    if panel is None:
+        panel = ExerciseSettingsPanel()
+        stack = panel.stack = SlideStack()
+        outer = QVBoxLayout(panel)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(stack)
+        menu = QWidget()
+        layout = QVBoxLayout(menu)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(QLabel("<h3>Settings</h3>"))
+        layout.addStretch()
+        stack.addWidget(menu)
+    else:
+        stack = panel.stack
+        menu = stack.widget(0)
+        assert menu is not None
+        layout = menu.layout()
+        assert isinstance(layout, QVBoxLayout)
+    cfg = exercise.button_settings()
+    row = panel.choice_buttons_row = _Row("Buttons")
+    row.value.setText(cfg.button_mode.title())
+    layout.insertWidget(layout.count() - 1, row)
+    stack.removeWidget(menu)
+    stack.insertWidget(0, _scrolling(menu))
+    stack.setCurrentIndex(0)
+
+    def save() -> None:
+        """
+        Save this exercise's selection and apply it to the next question.
+
+        Examples
+        --------
+        Editing the count in Note Identification leaves the keyboard exercise's count alone.
+        """
+        saved = store()
+        prefix = f"answerButtons/{type(exercise).__name__}"
+        saved.setValue(f"{prefix}/mode", cfg.button_mode)
+        saved.setValue(f"{prefix}/count", cfg.button_count)
+        row.value.setText(cfg.button_mode.title())
+        panel.changed.emit()
+
+    page = stack.addWidget(_buttons_page(cfg, changed=save, back=lambda: stack.slide_to(0)))
+    row.clicked.connect(lambda: stack.slide_to(page))
+    return panel
+
+
+def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
+    """
+    Build the exercise-specific settings pages.
+
+    Parameters
+    ----------
+    exercise : Exercise
+        The exercise being opened.
+
+    Returns
+    -------
+    ExerciseSettingsPanel or None
+        Its specialized panel, if it has one.
+
+    Examples
+    --------
+    >>> type(_exercise_panel(NoteNames())).__name__
+    'NoteNameSettingsPanel'
     """
     if isinstance(exercise, NotationIdentification):
         return NotationSettingsPanel()

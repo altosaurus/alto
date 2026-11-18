@@ -7,6 +7,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Added
 
+- Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.
+
 - Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
 
 - Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.

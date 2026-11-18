@@ -1417,6 +1417,22 @@ Build the panel for a set of settings.
 4
 ```
 
+## load_choice_buttons
+
+```python
+def load_choice_buttons() -> None
+```
+
+Restore the independent button preferences for each multiple-choice exercise.
+
+**Examples**
+
+```pycon
+>>> load_choice_buttons()
+>>> NoteNames.button_settings().button_mode in {"all", "limited"}
+True
+```
+
 ## settings_panel_for
 
 ```python

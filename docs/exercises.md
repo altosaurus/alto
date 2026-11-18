@@ -5,13 +5,14 @@ nav_group: Using Alto
 permalink: /exercises/
 ---
 
-Alto has thirteen exercises. Each one has a **?** button with a short explanation, and ten of them have their own
-settings (the sliders button). The others use fixed rules, described below.
+Each exercise has a **?** button with a short explanation. Open the sliders button to change an exercise’s settings.
 
 **Every exercise can be done with the keyboard alone, and without clicking on the staff.** The answer buttons have keys,
 and where you place notes on a staff there are buttons and keys to move the note, choose its sign and place it, so the
 mouse is never needed. The keys are listed on the [Shortcuts]({{ '/shortcuts/' | relative_url }}) page, and each button
 shows its key when you hover over it.
+
+Answer-choice exercises include **Buttons** in their settings. Choose **All** for the full answer bank or **Limited** to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.
 
 ## Note Identification
 

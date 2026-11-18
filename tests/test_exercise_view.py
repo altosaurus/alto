@@ -14,7 +14,6 @@ from alto.exercises.library import (
     ArpeggioNames,
     ChordQualities,
     CircleOfFifths,
-    IntervalNames,
     KeyboardNotes,
     KeySignatures,
     NoteConstruction,
@@ -96,9 +95,9 @@ def test_the_speaker_button_mutes_and_unmutes(app: QApplication) -> None:
     assert sounds.enabled
 
 
-def test_an_exercise_with_fixed_rules_has_no_settings_button(app: QApplication) -> None:
+def test_chord_quality_has_a_buttons_only_settings_menu(app: QApplication) -> None:
     """
-    Check that an exercise with fixed rules has no settings button.
+    Check that chord quality offers its answer-button setting.
 
     Parameters
     ----------
@@ -106,7 +105,8 @@ def test_an_exercise_with_fixed_rules_has_no_settings_button(app: QApplication) 
         The shared Qt application.
     """
     view = view_of(ChordQualities())
-    assert view.settings_panel is None and not hasattr(view, "gear") and not hasattr(view, "pane")
+    assert view.settings_panel is not None and view.settings_panel.choice_buttons_row is not None
+    assert view.settings_panel.stack.count() == 2
 
 
 def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
@@ -138,7 +138,7 @@ def test_only_an_exercise_with_a_reference_has_a_book_button(app: QApplication) 
     app : QApplication
         The shared Qt application.
     """
-    assert view_of(IntervalNames()).book_btn is None and view_of(IntervalNames()).reference_pane is None
+    assert view_of(ArpeggioNames()).book_btn is None and view_of(ArpeggioNames()).reference_pane is None
     view = view_of(CircleOfFifths())
     assert view.book_btn is not None and view.book_btn.toolTip().startswith("Reference")
     view.resize(900, 700)

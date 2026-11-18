@@ -303,24 +303,23 @@ the guided G major example, and three for the comparison and recap.
 
 ## Adding an exercise
 
-Subclass `Exercise` in `alto/exercises/library.py`, decorate it with `@register`, and implement `generate`, which returns a
-`Question`:
+For an exercise with answer choices, subclass `ChoiceExercise` in `alto/exercises/library.py` and implement `make_question`. Supply the full set of eligible answers. Alto adds the **Buttons** submenu and applies **Limited** or **All**. A construction exercise whose buttons edit or submit an answer uses `Exercise.generate`.
 
 ```python
 @register
-class MyExercise(Exercise):
+class MyExercise(ChoiceExercise):
     name = "My exercise"
     category = "Intervals"
     description = "One line shown on the home screen."
     par_seconds = 5.0  # a good first-answer time; see How practice adapts
 
-    def generate(self, rng):
+    def make_question(self, rng):
         ...
-        return Question("What is this?", choices, answer, staff=[[note]], clef="treble")
+        return Question("What is this?", choices=choices, answer=answer, staff=[[note]], clef="treble")
 ```
 
 - `Question` describes everything the screen needs: a prompt, the answer buttons, the notes to draw, a key signature, a keyboard key to highlight, and so on.
-- If your exercise reads user settings, override `settings_signature()` and return `signature(...)` of those settings. Stored questions are only replayed while the signature is unchanged.
+- If your exercise reads user settings, override `practice_signature()` for a `ChoiceExercise` or `settings_signature()` for other exercises and return `signature(...)` of those settings. Stored questions are only replayed while the signature is unchanged.
 - Give the exercise an icon in `alto/ui/home.py` so it appears properly on the home screen.
 - Pick its `category` from the existing ones, or make a new one. `@register` places the exercise next to the others of its category, so the home screen and the exercise list show each category once, whatever order the classes are written in.
 
@@ -328,6 +327,58 @@ Everything else comes with it: the question is recorded in the database, scored 
 notation font and included in the statistics.
 
 ### Adding an exercise option
+
+#### Requesting exercise options
+
+Use the option names below when asking an agent to design or implement exercise settings. An **option** is a row in
+the exercise’s settings menu. A **choice** is a value inside that row, such as **Descending** under **Motion**.
+**Answer buttons** are the controls the learner presses during practice. The **Buttons** option configures them.
+
+| What to ask | What to expect |
+| --- | --- |
+| “Propose options for Interval Identification.” | A short table of options that fit the exercise. For each, give its menu label, what changes for the learner, the template exercise, the choices and default, and any behavior that would need new work. |
+| “Add standard Clefs to Interval Identification.” | A working Clefs row modeled on Note Identification, with the shared picker and selected-clef preview. The exercise generates questions using the checked clefs. |
+| “Use Range from Keyboard Note Identification. Default to C4–C5.” | The named exercise supplies the keyboard range editor, preview, and interactions. The requested range sets the initial endpoints. |
+
+**Standard** means to reuse the option in the table below. **From [exercise]** selects a specific variant. An explicit
+override takes precedence. For example, “default to treble and bass” sets the boxes checked on first use. “Offer only
+treble and bass” limits which boxes appear. If the request leaves the default open, preserve the target exercise’s
+current behavior where possible. Reusing a picker gives the target exercise its own saved selection unless the
+request calls for a shared preference or the exercises already share it.
+
+#### Exercise option vocabulary
+
+The template exercise gives you a place to try the option in Alto. Its panel and the named helpers are in
+`alto/ui/settings_panel.py`. Start with the option’s effect on the question or answer to choose among variants.
+
+| Option to request | What the learner gets | Template to reuse |
+| --- | --- | --- |
+| **Clefs** (also “Clef”) | A row showing the selected clef symbols. Its submenu has grouped, illustrated checkboxes. At least one stays checked. Offer the grand staff when the exercise supports questions on both staves. | **Note Identification** uses `ClefPictures` with `_clefs_page`. **Scale Construction** shows the single-staff variant of the same picker. |
+| **Range** | Low and high pitches. Staff exercises can keep a range per clef. Keyboard exercises select a span on a piano and show a miniature keyboard in the row. | **Note Identification** uses `RangeEditor` with `RangePictures`. **Keyboard Note Identification** uses `KeyboardSpan` and endpoint arrows. |
+| **Staff Key** | Check which signatures can be drawn at the start of the staff, including the blank signature. The row previews the selection. | **Scale Identification** uses `KeyChecklist` and `KeyDiagram`. |
+| **Scale Key** | Choose the musical keys used in questions. Underlined Major and Minor tabs each offer 15 signatures. Either tab may be empty if the other has a selection. The row counts selections by mode. | **Scale Identification** uses `_ScaleKeyPicker`. When both key options apply, place **Staff Key** above **Scale Key**. |
+| **Key signatures** | A single checklist of signature counts. Some exercises also let the learner turn signatures on or off. | **Note Identification** uses `KeyChecklist`. For the version with a switch inside the submenu, follow **Keyboard Note Identification** and `KeySignaturePage`. |
+| **Scales** | Check the scale types or modes that can appear, such as major, Dorian, and natural minor. | **Scale Construction** uses `ChoiceChecklist` and shows the selected count in the row. |
+| **Motion** | Choose **Ascending** or **Descending** with radio buttons. | **Scale Identification** and **Scale Construction** share this page in `KeySignatureSettingsPanel`. |
+| **Display** | Choose how the notes appear on the staff. Checked presentations can be mixed. | **Interval Identification** offers Melodic and Harmonic checkboxes. |
+| **Quality** | An inline switch requires the interval quality as part of the answer. Turning it off asks for the number alone. | **Interval Identification** uses `_ToggleRow`. |
+| **Question Type** | Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts. | **Notation Identification** has **Click on Staff** and **Answer Button** radios. **Scale Identification** has independent **Key** and **Mode** boxes. **Note Construction** shows its keys and degrees when **Scale and Degree** is selected. |
+| **Buttons** | One submenu for answer layouts. **Limited** caps the number offered, with **Button count** directly below it. **All** shows the full answer set. | **Scale Identification** and **Interval Identification** share the Limited and All submenu. **Keyboard Interval Identification** adds **Compact**, where the learner picks a quality and an interval number in either order. |
+| **Octave** | An inline switch that makes the octave part of the required answer. | **Note Construction** uses `_ToggleRow`. **Keyboard Note Identification** labels its variant **Octave number**. |
+| **Note names**, **Note values**, **Accidentals** | Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options. | **Note Identification** has the naming and value previews and the Accidentals switch. |
+| **Terms**, **Degrees**, **Arpeggio types**, **Inversions** | Check the items eligible for practice. **Terms** also restricts the distractors. **Degrees** is a section within **Scale and Degree**. | All use `ChoiceChecklist`. **Notation Identification** groups terms, **Note Construction** lists degrees, and **Arpeggio Identification** has separate pages for types and inversions. |
+| **Intervals** | Choose interval sizes individually or by endpoints. The available sizes depend on the keyboard range. | **Keyboard Interval Identification** combines `ChoiceChecklist` and `IntervalRangeSlider`. **Interval Identification** uses the slider for interval numbers and the checklist for written spellings, so A4 and d5 can be selected separately. |
+
+For exercise-specific options, use the existing exercise as the reference. Examples include **Black keys** in
+Keyboard Note Identification, **Steps** in Scale Construction, and **Questions** and **Colors** in Circle of Fifths.
+
+#### Implementing the request
+
+Start by opening the template’s settings row and tracing its panel, saved settings, and question or answer behavior.
+Reuse the shared picker, preview, and selection rules where they fit. If two exercises need the same behavior and
+it currently lives inside one panel, share that implementation while preserving the original exercise’s behavior.
+When a new option needs a distinct interaction, describe the difference from its closest template. Add a vocabulary
+entry when introducing a reusable option or variant so it can be requested by name next time.
 
 1. Give the option a row on the exercise settings menu. Use the shared `_Row` in `alto/ui/settings_panel.py` with
    the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
@@ -339,8 +390,10 @@ notation font and included in the statistics.
 3. Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
    update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
    current question. Include settings that affect question selection in the exercise’s review signature.
-4. Test the path from the exercise gear through the row and back. Verify the current choice, the effect on the
-   exercise, the updated summary, and the restored choice when reopening the app.
+4. Test the path from the exercise gear through the row and back. Verify the first-use default, the effect on
+   questions and answers, the updated summary, and the restored choice when reopening the app. For example, select
+   only bass under **Clefs**, generate questions, and check that the row preview and each staff show bass. If the
+   implementation touched a shared picker, run the original exercise’s settings tests too.
 
 ## Adding an instrument
 

@@ -91,6 +91,7 @@ from alto.ui.profile_dialog import (
 )
 from alto.ui.settings_panel import (
     load_arpeggio,
+    load_choice_buttons,
     load_circle,
     load_clef_basics,
     load_construction,
@@ -485,6 +486,7 @@ class MainWindow(QMainWindow):
         self.addAction(restart)  # keep the shortcuts working while the menu is closed
         self.addAction(quit_action)
 
+        load_choice_buttons()
         load_note_names()
         load_intervals()
         load_keyboard()

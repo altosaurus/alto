@@ -30,7 +30,7 @@ The exercises and the framework they are built on.
 
 | Module | What it is |
 |---|---|
-| [alto.exercises.base](alto.exercises.base/) | Exercise framework. To add an exercise: subclass Exercise, decorate with @register. |
+| [alto.exercises.base](alto.exercises.base/) | Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks. |
 | [alto.exercises.library](alto.exercises.library/) | The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction. |
 
 ## alto.learning

@@ -1770,7 +1770,7 @@ def test_the_other_key_exercises_have_one_key_signature_setting(app: QApplicatio
     """
     other = ExerciseView(KeySignatures(), rng=random.Random(4)).settings_panel
     assert isinstance(other, sp.KeySignatureSettingsPanel) and other.staff_keys_row is None and other.staff_key_list is None
-    assert "Key signatures" in other.keys_row.title.text() and other.stack.count() == 4
+    assert "Key signatures" in other.keys_row.title.text() and other.stack.count() == 5
 
 
 def test_the_help_mentions_the_staffs_signature_only_when_the_staff_can_have_one() -> None:

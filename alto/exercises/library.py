@@ -18,6 +18,7 @@ from dataclasses import replace
 
 from alto import settings
 from alto.exercises.base import (
+    ChoiceExercise,
     Exercise,
     Question,
     pick_distractors,
@@ -137,7 +138,7 @@ def _degree_choices(
 
 
 @register
-class NoteNames(Exercise):
+class NoteNames(ChoiceExercise):
     """
     Name the note shown on a staff.
 
@@ -153,7 +154,7 @@ class NoteNames(Exercise):
     description = "Identify notes on the staff."
     par_seconds = 3.0
 
-    def settings_signature(self) -> str:
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -215,7 +216,7 @@ class NoteNames(Exercise):
         """
         self.accidentals = accidentals
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Make a note to name, on one of the chosen clefs, in a chosen key.
 
@@ -599,7 +600,7 @@ def _blank_scale(mode: str) -> str:
 
 
 @register
-class KeySignatures(Exercise):
+class KeySignatures(ChoiceExercise):
     """
     Read a key signature drawn on a staff and name the key it belongs to.
 
@@ -616,7 +617,7 @@ class KeySignatures(Exercise):
     par_seconds = 5.0
     has_sound = False
 
-    def settings_signature(self) -> str:
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -687,7 +688,7 @@ class KeySignatures(Exercise):
                         for c in settings.key_signatures.active_keys()
                     ),
                 )
-                return replace(
+                updated = replace(
                     question,
                     caption=question.caption or _blank_scale(mode),
                     choices=choices,
@@ -696,9 +697,10 @@ class KeySignatures(Exercise):
                         for choice in choices
                     },
                 )
+                return self.limit_buttons(updated, rng=random.Random(question.item_key()))
         return question
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Make a key signature to read.
 
@@ -1355,7 +1357,7 @@ NUMERAL_CHOICES: list[str] = list(
 
 
 @register
-class CircleOfFifths(Exercise):
+class CircleOfFifths(ChoiceExercise):
     """
     Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.
 
@@ -1372,7 +1374,7 @@ class CircleOfFifths(Exercise):
     par_seconds = 7.0
     has_sound = False
 
-    def settings_signature(self) -> str:
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -1431,7 +1433,7 @@ class CircleOfFifths(Exercise):
         )
         return "<br><br>".join(text)
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Pick a kind of question that is switched on, and ask it.
 
@@ -1584,7 +1586,7 @@ class CircleOfFifths(Exercise):
 
 
 @register
-class ChordQualities(Exercise):
+class ChordQualities(ChoiceExercise):
     """
     Identify the quality of a triad or seventh chord in root position.
 
@@ -1598,6 +1600,7 @@ class ChordQualities(Exercise):
     name = "Chord Quality"
     category = "Chords"
     description = "Identify triads and seventh chords in root position."
+    default_limit = 5
     par_seconds = 6.0
 
     def instructions(self) -> str:
@@ -1620,7 +1623,7 @@ class ChordQualities(Exercise):
             "of the button: 1 is the first."
         )
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Make a chord in root position whose quality is to be named.
 
@@ -1646,13 +1649,10 @@ class ChordQualities(Exercise):
         lo, hi = CLEF_RANGES[clef]
         chord = build(root, intervals=CHORDS[quality])
         if any(abs(n.accidental) > 1 for n in chord) or chord[-1].diatonic > hi.diatonic + 3:
-            return self.generate(rng)
-        choices = pick_distractors(
-            quality,
-            pool=list(CHORDS),
-            n=4,
-            rng=rng,
-        )
+            return self.make_question(rng)
+        choices = list(CHORDS)
+        if self.button_settings().button_mode == "limited":
+            rng.shuffle(choices)
         expl = f"{root.name} {quality}: " + " ".join(n.name for n in chord)
         return Question(
             "",
@@ -1677,7 +1677,7 @@ ARPEGGIO_WINDOWS = {
 
 
 @register
-class ArpeggioNames(Exercise):
+class ArpeggioNames(ChoiceExercise):
     """
     Name the type and the inversion of a broken chord.
 
@@ -1693,7 +1693,7 @@ class ArpeggioNames(Exercise):
     description = "Name the type and the inversion of a broken chord."
     par_seconds = 9.0
 
-    def settings_signature(self) -> str:
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -1733,7 +1733,7 @@ class ArpeggioNames(Exercise):
             "Use the sliders button to choose the clefs, the types of arpeggio, the inversions and key signatures."
         )
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Make an arpeggio on one of the chosen clefs, in a chosen position.
 
@@ -1984,7 +1984,7 @@ def _spelled(
 
 
 @register
-class KeyboardNotes(Exercise):
+class KeyboardNotes(ChoiceExercise):
     """
     Name the highlighted key on a piano keyboard.
 
@@ -2000,7 +2000,7 @@ class KeyboardNotes(Exercise):
     description = "Name the highlighted key on a piano keyboard."
     par_seconds = 3.0
 
-    def settings_signature(self) -> str:
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -2062,7 +2062,7 @@ class KeyboardNotes(Exercise):
             text.append("Black keys have two names, such as C♯ and D♭. Either one is accepted.")
         return "<br><br>".join(text)
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Make a keyboard with one key highlighted.
 
@@ -2374,7 +2374,7 @@ CLEF_FACTS = {
 
 
 @register
-class ClefBasics(Exercise):
+class ClefBasics(ChoiceExercise):
     """
     Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.
 
@@ -2392,6 +2392,21 @@ class ClefBasics(Exercise):
     has_sound = False
 
     def settings_signature(self) -> str:
+        """
+        Use button preferences for reviews only when the learner answers with buttons.
+
+        Returns
+        -------
+        str
+            The signature for the active question type.
+
+        Examples
+        --------
+        Changing Button count leaves staff-placement reviews available.
+        """
+        return self.practice_signature() if settings.clef_basics.active_type() == "construction" else super().settings_signature()
+
+    def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
 
@@ -2442,7 +2457,7 @@ class ClefBasics(Exercise):
             "choose which clefs are asked for, and to ask you to name a clef on a staff instead."
         )
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Name a clef to place, or draw a clef to name.
 
@@ -2496,7 +2511,7 @@ class ClefBasics(Exercise):
 
 
 @register
-class NotationIdentification(Exercise):
+class NotationIdentification(ChoiceExercise):
     """
     Identify the highlighted part of a written phrase.
 
@@ -2512,7 +2527,24 @@ class NotationIdentification(Exercise):
     description = "Name a highlighted marking or find a named component on the staff."
     has_sound = False
 
+    default_limit = 4
+
     def settings_signature(self) -> str:
+        """
+        Use button preferences for reviews only when the learner answers with buttons.
+
+        Returns
+        -------
+        str
+            The signature for the active question type.
+
+        Examples
+        --------
+        Changing Button count leaves staff-placement reviews available.
+        """
+        return self.practice_signature() if settings.notation.question_type == "staff" else super().settings_signature()
+
+    def practice_signature(self) -> str:
         """
         Identify the terms eligible for review.
 
@@ -2548,10 +2580,10 @@ class NotationIdentification(Exercise):
             return "Read the prompt, then click the named component in the music."
         return "Look for the blue part of the music. Click its name or press the number shown on the matching button."
 
-    @staticmethod
-    def _choices(part: str, *, group: str, rng: random.Random) -> list[str]:
+    @classmethod
+    def _choices(cls, part: str, *, group: str, rng: random.Random) -> list[str]:
         """
-        Pick up to four checked terms, favoring the target's category and close visual matches.
+        Pick checked terms, favoring the target's category and close visual matches.
 
         Parameters
         ----------
@@ -2572,15 +2604,19 @@ class NotationIdentification(Exercise):
         >>> "Turn" in NotationIdentification._choices("Turn", group="Ornaments", rng=random.Random(0))
         True
         """
+        cfg = cls.button_settings()
+        if cfg.button_mode == "all":
+            return [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
+        needed = cfg.button_count - 1
         alternatives = [term for term in CATALOG[group] if term != part and term in settings.notation.terms]
         rng.shuffle(alternatives)
         if rng.random() < 0.8:
             similar = next((family for family in SIMILAR_MARKS if part in family), ())
             alternatives.sort(key=lambda term: term not in similar)
-        if len(alternatives) < 3:
+        if len(alternatives) < needed:
             others = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms and term not in CATALOG[group]]
-            alternatives.extend(rng.sample(others, min(len(others), 3 - len(alternatives))))
-        choices = [part, *alternatives[:3]]
+            alternatives.extend(rng.sample(others, min(len(others), needed - len(alternatives))))
+        choices = [part, *alternatives[:needed]]
         rng.shuffle(choices)
         return choices
 
@@ -2611,7 +2647,7 @@ class NotationIdentification(Exercise):
         choices = self._choices(question.answer, group=group, rng=random.Random(question.item_key()))
         return replace(question, choices=choices, grid={choice: divmod(i, 2) for i, choice in enumerate(choices)})
 
-    def generate(self, rng: random.Random) -> Question:
+    def make_question(self, rng: random.Random) -> Question:
         """
         Choose a phrase and a single visible feature to highlight.
 
@@ -2623,7 +2659,7 @@ class NotationIdentification(Exercise):
         Returns
         -------
         Question
-            A short phrase with the selected marking and up to four checked answer choices.
+            A short phrase with the selected marking and checked answer choices.
 
         Examples
         --------

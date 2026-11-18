@@ -6,6 +6,15 @@
 
 ## UI consistency
 
+- Include **Buttons** with **Limited**, **Button count**, and **All** by default whenever buttons are answer choices.
+  Use `ChoiceExercise` for new multiple-choice exercises. Show this option in button-answer modes. Editing controls
+  and a standalone **Answer** submission button do not qualify.
+
+- For exercise settings, interpret names such as **Clef** or **Clefs**, **Staff Key**, and **Buttons** using the
+  [exercise option vocabulary](docs/development.md#exercise-option-vocabulary). Start with the named exercise or
+  the listed template and reuse its controls and behavior. “Propose options” asks for a comparison of applicable
+  settings. “Add” or “use” asks for implementation. See [how to request exercise options](docs/development.md#requesting-exercise-options).
+
 - Default new exercise options to a settings row that shows the current selection and opens a titled submenu with Back.
   Use radio buttons for one choice and checkboxes for independent choices. A simple on/off option can use an inline switch.
   Follow the [exercise option procedure](docs/development.md#adding-an-exercise-option).
