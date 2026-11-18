@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794978679">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1794982566">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -561,13 +561,12 @@ resumes the active exercise or lesson. Before starting an activity, the workspac
 <h3 class="no-toc" id="fixed">Fixed</h3>
 
 <ul>
+  <li>The documentation homepage shows dark app screenshots in dark mode, and its Keyboard Identification icon matches the other blue topic icons.</li>
   <li>
     <p>Scale Identification plays with even rhythm on the first correct answer, highlights each note as it sounds, and waits
 for the scale to finish before advancing.</p>
   </li>
-  <li>
-    <p>Switching themes in Settings is faster, and Settings opens more quickly.</p>
-  </li>
+  <li>Switching themes in Settings is faster, and Settings opens more quickly.</li>
 </ul>
 
 <h2 id="001">0.0.1</h2>
@@ -1067,8 +1066,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1794978679" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1794978679" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1794982566" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1794982566" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
