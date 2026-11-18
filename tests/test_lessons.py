@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import random
 from typing import TYPE_CHECKING
+from unittest.mock import Mock
 
 import pytest
 from PySide6.QtCore import Qt
@@ -16,18 +17,32 @@ from PySide6.QtWidgets import (
     QRadioButton,
 )
 
-from alto.exercises import REGISTRY
-from alto.exercises.library import CircleOfFifths, KeyboardNotes, NotationIdentification, NoteConstruction, NoteNames
+from alto.audio import INSTRUMENT_BY_KEY, sounds
+from alto.exercises import REGISTRY, Question
+from alto.exercises.library import (
+    CircleOfFifths,
+    IntervalNames,
+    KeyboardIntervals,
+    KeyboardNotes,
+    KeySignatureConstruction,
+    KeySignatures,
+    NotationIdentification,
+    NoteConstruction,
+    NoteNames,
+)
 from alto.lessons import LESSONS
 from alto.lessons.circle_of_fifths import (
     CIRCLE_OF_FIFTHS,
     summary,
 )
+from alto.lessons.intervals import INTERVALS
+from alto.lessons.key_signatures import KEY_SIGNATURES
 from alto.lessons.pitches_and_notes import PITCHES_AND_NOTES
 from alto.theory.fifths import (
     MAJORS,
     SIGNATURES,
 )
+from alto.theory.pitch import Note
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import HomePage
@@ -55,6 +70,9 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from PySide6.QtWidgets import QApplication
+
+    from alto.exercises.base import Exercise
+    from alto.lessons.base import Lesson
 
 
 @pytest.fixture
@@ -360,6 +378,192 @@ def test_the_note_references_connect_the_related_exercises(app: QApplication, cl
     window.close()
 
 
+@pytest.mark.parametrize("instrument", INSTRUMENT_BY_KEY)
+def test_key_signature_lesson_matches_note_identification_volume(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    instrument: str,
+) -> None:
+    """
+    Compare the final output for the F sharp and F natural in both views.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Records each effect and its volume at the moment playback starts.
+    instrument : str
+        The selected instrument.
+    """
+    lesson = StepView(next(step for step in KEY_SIGNATURES.steps if step.title == "Read the sign beside the note"))
+    assert lesson.hear_button is not None
+    notes = [Note.parse("F#4"), Note.parse("F4")]
+    questions = iter([Question("Name the note.", choices=[note.name], answer=note.name, staff=[[note]]) for note in notes])
+    exercise = NoteNames()
+    monkeypatch.setattr(exercise, "generate", lambda rng: next(questions))
+    view = ExerciseView(exercise, rng=random.Random(1))
+    monkeypatch.setattr(sounds, "instrument", instrument)
+    monkeypatch.setattr(sounds, "enabled", True)
+    played = []
+
+    def make_effect() -> Mock:
+        """
+        Capture the recording and gain passed to the output device for each note.
+
+        Returns
+        -------
+        Mock
+            An effect that records playback without opening a device.
+        """
+        effect = Mock()
+        effect.play.side_effect = lambda: played.append((effect.setSource.call_args.args[0], effect.setVolume.call_args.args[0]))
+        effect.isPlaying.return_value = False
+        return effect
+
+    monkeypatch.setattr("alto.audio.QSoundEffect", Mock(side_effect=make_effect))
+    monkeypatch.setattr(sounds, "_effects", {})
+    monkeypatch.setattr(sounds, "_release", lambda effect: effect.stop())
+    with monkeypatch.context() as clock:
+        pending = []
+        clock.setattr("alto.audio.QTimer.singleShot", lambda delay, callback: pending.append(callback))
+        lesson.hear_button.click()
+        while pending:
+            pending.pop(0)()
+    lesson_output = played.copy()
+    played.clear()
+    for index, note in enumerate(notes):
+        if index:
+            view.next_question()
+        next(button for button in view.buttons if button.text() == note.name).click()
+        view._advance.stop()
+    assert len(played) == 2 and played == lesson_output
+    assert played[0][0] != played[1][0]
+    assert [volume for _, volume in played] == pytest.approx([INSTRUMENT_BY_KEY[instrument].gain] * 2)
+    sounds.stop_all()
+
+
+def test_staff_sample_highlights_follow_playback(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Follow shared pitches, successive notes, and chords through playback, replay, and navigation.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the audio clock so each onset can be inspected.
+    """
+    pending = []
+    monkeypatch.setattr(sounds, "enabled", False)
+    monkeypatch.setattr("alto.audio.QTimer.singleShot", lambda delay, callback: pending.append(callback))
+    first, second = (StepView(step) for step in KEY_SIGNATURES.steps[:2])
+    first.show()
+    second.show()
+    assert first.hear_button and second.hear_button
+    first.hear_button.click()
+    assert [staff.playback_column for staff in first.staves] == [0, 0]
+    second.hear_button.click()
+    first.hide()
+    pending.pop(0)()  # the first sample's canceled end callback
+    assert [staff.playback_column for staff in first.staves] == [None, None]
+    assert [staff.playback_column for staff in second.staves] == [0, None]
+    pending.pop(0)()
+    assert [staff.playback_column for staff in second.staves] == [None, 0]
+    second.hear_button.click()
+    assert [staff.playback_column for staff in second.staves] == [0, None]
+    second.close()
+    while pending:
+        pending.pop(0)()
+    assert [staff.playback_column for staff in second.staves] == [None, None]
+
+    for step in (step for step in INTERVALS.steps if step.hear_display == "staff"):
+        view = StepView(step)
+        assert view.hear_button is not None
+        view.hear_button.click()
+        staff = view.staves[0]
+        for index, chord in enumerate(step.hear):
+            assert staff.playback_column == index
+            assert staff.columns[index] == [Note.parse(name) for name in chord]
+            pending.pop(0)()
+        assert staff.playback_column is None
+
+
+def test_interval_examples_match_their_playback_and_feedback(app: QApplication) -> None:
+    """
+    Check the written notes, highlighted keys, and answers across the lesson.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    # With seed zero, the last question asks for F up to C.
+    answers = ("Third", None, "m3", None, "10", "d5", "P5", None)
+    for step, answer in zip(INTERVALS.steps, answers, strict=True):
+        view = StepView(step, rng=random.Random(0))
+        columns = [[Note.parse(name) for name in chord] for chord in step.hear]
+        if step.hear_display == "staff":
+            assert view.staves[0].columns == columns
+        if step.hear_display == "keyboard":
+            keyboard = view.findChild(KeyboardWidget)
+            assert keyboard is not None
+            assert {keyboard.highlight, *keyboard.additional_highlights} == {n.midi for chord in columns for n in chord}
+        if answer is not None:
+            assert view.task is not None and view.task.correct == answer
+            next(button for button in view.choice_buttons if button.text() == answer).click()
+            assert "Right." in view.feedback.text()
+
+
+@pytest.mark.parametrize(
+    ("lesson", "first", "second"),
+    [(INTERVALS, IntervalNames, KeyboardIntervals), (KEY_SIGNATURES, KeySignatures, KeySignatureConstruction)],
+)
+def test_lesson_and_both_practice_links(
+    app: QApplication,
+    clean_lessons: None,
+    lesson: Lesson,
+    first: type[Exercise],
+    second: type[Exercise],
+) -> None:
+    """
+    Open the lesson from each exercise, practice the other format, and return to the closing step.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    clean_lessons : None
+        Clears saved progress.
+    lesson : Lesson
+        The lesson linked from both exercises.
+    first, second : type of Exercise
+        The two practice destinations.
+    """
+    window = MainWindow()
+    window.show()
+    for source, destination in ((first, second), (second, first)):
+        window.open_exercise(source)
+        exercise = window.stack.currentWidget()
+        assert isinstance(exercise, ExerciseView) and exercise.book_btn is not None
+        exercise.book_btn.click()
+        assert exercise._reference is not None
+        exercise._reference.lesson_button.click()
+        page = window.stack.currentWidget()
+        assert isinstance(page, LessonsPage) and page.view.lesson is lesson
+        last = len(lesson.steps) - 1
+        page.view.go(to=last)
+        closing = page.view.pages.currentWidget()
+        assert isinstance(closing, StepView)
+        next(button for button in closing.findChildren(QPushButton) if button.text() == destination.name).click()
+        practice = window.stack.currentWidget()
+        assert isinstance(practice, ExerciseView) and isinstance(practice.exercise, destination)
+        practice.lesson_back_button.click()
+        returned = window.stack.currentWidget()
+        assert isinstance(returned, LessonsPage) and returned.view.lesson is lesson and returned.view.current == last
+    window.close()
+
+
 def test_the_first_lesson_illustrates_its_keyboard_examples(app: QApplication) -> None:
     """
     Check the keyboard landmarks and the pitches paired with listening examples.
@@ -371,11 +575,11 @@ def test_the_first_lesson_illustrates_its_keyboard_examples(app: QApplication) -
     """
     assert LESSONS[0] is PITCHES_AND_NOTES
     examples = [step for step in PITCHES_AND_NOTES.steps if step.keyboard_note]
-    for step, midi, sounds in zip(examples, (62, 72, 61), ((), (("C4",), ("C5",)), (("C4",), ("C#4",))), strict=True):
+    for step, midi, pitches in zip(examples, (62, 72, 61), ((), (("C4",), ("C5",)), (("C4",), ("C#4",))), strict=True):
         view = StepView(step)
         keyboard = view.findChild(KeyboardWidget)
         assert keyboard is not None and (keyboard.lo, keyboard.hi, keyboard.highlight) == (60, 72, midi)
-        assert step.hear == sounds
+        assert step.hear == pitches
 
 
 def test_pitch_lesson_questions_match_their_examples(app: QApplication) -> None:
@@ -795,3 +999,50 @@ def test_the_switch_in_the_preview_works(app: QApplication) -> None:
         preview.close()
     finally:
         store().remove("ui/homeTransition")
+
+
+def test_key_signature_lesson_examples(app: QApplication) -> None:
+    """
+    Check the displayed signature, note spelling, and feedback for the guided examples.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    for step, counts in zip(KEY_SIGNATURES.steps[:6], [(0, 1), (1, 1), (1, 2), (-1, -3), (0,), (-3, -4, 4)], strict=True):
+        view = StepView(step, rng=random.Random(0))
+        assert tuple(staff.key for staff in view.staves) == counts
+        if step.hear:
+            notes = [staff.columns[0][0] for staff in view.staves]
+            assert list(dict.fromkeys(notes)) == [Note.parse(chord[0]) for chord in step.hear]
+        if view.task:
+            next(button for button in view.choice_buttons if button.text() == view.task.correct).click()
+            assert "Right." in view.feedback.text()
+
+
+def test_key_signature_lesson_reads_new_signatures(app: QApplication) -> None:
+    """
+    Verify fresh staff questions across all signatures against independently spelled answers.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    majors = "C♭ G♭ D♭ A♭ E♭ B♭ F C G D A E B F♯ C♯".split()
+    minors = "A♭ E♭ B♭ F C G D A E B F♯ C♯ G♯ D♯ A♯".split()
+    step = next(step for step in KEY_SIGNATURES.steps if step.task_staff)
+    view = StepView(step, rng=random.Random(29))
+    seen = set()
+    for _ in range(250):
+        assert view.task is not None
+        staff = view.staves[0]
+        minor = "minor" in view.task.prompt
+        answer = (minors if minor else majors)[staff.key + 7]
+        assert view.task.check(answer)
+        assert len(set(view.task.choices)) == 3 and answer in view.task.choices
+        assert staff.clef == view.task.clef and not staff.clef_hidden
+        seen.add((staff.key, minor))
+        view.ask()
+    assert len(seen) == 30

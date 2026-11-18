@@ -72,7 +72,14 @@ def test_the_lesson_is_listed_with_the_exercise_that_practices_it(app: QApplicat
     clean_lessons : None
         Clears what is saved.
     """
-    assert [lesson.key for lesson in LESSONS] == ["pitches-and-notes", "clef-basics", "scale-identification", "circle-of-fifths"]
+    assert [lesson.key for lesson in LESSONS] == [
+        "pitches-and-notes",
+        "clef-basics",
+        "intervals",
+        "scale-identification",
+        "key-signatures",
+        "circle-of-fifths",
+    ]
     assert CLEF_BASICS.category == "Notation" and CLEF_BASICS.exercise == ClefBasics.__name__
     assert len(CLEF_BASICS.steps) == 10 and CLEF_BASICS.steps[-1].closing
     card = lesson_card(CLEF_BASICS)

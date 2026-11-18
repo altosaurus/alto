@@ -2,7 +2,7 @@
 title: alto.ui.widgets
 parent: api
 package: alto.ui
-order: 68
+order: 70
 permalink: /api/alto.ui.widgets/
 ---
 {% raw %}

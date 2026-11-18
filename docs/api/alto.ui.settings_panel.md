@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 55
+order: 57
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}

@@ -329,7 +329,7 @@ learner can reach the next tile without doing either.
 
 | First lesson and step that needs the skill | What the learner must do | Where it was taught | Finding and smallest repair | Recheck |
 | --- | --- | --- | --- | --- |
-| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Pitches and Notes · Read a note on the staff demonstrates G4 and A4 inside the staff. Clef Basics teaches landmark lines. | Potential practice gap. Check whether the learner can continue below the staff. If they stall, show E4 on the bottom line, D4 immediately below it, and C4 on the short extra line called a ledger line. | Open. Ask the learner to locate C4 on a fresh treble staff and explain how they found it. |
+| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Intervals · Lower the upper note traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4. | The worked example now connects the bottom line to middle C before scales. | Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it. |
 
 Prefer a short bridge at first use when it serves one lesson. Move a prerequisite earlier when several lessons rely
 on it. Add a separate lesson when the missing skill needs its own guided sequence to keep a first pass within

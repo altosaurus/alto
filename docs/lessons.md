@@ -9,7 +9,8 @@ Lessons are step-by-step walks through a topic for someone meeting it for the fi
 Start with **Pitches and Notes** to connect a sound to a piano key and a written note. Its last step opens
 **Keyboard Note Identification**, **Note Identification**, **Note Construction**, or **Notation Identification**. Each exercise’s book button
 opens hints for that exercise and a link back to the lesson. **Clef Basics** then explains how to read different clefs.
-**Scale Identification** uses that notation to explore patterns of notes. **The Circle of Fifths** shows how keys and
+**Intervals** builds on staff reading to name the distance between two pitches.
+**Scale Identification** uses that notation to explore patterns of notes. **Key Signatures** teaches how to read and write their sharps and flats. **The Circle of Fifths** shows how keys and
 their signatures relate.
 
 When you open an exercise from a lesson, **Back to lesson** at the upper left of the exercise returns you to the step you left.
@@ -50,6 +51,25 @@ A step has some reading, and may have:
   fifth** and **Up a fifth** buttons that walk around the circle for you.
 - **A small exercise.** It cannot be failed. A wrong answer gets a hint, a second wrong answer shows the answer with its
   explanation, and a right answer is explained. **Try another** asks a new one.
+
+## Intervals
+
+Allow about 12–15 minutes for a first pass. Count letter names to find an interval’s number, then count half steps to
+determine its quality. The staff and keyboard illustrations use the pitches played by the listening buttons. The lesson
+compares C–E with C–E♭, introduces perfect intervals, and shows why C–F♯ and C–G♭ use the same two piano keys.
+A final check asks you to name an unfamiliar pair.
+
+The last step opens **Interval Identification** for practice with written notes or **Keyboard Interval Identification**
+for practice with highlighted keys. The book button in either exercise has hints and a link to the lesson.
+
+## Key Signatures
+
+Allow about 10–15 minutes. Start with two ways to write the same F♯. Listen to what happens when a natural cancels
+the signature, then read sharp and flat signatures to find major keys and their relative minors. Choose the staff
+you would write for A♭ major and try a fresh signature in treble or bass clef.
+
+The closing step links to **Key Signature Identification** and **Key Signature Construction**. The book button in
+either exercise opens a hint and a link back to the lesson.
 
 ## The Circle of Fifths lesson
 

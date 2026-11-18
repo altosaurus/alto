@@ -2,7 +2,7 @@
 title: alto.lessons.scale_identification
 parent: api
 package: alto.lessons
-order: 20
+order: 22
 permalink: /api/alto.lessons.scale_identification/
 ---
 {% raw %}

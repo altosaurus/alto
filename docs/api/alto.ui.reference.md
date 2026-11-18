@@ -2,7 +2,7 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 53
+order: 55
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
@@ -390,7 +390,7 @@ NoteReferencePanel(exercise: Exercise)
 
 Bases: `QWidget`
 
-Quick hints for reading or placing a note and a link to the introductory lesson.
+Hints for reading notes or intervals and a link to the associated lesson.
 
 **Constructor**
 

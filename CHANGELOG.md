@@ -11,6 +11,9 @@ Alto uses [semantic versioning](https://semver.org/).
 
 - Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
 
+- A Key Signatures lesson teaches how to read and write major and minor key signatures and links to both key signature exercises.
+- An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.
+
 - Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.
 - Double-clicking a row in **Questions that need practice** opens the saved question and its answer.
 - A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.
