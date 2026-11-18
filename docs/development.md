@@ -86,7 +86,7 @@ behind it.
   after each merge into `main` that touches the app, when a version is tagged and once a month. A missed budget opens an issue labeled
   `performance`, or adds the run to the one that is open, and does not fail the run. Run them yourself with `pytest -m perf`.
 - **A history, from release to release.** `benchmarks/suite.py` is an [ASV](https://asv.readthedocs.io/) suite, and the Performance
-  workflow (`.github/workflows/performance.yml`) runs it when a version is tagged and once a month, and keeps the results on the
+  workflow (`.github/workflows/performance.yml`) measures main daily at 09:37 UTC and keeps the results on the
   branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
   failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
   would catch.
@@ -104,7 +104,7 @@ asv compare v0.0.0 HEAD            # what changed since a release, once both hav
 When an operation is made faster or slower on purpose, change its budget in the same commit. A new page or exercise needs a line in
 `benchmarks/budgets.py` (a prefix such as `page:` covers it) and, if it is a new kind of operation, an entry in
 `benchmarks/operations.py`; the tests fail until it has a budget, so nothing goes unwatched. The first release to be measured is the
-one that has `benchmarks/`; to measure an earlier one, run the Performance workflow by hand with `ref` set to its tag.
+one that has `benchmarks/`. To record a release baseline, run the Performance workflow by hand with `ref` set to its tag.
 
 ## Type checking
 

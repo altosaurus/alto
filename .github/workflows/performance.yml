@@ -3,9 +3,8 @@ name: Performance
 # Measures how fast Alto's operations are (benchmarks/, with ASV) and keeps the results from release to release, so that a slow
 # creep between versions shows even when no single budget test in the test suite fails.
 #
-# It runs when a version is tagged, when a change to the app or the benchmarks is merged into main, once a month (to notice a new
-# PySide6 or Qt that is slower, which no change of ours causes), and by hand. By hand it can measure an older tag or commit with the
-# benchmarks of main (for the version before the benchmarks existed), so that there is something to compare a release with.
+# The daily run measures main. A manual run can measure a release tag or commit with the benchmarks
+# from main, including versions that predate the benchmark suite.
 # The results are kept on the branch asv-results.
 #
 # A change of more than 30% against the previous release is written in the run's summary and opens an issue (or updates the one
@@ -13,12 +12,8 @@ name: Performance
 # fails the run: a shared build machine is too noisy for a strict gate, so an issue is a reason to look and to run it again, not
 # proof.
 on:
-  push:
-    branches: [main]
-    tags:
-      - "v*"
   schedule:
-    - cron: "17 4 1 * *"
+    - cron: "37 9 * * *" # 09:37 UTC daily
   workflow_dispatch:
     inputs:
       ref:
@@ -30,41 +25,13 @@ permissions:
   contents: write # to save the results on the branch asv-results
   issues: write # to open an issue when something got slower
 
-# One run at a time, so that two quick merges do not both push to asv-results.
+# Serialize scheduled and manual updates to asv-results.
 concurrency:
   group: performance
   cancel-in-progress: false
 
 jobs:
-  # A merge into main is measured only if it touched the app, the benchmarks or the dependencies; a tag, the monthly run and a run
-  # by hand always are. (This is checked here and not with a `paths` filter, which does not mix with tags.)
-  changed:
-    runs-on: ubuntu-latest
-    outputs:
-      measure: ${{ steps.decide.outputs.measure }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - id: decide
-        env:
-          BEFORE: ${{ github.event.before }}
-        run: |
-          measure=true
-          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
-            # The first push of a branch has no earlier commit; measure it.
-            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(alto/|benchmarks/|tests/test_performance\.py$|pyproject\.toml$|uv\.lock$|\.github/workflows/performance\.yml$)'; then
-              measure=false
-            fi
-          fi
-          echo "measure=${measure}" >> "$GITHUB_OUTPUT"
-          echo "Measure: ${measure}"
-
   benchmark:
-    needs: changed
-    if: needs.changed.outputs.measure == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -206,8 +173,6 @@ jobs:
   # processes share the cores. A missed budget opens an issue (or updates the one that is open) and does not fail the run: one
   # slow moment on a shared machine is a reason to run it again, and a real slowdown misses its budget every time.
   budgets:
-    needs: changed
-    if: needs.changed.outputs.measure == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
