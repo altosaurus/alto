@@ -2,7 +2,6 @@
 title: alto.ui.degree_text
 parent: api
 package: alto.ui
-order: 35
 permalink: /api/alto.ui.degree_text/
 ---
 {% raw %}

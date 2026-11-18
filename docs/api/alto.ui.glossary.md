@@ -2,7 +2,6 @@
 title: alto.ui.glossary
 parent: api
 package: alto.ui
-order: 39
 permalink: /api/alto.ui.glossary/
 ---
 {% raw %}

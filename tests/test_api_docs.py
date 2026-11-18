@@ -77,6 +77,26 @@ def test_a_page_has_the_front_matter_the_site_needs(api_docs: ModuleType) -> Non
     assert "{%" not in body.replace("{% raw %}", "").replace("{% endraw %}", "")
 
 
+def test_adding_a_module_leaves_existing_pages_identical(api_docs: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Insert a module earlier in the API index and compare the existing page byte for byte.
+
+    Parameters
+    ----------
+    api_docs : ModuleType
+        The API page generator.
+    monkeypatch : pytest.MonkeyPatch
+        Supplies a small module list to the generator.
+    """
+    files = [api_docs.SOURCE / "theory" / "pitch.py"]
+    monkeypatch.setattr(api_docs, "module_files", lambda: files)
+    before = api_docs.build()
+    files.insert(0, api_docs.SOURCE / "theory" / "fifths.py")
+    after = api_docs.build()
+    assert after["index.md"] != before["index.md"]
+    assert after["alto.theory.pitch.md"] == before["alto.theory.pitch.md"]
+
+
 def test_the_check_reports_what_is_missing_or_stale(
     api_docs: ModuleType,
     tmp_path: Path,

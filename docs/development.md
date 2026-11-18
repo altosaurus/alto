@@ -510,7 +510,7 @@ The sidebar and the "On this page" list are built from the pages themselves. A p
 |---|---|
 | `nav_order` | Where it goes, lowest first. A page without one is not in the sidebar. |
 | `nav_group` | The heading it goes under (Using Alto, For developers, About). The headings open and close, and the pages of one heading must be next to each other in `nav_order`. Home has none. |
-| `children`, `parent` | A page with `children: name` is one row that links to it and opens the pages that say `parent: name`, in their `order`. Those pages can also say `package:` to be grouped under a small heading that opens and closes (the API reference). |
+| `children`, `parent` | A page with `children: name` opens the pages with `parent: name`. Guide chapters use `order` for their reading sequence. The API reference lists packages alphabetically and sorts modules by title within each package. |
 
 A heading that is also the title of a page (For developers) is that page's link, and the page is not listed again under it. Whatever holds
 the page you are on is open. Which headings you closed is remembered in the browser.
@@ -520,9 +520,7 @@ headings, and on a narrower one a box above the text. Nothing needs to be writte
 home page, says `toc: false` in its front matter. `docs/api/index.md` is written by
 `scripts/api_docs.py`, so change its front matter there.
 
-Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar's
-own order: the pages by `nav_order`, each followed by its `children` in their `order`. Nothing needs to be written for them. The first page has
-no previous link and the last no next one.
+The previous and next links at the bottom of each page follow the sidebar’s reading order.
 
 ### Building the docs
 

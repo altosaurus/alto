@@ -2,7 +2,6 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 56
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}

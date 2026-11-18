@@ -2,7 +2,6 @@
 title: alto.notation_excerpts
 parent: api
 package: alto
-order: 5
 permalink: /api/alto.notation_excerpts/
 ---
 {% raw %}

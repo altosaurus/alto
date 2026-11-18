@@ -2,7 +2,6 @@
 title: alto.ui.interval_range
 parent: api
 package: alto.ui
-order: 43
 permalink: /api/alto.ui.interval_range/
 ---
 {% raw %}

@@ -2,7 +2,6 @@
 title: alto.ui.stats_dialog
 parent: api
 package: alto.ui
-order: 63
 permalink: /api/alto.ui.stats_dialog/
 ---
 {% raw %}

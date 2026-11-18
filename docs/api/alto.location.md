@@ -2,7 +2,6 @@
 title: alto.location
 parent: api
 package: alto
-order: 4
 permalink: /api/alto.location/
 ---
 {% raw %}

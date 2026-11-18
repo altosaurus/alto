@@ -2,7 +2,6 @@
 title: alto.selfupdate
 parent: api
 package: alto
-order: 7
 permalink: /api/alto.selfupdate/
 ---
 {% raw %}

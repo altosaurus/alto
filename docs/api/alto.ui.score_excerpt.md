@@ -2,7 +2,6 @@
 title: alto.ui.score_excerpt
 parent: api
 package: alto.ui
-order: 58
 permalink: /api/alto.ui.score_excerpt/
 ---
 {% raw %}

@@ -2,7 +2,6 @@
 title: alto.ui.pictures
 parent: api
 package: alto.ui
-order: 53
 permalink: /api/alto.ui.pictures/
 ---
 {% raw %}
