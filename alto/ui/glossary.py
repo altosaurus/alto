@@ -67,7 +67,7 @@ TERMS = {
             _Example("G4 C4", "From G down to middle C"),
         ),
         exercises=("NoteNames", "KeyboardNotes"),
-        lesson="clef-basics",
+        lesson="pitches-and-notes",
     ),
     "octave": _Term(
         definition="An octave is the interval from one note to the next higher or lower note of the same name. "
@@ -79,7 +79,7 @@ TERMS = {
             _Example("F4 F5", "F and the F one octave higher"),
         ),
         exercises=("IntervalNames", "KeyboardIntervals"),
-        lesson="clef-basics",
+        lesson="pitches-and-notes",
     ),
     "octave register": _Term(
         definition="An octave register is a band of notes that share an octave number. "
@@ -91,7 +91,7 @@ TERMS = {
             _Example("B4 C5 D5", "B4 → C5 → D5"),
         ),
         exercises=("NoteNames", "KeyboardNotes"),
-        lesson="clef-basics",
+        lesson="pitches-and-notes",
     ),
     "staff": _Term(
         definition="A staff is a set of five horizontal lines. The center of a notehead sits on a line or in a space. "

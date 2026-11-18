@@ -20,6 +20,10 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.
+- Notation Identification lets learners name a highlighted marking or find a named component on the staff. Hovering
+  previews a component before answering, and learners can choose which notation terms to practice.
+
 - Keyboard Interval Identification with configurable keyboard and interval ranges, compound intervals, and Limited, All,
   or Compact answer buttons. Compact answers use a quality letter and an interval number.
 
@@ -34,6 +38,7 @@ Changes that are in the development docs and not in a release yet.
 ### Changed
 {: .no-toc}
 
+- The documentation homepage groups practice into six topic cards that switch between light- and dark-theme screenshots.
 - Keyboard exercise icons use seven realistically proportioned white keys; the interval icon adds a span bracket.
 - Exercise button-group labels appear above their buttons, and theme rebuilds preserve the exercise settings page.
 - Code, documentation, and interface text use American English; saved color-scheme settings remain compatible.

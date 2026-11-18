@@ -231,6 +231,76 @@ function, and say why when it is not obvious. A few things that are not obvious:
   needs.
 - Declare every attribute in `__init__`, not in the method that first sets it.
 
+## Designing lessons and exercises
+
+A **lesson** teaches a musical idea that a learner can apply in several situations. An **exercise** gives repeated
+practice in one specific technique. In an identification exercise, the learner reads or hears an example and names
+what it is. In a construction exercise, the learner starts with a specification and supplies the notes or symbols
+that satisfy it.
+
+Plan the relationship by learning goal. One lesson can prepare a learner for several exercises, and an exercise can
+reinforce ideas introduced in several lessons. Reuse an existing lesson when it already explains the idea a new
+exercise depends on.
+
+Order the lesson tiles by prerequisite in `alto.lessons.LESSONS`. Start with a lesson that assumes no music theory
+knowledge. When adding a lesson, place it after the ideas it uses and before lessons that build on it.
+
+1. **Choose the lesson outcome.** Write one sentence describing what a first-time learner should understand by the
+   end. Use that sentence to decide which examples belong and where the lesson should stop.
+2. **Map the practice.** For each related exercise, describe what the learner is given, what they do, and what makes
+   the answer correct. Check the exercise catalog for a match before proposing a new drill.
+3. **Check the vocabulary in teaching order.** Read the lesson as a learner who has completed only the preceding
+   lessons. For each musical term, find where its meaning was taught. If it is new, give a plain-language definition
+   where the learner first needs it, before a diagram or question asks them to use it. A mention in a title or a
+   glossary entry alone does not teach the term. For example, introduce the tonic as the note that feels like home,
+   then ask the learner to find it. Repeat this check when reordering lessons.
+4. **Build a short guided sequence.** Introduce the idea with an example the learner can read or hear. Change one
+   feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
+   Use the closing step to name the skills the learner can practice next. Choose the primary practice target with `Lesson.exercise` and list
+   additional practice targets in `Lesson.related_exercises`.
+5. **Time a first pass.** Aim for **20 minutes or less**, including reading, listening, guided questions, and time
+   to use a hint. Count independent exercise practice separately. If the lesson runs long, move repeated trials
+   into an exercise or split off a concept that has its own learning outcome.
+
+### Reviewing the lesson sequence for gaps
+
+Review the affected stretch whenever a lesson is added, moved, or substantially revised. Every few lesson changes,
+walk the full sequence in the order given by `alto.lessons.LESSONS`. Start with an absolute beginner and carry
+forward what each lesson actually teaches. An optional exercise or glossary lookup can reinforce a skill, but a
+learner can reach the next tile without doing either.
+
+1. Work through the next lesson's examples and questions. For each, finish the sentence “To do this, I already need
+   to be able to …” Include reading the diagram, hearing a difference, and interpreting the answer choices.
+2. For each prerequisite, record the earlier lesson and step that teaches it, or the worked example in the current
+   lesson before its first use. Distinguish seeing a definition, following a demonstration, and using the idea on a
+   fresh example. Match the evidence to what the question actually asks the learner to do.
+3. Try one fresh example with the same demands. For instance, after a learner reads a note just above a known line,
+   ask them to read one just below it. When possible, watch a first-time learner try it before giving a hint.
+   Record where their reasoning stops. A walkthrough by the author and an observed learner result are different evidence.
+4. Flag a **blocking gap** when an essential action requires knowledge the sequence has yet to teach. Flag a
+   **practice gap** when the explanation exists but the jump to independent use needs a smaller example.
+   Record one row per finding. Keep a row open until someone retries the original task using the revised sequence.
+
+| First lesson and step that needs the skill | What the learner must do | Where it was taught | Finding and smallest repair | Recheck |
+| --- | --- | --- | --- | --- |
+| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Pitches and Notes · Read a note on the staff demonstrates G4 and A4 inside the staff. Clef Basics teaches landmark lines. | Potential practice gap. Check whether the learner can continue below the staff. If they stall, show E4 on the bottom line, D4 immediately below it, and C4 on the short extra line called a ledger line. | Open. Ask the learner to locate C4 on a fresh treble staff and explain how they found it. |
+
+Prefer a short bridge at first use when it serves one lesson. Move a prerequisite earlier when several lessons rely
+on it. Add a separate lesson when the missing skill needs its own guided sequence to keep a first pass within
+about 20 minutes.
+
+### Example lesson plan for scales
+
+A lesson on **Scales** could ask, “How can the same major-scale pattern start on two different notes?” Have the
+learner play C major, locate the half steps, then start on G and decide whether F or F♯ preserves the pattern.
+Close by playing the G scale they predicted. An illustrative first pass allows four minutes for C major, six for
+the guided G major example, and three for the comparison and recap.
+
+| Related exercise | What the learner practices |
+| --- | --- |
+| Scale Identification | Given a written scale, identify its tonic or mode from the notes and their spacing. |
+| Scale Construction | Given a tonic and a scale type, place the notes on the staff with the correct spelling. |
+
 ## Adding an exercise
 
 Subclass `Exercise` in `alto/exercises/library.py`, decorate it with `@register`, and implement `generate`, which returns a
@@ -256,6 +326,21 @@ class MyExercise(Exercise):
 
 Everything else comes with it: the question is recorded in the database, scored for speed, drawn in the chosen
 notation font and included in the statistics.
+
+### Adding an exercise option
+
+1. Give the option a row on the exercise settings menu. Use the shared `_Row` in `alto/ui/settings_panel.py` with
+   the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
+   such as **Octave**, an inline `Switch` in a row without a chevron is appropriate. Two named modes, such as
+   **Click on Staff** and **Answer Button**, belong together in a submenu.
+2. Open the option with the panel’s `SlideStack`. Build its page with `_subpage` so the title matches the row and
+   Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
+   several can apply. Keep long lists scrollable.
+3. Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
+   update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
+   current question. Include settings that affect question selection in the exercise’s review signature.
+4. Test the path from the exercise gear through the row and back. Verify the current choice, the effect on the
+   exercise, the updated summary, and the restored choice when reopening the app.
 
 ## Adding an instrument
 

@@ -137,7 +137,7 @@ def test_only_an_exercise_with_a_reference_has_a_book_button(app: QApplication) 
     app : QApplication
         The shared Qt application.
     """
-    assert view_of(NoteNames()).book_btn is None and view_of(NoteNames()).reference_pane is None
+    assert view_of(IntervalNames()).book_btn is None and view_of(IntervalNames()).reference_pane is None
     view = view_of(CircleOfFifths())
     assert view.book_btn is not None and view.book_btn.toolTip().startswith("Reference")
     view.resize(900, 700)

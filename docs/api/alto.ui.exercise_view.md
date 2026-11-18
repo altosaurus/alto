@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 33
+order: 35
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}
@@ -336,16 +336,16 @@ def eventFilter(
 ) -> bool
 ```
 
-Send the mouse wheel to the fork, or to the clef staff, while it is showing and the mouse is over the music or Answer.
+Handle staff clicks in notation questions and forward wheel turns to the fork or clef staff.
 
 **Parameters**
 
 - `watched` (*QObject*): The staff or the Answer button.
-- `event` (*QEvent*): Anything that reaches it; only the wheel is taken.
+- `event` (*QEvent*): The incoming pointer or widget event.
 
 **Returns**
 
-- *bool*: True if the fork or the clef staff took the wheel turn, False to let it go on as usual.
+- *bool*: True when the exercise handles the event.
 
 **Examples**
 
@@ -370,11 +370,11 @@ True
 def submit(
     choice: str,
     *,
-    button: QPushButton,
+    button: QPushButton | None,
 ) -> None
 ```
 
-Check an answer chosen with a button.
+Check an answer chosen with a button or by clicking the notation.
 
 A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
 fades red and its button is switched off, so another can be tried.
@@ -382,7 +382,7 @@ fades red and its button is switched off, so another can be tried.
 **Parameters**
 
 - `choice` (*str*): The text of the button that was pressed.
-- `button` (*QPushButton*): The button. Nothing happens if it is switched off. Keyword-only.
+- `button` (*QPushButton or None*): The pressed button, or None for a staff click. Keyword-only.
 
 **Examples**
 

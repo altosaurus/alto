@@ -106,6 +106,7 @@ class QuestionPreview(QDialog):
                 clef=q.clef,
                 key=q.key if q.staff_signature is None else q.staff_signature,
                 value=q.value,
+                notation_target=q.notation_target,
                 caption=q.caption,
             )
             lay.addWidget(staff, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -158,7 +159,8 @@ class QuestionPreview(QDialog):
             if q.construct is not None
             else scale
         )
-        if notes:
+        # The simple pitch player cannot perform the rhythmic, microtonal, or instrumental markings in these questions.
+        if notes and (q.notation_target is None or q.notation_target[0] in ("Notehead", "Stem", "Clef", "Staff line")):
             play = QPushButton("Play")
             play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)

@@ -8,19 +8,22 @@ import random
 from typing import TYPE_CHECKING
 
 import pytest
+from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QLabel,
+    QPushButton,
     QRadioButton,
 )
 
 from alto.exercises import REGISTRY
-from alto.exercises.library import CircleOfFifths
+from alto.exercises.library import CircleOfFifths, KeyboardNotes, NotationIdentification, NoteConstruction, NoteNames
 from alto.lessons import LESSONS
 from alto.lessons.circle_of_fifths import (
     CIRCLE_OF_FIFTHS,
     summary,
 )
+from alto.lessons.pitches_and_notes import PITCHES_AND_NOTES
 from alto.theory.fifths import (
     MAJORS,
     SIGNATURES,
@@ -28,6 +31,7 @@ from alto.theory.fifths import (
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import HomePage
+from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson import (
     GIVE_UP_AFTER,
     LessonsPage,
@@ -317,6 +321,82 @@ def test_the_reference_pane_has_a_button_that_opens_the_lesson(app: QApplication
     assert window.stack.currentWidget() is view
 
 
+def test_the_note_references_connect_the_related_exercises(app: QApplication, clean_lessons: None) -> None:
+    """
+    Follow each exercise's hints into the lesson and leave it for a different exercise.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    clean_lessons : None
+        Clears saved progress.
+    """
+    window = MainWindow()
+    window.show()
+    for source, clue, destination in (
+        (KeyboardNotes, "pair of black keys", NoteNames),
+        (NoteNames, "second line is G4", NoteConstruction),
+        (NoteConstruction, "degree 2 in C major is D", NotationIdentification),
+        (NotationIdentification, "vertical stroke", KeyboardNotes),
+    ):
+        window.open_exercise(source)
+        exercise = window.stack.currentWidget()
+        assert isinstance(exercise, ExerciseView) and exercise.book_btn is not None
+        exercise.book_btn.click()
+        reference = exercise._reference
+        assert reference is not None and reference.isVisible()
+        assert any(clue in label.text() for label in reference.findChildren(QLabel))
+        reference.lesson_button.click()
+        page = window.stack.currentWidget()
+        assert isinstance(page, LessonsPage) and page.view.lesson is PITCHES_AND_NOTES
+        page.view.go(to=len(PITCHES_AND_NOTES.steps) - 1)
+        closing = page.view.pages.currentWidget()
+        assert isinstance(closing, StepView)
+        button = next(button for button in closing.findChildren(QPushButton) if button.text() == destination.name)
+        button.click()
+        practice = window.stack.currentWidget()
+        assert isinstance(practice, ExerciseView) and isinstance(practice.exercise, destination)
+    window.close()
+
+
+def test_the_first_lesson_illustrates_its_keyboard_examples(app: QApplication) -> None:
+    """
+    Check the keyboard landmarks and the pitches paired with listening examples.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    assert LESSONS[0] is PITCHES_AND_NOTES
+    examples = [step for step in PITCHES_AND_NOTES.steps if step.keyboard_note]
+    for step, midi, sounds in zip(examples, (62, 72, 61), ((), (("C4",), ("C5",)), (("C4",), ("C#4",))), strict=True):
+        view = StepView(step)
+        keyboard = view.findChild(KeyboardWidget)
+        assert keyboard is not None and (keyboard.lo, keyboard.hi, keyboard.highlight) == (60, 72, midi)
+        assert step.hear == sounds
+
+
+def test_pitch_lesson_questions_match_their_examples(app: QApplication) -> None:
+    """
+    Answer the listening, keyboard, and staff questions using the pitches each step presents.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    listening, keyboard, _, staff, _, _ = PITCHES_AND_NOTES.steps
+    assert listening.hear == (("C4",), ("G4",))
+    for step, answer in ((listening, "Second"), (keyboard, "D"), (staff, "A")):
+        view = StepView(step)
+        if step is staff:
+            assert [(s.clef, s.columns[0][0].midi) for s in view.staves] == [("treble", 67), ("treble", 69)]
+        next(button for button in view.choice_buttons if button.text() == answer).click()
+        assert "Right." in view.feedback.text()
+
+
 def test_every_step_of_the_lesson_builds_and_has_something_to_read(app: QApplication) -> None:
     """
     Check that each step can be built, with its circle where it says it has one.
@@ -485,7 +565,7 @@ def test_a_started_lesson_says_where_to_continue_and_can_start_over(app: QApplic
     """
     home = HomePage(REGISTRY)
     assert "Start" in [label.text() for label in home.lesson_cards[0].findChildren(QLabel)]
-    page = LessonsPage("circle-of-fifths", step=3)
+    page = LessonsPage(LESSONS[0].key, step=3)
     home.show()  # showing the page brings its cards up to date
     assert "Continue at step 4" in [label.text() for label in home.lesson_cards[0].findChildren(QLabel)]
     page.restart_button.click()
@@ -494,7 +574,7 @@ def test_a_started_lesson_says_where_to_continue_and_can_start_over(app: QApplic
 
 def test_the_last_step_offers_to_practice_the_exercise(app: QApplication, clean_lessons: None) -> None:
     """
-    Check that the Practice button leaves the lessons and opens the Circle of Fifths exercise.
+    Open practice from the final step and use Back to lesson to return to that step.
 
     Parameters
     ----------
@@ -504,14 +584,28 @@ def test_the_last_step_offers_to_practice_the_exercise(app: QApplication, clean_
         Clears what is saved.
     """
     window = MainWindow()
-    window.open_lessons("circle-of-fifths")
+    window.show()
+    window.show_lessons()
+    window.home.lesson_cards[0].click()
     page = window.stack.currentWidget()
-    assert isinstance(page, LessonsPage)
-    page.view.go(to=len(CIRCLE_OF_FIFTHS.steps) - 1)
+    assert isinstance(page, LessonsPage) and page.view.lesson is PITCHES_AND_NOTES
+    for _ in PITCHES_AND_NOTES.steps[1:]:
+        page.view.next_button.click()
     step_view = page.view.pages.currentWidget()
     assert isinstance(step_view, StepView)
-    step_view.practice_button.click()
-    assert window.title_label.text() == "Circle of Fifths"
+    next(button for button in step_view.findChildren(QPushButton) if button.text() == NoteNames.name).click()
+    assert window.title_label.text() == NoteNames.name
+    practice = window.stack.currentWidget()
+    assert isinstance(practice, ExerciseView) and practice.lesson_back_button.isVisible()
+    app.processEvents()
+    button = practice.lesson_back_button
+    assert practice.rect().contains(button.mapTo(practice, button.rect().center()))
+    QTest.mouseClick(button, Qt.MouseButton.LeftButton)
+    assert window.stack.currentWidget() is page
+    assert page.view.pages.currentWidget() is step_view
+    assert practice.lesson_back_button.isHidden()
+    window.open_exercise(NoteNames)
+    assert practice.lesson_back_button.isHidden()
 
 
 def test_lesson_mode_has_a_list_on_the_left_that_follows_the_steps(app: QApplication, clean_lessons: None) -> None:
@@ -531,7 +625,8 @@ def test_lesson_mode_has_a_list_on_the_left_that_follows_the_steps(app: QApplica
     window.open_lessons("circle-of-fifths")
     assert window.nav_stack.currentWidget() is window.lesson_nav
     nav = window.lesson_nav
-    assert [item.text().strip().split(".", 1)[1].strip() for item in nav.step_items] == [step.title for step in LESSONS[0].steps]
+    titles = [item.text().strip().split(".", 1)[1].strip() for item in nav.step_items]
+    assert titles == [step.title for step in CIRCLE_OF_FIFTHS.steps]
     page = window.stack.currentWidget()
     assert isinstance(page, LessonsPage)
     page.view.next_button.click()
@@ -614,7 +709,7 @@ def test_the_circle_of_a_lesson_is_never_cut_off(app: QApplication, clean_lesson
         window.open_lessons("circle-of-fifths")
         page = window.stack.currentWidget()
         assert isinstance(page, LessonsPage)
-        for number in range(len(LESSONS[0].steps)):
+        for number in range(len(CIRCLE_OF_FIFTHS.steps)):
             page.view.go(to=number)
             QTest.qWait(40)
             step = page.view.pages.currentWidget()

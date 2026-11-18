@@ -6,6 +6,14 @@ permalink: /lessons/
 ---
 Lessons are step-by-step walks through a topic for someone meeting it for the first time. Nothing about them is scored or recorded.
 
+Start with **Pitches and Notes** to connect a sound to a piano key and a written note. Its last step opens
+**Keyboard Note Identification**, **Note Identification**, **Note Construction**, or **Notation Identification**. Each exercise’s book button
+opens hints for that exercise and a link back to the lesson. **Clef Basics** then explains how to read different clefs.
+**Scale Identification** uses that notation to explore patterns of notes. **The Circle of Fifths** shows how keys and
+their signatures relate.
+
+When you open an exercise from a lesson, **Back to lesson** at the upper left of the exercise returns you to the step you left.
+
 ## Finding them
 
 The home page has a switch at the top, **Exercises** and **Lessons**. Choose **Lessons** to see a tile for each lesson, with the
@@ -35,6 +43,7 @@ step, and **Finish** on the last, leave the lesson.
 A step has some reading, and may have:
 
 - **A sound to hear.** A button plays the notes being described, in the instrument chosen in the settings.
+- **A keyboard.** In Pitches and Notes, a highlighted piano key shows where a pitch falls among its neighbors.
 - **Staves.** The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
   small exercise the staff changes with the question.
 - **The circle of fifths.** Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have **Down a

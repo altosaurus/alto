@@ -35,6 +35,7 @@ from PySide6.QtGui import (
     QColor,
     QHideEvent,
     QKeySequence,
+    QMouseEvent,
     QPalette,
     QShortcut,
     QShowEvent,
@@ -93,12 +94,7 @@ from alto.ui.key_fork import (
 )
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.pictures import symbol_icon
-from alto.ui.reference import (
-    ClefReferencePanel,
-    ReferencePanel,
-    ScaleReferencePanel,
-    reference_panel_for,
-)
+from alto.ui.reference import reference_panel_for
 from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import (
     MAX_STEP,
@@ -592,6 +588,9 @@ class ExerciseView(QWidget):
         self._anims: list[QVariantAnimation] = []
 
         top = QHBoxLayout()
+        self.lesson_back_button = QPushButton("← Back to lesson")
+        self.lesson_back_button.hide()
+        top.addWidget(self.lesson_back_button)
         top.addStretch()
         top.addWidget(self.score)
         self.help_btn = HelpButton(exercise.instructions)
@@ -599,7 +598,7 @@ class ExerciseView(QWidget):
         reference = reference_panel_for(exercise)
         self.book_btn: QToolButton | None = None
         self.reference_pane: QFrame | None = None
-        self._reference: ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None = reference
+        self._reference = reference
         if reference is not None:
             reference.lesson_requested.connect(self.lesson_requested)
         if (
@@ -1127,6 +1126,8 @@ class ExerciseView(QWidget):
             clef=q.clef,
             key=0 if q.build_key else q.key,  # a signature to build starts from a blank staff
             value=q.value,
+            notation_target=q.notation_target,
+            locate_notation=q.notation_target is not None and not q.choices,
             caption=q.caption,
         )
         self.prompt.setMaximumWidth(self.staff.maximumWidth() if not self.staff.isHidden() else self.CHOICE_MAX_WIDTH)
@@ -1148,7 +1149,7 @@ class ExerciseView(QWidget):
         self.quality_label.setVisible(compact_intervals or scale_buttons)
         self.interval_label.setText("Interval" if compact_intervals else q.second_label)
         self.interval_label.setVisible(bool(q.octaves))
-        self.choice_area.setVisible(not interval_bank)
+        self.choice_area.setVisible(not interval_bank and not self.staff.locate_notation)
         self.interval_answers.setVisible(interval_bank and bool(q.choices))
         keys = choice_keys(q.choices)
         for i, c in enumerate(q.choices):
@@ -1234,7 +1235,7 @@ class ExerciseView(QWidget):
 
     def _flash(
         self,
-        button: QPushButton,
+        button: QPushButton | None,
         *,
         target: str,
         staff: bool = False,
@@ -1244,8 +1245,8 @@ class ExerciseView(QWidget):
 
         Parameters
         ----------
-        button : QPushButton
-            The button to color.
+        button : QPushButton or None
+            The button to color, if the learner used one.
         target : str
             The color to fade to, such as '#2e7d32'. Keyword-only.
         staff : bool, default False
@@ -1279,7 +1280,8 @@ class ExerciseView(QWidget):
             >>> step(0.5)  # doctest: +SKIP
             """
             c = blend(start, b=end, t=t)
-            button.setStyleSheet(self._style(c))
+            if button is not None:
+                button.setStyleSheet(self._style(c))
             if staff:
                 self.staff.set_note_color(c if t > 0 else None)
                 if self.question and (self.question.keyboard or self.question.keyboard_notes):
@@ -1910,19 +1912,19 @@ class ExerciseView(QWidget):
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917  (Qt calls it with both)
         """
-        Send the mouse wheel to the fork, or to the clef staff, while it is showing and the mouse is over the music or Answer.
+        Handle staff clicks in notation questions and forward wheel turns to the fork or clef staff.
 
         Parameters
         ----------
         watched : QObject
             The staff or the Answer button.
         event : QEvent
-            Anything that reaches it; only the wheel is taken.
+            The incoming pointer or widget event.
 
         Returns
         -------
         bool
-            True if the fork or the clef staff took the wheel turn, False to let it go on as usual.
+            True when the exercise handles the event.
 
         Examples
         --------
@@ -1939,6 +1941,17 @@ class ExerciseView(QWidget):
         >>> view.fork.value
         1
         """
+        if (
+            event.type() == QEvent.Type.MouseButtonPress
+            and isinstance(event, QMouseEvent)
+            and event.button() == Qt.MouseButton.LeftButton
+            and watched is self.staff
+            and self.staff.locate_notation
+            and self.question
+        ):
+            choice = self.question.answer if self.staff.hits_notation(event.position().toPoint()) else "Incorrect location"
+            self.submit(choice, button=None)
+            return True
         if isinstance(event, QWheelEvent) and watched in (self.staff, self.answer_button):
             if self.fork.isVisible():
                 self.fork.wheelEvent(event)
@@ -2288,10 +2301,10 @@ class ExerciseView(QWidget):
         self,
         choice: str,
         *,
-        button: QPushButton,
+        button: QPushButton | None,
     ) -> None:
         """
-        Check an answer chosen with a button.
+        Check an answer chosen with a button or by clicking the notation.
 
         A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
         fades red and its button is switched off, so another can be tried.
@@ -2300,8 +2313,8 @@ class ExerciseView(QWidget):
         ----------
         choice : str
             The text of the button that was pressed.
-        button : QPushButton
-            The button. Nothing happens if it is switched off. Keyword-only.
+        button : QPushButton or None
+            The pressed button, or None for a staff click. Keyword-only.
 
         Examples
         --------
@@ -2323,11 +2336,11 @@ class ExerciseView(QWidget):
         >>> view._advance.stop()
         >>> sounds.enabled = True
         """
-        if self.answered or not self.question or not button.isEnabled():
+        if self.answered or not self.question or (button is not None and not button.isEnabled()):
             return
         q = self.question
         ok = q.check(choice)
-        if ok and q.required:  # an answer with several parts: each is marked as it is found, and the last one answers
+        if ok and q.required and button is not None:  # mark each part as it is found
             self._found.add(choice)
             button.setEnabled(False)
             self._flash(button, target="#2e7d32")
@@ -2343,6 +2356,8 @@ class ExerciseView(QWidget):
                 self.circle.flash_wrong()
         if ok:
             self.answered = True  # the other buttons stay as they are; only the one pressed animates
+            if button is None:
+                self.prompt.setText(q.prompt)
             identified_scale = isinstance(self.exercise, ScaleIdentification)
             self._flash(button, target="#2e7d32", staff=not identified_scale)
             notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
@@ -2364,8 +2379,11 @@ class ExerciseView(QWidget):
                 self._advance.start(600)
         else:
             self.missed = True
-            button.setEnabled(False)
-            self._flash(button, target="#c62828")
+            if button is None:
+                self.prompt.setText(f"Try again. {q.prompt}")
+            else:
+                button.setEnabled(False)
+                self._flash(button, target="#c62828")
         self._update_score()
 
     def _light_identified_note(

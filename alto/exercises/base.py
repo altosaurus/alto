@@ -113,6 +113,8 @@ class Question:
     required : tuple of str
         Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭.
         Empty for an ordinary question with one answer. Keyword-only.
+    notation_target : tuple of (str, int) or None
+        Notation part and zero-based note column or staff line to highlight. Keyword-only.
     place_clef : str, default ""
         The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button.
         Empty for any other question. Keyword-only.
@@ -164,6 +166,8 @@ class Question:
     circle_key: int | None = None  # for a numeral question, the place of the key whose chords they are
     required: tuple[str, ...] = ()  # answers that must all be given, in any order, such as both names of an enharmonic key
     place_clef: str = ""  # the clef to put on a blank staff, as a G, C or F symbol in the right place
+
+    notation_target: tuple[str, int] | None = None
 
     def check_placed(self, note: Note) -> bool:
         """
@@ -383,6 +387,8 @@ class Question:
             spelled(self.keyboard),
             spelled(self.construct),
         ]
+        if self.notation_target is not None:
+            data.append(self.notation_target)
         if self.keyboard_notes:
             data.append([spelled(n) for n in self.keyboard_notes])
         if self.notes_only:
@@ -436,6 +442,8 @@ class Question:
         True
         """
         d = dict(d)
+        if d.get("notation_target") is not None:
+            d["notation_target"] = tuple(d["notation_target"])
         if d.pop("staff_key_hidden", False):
             d.setdefault("staff_signature", 0)
         d["staff"] = [[Note(**n) for n in col] for col in d.get("staff", [])]

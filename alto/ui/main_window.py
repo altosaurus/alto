@@ -98,6 +98,7 @@ from alto.ui.settings_panel import (
     load_key_signatures,
     load_keyboard,
     load_keyboard_intervals,
+    load_notation_terms,
     load_note_names,
     load_scale_construction,
     load_scale_identification,
@@ -492,6 +493,7 @@ class MainWindow(QMainWindow):
         load_key_construction()
         load_circle()
         load_clef_basics()
+        load_notation_terms()
         load_scale_construction()
         load_scale_identification()
         load_instrument()
@@ -946,9 +948,11 @@ class MainWindow(QMainWindow):
         view = old if old is not None and type(old.exercise) is cls else ExerciseView(cls(), learner=self.learner)
         if view is not old:
             view.lesson_requested.connect(lambda key: self.open_lessons(key))
+            view.lesson_back_button.clicked.connect(self._back_to_practice_lesson)
             self.stack.addWidget(view)
         if self._lesson_return is not None and self._lesson_return[0] is old:
             self._lesson_return = (view, cls.name)
+        view.lesson_back_button.hide()
         self._exercise_page = view
         self._workspace_page = view
         self.home.set_mode("exercises", animate=False)
@@ -1022,6 +1026,7 @@ class MainWindow(QMainWindow):
             "scale_identification",
             "scale_construction",
             "clef_basics",
+            "notation",
             "circle",
         ):
             cfg = getattr(settings, name)
@@ -1487,6 +1492,8 @@ class MainWindow(QMainWindow):
             page.view.stepped.connect(self.lesson_nav.select_step)
             self.stack.addWidget(page)
         self._lesson_return = (self.stack.currentWidget(), self.title_label.text())
+        if self._exercise_page is not None:
+            self._exercise_page.lesson_back_button.hide()
         self._lesson_page = page
         self._workspace_page = page
         self.home.set_mode("lessons", animate=False)
@@ -1664,10 +1671,35 @@ class MainWindow(QMainWindow):
         >>> window.title_label.text()
         'Circle of Fifths'
         """
-        self.close_overlay()
+        from_lesson = isinstance(self.stack.currentWidget(), LessonsPage)
         cls = next((candidate for candidate in REGISTRY if candidate.__name__ == name), None)
         if cls is not None:
             self.open_exercise(cls)
+            if self._exercise_page is not None:
+                self._exercise_page.lesson_back_button.setVisible(from_lesson)
+
+    def _back_to_practice_lesson(self) -> None:
+        """
+        Return from practice to the retained lesson and its current step.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._back_to_practice_lesson()
+        >>> window.open_lessons("circle-of-fifths")
+        >>> window._practice("CircleOfFifths")
+        >>> window._back_to_practice_lesson()
+        >>> window.title_label.text()
+        'The Circle of Fifths'
+        """
+        page = self._lesson_page
+        if page is None:
+            return
+        if self._exercise_page is not None:
+            self._exercise_page.lesson_back_button.hide()
+        self._workspace_page = page
+        self.home.set_mode("lessons", animate=False)
+        self._show_workspace()
 
     def open_database(self) -> None:
         """

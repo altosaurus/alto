@@ -2,7 +2,7 @@
 title: alto.updates
 parent: api
 package: alto
-order: 7
+order: 8
 permalink: /api/alto.updates/
 ---
 {% raw %}

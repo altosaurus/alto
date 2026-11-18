@@ -143,6 +143,8 @@ class Step:
         Starting note of the diagram, including its octave.
     scale_explore : bool
         Allow changing the example. False hides the selectors for identification tasks.
+    keyboard_note : str
+        A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 
     Examples
     --------
@@ -162,6 +164,7 @@ class Step:
     scale: str = ""  # a scale explorer beside the lesson; empty for none
     scale_tonic: str = "C4"
     scale_explore: bool = True  # false fixes the example and hides the scale's name for a question
+    keyboard_note: str = ""
 
 
 @dataclass(frozen=True)
@@ -184,7 +187,9 @@ class Lesson:
     steps : tuple of Step
         The pages, in order.
     exercise : str
-        The class name of the exercise that practices it, which the last page offers.
+        The primary exercise offered on the last page and used for the lesson icon.
+    related_exercises : tuple of str
+        Additional exercises offered on the last page, in display order.
 
     Examples
     --------
@@ -209,3 +214,4 @@ class Lesson:
     category: str
     steps: tuple[Step, ...]
     exercise: str
+    related_exercises: tuple[str, ...] = ()

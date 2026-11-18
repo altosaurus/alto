@@ -36,6 +36,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto.audio import sounds
+from alto.exercises import REGISTRY
 from alto.lessons import (
     LESSONS,
     Lesson,
@@ -45,6 +46,7 @@ from alto.lessons import (
 )
 from alto.lessons.circle_of_fifths import summary
 from alto.theory.pitch import Note
+from alto.ui.keyboard import KeyboardWidget
 from alto.ui.reference import ExplorableCircle
 from alto.ui.scale_explorer import ScaleExplorer
 from alto.ui.staff import StaffWidget
@@ -135,7 +137,8 @@ class StepView(QWidget):
 
     Examples
     --------
-    >>> view = StepView(LESSONS[0].steps[1], rng=random.Random(1))
+    >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+    >>> view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
     >>> view.task is not None and len(view.choice_buttons) == 4
     True
     """
@@ -163,7 +166,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> StepView(LESSONS[0].steps[0]).circle is not None
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> StepView(CIRCLE_OF_FIFTHS.steps[0]).circle is not None
         True
         """
         super().__init__(parent)
@@ -252,7 +256,9 @@ class StepView(QWidget):
             self.practice_button = QPushButton("Practice this in the exercise  →")
             self.practice_button.setDefault(True)
             self.practice_button.clicked.connect(self.practice)
-            side.addWidget(self.practice_button, alignment=Qt.AlignmentFlag.AlignLeft)
+            self.practice_layout = QVBoxLayout()
+            self.practice_layout.addWidget(self.practice_button, alignment=Qt.AlignmentFlag.AlignLeft)
+            side.addLayout(self.practice_layout)
         left.addStretch(1)
         scroll = QScrollArea()
         scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -263,6 +269,11 @@ class StepView(QWidget):
         lay.addWidget(scroll, 2)
         if self.circle is not None:
             lay.addWidget(self.circle, 3)  # it takes the height that is left, and is drawn as the biggest square that fits
+        if step.keyboard_note:
+            keyboard = KeyboardWidget()
+            keyboard.show_key(Note.parse(step.keyboard_note).midi, span=(60, 72))
+            keyboard.setAccessibleName(f"Keyboard with {step.keyboard_note} highlighted")
+            lay.addWidget(keyboard, 3, Qt.AlignmentFlag.AlignVCenter)
         if self.staves:
             holder = QWidget()  # the staves, one above another, in the middle of the space beside the words
             stack = QVBoxLayout(holder)
@@ -329,9 +340,11 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> StepView(LESSONS[0].steps[0])._invitation()
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> StepView(CIRCLE_OF_FIFTHS.steps[0])._invitation()
         'This is the circle. Each wedge is a key.'
-        >>> StepView(LESSONS[0].steps[3])._invitation()
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> StepView(CIRCLE_OF_FIFTHS.steps[3])._invitation()
         'Click a key to see its key signature.'
         """
         if self.step.circle == "rest":
@@ -344,7 +357,10 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> StepView(LESSONS[0].steps[1]).hear()  # nothing sounds while muted, and nothing breaks
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> from unittest.mock import patch
+        >>> with patch.object(sounds, "enabled", False):
+        ...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
         """
         columns = [[Note.parse(name) for name in column] for column in self.step.hear]
         sounds.play_notes(columns, gap_ms=330 if len(columns) > 4 else 650)
@@ -360,7 +376,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[2])
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[2])
         >>> view.walk(1)
         >>> # noinspection PyUnresolvedReferences
         >>> view.circle.cell
@@ -397,7 +414,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[3], rng=random.Random(1))
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
         >>> # noinspection PyTypeChecker
         >>> view._show(view.circle, ring="outer", place=4)
         >>> # noinspection PyUnresolvedReferences
@@ -417,7 +435,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[3], rng=random.Random(1))
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
         >>> first = view.task
         >>> view.ask()
         >>> view.task is not None and view.again.isHidden()
@@ -474,7 +493,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[3], rng=random.Random(2))
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(2))
         >>> # noinspection PyUnresolvedReferences
         >>> view.circle.select("outer", place=1)
         >>> "sharp" in view.feedback.text() or "step" in view.feedback.text()
@@ -507,7 +527,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[1], rng=random.Random(1))
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
         >>> # noinspection PyUnresolvedReferences
         >>> view._answered(view.task.correct, button=None)
         >>> view.again.isHidden(), "Right" in view.feedback.text()
@@ -542,7 +563,8 @@ class StepView(QWidget):
 
         Examples
         --------
-        >>> view = StepView(LESSONS[0].steps[1], rng=random.Random(1))
+        >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+        >>> view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
         >>> view._lock()
         >>> any(choice.isEnabled() for choice in view.choice_buttons)
         False
@@ -580,7 +602,8 @@ class LessonView(QWidget):
 
     Examples
     --------
-    >>> view = LessonView(LESSONS[0])
+    >>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+    >>> view = LessonView(CIRCLE_OF_FIFTHS)
     >>> view.counter.text()
     'Step 1 of 8'
     >>> view.go(to=1)
@@ -674,6 +697,13 @@ class LessonView(QWidget):
         if to not in self._views:
             made = StepView(steps[to])
             made.practice.connect(lambda: self.practice.emit(self.lesson.exercise))
+            if steps[to].closing and self.lesson.related_exercises:
+                names = {exercise.__name__: exercise.name for exercise in REGISTRY}
+                made.practice_button.setText(names[self.lesson.exercise])
+                for key in self.lesson.related_exercises:
+                    button = QPushButton(names[key])
+                    button.clicked.connect(lambda _checked=False, target=key: self.practice.emit(target))
+                    made.practice_layout.addWidget(button, alignment=Qt.AlignmentFlag.AlignLeft)
             self._views[to] = made
             self.pages.addWidget(made)
         self.pages.setCurrentWidget(self._views[to])

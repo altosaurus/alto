@@ -26,6 +26,7 @@ from alto.circle_schemes import (
     Scheme,
     resolve,
 )
+from alto.notation_terms import MARKS
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     LETTERS,
@@ -1227,6 +1228,28 @@ class ClefBasicsSettings:
 
 
 clef_basics = ClefBasicsSettings()
+
+NOTATION_TERMS = tuple(MARKS)
+
+
+@dataclass
+class NotationSettings:
+    """
+    Terms eligible to be highlighted in Notation Identification.
+
+    Examples
+    --------
+    >>> "Notehead" in NotationSettings().terms
+    True
+    """
+
+    terms: set[str] = field(default_factory=lambda: set(NOTATION_TERMS))
+    question_type: str = "button"
+
+
+NOTATION_QUESTION_TYPES = {"staff": "Click on Staff", "button": "Answer Button"}
+
+notation = NotationSettings()
 
 
 # Circle of fifths exercise: what to ask about the circle.

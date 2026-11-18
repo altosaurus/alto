@@ -259,14 +259,11 @@ CIRCLE_OF_FIFTHS = Lesson(
         Step(
             title="Why keys need a map",
             text=(
-                "<p>Almost every song is built from seven of the twelve notes on a piano. Which seven notes it uses is "
-                "the song's <b>key</b>.</p>"
-                "<p>The white keys, played from one C up to the next, make the key of <b>C major</b>. Press Hear it to listen to "
-                "it.</p>"
-                "<p>Every other key needs some black keys. They are written as sharps (♯) or flats (♭) at the start of each "
-                "line of music, and together they are the key's <b>key signature</b>. There are twelve major keys, and each has "
-                "its own. The <b>circle of fifths</b>, below, is a map of all twelve: it shows how they are related, and how "
-                "many sharps or flats each one has. The rest of this lesson shows you how to read it.</p>"
+                "<p>A <b>key</b> tells you which note feels like home and whether the music is major or minor. "
+                "In C major, C is home. Play the example to hear the C major scale return to C.</p>"
+                "<p>The <b>circle of fifths</b> is a map of keys. On the outer ring, neighboring major keys share six "
+                "of their seven scale notes. Start at C and look one place clockwise to G. Only F changes to F♯, "
+                "so G major has one sharp in its key signature.</p>"
             ),
             circle="rest",
             hear=(("C4",), ("D4",), ("E4",), ("F4",), ("G4",), ("A4",), ("B4",), ("C5",)),
@@ -277,9 +274,10 @@ CIRCLE_OF_FIFTHS = Lesson(
             text=(
                 "<p>The circle is built from one distance between notes: the <b>fifth</b>.</p>"
                 "<p>To find a fifth, count five letter names, starting with the note you are on as 1. From C that is "
-                "<b>C D E F G</b>, so G is a fifth above C. On a piano it is seven keys along, counting the black ones.</p>"
-                "<p>Press Hear it: you will hear C, then G, then both together. They sound steady together, which is why "
-                "fifths are used to link the keys.</p>"
+                "<b>C D E F G</b>, so G is a fifth above C. The circle uses a <b>perfect fifth</b>, which spans "
+                "seven half steps.</p>"
+                "<p>Press Hear it: you will hear C, then G, then both together. Listen for the same distance when "
+                "the notes sound together.</p>"
             ),
             hear=(("C4",), ("G4",), ("C4", "G4")),
             hear_label="Hear C and G",
@@ -323,10 +321,10 @@ CIRCLE_OF_FIFTHS = Lesson(
         Step(
             title="The inner ring: relative minors",
             text=(
-                "<p>Each major key has a partner <b>minor</b> key that uses exactly the same notes, and the same key signature, "
-                "but starts on a different one. They are called <b>relative</b> keys.</p>"
-                "<p>The inner ring shows them. A minor sits under C major: it is the white keys again, starting from A, the "
-                "sixth note of C major. In the same way, every minor key is the sixth note of its major.</p>"
+                "<p><b>Relative keys</b> are a major key and a minor key that share a key signature and have different "
+                "tonics. Find C major on the outer ring and A minor just inside it. Both signatures are empty.</p>"
+                "<p>To find the relative minor, count up to degree 6 of the major scale. In C major that note is A, "
+                "so A is the tonic of its relative minor.</p>"
             ),
             circle="explore",
             make_task=relative_task,
@@ -336,9 +334,10 @@ CIRCLE_OF_FIFTHS = Lesson(
             text=(
                 "<p>Keys that sit next to each other on the circle have almost all their notes in common: only one note is "
                 "different. That makes them the closest relatives, and music often moves between them.</p>"
-                "<p>The key one step clockwise is a fifth above, called the <b>V</b> (five). The one counterclockwise is a "
-                "fifth below, the <b>IV</b> (four). Together with the key itself, <b>I</b>, they give the three main major "
-                "chords of the key. Click any key to see its chords lit, with the minor ones on the inner ring.</p>"
+                "<p>A <b>chord</b> is a group of notes heard together. Build one on C by taking alternate notes of "
+                "C major: C, E and G. This is the <b>I chord</b>. The Roman numeral I means its starting note is degree 1.</p>"
+                "<p>In C major the <b>IV chord</b> starts on F (degree 4) and the <b>V chord</b> starts on G (degree 5). "
+                "Find F one place counterclockwise from C and G one place clockwise. Click C to see them light up.</p>"
             ),
             circle="explore",
             make_task=neighbor_task,

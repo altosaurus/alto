@@ -63,7 +63,7 @@ def clean_lessons() -> Iterator[None]:
 
 def test_the_lesson_is_listed_with_the_exercise_that_practices_it(app: QApplication, clean_lessons: None) -> None:
     """
-    Check that the lesson is after the circle of fifths lesson, is in the notation group and has a card with the exercise's icon.
+    Check that the tiles start with pitches and clefs, then build on notation with scales and key relationships.
 
     Parameters
     ----------
@@ -72,13 +72,13 @@ def test_the_lesson_is_listed_with_the_exercise_that_practices_it(app: QApplicat
     clean_lessons : None
         Clears what is saved.
     """
-    assert [lesson.key for lesson in LESSONS] == ["circle-of-fifths", "clef-basics", "scale-identification"]
+    assert [lesson.key for lesson in LESSONS] == ["pitches-and-notes", "clef-basics", "scale-identification", "circle-of-fifths"]
     assert CLEF_BASICS.category == "Notation" and CLEF_BASICS.exercise == ClefBasics.__name__
     assert len(CLEF_BASICS.steps) == 10 and CLEF_BASICS.steps[-1].closing
     card = lesson_card(CLEF_BASICS)
     assert card.accessibleName().startswith("Clef Basics")
     page = HomePage([ClefBasics])
-    assert len(page.lesson_cards) == len(LESSONS)
+    assert [tile.accessibleName() for tile in page.lesson_cards] == [f"{lesson.title}, {lesson.category}" for lesson in LESSONS]
 
 
 def test_every_step_builds_and_shows_what_it_says_it_does(app: QApplication) -> None:

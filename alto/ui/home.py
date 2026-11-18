@@ -65,6 +65,7 @@ from alto.ui.widgets import SegmentedControl
 
 # Icon for each exercise, keyed by class name.
 EXERCISE_ICONS = {
+    "NotationIdentification": icons.EXERCISE_NOTATION_IDENTIFICATION,
     "NoteNames": icons.EXERCISE_NOTE_NAMES,
     "KeyboardNotes": icons.EXERCISE_KEYBOARD,
     "NoteConstruction": icons.EXERCISE_CONSTRUCTION,
@@ -236,7 +237,7 @@ def lesson_card(
     --------
     >>> card = lesson_card(LESSONS[0])
     >>> card.accessibleName()
-    'The Circle of Fifths, Scales & Keys'
+    'Pitches and Notes, Notation'
     """
     where = saved_step(lesson)
     return TileCard(

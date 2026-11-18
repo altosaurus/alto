@@ -35,6 +35,22 @@ In the exercise settings you can choose:
 The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
 that option. Changes apply to the next question right away.
 
+## Notation Identification
+
+Choose a **Question Type** in the exercise settings. **Answer Button** is the default. A short phrase appears with one marking
+highlighted in blue. Choose its name from up to four answers or press its number key. In **Click on Staff**, the prompt names
+a component. Move the pointer over the music to highlight a component, then click to answer. For a notehead, stem, or staff line,
+the prompt specifies which one to find.
+Open **Terms** in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
+Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
+favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.
+
+Topics include note values and rests, clefs, accidentals and microtonal signs, meter, barlines, repeats, articulations,
+dynamics, ornaments, octave signs, and instrumental techniques. For example, you can isolate ties and slurs, compare
+quarter-tone accidentals, or practice bowing and pedal marks. For advanced markings, Alto uses the selected music font
+when it contains the symbol and the bundled Bravura font otherwise. Glyph codes follow the
+[Standard Music Font Layout index](https://github.com/w3c/smufl/blob/gh-pages/metadata/glyphnames.json).
+
 ## Keyboard Note Identification
 
 One key on a piano keyboard is highlighted. Press the button with its name.

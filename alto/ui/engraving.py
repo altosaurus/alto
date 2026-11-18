@@ -29,6 +29,7 @@ from PySide6.QtGui import (
     QFontDatabase,
     QPainter,
     QPainterPath,
+    QRawFont,
     QTransform,
 )
 
@@ -301,6 +302,35 @@ def _place(
     return t.map(path)
 
 
+@cache
+def notation_glyph(font: str, *, codepoint: int) -> QPainterPath:
+    """
+    Read a score marking from a bundled font at four staff spaces per em.
+
+    Parameters
+    ----------
+    font : str
+        Preferred SMuFL font key.
+    codepoint : int
+        Standard Music Font Layout code point.
+
+    Returns
+    -------
+    QPainterPath
+        Outline at 100 pixels per em. Bravura supplies markings missing in the selected font.
+
+    Examples
+    --------
+    >>> notation_glyph("bravura", codepoint=0xE260).isEmpty()
+    False
+    """
+    raw = QRawFont(str(_DIR / _FILES[font]), _PX)
+    index = raw.glyphIndexesForString(chr(codepoint))[0]
+    if index == 0 and font != "bravura":
+        return notation_glyph("bravura", codepoint=codepoint)
+    return raw.pathForGlyph(index) if index else QPainterPath()
+
+
 def staff_line_width(
     font: str,
     *,
@@ -406,6 +436,7 @@ def draw_note(
     gap: float,
     color: QColor,
     stem_down: bool = False,
+    flag_color: QColor | None = None,
 ) -> None:
     """
     Draw a note with its head centered on a point.
@@ -428,6 +459,8 @@ def draw_note(
         The distance between staff lines in pixels. Keyword-only.
     color : QColor
         The color. Keyword-only.
+    flag_color : QColor or None
+        Optional highlight for the flag alone. Keyword-only.
     stem_down : bool, default False
         Draw the stem down. Keyword-only.
 
@@ -490,7 +523,7 @@ def draw_note(
                 y=end + fy * gap,
                 gap=gap,
             ),
-            color=color,
+            color=flag_color or color,
         )
 
 

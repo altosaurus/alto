@@ -2,7 +2,7 @@
 title: alto.ui.engraving
 parent: api
 package: alto.ui
-order: 32
+order: 34
 permalink: /api/alto.ui.engraving/
 ---
 {% raw %}
@@ -19,6 +19,35 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 ['breve', 'half', 'whole']
 >>> ACCIDENTALS[1]
 'accidentalSharp'
+```
+
+## notation_glyph
+
+```python
+@cache
+def notation_glyph(
+    font: str,
+    *,
+    codepoint: int,
+) -> QPainterPath
+```
+
+Read a score marking from a bundled font at four staff spaces per em.
+
+**Parameters**
+
+- `font` (*str*): Preferred SMuFL font key.
+- `codepoint` (*int*): Standard Music Font Layout code point.
+
+**Returns**
+
+- *QPainterPath*: Outline at 100 pixels per em. Bravura supplies markings missing in the selected font.
+
+**Examples**
+
+```pycon
+>>> notation_glyph("bravura", codepoint=0xE260).isEmpty()
+False
 ```
 
 ## staff_line_width
@@ -90,6 +119,7 @@ def draw_note(
     gap: float,
     color: QColor,
     stem_down: bool = False,
+    flag_color: QColor | None = None,
 ) -> None
 ```
 
@@ -106,6 +136,7 @@ The head, then a stem and (for the short values) a flag, placed on the font's an
 - `y` (*float*): The head's center, in pixels. Keyword-only.
 - `gap` (*float*): The distance between staff lines in pixels. Keyword-only.
 - `color` (*QColor*): The color. Keyword-only.
+- `flag_color` (*QColor or None*): Optional highlight for the flag alone. Keyword-only.
 - `stem_down` (*bool, default False*): Draw the stem down. Keyword-only.
 
 **Examples**

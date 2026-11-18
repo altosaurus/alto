@@ -2,7 +2,7 @@
 title: alto.ui.settings_panel
 parent: api
 package: alto.ui
-order: 53
+order: 55
 permalink: /api/alto.ui.settings_panel/
 ---
 {% raw %}
@@ -1134,6 +1134,50 @@ Build the panel for a set of settings.
 ```pycon
 >>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
 4
+```
+
+## load_notation_terms
+
+```python
+def load_notation_terms() -> None
+```
+
+Restore the question type and term selection, defaulting to Answer Button and all terms.
+
+**Examples**
+
+```pycon
+>>> load_notation_terms()
+>>> bool(settings.notation.terms)
+True
+```
+
+## NotationSettingsPanel
+
+```python
+NotationSettingsPanel()
+```
+
+Bases: `ExerciseSettingsPanel`
+
+Choose the question type and the notation terms to practice.
+
+**Examples**
+
+```pycon
+>>> "Trill" in NotationSettingsPanel().terms.boxes
+True
+```
+
+**Constructor**
+
+Build the settings menu and its Question Type and Terms pages.
+
+**Constructor examples**
+
+```pycon
+>>> len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
+True
 ```
 
 ## load_clef_basics

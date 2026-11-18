@@ -93,6 +93,7 @@ def _isolated_state() -> Iterator[None]:
         "scale_construction",
         "scale_identification",
         "clef_basics",
+        "notation",
         "circle",
     )
     before = {n: copy.deepcopy(getattr(settings, n).__dict__) for n in names}

@@ -2,7 +2,7 @@
 title: alto.lessons.base
 parent: api
 package: alto.lessons
-order: 15
+order: 16
 permalink: /api/alto.lessons.base/
 ---
 {% raw %}
@@ -120,6 +120,7 @@ Step(
     scale: str = '',
     scale_tonic: str = 'C4',
     scale_explore: bool = True,
+    keyboard_note: str = '',
 )
 ```
 
@@ -139,6 +140,7 @@ One page of a lesson.
 - `scale` (*str*): Scale type for an interactive notation diagram; empty for none.
 - `scale_tonic` (*str*): Starting note of the diagram, including its octave.
 - `scale_explore` (*bool*): Allow changing the example. False hides the selectors for identification tasks.
+- `keyboard_note` (*str*): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 
 **Examples**
 
@@ -158,6 +160,7 @@ Lesson(
     category: str,
     steps: tuple[Step, ...],
     exercise: str,
+    related_exercises: tuple[str, ...] = (),
 )
 ```
 
@@ -171,7 +174,8 @@ A lesson: a title, a line about it, and its steps.
 - `summary` (*str*): A short line for its card.
 - `category` (*str*): The group it belongs to on the list, such as "Scales & Keys".
 - `steps` (*tuple of Step*): The pages, in order.
-- `exercise` (*str*): The class name of the exercise that practices it, which the last page offers.
+- `exercise` (*str*): The primary exercise offered on the last page and used for the lesson icon.
+- `related_exercises` (*tuple of str*): Additional exercises offered on the last page, in display order.
 
 **Examples**
 
