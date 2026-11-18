@@ -2,7 +2,7 @@
 title: alto.theory.scales
 parent: api
 package: alto.theory
-order: 25
+order: 26
 permalink: /api/alto.theory.scales/
 ---
 {% raw %}

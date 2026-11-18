@@ -1131,6 +1131,7 @@ class ExerciseView(QWidget):
             clef=q.clef,
             key=0 if q.build_key else q.key,  # a signature to build starts from a blank staff
             value=q.value,
+            notation_excerpt=q.notation_excerpt,
             notation_target=q.notation_target,
             locate_notation=q.notation_target is not None and not q.choices,
             caption=q.caption,
@@ -1957,6 +1958,7 @@ class ExerciseView(QWidget):
             and event.button() == Qt.MouseButton.LeftButton
             and watched is self.staff
             and self.staff.locate_notation
+            and not self.answered
             and self.question
         ):
             choice = self.question.answer if self.staff.hits_notation(event.position().toPoint()) else "Incorrect location"

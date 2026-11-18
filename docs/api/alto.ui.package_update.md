@@ -2,7 +2,7 @@
 title: alto.ui.package_update
 parent: api
 package: alto.ui
-order: 51
+order: 52
 permalink: /api/alto.ui.package_update/
 ---
 {% raw %}

@@ -19,6 +19,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.circle_schemes](alto.circle_schemes/) | The color schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
+| [alto.notation_excerpts](alto.notation_excerpts/) | Public-domain piano excerpts available for offline notation practice. |
 | [alto.notation_terms](alto.notation_terms/) | Notation Identification terms, grouped by subject with their score placement and SMuFL code points. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
@@ -106,6 +107,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |
 | [alto.ui.scale_explorer](alto.ui.scale_explorer/) | Interactive notation and step patterns for learning scales. |
+| [alto.ui.score_excerpt](alto.ui.score_excerpt/) | Paint the engraved score and locate symbols from a pixel map made from the same SVG. |
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
 | [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |

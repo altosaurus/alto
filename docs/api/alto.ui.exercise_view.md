@@ -2,7 +2,7 @@
 title: alto.ui.exercise_view
 parent: api
 package: alto.ui
-order: 37
+order: 38
 permalink: /api/alto.ui.exercise_view/
 ---
 {% raw %}

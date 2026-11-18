@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 58
+order: 60
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
@@ -242,6 +242,7 @@ def show_notes(
     caption: str = '',
     notation_target: tuple[str, int] | None = None,
     locate_notation: bool = False,
+    notation_excerpt: str | None = None,
 ) -> None
 ```
 
@@ -255,6 +256,7 @@ Show some notes, with a clef and a key signature.
 - `value` (*str, default "whole"*): The note value to draw (stems are only drawn for single notes). Keyword-only.
 - `caption` (*str, default ""*): Text to write under the staff. Keyword-only.
 - `notation_target` (*tuple of (str, int) or None*): Part and position to highlight in a notation question. Keyword-only.
+- `notation_excerpt` (*str or None*): Versioned score to show for a repertoire question. Keyword-only.
 - `locate_notation` (*bool, default False*): Render the target in ordinary ink for the learner to find. Keyword-only.
 
 **Examples**

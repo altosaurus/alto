@@ -25,6 +25,7 @@ from alto.exercises.base import (
     register,
     signature,
 )
+from alto.notation_excerpts import passages_by_term
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
 from alto.settings import spell
 from alto.theory.fifths import (
@@ -2518,8 +2519,8 @@ class NotationIdentification(ChoiceExercise):
     Examples
     --------
     >>> q = NotationIdentification().generate(random.Random(2))
-    >>> len(q.staff), q.answer in q.choices
-    (4, True)
+    >>> bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+    True
     """
 
     name = "Notation Identification"
@@ -2668,10 +2669,34 @@ class NotationIdentification(ChoiceExercise):
         True
         """
         phrase = rng.choice(("E4 G4 A4 G4", "B4 A4 G4 E4", "G4 B4 D5 C5", "D5 C5 A4 B4"))
-        part = rng.choice([term for term in settings.NOTATION_TERMS if term in settings.notation.terms])
+        selected = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
+        repertoire = passages_by_term()
+        represented = [term for term in selected if term in repertoire]
+        part = rng.choice(represented if represented and rng.random() < 0.5 else selected)
         group = next(name for name, terms in CATALOG.items() if part in terms)
         locate = settings.notation.question_type == "staff"
         choices = [] if locate else self._choices(part, group=group, rng=rng)
+        if part in repertoire:
+            passage = rng.choice(list(repertoire[part]))
+            locations = repertoire[part][passage]
+            index = locations[0] if locate else rng.choice(locations)
+            prompt = "Which part of the music is highlighted?"
+            if locate:
+                if group == "Accidentals":
+                    prompt = f"Click a {part.lower()} beside a note."
+                elif part == "Barline":
+                    prompt = "Click a single barline."
+                else:
+                    prompt = f"Click an example of {part.lower()}."
+            return Question(
+                prompt,
+                show_staff=True,
+                notation_excerpt=passage,
+                notation_target=(part, index),
+                choices=choices,
+                grid={choice: divmod(i, 2) for i, choice in enumerate(choices)},
+                answer=part,
+            )
         placement, symbol = MARKS[part]
         position = rng.randrange(4)
         clef = "treble"

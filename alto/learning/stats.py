@@ -38,6 +38,7 @@ from datetime import (
 from alto.exercises.base import Question
 from alto.learning import scheduler
 from alto.learning.database import Database
+from alto.notation_excerpts import excerpts
 from alto.theory.pitch import Note
 from alto.theory.scales import format_key_signature
 
@@ -482,7 +483,9 @@ def describe(question: Question) -> str:
         return f"{n.name}{n.octave}"
 
     clef = question.clef.capitalize()
-    if question.show_staff:
+    if question.notation_excerpt:
+        what = excerpts()[question.notation_excerpt].credit
+    elif question.show_staff:
         what = f"{clef}: {format_key_signature(question.key)}. {question.prompt}"
     elif question.prompt:
         what = question.prompt

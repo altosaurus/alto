@@ -2,7 +2,7 @@
 title: alto.exercises.library
 parent: api
 package: alto.exercises
-order: 10
+order: 11
 permalink: /api/alto.exercises.library/
 ---
 {% raw %}
@@ -1106,8 +1106,8 @@ Identify the highlighted part of a written phrase.
 
 ```pycon
 >>> q = NotationIdentification().generate(random.Random(2))
->>> len(q.staff), q.answer in q.choices
-(4, True)
+>>> bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+True
 ```
 
 ### NotationIdentification.settings_signature

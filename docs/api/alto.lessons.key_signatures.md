@@ -2,7 +2,7 @@
 title: alto.lessons.key_signatures
 parent: api
 package: alto.lessons
-order: 20
+order: 21
 permalink: /api/alto.lessons.key_signatures/
 ---
 {% raw %}

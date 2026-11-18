@@ -117,6 +117,8 @@ class Question:
         Empty for an ordinary question with one answer. Keyword-only.
     notation_target : tuple of (str, int) or None
         Notation part and zero-based note column or staff line to highlight. Keyword-only.
+    notation_excerpt : str or None
+        Versioned score containing the target. Its position is an index into the excerpt manifest. Keyword-only.
     place_clef : str, default ""
         The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button.
         Empty for any other question. Keyword-only.
@@ -170,6 +172,7 @@ class Question:
     place_clef: str = ""  # the clef to put on a blank staff, as a G, C or F symbol in the right place
 
     notation_target: tuple[str, int] | None = None
+    notation_excerpt: str | None = None
 
     def check_placed(self, note: Note) -> bool:
         """
@@ -391,6 +394,8 @@ class Question:
         ]
         if self.notation_target is not None:
             data.append(self.notation_target)
+        if self.notation_excerpt is not None:
+            data.append(self.notation_excerpt)
         if self.keyboard_notes:
             data.append([spelled(n) for n in self.keyboard_notes])
         if self.notes_only:

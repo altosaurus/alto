@@ -2,7 +2,7 @@
 title: alto.exercises.base
 parent: api
 package: alto.exercises
-order: 9
+order: 10
 permalink: /api/alto.exercises.base/
 ---
 {% raw %}
@@ -61,6 +61,7 @@ Question(
     required: tuple[str, ...] = (),
     place_clef: str = '',
     notation_target: tuple[str, int] | None = None,
+    notation_excerpt: str | None = None,
 )
 ```
 
@@ -103,6 +104,7 @@ One question, with what to show for it and which answer is right.
 - `circle_key` (*int or None*): For a Roman numeral question, the place of the key whose chords they are. Keyword-only.
 - `required` (*tuple of str*): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.
 - `notation_target` (*tuple of (str, int) or None*): Notation part and zero-based note column or staff line to highlight. Keyword-only.
+- `notation_excerpt` (*str or None*): Versioned score containing the target. Its position is an index into the excerpt manifest. Keyword-only.
 - `place_clef` (*str, default ""*): The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button. Empty for any other question. Keyword-only.
 
 **Examples**

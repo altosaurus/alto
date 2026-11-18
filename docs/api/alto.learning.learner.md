@@ -2,7 +2,7 @@
 title: alto.learning.learner
 parent: api
 package: alto.learning
-order: 13
+order: 14
 permalink: /api/alto.learning.learner/
 ---
 {% raw %}

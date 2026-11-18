@@ -675,3 +675,20 @@ The release is a normal one and never a pre-release, because Alto's update check
 
 Open an issue on [GitHub](https://github.com/altosaurus/alto/issues). Say which operating system and Python version you
 use, and which exercise you were in.
+
+## Adding a notation excerpt
+
+Choose a passage whose music and source edition are in the public domain. For a modern transcription, verify the
+transcriber’s public-domain dedication as well. Record the precise source file URL, its SHA-256 digest, the historical
+edition, the part, and the measure numbers in `excerpt.json`. Add the edition to `THIRD_PARTY_NOTICES.md`.
+
+Store the extracted `score.musicxml` and its engraved `score.svg` beside the manifest under
+`alto/assets/excerpts/<work>-m<first-measure>-v<version>/`. Preserve the prevailing clefs, key, and meter.
+Give each independently selectable component a group ID such as `mark-0`, and put its Alto notation term
+at the corresponding index in the manifest’s `targets` list. Mark every visible instance of a term that can be asked.
+Keep neighboring symbols as musical context. Tintable shapes inherit their group's fill or use `currentColor` for strokes.
+
+Run `QT_QPA_PLATFORM=offscreen .venv/bin/python scripts/excerpt_hit_map.py <excerpt-directory>` to generate
+`hits.png` from the engraved ink. Inspect both answer modes at narrow and wide sizes.
+Published IDs identify saved questions. Give corrected music or a changed marker order a new version and keep the
+original directory so older answers can still be opened.

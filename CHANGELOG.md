@@ -19,6 +19,7 @@ Alto uses [semantic versioning](https://semver.org/).
 - A beginner lesson on pitches and notes links to three note exercises, with reference hints and a return path to the lesson.
 - Notation Identification lets learners name a highlighted marking or find a named component on the staff. Hovering
   previews a component before answering, and learners can choose which notation terms to practice.
+  Eight public-domain piano excerpts from Schubert and Schumann put 34 of those terms in musical context.
 
 - Keyboard Interval Identification with configurable keyboard and interval ranges, compound intervals, and Limited, All,
   or Compact answer buttons. Compact answers use a quality letter and an interval number.

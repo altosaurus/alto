@@ -39,12 +39,17 @@ that option. Changes apply to the next question right away.
 ## Notation Identification
 
 Choose a **Question Type** in the exercise settings. **Answer Button** is the default. A short phrase appears with one marking
-highlighted in blue. Choose its name from up to four answers or press its number key. In **Click on Staff**, the prompt names
-a component. Move the pointer over the music to highlight a component, then click to answer. For a notehead, stem, or staff line,
-the prompt specifies which one to find.
+highlighted in blue. By default, choose its name from up to four answers or press its number key. In **Click on Staff**, the prompt names
+a component. Move the pointer over the music to highlight a component, then click to answer. In a repertoire excerpt, any occurrence of the named component counts. In a generated phrase, the prompt can specify
+a particular notehead, stem, or staff line.
 Open **Terms** in the exercise settings to select a whole group or check individual terms. Only checked terms can be highlighted or offered as answers.
 Choices favor the target’s category, then draw from other checked terms if space remains. When visually similar alternatives exist, most questions
 favor them. For example, a turn often appears alongside inverted, slashed, and vertical turns.
+
+Eight piano excerpts from Schubert’s *Erlkönig* and Schumann’s *Schöne Fremde* and *Die Lotosblume* are installed with Alto.
+The composer, title, and measure numbers appear beneath the music. Try selecting **Tie** and **Slur** together to practice
+telling the two curves apart in context. Terms outside the collection use generated phrases.
+The original editions are in the public domain, and the digital scores come from the [OpenScore Lieder corpus](https://fourscoreandmore.org/openscore/lieder/).
 
 Topics include note values and rests, clefs, accidentals and microtonal signs, meter, barlines, repeats, articulations,
 dynamics, ornaments, octave signs, and instrumental techniques. For example, you can isolate ties and slurs, compare

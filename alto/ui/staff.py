@@ -54,6 +54,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.notation_excerpts import excerpts
 from alto.notation_terms import MARKS
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
@@ -69,6 +70,7 @@ from alto.ui.notation import (
 )
 from alto.ui.notation import current as current_style
 from alto.ui.notes import draw_note
+from alto.ui.score_excerpt import ScoreExcerpt, score_artwork
 
 # Chord noteheads also carry their pitch so each head can be pointed to separately.
 Component = tuple[str, int] | tuple[str, int, int]
@@ -572,6 +574,8 @@ class StaffWidget(QWidget):
         self.value = "whole"
         self.caption = ""  # text written under the staff, inside the paper
         self.notation_target: tuple[str, int] | None = None
+        self.excerpt: ScoreExcerpt | None = None
+        self._clicked_component: Component | None = None
         self.locate_notation = False
         self._hover_point: QPoint | None = None
         self._pick_geometry: tuple | None = None
@@ -591,6 +595,7 @@ class StaffWidget(QWidget):
         caption: str = "",
         notation_target: tuple[str, int] | None = None,
         locate_notation: bool = False,
+        notation_excerpt: str | None = None,
     ) -> None:
         """
         Show some notes, with a clef and a key signature.
@@ -609,6 +614,8 @@ class StaffWidget(QWidget):
             Text to write under the staff. Keyword-only.
         notation_target : tuple of (str, int) or None
             Part and position to highlight in a notation question. Keyword-only.
+        notation_excerpt : str or None
+            Versioned score to show for a repertoire question. Keyword-only.
         locate_notation : bool, default False
             Render the target in ordinary ink for the learner to find. Keyword-only.
 
@@ -621,6 +628,9 @@ class StaffWidget(QWidget):
         """
         self.playback_column = None
         self.notation_target = notation_target
+        self.excerpt = score_artwork(excerpts()[notation_excerpt]) if notation_excerpt else None
+        self._clicked_component = None
+        self.setToolTip(self.excerpt.excerpt.credit if self.excerpt else "")
         if locate_notation != self.locate_notation:
             self.setMouseTracking(locate_notation)
         self.locate_notation = locate_notation
@@ -630,6 +640,8 @@ class StaffWidget(QWidget):
         self.note_color = None
         self._fit_height(clef)
         self._fit_width()
+        if self.excerpt:
+            self.setMaximumWidth(760)
         self.update()
 
     def _fit_width(self) -> None:
@@ -978,6 +990,20 @@ class StaffWidget(QWidget):
             focused: Component | None = self.notation_target
             if self.locate_notation and self.note_color is None:
                 focused = self._notation_at(self._hover_point) if self._hover_point is not None else None
+            if self.excerpt:
+                if self.note_color is not None and self._clicked_component:
+                    focused = self._clicked_component
+                p.setRenderHint(QPainter.RenderHint.Antialiasing)
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(QColor("white"))
+                p.drawRoundedRect(self.rect(), CORNER_RADIUS, CORNER_RADIUS)
+                self.excerpt.paint(
+                    p,
+                    paper=QRectF(self.rect()),
+                    index=focused[1] if focused else None,
+                    color=self.note_color or QColor("#0068af"),
+                )
+                return
             if focused and focused[0] in {"Notehead", "Stem"} and focused[1] == self.playback_column:
                 focused = None  # let the sounding column use playback ink, then restore its notation marking
             accent = self.note_color or QColor("#0068af")
@@ -1039,7 +1065,17 @@ class StaffWidget(QWidget):
         >>> StaffWidget().hits_notation(QPoint(0, 0))
         False
         """
-        return self.notation_target is not None and self._notation_at(point) == self.notation_target
+        component = self._notation_at(point)
+        if (
+            self.excerpt
+            and self.locate_notation
+            and component
+            and self.notation_target
+            and component[0] == self.notation_target[0]
+        ):
+            self._clicked_component = component
+            return True
+        return self.notation_target is not None and component == self.notation_target
 
     def _notation_at(self, point: QPoint) -> Component | None:
         """
@@ -1060,6 +1096,12 @@ class StaffWidget(QWidget):
         >>> StaffWidget()._notation_at(QPoint(0, 0)) is None
         True
         """
+        if self.excerpt:
+            rect = self.excerpt.music_rect(QRectF(self.rect()))
+            for dx, dy in PICK_OFFSETS:
+                if component := self.excerpt.component_at(point + QPoint(dx, dy), rect=rect):
+                    return component
+            return None
         geometry = (self.size(), self.notation_style or current_style(), clef_shape(self.clef), self.font())
         if geometry != self._pick_geometry:
             self._build_pick_map()
