@@ -97,6 +97,7 @@ checks relaxed (in `pyproject.toml`), because tests deliberately assert on widge
 `.pre-commit-config.yaml` installs hooks into Git. On **commit**: trailing whitespace, final newline, YAML and TOML validity,
 large files, `ruff format`, `ruff check --fix`. On **push**: the whole test suite, the docs freshness check (a warning only) and
 Pyright. If a hook changes a file the commit stops so you can look; commit again.
+After a merge or fast-forward pull on `main`, a third hook [cleans up merged local branches]({{ '/development/' | relative_url }}#merged-local-branches).
 
 ### Continuous integration
 

@@ -138,6 +138,25 @@ error stops the push. Run the commit checks by hand with `pre-commit run --all-f
 
 Alto uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting. It is installed with the `dev` extra and
 configured in `pyproject.toml` (pycodestyle, pyflakes, import sorting, pyupgrade, bugbear and a few more rules, with a
+### Merged local branches
+
+Run `pre-commit install` again in an existing clone to install the post-merge hook. When a merge or
+fast-forward pull updates your checked-out `main`, the hook deletes local branches whose tips are in
+both `main` and `origin/main`. Each deletion prints the branch name and its previous commit.
+Branches with new local commits or commits incorporated only by a squash merge stay available for review.
+
+The hook skips every branch checked out in a worktree and always keeps `main`, `gh-pages`, and
+`asv-results`. To keep another long-running branch in this clone, add its exact name before pulling.
+Repeat the command for each branch you want to keep.
+
+```bash
+git config --local --add alto.keepBranch gd_dev
+sh scripts/prune-branches.sh --dry-run
+```
+
+The preview refreshes `origin` and lists eligible local branches. The automatic hook uses the
+references already in your clone and only deletes local branches.
+
 130-character line limit).
 
 ```bash

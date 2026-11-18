@@ -1,6 +1,7 @@
-# Run with `pre-commit install` once; after that the quick checks run on every commit and the tests run on every push.
+# Run `pre-commit install` to install the commit, push and branch cleanup hooks.
 # Update the pinned versions with `pre-commit autoupdate`.
-default_install_hook_types: [pre-commit, pre-push]
+default_install_hook_types: [pre-commit, pre-push, post-merge]
+default_stages: [pre-commit, pre-push, manual]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -27,6 +28,15 @@ repos:
   # The tests run when pushing, not on every commit, so commits stay quick.
   - repo: local
     hooks:
+      - id: prune-merged-branches
+        name: Prune merged local branches on main
+        entry: sh scripts/prune-branches.sh --post-merge
+        language: system
+        pass_filenames: false
+        always_run: true
+        verbose: true
+        stages: [post-merge]
+
       - id: pytest
         name: Full test suite and patch coverage
         entry: sh scripts/run-tests.sh --patch-coverage

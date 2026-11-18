@@ -32,8 +32,8 @@ Three things in that list deserve a sentence each.
   `pip install -e` reads `pyproject.toml`, which is where the dependencies, the entry point (`alto = "alto.__main__:main"`)
   and the tool settings live.
 - **`[dev]`** is an optional dependency group in `pyproject.toml`: pytest, coverage, Ruff, Pyright and pre-commit.
-- **`pre-commit install`** installs two Git hooks: quick checks on every commit, and the full test suite and type check on every
-  push. Nothing reaches the remote with a failing test.
+- **`pre-commit install`** installs quick checks on commit, tests and type checking on push, and
+  [local branch cleanup]({{ '/development/' | relative_url }}#merged-local-branches) after a merge or fast-forward pull on `main`.
 
 If the program starts but the notation looks odd, see [Rendering music notation]({{ '/guide/notation/' | relative_url }}). The
 default style, Finale Maestro, and the other SMuFL styles use fonts bundled with the program. Only the "Noto Music" style needs
