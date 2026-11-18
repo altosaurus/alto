@@ -51,6 +51,9 @@ def render() -> str:
     symbols = []
     for cls in REGISTRY:
         inner = EXERCISE_ICONS[cls.__name__].replace("COLOR", "currentColor")
+        if cls.__name__ == "KeyboardNotes":
+            # Let the card show through the long keys and tint the short keys and outlines.
+            inner = inner.replace("#ffffff", "none").replace("#202020", "currentColor")
         symbols.append(f'  <symbol id="ex-{cls.__name__}" viewBox="0 0 24 24">{inner}</symbol>\n')
     wrapper = '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">\n'
     return HEADER + wrapper + "".join(symbols) + "</svg>\n"

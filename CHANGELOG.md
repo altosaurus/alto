@@ -42,6 +42,7 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Fixed
 
+- The documentation homepage shows dark app screenshots in dark mode, and its Keyboard Identification icon matches the other blue topic icons.
 - Scale Identification plays with even rhythm on the first correct answer, highlights each note as it sounds, and waits
   for the scale to finish before advancing.
 
