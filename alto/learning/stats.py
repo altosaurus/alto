@@ -159,6 +159,10 @@ class HardQuestion:
         How many times it was answered. Keyword-only.
     wrong : int
         How many wrong answers it has had. Keyword-only.
+    item_key : str
+        The stored identity used to look up this question's practice history. Keyword-only.
+    payload : str or None
+        The saved question as JSON for the preview. Keyword-only.
 
     Examples
     --------
@@ -172,6 +176,8 @@ class HardQuestion:
     strain: float
     seen: int
     wrong: int
+    item_key: str = ""
+    payload: str | None = None
 
 
 @dataclass
@@ -658,6 +664,8 @@ def collect(
                 strain=r["strain"],
                 seen=r["seen"],
                 wrong=r["wrong"],
+                item_key=r["item_key"],
+                payload=r["payload"],
             ),
         )
     return out

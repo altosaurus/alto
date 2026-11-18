@@ -14,18 +14,22 @@ from PySide6.QtGui import (
     QKeySequence,
     QShortcut,
 )
-from PySide6.QtTest import QSignalSpy
+from PySide6.QtTest import QSignalSpy, QTest
+from PySide6.QtWidgets import QToolButton
 
 from alto.exercises import REGISTRY
 from alto.exercises.base import Question
-from alto.learning import Learner
+from alto.learning import Database, Learner
 from alto.learning.database import ItemRecord
 from alto.ui import database_page
+from alto.ui.charts import LineChart
 from alto.ui.database_page import (
     ROW_ROLE,
     DatabasePage,
     RowsModel,
 )
+from alto.ui.question_preview import QuestionPreview
+from alto.ui.stats_dialog import StatsPage
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -265,6 +269,7 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
             *,
             question: object,
             details: object,
+            statistics: object,
             parent: QWidget | None,
         ) -> None:
             """
@@ -278,10 +283,12 @@ def test_double_clicking_a_row_shows_the_question_it_is_about(
                 The question to show.
             details : object
                 The details of the answer.
+            statistics : object
+                The action for showing the question statistics.
             parent : QWidget or None
                 The owning widget.
             """
-            del parent  # accepted to match what it stands in for, but not needed
+            del parent, statistics  # accepted to match what it stands in for, but not needed
             opened.append((name, question, details))
 
         # noinspection PyMethodMayBeStatic
@@ -361,3 +368,114 @@ def test_back_is_offered_by_a_button_and_by_escape(
     escape = [s for s in page.findChildren(QShortcut) if s.key() == QKeySequence(Qt.Key.Key_Escape)]
     escape[0].activated.emit()
     assert spy.count() == 1
+
+
+@pytest.mark.parametrize("source", ["answers", "questions", "statistics", "needs_practice"])
+def test_question_statistics_from_a_stored_card(app: QApplication, monkeypatch: pytest.MonkeyPatch, source: str) -> None:
+    """
+    Open a saved question and its lifetime statistics from each table that lists it.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures modal dialogs so the test can interact with them.
+    source : str
+        The table from which to open the question.
+    """
+    db = Database()
+    profile = db.add_profile("Ada")
+    other = db.add_profile("Sam")
+    question = Question("Name the note.", choices=["C", "D"], answer="C")
+    db.save_item(
+        profile.id,
+        exercise="NoteNames",
+        item_key="target",
+        item=ItemRecord(
+            2.0,
+            seen=2,
+            first_try_right=1,
+            wrong_attempts=1,
+            total_first_ms=6000,
+            last_seen=20.0,
+            signature="s",
+            payload=json.dumps(question.to_dict()),
+        ),
+    )
+    for pid, exercise, key, attempt, correct, duration in (
+        (profile.id, "NoteNames", "target", 1, False, 2000),
+        (profile.id, "NoteNames", "target", 2, True, 7000),
+        (profile.id, "NoteNames", "target", 1, True, 4000),
+        (profile.id, "NoteNames", "other", 1, True, 9000),
+        (profile.id, "KeyboardNotes", "target", 1, True, 9000),
+        (other.id, "NoteNames", "target", 1, True, 9000),
+    ):
+        db.add_attempt(
+            pid,
+            exercise=exercise,
+            item_key=key,
+            attempt_no=attempt,
+            answer="C",
+            correct=correct,
+            duration_ms=duration,
+            answered_at=40.0 if duration == 4000 else 20.0,
+        )
+    dialogs = []
+    monkeypatch.setattr(database_page.QDialog, "exec", lambda dialog: dialogs.append(dialog))
+
+    def open_statistics(card: QuestionPreview) -> None:
+        """
+        Open the graphs from the question card.
+
+        Parameters
+        ----------
+        card : QuestionPreview
+            The preview opened by the selected row.
+        """
+        assert card.windowTitle() == "Note Identification"
+        assert card.question == question
+        card.show()
+        layout = card.layout()
+        assert layout is not None
+        layout.setGeometry(card.rect())
+        button = next(b for b in card.findChildren(QToolButton) if b.accessibleName() == "Question Statistics")
+        assert not button.icon().isNull() and button.toolTip() == "Question Statistics"
+        assert button.geometry().topRight() == card.rect().marginsRemoved(layout.contentsMargins()).topRight()
+        button.click()
+
+    monkeypatch.setattr(QuestionPreview, "exec", open_statistics)
+    learner = Learner(db, profile=profile)
+    if source == "needs_practice":
+        page = StatsPage(learner)
+        page.timeframe.setCurrentIndex(page.timeframe.findText("All time"))
+        page.resize(1000, 800)
+        page.show()
+        page.scroller.ensureWidgetVisible(page.table)
+        app.processEvents()
+        assert page.table.rowCount() == 1
+        table, model = page.table, page.table.model()
+    elif source == "statistics":
+        page = StatsPage(learner)
+        page._open_detail("A day", exercise="NoteNames", since=0.0, until=30.0)
+        table, model = page.answers, page.answers.proxy
+    else:
+        page = DatabasePage(learner)
+        page.show_table(source)
+        table, model = page.view, page.proxy
+    indices = (model.index(row, 0) for row in range(model.rowCount()))
+    index = next(i for i in indices if i.data(ROW_ROLE)["exercise"] == "NoteNames" and i.data(ROW_ROLE)["item_key"] == "target")
+    if source == "needs_practice":
+        position = table.visualRect(index.siblingAtColumn(2)).center()
+        QTest.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=position)
+        assert not dialogs
+        QTest.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=position)
+    else:
+        table.doubleClicked.emit(index)
+    [dialog] = dialogs
+    assert isinstance(dialog.parentWidget(), QuestionPreview)
+    assert dialog.windowTitle() == "Question Statistics"
+    speed, accuracy = dialog.findChildren(LineChart)
+    assert speed.labels == accuracy.labels == ["#1", "#2"]
+    assert speed.values == [2.0, 4.0]
+    assert accuracy.values == [0.0, 50.0]

@@ -472,6 +472,7 @@ def attempts_in(
     *,
     exercise: str | None = None,
     since: float | None = None,
+    item_key: str | None = None,
 ) -> list[sqlite3.Row]
 ```
 
@@ -482,6 +483,7 @@ Return answers given, oldest first, for some profiles, an exercise and a period.
 - `profile_ids` (*list of int or None, default None*): The profiles to include; every profile if None.
 - `exercise` (*str or None, default None*): Only this exercise (its class name); every exercise if None. Keyword-only.
 - `since` (*float or None, default None*): Only answers from this timestamp on; the whole history if None. Keyword-only.
+- `item_key` (*str or None, default None*): Only answers for this question key. Pass the exercise to identify the question. Keyword-only.
 
 **Returns**
 

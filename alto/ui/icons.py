@@ -490,6 +490,12 @@ CHART = (
     '<circle cx="8" cy="15" r="1.2" fill="COLOR"/><circle cx="11.6" cy="10.6" r="1.2" fill="COLOR"/>'
     '<circle cx="14.6" cy="13.2" r="1.2" fill="COLOR"/><circle cx="19" cy="7.2" r="1.2" fill="COLOR"/>'
 )
+# Three columns on a baseline for an individual question's statistics.
+BAR_CHART = (
+    f'<path d="M3 20h18" {_MENU}/><g fill="COLOR">'
+    '<rect x="5" y="11" width="3.5" height="8" rx="0.8"/><rect x="10.25" y="5" width="3.5" height="14" rx="0.8"/>'
+    '<rect x="15.5" y="8" width="3.5" height="11" rx="0.8"/></g>'
+)
 # Database: a stack of discs, drawn as a cylinder.
 DATABASE = (
     f'<ellipse cx="12" cy="6" rx="7" ry="2.6" {_MENU}/>'

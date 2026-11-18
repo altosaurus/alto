@@ -16,6 +16,7 @@ from collections.abc import (
     Sequence,
 )
 from datetime import datetime
+from functools import partial
 
 from PySide6.QtCore import (
     QAbstractTableModel,
@@ -33,6 +34,8 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QButtonGroup,
+    QDialog,
+    QDialogButtonBox,
     QHBoxLayout,
     QHeaderView,
     QLabel,
@@ -49,6 +52,7 @@ from alto.learning import (
     Learner,
     stats,
 )
+from alto.ui.charts import LineChart
 from alto.ui.question_preview import QuestionPreview
 
 ROW_LIMIT = 10000
@@ -366,6 +370,7 @@ def answer_cells(
         extras.append(
             {
                 "exercise": r["exercise"],
+                "item_key": r["item_key"],
                 "payload": r["payload"],
                 "details": [
                     (
@@ -390,11 +395,58 @@ def answer_cells(
     return cells, extras
 
 
+def _show_question_statistics(parent: QWidget, *, learner: Learner, exercise: str, item_key: str) -> None:
+    """
+    Graph response time and first-try accuracy across showings of the same question.
+
+    Parameters
+    ----------
+    parent : QWidget
+        Answer card that owns the dialog.
+    learner : Learner
+        Active profile and answer database. Keyword-only.
+    exercise : str
+        Stored exercise class name. Keyword-only.
+    item_key : str
+        Identifier of the saved question shown on the card. Keyword-only.
+
+    Examples
+    --------
+    The chart button on a saved excerpt uses its item key to retrieve that question's attempts.
+    """
+    rows = learner.db.attempts_in([learner.profile.id], exercise=exercise, item_key=item_key)
+    firsts = [row for row in rows if row["attempt_no"] == 1]
+    labels = [f"#{i}" for i in range(1, len(firsts) + 1)]
+    right = 0
+    accuracy_values = []
+    for i, row in enumerate(firsts, start=1):
+        right += row["correct"]
+        accuracy_values.append(100 * right / i)
+
+    dialog = QDialog(parent)
+    dialog.setWindowTitle("Question Statistics")
+    dialog.resize(600, 500)
+    layout = QVBoxLayout(dialog)
+    layout.addWidget(QLabel(f"Times asked: {len(firsts):,}    Total attempts: {len(rows):,}"))
+    speed = LineChart("Time to first answer", fmt=lambda value: f"{value:.1f} s")
+    speed.set_data(labels, values=[row["duration_ms"] / 1000 for row in firsts])
+    accuracy = LineChart("Cumulative first-try accuracy", fmt=lambda value: f"{value:.0f}%", fixed_top=100)
+    accuracy.set_data(labels, values=accuracy_values)
+    layout.addWidget(speed)
+    layout.addWidget(accuracy)
+    buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+    buttons.rejected.connect(dialog.reject)
+    layout.addWidget(buttons)
+    dialog.exec()
+    dialog.deleteLater()
+
+
 def open_preview(
     index: QModelIndex,
     *,
     names: dict[str, str],
     parent: QWidget,
+    learner: Learner | None = None,
 ) -> None:
     """
     Show the question behind a row of an answers table, if its record is still stored.
@@ -407,6 +459,8 @@ def open_preview(
         The title of each exercise, by class name. Keyword-only.
     parent : QWidget
         The widget the popup belongs to. Keyword-only.
+    learner : Learner or None, default None
+        The active profile, used to open this question's statistics. Keyword-only.
 
     Examples
     --------
@@ -421,10 +475,14 @@ def open_preview(
     except (ValueError, KeyError, TypeError):
         return
     name = str(names.get(extra["exercise"], extra["exercise"]))
+    statistics = None
+    if learner is not None and "item_key" in extra:
+        statistics = partial(_show_question_statistics, learner=learner, exercise=extra["exercise"], item_key=extra["item_key"])
     QuestionPreview(
         name,
         question=question,
         details=extra.get("details"),
+        statistics=statistics,
         parent=parent,
     ).exec()
 
@@ -452,6 +510,7 @@ class AnswerList(QTableView):
         self,
         *,
         names: dict[str, str],
+        learner: Learner | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -461,6 +520,8 @@ class AnswerList(QTableView):
         ----------
         names : dict of str to str
             The title of each exercise, by class name. Keyword-only.
+        learner : Learner or None, default None
+            The active profile for question statistics. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the table. Keyword-only.
 
@@ -483,7 +544,7 @@ class AnswerList(QTableView):
         self.proxy = QSortFilterProxyModel(self)
         self.proxy.setSortRole(SORT_ROLE)
         self.setModel(self.proxy)
-        self.doubleClicked.connect(lambda index: open_preview(index, names=self.names, parent=self))
+        self.doubleClicked.connect(lambda index: open_preview(index, names=self.names, parent=self, learner=learner))
 
     def show_answers(self, rows: Sequence[sqlite3.Row]) -> None:
         """
@@ -735,6 +796,7 @@ class DatabasePage(QWidget):
             extras.append(
                 {
                     "exercise": r["exercise"],
+                    "item_key": r["item_key"],
                     "payload": r["payload"],
                     "details": [
                         (
@@ -881,7 +943,7 @@ class DatabasePage(QWidget):
         >>> page.show_table("profiles")
         >>> page._preview(page.proxy.index(0, 0))  # a profile has no question to show
         """
-        open_preview(index, names=self._names, parent=self)
+        open_preview(index, names=self._names, parent=self, learner=self.learner)
 
     def _show_count(self) -> None:
         """
