@@ -640,26 +640,33 @@ def test_the_exercise_icons_of_the_docs_are_the_ones_the_app_draws() -> None:
         assert f'id="ex-{cls.__name__}"' in sprite
 
 
-def test_each_card_on_the_home_page_has_its_exercises_icon_and_name() -> None:
-    """Check the cards under What you can practice: one for each exercise, with its icon before its name, and the icon sized."""
+def test_home_page_topics_have_distinct_exercise_icons_and_screenshot_controls() -> None:
+    """Check the six topics, their exercise icons, and the radio controls that switch the preview."""
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    assert "{% include exercise-icons.html %}" in home
-    cards = home[home.index('<ul class="cards">') : home.index("</ul>", home.index('<ul class="cards">'))]
-    for cls in REGISTRY:
-        picture = '<svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">'
-        icon = f'{picture}<use href="#ex-{cls.__name__}"/></svg>'
-        assert f"<li><strong>{icon}{cls.name}</strong>" in cards, f"no card for {cls.name} with its icon"
-    assert cards.count("<li>") == len(REGISTRY)
-    css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
-    assert ".ex-icon {" in css and ".cards strong { display: flex; align-items: center;" in css
+    topics = re.findall(r"  - title: (.+)\n    icon: (\w+)\n    image: ([\w-]+\.png)", home)
+    assert [title for title, _, _ in topics] == [
+        "Circle of Fifths",
+        "Scales",
+        "Chords",
+        "Intervals",
+        "Keyboard Identification",
+        "Notation",
+    ]
+    assert len({image for _, _, image in topics}) == 6
+    assert {icon for _, icon, _ in topics} <= {cls.__name__ for cls in REGISTRY}
+    assert "{% include exercise-icons.html %}" in home and 'href="#ex-{{ topic.icon }}"' in home
+    assert "{% for topic in page.topics %}" in home and 'type="radio" name="practice-topic"' in home
+    assert 'aria-controls="preview-{{ topic.icon }}"' in home and 'id="preview-{{ topic.icon }}"' in home
+    assert "{% include shot.html src=topic.image alt=topic.alt %}" in home
 
 
 def test_the_first_picture_on_the_home_page_is_the_circle_of_fifths_with_the_list_wide_enough_to_read() -> None:
-    """Check that the home page opens with the circle of fifths, and that the script shows the list wide enough to read."""
+    """Check the initially selected topic and the sidebar shown in its screenshot."""
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    first = re.search(r'\{% include shot\.html src="([^"]+)"', home)
+    first = re.search(r"^    image: (.+)$", home, re.MULTILINE)
     assert first is not None and first.group(1) == "circle-of-fifths.png"
-    assert 'alt="The Circle of Fifths exercise, with the list of exercises open on the left"' in home
+    assert "{% if forloop.first %} checked{% endif %}" in home
+    assert "alt: The Circle of Fifths exercise, with the list of exercises open on the left" in home
     assert "home.png" not in home
     for suffix in ("", "-dark"):
         assert (DOCS / "assets" / "img" / f"circle-of-fifths{suffix}.png").is_file()

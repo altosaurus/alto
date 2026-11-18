@@ -2,7 +2,7 @@
 title: alto.ui.reference
 parent: api
 package: alto.ui
-order: 51
+order: 53
 permalink: /api/alto.ui.reference/
 ---
 {% raw %}
@@ -382,10 +382,35 @@ Scale identification hints and a link to the guided lesson.
 
 Build a scrollable guide to tonic reading and scale patterns.
 
+## NoteReferencePanel
+
+```python
+NoteReferencePanel(exercise: Exercise)
+```
+
+Bases: `QWidget`
+
+Quick hints for reading or placing a note and a link to the introductory lesson.
+
+**Constructor**
+
+Show the hints for the current note exercise.
+
+**Parameters**
+
+- `exercise` (*Exercise*): The note exercise whose reference was opened.
+
+**Constructor examples**
+
+```pycon
+>>> NoteReferencePanel(KeyboardNotes()).lesson_button.text()
+'New to this? Take the full lesson  →'
+```
+
 ## reference_panel_for
 
 ```python
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | None
 ```
 
 Return the reference pane for an exercise.
@@ -396,13 +421,13 @@ Return the reference pane for an exercise.
 
 **Returns**
 
-- *ReferencePanel or ClefReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
+- *ReferencePanel or ClefReferencePanel or ScaleReferencePanel or NoteReferencePanel or None*: The panel, or None for an exercise with nothing to look up.
 
 **Examples**
 
 ```pycon
 >>> from alto.exercises.library import NoteNames
->>> reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
+>>> isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
 (True, True)
 >>> type(reference_panel_for(ClefBasics())).__name__
 'ClefReferencePanel'

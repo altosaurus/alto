@@ -50,6 +50,9 @@ def shown() -> set[str]:
     found = set()
     for page in (ROOT / "docs").glob("*.md"):
         found |= set(re.findall(r'shot\.html src="([^"]+)\.png"', page.read_text()))
+    home = (ROOT / "docs" / "index.md").read_text()
+    front_matter = home.split("---", 2)[1]
+    found.update(re.findall(r"^    image: ([\w-]+)\.png$", front_matter, re.MULTILINE))
     return found
 
 

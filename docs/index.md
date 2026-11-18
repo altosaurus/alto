@@ -3,6 +3,37 @@ title: Home
 nav_order: 1
 permalink: /
 toc: false
+topics:
+  - title: Circle of Fifths
+    icon: CircleOfFifths
+    image: circle-of-fifths.png
+    description: Find relative keys and the chords that belong to a key.
+    alt: The Circle of Fifths exercise, with the list of exercises open on the left
+  - title: Scales
+    icon: ScaleIdentification
+    image: scales.png
+    description: Identify scales and modes by their patterns, or build them on the staff.
+    alt: Scale Identification showing a scale on the staff with answer choices below
+  - title: Chords
+    icon: ChordQualities
+    image: chords.png
+    description: Tell triads and seventh chords apart and recognize inversions in arpeggios.
+    alt: Chord Quality showing notes stacked on a staff and a choice of chord qualities
+  - title: Intervals
+    icon: IntervalNames
+    image: intervals.png
+    description: Name the distance between two notes on a staff or a keyboard.
+    alt: Interval Identification showing two notes on the staff with interval names below
+  - title: Keyboard Identification
+    icon: KeyboardNotes
+    image: keyboard.png
+    description: Name highlighted piano keys and identify the intervals between them.
+    alt: Keyboard Note Identification showing a highlighted piano key and note-name buttons
+  - title: Notation
+    icon: NotationIdentification
+    image: notation.png
+    description: Identify written symbols, from noteheads and clefs to ornaments and playing techniques.
+    alt: Notation Identification showing a highlighted marking in a short musical phrase
 ---
 {% include os-icons.html %}
 {% include exercise-icons.html %}
@@ -12,25 +43,19 @@ toc: false
   {% if site.app_version != "" %}<a class="dl-go" href="#download">Download Alto <svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>{% endif %}
 </div>
 
-{% include shot.html src="circle-of-fifths.png" alt="The Circle of Fifths exercise, with the list of exercises open on the left" caption="An exercise, here the circle of fifths. The list on the left switches between exercises." %}
-
-## What you can practice
-
-<ul class="cards">
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteNames"/></svg>Note Identification</strong>Name notes on the grand staff or on any of seven clefs, treble to baritone.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardNotes"/></svg>Keyboard Note Identification</strong>Name the highlighted key on a piano keyboard.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-NoteConstruction"/></svg>Note Construction</strong>Click the staff where a named note belongs.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ClefBasics"/></svg>Clef Basics</strong>Put the G, C or F clef where it makes the clef you are asked for, or name the clef on a staff.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-IntervalNames"/></svg>Interval Identification</strong>Name the interval between two notes.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeyboardIntervals"/></svg>Keyboard Interval Identification</strong>Identify the interval between two highlighted piano keys.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatures"/></svg>Key Signature Identification</strong>Name the key from its signature on a staff, in major, minor and the modes.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-KeySignatureConstruction"/></svg>Key Signature Construction</strong>Build the key signature of a named key with a fork of sharps and flats.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleIdentification"/></svg>Scale Identification</strong>Identify a scale or mode on the staff.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ScaleConstruction"/></svg>Scale Construction</strong>Place the notes of a named scale on a blank staff, one after another.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-CircleOfFifths"/></svg>Circle of Fifths</strong>Find relative majors and minors, and the Roman numerals of a key, on the circle of fifths.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ChordQualities"/></svg>Chord Quality</strong>Tell triads and seventh chords apart.</li>
-  <li><strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-ArpeggioNames"/></svg>Arpeggio Identification</strong>Name the type and the inversion of a broken chord.</li>
-</ul>
+<div class="practice-gallery" role="radiogroup" aria-labelledby="what-you-can-practice">
+  <h2 id="what-you-can-practice">What you can practice</h2>
+  {% for topic in page.topics %}
+  <label class="practice-card">
+    <input type="radio" name="practice-topic" aria-controls="preview-{{ topic.icon }}"{% if forloop.first %} checked{% endif %}>
+    <strong><svg class="ex-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#ex-{{ topic.icon }}"/></svg>{{ topic.title }}</strong>
+    <span>{{ topic.description }}</span>
+  </label>
+  <div class="practice-preview" id="preview-{{ topic.icon }}">
+    {% include shot.html src=topic.image alt=topic.alt %}
+  </div>
+  {% endfor %}
+</div>
 
 ## What makes it different
 

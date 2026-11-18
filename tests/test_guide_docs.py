@@ -15,7 +15,7 @@ LINK = re.compile(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*}}")
 
 def front_matter(page: Path) -> dict[str, str]:
     """
-    Read the front matter of a docs page.
+    Read the top-level single-line fields used to check a docs page's links and order.
 
     Parameters
     ----------
@@ -25,10 +25,10 @@ def front_matter(page: Path) -> dict[str, str]:
     Returns
     -------
     dict of str to str
-        Each `key: value` line of the block.
+        The page's top-level scalar fields. Nested collections, such as homepage topics, are skipped.
     """
     head = page.read_text(encoding="utf-8").split("---\n", 2)[1]
-    return dict(line.split(": ", 1) for line in head.strip().split("\n"))
+    return dict(re.findall(r"^([\w-]+): (.+)$", head, re.MULTILINE))
 
 
 def permalinks() -> set[str]:

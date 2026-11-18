@@ -42,6 +42,10 @@ from alto.exercises.library import (
     CLEF_FACTS,
     CircleOfFifths,
     ClefBasics,
+    KeyboardNotes,
+    NotationIdentification,
+    NoteConstruction,
+    NoteNames,
     ScaleIdentification,
 )
 from alto.theory.fifths import (
@@ -625,7 +629,78 @@ class ScaleReferencePanel(QWidget):
         lay.addWidget(scroll, 1)
 
 
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | None:
+_NOTE_HINTS = {
+    NotationIdentification: (
+        "<p>Look at the shape and what it touches. The <b>notehead</b> is the oval that sits on a line or in a space. "
+        "The <b>stem</b> is the vertical stroke attached to it and can point up or down.</p>"
+        "<p>A <b>staff line</b> runs horizontally across the music. The <b>clef</b> at the left tells you which "
+        "pitches the lines and spaces represent.</p>"
+        "<p>For other symbols, look at their position. Accidentals sit immediately before a note, articulations sit near "
+        "the note, and dynamic markings such as <i>p</i> and <i>f</i> usually sit below the staff. A tie joins notes "
+        "of the same pitch. A slur groups notes into a phrase.</p>"
+    ),
+    KeyboardNotes: (
+        "<p>Find a pair of black keys. The white key just to its left is C. Moving right, the white keys are "
+        "C D E F G A B, then C again. F is just left of a group of three black keys.</p>"
+        "<p>For a black key, look at both neighbors. The black key between C and D can be called C♯ or D♭. "
+        "If the question shows a key signature, use it to help choose the spelling.</p>"
+    ),
+    NoteNames: (
+        "<p>Start at a line you know. In treble clef the second line is G4. In bass clef the fourth line is F3. "
+        "The center of a C clef marks middle C. Count lines from the bottom.</p>"
+        "<p>Trace each line and space from your landmark to the notehead, moving one letter at a time. "
+        "Apply the sharps or flats after the clef, then any sign beside the note. If asked for an octave, "
+        "remember that the number changes at C.</p>"
+    ),
+    NoteConstruction: (
+        "<p>For Notes Only, read the requested note name. For Scale and Degree, start on the first note of the "
+        "named scale (the tonic) and count it as degree 1. For example, degree 2 in C major is D.</p>"
+        "<p>Find the letter’s line or space using the clef. If an octave is given, choose that occurrence. "
+        "Check the key signature at the start of the staff. If it makes every F sharp and you need F natural, "
+        "choose the natural sign (♮) before placing the note.</p>"
+    ),
+}
+
+
+class NoteReferencePanel(QWidget):
+    """Quick hints for reading or placing a note and a link to the introductory lesson."""
+
+    lesson_requested = Signal(str)
+
+    def __init__(self, exercise: Exercise) -> None:
+        """
+        Show the hints for the current note exercise.
+
+        Parameters
+        ----------
+        exercise : Exercise
+            The note exercise whose reference was opened.
+
+        Examples
+        --------
+        >>> NoteReferencePanel(KeyboardNotes()).lesson_button.text()
+        'New to this? Take the full lesson  →'
+        """
+        super().__init__()
+        layout = QVBoxLayout(self)
+        self.lesson_button = QPushButton("New to this? Take the full lesson  →")
+        self.lesson_button.setToolTip("Open Pitches and Notes")
+        self.lesson_button.clicked.connect(lambda: self.lesson_requested.emit("pitches-and-notes"))
+        layout.addWidget(self.lesson_button)
+        hints = QLabel(f"<h3>{exercise.name}</h3>{_NOTE_HINTS[type(exercise)]}")
+        hints.setWordWrap(True)
+        hints.setAlignment(Qt.AlignmentFlag.AlignTop)
+        hints.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        scroll = QScrollArea()
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(hints)
+        layout.addWidget(scroll, 1)
+
+
+def reference_panel_for(
+    exercise: Exercise,
+) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | None:
     """
     Return the reference pane for an exercise.
 
@@ -636,17 +711,19 @@ def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePan
 
     Returns
     -------
-    ReferencePanel or ClefReferencePanel or None
+    ReferencePanel or ClefReferencePanel or ScaleReferencePanel or NoteReferencePanel or None
         The panel, or None for an exercise with nothing to look up.
 
     Examples
     --------
     >>> from alto.exercises.library import NoteNames
-    >>> reference_panel_for(NoteNames()) is None, reference_panel_for(CircleOfFifths()) is not None
+    >>> isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
     (True, True)
     >>> type(reference_panel_for(ClefBasics())).__name__
     'ClefReferencePanel'
     """
+    if type(exercise) in _NOTE_HINTS:
+        return NoteReferencePanel(exercise)
     if isinstance(exercise, CircleOfFifths):
         return ReferencePanel()
     if isinstance(exercise, ClefBasics):

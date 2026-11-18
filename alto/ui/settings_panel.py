@@ -78,11 +78,13 @@ from alto.exercises.library import (
     KeyboardNotes,
     KeySignatureConstruction,
     KeySignatures,
+    NotationIdentification,
     NoteConstruction,
     NoteNames,
     ScaleConstruction,
     ScaleIdentification,
 )
+from alto.notation_terms import CATALOG
 from alto.settings import (
     CLEFS,
     DEFAULT_RANGES,
@@ -4750,6 +4752,143 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
+def load_notation_terms() -> None:
+    """
+    Restore the question type and term selection, defaulting to Answer Button and all terms.
+
+    Examples
+    --------
+    >>> load_notation_terms()
+    >>> bool(settings.notation.terms)
+    True
+    """
+    kind = text_value(store(), key="notationIdentification/questionType", default="button")
+    settings.notation.question_type = kind if kind in settings.NOTATION_QUESTION_TYPES else "button"
+    saved = text_value(store(), key="notationIdentification/terms", default="")
+    settings.notation.terms = set(settings.NOTATION_TERMS).intersection(saved.split(",")) or set(settings.NOTATION_TERMS)
+
+
+class NotationSettingsPanel(ExerciseSettingsPanel):
+    """
+    Choose the question type and the notation terms to practice.
+
+    Examples
+    --------
+    >>> "Trill" in NotationSettingsPanel().terms.boxes
+    True
+    """
+
+    def __init__(self) -> None:
+        """
+        Build the settings menu and its Question Type and Terms pages.
+
+        Examples
+        --------
+        >>> len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
+        True
+        """
+        super().__init__()
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.stack = SlideStack()
+        layout.addWidget(self.stack)
+        menu = QWidget()
+        menu_layout = QVBoxLayout(menu)
+        menu_layout.setContentsMargins(0, 0, 0, 0)
+        menu_layout.addWidget(QLabel("<h3>Settings</h3>"))
+        self.type_row = _Row("Question Type")
+        self.type_row.clicked.connect(lambda: self.stack.slide_to(1))
+        menu_layout.addWidget(self.type_row)
+        self.terms_row = _Row("Terms")
+        self.terms_row.clicked.connect(lambda: self.stack.slide_to(2))
+        menu_layout.addWidget(self.terms_row)
+        menu_layout.addStretch()
+        self.stack.addWidget(menu)
+
+        question_types = QWidget()
+        type_layout = QVBoxLayout(question_types)
+        type_layout.setContentsMargins(0, 0, 0, 0)
+        self.types: dict[str, QRadioButton] = {}
+        for key, label in settings.NOTATION_QUESTION_TYPES.items():
+            radio = QRadioButton(label)
+            type_layout.addWidget(radio)
+            radio.setChecked(key == settings.notation.question_type)
+            radio.toggled.connect(lambda checked: checked and self._save())
+            self.types[key] = radio
+        self.stack.addWidget(_subpage("Question Type", body=question_types, back=lambda: self.stack.slide_to(0)))
+
+        terms_body = QWidget()
+        terms_layout = QVBoxLayout(terms_body)
+        terms_layout.setContentsMargins(0, 0, 0, 0)
+        self.group_picker = FieldComboBox()
+        self.group_picker.setAccessibleName("Notation term group")
+        self.group_picker.setPlaceholderText("Select a group…")
+        self.group_picker.addItems(["All terms", *CATALOG])
+        self.group_picker.setCurrentIndex(-1)
+        terms_layout.addWidget(self.group_picker)
+        self.terms = ChoiceChecklist(
+            [(group, [(term, term) for term in terms]) for group, terms in CATALOG.items()],
+            selected=settings.notation.terms,
+        )
+        terms_layout.addWidget(_scrolling(self.terms), 1)
+        self.stack.addWidget(_subpage("Terms", body=terms_body, back=lambda: self.stack.slide_to(0), fill=True))
+        self.terms.changed.connect(self._save)
+        self.group_picker.textActivated.connect(self._select_group)
+        self._refresh_summaries()
+
+    def _refresh_summaries(self) -> None:
+        """
+        Show the selected question type and term count on the settings menu.
+
+        Examples
+        --------
+        >>> NotationSettingsPanel().type_row.value.text() == settings.NOTATION_QUESTION_TYPES[settings.notation.question_type]
+        True
+        """
+        self.type_row.value.setText(settings.NOTATION_QUESTION_TYPES[settings.notation.question_type])
+        count = len(settings.notation.terms)
+        self.terms_row.value.setText("All" if count == len(settings.NOTATION_TERMS) else f"{count} selected")
+
+    def _select_group(self, group: str) -> None:
+        """
+        Select all terms or only the terms of one group and apply the edit once.
+
+        Parameters
+        ----------
+        group : str
+            The group chosen in the picker.
+
+        Examples
+        --------
+        >>> "Ornaments" in CATALOG
+        True
+        """
+        selected = settings.NOTATION_TERMS if group == "All terms" else CATALOG[group]
+        for term, box in self.terms.boxes.items():
+            box.blockSignals(True)
+            box.setChecked(term in selected)
+            box.blockSignals(False)
+        _guard_last(self.terms.boxes.values())
+        self.group_picker.setCurrentIndex(-1)
+        self._save()
+
+    def _save(self) -> None:
+        """
+        Save the question type and checked terms, then request a matching question.
+
+        Examples
+        --------
+        >>> callable(NotationSettingsPanel()._save)
+        True
+        """
+        settings.notation.question_type = next(key for key, radio in self.types.items() if radio.isChecked())
+        store().setValue("notationIdentification/questionType", settings.notation.question_type)
+        settings.notation.terms = self.terms.selected()
+        store().setValue("notationIdentification/terms", ",".join(sorted(settings.notation.terms)))
+        self._refresh_summaries()
+        self.changed.emit()
+
+
 def load_clef_basics() -> None:
     """
     Load the saved clef basics settings into the shared settings object.
@@ -5380,6 +5519,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     >>> settings_panel_for(IntervalNames()) is None
     True
     """
+    if isinstance(exercise, NotationIdentification):
+        return NotationSettingsPanel()
     if isinstance(exercise, NoteNames):
         return NoteNameSettingsPanel(settings.note_names)
     if isinstance(exercise, KeyboardIntervals):

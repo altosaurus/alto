@@ -2,7 +2,7 @@
 title: alto.ui.lesson
 parent: api
 package: alto.ui
-order: 42
+order: 44
 permalink: /api/alto.ui.lesson/
 ---
 {% raw %}
@@ -96,7 +96,8 @@ One step of a lesson: its words, a sound to hear, the circle, and a task.
 **Examples**
 
 ```pycon
->>> view = StepView(LESSONS[0].steps[1], rng=random.Random(1))
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
 >>> view.task is not None and len(view.choice_buttons) == 4
 True
 ```
@@ -114,7 +115,8 @@ Build the step and ask its first task.
 **Constructor examples**
 
 ```pycon
->>> StepView(LESSONS[0].steps[0]).circle is not None
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> StepView(CIRCLE_OF_FIFTHS.steps[0]).circle is not None
 True
 ```
 
@@ -129,7 +131,10 @@ Play the step's notes.
 **Examples**
 
 ```pycon
->>> StepView(LESSONS[0].steps[1]).hear()  # nothing sounds while muted, and nothing breaks
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> from unittest.mock import patch
+>>> with patch.object(sounds, "enabled", False):
+...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
 ```
 
 ### StepView.walk
@@ -147,7 +152,8 @@ Move the pick one fifth around the outer ring.
 **Examples**
 
 ```pycon
->>> view = StepView(LESSONS[0].steps[2])
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> view = StepView(CIRCLE_OF_FIFTHS.steps[2])
 >>> view.walk(1)
 >>> # noinspection PyUnresolvedReferences
 >>> view.circle.cell
@@ -170,7 +176,8 @@ Ask a new task, with a fresh circle and clean feedback.
 **Examples**
 
 ```pycon
->>> view = StepView(LESSONS[0].steps[3], rng=random.Random(1))
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
 >>> first = view.task
 >>> view.ask()
 >>> view.task is not None and view.again.isHidden()
@@ -208,7 +215,8 @@ One lesson being taken: the step, a progress bar, and Back and Next.
 **Examples**
 
 ```pycon
->>> view = LessonView(LESSONS[0])
+>>> from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
+>>> view = LessonView(CIRCLE_OF_FIFTHS)
 >>> view.counter.text()
 'Step 1 of 8'
 >>> view.go(to=1)

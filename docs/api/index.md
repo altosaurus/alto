@@ -19,6 +19,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.circle_schemes](alto.circle_schemes/) | The color schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
+| [alto.notation_terms](alto.notation_terms/) | Notation Identification terms, grouped by subject with their score placement and SMuFL code points. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
 | [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
@@ -53,6 +54,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.base](alto.lessons.base/) | What a lesson is made of: steps, and the small tasks inside them. |
 | [alto.lessons.circle_of_fifths](alto.lessons.circle_of_fifths/) | The lesson on the circle of fifths, taught from nothing. |
 | [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
+| [alto.lessons.pitches_and_notes](alto.lessons.pitches_and_notes/) | A first lesson connecting a sound, a piano key, and a written note. |
 | [alto.lessons.scale_identification](alto.lessons.scale_identification/) | Reading scales and recognizing their interval patterns. |
 
 ## alto.theory

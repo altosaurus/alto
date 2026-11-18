@@ -2,7 +2,7 @@
 title: alto.ui.staff
 parent: api
 package: alto.ui
-order: 54
+order: 56
 permalink: /api/alto.ui.staff/
 ---
 {% raw %}
@@ -187,7 +187,7 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `max_step` (*float or None*): The most width each column of notes may take.
 - `clef` (*str*): The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
 - `columns` (*list of list of Note*): The notes drawn; each inner list is one chord or note.
-- `note_color` (*QColor or None*): The color of the notes; None draws them in the notation style's ink.
+- `note_color` (*QColor or None*): Feedback color for the highlighted notation component, or for the notes in other exercises.
 - `column_colors` (*dict of int to QColor*): The color of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
 - `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
 - `wedge_colors` (*dict of int to QColor*): The color of particular wedges, by position from 0. The others take the color of the note on their right, or `note_color`.
@@ -238,6 +238,8 @@ def show_notes(
     key: int = 0,
     value: str = 'whole',
     caption: str = '',
+    notation_target: tuple[str, int] | None = None,
+    locate_notation: bool = False,
 ) -> None
 ```
 
@@ -250,6 +252,8 @@ Show some notes, with a clef and a key signature.
 - `key` (*int, default 0*): The key signature: that many sharps if positive, flats if negative. Keyword-only.
 - `value` (*str, default "whole"*): The note value to draw (stems are only drawn for single notes). Keyword-only.
 - `caption` (*str, default ""*): Text to write under the staff. Keyword-only.
+- `notation_target` (*tuple of (str, int) or None*): Part and position to highlight in a notation question. Keyword-only.
+- `locate_notation` (*bool, default False*): Render the target in ordinary ink for the learner to find. Keyword-only.
 
 **Examples**
 
@@ -289,11 +293,11 @@ A capped staff asks for its full capped width, so a layout that centers it gives
 def set_note_color(color: QColor | None) -> None
 ```
 
-Draw the notes in a color, for feedback, or back in the style's ink.
+Apply feedback to the highlighted notation component or to the notes when there is no component target.
 
 **Parameters**
 
-- `color` (*QColor or None*): The color; None to use the notation style's ink.
+- `color` (*QColor or None*): The feedback color. None restores the usual ink and highlight colors.
 
 **Examples**
 
@@ -349,5 +353,65 @@ Draw the paper, the staff lines, the clef, the key signature, the notes and the 
 >>> staff.show_notes([[Note.parse("C4")]], clef="treble")
 >>> staff.grab().toImage().pixelColor(200, 5).name()  # the white paper
 '#ffffff'
+```
+
+### StaffWidget.mouseMoveEvent
+
+```python
+def mouseMoveEvent(event: QMouseEvent) -> None
+```
+
+Preview the component under the pointer in Click on Staff questions.
+
+**Parameters**
+
+- `event` (*QMouseEvent*): The pointer position relative to the score.
+
+**Examples**
+
+```pycon
+>>> StaffWidget().hasMouseTracking()
+False
+```
+
+### StaffWidget.leaveEvent
+
+```python
+def leaveEvent(event: QEvent) -> None
+```
+
+Clear the component preview when the pointer leaves the music.
+
+**Parameters**
+
+- `event` (*QEvent*): The pointer leaving the staff.
+
+**Examples**
+
+```pycon
+>>> StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
+```
+
+### StaffWidget.hits_notation
+
+```python
+def hits_notation(point: QPoint) -> bool
+```
+
+Check for target ink within four logical pixels of a click on the score.
+
+**Parameters**
+
+- `point` (*QPoint*): Click position relative to the staff widget.
+
+**Returns**
+
+- *bool*: Whether the clicked neighborhood contains the selected marking.
+
+**Examples**
+
+```pycon
+>>> StaffWidget().hits_notation(QPoint(0, 0))
+False
 ```
 {% endraw %}

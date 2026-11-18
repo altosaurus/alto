@@ -2,7 +2,7 @@
 title: alto.exercises.library
 parent: api
 package: alto.exercises
-order: 9
+order: 10
 permalink: /api/alto.exercises.library/
 ---
 {% raw %}
@@ -1059,5 +1059,108 @@ True
 >>> q.answer in q.choices, q.place_clef, q.caption
 (True, '', 'Which clef is this?')
 >>> settings.clef_basics.question_type = "construction"
+```
+
+## NotationIdentification
+
+```python
+class NotationIdentification(Exercise)
+```
+
+Identify the highlighted part of a written phrase.
+
+**Examples**
+
+```pycon
+>>> q = NotationIdentification().generate(random.Random(2))
+>>> len(q.staff), q.answer in q.choices
+(4, True)
+```
+
+### NotationIdentification.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the terms eligible for review.
+
+**Returns**
+
+- *str*: The selected terms, or the original empty signature when all terms are enabled.
+
+**Examples**
+
+```pycon
+>>> NotationIdentification().settings_signature()
+''
+```
+
+### NotationIdentification.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to answer the notation question.
+
+**Returns**
+
+- *str*: Help for mouse and keyboard users.
+
+**Examples**
+
+```pycon
+>>> "number" in NotationIdentification().instructions()
+True
+```
+
+### NotationIdentification.refresh
+
+```python
+def refresh(question: Question) -> Question
+```
+
+Replace unchecked distractors in older practice questions before replay.
+
+**Parameters**
+
+- `question` (*Question*): Stored question matching the current settings signature.
+
+**Returns**
+
+- *Question*: The original notation with eligible answer buttons.
+
+**Examples**
+
+```pycon
+>>> ex = NotationIdentification()
+>>> q = ex.generate(random.Random(1))
+>>> ex.refresh(q) == q
+True
+```
+
+### NotationIdentification.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Choose a phrase and a single visible feature to highlight.
+
+**Parameters**
+
+- `rng` (*random.Random*): Source for the phrase, feature, and its position.
+
+**Returns**
+
+- *Question*: A short phrase with the selected marking and up to four checked answer choices.
+
+**Examples**
+
+```pycon
+>>> q = NotationIdentification().generate(random.Random(0))
+>>> q.notation_target[0] == q.answer
+True
 ```
 {% endraw %}

@@ -24,6 +24,7 @@ from alto.exercises.base import (
     register,
     signature,
 )
+from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
 from alto.settings import spell
 from alto.theory.fifths import (
     MAJORS,
@@ -2471,4 +2472,195 @@ class ClefBasics(Exercise):
             caption=f"Place the {words} clef.",  # the question goes under the staff, in the white area
             place_clef=clef,
             explanation=CLEF_FACTS[clef],
+        )
+
+
+@register
+class NotationIdentification(Exercise):
+    """
+    Identify the highlighted part of a written phrase.
+
+    Examples
+    --------
+    >>> q = NotationIdentification().generate(random.Random(2))
+    >>> len(q.staff), q.answer in q.choices
+    (4, True)
+    """
+
+    name = "Notation Identification"
+    category = "Notation"
+    description = "Name a highlighted marking or find a named component on the staff."
+    has_sound = False
+
+    def settings_signature(self) -> str:
+        """
+        Identify the terms eligible for review.
+
+        Returns
+        -------
+        str
+            The selected terms, or the original empty signature when all terms are enabled.
+
+        Examples
+        --------
+        >>> NotationIdentification().settings_signature()
+        ''
+        """
+        if settings.notation.question_type == "staff":
+            return signature("staff", settings.notation.terms)
+        return "" if settings.notation.terms == set(settings.NOTATION_TERMS) else signature(settings.notation.terms)
+
+    def instructions(self) -> str:
+        """
+        Explain how to answer the notation question.
+
+        Returns
+        -------
+        str
+            Help for mouse and keyboard users.
+
+        Examples
+        --------
+        >>> "number" in NotationIdentification().instructions()
+        True
+        """
+        if settings.notation.question_type == "staff":
+            return "Read the prompt, then click the named component in the music."
+        return "Look for the blue part of the music. Click its name or press the number shown on the matching button."
+
+    @staticmethod
+    def _choices(part: str, *, group: str, rng: random.Random) -> list[str]:
+        """
+        Pick up to four checked terms, favoring the target's category and close visual matches.
+
+        Parameters
+        ----------
+        part : str
+            The highlighted term.
+        group : str
+            Category containing the target. Keyword-only.
+        rng : random.Random
+            Source for sampling and ordering the buttons. Keyword-only.
+
+        Returns
+        -------
+        list of str
+            Distinct enabled answers, including the target.
+
+        Examples
+        --------
+        >>> "Turn" in NotationIdentification._choices("Turn", group="Ornaments", rng=random.Random(0))
+        True
+        """
+        alternatives = [term for term in CATALOG[group] if term != part and term in settings.notation.terms]
+        rng.shuffle(alternatives)
+        if rng.random() < 0.8:
+            similar = next((family for family in SIMILAR_MARKS if part in family), ())
+            alternatives.sort(key=lambda term: term not in similar)
+        if len(alternatives) < 3:
+            others = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms and term not in CATALOG[group]]
+            alternatives.extend(rng.sample(others, min(len(others), 3 - len(alternatives))))
+        choices = [part, *alternatives[:3]]
+        rng.shuffle(choices)
+        return choices
+
+    def refresh(self, question: Question) -> Question:
+        """
+        Replace unchecked distractors in older practice questions before replay.
+
+        Parameters
+        ----------
+        question : Question
+            Stored question matching the current settings signature.
+
+        Returns
+        -------
+        Question
+            The original notation with eligible answer buttons.
+
+        Examples
+        --------
+        >>> ex = NotationIdentification()
+        >>> q = ex.generate(random.Random(1))
+        >>> ex.refresh(q) == q
+        True
+        """
+        if all(term in settings.notation.terms for term in question.choices):
+            return question
+        group = next(name for name, terms in CATALOG.items() if question.answer in terms)
+        choices = self._choices(question.answer, group=group, rng=random.Random(question.item_key()))
+        return replace(question, choices=choices, grid={choice: divmod(i, 2) for i, choice in enumerate(choices)})
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Choose a phrase and a single visible feature to highlight.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Source for the phrase, feature, and its position.
+
+        Returns
+        -------
+        Question
+            A short phrase with the selected marking and up to four checked answer choices.
+
+        Examples
+        --------
+        >>> q = NotationIdentification().generate(random.Random(0))
+        >>> q.notation_target[0] == q.answer
+        True
+        """
+        phrase = rng.choice(("E4 G4 A4 G4", "B4 A4 G4 E4", "G4 B4 D5 C5", "D5 C5 A4 B4"))
+        part = rng.choice([term for term in settings.NOTATION_TERMS if term in settings.notation.terms])
+        group = next(name for name, terms in CATALOG.items() if part in terms)
+        locate = settings.notation.question_type == "staff"
+        choices = [] if locate else self._choices(part, group=group, rng=rng)
+        placement, symbol = MARKS[part]
+        position = rng.randrange(4)
+        clef = "treble"
+        if part == "Staff line":
+            position = rng.randrange(5)
+        elif placement == "clef":
+            clef = str(symbol)
+            phrase = {"bass": "G2 B2 C3 D3", "tenor": "D3 F3 A3 G3", "baritone": "B2 D3 F3 G3"}.get(clef, "C4 D4 E4 D4")
+        notes = phrase.split()
+        if part in ("Tie", "Slur", "Beam", "Triplet", "Glissando"):
+            position = 0
+            notes = ["E4", "E4" if part == "Tie" else "G4", "A4", "G4"]
+        if part == "Ledger line":
+            notes[position] = "C4"
+        key = 2 if part == "Key signature" else 0
+        if key:
+            notes = ["D4", "F#4", "A4", "D5"]
+        staff = [[Note.parse(name)] for name in notes]
+        if placement == "rest":
+            staff[position] = []
+        elif placement == "arpeggio":
+            staff[position] = [Note.parse(name) for name in ("E4", "G4", "B4")]
+        context = {
+            "Brass": "brass part",
+            "Woodwinds": "woodwind part",
+            "Strings and plucked instruments": "string part",
+            "Keyboard and organ": "keyboard part",
+        }.get(group)
+        prompt = f"Which marking in this {context} is highlighted?" if context else "Which part of the music is highlighted?"
+        if locate:
+            ordinal = ("first", "second", "third", "fourth", "fifth")[position]
+            if part == "Staff line":
+                prompt = f"Click the {ordinal} staff line from the bottom."
+            elif part in ("Notehead", "Stem"):
+                prompt = f"Click the {part.lower()} of the {ordinal} note."
+            else:
+                prompt = f"Click the {part.lower()}."
+        return Question(
+            prompt,
+            staff=staff,
+            clef=clef,
+            key=key,
+            grid={choice: divmod(i, 2) for i, choice in enumerate(choices)},
+            value="half" if locate and part == "Quarter note" else "quarter",
+            choices=choices,
+            answer=part,
+            notation_target=(part, position),
         )

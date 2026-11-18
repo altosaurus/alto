@@ -140,11 +140,13 @@ CLEF_BASICS = Lesson(
         Step(
             title="What a clef does",
             text=(
-                "<p>Music is written on five lines. But the lines do not mean a note by themselves: which note each line is "
-                "depends on the <b>clef</b> at the start.</p>"
-                "<p>The staves on the right have a note on the bottom line. In the treble clef it is E. In the bass clef it is "
-                "G. The same place on the page is a different note.</p>"
-                "<p>So a clef is a key to the staff, and you need it to read any note.</p>"
+                "<p>A musical sound has a <b>pitch</b>: how high or low it sounds. A written <b>note</b> shows a pitch "
+                "by its place on a <b>staff</b>, a set of five lines. Notes sit on the lines and in the spaces between them. "
+                "Count the lines from the bottom. "
+                "Notes have letter names from A through G. The symbol at the start of the staff, called a <b>clef</b>, "
+                "tells you which letter goes where.</p>"
+                "<p>Compare the two examples. The <b>treble clef</b> marks G on the second line, making the bottom line E. "
+                "The <b>bass clef</b> marks F on the fourth line, making the bottom line G.</p>"
             ),
             staves=(
                 Staff(clef="treble", note="E4", caption="Treble clef: the bottom line is E"),
@@ -154,10 +156,12 @@ CLEF_BASICS = Lesson(
         Step(
             title="Three symbols",
             text=(
-                "<p>Every clef is one of three symbols: the <b>G clef</b>, the <b>C clef</b> and the <b>F clef</b>. They are "
-                "old, stylised letters.</p>"
+                "<p>The clefs in this lesson use three symbols: the <b>G clef</b>, the <b>C clef</b> and the <b>F "
+                "clef</b>. They are "
+                "old, stylized letters.</p>"
                 "<p>A clef is a symbol put on a particular line, and the symbol says which note that line is. The G clef "
-                "says it is G, the F clef says F, and the C clef says <b>middle C</b>.</p>"
+                "says it is G, the F clef says F, and the C clef marks <b>middle C</b>, the C nearest the center of "
+                "a piano keyboard.</p>"
                 "<p>So there are not many symbols to learn. The different clefs are the same three, put on different lines.</p>"
             ),
             staves=(

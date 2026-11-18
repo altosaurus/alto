@@ -2,7 +2,7 @@
 title: alto.ui.home
 parent: api
 package: alto.ui
-order: 35
+order: 37
 permalink: /api/alto.ui.home/
 ---
 {% raw %}
@@ -135,7 +135,7 @@ Make the card of a lesson: the icon of the exercise that practices the same topi
 ```pycon
 >>> card = lesson_card(LESSONS[0])
 >>> card.accessibleName()
-'The Circle of Fifths, Scales & Keys'
+'Pitches and Notes, Notation'
 ```
 
 ## HomePage

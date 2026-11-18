@@ -2,7 +2,7 @@
 title: alto.lessons.clef_basics
 parent: api
 package: alto.lessons
-order: 17
+order: 18
 permalink: /api/alto.lessons.clef_basics/
 ---
 {% raw %}

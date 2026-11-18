@@ -2,7 +2,7 @@
 title: alto.settings
 parent: api
 package: alto
-order: 6
+order: 7
 permalink: /api/alto.settings/
 ---
 {% raw %}
@@ -934,6 +934,24 @@ Return the clefs to offer as buttons when a clef is to be named: those asked for
 ['alto', 'tenor']
 >>> ClefBasicsSettings(clefs={"alto"}).answer_clefs()
 ['treble', 'alto']
+```
+
+## NotationSettings
+
+```python
+NotationSettings(
+    terms: set[str] = field(default_factory=lambda: set(NOTATION_TERMS)),
+    question_type: str = 'button',
+)
+```
+
+Terms eligible to be highlighted in Notation Identification.
+
+**Examples**
+
+```pycon
+>>> "Notehead" in NotationSettings().terms
+True
 ```
 
 ## CircleSettings

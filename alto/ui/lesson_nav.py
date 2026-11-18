@@ -209,7 +209,7 @@ class LessonNav(QListWidget):
         >>> _ = nav.lesson_chosen.connect(chosen.append)
         >>> nav._clicked(nav.item(1))
         >>> chosen
-        ['circle-of-fifths']
+        ['pitches-and-notes']
         """
         step = item.data(STEP_ROLE)
         if isinstance(step, int):

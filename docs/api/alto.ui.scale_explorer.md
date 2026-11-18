@@ -2,7 +2,7 @@
 title: alto.ui.scale_explorer
 parent: api
 package: alto.ui
-order: 52
+order: 54
 permalink: /api/alto.ui.scale_explorer/
 ---
 {% raw %}

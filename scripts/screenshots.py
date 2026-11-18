@@ -68,6 +68,9 @@ SHOTS = (
     "keyboard",
     "note-construction",
     "intervals",
+    "scales",
+    "chords",
+    "notation",
     "arpeggios",
     "key-signatures",
     "circle-of-fifths",
@@ -297,10 +300,15 @@ def capture(
         ("KeyboardNotes", "keyboard"),
         ("NoteConstruction", "note-construction"),
         ("IntervalNames", "intervals"),
+        ("ScaleIdentification", "scales"),
+        ("ChordQualities", "chords"),
+        ("NotationIdentification", "notation"),
         ("ArpeggioNames", "arpeggios"),
         ("KeySignatures", "key-signatures"),
         ("CircleOfFifths", "circle-of-fifths"),
     ):
+        if cls == "NotationIdentification":
+            settings.notation.terms = {"Clef", "Notehead", "Stem", "Flag"}
         if cls == "KeySignatures":  # show a signature on an alto clef staff, whatever the default is
             settings.key_signatures.clefs = {"alto"}
             settings.key_signatures.modes = {"Major (Ionian)"}
