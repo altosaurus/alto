@@ -1,9 +1,7 @@
 name: Tests
 
-# Run the test suite on every pull request and on every push to main. A push to main runs every Python version that has not reached
-# end of life (see https://devguide.python.org/versions/; when one does, drop it in ALL below and in pyproject.toml). A pull request runs
-# the oldest and the newest, which is where a break shows first, and a pull request that changes only the docs runs one version of the
-# tests that read the docs. scripts/changed_tests.py decides which kind of change it is.
+# Pull requests run the full suite on the oldest and newest supported Python, the documentation
+# tests on one version, or no pytest job for housekeeping. Pushes to main run every version.
 on:
   push:
     branches: [main]
@@ -22,6 +20,7 @@ jobs:
   scope:
     runs-on: ubuntu-latest
     outputs:
+      kind: ${{ steps.decide.outputs.kind }}
       versions: ${{ steps.decide.outputs.versions }}
       targets: ${{ steps.decide.outputs.targets }}
     steps:
@@ -35,28 +34,37 @@ jobs:
           BASE: ${{ github.event.pull_request.base.sha }}
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
+          kind=code
           versions="$ALL"
           targets=""
           if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
             versions='["3.11", "3.15"]'
-            if [ "$(python3 scripts/changed_tests.py --kind --base "$BASE" --head "$HEAD")" = docs ]; then
+            kind=$(python3 scripts/changed_tests.py --kind --base "$BASE" --head "$HEAD")
+            if [ "$kind" = docs ]; then
               versions='["3.14"]'
               targets=$(python3 scripts/changed_tests.py --base "$BASE" --head "$HEAD")
             fi
           fi
+          echo "kind=$kind" >> "$GITHUB_OUTPUT"
           echo "versions=${versions}" >> "$GITHUB_OUTPUT"
           echo "targets=${targets}" >> "$GITHUB_OUTPUT"
-          echo "Versions: ${versions}; tests: ${targets:-all}"
+          echo "Test scope: $kind"
 
   pytest:
     needs: scope
+    if: needs.scope.outputs.kind != 'skip'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         python-version: ${{ fromJSON(needs.scope.outputs.versions) }}
+    env:
+      # The oldest version is present on both PRs and pushes to main.
+      COVERAGE_RUN: ${{ needs.scope.outputs.kind == 'code' && matrix.python-version == fromJSON(needs.scope.outputs.versions)[0] }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ env.COVERAGE_RUN == 'true' && '0' || '1' }}
 
       - uses: actions/setup-python@v5
         with:
@@ -73,6 +81,27 @@ jobs:
 
       - name: Run the tests
         env:
-          QT_QPA_PLATFORM: offscreen
+          ALTO_COVERAGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           TARGETS: ${{ needs.scope.outputs.targets }}
-        run: sh scripts/run-tests.sh $TARGETS
+        run: |
+          if [ "$COVERAGE_RUN" = true ]; then
+            sh scripts/run-tests.sh --patch-coverage
+          else
+            sh scripts/run-tests.sh $TARGETS
+          fi
+
+      - name: Attach pytest coverage report
+        if: ${{ !cancelled() && env.COVERAGE_RUN == 'true' && hashFiles('coverage.xml') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-coverage
+          path: coverage.xml
+          if-no-files-found: error
+          overwrite: true
+
+  codecov:
+    needs: [scope, pytest]
+    if: ${{ !cancelled() && needs.scope.outputs.kind == 'code' }}
+    uses: ./.github/workflows/codecov.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

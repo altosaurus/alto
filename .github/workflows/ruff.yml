@@ -1,17 +1,20 @@
 name: Ruff
 
-# Checks the code with Ruff, its formatting and then its rules, on every pull request and every push to main. Until now Ruff only ran in the
-# pre-commit hook, so a change made without the hook installed was not checked. The version is the one of the hook (.pre-commit-config.yaml),
-# so that both hold the code to the same rules; a test keeps the two the same.
+# The installed Ruff version matches the pre-commit hook. Check relevant pull requests and every push to main.
 on:
   push:
     branches: [main]
   pull_request:
-    # A change to the docs alone cannot break this, and the Tests workflow runs the tests that read the docs. (Nothing requires
-    # this check to pass, so a pull request that skips it is not left waiting; if that changes, skip with a job-level `if` instead.)
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
+    paths:
+      - "**/*.py"
+      - "**/*.pyi"
+      - "**/*.ipynb"
+      - "**/pyproject.toml"
+      - "**/ruff.toml"
+      - "**/.ruff.toml"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/ruff.yml"
+      - "!work/**"
 
 permissions:
   contents: read

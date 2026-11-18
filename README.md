@@ -106,7 +106,7 @@ Guides for every exercise, how the practice scheduling works, the statistics, se
 
 ```bash
 .venv/bin/pip install -e ".[dev]"
-.venv/bin/pre-commit install     # whitespace and Ruff checks on commit, tests on push
+.venv/bin/pre-commit install     # commit checks, push checks, and merged local branch cleanup
 .venv/bin/pytest
 .venv/bin/ruff check alto tests
 ```

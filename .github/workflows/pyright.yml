@@ -1,15 +1,20 @@
 name: Pyright
 
-# Check the types with Pyright on every pull request and every push to main.
+# Check types for relevant pull requests and every push to main.
 on:
   push:
     branches: [main]
   pull_request:
-    # A change to the docs alone cannot break this, and the Tests workflow runs the tests that read the docs. (Nothing requires
-    # this check to pass, so a pull request that skips it is not left waiting; if that changes, skip with a job-level `if` instead.)
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
+    paths:
+      - "**/*.py"
+      - "**/*.pyi"
+      - "**/py.typed"
+      - "pyproject.toml"
+      - "pyrightconfig.json"
+      - "uv.lock"
+      - "scripts/typecheck.sh"
+      - ".github/workflows/pyright.yml"
+      - "!work/**"
 
 permissions:
   contents: read
