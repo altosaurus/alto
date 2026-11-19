@@ -111,23 +111,25 @@ Build the card for one exercise.
 ### ExerciseCard.set_counts
 
 ```python
-def set_counts(counts: tuple[int, int] | None) -> None
+def set_counts(counts: tuple[int, int] | tuple[int, int, int] | None) -> None
 ```
 
-Show the available reviews and new questions in the upper right corner.
+Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.
 
 **Parameters**
 
-- `counts` (*tuple of int and int or None*): Reviews due and new cards available, or None in untimed practice.
+- `counts` (*tuple of int or None*): Reviews due, new cards available, and optionally the outstanding incorrect count. None hides the counts.
 
 **Examples**
 
 ```pycon
 >>> from alto.exercises.library import NoteNames
 >>> card = ExerciseCard(NoteNames)
->>> card.set_counts((2, 3))
->>> card.counts.toolTip()
-'2 reviews due, 3 new cards available'
+>>> card.set_counts((2, 3, 1))
+>>> print(card.counts.toolTip())
+Blue — 3 new cards available
+Red — 1 incorrect card awaiting a correct answer
+Green — 2 reviews due
 ```
 
 ## lesson_card
@@ -167,6 +169,7 @@ HomePage(
     *,
     parent: QWidget | None = None,
     learner: Learner | None = None,
+    filter_layout: QHBoxLayout | None = None,
 )
 ```
 
@@ -178,11 +181,13 @@ The start screen: a row of exercise buttons for each category.
 
 - `exercise_chosen` (*Signal*): Emitted with the `Exercise` class when a card is clicked.
 - `lesson_chosen` (*Signal*): Emitted with a lesson's key when its card is clicked.
+- `filters_changed` (*Signal*): Emitted after a change to the search, tile selection or displayed section.
 - `cards` (*list of ExerciseCard*): One per exercise, in registry order.
 - `lesson_cards` (*list of TileCard*): One per lesson, with how far through it you are.
 - `canvas` (*TransitionCanvas*): Where the transition between the exercises and the lessons is drawn.
 - `mode_control` (*SegmentedControl*): The switch between the exercises and the lessons. The main window puts it in its top bar.
 - `resume_button` (*QPushButton*): Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.
+- `category_filter` (*QToolButton*): Shows or hides the filter sidebar from the right end of the search row.
 - `no_results` (*QLabel*): Shown when no tiles match the search.
 - `mode` (*str*): "exercises" or "lessons": which cards are showing.
 - `scroll_area` (*QScrollArea*): Scrolls the rows when the window is shorter than all of them.
@@ -208,6 +213,7 @@ Build the page.
 - `registry` (*iterable of type of Exercise*): The exercises to show, in the order to show them.
 - `parent` (*QWidget or None, default None*): The widget that owns the page. Keyword-only.
 - `learner` (*Learner or None*): Profile supplying the exercise tile counts.
+- `filter_layout` (*QHBoxLayout or None*): Shared workspace layout for the filter sidebar. A standalone page places it beside its tiles.
 
 **Constructor examples**
 
@@ -227,7 +233,7 @@ Show only tiles matching a title, description or category search.
 
 **Parameters**
 
-- `text` (*str*): Case-insensitive search text; empty text restores all tiles.
+- `text` (*str*): Case-insensitive search text. Empty text shows every tile in the selected category.
 
 **Examples**
 
@@ -237,6 +243,124 @@ Show only tiles matching a title, description or category search.
 >>> page.set_search("keyboard")
 >>> page._query
 'keyboard'
+```
+
+### HomePage.matches_filter
+
+```python
+def matches_filter(
+    card: TileCard,
+    *,
+    section: str,
+) -> bool
+```
+
+Check whether a tile matches the search text and the selection for its section.
+
+**Parameters**
+
+- `card` (*TileCard*): Exercise or lesson tile to check.
+- `section` (*str*): Section containing the tile, either "exercises" or "lessons".
+
+**Returns**
+
+- *bool*: True if both filters include the tile.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> page = HomePage([NoteNames])
+>>> page.matches_filter(page.cards[0], section="exercises")
+True
+```
+
+### HomePage.eventFilter
+
+```python
+def eventFilter(
+    watched: QObject,
+    event: QEvent,
+) -> bool
+```
+
+Fit the open filter sidebar when its workspace changes width.
+
+**Parameters**
+
+- `watched` (*QObject*): Widget containing the activity and sidebar.
+- `event` (*QEvent*): Event delivered to the widget.
+
+**Returns**
+
+- *bool*: Whether the base widget consumes the event.
+
+**Examples**
+
+```pycon
+Dragging the navigation divider resizes the space available for the filters.
+```
+
+### HomePage.set_filter_available
+
+```python
+def set_filter_available(available: bool) -> None
+```
+
+Show the filter control on browsing and exercise pages, remembering the sidebar's open state.
+
+**Parameters**
+
+- `available` (*bool*): Whether the current page supports filtering.
+
+**Examples**
+
+```pycon
+>>> page = HomePage([])
+>>> page.set_filter_available(False)
+>>> page.category_filter.isHidden()
+True
+```
+
+### HomePage.restore_tile_filters
+
+```python
+def restore_tile_filters(
+    selections: dict[str, frozenset[str]],
+    *,
+    expanded: bool | None = None,
+) -> None
+```
+
+Restore exercise and lesson checkboxes after a theme change.
+
+**Parameters**
+
+- `selections` (*dict of str to frozenset of str*): Checked tile titles for each section with a saved filter.
+- `expanded` (*bool or None*): Restore the sidebar at its open or closed width immediately. None keeps its current state.
+
+**Examples**
+
+```pycon
+>>> HomePage([]).restore_tile_filters({})
+```
+
+### HomePage.set_category
+
+```python
+def set_category(category: str | None) -> None
+```
+
+Select the tiles of one category, or all tiles when the category is absent.
+
+**Parameters**
+
+- `category` (*str or None*): Case-folded category name, or None for all tiles.
+
+**Examples**
+
+```pycon
+>>> HomePage([]).set_category(None)
 ```
 
 ### HomePage.set_mode
@@ -293,7 +417,7 @@ False
 def refresh_counts() -> None
 ```
 
-Refresh the visible exercise tiles from the same queues used for practice.
+Refresh each exercise tile and the totals for the current filters.
 
 **Examples**
 

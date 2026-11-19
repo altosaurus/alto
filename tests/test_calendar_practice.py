@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 from fsrs import Card, Rating, State
 from PySide6.QtCore import QPoint, Qt
+from PySide6.QtGui import QTextDocumentFragment
 from PySide6.QtTest import QSignalSpy, QTest
 from PySide6.QtWidgets import QApplication
 
@@ -536,6 +537,97 @@ def test_lingering_on_a_miss_prefers_another_available_card(mode: str) -> None:
     learner.record(ex, question=other, answer="?", correct=False, attempt_no=1, seconds=1, now=NOW + 60)
     assert learner.pick(ex, rng=rng, avoid=first.item_key(), now=NOW + 120).item_key() == other.item_key()
     assert learner.calendar.tile_counts(ex, profile=learner.profile.id, mode=mode, now=NOW + 120) == (1, 0, 2)
+
+
+@pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
+def test_tile_tracks_missed_card_until_correct(app: QApplication, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
+    """
+    Show one outstanding miss on returning to the grid and clear it after a correct scheduled retry.
+
+    Parameters
+    ----------
+    app : QApplication
+        Desktop application fixture.
+    monkeypatch : pytest.MonkeyPatch
+        Set the clock and choose a single note.
+    mode : str
+        Calendar scheduler.
+    """
+    monkeypatch.setattr(time, "time", lambda: NOW)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode(mode)
+    learner.calendar.set_limits(learner.profile.id, new_cards=0, reviews=None)
+    learner.calendar.set_limits(learner.profile.id, exercise="NoteNames", new_cards=1, reviews=None)
+    learner.calendar.set_limits(learner.profile.id, exercise="NotationIdentification", new_cards=3, reviews=None)
+    window = MainWindow(learner)
+    monkeypatch.setattr(
+        settings,
+        "note_names",
+        settings.NoteNameSettings(clefs={"treble"}, ranges={"treble": (28, 28)}, key_signatures={0}),
+    )
+    window.show()
+    window.home.set_mode("exercises", animate=False)
+    totals = window.home.queue_totals
+    assert totals.isVisible()
+    first_tile = window.home.cards[0]
+    for width in (680, 1200):
+        window.resize(width, 600)
+        app.processEvents()
+        counter_top = totals.mapToGlobal(totals.contentsRect().topRight())
+        tile_top = first_tile.mapToGlobal(first_tile.rect().topLeft())
+        assert counter_top.x() < tile_top.x()
+        assert tile_top.y() <= counter_top.y() < tile_top.y() + first_tile.height()
+    assert QTextDocumentFragment.fromHtml(totals.text()).toPlainText().splitlines() == ["4 New", "0 Learn", "0 Due"]
+    window.home.set_search("Note Identification")
+    assert totals.isVisible() and "1 new card available" in totals.accessibleName()
+    window.open_exercise(NoteNames)
+    view = window._exercise_page
+    assert view is not None and view.question is not None
+    counts = view.queue_counts
+    assert counts.isVisible() and counts.text().split(" / ")[0].endswith("<u>1</u></b>")
+    assert counts.toolTip() == "1 new card available (current card), 0 incorrect cards awaiting a correct answer, 0 reviews due"
+    view.submit("wrong", button=None)
+    assert "<u>" not in counts.text() and "1 incorrect card" in counts.accessibleName()
+    window.show_home()
+    assert QTextDocumentFragment.fromHtml(totals.text()).toPlainText().splitlines() == ["0 New", "1 Learn", "0 Due"]
+    tile = next(card for card in window.home.cards if card.exercise_class is NoteNames)
+    assert tile.counts.isVisible() and tile.counts.text().split(" &nbsp; ")[1].endswith('">1</b>')
+    assert "1 incorrect card awaiting a correct answer" in tile.accessibleDescription()
+    monkeypatch.setattr(time, "time", lambda: NOW + 60)
+    window.home.refresh_counts()
+    assert QTextDocumentFragment.fromHtml(totals.text()).toPlainText().splitlines() == ["0 New", "1 Learn", "1 Due"]
+    window.home.set_category("chords")
+    assert totals.values == (0, 0, 0) and window.home.no_results.isVisible()
+    window.home.set_search("")
+    assert totals.values == (0, 0, 0) and not window.home.no_results.isVisible()
+    window.home.set_category("notation")
+    assert totals.values == (1, 3, 1)
+    note_tile = window.home._filter_leaves["Note Identification"]
+    note_tile.setCheckState(0, Qt.CheckState.Unchecked)
+    assert totals.values == (0, 3, 0)
+    note_tile.setCheckState(0, Qt.CheckState.Checked)
+    assert totals.values == (1, 3, 1)
+    window.home.set_search("Note Identification")
+    window.open_exercise(NoteNames)
+    view.next_question()
+    assert view.question is not None
+    assert counts.text().split(" / ")[1].endswith("<u>1</u></b>") and "1 review due" in counts.toolTip()
+    view.submit(view.question.answer, button=None)
+    assert counts.toolTip() == "0 new cards available, 0 incorrect cards awaiting a correct answer, 0 reviews due"
+    window.show_home()
+    assert tile.counts.text().split(" &nbsp; ")[1].endswith('">0</b>')
+    assert "0 incorrect cards awaiting a correct answer" in tile.counts.toolTip()
+    assert QTextDocumentFragment.fromHtml(totals.text()).toPlainText().splitlines() == ["0 New", "0 Learn", "0 Due"]
+    window.home.set_mode("lessons", animate=False)
+    assert totals.isHidden()
+    due_at = db.conn.execute("SELECT due FROM review_schedules").fetchone()[0]
+    monkeypatch.setattr(time, "time", lambda: due_at)
+    window.open_exercise(NoteNames)
+    view.next_question()
+    assert counts.text().split(" / ")[2].endswith("<u>1</u></b>")
+    assert "1 review due (current card)" in counts.accessibleName()
+    window.close()
 
 
 def test_daily_limit_and_profile_history() -> None:
@@ -1093,7 +1185,7 @@ def test_scheduler_controls(app: QApplication, monkeypatch: pytest.MonkeyPatch) 
     window.show()
     window.home.set_mode("exercises", animate=False)
     card = next(c for c in window.home.cards if c.exercise_class is NoteNames)
-    assert card.counts.isHidden()
+    assert card.counts.isHidden() and window.home.queue_totals.isHidden()
     window.open_settings()
     dialog = window._settings
     changes = QSignalSpy(dialog.scheduler_changed)
@@ -1119,7 +1211,8 @@ def test_scheduler_controls(app: QApplication, monkeypatch: pytest.MonkeyPatch) 
     assert learner.mode == "FSRS" and "Free Spaced Repetition Scheduler" in dialog.scheduler_description.text()
     assert changes.count() == 2
     app.processEvents()
-    assert card.counts.isVisible() and "0 reviews due, 1 new card available" in card.accessibleDescription()
+    assert card.counts.isVisible()
+    assert "1 new card available, 0 incorrect cards awaiting a correct answer, 0 reviews due" in card.accessibleDescription()
     dialog.close()
     card.click()
     view = window._exercise_page
@@ -1129,7 +1222,7 @@ def test_scheduler_controls(app: QApplication, monkeypatch: pytest.MonkeyPatch) 
     assert view.question is None and view.next_button.text() == "Check again"
     assert view.prompt.isVisible() and not view.buttons
     window.show_home()
-    assert "0 reviews due, 0 new cards available" in card.accessibleDescription()
+    assert "0 new cards available, 0 incorrect cards awaiting a correct answer, 0 reviews due" in card.accessibleDescription()
     card.click()
     assert view.question is None
     window.open_settings()
@@ -1138,6 +1231,7 @@ def test_scheduler_controls(app: QApplication, monkeypatch: pytest.MonkeyPatch) 
     assert "Free Spaced Repetition Scheduler" in window._settings.scheduler_description.text()
     window._settings.scheduler_list.setCurrentRow(0)
     assert view.question is not None
+    assert view.queue_counts.isHidden() and not view._count_timer.isActive()
     window._settings.close()
     window.show_home()
     assert card.counts.isHidden()

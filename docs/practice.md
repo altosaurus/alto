@@ -182,7 +182,7 @@ After the first answer, ASRS draws F♯ again within nine intervening questions 
 
 ## Daily limits
 
-For SM-2 and FSRS, exercise tiles show **due reviews in green** and **new cards in blue**. Due reviews come first. The default allowance for each exercise is **10 new cards and 200 reviews per local day**. Change those numbers in **Settings → Practice**, or open an exercise’s **Daily Limits** submenu and clear **Use global** to override either number for that exercise.
+For SM-2 and FSRS, exercise tiles show **new cards in blue**, **missed cards awaiting a correct answer in red**, and **due reviews in green**. Below the search bar, **New**, **Learn**, and **Due** show the totals for checked exercise tiles that match the search text. A missed card stays in the red count while it waits and when it becomes due. Another miss on that card still counts as one. Due reviews come first. The default allowance for each exercise is **10 new cards and 200 reviews per local day**. Change those numbers in **Settings → Practice**, or open an exercise’s **Daily Limits** submenu and clear **Use global** to override either number for that exercise. Check **Unlimited** to remove the daily cap on new cards, reviews, or both. A limit of zero pauses that kind of practice.
 
 On the exercise screen, the counts appear at the top, immediately to the left of the score and streak, in **blue / red / green** order: new cards, outstanding incorrect cards, and due reviews. The underlined number identifies the current card’s queue. A retry that is due appears in both the red and green counts, with red underlined while you answer it.
 

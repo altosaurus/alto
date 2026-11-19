@@ -11,11 +11,38 @@ Examples
 
 from pathlib import Path
 
-from PySide6.QtGui import QColor, QPalette
+from PySide6.QtGui import QColor, QFont, QPalette
 
-from alto.ui.colors import blend_name
+from alto.ui.colors import blend, blend_name
 
 RADIUS = 10
+
+
+def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]:
+    """
+    Style category headings in the navigation pane and tile filters.
+
+    Parameters
+    ----------
+    palette : QPalette
+        The pane's current palette.
+
+    Returns
+    -------
+    tuple of QFont and QColor
+        The small, spaced capitals and muted foreground used for section headings.
+
+    Examples
+    --------
+    >>> navigation_heading_style(QPalette())[0].bold()
+    True
+    """
+    font = QFont()
+    font.setPixelSize(10)
+    font.setBold(True)
+    font.setCapitalization(QFont.Capitalization.AllUppercase)
+    font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.3)
+    return font, blend(palette.text().color(), b=palette.window().color(), t=0.5)
 
 
 def _button_colors(palette: QPalette) -> dict[str, str]:
@@ -115,6 +142,7 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
         nav_hover=blend_name(window_c, b=text_c, t=0.07),
         nav_selected=blend_name(window_c, b=accent_c, t=0.2),
         check=(ui_assets / "check.svg").as_posix(),
+        dash=(ui_assets / "dash.svg").as_posix(),
         chevron_up=(ui_assets / "chevron-up.svg").as_posix(),
         chevron=(ui_assets / "chevron.svg").as_posix(),
     )
@@ -246,16 +274,21 @@ QComboBox[field="true"] QAbstractItemView {{
 
 /* Check boxes and radio buttons: rounded, soft-edged, and filled with the accent color when selected. */
 QCheckBox, QRadioButton {{ spacing: 10px; }}
-QCheckBox::indicator, QRadioButton::indicator {{
+QCheckBox::indicator, QRadioButton::indicator, QTreeView#tileFilterTree::indicator {{
     width: 18px;
     height: 18px;
     border: 1.5px solid {box_edge};
     background: palette(base);
 }}
-QCheckBox::indicator {{ border-radius: 6px; }}
+QCheckBox::indicator, QTreeView#tileFilterTree::indicator {{ border-radius: 6px; }}
 QRadioButton::indicator {{ border-radius: 10px; }}
 QCheckBox::indicator:hover, QRadioButton::indicator:hover {{ border-color: {accent}; }}
-QCheckBox::indicator:checked {{ background: {accent}; border-color: {accent}; image: url({check}); }}
+QCheckBox::indicator:checked, QTreeView#tileFilterTree::indicator:checked {{
+    background: {accent}; border-color: {accent}; image: url({check});
+}}
+QTreeView#tileFilterTree::indicator:indeterminate {{
+    background: {accent}; border-color: {accent}; image: url({dash});
+}}
 QRadioButton::indicator:checked {{
     border-color: {accent};
     background: qradialgradient(cx: .5, cy: .5, radius: .5, fx: .5, fy: .5,
@@ -338,6 +371,15 @@ QMenu#appMenu {{
     border-radius: {rp}px;
     padding: 6px;
 }}
+QTreeView#tileFilterTree {{
+    background: transparent;
+    color: palette(text);
+    border: none;
+    outline: 0;
+}}
+QTreeView#tileFilterTree::item {{ min-height: 22px; padding: 3px 6px; border-radius: {r2}px; }}
+QTreeView#tileFilterTree::item:hover {{ background: {button_hover}; }}
+QTreeView#tileFilterTree::item:selected {{ background: {nav_selected}; color: {accent}; }}
 QMenu::item {{ padding: 8px 30px 8px 14px; border-radius: {r3}px; margin: 1px 0; }}
 QMenu::item:selected {{ background: palette(highlight); color: palette(highlighted-text); }}
 QMenu::item:disabled {{ color: gray; }}

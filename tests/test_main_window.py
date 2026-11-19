@@ -16,7 +16,7 @@ from PySide6.QtCore import (
     QSize,
     Qt,
 )
-from PySide6.QtGui import QKeySequence
+from PySide6.QtGui import QHelpEvent, QKeySequence
 from PySide6.QtTest import (
     QSignalSpy,
     QTest,
@@ -29,6 +29,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QPushButton,
     QScrollArea,
+    QToolTip,
     QWidget,
 )
 
@@ -91,6 +92,38 @@ def test_every_card_shows_its_whole_name_and_description(app: QApplication) -> N
             else:
                 assert label.sizeHint().width() <= label.width(), (cls.name, label.text())
         card.close()
+
+
+def test_tile_count_hover_explains_the_colors_and_clicks_the_tile(app: QApplication) -> None:
+    """
+    Give the count strip its own hover target while keeping the whole exercise tile clickable.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    card = ExerciseCard(KeyboardIntervals)
+    card.set_counts((2, 4, 1))
+    card.show()
+    app.processEvents()
+    target = card.counts
+    assert card.childAt(target.geometry().center()) is target
+    point = target.rect().center()
+    app.sendEvent(target, QHelpEvent(QEvent.Type.ToolTip, point, target.mapToGlobal(point)))
+    assert QToolTip.text().splitlines() == [
+        "Blue — 4 new cards available",
+        "Red — 1 incorrect card awaiting a correct answer",
+        "Green — 2 reviews due",
+    ]
+    clicked = QSignalSpy(card.clicked)
+    QTest.mouseClick(target, Qt.MouseButton.LeftButton, pos=point)
+    assert clicked.count() == 1
+    point = card.rect().center()
+    app.sendEvent(card, QHelpEvent(QEvent.Type.ToolTip, point, card.mapToGlobal(point)))
+    assert QToolTip.text() == KeyboardIntervals.description
+    QToolTip.hideText()
+    card.close()
 
 
 def test_home_tile_and_button_borders_follow_theme_changes(app: QApplication, request: pytest.FixtureRequest) -> None:

@@ -16,6 +16,29 @@ Colors come from the palette so it follows the system light/dark theme.
 10
 ```
 
+## navigation_heading_style
+
+```python
+def navigation_heading_style(palette: QPalette) -> tuple[QFont, QColor]
+```
+
+Style category headings in the navigation pane and tile filters.
+
+**Parameters**
+
+- `palette` (*QPalette*): The pane's current palette.
+
+**Returns**
+
+- *tuple of QFont and QColor*: The small, spaced capitals and muted foreground used for section headings.
+
+**Examples**
+
+```pycon
+>>> navigation_heading_style(QPalette())[0].bold()
+True
+```
+
 ## app_style
 
 ```python

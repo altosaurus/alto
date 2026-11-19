@@ -114,8 +114,6 @@ delete those too; use **Export backup…** first if you might want them back.
 
 The first time you open Alto it asks you to create a profile.
 
-{% include shot.html src="home.png" alt="The home screen after creating a profile" %}
-
 Type a name and press **Create profile**. There is no password, and the name is only a label that keeps your history
 separate from anyone else who uses the same computer. Next time Alto opens straight into the profile you used last.
 
@@ -134,7 +132,19 @@ opens the matching list on the left; before you start an activity, the main pane
 
 The icon-only **Exercises / Lessons** pair sits at the top left, followed by an open/close navigation-pane button, a divider,
 and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
-selected section by name, description or category, and follows the sidebar's width.
+selected section by name, description or category, and follows the sidebar's width. On the tile grid or during an exercise, click the funnel icon
+at the right end of the search row to open the filter sidebar. Click it again to collapse the sidebar and keep your filters.
+The sidebar opens on the right with every category expanded. Check or clear a category to include or
+hide its activities, or check individual exercises or lessons. The tiles and navigation list show the same matches.
+A dash means some activities in a category are checked. **All categories** selects or clears the whole list.
+
+Turn on **Shuffle exercises**, just left of the funnel, to practice the exercises in your filtered list. After each
+right or wrong answer, Alto prefers an exercise from another category. If the other available exercises are in the
+current category, it picks one of those. For example, selecting only **Note Identification** and **Keyboard Note
+Identification** makes them alternate when both have questions available. Your **Next Question** setting controls when
+the switch happens. With **Wait**, click **Next** after reviewing your answer. You can change the filters while answering
+a question. Shuffle uses the updated list for the next question and returns to the tiles if the list is empty.
+Click the highlighted shuffle icon again to turn it off.
 
 During an exercise or lesson, **Exercises / Lessons** switches the list while keeping your activity on screen. Selecting
 an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.

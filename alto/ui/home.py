@@ -20,12 +20,19 @@ from collections.abc import (
 )
 
 from PySide6.QtCore import (
+    QAbstractAnimation,
+    QEvent,
+    QModelIndex,
+    QObject,
+    QPersistentModelIndex,
     QPoint,
     QRectF,
+    QSignalBlocker,
     QSize,
     QSizeF,
     Qt,
     QTimer,
+    QVariantAnimation,
     Signal,
 )
 from PySide6.QtGui import (
@@ -37,9 +44,15 @@ from PySide6.QtWidgets import (
     QFrame,
     QGraphicsOpacityEffect,
     QHBoxLayout,
+    QHeaderView,
     QLabel,
     QPushButton,
     QScrollArea,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QToolButton,
+    QTreeWidget,
+    QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
 )
@@ -57,13 +70,15 @@ from alto.ui.store import (
     store,
     text_value,
 )
+from alto.ui.style import navigation_heading_style
 from alto.ui.transitions import (
+    SIDEBAR_SLIDE_MS,
     Sprite,
     TransitionCanvas,
     saved_transition,
     transition_named,
 )
-from alto.ui.widgets import SegmentedControl
+from alto.ui.widgets import PracticeCounts, SegmentedControl
 
 # Icon for each exercise, keyed by class name.
 EXERCISE_ICONS = {
@@ -86,6 +101,41 @@ EXERCISE_ICONS = {
 
 
 CARD_W, CARD_H, GAP = 190, 185, 14
+FILTER_INDENT = 16
+
+
+class _FilterLabelDelegate(QStyledItemDelegate):
+    """
+    Indent filter checkboxes and labels while Qt draws the tree branches in the trailing column.
+
+    Examples
+    --------
+    >>> isinstance(_FilterLabelDelegate(), QStyledItemDelegate)
+    True
+    """
+
+    def initStyleOption(  # noqa: PLR0917 (Qt passes both arguments positionally)
+        self,
+        option: QStyleOptionViewItem,
+        index: QModelIndex | QPersistentModelIndex,
+    ) -> None:
+        """
+        Inset the label and its checkbox hit area according to the item's depth.
+
+        Parameters
+        ----------
+        option : QStyleOptionViewItem
+            Style settings for this cell.
+        index : QModelIndex or QPersistentModelIndex
+            Root, category, or individual tile.
+
+        Examples
+        --------
+        A tile is indented two levels beneath All categories.
+        """
+        super().initStyleOption(option, index)
+        depth = int(index.parent().isValid()) + int(index.parent().parent().isValid())
+        option.rect.adjust(depth * FILTER_INDENT, 0, 0, 0)
 
 
 class TileCard(QPushButton):
@@ -135,6 +185,9 @@ class TileCard(QPushButton):
         'Get help.'
         """
         super().__init__(parent)
+        self.category = category
+        self.title = name
+        self.icon_svg = icon
         self.setFixedSize(CARD_W, CARD_H)
         self.setToolTip(about)
         self.setAccessibleName(f"{name}, {category}")  # the card's text is in labels that a screen reader would skip
@@ -216,40 +269,37 @@ class ExerciseCard(TileCard):
         )
 
         self.exercise_class = cls
-        self.counts = QLabel(self)
-        self.counts.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.counts = PracticeCounts(self)
+        self.counts.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
         self.counts.hide()
 
-    def set_counts(self, counts: tuple[int, int] | None) -> None:
+    def set_counts(self, counts: tuple[int, int] | tuple[int, int, int] | None) -> None:
         """
-        Show the available reviews and new questions in the upper right corner.
+        Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.
 
         Parameters
         ----------
-        counts : tuple of int and int or None
-            Reviews due and new cards available, or None in untimed practice.
+        counts : tuple of int or None
+            Reviews due, new cards available, and optionally the outstanding incorrect count. None hides the counts.
 
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
         >>> card = ExerciseCard(NoteNames)
-        >>> card.set_counts((2, 3))
-        >>> card.counts.toolTip()
-        '2 reviews due, 3 new cards available'
+        >>> card.set_counts((2, 3, 1))
+        >>> print(card.counts.toolTip())
+        Blue — 3 new cards available
+        Red — 1 incorrect card awaiting a correct answer
+        Green — 2 reviews due
         """
         if counts is None:
             self.counts.hide()
-            self.setToolTip(self.exercise_class.description)
             self.setAccessibleDescription(self.exercise_class.description)
             return
-        reviews, new = counts
-        dark = self.palette().color(QPalette.ColorRole.Button).lightness() < 128
-        green, blue = ("#82cd93", "#89bbff") if dark else ("#226939", "#215fa7")
-        self.counts.setText(f'<b style="color:{green}">{reviews}</b> &nbsp; <b style="color:{blue}">{new}</b>')
-        description = f"{reviews} review{'' if reviews == 1 else 's'} due, {new} new card{'' if new == 1 else 's'} available"
-        self.setToolTip(f"{self.exercise_class.description} {description}")
-        self.setAccessibleDescription(self.toolTip())
-        self.counts.setToolTip(description)
+        reviews, new = counts[:2]
+        incorrect = counts[2] if len(counts) == 3 else 0
+        self.counts.set_counts((reviews, new, incorrect))
+        self.setAccessibleDescription(f"{self.exercise_class.description} {self.counts.accessibleName()}")
         self.counts.adjustSize()
         self.counts.move(self.width() - self.counts.width() - 8, 3)
         self.counts.show()
@@ -302,6 +352,8 @@ class HomePage(QWidget):
         Emitted with the `Exercise` class when a card is clicked.
     lesson_chosen : Signal
         Emitted with a lesson's key when its card is clicked.
+    filters_changed : Signal
+        Emitted after a change to the search, tile selection or displayed section.
     cards : list of ExerciseCard
         One per exercise, in registry order.
     lesson_cards : list of TileCard
@@ -312,6 +364,8 @@ class HomePage(QWidget):
         The switch between the exercises and the lessons. The main window puts it in its top bar.
     resume_button : QPushButton
         Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.
+    category_filter : QToolButton
+        Shows or hides the filter sidebar from the right end of the search row.
     no_results : QLabel
         Shown when no tiles match the search.
     mode : str
@@ -332,6 +386,7 @@ class HomePage(QWidget):
 
     exercise_chosen = Signal(object)  # the Exercise class
     lesson_chosen = Signal(str)  # a lesson's key
+    filters_changed = Signal()
 
     def __init__(
         self,
@@ -339,6 +394,7 @@ class HomePage(QWidget):
         *,
         parent: QWidget | None = None,
         learner: Learner | None = None,
+        filter_layout: QHBoxLayout | None = None,
     ) -> None:
         """
         Build the page.
@@ -352,6 +408,8 @@ class HomePage(QWidget):
 
         learner : Learner or None
             Profile supplying the exercise tile counts.
+        filter_layout : QHBoxLayout or None
+            Shared workspace layout for the filter sidebar. A standalone page places it beside its tiles.
 
         Examples
         --------
@@ -376,10 +434,62 @@ class HomePage(QWidget):
         self.resume_button = QPushButton()
         self.resume_button.hide()
         lay.addWidget(self.resume_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.tile_filters: dict[str, frozenset[str]] = {}
+        self._filter_leaves: dict[str, QTreeWidgetItem] = {}
+        self._filter_groups: list[QTreeWidgetItem] = []
+        self.category_filter = QToolButton(self)
+        self.category_filter.setAutoRaise(True)
+        self.category_filter.setIconSize(QSize(20, 20))
+        self.category_filter.setMinimumSize(32, 32)
+        self.category_filter.setCheckable(True)
+        self.filter_sidebar = QFrame()
+        self.filter_sidebar.setObjectName("settingsPane")
+        sidebar_layout = QVBoxLayout(self.filter_sidebar)
+        header = QHBoxLayout()
+        header.addWidget(QLabel("Filters"), 1)
+        collapse = QToolButton()
+        collapse.setText("−")
+        collapse.setAutoRaise(True)
+        collapse.setToolTip("Collapse filters")
+        collapse.setAccessibleName("Collapse filters")
+        collapse.clicked.connect(lambda: self.category_filter.setChecked(False))
+        header.addWidget(collapse)
+        sidebar_layout.addLayout(header)
+        self.category_tree = QTreeWidget()
+        self.category_tree.setObjectName("tileFilterTree")
+        self.category_tree.setAccessibleName("Filter by category")
+        self.category_tree.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
+        self.category_tree.setHeaderHidden(True)
+        self.category_tree.setColumnCount(2)
+        self.category_tree.setTreePosition(1)
+        self.category_tree.header().setStretchLastSection(False)
+        self.category_tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.category_tree.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
+        self.category_tree.setColumnWidth(1, 2 * FILTER_INDENT)
+        self.category_tree.setItemDelegateForColumn(0, _FilterLabelDelegate(self.category_tree))
+        self.category_tree.setFrameShape(QFrame.Shape.NoFrame)
+        self.category_tree.setUniformRowHeights(True)
+        self.category_tree.setIndentation(FILTER_INDENT)
+        sidebar_layout.addWidget(self.category_tree, 1)
+        self.category_tree.itemChanged.connect(self._selection_changed)
+        self.category_filter.toggled.connect(self._toggle_filter_sidebar)
+        self._filter_slide = QVariantAnimation(self)
+        self._filter_slide.setDuration(SIDEBAR_SLIDE_MS)
+        self._filter_slide.setStartValue(0.0)
+        self._filter_slide.setEndValue(1.0)
+        self._filter_slide.valueChanged.connect(self._size_filter)
+        self._filter_slide.finished.connect(
+            lambda: self.filter_sidebar.setVisible(self.category_filter.isChecked() and not self.category_filter.isHidden()),
+        )
+        self.filter_sidebar.setFixedWidth(0)
+        self.filter_sidebar.hide()
+        lay.addWidget(self.category_filter, alignment=Qt.AlignmentFlag.AlignRight)
+        self.queue_totals = PracticeCounts()
+        self.queue_totals.setContentsMargins(12, 12, 0, 0)
+        self.queue_totals.hide()
         self._query = ""
         self.no_results = QLabel()
         self.no_results.hide()
-        lay.addWidget(self.no_results, alignment=Qt.AlignmentFlag.AlignCenter)
         self.cards = []
         for cls in registry:
             card = ExerciseCard(cls)
@@ -412,10 +522,23 @@ class HomePage(QWidget):
         self._transition_start.timeout.connect(self._begin)
         self.canvas.finished.connect(self._transition_start.stop)
         self.scroll_area = scroll
-        lay.addWidget(scroll, 1)
+        grid = QHBoxLayout()
+        grid.setSpacing(0)
+        grid.addWidget(self.queue_totals, alignment=Qt.AlignmentFlag.AlignTop)
+        tiles = QVBoxLayout()
+        tiles.addWidget(self.no_results, alignment=Qt.AlignmentFlag.AlignCenter)
+        tiles.addWidget(scroll, 1)
+        grid.addLayout(tiles, 1)
+        (filter_layout if filter_layout is not None else grid).addWidget(self.filter_sidebar)
+        lay.addLayout(grid, 1)
         self.lesson_cards: list[TileCard] = []
         self._make_lesson_cards()
         self.mode = "lessons" if text_value(store(), key="ui/homeMode", default="exercises") == "lessons" else "exercises"
+        filter_host = self.filter_sidebar.parentWidget()
+        assert filter_host is not None
+        self._filter_host = filter_host
+        self._update_categories()
+        self._filter_host.installEventFilter(self)
         self.mode_control.set_current(1 if self.mode == "lessons" else 0)
         self._reflow()
 
@@ -429,7 +552,7 @@ class HomePage(QWidget):
         Parameters
         ----------
         text : str
-            Case-insensitive search text; empty text restores all tiles.
+            Case-insensitive search text. Empty text shows every tile in the selected category.
 
         Examples
         --------
@@ -440,9 +563,269 @@ class HomePage(QWidget):
         'keyboard'
         """
         self._query = text.strip().casefold()
+        self._filter_tiles()
+
+    def _filter_tiles(self) -> None:
+        """
+        Apply the text and category filters immediately, including during a transition.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page._filter_tiles()
+        """
         self.canvas.stop()
         self._hidden.setEnabled(False)
         self._reflow(force=True)
+        self.filters_changed.emit()
+
+    def matches_filter(self, card: TileCard, *, section: str) -> bool:
+        """
+        Check whether a tile matches the search text and the selection for its section.
+
+        Parameters
+        ----------
+        card : TileCard
+            Exercise or lesson tile to check.
+        section : str
+            Section containing the tile, either "exercises" or "lessons".
+
+        Returns
+        -------
+        bool
+            True if both filters include the tile.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> page = HomePage([NoteNames])
+        >>> page.matches_filter(page.cards[0], section="exercises")
+        True
+        """
+        selected = self.tile_filters.get(section)
+        searchable_text = f"{card.accessibleName()} {card.toolTip()}".casefold()
+        return (selected is None or card.title in selected) and self._query in searchable_text
+
+    def _update_categories(self) -> None:
+        """
+        Build a checkable tree of categories and tiles for the current section.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page.category_tree.topLevelItem(0).text(0)
+        'All categories'
+        """
+        tree = self.category_tree
+        cards = self.lesson_cards if self.mode == "lessons" else self.cards
+        selected = self.tile_filters.get(self.mode)
+        heading_font, heading_ink = navigation_heading_style(self.window().palette())
+        icon_ink = tree.palette().text().color()
+        with QSignalBlocker(tree):
+            self._filter_leaves.clear()
+            self._filter_groups.clear()
+            tree.clear()
+            root = self._filter_root = QTreeWidgetItem(tree, ["All categories"])
+            root.setFont(0, heading_font)
+            root.setForeground(0, heading_ink)
+            root.setFlags(root.flags() | Qt.ItemFlag.ItemIsAutoTristate)
+            root.setCheckState(0, Qt.CheckState.Checked)
+            for category in dict.fromkeys(card.category for card in cards):
+                group = QTreeWidgetItem(root, [category])
+                group.setFont(0, heading_font)
+                group.setForeground(0, heading_ink)
+                self._filter_groups.append(group)
+                group.setFlags(group.flags() | Qt.ItemFlag.ItemIsAutoTristate)
+                for card in cards:
+                    if card.category == category:
+                        leaf = QTreeWidgetItem(group, [card.title])
+                        leaf.setIcon(0, icons.svg_icon(card.icon_svg, color=icon_ink, size=tree.iconSize().width()))
+                        leaf.setToolTip(0, card.title)
+                        self._filter_leaves[card.title] = leaf
+                        checked = selected is None or card.title in selected
+                        leaf.setCheckState(0, Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked)
+            tree.expandAll()
+            tree.setCurrentItem(root)
+        layout = self.filter_sidebar.layout()
+        assert layout is not None
+        margins = layout.contentsMargins()
+        self._filter_width = (
+            tree.sizeHintForColumn(0)
+            + 2 * FILTER_INDENT
+            + tree.columnWidth(1)
+            + tree.verticalScrollBar().sizeHint().width()
+            + margins.left()
+            + margins.right()
+            + 2 * self.filter_sidebar.frameWidth()
+        )
+        self._update_filter_icon()
+        self._size_filter()
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917 (Qt passes both arguments positionally)
+        """
+        Fit the open filter sidebar when its workspace changes width.
+
+        Parameters
+        ----------
+        watched : QObject
+            Widget containing the activity and sidebar.
+        event : QEvent
+            Event delivered to the widget.
+
+        Returns
+        -------
+        bool
+            Whether the base widget consumes the event.
+
+        Examples
+        --------
+        Dragging the navigation divider resizes the space available for the filters.
+        """
+        if event.type() == QEvent.Type.Resize and watched is self._filter_host:
+            self._size_filter()
+        return super().eventFilter(watched, event)
+
+    def _size_filter(self) -> None:
+        """
+        Size the sliding sidebar while leaving room beside it for the activity.
+
+        Examples
+        --------
+        A narrow window reserves at least one tile's width for the grid.
+        """
+        available = self._filter_host.width() - CARD_W - 56 - self.scroll_area.verticalScrollBar().sizeHint().width()
+        if not self.queue_totals.isHidden() and self.isVisible():
+            available -= self.queue_totals.sizeHint().width()
+        width = min(self._filter_width, max(120, available))
+        self.filter_sidebar.setFixedWidth(round(width * self._filter_slide.currentValue()))
+        if self._filter_host is self:
+            self._reflow()
+
+    def set_filter_available(self, available: bool) -> None:
+        """
+        Show the filter control on browsing and exercise pages, remembering the sidebar's open state.
+
+        Parameters
+        ----------
+        available : bool
+            Whether the current page supports filtering.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page.set_filter_available(False)
+        >>> page.category_filter.isHidden()
+        True
+        """
+        self.category_filter.setVisible(available)
+        open_or_sliding = self.category_filter.isChecked() or self._filter_slide.state() == QAbstractAnimation.State.Running
+        self.filter_sidebar.setVisible(available and open_or_sliding)
+
+    def _toggle_filter_sidebar(self, expanded: bool) -> None:
+        """
+        Show or hide the filter sidebar and fit the tiles into the remaining space.
+
+        Parameters
+        ----------
+        expanded : bool
+            Whether the sidebar should be open.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page.category_filter.click()
+        >>> page.filter_sidebar.isHidden()
+        False
+        """
+        if expanded:
+            self.filter_sidebar.setVisible(not self.category_filter.isHidden())
+            self.category_tree.expandAll()
+            self.category_tree.setFocus()
+        else:
+            self.category_filter.setFocus()
+        self._update_filter_icon()
+        direction = QAbstractAnimation.Direction.Forward if expanded else QAbstractAnimation.Direction.Backward
+        self._filter_slide.setDirection(direction)
+        if self._filter_slide.state() != QAbstractAnimation.State.Running:
+            self._filter_slide.start()
+
+    def _selection_changed(self) -> None:
+        """
+        Apply the checked leaves when Qt updates the tree.
+
+        Examples
+        --------
+        Checking a category updates all of its tiles together.
+        """
+        selected = frozenset(name for name, leaf in self._filter_leaves.items() if leaf.checkState(0) == Qt.CheckState.Checked)
+        if self.tile_filters.get(self.mode) == selected:
+            return
+        self.tile_filters[self.mode] = selected
+        self._update_filter_icon()
+        self._filter_tiles()
+
+    def _update_filter_icon(self) -> None:
+        """
+        Show how many tiles are checked and highlight the funnel for a partial or empty selection.
+
+        Examples
+        --------
+        >>> HomePage([])._update_filter_icon()
+        """
+        total = len(self._filter_leaves)
+        selected = self.tile_filters.get(self.mode)
+        count = total if selected is None else len(selected)
+        label = "All categories" if count == total else f"{count} of {total} {self.mode} selected"
+        verb = "Hide" if self.category_filter.isChecked() else "Show"
+        self.category_filter.setToolTip(f"{verb} filters ({label})")
+        self.category_filter.setAccessibleName(f"{verb} filters")
+        self.category_filter.setAccessibleDescription(label)
+        role = QPalette.ColorRole.Highlight if count != total else QPalette.ColorRole.WindowText
+        self.category_filter.setIcon(icons.svg_icon(icons.FILTER, color=self.palette().color(role)))
+
+    def restore_tile_filters(self, selections: dict[str, frozenset[str]], *, expanded: bool | None = None) -> None:
+        """
+        Restore exercise and lesson checkboxes after a theme change.
+
+        Parameters
+        ----------
+        selections : dict of str to frozenset of str
+            Checked tile titles for each section with a saved filter.
+        expanded : bool or None
+            Restore the sidebar at its open or closed width immediately. None keeps its current state.
+
+        Examples
+        --------
+        >>> HomePage([]).restore_tile_filters({})
+        """
+        self.tile_filters = selections.copy()
+        self._update_categories()
+        if expanded is not None:
+            self.category_filter.setChecked(expanded)
+            self._filter_slide.setCurrentTime(self._filter_slide.duration() if expanded else 0)
+        self._filter_tiles()
+
+    def set_category(self, category: str | None) -> None:
+        """
+        Select the tiles of one category, or all tiles when the category is absent.
+
+        Parameters
+        ----------
+        category : str or None
+            Case-folded category name, or None for all tiles.
+
+        Examples
+        --------
+        >>> HomePage([]).set_category(None)
+        """
+        cards = self.lesson_cards if self.mode == "lessons" else self.cards
+        selected = frozenset(card.title for card in cards if card.category.casefold() == category)
+        if selected:
+            self.tile_filters[self.mode] = selected
+        else:
+            self.tile_filters.pop(self.mode, None)
+        self._update_categories()
+        self._filter_tiles()
 
     def _make_lesson_cards(self) -> None:
         """
@@ -498,11 +881,22 @@ class HomePage(QWidget):
             self._prepare_transition(self.lesson_cards if self.mode == "lessons" else self.cards)
         else:
             self.canvas.stop()
-        self.mode = mode
+        if self.mode != mode:
+            if mode not in self.tile_filters and self._filter_root.checkState(0) == Qt.CheckState.PartiallyChecked:
+                groups = self._filter_groups
+                if all(group.checkState(0) != Qt.CheckState.PartiallyChecked for group in groups):
+                    categories = {group.text(0).casefold() for group in groups if group.checkState(0) == Qt.CheckState.Checked}
+                    cards = self.lesson_cards if mode == "lessons" else self.cards
+                    selected = frozenset(card.title for card in cards if card.category.casefold() in categories)
+                    if selected:
+                        self.tile_filters[mode] = selected
+            self.mode = mode
+            self._update_categories()
         self.refresh_counts()
         self.mode_control.set_current(1 if mode == "lessons" else 0)
         store().setValue("ui/homeMode", mode)
         self._reflow(force=True)
+        self.filters_changed.emit()
 
     def page_changed(self) -> None:
         """
@@ -589,26 +983,34 @@ class HomePage(QWidget):
 
     def refresh_counts(self) -> None:
         """
-        Refresh the visible exercise tiles from the same queues used for practice.
+        Refresh each exercise tile and the totals for the current filters.
 
         Examples
         --------
         >>> HomePage([]).refresh_counts()
         """
+        mode = self.learner.mode if self.learner else DEFAULT_SCHEDULER
+        show_totals = self.mode == "exercises" and mode in CALENDAR_SCHEDULERS
+        self.queue_totals.setVisible(show_totals)
         if not self.isVisible() or self.mode != "exercises":
             self._count_timer.stop()
             return
-        mode = self.learner.mode if self.learner else DEFAULT_SCHEDULER
         now = time.time()
         for card in self.cards:
             counts = None
-            if self.learner and mode in CALENDAR_SCHEDULERS:
-                counts = self.learner.calendar.counts(card.exercise_class(), profile=self.learner.profile.id, mode=mode, now=now)
+            if self.learner and show_totals:
+                counts = self.learner.calendar.tile_counts(
+                    card.exercise_class(),
+                    profile=self.learner.profile.id,
+                    mode=mode,
+                    now=now,
+                )
             card.set_counts(counts)
-        if mode not in CALENDAR_SCHEDULERS:
-            self._count_timer.stop()
-        else:
+        if show_totals:
             self._count_timer.start()
+        else:
+            self._count_timer.stop()
+        self._reflow()
 
     def showEvent(self, event: QShowEvent) -> None:
         """
@@ -673,8 +1075,22 @@ class HomePage(QWidget):
         >>> page._columns < wide
         True
         """
+        shown = self.lesson_cards if self.mode == "lessons" else self.cards
+        shown = [card for card in shown if self.matches_filter(card, section=self.mode)]
         # Use the page's own width: the scroll area's viewport isn't resized yet when this runs.
         usable = self.width() - 56 - self.scroll_area.verticalScrollBar().sizeHint().width()
+        if not self.queue_totals.isHidden():
+            due = new = learn = 0
+            for card in shown:
+                if isinstance(card, ExerciseCard):
+                    reviews, unseen, incorrect = card.counts.values
+                    due += reviews
+                    new += unseen
+                    learn += incorrect
+            self.queue_totals.set_counts((due, new, learn), totals=True)
+            usable -= self.queue_totals.sizeHint().width()
+        if self.filter_sidebar.parentWidget() is self and not self.filter_sidebar.isHidden():
+            usable -= self.filter_sidebar.width()
         columns = max(1, (usable + GAP) // (CARD_W + GAP))
         if columns == self._columns and not force:
             return
@@ -686,8 +1102,6 @@ class HomePage(QWidget):
                 while old_row.count():
                     old_row.takeAt(0)
                 old_row.deleteLater()
-        shown = self.lesson_cards if self.mode == "lessons" else self.cards
-        shown = [card for card in shown if self._query in f"{card.accessibleName()} {card.toolTip()}".casefold()]
         section = "lessons" if self.mode == "lessons" else "exercises"
         self.no_results.setText(f"No {section} found.")
         self.no_results.setVisible(not shown)

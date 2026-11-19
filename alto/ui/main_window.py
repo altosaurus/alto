@@ -12,8 +12,10 @@ Examples
 
 from __future__ import annotations
 
+import random
 import sys
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 from importlib import metadata
 
 from PySide6.QtCore import (
@@ -33,6 +35,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QCloseEvent,
+    QColor,
     QDesktopServices,
     QGuiApplication,
     QKeySequence,
@@ -54,6 +57,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMenu,
     QMessageBox,
+    QScrollArea,
     QSplitter,
     QStackedWidget,
     QToolButton,
@@ -66,7 +70,7 @@ from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
 from alto.learning import Learner
-from alto.learning.calendar import DEFAULT_SCHEDULER
+from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER
 from alto.ui import (
     backup_flow,
     icons,
@@ -120,10 +124,11 @@ from alto.ui.store import (
     text_value,
 )
 from alto.ui.theme import (
+    STUDIO,
     apply_theme,
     saved_theme,
 )
-from alto.ui.transitions import saved_transition
+from alto.ui.transitions import SIDEBAR_SLIDE_MS, saved_transition
 from alto.ui.widgets import SidebarToggle
 
 DEFAULT_WIDTH, DEFAULT_HEIGHT = 1100, 820  # big enough for a lesson step with its circle, and an exercise with its pane
@@ -181,6 +186,12 @@ class _PageState:
         Whether the sidebar is expanded in the workspace.
     search : str
         The search text shared by the tiles and navigation lists.
+    tile_filters : dict
+        Checked tile titles for each filtered section.
+    filters_open : bool
+        Whether the tile grid's filter sidebar is open.
+    shuffle : bool
+        Whether to change exercise categories after each answer.
 
     Examples
     --------
@@ -199,6 +210,9 @@ class _PageState:
     pane: bool = False
     sidebar: bool = True
     search: str = ""
+    tile_filters: dict[str, frozenset[str]] = field(default_factory=dict)
+    filters_open: bool = False
+    shuffle: bool = False
 
 
 class _AdjacentSubmenu(QMenu):
@@ -394,7 +408,7 @@ class MainWindow(QMainWindow):
         self._lesson_return = None
         self.nav = QListWidget()  # the exercise list: section labels and exercises, as a flat sidebar
         self.nav.setObjectName("nav")  # styled in style.py
-        self.nav.setIconSize(QSize(20, 20))
+        self.nav.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
         self.nav.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
         self.lesson_nav = LessonNav()  # the lesson list, which takes the exercise list's place in lesson mode
         self.nav_stack = QStackedWidget()  # holds the two lists; the page decides which shows
@@ -404,7 +418,18 @@ class MainWindow(QMainWindow):
         self.lesson_nav.lesson_chosen.connect(self._lesson_picked)
         self.lesson_nav.step_chosen.connect(self._step_picked)
         self.stack = QStackedWidget()
-        self.home = HomePage(REGISTRY, learner=self.learner)  # start screen with a button for every exercise
+        workspace = QWidget()
+        workspace_layout = QHBoxLayout(workspace)
+        workspace_layout.setContentsMargins(0, 0, 0, 0)
+        workspace_layout.setSpacing(0)
+        activity_scroll = QScrollArea()
+        activity_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        activity_scroll.setWidgetResizable(True)
+        activity_scroll.setWidget(self.stack)
+        self.stack.setAutoFillBackground(False)
+        activity_scroll.viewport().setAutoFillBackground(False)
+        workspace_layout.addWidget(activity_scroll, 1)
+        self.home = HomePage(REGISTRY, learner=self.learner, filter_layout=workspace_layout)
         self.home.exercise_chosen.connect(self.open_exercise)
         self.home.lesson_chosen.connect(self.open_lessons)
         self.home.resume_button.clicked.connect(self._back_from_topbar)
@@ -416,7 +441,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.empty_page)
         self._update_empty_page()
 
-        self._items: dict[type, QListWidgetItem] = {}
+        self._items: dict[type[Exercise], QListWidgetItem] = {}
         ink = self.palette().color(QPalette.ColorRole.Text)
         seen: set[str] = set()
         for cls in REGISTRY:
@@ -424,7 +449,11 @@ class MainWindow(QMainWindow):
                 seen.add(cls.category)
                 self.nav.addItem(section_item(cls.category, palette=self.palette()))
             item = QListWidgetItem(
-                svg_icon(EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES), color=ink, size=20),
+                svg_icon(
+                    EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES),
+                    color=ink,
+                    size=self.nav.iconSize().width(),
+                ),
                 cls.name,
             )
             item.setData(Qt.ItemDataRole.UserRole, cls)
@@ -520,7 +549,7 @@ class MainWindow(QMainWindow):
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         self.splitter.setHandleWidth(10)
         self.splitter.addWidget(self.nav_stack)
-        self.splitter.addWidget(self.stack)
+        self.splitter.addWidget(workspace)
         self.splitter.setStretchFactor(0, 0)
         self.splitter.setStretchFactor(1, 1)
         self.splitter.setCollapsible(0, True)
@@ -565,7 +594,7 @@ class MainWindow(QMainWindow):
         self.search_field.setClearButtonEnabled(True)
         self.search_field.setMinimumWidth(0)
         self.search_field.setMinimumHeight(32)
-        self.search_field.textChanged.connect(self._apply_search)
+        self.search_field.textChanged.connect(self.home.set_search)
         search_action = self.search_field.addAction(
             svg_icon(icons.SEARCH, color=self.palette().color(QPalette.ColorRole.WindowText)),
             QLineEdit.ActionPosition.LeadingPosition,
@@ -727,6 +756,20 @@ class MainWindow(QMainWindow):
         browser_row.addWidget(self.search_row)
         browser_row.addWidget(self.home.resume_button)
         browser_row.addStretch(1)
+        self.shuffle_button = QToolButton(root)
+        self.shuffle_button.setAutoRaise(True)
+        self.shuffle_button.setCheckable(True)
+        self.shuffle_button.setIconSize(self.home.category_filter.iconSize())
+        self.shuffle_button.setMinimumSize(self.home.category_filter.minimumSize())
+        self.shuffle_button.setAccessibleName("Shuffle exercises")
+        self.shuffle_button.toggled.connect(self._update_shuffle_button)
+        self.shuffle_button.clicked.connect(
+            lambda checked: self._shuffle_exercise() if checked and self.stack.currentWidget() is self.home else None,
+        )
+        self.home.filters_changed.connect(self._filter_navigation)
+        self.home.filters_changed.connect(self._update_shuffle_button)
+        browser_row.addWidget(self.shuffle_button)
+        browser_row.addWidget(self.home.category_filter)
         bar.addLayout(
             browser_row,
             1,
@@ -922,7 +965,7 @@ class MainWindow(QMainWindow):
         total = sum(self.splitter.sizes())
         self.nav_stack.setMinimumWidth(0)  # let the width pass through values below the minimum while animating
         anim = self._sidebar_anim = QVariantAnimation(self)
-        anim.setDuration(180 if animate else 0)
+        anim.setDuration(SIDEBAR_SLIDE_MS if animate else 0)
         anim.setStartValue(start)
         anim.setEndValue(end)
         anim.valueChanged.connect(lambda w: self.splitter.setSizes([int(w), total - int(w)]))
@@ -942,6 +985,100 @@ class MainWindow(QMainWindow):
 
         anim.finished.connect(done)
         anim.start()
+
+    def _shuffle_choices(self) -> list[type[Exercise]]:
+        """
+        Find all exercises included in the filtered navigation list.
+
+        Returns
+        -------
+        list of type of Exercise
+            Exercises eligible for the next shuffle.
+
+        Examples
+        --------
+        >>> bool(MainWindow()._shuffle_choices())
+        True
+        """
+        return [cls for cls, item in self._items.items() if not item.isHidden()]
+
+    def _update_shuffle_button(self) -> None:
+        """
+        Show shuffle during exercise practice and explain when the filters leave no choices.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._update_shuffle_button()
+        """
+        current = self.stack.currentWidget()
+        on_exercise_grid = current is self.home and self.home.mode == "exercises"
+        self.shuffle_button.setVisible(on_exercise_grid or isinstance(current, ExerciseView))
+        active = self.shuffle_button.isChecked()
+        palette = self.shuffle_button.palette()
+        blue = STUDIO[1].accent if palette.button().color().lightness() < 128 else STUDIO[0].accent
+        self.shuffle_button.setIcon(svg_icon(icons.SHUFFLE, color=QColor(blue) if active else palette.windowText().color()))
+        choices = self._shuffle_choices()
+        self.shuffle_button.setEnabled(active or bool(choices))
+        if self._exercise_page is not None:
+            self._exercise_page.shuffle_answers = active and choices != [type(self._exercise_page.exercise)]
+        if active:
+            tip = "Turn off exercise shuffle"
+        elif choices:
+            tip = "Shuffle selected exercises after each answer"
+        else:
+            tip = "No exercises match your filters"
+        self.shuffle_button.setToolTip(tip)
+
+    def _shuffle_exercise(self) -> None:
+        """
+        Open a random eligible exercise through the same navigation as its tile.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._shuffle_exercise()
+        >>> isinstance(window.stack.currentWidget(), ExerciseView)
+        True
+        """
+        choices = self._shuffle_choices()
+        view = self._exercise_page
+        current = type(view.exercise) if view is not None else None
+        groups: dict[str, list[type[Exercise]]] = {}
+        for cls in choices:
+            if cls is not current:
+                groups.setdefault(cls.category, []).append(cls)
+        categories = list(groups)
+        random.shuffle(categories)
+        if current is not None and current.category in groups:
+            categories.remove(current.category)
+            categories.append(current.category)
+        learner = self.learner
+        mode = learner.mode if learner else DEFAULT_SCHEDULER
+        now = time.time()
+        for category in categories:
+            exercises = groups[category]
+            random.shuffle(exercises)
+            for exercise in exercises:
+                if (
+                    learner
+                    and mode in CALENDAR_SCHEDULERS
+                    and not any(
+                        learner.calendar.counts(exercise(), profile=learner.profile.id, mode=mode, now=now),
+                    )
+                ):
+                    continue
+                self.open_exercise(exercise)
+                return
+        if view is not None and current in choices:
+            if self.stack.currentWidget() is view:
+                view.next_question()
+            else:
+                self.open_exercise(current)
+        elif categories:
+            self.open_exercise(groups[categories[0]][0])  # Show the scheduler's caught-up message.
+        else:
+            self.show_home()
 
     def open_exercise(self, cls: type[Exercise] | None) -> None:
         """
@@ -966,6 +1103,7 @@ class MainWindow(QMainWindow):
         old = self._exercise_page
         view = old if old is not None and type(old.exercise) is cls else ExerciseView(cls(), learner=self.learner)
         if view is not old:
+            view.shuffle_requested.connect(self._shuffle_exercise)
             view.lesson_requested.connect(lambda key: self.open_lessons(key))
             view.lesson_back_button.clicked.connect(self._back_to_practice_lesson)
             self.stack.addWidget(view)
@@ -1177,6 +1315,9 @@ class MainWindow(QMainWindow):
             pane=self._pane_view,
             sidebar=self._sidebar_pref,
             search=self.search_field.text(),
+            tile_filters=self.home.tile_filters.copy(),
+            filters_open=self.home.category_filter.isChecked(),
+            shuffle=self.shuffle_button.isChecked(),
         )
 
     def _restore_page(self, state: _PageState) -> None:
@@ -1213,6 +1354,8 @@ class MainWindow(QMainWindow):
         if self.home.mode != state.mode:
             self.home.set_mode(state.mode, animate=False)
         self.search_field.setText(state.search)
+        self.home.restore_tile_filters(state.tile_filters, expanded=state.filters_open)
+        self.shuffle_button.setChecked(state.shuffle)
         self._sidebar_pref = state.sidebar
         if state.pane:
             self._show_workspace()
@@ -1375,6 +1518,8 @@ class MainWindow(QMainWindow):
         activity = self._workspace_page
         activity_section = "exercises" if isinstance(activity, ExerciseView) else "lessons" if activity else None
         current = self.stack.currentWidget()
+        self.home.set_filter_available(current in (self.home, self.empty_page) or isinstance(current, ExerciseView))
+        self._update_shuffle_button()
         show_back = (current is self.home and activity_section is not None) or isinstance(
             self._overlay,
             (StatsPage, DatabasePage, GlossaryPage),
@@ -1629,76 +1774,34 @@ class MainWindow(QMainWindow):
         lesson = self.home.mode == "lessons"
         nav = self.lesson_nav if lesson else self.nav
         self.nav_stack.setCurrentWidget(nav)
-        self._filter_navigation(nav, query=self.search_field.text())
+        self._filter_navigation()
 
-    def _apply_search(
-        self,
-        text: str,
-    ) -> None:
-        """
-        Filter tiles and both navigation lists without replacing the active activity.
-
-        Parameters
-        ----------
-        text : str
-            The exercise or lesson search text.
-
-        Examples
-        --------
-        >>> window = MainWindow()
-        >>> window.search_field.setText("keyboard")
-        >>> sum(not item.isHidden() for item in window._items.values())
-        2
-        """
-        self.home.set_search(text)
-        self._filter_navigation(self.nav, query=text)
-        self._filter_navigation(self.lesson_nav, query=text)
-
-    def _filter_navigation(
-        self,
-        nav: QListWidget,
-        *,
-        query: str,
-    ) -> None:
+    def _filter_navigation(self) -> None:
         """
         Hide unmatched rows and empty category headings, retaining matching lessons' steps.
 
-        Parameters
-        ----------
-        nav : QListWidget
-            The exercise or lesson list.
-        query : str
-            Case-insensitive title, description or category search. Keyword-only.
-
         Examples
         --------
         >>> window = MainWindow()
-        >>> window._filter_navigation(window.nav, query="nothing matches this")
+        >>> window.search_field.setText("nothing matches this")
         >>> all(window.nav.item(i).isHidden() for i in range(window.nav.count()))
         True
         """
-        query = query.strip().casefold()
-        heading: QListWidgetItem | None = None
-        heading_text = ""
-        group_visible = False
-        lesson_matches = False
-        for index in range(nav.count()):
-            item = nav.item(index)
-            if not item.flags() & Qt.ItemFlag.ItemIsSelectable:
-                if heading is not None:
-                    heading.setHidden(not group_visible)
-                heading, heading_text, group_visible = item, item.text(), False
-                continue
-            matches = query in f"{item.text()} {item.toolTip()} {heading_text}".casefold()
-            if nav is self.lesson_nav:
-                if isinstance(item.data(STEP_ROLE), int):
-                    matches = lesson_matches
-                else:
-                    lesson_matches = matches
-            item.setHidden(not matches)
-            group_visible |= matches
-        if heading is not None:
-            heading.setHidden(not group_visible)
+        for nav, cards, section in (
+            (self.nav, self.home.cards, "exercises"),
+            (self.lesson_nav, self.home.lesson_cards, "lessons"),
+        ):
+            matching = [card for card in cards if self.home.matches_filter(card, section=section)]
+            titles = {card.title for card in matching}
+            headings = {card.category.upper() for card in matching}
+            visible = False
+            for index in range(nav.count()):
+                item = nav.item(index)
+                if not item.flags() & Qt.ItemFlag.ItemIsSelectable:
+                    visible = item.text() in headings
+                elif item.data(STEP_ROLE) is None:
+                    visible = item.text() in titles
+                item.setHidden(not visible)
 
     def _practice(self, name: str) -> None:
         """
