@@ -1171,7 +1171,7 @@ class MainWindow(QMainWindow):
 
     def _scheduler_changed(self) -> None:
         """
-        Apply a new scheduling policy to an open exercise.
+        Apply the scheduler to an open exercise and refresh due dates in the database browser.
 
         Examples
         --------
@@ -1179,6 +1179,11 @@ class MainWindow(QMainWindow):
         """
         if self._exercise_page is not None:
             self._exercise_page.scheduling_changed()
+        if isinstance(self._overlay, DatabasePage):
+            for tab in ("answers", "questions"):
+                if self._overlay.tabs[tab].isChecked():
+                    self._overlay.show_table(tab, keep_sort=True)
+                    break
 
     def _restore_defaults(self) -> None:
         """

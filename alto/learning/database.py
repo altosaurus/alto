@@ -1013,7 +1013,8 @@ class Database:
         Returns
         -------
         list of sqlite3.Row
-            Each answer's time, exercise, question key, answer, correctness, attempt number, duration and question payload.
+            Each answer's time, exercise, question key, answer, correctness, attempt number, duration, question payload,
+            and the question's current due timestamp under the active scheduler (NULL if unscheduled).
 
         Examples
         --------
@@ -1034,9 +1035,12 @@ class Database:
             until=until,
         )
         return self.conn.execute(
-            "SELECT a.answered_at, a.exercise, a.item_key, a.answer, a.correct, a.attempt_no, a.duration_ms, i.payload "
-            "FROM attempts a LEFT JOIN items i ON i.profile_id = a.profile_id AND i.exercise = a.exercise "
-            f"AND i.item_key = a.item_key WHERE {where} ORDER BY a.id DESC LIMIT ?",
+            "SELECT a.answered_at, a.exercise, a.item_key, a.answer, a.correct, a.attempt_no, a.duration_ms, i.payload, s.due "
+            "FROM attempts a JOIN profiles p ON p.id = a.profile_id "
+            "LEFT JOIN items i ON (i.profile_id, i.exercise, i.item_key) = (a.profile_id, a.exercise, a.item_key) "
+            "LEFT JOIN review_schedules s ON (s.profile_id, s.exercise, s.item_key, s.scheduler) "
+            "= (a.profile_id, a.exercise, a.item_key, p.scheduler) "
+            f"WHERE {where} ORDER BY a.id DESC LIMIT ?",
             [*args, limit],
         ).fetchall()
 
@@ -1059,7 +1063,7 @@ class Database:
         Returns
         -------
         list of sqlite3.Row
-            Every column of each question's record.
+            Every column of each question's record and the active scheduler's due timestamp, or NULL if unscheduled.
 
         Examples
         --------
@@ -1069,7 +1073,10 @@ class Database:
         []
         """
         return self.conn.execute(
-            "SELECT * FROM items WHERE profile_id = ? ORDER BY strain DESC, last_seen DESC LIMIT ?",
+            "SELECT i.*, s.due FROM items i JOIN profiles p ON p.id = i.profile_id "
+            "LEFT JOIN review_schedules s ON (s.profile_id, s.exercise, s.item_key, s.scheduler) "
+            "= (i.profile_id, i.exercise, i.item_key, p.scheduler) "
+            "WHERE i.profile_id = ? ORDER BY i.strain DESC, i.last_seen DESC LIMIT ?",
             (profile_id, limit),
         ).fetchall()
 

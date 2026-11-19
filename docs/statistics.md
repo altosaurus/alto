@@ -63,8 +63,10 @@ The database button next to the statistics button opens a read-only view of what
 Three tables are available:
 
 - **Answers:** every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.
-- **Questions:** the record kept for each question: its strain, how often it was answered, right on the first try, missed, typical time and when it was last seen.
+- **Questions** shows each question’s strain, answer counts, typical response time, and last practice time.
 - **Profiles:** everyone who has a profile, with how many answers and questions each has.
+
+In both **Answers** and **Questions**, **Due** shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.
 
 Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
 limited to the newest 10,000 rows each; the line above the table says when that applies.
