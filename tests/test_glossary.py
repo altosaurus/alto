@@ -84,6 +84,19 @@ def test_glossary_comparison_pairs() -> None:
     """Check the pitch and key relationships that changing examples demonstrates."""
 
     def phrases(term: str) -> list[list[Note]]:
+        """
+        Read each glossary example as a sequence of written pitches.
+
+        Parameters
+        ----------
+        term : str
+            Name of the glossary entry.
+
+        Returns
+        -------
+        list of list of Note
+            The notes of each example in display order.
+        """
         return [[Note.parse(name) for name in example.pitches.split()] for example in TERMS[term].examples]
 
     for first, second in phrases("enharmonically equivalent"):
