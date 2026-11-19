@@ -113,6 +113,7 @@ kbd { font: .85em ui-monospace, Menlo, Consolas, monospace; border: 1px solid va
 table { border-collapse: collapse; width: 100%; margin: 0 0 1.2em; font-size: .96rem; display: block; overflow-x: auto; }
 th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+td:has(> .roadmap-complete) { background-color: color-mix(in srgb, var(--good) 25%, var(--bg)); }
 blockquote { margin: 0 0 1.2em; padding: 10px 16px; border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
 blockquote p:last-child { margin-bottom: 0; }
 .shot { margin: 1.4em 0; }
