@@ -59,7 +59,6 @@ from alto.ui.store import (
 )
 from alto.ui.transitions import (
     Sprite,
-    Transition,
     TransitionCanvas,
     saved_transition,
     transition_named,
@@ -408,6 +407,10 @@ class HomePage(QWidget):
         body.setGraphicsEffect(self._hidden)
         self.canvas = TransitionCanvas(scroll.viewport())  # where the transition is drawn
         self.canvas.finished.connect(lambda: self._hidden.setEnabled(False))
+        self._transition_start = QTimer(self)
+        self._transition_start.setSingleShot(True)
+        self._transition_start.timeout.connect(self._begin)
+        self.canvas.finished.connect(self._transition_start.stop)
         self.scroll_area = scroll
         lay.addWidget(scroll, 1)
         self.lesson_cards: list[TileCard] = []
@@ -491,52 +494,70 @@ class HomePage(QWidget):
         >>> page.set_mode("exercises")
         """
         mode = "lessons" if mode == "lessons" else "exercises"
-        changed = mode != self.mode
-        transition = transition_named(saved_transition())
-        self.canvas.stop()  # a transition that is still playing ends where it was going
-        leaving = self._sprites(self.lesson_cards if self.mode == "lessons" else self.cards)
+        if animate and mode != self.mode:
+            self._prepare_transition(self.lesson_cards if self.mode == "lessons" else self.cards)
+        else:
+            self.canvas.stop()
         self.mode = mode
         self.refresh_counts()
         self.mode_control.set_current(1 if mode == "lessons" else 0)
         store().setValue("ui/homeMode", mode)
-        playing = animate and changed and self.isVisible() and transition.frame is not None
-        if playing:
-            self.canvas.cover(leaving)  # the old cards stay in view while the new ones are put in place
-            self._hidden.setEnabled(True)
-            self._hidden.setOpacity(0.0)
         self._reflow(force=True)
-        if playing:
-            QTimer.singleShot(0, self, lambda: self._begin(transition, direction=1 if mode == "lessons" else -1))
 
-    def _begin(
-        self,
-        transition: Transition,
-        *,
-        direction: int,
-    ) -> None:
+    def page_changed(self) -> None:
         """
-        Start the transition, now that the new cards are in place.
+        Animate the tiles from an empty grid on return, or stop the animation when leaving.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page.page_changed()
+        >>> page.canvas.running
+        False
+        """
+        self._prepare_transition(())
+
+    def _prepare_transition(self, leaving: Sequence[TileCard]) -> None:
+        """
+        Cover the live tiles until Qt has laid out the arriving cards.
 
         Parameters
         ----------
-        transition : Transition
-            Which one to play.
-        direction : int
-            1 when going toward the lessons, -1 when coming back. Keyword-only.
+        leaving : sequence of TileCard
+            Tiles to draw in the opening frame. An empty sequence starts with a blank grid.
+
+        Examples
+        --------
+        >>> page = HomePage([])
+        >>> page._prepare_transition(page.cards)
+        """
+        self.canvas.stop()
+        if self.isVisible():
+            self._transition = transition_named(saved_transition())
+            if self._transition.frame is not None:
+                self.canvas.cover(self._sprites(leaving))
+                self._hidden.setOpacity(0.0)
+                self._hidden.setEnabled(True)
+                self._transition_start.start(0)
+
+    def _begin(self) -> None:
+        """
+        Start the transition, now that the new cards are in place.
 
         Examples
         --------
         >>> from alto.exercises import REGISTRY
         >>> page = HomePage(REGISTRY)
-        >>> page._begin(transition_named("fade"), direction=1)  # nothing is covered, so nothing plays
+        >>> page._begin()  # nothing is covered, so nothing plays
         >>> page.canvas.running
         False
         """
         if not self.canvas.running:
             return
         self.rows.activate()
+        self.canvas.setGeometry(self.scroll_area.viewport().rect())
         arriving = self._sprites(self.lesson_cards if self.mode == "lessons" else self.cards)
-        self.canvas.play(transition, new=arriving, direction=direction)
+        self.canvas.play(self._transition, new=arriving, direction=1 if self.mode == "lessons" else -1)
 
     def _sprites(self, cards: Sequence[TileCard]) -> list[Sprite]:
         """

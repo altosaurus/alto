@@ -270,6 +270,23 @@ waits on it.
 >>> page.set_mode("exercises")
 ```
 
+### HomePage.page_changed
+
+```python
+def page_changed() -> None
+```
+
+Animate the tiles from an empty grid on return, or stop the animation when leaving.
+
+**Examples**
+
+```pycon
+>>> page = HomePage([])
+>>> page.page_changed()
+>>> page.canvas.running
+False
+```
+
 ### HomePage.refresh_counts
 
 ```python

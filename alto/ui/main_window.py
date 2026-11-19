@@ -19,9 +19,12 @@ from importlib import metadata
 from PySide6.QtCore import (
     QAbstractAnimation,
     QByteArray,
+    QEasingCurve,
     QEvent,
     QObject,
+    QPoint,
     QProcess,
+    QPropertyAnimation,
     QSize,
     Qt,
     QTimer,
@@ -35,6 +38,7 @@ from PySide6.QtGui import (
     QKeySequence,
     QMoveEvent,
     QPalette,
+    QPixmap,
     QShowEvent,
 )
 from PySide6.QtWidgets import (
@@ -119,6 +123,7 @@ from alto.ui.theme import (
     apply_theme,
     saved_theme,
 )
+from alto.ui.transitions import saved_transition
 from alto.ui.widgets import SidebarToggle
 
 DEFAULT_WIDTH, DEFAULT_HEIGHT = 1100, 820  # big enough for a lesson step with its circle, and an exercise with its pane
@@ -731,6 +736,7 @@ class MainWindow(QMainWindow):
         )
         self.stack.currentChanged.connect(self._show_mode_control)
         self.stack.currentChanged.connect(self._show_nav)
+        self.stack.currentChanged.connect(self.home.page_changed)
         self.home.mode_control.chosen.connect(self._mode_chosen)
         self._show_mode_control()
         bar.setColumnStretch(0, 1)
@@ -877,6 +883,7 @@ class MainWindow(QMainWindow):
         show: bool,
         *,
         user: bool = False,
+        animate: bool = True,
     ) -> None:
         """
         Slide the exercise list open or closed.
@@ -889,6 +896,8 @@ class MainWindow(QMainWindow):
             True to open the list, False to close it.
         user : bool, default False
             True if the user asked for this (with the button), so it is remembered. Keyword-only.
+        animate : bool, default True
+            Slide to the new width. Disable this to lay out the tile grid at its final width immediately.
 
         Examples
         --------
@@ -913,7 +922,7 @@ class MainWindow(QMainWindow):
         total = sum(self.splitter.sizes())
         self.nav_stack.setMinimumWidth(0)  # let the width pass through values below the minimum while animating
         anim = self._sidebar_anim = QVariantAnimation(self)
-        anim.setDuration(180)
+        anim.setDuration(180 if animate else 0)
         anim.setStartValue(start)
         anim.setEndValue(end)
         anim.valueChanged.connect(lambda w: self.splitter.setSizes([int(w), total - int(w)]))
@@ -1472,9 +1481,10 @@ class MainWindow(QMainWindow):
         >>> window.stack.currentWidget() is window.home
         True
         """
-        if self._pane_view:
-            self._grid_return_available = True
-            self._grid_return_sidebar = self.sidebar_width() > 0 or self._sidebar_pref
+        if self.stack.currentWidget() is not self.home:
+            if self._pane_view:
+                self._grid_return_available = True
+                self._grid_return_sidebar = self.sidebar_width() > 0 or self._sidebar_pref
             self.show_home()
         elif self._grid_return_available:
             self._grid_return_available = False
@@ -1495,8 +1505,8 @@ class MainWindow(QMainWindow):
         'lessons'
         >>> window.home.set_mode("exercises")
         """
-        self.show_home()
         self.home.set_mode("lessons")
+        self.show_home()
 
     def open_lessons(self, lesson: str) -> None:
         """
@@ -1757,16 +1767,16 @@ class MainWindow(QMainWindow):
 
     def _open_overlay(
         self,
-        page: StatsPage | DatabasePage | GlossaryPage | LessonsPage,
+        page: StatsPage | DatabasePage | GlossaryPage,
         *,
         title: str,
     ) -> None:
         """
-        Show a page that has a `back` signal in place of the current page.
+        Slide a utility page in from the right and remember the page to return to.
 
         Parameters
         ----------
-        page : StatsPage or DatabasePage or LessonsPage
+        page : StatsPage or DatabasePage or GlossaryPage
             The page to show; its Back button returns to the page it replaced.
         title : str
             The title to show in the top bar while it is open. Keyword-only.
@@ -1782,18 +1792,59 @@ class MainWindow(QMainWindow):
         True
         >>> window.close_overlay()
         """
-        if not isinstance(self._overlay, LessonsPage):
-            self.close_overlay()
-        if self.stack.currentWidget() is self.home:
-            self._pane_view = False
-        elif self.stack.currentWidget() in (self.empty_page, self._workspace_page):
-            self._pane_view = True
-        self._overlay_return = (self.stack.currentWidget(), self.title_label.text())
+        backdrop = self.stack.grab() if self.stack.isVisible() and saved_transition() != "none" else None
+        previous = self._overlay
+        if previous is None or isinstance(previous, LessonsPage):
+            current = self.stack.currentWidget()
+            self._pane_view = current is not self.home
+            self._overlay_return = (current, self.title_label.text())
         self._overlay = page
         page.back.connect(self.close_overlay)
         self.stack.addWidget(page)
         self.stack.setCurrentWidget(page)
         self.title_label.setText(title)
+        self._drop(previous)
+        if backdrop is not None:
+            self._slide_overlay(backdrop)
+
+    def _slide_overlay(self, backdrop: QPixmap) -> None:
+        """
+        Reveal the incoming page over a still image of the page the user was viewing.
+
+        Parameters
+        ----------
+        backdrop : QPixmap
+            The stack as it appeared immediately before navigation.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window.show()
+        >>> window.open_glossary()
+        >>> isinstance(window.stack.currentWidget(), GlossaryPage)
+        True
+        """
+        incoming = self.stack.grab()
+        background = QLabel(self.stack)
+        background.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        background.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        background.setPixmap(backdrop)
+        background.setGeometry(self.stack.contentsRect())
+        foreground = QLabel(background)
+        foreground.setPixmap(incoming)
+        foreground.setGeometry(background.rect())
+
+        slide = QPropertyAnimation(foreground, b"pos", background)
+        slide.setDuration(220)
+        slide.setEasingCurve(QEasingCurve.Type.OutCubic)
+        slide.setStartValue(QPoint(self.stack.width(), 0))
+        slide.setEndValue(QPoint())
+        self.stack.currentChanged.connect(slide.stop)
+        self.stack.currentChanged.connect(background.close)
+        slide.finished.connect(background.close)
+        slide.start()
+        background.show()
+        background.raise_()
 
     def close_overlay(self) -> None:
         """
@@ -1924,9 +1975,9 @@ class MainWindow(QMainWindow):
         self._overlay_return = None
         self._pane_view = False
         self.title_label.setText(self.APP_TITLE)
+        self._set_sidebar(False, animate=False)
         self.stack.setCurrentWidget(self.home)
         self._show_mode_control()
-        self._set_sidebar(False)
         self.splitter.handle(1).setEnabled(False)
         self._update_sidebar_button()
 

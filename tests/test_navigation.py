@@ -9,9 +9,11 @@ from typing import TYPE_CHECKING
 import pytest
 from PySide6.QtCore import (
     QPoint,
+    QPropertyAnimation,
     Qt,
 )
 from PySide6.QtTest import QTest
+from PySide6.QtWidgets import QLabel
 
 from alto import settings
 from alto.exercises.library import (
@@ -27,6 +29,7 @@ from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
+from alto.ui.transitions import save_transition
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -97,12 +100,133 @@ def test_grid_button_returns_to_the_workspace_after_visiting_tiles(window: MainW
     assert window.stack.currentWidget() is window.home
     window.view_button.click()
     assert window.stack.currentWidget() is activity
+    assert not window.home.canvas.running and not window.home._transition_start.isActive()
     assert activity.question is question and window.sidebar_width() == pane_width
     control_x = window.home.mode_control.mapTo(window, QPoint()).x()
     view_x = window.view_button.mapTo(window, QPoint()).x()
     stats_x = window.stats_button.mapTo(window, QPoint()).x()
     database_x = window.database_button.mapTo(window, QPoint()).x()
     assert control_x < window.pane_button.mapTo(window, QPoint()).x() < view_x < stats_x < database_x
+
+
+@pytest.mark.parametrize("source", ["exercise", "lesson", "statistics", "database", "lessons shortcut"])
+def test_return_to_tiles_animates_from_a_blank_grid(window: MainWindow, source: str) -> None:
+    """
+    Reveal only the destination tiles at their final positions when returning from another page.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The visible navigation window.
+    source : str
+        Navigation route back to the grid.
+    """
+    home = window.home
+    save_transition("cascade")
+    if source == "statistics":
+        window.open_stats()
+        window.close_overlay()
+    elif source == "database":
+        window.open_database()
+        window.view_button.click()
+    elif source == "lesson":
+        window.open_lessons("circle-of-fifths")
+        window.view_button.click()
+    else:
+        window.open_exercise(NoteNames)
+        window._set_sidebar(True, animate=False)
+        if source == "lessons shortcut":
+            window.show_lessons()
+        else:
+            window.view_button.click()
+
+    canvas = home.canvas
+    assert window.stack.currentWidget() is home and window.sidebar_width() == 0
+    assert canvas.running and not canvas.old and not canvas.new
+    assert home._hidden.isEnabled() and home._hidden.opacity() == 0
+    QTest.qWait(1)
+    cards = home.lesson_cards if source in {"lesson", "lessons shortcut"} else home.cards
+    viewport = home.scroll_area.viewport()
+    assert canvas.geometry() == viewport.rect()
+    assert [sprite.rect.topLeft().toPoint() for sprite in canvas.new] == [card.mapTo(viewport, QPoint()) for card in cards]
+    canvas._animation.setCurrentTime(150)
+    assert 0 < canvas.new[0].opacity < 1
+    canvas._animation.setCurrentTime(canvas._animation.duration())
+    assert not canvas.running and not home._hidden.isEnabled()
+
+
+@pytest.mark.parametrize("button", ["glossary_button", "stats_button", "database_button"])
+def test_utility_page_slides_in_from_the_right(window: MainWindow, button: str) -> None:
+    """
+    Keep the outgoing grid visible as the selected utility page enters from the right.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The visible navigation window.
+    button : str
+        Toolbar button for the destination.
+    """
+    save_transition("cascade")
+    stack = window.stack
+    before = stack.grab().toImage()
+    getattr(window, button).click()
+    slide = next(animation for animation in stack.findChildren(QPropertyAnimation) if animation.propertyName() == b"pos")
+    incoming = slide.targetObject()
+    assert isinstance(incoming, QLabel) and incoming.x() == stack.width()
+    assert stack.grab().toImage() == before
+    slide.setCurrentTime(slide.duration() // 2)
+    assert 0 < incoming.x() < stack.width()
+    frame = stack.grab().toImage()
+    edge = round(incoming.x() * frame.devicePixelRatio())
+    assert frame.copy(0, 0, edge, frame.height()) == before.copy(0, 0, edge, frame.height())
+    revealed = frame.width() - edge
+    assert frame.copy(edge, 0, revealed, frame.height()) == incoming.pixmap().toImage().copy(0, 0, revealed, frame.height())
+    slide.setCurrentTime(slide.duration())
+    assert not incoming.isVisible() and stack.currentWidget().geometry() == stack.contentsRect()
+    window.home.resume_button.click()
+    assert stack.currentWidget() is window.home and window.home.canvas.running
+
+
+def test_switching_utilities_mid_slide_keeps_the_original_back_destination(window: MainWindow) -> None:
+    """
+    Switch utilities in mid-flight, resize, and return to the same exercise.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The visible navigation window.
+    """
+    window.open_exercise(NoteNames)
+    activity = window.stack.currentWidget()
+    window.glossary_button.click()
+    window.stats_button.click()
+    window.database_button.click()
+    window.resize(1300, 900)
+    QTest.qWait(260)
+    page = window.stack.currentWidget()
+    assert page is not None and page.geometry() == window.stack.contentsRect()
+    window.home.resume_button.click()
+    assert window.stack.currentWidget() is activity and window.stack.count() == 3
+
+
+def test_grid_return_honors_disabled_transitions(window: MainWindow) -> None:
+    """
+    Show the live grid immediately when transitions are disabled.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The visible navigation window.
+    """
+    save_transition("none")
+    window.open_glossary()
+    assert not window.stack.findChildren(QPropertyAnimation)
+    window.close_overlay()
+    window.open_exercise(NoteNames)
+    window.view_button.click()
+    assert window.home.cards[0].isVisible() and not window.home._hidden.isEnabled()
+    assert not window.home.canvas.running
 
 
 def test_empty_workspace_prompt_follows_the_selected_section(window: MainWindow) -> None:
