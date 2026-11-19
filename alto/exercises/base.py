@@ -91,6 +91,10 @@ class Question:
     build_key : bool, default False
         The learner builds the key signature `key` on a blank staff with the fork widget, instead of pressing a button.
         Keyword-only.
+    place_signature : bool, default False
+        Place each accidental of the named key on the staff. Keyword-only.
+    starting_slots : list of int
+        Zero-based positions of the accidentals already printed in an Order of Keys question.
     construct_scale : list of Note or None
         The notes of a scale to place on the staff one after another, left to right: the answer is the whole row.
         Keyword-only.
@@ -159,6 +163,8 @@ class Question:
     show_staff: bool = False  # draw the staff even with no notes on it, to show only its clef and key signature
     caption: str = ""  # text written on the staff itself, under the music, in place of the prompt above it
     build_key: bool = False  # the learner builds the key signature `key` with the fork, on a staff that starts blank
+    place_signature: bool = False
+    starting_slots: list[int] = field(default_factory=list)
     construct_scale: list[Note] | None = None  # the notes of a scale to place on the staff, left to right
     construct_steps: list[str] | None = None  # the whole ("W") and half ("H") steps between them, if those are asked too
     notes_only: bool = False
@@ -291,6 +297,23 @@ class Question:
         """
         return count == self.key
 
+    @property
+    def places_sequence(self) -> bool:
+        """
+        Report whether the learner enters successive positions on the staff.
+
+        Returns
+        -------
+        bool
+            True for scales and handwritten key signatures.
+
+        Examples
+        --------
+        >>> Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
+        True
+        """
+        return self.construct_scale is not None or self.place_signature
+
     def check(self, choice: str) -> bool:
         """
         Report whether a chosen answer is right.
@@ -406,6 +429,8 @@ class Question:
             data.append(["staff signature", self.staff_signature])
         if self.minor:
             data.append("minor")
+        if self.starting_slots:
+            data.append(["starting slots", self.starting_slots])
         return hashlib.sha1(json.dumps(data).encode()).hexdigest()[:20]
 
     def to_dict(self) -> dict:

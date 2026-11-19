@@ -68,6 +68,7 @@ from alto.exercises.library import (
     IntervalNames,
     KeyboardIntervals,
     NotationIdentification,
+    OrderOfKeys,
     ScaleIdentification,
 )
 from alto.learning import Learner
@@ -108,6 +109,7 @@ from alto.ui.staff import (
 from alto.ui.staff_input import (
     ClefInput,
     ScaleInput,
+    SignatureInput,
     StaffInput,
 )
 from alto.ui.staff_playback import StaffPlayback
@@ -477,7 +479,7 @@ class ExerciseView(QWidget):
             self.symbol_buttons[symbol] = button
             symbol_lay.addWidget(button)
         symbol_lay.addStretch()
-        self.scale_input = ScaleInput()  # for 'place this scale' questions
+        self.scale_input = SignatureInput() if isinstance(exercise, OrderOfKeys) else ScaleInput()
         self.scale_input.notes_changed.connect(self._scale_changed)
         self.scale_input.accidental_cycled.connect(self._cycle_accidental)
         self.scale_input.accidental_stepped.connect(self._cycle_accidental)  # the mouse wheel steps through them too
@@ -659,14 +661,20 @@ class ExerciseView(QWidget):
         lay.addWidget(self.circle, 1)
         lay.addWidget(self.fork, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.input_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
-        lay.addWidget(self.scale_input, alignment=Qt.AlignmentFlag.AlignHCenter)
-        lay.addWidget(self.clef_input, alignment=Qt.AlignmentFlag.AlignHCenter)
-        lay.addWidget(self.symbol_row)
-        lay.addWidget(self.place_status)
-        lay.addWidget(self.pitch_row)
-        lay.addWidget(self.accidental_row)
-        lay.addWidget(self.step_row)
-        lay.addWidget(self.answer_row)
+        placement_layout = lay
+        if isinstance(self.scale_input, SignatureInput):
+            signature_area = QWidget()
+            placement_layout = QVBoxLayout(signature_area)
+            placement_layout.setContentsMargins(0, 0, 0, 0)
+            lay.addWidget(signature_area, alignment=Qt.AlignmentFlag.AlignHCenter)
+        placement_layout.addWidget(self.scale_input, alignment=Qt.AlignmentFlag.AlignHCenter)
+        placement_layout.addWidget(self.clef_input, alignment=Qt.AlignmentFlag.AlignHCenter)
+        placement_layout.addWidget(self.symbol_row)
+        placement_layout.addWidget(self.place_status)
+        placement_layout.addWidget(self.pitch_row)
+        placement_layout.addWidget(self.accidental_row)
+        placement_layout.addWidget(self.step_row)
+        placement_layout.addWidget(self.answer_row)
         lay.addWidget(self.key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.keyboard)
         answers = QWidget()
@@ -1101,7 +1109,7 @@ class ExerciseView(QWidget):
         self.prompt.setText(q.prompt)
         self.prompt.setVisible(bool(q.prompt) and not q.caption)  # some need none; a caption goes on the staff
         construct = q.construct is not None
-        scale = q.construct_scale is not None
+        scale = q.places_sequence
         clef = bool(q.place_clef)
         self.staff.setVisible((bool(q.staff) or q.show_staff) and not construct and not scale and not clef)
         self.fork.setVisible(q.build_key)
@@ -1132,6 +1140,10 @@ class ExerciseView(QWidget):
         if construct or scale:
             for b in self.accidental_buttons.values():
                 b.setChecked(False)
+        if q.place_signature:
+            assert isinstance(self.scale_input, SignatureInput)
+            self.scale_input.reset_signature(q.clef, key=q.key, caption=q.caption, starting_slots=q.starting_slots)
+            self._set_accidental(-1 if q.starting_slots and q.key < 0 else 1)
         self._show_placement_rows()
         self.keyboard.setVisible(q.keyboard is not None or bool(q.keyboard_notes))
         self.key_staff.setVisible(q.key_staff)
@@ -1341,7 +1353,7 @@ class ExerciseView(QWidget):
         True
         """
         q = self.question
-        return self.scale_input if q is not None and q.construct_scale is not None else self.input_staff
+        return self.scale_input if q is not None and q.places_sequence else self.input_staff
 
     def _set_accidental(self, accidental: int | None) -> None:
         """
@@ -1393,7 +1405,7 @@ class ExerciseView(QWidget):
         True
         """
         lit = self.accidental_buttons[accidental].isChecked()  # the click has already toggled it
-        self._set_accidental(accidental if lit else None)
+        self._set_accidental(accidental if lit or (self.question and self.question.place_signature) else None)
 
     def _cycle_accidental(self, direction: int = 1) -> None:
         """
@@ -1421,7 +1433,9 @@ class ExerciseView(QWidget):
         -1
         """
         q = self.question
-        if q and (q.construct is not None or q.construct_scale is not None) and q.accidentals:
+        if q and q.place_signature:
+            self._set_accidental(-1 if self.scale_input.accidental == 1 else 1)
+        elif q and (q.construct is not None or q.construct_scale is not None) and q.accidentals:
             order = (
                 [
                     None,
@@ -1539,6 +1553,21 @@ class ExerciseView(QWidget):
             self._check_built()
         elif q and q.place_clef:
             self.clef_input.place_caret()
+        elif q and q.place_signature and self.answer_button.isEnabled() and not self.answered:
+            assert isinstance(self.scale_input, SignatureInput)
+            choice = " ".join(str(note) for note in self.scale_input.entered_signature() if note is not None) or "No accidentals"
+            ok = q.check(choice)
+            self._record(ok, choice=choice)
+            if ok:
+                self.scale_input.locked = True
+                self._finish_answer(self.answer_button)
+                self._show_placement_rows()
+            else:
+                self.missed = True
+                self.scale_input.set_note_color(QColor("#c62828"))
+                self.place_status.setText("Try again. Use Undo to change the signature, or add another sign.")
+                self.answer_button.setEnabled(False)
+            self._update_score()
         elif q and q.construct_scale is not None:
             self._check_scale()
 
@@ -1555,7 +1584,9 @@ class ExerciseView(QWidget):
         >>> view.scale_input.accidental is None, view.answer_button.isEnabled()
         (True, False)
         """
-        if self.scale_input.accidental is not None:
+        if self.question and self.question.place_signature:
+            self.scale_input.set_note_color(None)
+        elif self.scale_input.accidental is not None:
             self._set_accidental(None)
         self._show_placement_rows()
 
@@ -1578,36 +1609,40 @@ class ExerciseView(QWidget):
         q = self.question
         if q is None:
             return
-        note, scale, fork = q.construct is not None, q.construct_scale is not None, q.build_key
+        note, sequence, fork = q.construct is not None, q.places_sequence, q.build_key
         clef = bool(q.place_clef)
         staff = self._input()
-        placing_notes = note or (scale and not self.scale_input.complete)
-        steps_turn = scale and self.scale_input.placing_steps
+        placing_notes = note or (sequence and not self.scale_input.complete)
+        steps_turn = sequence and self.scale_input.placing_steps
         live = not self.answered and not self._busy
         for symbol, button in self.symbol_buttons.items():  # one for each symbol that can be chosen, the chosen one pressed
             button.setVisible(clef and symbol in self.clef_input.options)
             button.setChecked(symbol == self.clef_input.selected)
             button.setEnabled(live)
-        self.answer_row.setVisible(note or scale or fork or clef)
-        self.place_status.setVisible(note or scale)
-        self.pitch_row.setVisible(placing_notes)
-        self.accidental_row.setVisible(q.accidentals and placing_notes)
+        self.answer_row.setVisible(note or sequence or fork or clef)
+        self.place_status.setVisible(note or sequence)
+        self.pitch_row.setVisible(placing_notes and not q.place_signature)
+        self.accidental_buttons[0].setVisible(not q.place_signature)
+        self.accidental_row.setEnabled(live and placing_notes)
+        self.accidental_row.setVisible(q.place_signature or (q.accidentals and placing_notes))
         self.step_row.setVisible(steps_turn)
-        self.undo_button.setVisible(scale)
-        self.place_button.setVisible(note or scale)
-        label = "Mark step" if steps_turn else "Place note"
+        self.undo_button.setVisible(sequence)
+        self.place_button.setVisible(note or sequence)
+        label = "Place sign" if q.place_signature else "Mark step" if steps_turn else "Place note"
         if self.place_button.text() != label:
             self.place_button.setText(label)
-            self.place_button.setShortcut("Return")  # setting a button's text makes it forget its shortcut
-        self.place_button.setEnabled(live and not (scale and self.scale_input.done))
-        self.answer_button.setVisible(scale or fork or clef)
-        self.answer_button.setEnabled(live if fork or clef else live and self.scale_input.done)
+            self.place_button.setShortcut("P" if q.place_signature else "Return")
+        self.place_button.setEnabled(live and not (sequence and self.scale_input.done))
+        self.answer_button.setVisible(sequence or fork or clef)
+        self.answer_button.setEnabled(live and (fork or clef or q.place_signature or self.scale_input.done))
+        self.undo_button.setEnabled(live and bool(self.scale_input.notes))
         for key in self._arrow_keys:
-            key.setEnabled(note or scale or fork or clef)
+            key.setEnabled(note or sequence or fork or clef)
         for key in self._letter_keys:
             key.setEnabled(placing_notes and not fork)
-        if note or scale:
-            staff.setAccessibleName("Staff: place the scale" if scale else "Staff: place the note")
+        if note or sequence:
+            action = "place the scale" if sequence else "place the note"
+            staff.setAccessibleName("Staff: write the key signature" if q.place_signature else f"Staff: {action}")
             self._update_placement_status()
 
     def _update_placement_status(self) -> None:
@@ -1628,7 +1663,7 @@ class ExerciseView(QWidget):
         self.place_status.setText(shown)
         self.place_status.setAccessibleDescription(spoken)
         q = self.question
-        if q is not None and (q.construct is not None or q.construct_scale is not None):
+        if q is not None and (q.construct is not None or q.places_sequence):
             self._input().setAccessibleDescription(spoken)
 
     def _placement_text(self) -> tuple[str, str]:
@@ -1648,9 +1683,20 @@ class ExerciseView(QWidget):
         'Note 1 of 8: press ↑ or ↓ to choose a note, then Return to place it.'
         """
         q = self.question
-        if q is None or (q.construct is None and q.construct_scale is None):
+        if q is None or (q.construct is None and not q.places_sequence):
             return "", ""
         staff = self._input()
+        if q.place_signature:
+            caret = staff.caret_note()
+            if self.answered:
+                text = "Correct."
+            elif self.scale_input.complete:
+                text = "Seven signs placed. Press Answer to submit."
+            elif caret:
+                text = f"Next sign: {caret}. Press P to place it."
+            else:
+                text = "Choose ♯ or ♭ and place the missing signs from left to right."
+            return text, text
         if q.construct_scale is not None:
             if self.scale_input.placing_steps:
                 number, of = len(self.scale_input.steps) + 1, self.scale_input.slots - 1
@@ -1719,7 +1765,7 @@ class ExerciseView(QWidget):
             elif name in {"left", "right"}:
                 self.clef_input.step_symbol(1 if name == "right" else -1)
             return
-        if q.construct is None and q.construct_scale is None:
+        if q.construct is None and not q.places_sequence:
             return
         if q.construct_scale is not None and self.scale_input.placing_steps:
             if name in {"up", "down", "left", "right"} and not self.scale_input.locked:
@@ -1749,9 +1795,9 @@ class ExerciseView(QWidget):
         True
         """
         q = self.question
-        if q is None or self.answered or self._busy or (q.construct is None and q.construct_scale is None):
+        if q is None or self.answered or self._busy or (q.construct is None and not q.places_sequence):
             return
-        if q.construct_scale is not None and not self.scale_input.placing_steps:
+        if q.places_sequence and not self.scale_input.placing_steps:
             self.scale_input.move_cursor(steps)
         elif q.construct is not None:
             self.input_staff.move_cursor(steps)
@@ -1776,7 +1822,7 @@ class ExerciseView(QWidget):
         q = self.question
         if q is None or self.answered or self._busy:
             return
-        if q.construct_scale is not None and not self.scale_input.placing_steps:
+        if q.places_sequence and not self.scale_input.placing_steps:
             self.scale_input.jump_to_letter(letter)
         elif q.construct is not None:
             self.input_staff.jump_to_letter(letter)
@@ -1799,7 +1845,7 @@ class ExerciseView(QWidget):
         q = self.question
         if q is None or self.answered or self._busy:
             return
-        if q.construct_scale is not None:
+        if q.places_sequence:
             self.scale_input.place_caret()
         elif q.construct is not None:
             self.input_staff.place_caret()
@@ -2400,7 +2446,7 @@ class ExerciseView(QWidget):
             self._flash_clef()
         elif q.build_key:
             self._flash_fork()
-        elif q.construct is not None or q.construct_scale is not None:
+        elif q.construct is not None or q.places_sequence:
             self._flash_note()
         else:
             self._flash(None, staff=True)

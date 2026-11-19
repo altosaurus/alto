@@ -1054,6 +1054,46 @@ key_signatures = KeySignatureSettings()
 
 
 @dataclass
+class OrderOfKeysSettings(KeySignatureSettings):
+    """
+    Choose the starting signs for writing a key signature.
+
+    Attributes
+    ----------
+    starting_accidentals : set of int
+        Allowed counts of given signs. Negative counts represent flats and positive counts represent sharps.
+
+    Examples
+    --------
+    >>> OrderOfKeysSettings(keys={-2, 4}).available_starts()
+    range(-2, 5)
+    """
+
+    _: KW_ONLY
+    starting_accidentals: set[int] = field(default_factory=lambda: {0})
+
+    def available_starts(self) -> range:
+        """
+        Return starting counts that fit at least one selected signature.
+
+        Returns
+        -------
+        range
+            Counts from the flattest eligible start through the sharpest, always including zero.
+
+        Examples
+        --------
+        >>> list(OrderOfKeysSettings(keys={-2}).available_starts())
+        [-2, -1, 0]
+        """
+        keys = self.active_keys()
+        return range(min(0, keys[0]), max(0, keys[-1]) + 1)
+
+
+order_of_keys = OrderOfKeysSettings()
+
+
+@dataclass
 class KeyConstructionSettings(KeySignatureSettings):
     """
     The settings of the key signature construction exercise: the same choices as key signature identification.

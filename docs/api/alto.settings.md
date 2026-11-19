@@ -773,6 +773,49 @@ Return the key signatures to ask about, lowest first.
 [-4, 3]
 ```
 
+## OrderOfKeysSettings
+
+```python
+OrderOfKeysSettings(
+    *,
+    starting_accidentals: set[int] = field(default_factory=lambda: {0}),
+)
+```
+
+Bases: `KeySignatureSettings`
+
+Choose the starting signs for writing a key signature.
+
+**Attributes**
+
+- `starting_accidentals` (*set of int*): Allowed counts of given signs. Negative counts represent flats and positive counts represent sharps.
+
+**Examples**
+
+```pycon
+>>> OrderOfKeysSettings(keys={-2, 4}).available_starts()
+range(-2, 5)
+```
+
+### OrderOfKeysSettings.available_starts
+
+```python
+def available_starts() -> range
+```
+
+Return starting counts that fit at least one selected signature.
+
+**Returns**
+
+- *range*: Counts from the flattest eligible start through the sharpest, always including zero.
+
+**Examples**
+
+```pycon
+>>> list(OrderOfKeysSettings(keys={-2}).available_starts())
+[-2, -1, 0]
+```
+
 ## KeyConstructionSettings
 
 ```python

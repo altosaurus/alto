@@ -479,6 +479,83 @@ True
 True
 ```
 
+## OrderOfKeys
+
+```python
+class OrderOfKeys(Exercise)
+```
+
+Write the accidentals of a named key signature in order.
+
+**Examples**
+
+```pycon
+>>> OrderOfKeys().generate(random.Random(1)).place_signature
+True
+```
+
+### OrderOfKeys.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the selections used to generate a practice question.
+
+**Returns**
+
+- *str*: The original empty signature at the defaults, so earlier questions remain available for review.
+
+**Examples**
+
+```pycon
+>>> OrderOfKeys().settings_signature()
+''
+```
+
+### OrderOfKeys.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to enter and submit a signature.
+
+**Returns**
+
+- *str*: The exercise help text.
+
+**Examples**
+
+```pycon
+>>> "Undo" in OrderOfKeys().instructions()
+True
+```
+
+### OrderOfKeys.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Choose a key from the selected scales and signatures and spell it in a selected clef.
+
+**Parameters**
+
+- `rng` (*random.Random*): Source for the key, mode, and clef.
+
+**Returns**
+
+- *Question*: The named key and the ordered signs with their exact staff octaves.
+
+**Examples**
+
+```pycon
+>>> q = OrderOfKeys().generate(random.Random(2))
+>>> q.show_staff and not q.choices
+True
+```
+
 ## ScaleIdentification
 
 ```python

@@ -185,6 +185,10 @@ _FLAT_PATH = (
     "C18.06 10.03 17.66 10.45 17.34 10.95Z"
 )
 EXERCISE_KEY_SIGNATURES = f'<path d="{_SHARP_PATH}" fill="COLOR"/><path d="{_FLAT_PATH}" fill="COLOR"/>'
+# The first three sharps of a treble signature, using the shared Noto Music outline.
+EXERCISE_ORDER_OF_KEYS = "".join(
+    f'<path transform="translate({x} {y}) scale(.66)" d="{_SHARP_PATH}" fill="COLOR"/>' for x, y in ((0, 3), (7, 8), (14, 1))
+)
 # Key signature construction: a fork on its side, a stem and two tines, with a sharp at the end of the upper tine and a flat at
 # the end of the lower one, in the Noto Music outlines the app icon uses.
 _FORK_SHARP = (

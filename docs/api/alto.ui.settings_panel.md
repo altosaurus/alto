@@ -544,6 +544,7 @@ KeyChecklist(
     selected: set[int],
     *,
     allow_empty: bool = False,
+    counts_only: bool = False,
     key_names: dict[int, str] | None = None,
     parent: QWidget | None = None,
 )
@@ -575,6 +576,7 @@ Build the checklist.
 
 - `selected` (*set of int*): The key signatures to check initially.
 - `allow_empty` (*bool, default False*): Allow every key to be unchecked. Keyword-only.
+- `counts_only` (*bool, default False*): Label each box with its accidental count instead of drawing a signature. Keyword-only.
 - `key_names` (*dict of int to str or None, default None*): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
@@ -1089,6 +1091,20 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 >>> store().remove("keyConstruction")
 ```
 
+## load_order_of_keys
+
+```python
+def load_order_of_keys() -> None
+```
+
+Restore the clefs, scales, and key signatures selected for Order of Keys.
+
+**Examples**
+
+```pycon
+>>> load_order_of_keys()
+```
+
 ## load_scale_identification
 
 ```python
@@ -1136,6 +1152,7 @@ KeySignatureSettingsPanel(
     cfg: settings.KeySignatureSettings,
     *,
     prefix: str = 'keySignatures',
+    keys_title: str = 'Key signatures',
     parent: QWidget | None = None,
 )
 ```
@@ -1176,6 +1193,7 @@ Build the panel for a set of settings.
 
 - `cfg` (*KeySignatureSettings*): The settings to edit.
 - `prefix` (*str, default "keySignatures"*): What the settings are saved under. Keyword-only.
+- `keys_title` (*str, default "Key signatures"*): Title for the signature checklist when the exercise uses a single list. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
 
 **Constructor examples**

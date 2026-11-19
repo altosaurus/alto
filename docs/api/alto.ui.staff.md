@@ -72,44 +72,6 @@ Return the symbol and the place of one way of writing a clef.
 (('F', 6), ('C', 0))
 ```
 
-## key_signature_positions
-
-```python
-def key_signature_positions(
-    clef: str,
-    *,
-    sign: int,
-) -> list[str]
-```
-
-Return the notes the sharps or flats of a key signature are written on, in a clef.
-
-Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
-the treble, bass, alto and tenor clefs, and works out the rest.
-
-**Parameters**
-
-- `clef` (*str*): A key of `BOTTOM_LINE`.
-- `sign` (*int*): 1 for sharps, -1 for flats. Keyword-only.
-
-**Returns**
-
-- *list of str*: Seven note names with octaves, in the order the accidentals appear.
-
-**Raises**
-
-- *ValueError*: If no placement keeps all seven accidentals on the staff.
-
-**Examples**
-
-```pycon
->>> key_signature_positions("treble", sign=1)
-['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
->>> key_signature_positions("bass", sign=-1)
-['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
-```
-
 ## draw_key_signature
 
 ```python
@@ -155,6 +117,41 @@ Draw the sharps or flats of a key signature, left to right.
 True
 >>> any(image.pixelColor(x_, y_).lightness() < 128 for x_ in range(10, 60) for y_ in range(20, 100))
 True
+```
+
+## draw_signature_sign
+
+```python
+def draw_signature_sign(
+    p: QPainter,
+    *,
+    sign: int,
+    x: float,
+    y: float,
+    gap: float,
+    color: QColor,
+    step: float = KEY_STEP,
+    size: float = 2.0,
+    font: str | None = None,
+) -> None
+```
+
+Draw one sharp or flat at its written position in a key signature.
+
+**Parameters**
+
+- `p` (*QPainter*): Active staff painter.
+- `sign` (*int*): Sharp (1) or flat (-1).
+- `x, y` (*float*): Left edge and staff pitch position in pixels.
+- `gap` (*float*): Distance between staff lines.
+- `color` (*QColor*): Ink for this sign.
+- `step, size` (*float*): Slot width in pixels and built-in glyph size in staff gaps.
+- `font` (*str or None*): SMuFL font, or None for the built-in notation.
+
+**Examples**
+
+```pycon
+Both the printed signature and signs placed by the learner use this drawing.
 ```
 
 ## StaffWidget

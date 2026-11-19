@@ -799,6 +799,98 @@ Place the next note or mark the next step on a left click; change the sign or th
 ['E4']
 ```
 
+## SignatureInput
+
+```python
+class SignatureInput(ScaleInput)
+```
+
+Place accidentals in consecutive key-signature slots immediately after the clef.
+
+**Examples**
+
+```pycon
+>>> staff = SignatureInput()
+>>> staff.reset_scale("treble", slots=7, caption="D major")
+>>> staff.place_next(Note.parse("F#5"))
+>>> staff.notes, staff.columns
+([Note(octave=5, letter=3, accidental=1)], [])
+```
+
+### SignatureInput.reset_signature
+
+```python
+def reset_signature(
+    clef: str,
+    *,
+    key: int,
+    caption: str,
+    starting_slots: list[int],
+) -> None
+```
+
+Set the fixed signs for this question and clear the learner’s entries.
+
+**Parameters**
+
+- `clef` (*str*): Clef used to read the positions.
+- `key` (*int*): Target signature.
+- `caption` (*str*): Name of the key under the staff.
+- `starting_slots` (*list of int*): Positions to fill before the learner begins.
+
+**Examples**
+
+```pycon
+>>> staff = SignatureInput()
+>>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+>>> len(staff.template), staff.template[1]
+(7, Note(octave=5, letter=0, accidental=1))
+```
+
+### SignatureInput.entered_signature
+
+```python
+def entered_signature() -> list[Note | None]
+```
+
+Combine the fixed signs and the learner's entries in staff order.
+
+**Returns**
+
+- *list of Note or None*: One pitch per occupied slot, with None in each remaining gap.
+
+**Examples**
+
+```pycon
+>>> staff = SignatureInput()
+>>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+>>> staff.place_next(Note.parse("F#5"))
+>>> [str(n) for n in staff.entered_signature() if n is not None]
+['F♯5', 'C♯5']
+```
+
+### SignatureInput.paintEvent
+
+```python
+def paintEvent(event: QPaintEvent) -> None
+```
+
+Draw the blank staff and caption, then the placed signs and the next sign under the pointer.
+
+**Parameters**
+
+- `event` (*QPaintEvent*): The paint request.
+
+**Examples**
+
+```pycon
+>>> staff = SignatureInput()
+>>> staff.reset_scale("bass", slots=7)
+>>> staff.place_next(Note.parse("Bb2"))
+>>> staff.grab().isNull()
+False
+```
+
 ## ClefInput
 
 ```python

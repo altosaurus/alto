@@ -270,6 +270,16 @@ In the exercise settings you can choose:
 
 The settings are kept apart from those of Key Signature Identification.
 
+## Order of Keys
+
+Read the key below the blank staff. Choose **♯** or **♭**, then click the line or space for each sign in order. Each click fills the next slot after the clef. For D major in treble clef, place F♯ on the top line, then C♯ in the third space.
+
+Use **Undo** (Backspace) to remove the last sign and **Answer** (Return) to submit. Submit the empty staff for a key with no sharps or flats, such as C major, A minor, or D Dorian. With the keyboard, choose a sharp with **+** or a flat with **−**, move up or down with the arrow keys, and press **P** to place each sign.
+
+Open the exercise settings to choose **Clefs**, **Scales**, and **Key Signatures**. By default, questions use treble and bass clefs, major and natural minor scales, and all 15 signatures. You can select any of the seven single-staff clefs and any of the seven diatonic modes. For example, selecting alto clef, Dorian, and two flats gives you C Dorian on an alto staff.
+
+**Starting Accidentals** lets you choose how many sharps or flats are already on the staff. The default, **0**, starts with a blank signature. For example, with **2 ♯** selected, a question in A major shows two of its three sharps in their usual positions. Place the missing signs from left to right. You can enter up to seven signs in total, including those already shown. If the key needs six and you submit seven, the answer is marked wrong. **Undo** removes only signs you placed. When all the signs are already present, press **Answer**. Counts must fit one of your selected key signatures. If changing keys rules out every selected count, the setting returns to **0**.
+
 ## Scale Spelling
 
 A question such as "In B♭ Dorian, what is scale degree 3?" Press the note's name. Each scale uses every letter name

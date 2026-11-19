@@ -47,7 +47,7 @@ KEY_SIGNATURES = Lesson(
     about="Read the sharps or flats after a clef and work out which ones to write for a given key.",
     summary="Read and build major and minor key signatures.",
     exercise="KeySignatures",
-    related_exercises=("KeySignatureConstruction",),
+    related_exercises=("KeySignatureConstruction", "OrderOfKeys"),
     steps=(
         Step(
             title="Two ways to write F sharp",

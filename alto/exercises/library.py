@@ -39,6 +39,7 @@ from alto.theory.fifths import (
     display_minor,
     numeral_chords,
 )
+from alto.theory.key_signatures import written_signature
 from alto.theory.pitch import (
     MAJOR_KEYS,
     NATURAL_SEMITONES,
@@ -1012,6 +1013,108 @@ class KeySignatureConstruction(Exercise):
             caption=name,
             build_key=True,
             explanation=f"{name}: {format_key_signature(count)}: " + " ".join(n.name for n in notes),
+        )
+
+
+@register
+class OrderOfKeys(Exercise):
+    """
+    Write the accidentals of a named key signature in order.
+
+    Examples
+    --------
+    >>> OrderOfKeys().generate(random.Random(1)).place_signature
+    True
+    """
+
+    name = "Order of Keys"
+    category = "Scales & keys"
+    description = "Place a key’s sharps or flats on the staff in order."
+    par_seconds = 12.0
+    has_sound = False
+
+    def settings_signature(self) -> str:
+        """
+        Identify the selections used to generate a practice question.
+
+        Returns
+        -------
+        str
+            The original empty signature at the defaults, so earlier questions remain available for review.
+
+        Examples
+        --------
+        >>> OrderOfKeys().settings_signature()
+        ''
+        """
+        cfg = settings.order_of_keys
+        base = settings.KeySignatureSettings(clefs=cfg.clefs, modes=cfg.modes, keys=cfg.keys)
+        if cfg.starting_accidentals == {0}:
+            return "" if base == settings.KeySignatureSettings() else signature(base)
+        return signature(base, cfg.starting_accidentals)
+
+    def instructions(self) -> str:
+        """
+        Explain how to enter and submit a signature.
+
+        Returns
+        -------
+        str
+            The exercise help text.
+
+        Examples
+        --------
+        >>> "Undo" in OrderOfKeys().instructions()
+        True
+        """
+        return (
+            "Read the key below the staff. Choose ♯ or ♭ and click the line or space for each sign, "
+            "starting with the leftmost empty position. Leave any printed signs in place. "
+            "You can also use ↑ and ↓ to choose a position and P to place the sign. "
+            "Use Undo to take back the last sign. Press Answer or Return when the signature is complete. "
+            "If the key has no sharps or flats, submit the empty staff."
+        )
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Choose a key from the selected scales and signatures and spell it in a selected clef.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Source for the key, mode, and clef.
+
+        Returns
+        -------
+        Question
+            The named key and the ordered signs with their exact staff octaves.
+
+        Examples
+        --------
+        >>> q = OrderOfKeys().generate(random.Random(2))
+        >>> q.show_staff and not q.choices
+        True
+        """
+        cfg = settings.order_of_keys
+        starts = sorted(cfg.starting_accidentals.intersection(cfg.available_starts())) or [0]
+        start = starts[0] if len(starts) == 1 else rng.choice(starts)
+        keys = [key for key in cfg.active_keys() if min(0, key) <= start <= max(0, key)]
+        count = rng.choice(keys)
+        mode = rng.choice(cfg.active_modes())
+        clef = rng.choice(cfg.active_clefs())
+        name = f"{mode_tonic(count, mode=mode).name} {_scale_name(mode)}"
+        signs = written_signature(clef, key=count)
+        return Question(
+            f"Write the key signature for {name}.",
+            choices=[],
+            answer=" ".join(map(str, signs)) or "No accidentals",
+            caption=name,
+            clef=clef,
+            key=count,
+            show_staff=True,
+            place_signature=True,
+            starting_slots=sorted(rng.sample(range(abs(count)), abs(start))),
+            accidentals=True,
         )
 
 

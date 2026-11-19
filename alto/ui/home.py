@@ -71,6 +71,7 @@ EXERCISE_ICONS = {
     "NoteConstruction": icons.EXERCISE_CONSTRUCTION,
     "IntervalNames": icons.EXERCISE_INTERVALS,
     "KeyboardIntervals": icons.EXERCISE_KEYBOARD_INTERVALS,
+    "OrderOfKeys": icons.EXERCISE_ORDER_OF_KEYS,
     "KeySignatures": icons.EXERCISE_KEY_SIGNATURES,
     "KeySignatureConstruction": icons.EXERCISE_KEY_CONSTRUCTION,
     "ScaleIdentification": icons.EXERCISE_SCALES,

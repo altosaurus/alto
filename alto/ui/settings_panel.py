@@ -84,6 +84,7 @@ from alto.exercises.library import (
     NotationIdentification,
     NoteConstruction,
     NoteNames,
+    OrderOfKeys,
     ScaleConstruction,
     ScaleIdentification,
 )
@@ -105,7 +106,7 @@ from alto.theory.pitch import (
     MAJOR_KEYS,
     Note,
 )
-from alto.theory.scales import INVERSION_NAMES, mode_tonic
+from alto.theory.scales import INVERSION_NAMES, format_key_signature, mode_tonic
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
@@ -2210,6 +2211,7 @@ class KeyChecklist(QWidget):
         selected: set[int],
         *,
         allow_empty: bool = False,
+        counts_only: bool = False,
         key_names: dict[int, str] | None = None,
         parent: QWidget | None = None,
     ) -> None:
@@ -2222,6 +2224,8 @@ class KeyChecklist(QWidget):
             The key signatures to check initially.
         allow_empty : bool, default False
             Allow every key to be unchecked. Keyword-only.
+        counts_only : bool, default False
+            Label each box with its accidental count instead of drawing a signature. Keyword-only.
         key_names : dict of int to str or None, default None
             Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
@@ -2263,8 +2267,12 @@ class KeyChecklist(QWidget):
                 grid.setColumnStretch(column, 1)
         else:
             for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
-                description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
-                _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
+                if counts_only:
+                    box.setText(f"{abs(k)} {'♭' if k < 0 else '♯'}" if k else "0")
+                    box.setAccessibleName(format_key_signature(k))
+                else:
+                    description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
+                    _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
             # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
             outer = QVBoxLayout(self)
             outer.setContentsMargins(
@@ -4759,6 +4767,20 @@ def load_key_construction() -> None:
     _load_key_settings(settings.key_construction, prefix="keyConstruction")
 
 
+def load_order_of_keys() -> None:
+    """
+    Restore the clefs, scales, and key signatures selected for Order of Keys.
+
+    Examples
+    --------
+    >>> load_order_of_keys()
+    """
+    cfg = settings.order_of_keys
+    _load_key_settings(cfg, prefix="orderOfKeys")
+    saved = text_value(store(), key="orderOfKeys/startingAccidentals", default="0").split(",")
+    cfg.starting_accidentals = {n for n in cfg.available_starts() if str(n) in saved} or {0}
+
+
 def load_scale_identification() -> None:
     """
     Load the saved scale identification options independently of scale construction.
@@ -4832,6 +4854,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         cfg: settings.KeySignatureSettings,
         *,
         prefix: str = "keySignatures",
+        keys_title: str = "Key signatures",
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -4843,6 +4866,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             The settings to edit.
         prefix : str, default "keySignatures"
             What the settings are saved under. Keyword-only.
+        keys_title : str, default "Key signatures"
+            Title for the signature checklist when the exercise uses a single list. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the panel. Keyword-only.
 
@@ -4880,7 +4905,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         )  # these have a signature for the staff and one for the scale
         self.clefs_row = _Row("Clefs")
         self.modes_row = _Row("Scales")
-        self.keys_row = _Row("Scale Key" if scales else "Key signatures")
+        self.keys_row = _Row("Scale Key" if scales else keys_title)
         self.staff_keys_row: _Row | None = _Row("Staff Key") if scales else None
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
@@ -4894,6 +4919,9 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         if self.staff_keys_row is not None:
             menu_rows.append(self.staff_keys_row)  # the staff's key and the scale's are next to each other
         menu_rows.append(self.keys_row)
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            self.starts_row = _Row("Starting Accidentals")
+            menu_rows.append(self.starts_row)
         if scales:
             self.motion_row = _Row("Motion")
             menu_rows.append(self.motion_row)
@@ -4989,7 +5017,25 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             pages.append(_subpage("Scale Key", body=_scrolling(self.scale_keys), back=lambda: self._go(0), fill=True))
             pages.append(_subpage("Motion", body=_direction_choices(cfg, edited=self._save_and_emit), back=lambda: self._go(0)))
         else:
-            pages.append(_subpage("Key signatures", body=self.key_list, back=lambda: self._go(0)))
+            pages.append(_subpage(keys_title, body=self.key_list, back=lambda: self._go(0)))
+
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            self.starts_list = KeyChecklist(cfg.starting_accidentals, counts_only=True)
+
+            def save_starts() -> None:
+                """
+                Apply the counts checked in Starting Accidentals.
+
+                Examples
+                --------
+                Checking two flats allows signatures to begin with two printed flats.
+                """
+                cfg.starting_accidentals = self.starts_list.selected()
+                self._refresh_summaries()
+                self._save_and_emit()
+
+            self.starts_list.changed.connect(save_starts)
+            pages.append(_subpage("Starting Accidentals", body=_scrolling(self.starts_list), back=lambda: self._go(0), fill=True))
 
         if isinstance(cfg, settings.ScaleIdentificationSettings):
             pages.append(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
@@ -5063,6 +5109,17 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             self.keys_row.value.setText(f"{len(self.key_list.selected())} major · {len(minor_keys.selected())} minor")
         else:
             _show_keys(self.keys_row, diagram=self.keys_diagram, enabled=True, keys=set(cfg.active_keys()))
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            allowed = cfg.available_starts()
+            selected = cfg.starting_accidentals.intersection(allowed) or {0}
+            cfg.starting_accidentals = selected
+            for count, box in self.starts_list.boxes.items():
+                box.blockSignals(True)
+                box.setChecked(count in selected)
+                box.blockSignals(False)
+                box.setEnabled(count in allowed and selected != {count})
+            summary = self.starts_list.boxes[next(iter(selected))].text() if len(selected) == 1 else f"{len(selected)} of 15"
+            self.starts_row.value.setText(summary)
         if self.staff_keys_row is not None and isinstance(
             cfg,
             (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
@@ -5098,6 +5155,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             keys = sorted(cfg.keys)
             saved_settings.setValue(f"{self.prefix}/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys)))
         saved_settings.setValue(f"{self.prefix}/keys", ",".join(str(k) for k in keys))
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            saved_settings.setValue(f"{self.prefix}/startingAccidentals", ",".join(map(str, sorted(cfg.starting_accidentals))))
         if isinstance(cfg, settings.ScaleConstructionSettings):
             saved_settings.setValue(f"{self.prefix}/steps", "true" if cfg.steps else "false")
             saved_settings.setValue(f"{self.prefix}/octave", "true" if cfg.octave else "false")
@@ -5223,7 +5282,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.cfg.keys = self.key_list.selected()
         if isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             self.cfg.minor_keys = self.scale_keys.minor_keys.selected()
-            self._refresh_summaries()
+        self._refresh_summaries()
         self._save_and_emit()
 
 
@@ -6205,6 +6264,8 @@ def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
         return ArpeggioSettingsPanel(settings.arpeggio)
     if isinstance(exercise, KeySignatures):
         return KeySignatureSettingsPanel(settings.key_signatures)
+    if isinstance(exercise, OrderOfKeys):
+        return KeySignatureSettingsPanel(settings.order_of_keys, prefix="orderOfKeys", keys_title="Key Signatures")
     if isinstance(exercise, KeySignatureConstruction):
         return KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction")
     if isinstance(exercise, ScaleIdentification):
