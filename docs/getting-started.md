@@ -114,6 +114,8 @@ delete those too; use **Export backup…** first if you might want them back.
 
 The first time you open Alto it asks you to create a profile.
 
+{% include shot.html src="home.png" alt="The home screen after creating a profile" %}
+
 Type a name and press **Create profile**. There is no password, and the name is only a label that keeps your history
 separate from anyone else who uses the same computer. Next time Alto opens straight into the profile you used last.
 
@@ -146,12 +148,20 @@ the switch happens. With **Wait**, click **Next** after reviewing your answer. Y
 a question. Shuffle uses the updated list for the next question and returns to the tiles if the list is empty.
 Click the highlighted shuffle icon again to turn it off.
 
+{% include shot.html src="filtered-practice.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" caption="Only the checked exercises appear in the grid. The New, Learn, and Due totals at the left count cards from these two exercises." %}
+
 During an exercise or lesson, **Exercises / Lessons** switches the list while keeping your activity on screen. Selecting
 an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
 **Statistics** and **Browse database** are at the top right. The sliders button opens the exercise's own settings, and **?**
 explains it.
 
-{% include shot.html src="note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" caption="An exercise screen. The row of buttons below the staff holds the possible answers." %}
+{% include shot.html src="filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the next interval beside the staff" caption="The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice." %}
+
+## Glossary
+
+Open **Glossary** in the top toolbar to look up a term. Search for *minor*, for example, and select **harmonic minor scale**. You can hear the scale, try another example, or open a related exercise from the same page.
+
+{% include shot.html src="glossary.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" caption="In A harmonic minor, listen for the three half steps from F to G♯ and the half step from G♯ to A." %}
 
 ## Running the tests
 

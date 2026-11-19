@@ -21,6 +21,8 @@ Consider a single Note Identification question, F♯ in treble clef. A scheduler
 
 In **Settings → Practice**, select **Grade correct answers with Hard, Good, or Easy**. After a correct answer, **Hard** and **Good** keep a new card in its short learning steps. **Easy** skips those steps. SM-2 starts its first Easy review at 4 days. With Alto’s default FSRS settings, the starting estimate is about 8.3 days.
 
+{% include shot.html src="self-grading.png" alt="A correct Note Identification answer with the review intervals above Hard, Good, and Easy" caption="Choose a grade to schedule the card at the interval above that button." %}
+
 | First correct answer | SM-2 | FSRS |
 | --- | --- | --- |
 | Hard | 5 min 30 s | 5 min 30 s |
@@ -186,9 +188,15 @@ For SM-2 and FSRS, exercise tiles show **new cards in blue**, **missed cards awa
 
 On the exercise screen, the counts appear at the top, immediately to the left of the score and streak, in **blue / red / green** order: new cards, outstanding incorrect cards, and due reviews. The underlined number identifies the current card’s queue. A retry that is due appears in both the red and green counts, with red underlined while you answer it.
 
+{% include shot.html src="keyboard-review.png" alt="Keyboard Note Identification with three colored counts next to the streak and Next interval beneath the keyboard" caption="With automatic grading, Next interval shows when this card will return if you answer correctly." %}
+
 After a miss, Alto sets the card aside and offers other eligible questions. If the missed card is the only review left within your daily limit, the exercise shows its return time and resumes automatically when it is due.
 
+{% include shot.html src="waiting-for-review.png" alt="An exercise waiting for a missed card, with its return time and the red outstanding-card count" caption="You can leave the exercise open. Practice resumes when the missed card is due." %}
+
 The two algorithms share the day’s allowances and keep separate review dates. Opening a new card uses one introduction slot. If you leave before answering, you can return to that card without using another slot. The allowances reset at local midnight, and overdue reviews remain due.
+
+You can see the next review date for a specific card in the [database browser]({{ '/statistics/' | relative_url }}#browsing-the-database).
 
 ## Switching schedulers
 

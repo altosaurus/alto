@@ -30,6 +30,8 @@ Due questions come first. By default, Alto grades the first submission automatic
 With automatic grading, **Next interval** shows how long after a correct first answer the card will be due. The value appears at the lower right of the music,
 or on one line beneath the keyboard. A new SM-2 card shows **1 day**, and a new FSRS card shows **10 min**.
 
+{% include shot.html src="keyboard-review.png" alt="A calendar review showing the next interval along the lower-right edge of the piano keyboard" %}
+
 To choose your own interval, enable **Grade correct answers with Hard, Good, or Easy** in **Settings → Practice**. After a correct answer, the interval appears above each grade button. Choose how difficult it was to recall the answer to schedule the review and move on. Response time ends when you answer the exercise. A wrong answer automatically earns **Again** and moves you to the next available card. Self-grading disables the exercise’s **Next Question** setting. Both algorithms use Anki’s default learning steps. On a new card, Hard repeats in 5 min 30 s, Good advances to 10 min, and Easy skips to a day-based review. SM-2 starts Easy around four days. FSRS calculates it from memory stability at 90% desired retention. Alto applies the displayed delay from the time you choose a grade and uses its own daily limits. [Anki deck options](https://docs.ankiweb.net/deck-options.html)
 
 For the range above each grade button and an example of how Alto spreads new cards across review days, see [Self-grading a new card]({{ '/practice/' | relative_url }}#self-grading-a-new-card).

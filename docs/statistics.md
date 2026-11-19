@@ -9,12 +9,12 @@ permalink: /statistics/
 Open the statistics from the chart button next to the menu button, or from the menu. They always show the active
 profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page you came from.
 
-{% include shot.html src="stats.png" alt="The statistics page with summary tiles and four charts" caption="Statistics for a demo profile." %}
-
 ### Filters
 
 - **Exercise:** all exercises, or any one of them.
 - **Timeframe:** today, the last 7, 30 or 90 days, the last year, or all time.
+
+{% include shot.html src="stats.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" caption="Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day." %}
 
 ### What you see
 
@@ -58,7 +58,7 @@ A question counts as **right** only if your first answer was right. That is the 
 
 The database button next to the statistics button opens a read-only view of what is stored. It never changes anything.
 
-{% include shot.html src="database.png" alt="The database browser listing answers in a table" %}
+{% include shot.html src="database.png" alt="The Answers table with the next review date in the Due column at the right" %}
 
 Three tables are available:
 
@@ -67,6 +67,8 @@ Three tables are available:
 - **Profiles:** everyone who has a profile, with how many answers and questions each has.
 
 In both **Answers** and **Questions**, **Due** shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.
+
+{% include shot.html src="database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" caption="Last seen records when you practiced the question. Due shows when the scheduler wants to show it again." %}
 
 Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
 limited to the newest 10,000 rows each; the line above the table says when that applies.

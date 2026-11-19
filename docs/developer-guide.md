@@ -53,15 +53,15 @@ Opening **Pitches and Notes** puts the lesson outline on the left. On the right,
 
 ### Glossary
 
-The glossary button opens a searchable term list. Selecting **accidental** updates the definition, the example on the staff, and the links to related practice. The example uses the same staff class as Note Identification.
+The glossary button opens a searchable term list. Selecting **harmonic minor scale** updates the definition, the example on the staff, and the links to related practice. The example uses the same staff class as Note Identification.
 
-{% include component-shot.html screen="glossary" width=1100 height=768 alt="The accidental glossary entry with a term list, a staff example, and related exercise tiles." %}
+{% include component-shot.html screen="glossary" width=1100 height=720 alt="The harmonic minor scale glossary entry with a term list, a staff example, and related exercise tiles." %}
 
 ### Statistics
 
-The chart button opens `StatsPage` for the active learner. Changing the exercise or date filter updates both the totals and the graphs. Each chart paints its own data. For example, the stacked bars show question counts, while the line beside them shows daily accuracy.
+The chart button opens `StatsPage` for the active learner. Changing the exercise or date filter updates both the totals and the graphs. Each chart paints its own data. For example, the stacked bars group questions by the period selected under **Granularity**, while the line beside them shows daily accuracy.
 
-{% include component-shot.html screen="stats" width=1100 height=768 alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." %}
+{% include component-shot.html screen="stats" width=1100 height=720 alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." %}
 
 ### Database and answer details
 
@@ -69,7 +69,7 @@ The database button opens the history browser. `DatabasePage` handles the table 
 
 The [Database chapter]({{ '/developer-guide/database/' | relative_url }}) diagrams the relationships between profiles, submitted answers, and question summaries, and documents every stored column.
 
-{% include component-shot.html screen="database" width=1100 height=768 alt="The database browser with Answers selected, a search field, and rows of recorded attempts." %}
+{% include component-shot.html screen="database" width=1100 height=720 alt="The database browser with Answers selected, a search field, and rows of recorded attempts." %}
 
 Double-clicking an answer opens a separate `QuestionPreview` dialog. It recreates the question from the saved record. This chord example has a `StaffWidget` above the answer and timing details.
 

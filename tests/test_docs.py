@@ -65,7 +65,8 @@ def shown() -> set[str]:
         The pictures the docs pages include.
     """
     found = set()
-    for page in (ROOT / "docs").glob("*.md"):
+    docs = ROOT / "docs"
+    for page in (*docs.glob("*.md"), *(docs / "guide").glob("*.md")):
         found |= set(re.findall(r'shot\.html src="([^"]+)\.png"', page.read_text()))
     home = (ROOT / "docs" / "index.md").read_text()
     front_matter = home.split("---", 2)[1]
