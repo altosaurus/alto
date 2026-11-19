@@ -10,6 +10,48 @@ Daily exercise queues for SM-2 and FSRS.
 The scheduler controls when an introduced card is due. Each exercise supplies new
 questions under its current settings. Counting a prepared question does not introduce it.
 
+## ReviewInterval
+
+```python
+ReviewInterval(
+    seconds: int,
+    identity: tuple[int, str, str, str],
+    previous_state: str | None,
+    rating: Rating = Rating.Good,
+    graded_state: str | None = None,
+    previous_due: float | None = None,
+)
+```
+
+A preview of one rating for a card in its current scheduling state.
+
+**Examples**
+
+```pycon
+>>> ReviewInterval(600, (1, "NoteNames", "abc", "FSRS"), None).seconds
+600
+```
+
+### ReviewInterval.duration
+
+```python
+@property
+def duration() -> str
+```
+
+Format a review interval for display above a grade button or beside the music.
+
+**Returns**
+
+- *str*: A whole-day interval or a short learning step in minutes and seconds.
+
+**Examples**
+
+```pycon
+>>> ReviewInterval(330, (1, "NoteNames", "abc", "FSRS"), None).duration
+'5 min 30 s'
+```
+
 ## CalendarPractice
 
 ```python
@@ -41,6 +83,29 @@ Attach the queues to an Alto database.
 {}
 ```
 
+### CalendarPractice.inherit_schedules
+
+```python
+def inherit_schedules(
+    profile: int,
+    *,
+    mode: str,
+) -> None
+```
+
+Initialize missing schedules for this profile from the other calendar scheduler.
+
+**Parameters**
+
+- `profile` (*int*): Profile entering calendar practice.
+- `mode` (*str*): Selected scheduler. Adaptive practice uses no calendar schedules.
+
+**Examples**
+
+```pycon
+Switching to FSRS carries over an SM-2 due date without consuming a review.
+```
+
 ### CalendarPractice.limits
 
 ```python
@@ -60,7 +125,7 @@ Return the effective daily new-card and review limits.
 
 **Returns**
 
-- *tuple of int and int*: New cards and completed reviews allowed per exercise per local day.
+- *tuple of int and int*: New cards and completed reviews allowed per exercise per local day. UNLIMITED removes the cap.
 
 **Examples**
 
@@ -115,8 +180,8 @@ Save the profile defaults or an exercise's individual overrides.
 
 - `profile` (*int*): Active profile.
 - `exercise` (*str*): Exercise class name, or an empty string for the profile defaults.
-- `new_cards` (*int or None*): Daily introductions, or None to inherit.
-- `reviews` (*int or None*): Daily reviews, or None to inherit.
+- `new_cards` (*int or None*): Daily introductions, UNLIMITED for no cap, or None to inherit.
+- `reviews` (*int or None*): Daily reviews, UNLIMITED for no cap, or None to inherit.
 
 **Examples**
 
@@ -217,6 +282,73 @@ Count due reviews and unseen cards available with the selected settings.
 True
 ```
 
+### CalendarPractice.tile_counts
+
+```python
+def tile_counts(
+    exercise: Exercise,
+    *,
+    profile: int,
+    mode: str,
+    now: float,
+) -> tuple[int, int, int]
+```
+
+Count available reviews, new cards, and missed cards awaiting a correct review.
+
+**Parameters**
+
+- `exercise` (*Exercise*): Exercise with the current settings.
+- `profile` (*int*): Active profile ID.
+- `mode` (*str*): Active calendar scheduler.
+- `now` (*float*): Current timestamp.
+
+**Returns**
+
+- *tuple of int, int, int*: Due reviews, available new cards, and outstanding incorrect cards. A due retry counts in both review totals.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> db = Database()
+>>> CalendarPractice(db).tile_counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[2]
+0
+```
+
+### CalendarPractice.study_counts
+
+```python
+def study_counts(
+    exercise: Exercise,
+    *,
+    profile: int,
+    mode: str,
+    now: float,
+    current_key: str | None = None,
+) -> tuple[tuple[int, int, int], str | None]
+```
+
+Count the exercise queues and identify the queue of the question on screen.
+
+**Parameters**
+
+- `exercise` (*Exercise*): Exercise with the current settings.
+- `profile` (*int*): Active profile ID.
+- `mode` (*str*): Active calendar scheduler.
+- `now` (*float*): Current timestamp.
+- `current_key` (*str or None*): Item key of the question awaiting an answer.
+
+**Returns**
+
+- *tuple*: The same review, new, and incorrect counts as the tiles, plus the current queue if a question is active.
+
+**Examples**
+
+```pycon
+A missed card that comes due again is underlined as incorrect during its retry.
+```
+
 ### CalendarPractice.take
 
 ```python
@@ -253,6 +385,137 @@ Take the first eligible card, recording a new introduction only when served.
 True
 ```
 
+### CalendarPractice.take_or_wait
+
+```python
+def take_or_wait(
+    exercise: Exercise,
+    *,
+    profile: int,
+    mode: str,
+    now: float,
+    avoid: str | None = None,
+    wait_learning: bool = False,
+) -> tuple[Question | None, float | None]
+```
+
+Draw an eligible card or return the time when a missed card can be reviewed.
+
+**Parameters**
+
+- `exercise` (*Exercise*): Exercise with the current settings.
+- `profile` (*int*): Active profile ID.
+- `mode` (*str*): Active calendar scheduler.
+- `now` (*float*): Presentation timestamp.
+- `avoid` (*str or None*): Prefer another available card to the one just shown.
+- `wait_learning` (*bool*): Also wake the exercise when a correctly answered learning card comes due.
+
+**Returns**
+
+- *tuple*: The next question and, when the queue is waiting for a retry, its due timestamp.
+
+**Examples**
+
+```pycon
+A single missed card can wake the exercise when its learning step expires.
+```
+
+### CalendarPractice.introduce
+
+```python
+def introduce(
+    exercise: Exercise,
+    *,
+    profile: int,
+    question: Question,
+    now: float,
+) -> None
+```
+
+Register a calendar introduction once, in the caller's draw or answer transaction.
+
+**Parameters**
+
+- `exercise` (*Exercise*): Exercise that supplied this question.
+- `profile` (*int*): Practicing profile.
+- `question` (*Question*): New or previously introduced question.
+- `now` (*float*): Time of introduction.
+
+**Examples**
+
+```pycon
+Answering a pending card keeps its original introduction day.
+```
+
+### CalendarPractice.correct_interval
+
+```python
+def correct_interval(
+    exercise: str,
+    *,
+    profile: int,
+    key: str,
+    mode: str,
+    now: float,
+) -> ReviewInterval
+```
+
+Preview the next correct answer without grading the card.
+
+**Parameters**
+
+- `exercise` (*str*): Exercise class name.
+- `profile` (*int*): Active profile ID.
+- `key` (*str*): Card identity.
+- `mode` (*str*): Calendar scheduler.
+- `now` (*float*): Presentation timestamp.
+
+**Returns**
+
+- *ReviewInterval*: Delay to display and reuse when the answer is submitted.
+
+**Examples**
+
+```pycon
+>>> CalendarPractice(Database()).correct_interval("NoteNames", profile=1, key="abc", mode="FSRS", now=1000).seconds
+600
+```
+
+### CalendarPractice.passing_intervals
+
+```python
+def passing_intervals(
+    exercise: str,
+    *,
+    profile: int,
+    key: str,
+    mode: str,
+    now: float,
+) -> dict[Rating, ReviewInterval]
+```
+
+Preview the three passing outcomes from one snapshot of this card.
+
+**Parameters**
+
+- `exercise` (*str*): Exercise class name.
+- `profile` (*int*): Active profile.
+- `key` (*str*): Card identity.
+- `mode` (*str*): Calendar scheduler.
+- `now` (*float*): Time of the correct answer.
+
+**Returns**
+
+- *dict*: Passing grades and their previews, including the state to save.
+
+**Examples**
+
+```pycon
+>>> practice = CalendarPractice(Database())
+>>> practice.passing_intervals("NoteNames", profile=1, key="abc", mode="SM-2", now=0)[Rating.Good].seconds
+600
+```
+
 ### CalendarPractice.grade
 
 ```python
@@ -264,6 +527,8 @@ def grade(
     mode: str,
     correct: bool,
     now: float,
+    manual_rating: Rating | None = None,
+    preview: ReviewInterval | None = None,
 ) -> None
 ```
 
@@ -276,7 +541,9 @@ Reschedule a card from the first submission to this presentation.
 - `key` (*str*): Stable card identity.
 - `mode` (*str*): Scheduler selected for this review.
 - `correct` (*bool*): Whether the first submission was correct.
+- `manual_rating` (*Rating or None*): Button grade or automatic Again in self-grading mode. None uses the automatic schedule.
 - `now` (*float*): Answer timestamp.
+- `preview` (*ReviewInterval or None*): Correct-answer interval shown for this presentation.
 
 **Examples**
 

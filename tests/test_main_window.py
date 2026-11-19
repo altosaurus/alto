@@ -953,11 +953,15 @@ def test_the_app_opens_a_window_for_the_chosen_profile(
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    db_profile = Database().add_profile("Ada")
+    path = tmp_path / "alto.db"
+    db = Database(path)
+    db_profile = db.add_profile("Ada")
+    db.close()
+    monkeypatch.setattr(entry, "database_path", lambda: path)
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry, "QApplication", FakeApp)
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(entry, "startup_profile", lambda db: db_profile)
+    monkeypatch.setattr(entry, "startup_profile", lambda db: db.profile(db_profile.id))
     shown = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry.MainWindow, "show", lambda self: shown.append(self))

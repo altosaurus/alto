@@ -17,12 +17,14 @@ import json
 import random
 import time
 
+from fsrs import Rating
+
 from alto.exercises.base import (
     Exercise,
     Question,
 )
 from alto.learning import scheduler
-from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, SCHEDULERS, CalendarPractice
+from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, SCHEDULERS, CalendarPractice, ReviewInterval
 from alto.learning.database import (
     Database,
     ItemRecord,
@@ -42,6 +44,23 @@ class PracticeComplete(Exception):
     >>> issubclass(PracticeComplete, Exception)
     True
     """
+
+    def __init__(self, retry_at: float | None = None) -> None:
+        """
+        Carry the next missed card's due time to the exercise screen.
+
+        Parameters
+        ----------
+        retry_at : float or None
+            Scheduled timestamp, or None when practice is finished for now.
+
+        Examples
+        --------
+        >>> PracticeComplete().retry_at is None
+        True
+        """
+        super().__init__()
+        self.retry_at = retry_at
 
 
 class Learner:
@@ -95,8 +114,28 @@ class Learner:
         'Ada'
         """
         self.db = db
+        self.set_profile(profile)
+
+    def set_profile(self, profile: Profile) -> None:
+        """
+        Open a profile's practice queues and resume its selected scheduler.
+
+        Parameters
+        ----------
+        profile : Profile
+            Profile loaded at launch, selected in the app, or restored from backup.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner.set_profile(db.add_profile("Ben"))
+        >>> learner.profile.name
+        'Ben'
+        """
         self.profile = profile
-        self.calendar = CalendarPractice(db)
+        self.calendar = CalendarPractice(self.db)
+        self.calendar.inherit_schedules(profile.id, mode=self.mode)
 
     @property
     def mode(self) -> str:
@@ -116,6 +155,44 @@ class Learner:
         """
         stored = self.db.conn.execute("SELECT scheduler FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0]
         return DEFAULT_SCHEDULER if stored == _STORED_ASRS else stored
+
+    @property
+    def self_grading(self) -> bool:
+        """
+        Read the profile's SM-2 and FSRS grading preference.
+
+        Returns
+        -------
+        bool
+            Whether a correct answer waits for a grade.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> Learner(db, profile=db.add_profile("Ada")).self_grading
+        False
+        """
+        return bool(self.db.conn.execute("SELECT self_grading FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0])
+
+    def set_self_grading(self, enabled: bool) -> None:
+        """
+        Choose how this profile grades correct calendar reviews.
+
+        Parameters
+        ----------
+        enabled : bool
+            Show Hard, Good, and Easy after a correct answer.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner.set_self_grading(True)
+        >>> learner.self_grading
+        True
+        """
+        with self.db.conn:
+            self.db.conn.execute("UPDATE profiles SET self_grading = ? WHERE id = ?", (enabled, self.profile.id))
 
     def set_mode(self, mode: str) -> None:
         """
@@ -142,7 +219,8 @@ class Learner:
         if mode != _STORED_ASRS and mode not in SCHEDULERS:
             raise ValueError(f"Unknown question scheduler: {mode}")
         stored = _STORED_ASRS if mode == DEFAULT_SCHEDULER else mode
-        with self.db.conn:
+        with self.db.write_transaction():
+            self.calendar.inherit_schedules(self.profile.id, mode=mode)
             self.db.conn.execute("UPDATE profiles SET scheduler = ? WHERE id = ?", (stored, self.profile.id))
 
     def pick(
@@ -192,9 +270,16 @@ class Learner:
         if mode == "ARTS":
             return self._pick_arts(exercise, rng=rng, avoid=avoid)
         if mode in CALENDAR_SCHEDULERS:
-            card = self.calendar.take(exercise, profile=self.profile.id, mode=mode, now=now)
+            card, retry_at = self.calendar.take_or_wait(
+                exercise,
+                profile=self.profile.id,
+                mode=mode,
+                now=now,
+                avoid=avoid,
+                wait_learning=self.self_grading,
+            )
             if card is None:
-                raise PracticeComplete
+                raise PracticeComplete(retry_at)
             return card
         name = type(exercise).__name__
         options: dict[str, tuple[Question, float]] = {}
@@ -295,6 +380,8 @@ class Learner:
         attempt_no: int,
         seconds: float,
         now: float | None = None,
+        preview: ReviewInterval | None = None,
+        self_grading: bool = False,
     ) -> None:
         """
         Log one answer and update what is known about the question.
@@ -315,6 +402,10 @@ class Learner:
             How long the answer took. Keyword-only.
         now : float or None, default None
             When it was answered, as a timestamp; the clock is used if None. Keyword-only.
+        preview : ReviewInterval or None
+            Correct-answer interval displayed for this question.
+        self_grading : bool
+            Defer scheduling a correct calendar answer until the learner rates it.
 
         Examples
         --------
@@ -370,9 +461,15 @@ class Learner:
             )
             mode = self.mode
             if first and mode in CALENDAR_SCHEDULERS:
-                self.calendar.grade(name, profile=self.profile.id, key=key, mode=mode, correct=correct, now=now)
-            elif first:
-                self.db.conn.execute(
-                    "UPDATE practice_cards SET pending_new=0 WHERE profile_id=? AND exercise=? AND item_key=? AND pending_new=1",
-                    (self.profile.id, name, key),
-                )
+                self.calendar.introduce(exercise, profile=self.profile.id, question=question, now=now)
+                if not (correct and self_grading):
+                    self.calendar.grade(
+                        name,
+                        profile=self.profile.id,
+                        key=key,
+                        mode=mode,
+                        correct=correct,
+                        now=now,
+                        preview=preview,
+                        manual_rating=Rating.Again if self_grading else None,
+                    )

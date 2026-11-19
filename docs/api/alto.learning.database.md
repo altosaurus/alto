@@ -42,7 +42,7 @@ Check that bytes are an intact Alto database that this version can read, and say
 
 ```pycon
 >>> check_snapshot(Database().snapshot())
-(3, 0, 0)
+(6, 0, 0)
 >>> check_snapshot(b"not a database")
 Traceback (most recent call last):
     ...
@@ -208,7 +208,7 @@ Return the whole database as bytes: every profile, answer and question record, e
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> check_snapshot(db.snapshot())
-(3, 1, 0)
+(6, 1, 0)
 ```
 
 ### Database.restore

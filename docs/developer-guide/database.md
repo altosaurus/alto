@@ -4,7 +4,7 @@ parent: developer-guide
 order: 2
 permalink: /developer-guide/database/
 ---
-Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 3, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
+Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 6, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
 
 A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends **two** rows to `attempts`, with durations of 3,000 and 1,000 milliseconds. It maintains **one** row in `items` for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.
 
@@ -34,6 +34,7 @@ One row per local practice profile.
 | `name` | TEXT | Unique, `COLLATE NOCASE` | Display name. Alto trims and collapses whitespace before insertion. SQLite’s case-insensitive comparison treats names such as Ada and ada as duplicates. |
 | `created_at` | REAL | | Time the profile was created. |
 | `scheduler` | TEXT | Default `Alto` | The profile’s selected question scheduler. ASRS retains its original database identifier, `Alto`. |
+| `self_grading` | INTEGER | Default 0 | Whether this profile rates correct answers in SM-2 and FSRS. |
 
 ### Attempts
 
@@ -71,25 +72,26 @@ One row per distinct question practiced by a particular profile within an exerci
 
 ### Practice cards
 
-Each row identifies one introduced card. Schema version 2 imports existing items as introduced cards so a scheduler change preserves their history.
+Each row identifies a calendar practice card. Version 6 removes adaptive-only entries from this table and retains their answer history in `items` and `attempts`.
 
 | Column | SQLite type | Meaning |
 |---|---|---|
 | `profile_id`, `exercise`, `item_key` | INTEGER, TEXT, TEXT | Composite primary key. Deleting the profile removes its cards. |
 | `signature`, `payload` | TEXT, TEXT | Exercise settings and playable question at introduction. |
-| `introduced_on` | TEXT | Local date of a calendar introduction. Empty for history imported from ASRS. |
+| `introduced_on` | TEXT | Local date of a calendar introduction. May be empty for scheduled cards imported by older versions. |
 | `pending_new` | INTEGER | 1 until the first answer to a new introduction, then 0. |
 
 ### Review schedules
 
-A practice card can have a separate schedule for SM-2 and FSRS. A card with no schedule for the selected algorithm is ready for its first review with that algorithm.
+A practice card can have a separate schedule for SM-2 and FSRS. On entry to a calendar scheduler, missing schedules are initialized from the other calendar scheduler for that profile. The inherited row preserves the due timestamp and last grade, with the state translated for its new scheduler. Existing schedules resume independently.
 
 | Column | SQLite type | Meaning |
 |---|---|---|
 | `profile_id`, `exercise`, `item_key` | INTEGER, TEXT, TEXT | Composite foreign key referencing the practice card, with cascading deletion. |
 | `scheduler` | TEXT | Together with the card identity, this forms the primary key. |
 | `due` | REAL | Unix timestamp of the next review. |
-| `state` | TEXT | JSON containing the SM-2 repetition count, interval and ease, or the FSRS library’s serialized card. |
+| `state` | TEXT | Automatic SM-2 stores repetitions, interval and ease. Self-graded SM-2 also stores the learning phase, step and scheduled delay. FSRS stores its serialized card. |
+| `last_rating` | INTEGER | The most recent grade (1 Again, 2 Hard, 3 Good, 4 Easy). Again marks a missed card for the red counter. |
 
 ### Practice limits
 
@@ -97,8 +99,8 @@ A practice card can have a separate schedule for SM-2 and FSRS. A card with no s
 | --- | --- | --- |
 | `profile_id` | INTEGER | Owning profile. Part of the primary key with `exercise`. |
 | `exercise` | TEXT | Exercise class name, or an empty string for the profile defaults. |
-| `new_cards` | INTEGER | Daily new-card allowance. NULL inherits the default. |
-| `reviews` | INTEGER | Daily review allowance. NULL inherits the default. |
+| `new_cards` | INTEGER | Daily new-card allowance. Zero pauses introductions, −1 allows unlimited introductions, and NULL inherits the default. |
+| `reviews` | INTEGER | Daily review allowance. Zero pauses reviews, −1 allows unlimited reviews, and NULL inherits the default. |
 
 ### Daily reviews
 
@@ -107,4 +109,4 @@ A practice card can have a separate schedule for SM-2 and FSRS. A card with no s
 | `profile_id` | INTEGER | Owning profile. |
 | `exercise` | TEXT | Exercise class name. |
 | `day` | TEXT | Local date. Together with profile and exercise, identifies the row. |
-| `completed` | INTEGER | First submissions on review presentations that day across SM-2 and FSRS. |
+| `completed` | INTEGER | Reviews graded that day across SM-2 and FSRS. |

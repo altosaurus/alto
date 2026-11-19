@@ -1892,7 +1892,7 @@ class MainWindow(QMainWindow):
         if accepted and chosen is not None and chosen != self.learner.profile:
             if self._settings is not None:
                 self._settings.close()
-            self.learner.profile = chosen
+            self.learner.set_profile(chosen)
             self.home.refresh_counts()
             # noinspection PyTypeChecker
             remember_profile(chosen)
@@ -1949,7 +1949,7 @@ class MainWindow(QMainWindow):
             return
         db = self.learner.db
         profiles = db.profiles()
-        self.learner.profile = db.profile(int_value(store(), key="profile/last", default=-1)) or profiles[0]
+        self.learner.set_profile(db.profile(int_value(store(), key="profile/last", default=-1)) or profiles[0])
         apply_theme(saved_theme())
         self.rebuild()  # a new window loads every setting, and draws every icon and color in the theme again
 

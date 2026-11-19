@@ -23,7 +23,7 @@ from dataclasses import (
 )
 from pathlib import Path
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 6
 
 _SCHEMA = """
 CREATE TABLE profiles (
@@ -117,6 +117,44 @@ UPDATE practice_cards AS c SET pending_new = 1 WHERE introduced_on IS NOT NULL
 """
 
 
+_UNLIMITED_LIMITS_SCHEMA = """
+ALTER TABLE practice_limits RENAME TO practice_limits_v3;
+CREATE TABLE practice_limits (
+    profile_id INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    exercise TEXT NOT NULL,
+    new_cards INTEGER CHECK (new_cards >= -1),
+    reviews INTEGER CHECK (reviews >= -1),
+    PRIMARY KEY (profile_id, exercise)
+);
+INSERT INTO practice_limits (profile_id, exercise, new_cards, reviews)
+SELECT profile_id, exercise, new_cards, reviews FROM practice_limits_v3;
+DROP TABLE practice_limits_v3;
+"""
+
+
+_GRADING_SCHEMA = """
+ALTER TABLE profiles ADD COLUMN self_grading INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE review_schedules ADD COLUMN last_rating INTEGER NOT NULL DEFAULT 3;
+UPDATE review_schedules SET last_rating = CASE
+    WHEN (scheduler = 'FSRS' AND json_extract(state, '$.step') = 0)
+      OR (scheduler = 'SM-2' AND json_extract(state, '$[1]') = 0) THEN 1
+    ELSE 3 END;
+"""
+
+
+_ISOLATE_CALENDAR_SCHEMA = """
+DROP TRIGGER remember_practiced_card;
+-- Old adaptive-only cards have no calendar introduction or grade. Their history remains in items and attempts.
+DELETE FROM practice_cards AS c WHERE introduced_on IS NULL AND NOT EXISTS (
+    SELECT 1 FROM review_schedules s WHERE (s.profile_id,s.exercise,s.item_key)=(c.profile_id,c.exercise,c.item_key)
+);
+-- An adaptive answer could mark a calendar introduction complete without grading it.
+UPDATE practice_cards AS c SET pending_new=1 WHERE introduced_on IS NOT NULL AND pending_new=0 AND NOT EXISTS (
+    SELECT 1 FROM review_schedules s WHERE (s.profile_id,s.exercise,s.item_key)=(c.profile_id,c.exercise,c.item_key)
+);
+"""
+
+
 def check_snapshot(data: bytes) -> tuple[int, int, int]:
     """
     Check that bytes are an intact Alto database that this version can read, and say what is in it.
@@ -139,7 +177,7 @@ def check_snapshot(data: bytes) -> tuple[int, int, int]:
     Examples
     --------
     >>> check_snapshot(Database().snapshot())
-    (3, 0, 0)
+    (6, 0, 0)
     >>> check_snapshot(b"not a database")
     Traceback (most recent call last):
         ...
@@ -294,7 +332,11 @@ class Database:
         """
         version = self.conn.execute("PRAGMA user_version").fetchone()[0]
         if version < SCHEMA_VERSION:
-            schema = "".join((_SCHEMA, _CALENDAR_SCHEMA, _LIMITS_SCHEMA)[version:])
+            schema = "".join(
+                (_SCHEMA, _CALENDAR_SCHEMA, _LIMITS_SCHEMA, _UNLIMITED_LIMITS_SCHEMA, _GRADING_SCHEMA, _ISOLATE_CALENDAR_SCHEMA)[
+                    version:
+                ],
+            )
             with self.conn:
                 self.conn.executescript(f"BEGIN;\n{schema}\nPRAGMA user_version = {SCHEMA_VERSION}; COMMIT;")
 
@@ -349,7 +391,7 @@ class Database:
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
         >>> check_snapshot(db.snapshot())
-        (3, 1, 0)
+        (6, 1, 0)
         """
         self.conn.commit()
         return self.conn.serialize()
