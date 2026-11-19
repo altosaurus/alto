@@ -117,6 +117,7 @@ Interval construction comes first, followed by chord construction and staff-to-k
 | Anki-compatible deck export | Export Alto practice questions as a deck to review in Anki. | Planned |
 | Instrument plugins | Add an instrument with its own sound and play it using an interactive on-screen version of the instrument. | Planned |
 | Exercise and lesson plugins | Install custom exercises and lessons and use them alongside Alto’s built-in material. | Planned |
+| Glossary plugins | Install a plugin that adds new terms to the glossary, with definitions, interactive examples, and links to related lessons and exercises. | Planned |
 
 ## Beta phase
 

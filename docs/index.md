@@ -72,6 +72,7 @@ topics:
 ## Development Status
 
 Alto is in alpha. You can work through the lessons and practice with the exercises now, but their content and layout may change between releases.
+For the latest features and fixes, see the [changelog]({{ '/release-notes/' | relative_url }}).
 The [roadmap]({{ '/roadmap/' | relative_url }}) lists current features and planned exercises.
 
 {% assign v = site.app_version %}
