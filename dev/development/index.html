@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
@@ -928,7 +931,7 @@ lesson content width of 760 pixels or more, align the top of the panel with the 
 that width, place the panel after the opening paragraph and before the remaining text and question. Keep paired
 staves together whenever both fit and wrap them when necessary.</p>
 
-<p>Put each guided question in the <strong>Check your understanding</strong> callout. Keep its prompt, choices, hints, explanation,
+<p>Put each guided question in the <strong>Knowledge check</strong> callout. Keep its prompt, choices, hints, explanation,
 and retry control together. Let answer buttons wrap in reading order when space is tight.</p>
 
 <p>Use <code class="language-plaintext highlighter-rouge">StaffPlayback</code> for a playable staff example. Its callback identifies each onset by position, so repeated notes
@@ -978,9 +981,9 @@ Record one row per finding. Keep a row open until someone retries the original t
   </thead>
   <tbody>
     <tr>
-      <td>Scale Identification · Count the steps</td>
+      <td>Scale Identification · The major scale pattern</td>
       <td>Locate middle C on a treble staff to follow the C-major example</td>
-      <td>Intervals · Lower the upper note traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4.</td>
+      <td>Intervals · C and E♭ on the staff traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4.</td>
       <td>The worked example now connects the bottom line to middle C before scales.</td>
       <td>Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it.</td>
     </tr>
@@ -1130,14 +1133,14 @@ request calls for a shared preference or the exercises already share it.</p>
       <td><strong>Scale Identification</strong> and <strong>Scale Construction</strong> share this page in <code class="language-plaintext highlighter-rouge">KeySignatureSettingsPanel</code>.</td>
     </tr>
     <tr>
-      <td><strong>Display</strong></td>
+      <td><strong>Display Mode</strong></td>
       <td>Choose how the notes appear on the staff. Checked presentations can be mixed.</td>
-      <td><strong>Interval Identification</strong> offers Melodic and Harmonic checkboxes.</td>
+      <td><strong>Interval Identification</strong> displays Ascending and Descending as indented checkboxes directly below Melodic when it is selected. At least one direction stays checked.</td>
     </tr>
     <tr>
       <td><strong>Quality</strong></td>
-      <td>An inline switch requires the interval quality as part of the answer. Turning it off asks for the number alone.</td>
-      <td><strong>Interval Identification</strong> uses <code class="language-plaintext highlighter-rouge">_ToggleRow</code>.</td>
+      <td>Choose <strong>Interval Only</strong>, <strong>Interval and Quality</strong> (default), or <strong>Quality Only</strong>.</td>
+      <td><strong>Interval Identification</strong> uses a submenu with three radio buttons.</td>
     </tr>
     <tr>
       <td><strong>Question Type</strong></td>
@@ -1150,6 +1153,11 @@ request calls for a shared preference or the exercises already share it.</p>
       <td><strong>Scale Identification</strong> and <strong>Interval Identification</strong> share the Limited and All submenu. <strong>Keyboard Interval Identification</strong> adds <strong>Compact</strong>, where the learner picks a quality and an interval number in either order.</td>
     </tr>
     <tr>
+      <td><strong>Next Question</strong></td>
+      <td>Choose <strong>Immediately</strong>, <strong>Wait</strong>, or <strong>After Animation</strong> (default). Each exercise remembers its own pace.</td>
+      <td>The shared settings panel adds this row to every exercise. Route completed answers through <code class="language-plaintext highlighter-rouge">ExerciseView._finish_answer</code>.</td>
+    </tr>
+    <tr>
       <td><strong>Octave</strong></td>
       <td>An inline switch that makes the octave part of the required answer.</td>
       <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">_ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
@@ -1157,7 +1165,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Note names</strong>, <strong>Note values</strong>, <strong>Accidentals</strong></td>
       <td>Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options.</td>
-      <td><strong>Note Identification</strong> has the naming and value previews and the Accidentals switch.</td>
+      <td><strong>Note Identification</strong> has the naming preview and Accidentals switch. Its illustrated note-value checklist is also used by <strong>Interval Identification</strong> under <strong>Note Value</strong>. For a choice of written signs, the <strong>Accidentals</strong> submenu in <strong>Interval Identification</strong> uses a checklist.</td>
     </tr>
     <tr>
       <td><strong>Terms</strong>, <strong>Degrees</strong>, <strong>Arpeggio types</strong>, <strong>Inversions</strong></td>
@@ -1190,7 +1198,10 @@ such as <strong>Octave</strong>, an inline <code class="language-plaintext highl
 <strong>Click on Staff</strong> and <strong>Answer Button</strong>, belong together in a submenu.</li>
   <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">_subpage</code> so the title matches the row and
 Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
-several can apply. Keep long lists scrollable.</li>
+several can apply. Group controls below the header at their natural height and leave extra space below the
+last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">_scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">_subpage</code> so the
+viewport can grow while the choices stay together. Verify row spacing at short and tall window sizes and
+check that the last option remains reachable when scrolling.</li>
   <li>Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
 update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
 current question. Include settings that affect question selection in the exercise’s review signature.</li>
@@ -1562,8 +1573,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

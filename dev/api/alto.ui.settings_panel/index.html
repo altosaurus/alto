@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
@@ -1069,6 +1072,7 @@ True
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">counts_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1102,6 +1106,7 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially.</li>
   <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">counts_only</code> (<em>bool, default False</em>): Label each box with its accidental count instead of drawing a signature. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
@@ -1361,6 +1366,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span>
     <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">positions</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1395,6 +1401,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
   <li><code class="language-plaintext highlighter-rouge">groups</code> (<em>list of tuple of (str, list of tuple of (object, str))</em>): The headings and, under each, the choices as (key, label); an empty heading shows none.</li>
   <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set</em>): The keys to check initially. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow all choices to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">positions</code> (<em>mapping or None, default None</em>): Optional (row, column) for each key within its group. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1451,12 +1458,12 @@ True
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
-7
+10
 </code></pre>
 
 <p><strong>Constructor</strong></p>
 
-<p>Build the menu and its six submenus.</p>
+<p>Build the interval settings menu with direction choices under Melodic.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1466,8 +1473,8 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).quality_row.isOn()
-True
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
+'Interval and Quality'
 </code></pre>
 
 <h2 id="keyboardintervalsettingspanel">KeyboardIntervalSettingsPanel</h2>
@@ -1609,6 +1616,18 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 &gt;&gt;&gt; store().remove("keyConstruction")
 </code></pre>
 
+<h2 id="load_order_of_keys">load_order_of_keys</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_order_of_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the clefs, scales, and key signatures selected for Order of Keys.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_order_of_keys()
+</code></pre>
+
 <h2 id="load_scale_identification">load_scale_identification</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_identification</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1651,6 +1670,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'keySignatures'</span><span class="p">,</span>
+    <span class="n">keys_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Key signatures'</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1693,6 +1713,7 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeySignatureSettings</em>): The settings to edit.</li>
   <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str, default “keySignatures”</em>): What the settings are saved under. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys_title</code> (<em>str, default “Key signatures”</em>): Title for the signature checklist when the exercise uses a single list. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
 </ul>
 
@@ -1944,7 +1965,7 @@ True
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span> <span class="o">|</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span>
 </code></pre></div></div>
 
 <p>Return the settings panel for an exercise.</p>
@@ -1958,7 +1979,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>ExerciseSettingsPanel or None</em>: A panel with a <code class="language-plaintext highlighter-rouge">changed</code> signal, or None for an exercise with no settings.</li>
+  <li><em>ExerciseSettingsPanel</em>: A panel with the exercise options and the shared Next Question setting.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1971,6 +1992,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -2207,8 +2230,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

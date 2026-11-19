@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -347,6 +347,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
                 
                 
@@ -580,6 +583,8 @@ a new exercise needs no new interface code.</p>
     <span class="n">show_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">build_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">place_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">starting_slots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">construct_scale</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">construct_steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">notes_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
@@ -608,7 +613,7 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str, default “treble”</em>): The clef to draw on. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">explanation</code> (<em>str, default ““</em>): Text shown after the answer to say why it is right. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (single notes only). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The written duration for single notes and interval voices. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">staff_signature</code> (<em>int or None</em>): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use the signature’s relative minor for scale degree naming. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">grid</code> (<em>dict of str to tuple of (int, int) or None</em>): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.</li>
@@ -625,6 +630,8 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">show_staff</code> (<em>bool, default False</em>): Draw the staff even with no notes on it, to show only its clef and key signature. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text written on the staff itself, under the music, in place of the prompt above it. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">build_key</code> (<em>bool, default False</em>): The learner builds the key signature <code class="language-plaintext highlighter-rouge">key</code> on a blank staff with the fork widget, instead of pressing a button. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">place_signature</code> (<em>bool, default False</em>): Place each accidental of the named key on the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">starting_slots</code> (<em>list of int</em>): Zero-based positions of the accidentals already printed in an Order of Keys question.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_scale</code> (<em>list of Note or None</em>): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_steps</code> (<em>list of str or None</em>): The steps between the notes of <code class="language-plaintext highlighter-rouge">construct_scale</code>, each “W” (whole) or “H” (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">notes_only</code> (<em>bool, default False</em>): Show note names without a scale degree context. Keyword-only.</li>
@@ -771,6 +778,26 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
 &gt;&gt;&gt; q.check_built(2), q.check_built(-2)
 (True, False)
+</code></pre>
+
+<h3 id="questionplaces_sequence">Question.places_sequence</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">places_sequence</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether the learner enters successive positions on the staff.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True for scales and handwritten key signatures.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
+True
 </code></pre>
 
 <h3 id="questioncheck">Question.check</h3>
@@ -1475,8 +1502,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

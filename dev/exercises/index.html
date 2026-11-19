@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -347,6 +347,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
                 
                 
@@ -547,6 +550,14 @@ shows its key when you hover over it.</p>
 
 <p>Answer-choice exercises include <strong>Buttons</strong> in their settings. Choose <strong>All</strong> for the full answer bank or <strong>Limited</strong> to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.</p>
 
+<p>Each exercise remembers its own <strong>Next Question</strong> setting.</p>
+
+<ul>
+  <li><strong>Immediately</strong> flashes the correct button green and advances. The answer audio can finish while you read the next question. The music stays unanimated.</li>
+  <li><strong>Wait</strong> plays the animation and keeps the correct answer button green. Press <strong>Next</strong> when you’re ready.</li>
+  <li><strong>After Animation</strong> (default) advances automatically when the feedback finishes.</li>
+</ul>
+
 <h2 id="note-identification">Note Identification</h2>
 
 <p>A note is drawn on a staff. Press the button with its name.</p>
@@ -740,7 +751,7 @@ subbass clefs, which only this exercise has.</li>
 
 <h2 id="interval-identification">Interval Identification</h2>
 
-<p>Name the interval between the two written notes. On first use, the notes ascend on a treble or bass staff, and the exercise asks for both quality and number.</p>
+<p>Name the interval between the two written notes. By default the notes appear together on a treble or bass staff, and the exercise asks for both quality and number.</p>
 
 <p>An interval has a quality and a number. The number counts the letter names it spans, including both notes. The quality
 is <strong>P</strong> (perfect), <strong>M</strong> (major), <strong>m</strong> (minor), <strong>A</strong> (augmented) or <strong>d</strong> (diminished). So C to E is M3, and C to E♭
@@ -750,13 +761,17 @@ is m3.</p>
   <li><strong>Clefs</strong> chooses which staves can appear, including the grand staff.</li>
   <li><strong>Range</strong> sets the lowest and highest written notes for each checked clef. Both notes must fit.</li>
   <li><strong>Staff Key</strong> selects the signatures drawn on the staff. Choose zero for a blank signature.</li>
-  <li><strong>Display</strong> has two checkboxes. <strong>Melodic</strong> shows the lower note followed by the higher one. <strong>Harmonic</strong> shows both together. Check both to mix them.</li>
-  <li><strong>Quality</strong> is on by default. Switch it off to answer <strong>3</strong> for either C–E or C–E♭.</li>
+  <li><strong>Display Mode</strong> defaults to <strong>Harmonic</strong>, which shows and plays both notes together. <strong>Melodic</strong> shows and plays them one at a time. Under Melodic, check <strong>Ascending</strong> (lower note first, the default), <strong>Descending</strong> (higher note first), or both to practice them in random order. You can also check both Harmonic and Melodic to mix presentations.</li>
+  <li><strong>Quality</strong> sets what you identify. For C up to E♭, choose <strong>3</strong> in <strong>Interval Only</strong>, <strong>m3</strong> in <strong>Interval and Quality</strong> (default), or <strong>m</strong> in <strong>Quality Only</strong>.</li>
   <li><strong>Intervals</strong> selects the spellings you want to practice, including compound intervals through a fifteenth.
-Drag the handles to select a span of interval numbers, then check individual spellings. <strong>Select all</strong> can temporarily include every spelling.
-Only selected intervals that fit the range can be asked. If none fit, widen the range or choose a smaller interval.</li>
+Each row shows one interval number. From left to right, the columns are augmented, major or perfect, minor, and diminished.
+The checklist and slider offer intervals that fit at least one selected clef’s range. For example, a staff range from C4 to E4 offers seconds and thirds.
+Drag the handles to select a span of interval numbers, then check individual spellings. <strong>Select all</strong> temporarily includes every available spelling.
+Widening a range restores any previously checked intervals that now fit.</li>
+  <li><strong>Accidentals</strong> controls the signs allowed beside either note. <strong>♮</strong> allows an unmarked note following the staff key. For example, in G major an unmarked F sounds as F♯. The default selection is <strong>♮</strong>, <strong>♭</strong>, and <strong>♯</strong>. Check <strong>𝄫</strong> for double flats or <strong>𝄪</strong> for double sharps.</li>
+  <li><strong>Note Value</strong> chooses which written durations can appear. Both notes use the same value.</li>
   <li><strong>Buttons</strong> defaults to <strong>Limited</strong>, with six answers. Choose a <strong>Button count</strong> from 2 to 10. The count includes the correct answer.
-Choose <strong>All</strong> to show every selected interval that fits the current staff range. With <strong>Quality</strong> off, each interval number appears once.</li>
+Choose <strong>All</strong> to show every eligible answer for the current staff range and selected intervals. Each distinct number or quality appears once when practicing that part alone.</li>
 </ul>
 
 <figure class="shot">
@@ -865,6 +880,16 @@ counts toward your score. Like Key Signature Identification, this exercise makes
 
 <p>The settings are kept apart from those of Key Signature Identification.</p>
 
+<h2 id="order-of-keys">Order of Keys</h2>
+
+<p>Read the key below the blank staff. Choose <strong>♯</strong> or <strong>♭</strong>, then click the line or space for each sign in order. Each click fills the next slot after the clef. For D major in treble clef, place F♯ on the top line, then C♯ in the third space.</p>
+
+<p>Use <strong>Undo</strong> (Backspace) to remove the last sign and <strong>Answer</strong> (Return) to submit. Submit the empty staff for a key with no sharps or flats, such as C major, A minor, or D Dorian. With the keyboard, choose a sharp with <strong>+</strong> or a flat with <strong>−</strong>, move up or down with the arrow keys, and press <strong>P</strong> to place each sign.</p>
+
+<p>Open the exercise settings to choose <strong>Clefs</strong>, <strong>Scales</strong>, and <strong>Key Signatures</strong>. By default, questions use treble and bass clefs, major and natural minor scales, and all 15 signatures. You can select any of the seven single-staff clefs and any of the seven diatonic modes. For example, selecting alto clef, Dorian, and two flats gives you C Dorian on an alto staff.</p>
+
+<p><strong>Starting Accidentals</strong> lets you choose how many sharps or flats are already on the staff. The default, <strong>0</strong>, starts with a blank signature. For example, with <strong>2 ♯</strong> selected, a question in A major shows two of its three sharps in their usual positions. Place the missing signs from left to right. You can enter up to seven signs in total, including those already shown. If the key needs six and you submit seven, the answer is marked wrong. <strong>Undo</strong> removes only signs you placed. When all the signs are already present, press <strong>Answer</strong>. Counts must fit one of your selected key signatures. If changing keys rules out every selected count, the setting returns to <strong>0</strong>.</p>
+
 <h2 id="scale-spelling">Scale Spelling</h2>
 
 <p>A question such as “In B♭ Dorian, what is scale degree 3?” Press the note’s name. Each scale uses every letter name
@@ -902,9 +927,8 @@ way around.</li>
   <li><strong>Answer</strong> (or Enter) hands in the scale once everything is placed.</li>
 </ul>
 
-<p>A wrong scale is cleared so that you can try again, and only your first try counts toward your score. A right one plays
-the scale: the notes start black and each one turns green as the instrument sounds it. They turn green even with the
-sound muted, and the next question comes when the scale has finished.</p>
+<p>A wrong scale is cleared so that you can try again, and only your first try counts toward your score. With <strong>After Animation</strong>
+or <strong>Wait</strong>, a correct scale plays back. Each note turns green as it sounds, with the same timing when muted.</p>
 
 <p>In the exercise settings you can choose:</p>
 
@@ -1185,8 +1209,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

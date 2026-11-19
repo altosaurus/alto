@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -347,6 +347,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
                 
                 
@@ -657,8 +660,8 @@ True
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(3))
-&gt;&gt;&gt; len(q.staff), q.answer in q.choices
-(2, True)
+&gt;&gt;&gt; [len(chord) for chord in q.staff], q.answer in q.choices
+([2], True)
 </code></pre>
 
 <h3 id="intervalnamesinstructions">IntervalNames.instructions</h3>
@@ -695,8 +698,34 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
-''
+<pre><code class="language-pycon">&gt;&gt;&gt; "Harmonic" in IntervalNames().settings_signature()
+True
+</code></pre>
+
+<h3 id="intervalnamesrefresh">IntervalNames.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Arrange written interval answers by quality, with interval numbers in columns.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): A new or saved interval question.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The same answer choices in reading order. Perfect and major share a row.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+&gt;&gt;&gt; IntervalNames().refresh(q).choices
+['A3', 'M3', 'P4', 'm3', 'd3']
 </code></pre>
 
 <h3 id="intervalnamesgenerate">IntervalNames.generate</h3>
@@ -990,6 +1019,83 @@ True
 &gt;&gt;&gt; q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
 True
 &gt;&gt;&gt; q.answer == format_key_signature(q.key)
+True
+</code></pre>
+
+<h2 id="orderofkeys">OrderOfKeys</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">OrderOfKeys</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Write the accidentals of a named key signature in order.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().generate(random.Random(1)).place_signature
+True
+</code></pre>
+
+<h3 id="orderofkeyssettings_signature">OrderOfKeys.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the selections used to generate a practice question.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The original empty signature at the defaults, so earlier questions remain available for review.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().settings_signature()
+''
+</code></pre>
+
+<h3 id="orderofkeysinstructions">OrderOfKeys.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to enter and submit a signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The exercise help text.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Undo" in OrderOfKeys().instructions()
+True
+</code></pre>
+
+<h3 id="orderofkeysgenerate">OrderOfKeys.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Choose a key from the selected scales and signatures and spell it in a selected clef.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the key, mode, and clef.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The named key and the ordered signs with their exact staff octaves.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = OrderOfKeys().generate(random.Random(2))
+&gt;&gt;&gt; q.show_staff and not q.choices
 True
 </code></pre>
 
@@ -1897,8 +2003,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

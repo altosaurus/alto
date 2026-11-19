@@ -70,6 +70,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.theory.fifths/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.theory.key_signatures/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.theory.pitch/</loc>
 </url>
 <url>
@@ -244,10 +247,10 @@
 <loc>https://altosaurus.github.io/alto/dev/getting-started/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
+<loc>https://altosaurus.github.io/alto/dev/api/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/api/</loc>
+<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/</loc>

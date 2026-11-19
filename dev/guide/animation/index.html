@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
@@ -672,10 +675,16 @@ make every switch slide.</p>
 
 <h3 id="the-rightwrong-flash-animate-a-color">The right/wrong flash: animate a color</h3>
 
-<p><code class="language-plaintext highlighter-rouge">ExerciseView._flash</code> fades an answer button from black to green or red in 350 ms with a <strong>linear</strong> curve, because it is a color
-fade. It uses <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> with a start of 0.0 and an end of 1.0 and in its callback computes <code class="language-plaintext highlighter-rouge">blend(start, b=end, t=t)</code>
+<p><code class="language-plaintext highlighter-rouge">ExerciseView._flash</code> fades an answer button from black to the correct-answer green in 180 ms. Calling it without a
+target uses <code class="language-plaintext highlighter-rouge">CORRECT_ANSWER_COLOR</code> from <code class="language-plaintext highlighter-rouge">alto/ui/colors.py</code>. The wrong-answer handler passes red explicitly.
+The flash uses <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> with a start of 0.0 and an end of 1.0 and in its callback computes <code class="language-plaintext highlighter-rouge">blend(start, b=end, t=t)</code>
 and sets the button’s style sheet from the result. The animations are kept in a list (<code class="language-plaintext highlighter-rouge">self._anims</code>) that is cleared when the next
 question appears, so nothing animates a button that no longer exists.</p>
+
+<p>Pass the answered notes to <code class="language-plaintext highlighter-rouge">ExerciseView._finish_answer</code>, grouped by onset. In <strong>After Animation</strong> and <strong>Wait</strong>,
+the playback callback colors each sounding staff column or piano key green and clears the highlight at the end.
+<strong>After Animation</strong> then starts the advance timer. <strong>Wait</strong> keeps the answer on screen until the learner presses
+<strong>Next</strong>. <strong>Immediately</strong> gives the answer button a brief green flash and plays the same audio without highlighting the music or delaying the next question.</p>
 
 <h3 id="the-fade-of-a-sound">The fade of a sound</h3>
 
@@ -860,8 +869,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

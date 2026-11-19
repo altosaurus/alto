@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
@@ -718,7 +721,7 @@ digit takes that digit.</p>
   <li><code class="language-plaintext highlighter-rouge">answered</code> (<em>bool</em>): True once the question has been answered right.</li>
   <li><code class="language-plaintext highlighter-rouge">missed</code> (<em>bool</em>): True once the question has been answered wrong, so it no longer counts toward the score.</li>
   <li><code class="language-plaintext highlighter-rouge">buttons</code> (<em>list of QPushButton</em>): The answer buttons on screen.</li>
-  <li><code class="language-plaintext highlighter-rouge">settings_panel</code> (<em>QWidget or None</em>): The exercise’s settings, or None for an exercise with none.</li>
+  <li><code class="language-plaintext highlighter-rouge">settings_panel</code> (<em>ExerciseSettingsPanel</em>): The exercise’s settings, including how to advance after a correct answer.</li>
   <li><code class="language-plaintext highlighter-rouge">staff</code> (<em>StaffWidget</em>): Shows the notes of a question.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard</code> (<em>KeyboardWidget</em>): Shows the key of a keyboard question.</li>
   <li><code class="language-plaintext highlighter-rouge">input_staff</code> (<em>StaffInput</em>): The staff to click, for “place this note” questions.</li>
@@ -916,8 +919,8 @@ True
 
 <p>Check an answer chosen with a button or by clicking the notation.</p>
 
-<p>A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
-fades red and its button is switched off, so another can be tried.</p>
+<p>A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
+so the learner can try another answer.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -948,6 +951,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1142,8 +1147,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

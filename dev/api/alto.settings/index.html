@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -347,6 +347,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
                 
                 
@@ -633,6 +636,7 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">ranges</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">),</span>
+    <span class="n">note_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'whole'</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -642,6 +646,25 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <pre><code class="language-pycon">&gt;&gt;&gt; StaffRangeSettings().active_clefs()
 ['treble', 'bass']
+</code></pre>
+
+<h3 id="staffrangesettingsactive_values">StaffRangeSettings.active_values</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the note values to draw, from longest to shortest.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen values in the order of <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>, or whole notes if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
+['whole', 'half']
 </code></pre>
 
 <h3 id="staffrangesettingsactive_clefs">StaffRangeSettings.active_clefs</h3>
@@ -697,7 +720,6 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettings</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">key_signatures</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
-    <span class="n">note_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'whole'</span><span class="p">}),</span>
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
     <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">require_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
@@ -746,34 +768,17 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 [-1, 2]
 </code></pre>
 
-<h3 id="notenamesettingsactive_values">NoteNameSettings.active_values</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the note values to draw, from longest to shortest.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen values in the order of <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>, or whole notes if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
-['whole', 'half']
-</code></pre>
-
 <h2 id="intervalsettings">IntervalSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettings</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
-    <span class="n">displays</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'Melodic'</span><span class="p">}),</span>
+    <span class="n">displays</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'Harmonic'</span><span class="p">}),</span>
+    <span class="n">directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'ascending'</span><span class="p">}),</span>
     <span class="n">button_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'limited'</span><span class="p">,</span>
     <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="n">quality</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">DEFAULT_INTERVAL_ACCIDENTALS</span><span class="p">)),</span>
+    <span class="n">quality_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'combined'</span><span class="p">,</span>
     <span class="n">intervals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">iv</span> <span class="ow">in</span> <span class="n">WRITTEN_INTERVALS</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">iv</span><span class="p">.</span><span class="n">number</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s">'P8'</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -784,8 +789,33 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings().quality
-True
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings().quality_mode
+'combined'
+</code></pre>
+
+<h3 id="intervalsettingsstaff_span">IntervalSettings.staff_span</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_span</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count the written staff positions in a clef’s selected range, including both endpoints.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef whose range to measure.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The largest diatonic interval number that fits.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
+3
 </code></pre>
 
 <h2 id="key_name">key_name</h2>
@@ -1291,6 +1321,49 @@ used.</p>
 [-4, 3]
 </code></pre>
 
+<h2 id="orderofkeyssettings">OrderOfKeysSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">OrderOfKeysSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">starting_accidentals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
+
+<p>Choose the starting signs for writing a key signature.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">starting_accidentals</code> (<em>set of int</em>): Allowed counts of given signs. Negative counts represent flats and positive counts represent sharps.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeysSettings(keys={-2, 4}).available_starts()
+range(-2, 5)
+</code></pre>
+
+<h3 id="orderofkeyssettingsavailable_starts">OrderOfKeysSettings.available_starts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">available_starts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">range</span>
+</code></pre></div></div>
+
+<p>Return starting counts that fit at least one selected signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>range</em>: Counts from the flattest eligible start through the sharpest, always including zero.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; list(OrderOfKeysSettings(keys={-2}).available_starts())
+[-2, -1, 0]
+</code></pre>
+
 <h2 id="keyconstructionsettings">KeyConstructionSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyConstructionSettings</span><span class="p">()</span>
@@ -1744,8 +1817,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

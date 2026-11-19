@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -347,6 +347,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
                 
                 
@@ -546,7 +549,7 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffPlayback</span><span class="p">(</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">highlight</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
+    <span class="n">highlight</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -562,7 +565,7 @@
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The view containing the sample.</li>
-  <li><code class="language-plaintext highlighter-rouge">highlight</code> (<em>callable</em>): Draw the current step on the displayed staff or staves.</li>
+  <li><code class="language-plaintext highlighter-rouge">highlight</code> (<em>callable or None</em>): Draw the current step on the displayed staff or staves. Omit for audio-only playback.</li>
 </ul>
 
 <h3 id="staffplaybackplay">StaffPlayback.play</h3>
@@ -570,8 +573,9 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play</span><span class="p">(</span>
     <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Note</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">450</span><span class="p">,</span>
+    <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_NOTE_GAP_MS</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -583,6 +587,7 @@
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>sequence of sequence of Note</em>): Notes grouped by onset.</li>
   <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int</em>): Time between onsets in milliseconds.</li>
   <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Allow explicit auditions even when exercise sounds are muted.</li>
+  <li><code class="language-plaintext highlighter-rouge">warmup</code> (<em>bool</em>): Prepare the audio streams before the first note.</li>
 </ul>
 
 <h3 id="staffplaybackstop">StaffPlayback.stop</h3>
@@ -616,6 +621,8 @@
 </ul>
 
 
+          
+          
           
           
           
@@ -858,8 +865,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795043044">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795056941">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -345,6 +345,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.theory.pitch/">pitch</a></li>
@@ -1328,6 +1331,96 @@ While steps are marked each notch switches between whole and half. Once everythi
 ['E4']
 </code></pre>
 
+<h2 id="signatureinput">SignatureInput</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SignatureInput</span><span class="p">(</span><span class="n">ScaleInput</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Place accidentals in consecutive key-signature slots immediately after the clef.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
+&gt;&gt;&gt; staff.reset_scale("treble", slots=7, caption="D major")
+&gt;&gt;&gt; staff.place_next(Note.parse("F#5"))
+&gt;&gt;&gt; staff.notes, staff.columns
+([Note(octave=5, letter=3, accidental=1)], [])
+</code></pre>
+
+<h3 id="signatureinputreset_signature">SignatureInput.reset_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reset_signature</span><span class="p">(</span>
+    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">starting_slots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Set the fixed signs for this question and clear the learner’s entries.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): Clef used to read the positions.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): Target signature.</li>
+  <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str</em>): Name of the key under the staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">starting_slots</code> (<em>list of int</em>): Positions to fill before the learner begins.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
+&gt;&gt;&gt; staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+&gt;&gt;&gt; len(staff.template), staff.template[1]
+(7, Note(octave=5, letter=0, accidental=1))
+</code></pre>
+
+<h3 id="signatureinputentered_signature">SignatureInput.entered_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">entered_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Combine the fixed signs and the learner’s entries in staff order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of Note or None</em>: One pitch per occupied slot, with None in each remaining gap.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
+&gt;&gt;&gt; staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+&gt;&gt;&gt; staff.place_next(Note.parse("F#5"))
+&gt;&gt;&gt; [str(n) for n in staff.entered_signature() if n is not None]
+['F♯5', 'C♯5']
+</code></pre>
+
+<h3 id="signatureinputpaintevent">SignatureInput.paintEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw the blank staff and caption, then the placed signs and the next sign under the pointer.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QPaintEvent</em>): The paint request.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
+&gt;&gt;&gt; staff.reset_scale("bass", slots=7)
+&gt;&gt;&gt; staff.place_next(Note.parse("Bb2"))
+&gt;&gt;&gt; staff.grab().isNull()
+False
+</code></pre>
+
 <h2 id="clefinput">ClefInput</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ClefInput</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
@@ -1880,6 +1973,8 @@ False
           
           
           
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.staff/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.staff</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.staff_playback/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.staff_playback<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1944,8 +2039,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795043044" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795043044" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795056941" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795056941" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
