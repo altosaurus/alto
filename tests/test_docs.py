@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 import base64
 import importlib.util
+import json
 import re
 from pathlib import Path
 from urllib.parse import unquote
@@ -40,6 +41,20 @@ def script() -> ModuleType:
     return module
 
 
+def developer_guide_screens() -> set[str]:
+    """
+    Collect screenshots referenced by the Developer guide overview and its subpages.
+
+    Returns
+    -------
+    set of str
+        The screen names passed to the component-shot include.
+    """
+    docs = ROOT / "docs"
+    pages = [docs / "developer-guide.md", *(docs / "developer-guide").glob("*.md")]
+    return {name for page in pages for name in re.findall(r'component-shot\.html screen="([\w-]+)"', page.read_text())}
+
+
 def shown() -> set[str]:
     """
     Return the picture names the docs pages include with shot.html, without the .png.
@@ -55,7 +70,23 @@ def shown() -> set[str]:
     home = (ROOT / "docs" / "index.md").read_text()
     front_matter = home.split("---", 2)[1]
     found.update(re.findall(r"^    image: ([\w-]+)\.png$", front_matter, re.MULTILINE))
+    found.update(developer_guide_screens())
     return found
+
+
+def test_launch_screens_link_visible_regions_to_api_classes() -> None:
+    """Check the paired images, region bounds, and destination of each link in the launch guide."""
+    screens = json.loads((ROOT / "docs" / "_data" / "launch_components.json").read_text())
+    assert set(screens) == developer_guide_screens()
+    for screen, regions in screens.items():
+        assert QImage(str(IMG / f"{screen}.png")).size() == QImage(str(IMG / f"{screen}-dark.png")).size()
+        assert regions
+        for region in regions:
+            x, y, width, height = region["rect"]
+            assert 0 <= x < x + width <= 100 and 0 <= y < y + height <= 100, (screen, region)
+            module, anchor = region["href"].removeprefix("/api/").split("/#")
+            api = (ROOT / "docs" / "api" / f"{module}.md").read_text()
+            assert anchor == region["type"].lower() and f"## {region['type']}\n" in api
 
 
 def test_every_picture_a_page_shows_exists_in_both_themes() -> None:

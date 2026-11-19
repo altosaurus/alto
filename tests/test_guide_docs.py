@@ -1,4 +1,4 @@
-"""The developer guide in docs/guide hangs together: every chapter is listed, every link works, and Jekyll can render it."""
+"""The Resources section in docs/guide lists every chapter, has working links, and renders with Jekyll."""
 
 from __future__ import annotations
 

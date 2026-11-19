@@ -53,6 +53,7 @@ from alto.ui.database_page import (
     DatabasePage,
 )
 from alto.ui.main_window import MainWindow
+from alto.ui.profile_dialog import ProfileDialog
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.stats_dialog import StatsPage
 from alto.ui.store import store
@@ -63,7 +64,12 @@ OUT = ROOT / "docs" / "assets" / "img"
 THEMES = ("light", "dark")
 # The pictures this script makes. A docs page includes each of them with shot.html.
 SHOTS = (
+    "profile-create",
+    "profile-picker",
     "home",
+    "lesson-tiles",
+    "lesson-workspace",
+    "glossary",
     "note-identification",
     "keyboard",
     "note-construction",
@@ -376,6 +382,28 @@ def capture(
     wait(200)
     save(dialog, name="settings-sound", width=1000)
     dialog.close()
+
+    if {"lesson-tiles", "lesson-workspace", "glossary"}.intersection(names):
+        window.show_home()
+        window.home.mode_control.buttons[1].click()
+        wait(1200)  # let the tile transition finish before capturing the catalog
+        save(window, name="lesson-tiles")
+        window.open_lessons("pitches-and-notes")
+        save(window, name="lesson-workspace")
+    if "glossary" in names:
+        window.open_glossary()
+        save(window, name="glossary")
+    if "profile-create" in names or "profile-picker" in names:
+        profiles = Database()
+        for name in ("profile-create", "profile-picker"):
+            if name == "profile-picker":
+                profiles.add_profile("Ada")
+                profiles.add_profile("Sam")
+            picker = ProfileDialog(profiles)
+            picker.show()
+            save(picker, name=name)
+            picker.close()
+        profiles.close()
 
 
 if __name__ == "__main__":

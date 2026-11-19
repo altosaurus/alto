@@ -512,7 +512,7 @@ def test_no_page_is_listed_twice_and_a_heading_that_is_a_page_is_that_pages_link
     Check that the sidebar can list each page once: the titles differ, and a heading named like a page stands for that page.
 
     "For developers" is both a heading and a page. The layout makes the heading the page's link and leaves the page out of the
-    list under it, so it appears once. The developer guide and the API reference are single rows that link to their page and
+    list under it, so it appears once. Resources and the API reference are single rows that link to their page and
     open their chapters, so they appear once as well.
     """
     pages = _nav_pages()

@@ -6,7 +6,7 @@ permalink: /development/
 ---
 Alto is a Python application using PySide6. The source is at [github.com/altosaurus/alto](https://github.com/altosaurus/alto).
 
-This page is the quick reference: commands, tooling and the short recipes. The [developer guide]({{ '/guide/' | relative_url }}) explains how
+This page is the quick reference: commands, tooling and the short recipes. [Resources]({{ '/guide/' | relative_url }}) explains how
 the program works and the ideas underneath it (audio, notation, spaced repetition, styling, animation), with reading lists.
 
 ## Layout
@@ -580,6 +580,11 @@ needs a display or `QT_QPA_PLATFORM=offscreen`. Fonts render slightly differentl
 machine you normally use and look at the pictures before committing them. To add a picture, include it in a docs page
 with `shot.html`, and add its name to `SHOTS` in the script. `tests/test_docs.py` checks that both match and that both themes
 exist.
+
+The Developer guide uses `component-shot.html` for clickable screenshots. Give the include the capture’s width and
+height. In `docs/_data/launch_components.json`, each region records its label, class, destination, and rectangle
+(left, top, width, height as percentages of the image). The screenshot and its numbered key share those destinations.
+After a recapture, check that each region still covers its component in both themes.
 
 The pre-push hook runs `scripts/check-docs.sh`, which warns when the interface (`alto/ui`) has changed since the pictures
 were last updated. It only warns; set `ALTO_DOCS_STRICT=1` to make it fail.
