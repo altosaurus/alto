@@ -449,7 +449,7 @@ class StepView(QWidget):
         self.task_box = QFrame()
         self.task_box.setObjectName("lessonKnowledgeCheck")
         self.task_box.setMaximumWidth(TEXT_WIDTH)
-        heading = QLabel("Check your understanding")
+        heading = QLabel("Knowledge check")
         heading.setObjectName("knowledgeCheckHeading")
         self.task_box.setAccessibleName(heading.text())
         box = QVBoxLayout(self.task_box)

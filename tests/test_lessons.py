@@ -396,7 +396,7 @@ def test_key_signature_lesson_matches_note_identification_volume(
     instrument : str
         The selected instrument.
     """
-    lesson = StepView(next(step for step in KEY_SIGNATURES.steps if step.title == "Read the sign beside the note"))
+    lesson = StepView(next(step for step in KEY_SIGNATURES.steps if step.title == "A natural beside the note"))
     assert lesson.hear_button is not None
     notes = [Note.parse("F#4"), Note.parse("F4")]
     questions = iter([Question("Name the note.", choices=[note.name], answer=note.name, staff=[[note]]) for note in notes])

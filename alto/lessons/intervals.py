@@ -43,7 +43,7 @@ INTERVALS = Lesson(
     related_exercises=("KeyboardIntervals",),
     steps=(
         Step(
-            title="Count both notes",
+            title="Interval numbers",
             text=(
                 "<p>An <b>interval</b> is the distance between two pitches. Its <b>number</b> counts the letter names "
                 "from one note to the other, including both ends. From G up to B, count G (1), A (2), B (3). "
@@ -63,7 +63,7 @@ INTERVALS = Lesson(
             ),
         ),
         Step(
-            title="Measure a third on the keyboard",
+            title="Thirds on the keyboard",
             text=(
                 "<p>From C up to E is another third. Its <b>quality</b> tells us more about its size. "
                 "Measure it in <b>half steps</b>, also called <b>semitones</b>. Moving to the very next key, black or white, "
@@ -76,7 +76,7 @@ INTERVALS = Lesson(
             hear_display="keyboard",
         ),
         Step(
-            title="Lower the upper note",
+            title="C and E♭ on the staff",
             text=(
                 "<p>On the treble staff, start at E on the bottom line. The space just below it is D. One step lower, "
                 "middle C sits on a short extra line called a <b>ledger line</b>.</p>"
@@ -132,7 +132,7 @@ INTERVALS = Lesson(
             ),
         ),
         Step(
-            title="What the spelling tells you",
+            title="Augmented and diminished intervals",
             text=(
                 "<p>Widen a perfect or major interval by one half step while keeping its letter span, and its quality "
                 "becomes <b>augmented</b> (A). Narrow a perfect or minor interval by one half step and it becomes "
@@ -154,7 +154,7 @@ INTERVALS = Lesson(
             ),
         ),
         Step(
-            title="Name a new pair",
+            title="Interval number and quality",
             text=(
                 "<p>Start with the letters to find the number, then count the half steps to find the quality. "
                 "For this check, use three half steps for m3, four for M3, five for P4, and seven for P5. "
@@ -164,7 +164,7 @@ INTERVALS = Lesson(
             make_task=_name_pair,
         ),
         Step(
-            title="Practice identifying intervals",
+            title="Intervals on the staff and keyboard",
             text=(
                 "<p>In <b>Interval Identification</b>, read the two notes on the staff and name their interval. "
                 "In <b>Keyboard Interval Identification</b>, count from the lower highlighted key to the higher one. "

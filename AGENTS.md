@@ -4,6 +4,14 @@
 - Use branches in the existing Alto repository for new work.
 - Do not create nested Git repositories or separate worktrees unless the user explicitly requests them.
 
+## Prose style
+
+- Prefer short noun phrases for section headings in documentation, lessons, and in-app help. Name the specific topic
+  readers will find in the section. Use parallel phrasing for related headings, such as “Major keys with sharps” and
+  “Major keys with flats.”
+- Use the body text for directions. Under “Major keys with sharps,” the first instruction might be “Find the last sharp
+  in the signature, then go up a half step.” Exercise prompts and button labels can also use direct verbs.
+
 ## UI consistency
 
 - Include **Buttons** with **Limited**, **Button count**, and **All** by default whenever buttons are answer choices.

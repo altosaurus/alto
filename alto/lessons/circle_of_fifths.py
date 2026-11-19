@@ -257,7 +257,7 @@ CIRCLE_OF_FIFTHS = Lesson(
     exercise="CircleOfFifths",
     steps=(
         Step(
-            title="Why keys need a map",
+            title="A map of major keys",
             text=(
                 "<p>A <b>key</b> tells you which note feels like home and whether the music is major or minor. "
                 "In C major, C is home. Play the example to hear the C major scale return to C.</p>"
@@ -284,7 +284,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             make_task=fifth_task,
         ),
         Step(
-            title="Walking clockwise",
+            title="Fifths clockwise from C",
             text=(
                 "<p>Start at C, at the top of the circle. Every step <b>clockwise</b> goes up by a fifth: C, then G, then D, "
                 "then "
@@ -295,7 +295,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             circle="walk",
         ),
         Step(
-            title="Counting sharps",
+            title="Sharp keys on the circle",
             text=(
                 "<p>That gives you a way to find any key's sharps, without remembering them: count the steps clockwise from "
                 "C. One step is one sharp, two steps are two sharps, and so on.</p>"
@@ -307,7 +307,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             make_task=sharps_task,
         ),
         Step(
-            title="Flats go the other way",
+            title="Flat keys on the circle",
             text=(
                 "<p>Counterclockwise from C, each step is a fifth <i>lower</i>, and adds a <b>flat</b>: F has one flat (B♭), "
                 "B♭ has two (B♭ and E♭), and so on. The flats come in the order sharps do, backwards: <b>B E A D G C F</b>.</p>"
@@ -319,7 +319,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             make_task=flats_task,
         ),
         Step(
-            title="The inner ring: relative minors",
+            title="Relative minors on the inner ring",
             text=(
                 "<p><b>Relative keys</b> are a major key and a minor key that share a key signature and have different "
                 "tonics. Find C major on the outer ring and A minor just inside it. Both signatures are empty.</p>"
@@ -343,7 +343,7 @@ CIRCLE_OF_FIFTHS = Lesson(
             make_task=neighbor_task,
         ),
         Step(
-            title="What you can do now",
+            title="Circle of fifths practice",
             text=(
                 "<p>You can read the circle of fifths:</p>"
                 "<ul>"

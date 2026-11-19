@@ -315,7 +315,7 @@ lesson content width of 760 pixels or more, align the top of the panel with the 
 that width, place the panel after the opening paragraph and before the remaining text and question. Keep paired
 staves together whenever both fit and wrap them when necessary.
 
-Put each guided question in the **Check your understanding** callout. Keep its prompt, choices, hints, explanation,
+Put each guided question in the **Knowledge check** callout. Keep its prompt, choices, hints, explanation,
 and retry control together. Let answer buttons wrap in reading order when space is tight.
 
 Use `StaffPlayback` for a playable staff example. Its callback identifies each onset by position, so repeated notes
@@ -353,7 +353,7 @@ learner can reach the next tile without doing either.
 
 | First lesson and step that needs the skill | What the learner must do | Where it was taught | Finding and smallest repair | Recheck |
 | --- | --- | --- | --- | --- |
-| Scale Identification · Count the steps | Locate middle C on a treble staff to follow the C-major example | Intervals · Lower the upper note traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4. | The worked example now connects the bottom line to middle C before scales. | Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it. |
+| Scale Identification · The major scale pattern | Locate middle C on a treble staff to follow the C-major example | Intervals · C and E♭ on the staff traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4. | The worked example now connects the bottom line to middle C before scales. | Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it. |
 
 Prefer a short bridge at first use when it serves one lesson. Move a prerequisite earlier when several lessons rely
 on it. Add a separate lesson when the missing skill needs its own guided sequence to keep a first pass within

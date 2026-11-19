@@ -27,7 +27,7 @@ SCALE_IDENTIFICATION = Lesson(
     exercise="ScaleIdentification",
     steps=(
         Step(
-            title="Find the tonic",
+            title="The tonic",
             scale="Major (Ionian)",
             scale_tonic="D4",
             scale_explore=False,
@@ -52,7 +52,7 @@ SCALE_IDENTIFICATION = Lesson(
             ),
         ),
         Step(
-            title="Count the steps",
+            title="The major scale pattern",
             scale="Major (Ionian)",
             text=(
                 "<p>A <b>major scale</b> follows the pattern W W H W W W H going up. "
@@ -65,7 +65,7 @@ SCALE_IDENTIFICATION = Lesson(
             hear=tuple((n,) for n in ("C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5")),
         ),
         Step(
-            title="Major and minor",
+            title="Three forms of the minor scale",
             scale="Natural minor (Aeolian)",
             scale_tonic="A4",
             text=(
@@ -82,7 +82,7 @@ SCALE_IDENTIFICATION = Lesson(
             ),
         ),
         Step(
-            title="Recognize modes",
+            title="Modes and their scale degrees",
             scale="Dorian",
             scale_tonic="D4",
             text=(
@@ -95,7 +95,7 @@ SCALE_IDENTIFICATION = Lesson(
             ),
         ),
         Step(
-            title="Try a pattern",
+            title="A scale’s pattern of steps",
             scale="Dorian",
             scale_tonic="D4",
             scale_explore=False,
@@ -109,7 +109,7 @@ SCALE_IDENTIFICATION = Lesson(
             ),
         ),
         Step(
-            title="Read, compare, identify",
+            title="The tonic and scale type",
             scale="Harmonic minor",
             scale_tonic="A4",
             scale_explore=False,
