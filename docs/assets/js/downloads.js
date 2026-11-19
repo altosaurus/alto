@@ -62,7 +62,7 @@
   } else if (os === "macos") {
     main = { logo: "os-apple", title: "Run Alto on macOS", note: "No installer yet · run it from source", url: source };
   } else {
-    main = { logo: "os-computer", title: "Get Alto on a computer", note: "Windows, Linux or macOS · pick yours below", url: "#dl-all" };
+    main = { logo: "os-computer", title: "Get Alto on a computer", note: "Linux, Windows or macOS · pick yours below", url: "#dl-all" };
   }
   if (systems[os]) {
     var you = el("span", "dl-you", "Your system");
@@ -94,9 +94,8 @@
   menu.setAttribute("role", "menu");
   menu.hidden = true;
   var links = [];
-  ["windows", "linux", "macos"].forEach(function (key) {
+  Object.keys(systems).forEach(function (key) {
     var item = systems[key];
-    if (!item) { return; }
     var link = el("a");
     link.href = item.url || source;
     link.setAttribute("role", "menuitem");

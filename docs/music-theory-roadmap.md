@@ -107,6 +107,7 @@ Interval construction comes first, followed by chord construction and staff-to-k
 | --- | --- | --- |
 | Guided lessons | Study pitches and notes, clefs, intervals, scales, key signatures, and the circle of fifths, then open related exercises. | {{ complete }} |
 | Spaced repetition and statistics | Review questions under the selected scheduler and inspect accuracy, response times, and individual answers in a local profile. | {{ complete }} |
+| Response-time grading | Use recorded practice times to establish thresholds for each exercise. A correct first answer earns a Hard, Good, or Easy rating based on its response time, and SM-2 or FSRS uses that rating to set the next review interval. | Planned |
 | Mixed practice | Combine an earlier prerequisite, a current topic, and a passage that uses both in one suggested session. | Planned |
 
 ### App features
@@ -116,6 +117,7 @@ Interval construction comes first, followed by chord construction and staff-to-k
 | Anki-compatible deck export | Export Alto practice questions as a deck to review in Anki. | Planned |
 | Instrument plugins | Add an instrument with its own sound and play it using an interactive on-screen version of the instrument. | Planned |
 | Exercise and lesson plugins | Install custom exercises and lessons and use them alongside Alto’s built-in material. | Planned |
+| Glossary plugins | Install a plugin that adds new terms to the glossary, with definitions, interactive examples, and links to related lessons and exercises. | Planned |
 
 ## Beta phase
 

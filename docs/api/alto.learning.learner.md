@@ -21,8 +21,10 @@ True
 ## PracticeComplete
 
 ```python
-class PracticeComplete(Exception)
+PracticeComplete(retry_at: float | None = None)
 ```
+
+Bases: `Exception`
 
 The current exercise has no scheduled cards available.
 
@@ -30,6 +32,21 @@ The current exercise has no scheduled cards available.
 
 ```pycon
 >>> issubclass(PracticeComplete, Exception)
+True
+```
+
+**Constructor**
+
+Carry the next missed card's due time to the exercise screen.
+
+**Parameters**
+
+- `retry_at` (*float or None*): Scheduled timestamp, or None when practice is finished for now.
+
+**Constructor examples**
+
+```pycon
+>>> PracticeComplete().retry_at is None
 True
 ```
 
@@ -82,6 +99,28 @@ Create a learner for one profile.
 'Ada'
 ```
 
+### Learner.set_profile
+
+```python
+def set_profile(profile: Profile) -> None
+```
+
+Open a profile's practice queues and resume its selected scheduler.
+
+**Parameters**
+
+- `profile` (*Profile*): Profile loaded at launch, selected in the app, or restored from backup.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner.set_profile(db.add_profile("Ben"))
+>>> learner.profile.name
+'Ben'
+```
+
 ### Learner.mode
 
 ```python
@@ -101,6 +140,49 @@ Return this profile's question scheduler.
 >>> db = Database()
 >>> Learner(db, profile=db.add_profile("Ada")).mode
 'ASRS'
+```
+
+### Learner.self_grading
+
+```python
+@property
+def self_grading() -> bool
+```
+
+Read the profile's SM-2 and FSRS grading preference.
+
+**Returns**
+
+- *bool*: Whether a correct answer waits for a grade.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> Learner(db, profile=db.add_profile("Ada")).self_grading
+False
+```
+
+### Learner.set_self_grading
+
+```python
+def set_self_grading(enabled: bool) -> None
+```
+
+Choose how this profile grades correct calendar reviews.
+
+**Parameters**
+
+- `enabled` (*bool*): Show Hard, Good, and Easy after a correct answer.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner.set_self_grading(True)
+>>> learner.self_grading
+True
 ```
 
 ### Learner.set_mode
@@ -182,6 +264,8 @@ def record(
     attempt_no: int,
     seconds: float,
     now: float | None = None,
+    preview: ReviewInterval | None = None,
+    self_grading: bool = False,
 ) -> None
 ```
 
@@ -196,6 +280,8 @@ Log one answer and update what is known about the question.
 - `attempt_no` (*int*): 1 for the first answer to this showing of the question, 2 for the second and so on. Keyword-only.
 - `seconds` (*float*): How long the answer took. Keyword-only.
 - `now` (*float or None, default None*): When it was answered, as a timestamp; the clock is used if None. Keyword-only.
+- `preview` (*ReviewInterval or None*): Correct-answer interval displayed for this question.
+- `self_grading` (*bool*): Defer scheduling a correct calendar answer until the learner rates it.
 
 **Examples**
 

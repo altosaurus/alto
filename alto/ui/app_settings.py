@@ -1592,7 +1592,7 @@ class AppSettingsDialog(QDialog):
             about=f"Choose how Alto schedules questions for {self.learner.profile.name}.",
         )
         calendar_note = (
-            "<p>Exercise tiles show due reviews in green and new cards in blue. "
+            "<p>Exercise tiles show new cards in blue, missed cards awaiting a correct answer in red, and due reviews in green. "
             "These daily limits apply to each exercise in both SM-2 and FSRS. "
             "You can change either limit in an exercise’s settings.</p>"
         )
@@ -1611,7 +1611,8 @@ class AppSettingsDialog(QDialog):
             "SM-2": (
                 "<h3>SuperMemo 2 (SM-2)</h3>"
                 "<p>Your first answer sets the next review date. Answer a new card correctly and it returns in one day. "
-                "Answer correctly again and it returns six days later. A miss brings the card back in one minute.</p>"
+                "Answer correctly again and it returns six days later. With self-grading, a new card uses Anki’s "
+                "learning steps instead. Hard repeats the step, Good advances, and Easy skips to a day-based review.</p>"
                 + calendar_note
             ),
             "FSRS": (
@@ -1638,6 +1639,15 @@ class AppSettingsDialog(QDialog):
         self.scheduler_description = QLabel(descriptions[selected])
         self.scheduler_description.setWordWrap(True)
         detail_layout.addWidget(self.scheduler_description)
+        self.self_grading = QCheckBox("Grade correct answers with Hard, Good, or Easy")
+        self.self_grading.setToolTip(
+            "Choose the next interval after a correct answer. A miss schedules a retry and advances automatically.",
+        )
+        self.self_grading.setChecked(self.learner.self_grading)
+        self.self_grading.setVisible(selected in CALENDAR_SCHEDULERS)
+        self.self_grading.toggled.connect(self.learner.set_self_grading)
+        self.self_grading.toggled.connect(lambda: self.scheduler_changed.emit())
+        detail_layout.addWidget(self.self_grading)
         self.daily_limits = DailyLimitsEditor(self.learner)
         self.daily_limits.setVisible(selected in CALENDAR_SCHEDULERS)
         self.daily_limits.changed.connect(self.scheduler_changed)
@@ -1651,6 +1661,7 @@ class AppSettingsDialog(QDialog):
 
         self.scheduler_list.currentTextChanged.connect(lambda mode: self.scheduler_description.setText(descriptions[mode]))
         self.scheduler_list.currentTextChanged.connect(lambda mode: self.daily_limits.setVisible(mode in CALENDAR_SCHEDULERS))
+        self.scheduler_list.currentTextChanged.connect(lambda mode: self.self_grading.setVisible(mode in CALENDAR_SCHEDULERS))
         self.scheduler_list.currentTextChanged.connect(self.learner.set_mode)
         self.scheduler_list.currentTextChanged.connect(lambda: self.scheduler_changed.emit())
         return page

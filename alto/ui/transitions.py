@@ -45,6 +45,7 @@ from alto.ui.store import (
 )
 
 DEFAULT_TRANSITION = "cascade"
+SIDEBAR_SLIDE_MS = 180
 BLUR_STEPS = 9.0  # how much smaller a fully blurred sprite is drawn, before it is stretched back up
 
 

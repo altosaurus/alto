@@ -9,20 +9,21 @@ permalink: /statistics/
 Open the statistics from the chart button next to the menu button, or from the menu. They always show the active
 profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page you came from.
 
-{% include shot.html src="stats.png" alt="The statistics page with summary tiles and four charts" caption="Statistics for a demo profile." %}
-
 ### Filters
 
 - **Exercise:** all exercises, or any one of them.
 - **Timeframe:** today, the last 7, 30 or 90 days, the last year, or all time.
+
+{% include shot.html src="stats.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" caption="Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day." %}
 
 ### What you see
 
 - **Summary tiles:** questions answered, how often the first answer was right, the typical time to a first answer,
   attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
   practice time, so leaving the app open does not inflate it.
-- **Questions answered:** a bar per day, with the questions you got right on the first try in green and the ones you missed in red.
-  Short timeframes switch to hours, and long ones to weeks or months.
+- **Questions answered** shows first-try correct answers in green and misses in red. Use **Granularity** in the chart’s upper-right corner to
+  choose **Hour**, **Day**, **Week**, or **Month** for each bar. **Auto** picks a period based on the timeframe.
+  If your choice produces more than 48 bars, scroll left beneath the chart to see earlier periods.
 - **Right on the first try:** your first-try accuracy over time. Days with no answers leave a gap.
 - **Typical time to first answer:** the median, over time, so a single slow answer does not distort it.
 - **By exercise:** accuracy, number of questions and typical time for each exercise.
@@ -36,8 +37,7 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 Every chart responds to the pointer. **Hover** a bar, a point, an exercise row or a calendar day and it brightens while the
 rest of the chart fades back, with its numbers in a tooltip. **Click** one and the answers behind it are listed in a panel under the charts:
 
-- a bar or a point of the three charts over time lists the answers given in that period (a day, a week, an hour, depending on the
-  timeframe);
+- a bar or point lists the answers given during its hour, day, week, or month within the selected timeframe;
 - a row of the by-exercise chart lists the answers to that exercise within the timeframe;
 - a square of the calendar lists the answers given on that day.
 
@@ -58,13 +58,17 @@ A question counts as **right** only if your first answer was right. That is the 
 
 The database button next to the statistics button opens a read-only view of what is stored. It never changes anything.
 
-{% include shot.html src="database.png" alt="The database browser listing answers in a table" %}
+{% include shot.html src="database.png" alt="The Answers table with the next review date in the Due column at the right" %}
 
 Three tables are available:
 
 - **Answers:** every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.
-- **Questions:** the record kept for each question: its strain, how often it was answered, right on the first try, missed, typical time and when it was last seen.
+- **Questions** shows each question’s strain, answer counts, typical response time, and last practice time.
 - **Profiles:** everyone who has a profile, with how many answers and questions each has.
+
+In both **Answers** and **Questions**, **Due** shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.
+
+{% include shot.html src="database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" caption="Last seen records when you practiced the question. Due shows when the scheduler wants to show it again." %}
 
 Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
 limited to the newest 10,000 rows each; the line above the table says when that applies.

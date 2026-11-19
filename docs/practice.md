@@ -17,6 +17,20 @@ Consider a single Note Identification question, F♯ in treble clef. A scheduler
 | [SM-2](#sm-2) | The first answer updates its run of successes and ease factor. | Its review interval follows a sequence of day counts, with a short retry after a miss. |
 | [FSRS](#fsrs) | The first answer updates its estimated memory stability and difficulty. | After the learning steps, it gets a review date near the model’s 90% recall point. |
 
+## Self-grading a new card
+
+In **Settings → Practice**, select **Grade correct answers with Hard, Good, or Easy**. After a correct answer, **Hard** and **Good** keep a new card in its short learning steps. **Easy** skips those steps. SM-2 starts its first Easy review at 4 days. With Alto’s default FSRS settings, the starting estimate is about 8.3 days.
+
+{% include shot.html src="self-grading.png" alt="A correct Note Identification answer with the review intervals above Hard, Good, and Easy" caption="Choose a grade to schedule the card at the interval above that button." %}
+
+| First correct answer | SM-2 | FSRS |
+| --- | --- | --- |
+| Hard | 5 min 30 s | 5 min 30 s |
+| Good | 10 min | 10 min |
+| Easy | 3–5 days | 6–10 days |
+
+Alto spreads reviews across nearby days so that cards learned together can come due on different days. This adjustment is called *fuzzing*. For example, two new FSRS cards can show **7 days** and **9 days** for Easy even though both start with the same estimate. If you reopen the same card before grading it, its preview stays the same.
+
 ## ASRS
 
 The **Alto Spaced Repetition System (ASRS)** is the default scheduler. For each turn, it generates a few questions and adds some you have answered before under the same exercise settings. It draws from that pool at random, giving more weight to questions you find difficult. A question you just answered gets less weight for a while. The better you know it, the longer that effect lasts.
@@ -99,16 +113,22 @@ Suppose F♯ and an unseen B are eligible. If you last identified F♯ in **one 
 
 ## SM-2
 
-**SuperMemo 2 (SM-2)** keeps a count of successive successful reviews, the last interval in days, and an **ease factor** $$E$$ for each card. A new card starts with $$E=2.5$$. Alto uses two grades from the SM-2 scale. The first submission in each showing supplies the grade, regardless of response speed. [Original SM-2 specification](https://super-memory.com/english/ol/sm2.htm)
+**SuperMemo 2 (SM-2)** keeps a count of successive successful reviews, the last interval in days, and an **ease factor** $$E$$ for each card. A new card starts with $$E=2.5$$. By default, Alto grades a correct first answer Good and a miss Again. Under **Settings → Practice**, select **Grade correct answers with Hard, Good, or Easy** to choose the grade yourself. Each button shows its interval above it. A wrong answer records Again and advances automatically. The exercise’s **Next Question** preference is disabled while self-grading is on. [Original SM-2 specification](https://super-memory.com/english/ol/sm2.htm)
 
 ### Review intervals and ease
 
-| First submission | Change to the card | Next review |
+| First submission with automatic grading | Change to the card | Next review |
 | --- | --- | --- |
-| Correct (grade 4) | Add one success. Keep the current ease. | 1 day for the first success and 6 days for the second. After that, $$I_{n}=\lceil I_{n-1}E\rceil$$, the previous interval times the ease, rounded up to a whole day. |
-| Incorrect (grade 2) | Reset the success count and interval to zero. Set the ease to $$\max(1.3,E-0.32)$$. | 1 minute. A correction during this showing leaves that date in place. |
+| Good (grade 4) | Add one success. Keep the current ease. | 1 day for the first success and 6 days for the second. After that, $$I_{n}=\lceil I_{n-1}E\rceil$$, the previous interval times the ease, rounded up to a whole day. |
+| Again (grade 2) | Reset the success count and interval to zero. Set the ease to $$\max(1.3,E-0.32)$$. | 1 minute. The next showing starts a new review. |
 
-### Three reviews of F♯
+### Self-graded SM-2
+
+The buttons use Anki’s default learning steps. A new card shows **5 min 30 s** for Hard and **10 min** for Good. Easy skips both steps and schedules a review around **4 days** later. At the second step, Hard repeats the ten-minute step and Good graduates the card with a one-day interval.
+
+Once a card graduates, Hard starts at 1.2 times the previous interval. Good multiplies the previous interval by the card’s ease, and Easy applies a further 1.3 multiplier. Good credits half the days overdue and Easy credits all of them. Hard lowers ease by 0.15, Easy raises it by 0.15, and Good preserves it. A miss lowers ease by 0.20 and starts a ten-minute relearning step. At that step Hard waits 15 minutes, Good schedules one day, and Easy schedules two days. [Anki deck options](https://docs.ankiweb.net/deck-options.html)
+
+### Three reviews of F♯ with automatic grading
 
 Identify a new F♯ correctly on day 0 and it is due on day 1. Get it right on day 1 and it is due on day 7. A third success on day 7 gives an interval of $$6\cdot 2.5=15$$ days, so the next due date is **day 22**.
 
@@ -118,7 +138,9 @@ Suppose instead that you miss F♯ on day 7. Its ease falls to 2.18 and Alto sch
 
 ## FSRS
 
-The **Free Spaced Repetition Scheduler (FSRS)** models the chance you can recall a card as time passes. Alto uses FSRS-6 with its default parameters. A correct first submission earns **Good** and a miss earns **Again**, regardless of response speed. For a new card, Good puts its next learning step ten minutes away and Again puts it one minute away. A miss on a card already in review starts a ten-minute relearning step. [Python FSRS scheduler](https://github.com/open-spaced-repetition/py-fsrs)
+The **Free Spaced Repetition Scheduler (FSRS)** models the chance you can recall a card as time passes. Alto uses FSRS-6 with its default parameters. A correct first submission earns **Good** by default. With self-grading on, you can choose **Hard**, **Good**, or **Easy** after a correct answer. A miss always earns **Again**. For a new card, Good puts its next learning step ten minutes away and Again puts it one minute away. A miss on a card already in review starts a ten-minute relearning step. [Python FSRS scheduler](https://github.com/open-spaced-repetition/py-fsrs)
+
+With self-grading, a new FSRS card starts with the same Hard and Good learning steps as SM-2. Easy graduates it directly using FSRS-6’s estimate of memory stability at 90% desired retention. On review cards, the three intervals use the same random adjustment and are ordered Hard, Good, Easy up to the maximum of 36,500 days. The interval printed above a button is the one Alto schedules. [Anki review scheduling](https://github.com/ankitects/anki/blob/main/rslib/src/scheduler/states/review.rs)
 
 ### Estimated recall and the review date
 
@@ -155,16 +177,34 @@ Suppose you see a new F♯ card five times in Note Identification. Each row show
 | 1. Correct in 4 s | 9 questions (90 s) | 3 questions (30 s) | 1 day | 10 min |
 | 2. Correct in 1 s | 19 questions (190 s) | 4 questions (40 s) | 6 days | 2 days |
 | 3. Correct in 1 s | 19 questions (190 s) | 4 questions (40 s) | 15 days | 11 days |
-| 4. Miss, then correct on retry | 8 questions (80 s) | 1 question (10 s) | 1 min | 10 min |
+| 4. Miss (corrected on the same showing in ASRS and ARTS) | 8 questions (80 s) | 1 question (10 s) | 1 min | 10 min |
 | 5. Correct in 4 s | 11 questions (110 s) | 3 questions (30 s) | 1 day | 2 days |
 
-After the first answer, ASRS draws F♯ again within nine intervening questions about half the time. ARTS picks it as soon as it outranks the unseen card, after three questions. On the fourth showing, ASRS counts both the miss and the correction. The other three schedulers use the miss as the grade for that showing. FSRS uses base intervals here. In practice, its small random adjustment to longer intervals can also change the dates of later reviews.
+After the first answer, ASRS draws F♯ again within nine intervening questions about half the time. ARTS picks it as soon as it outranks the unseen card, after three questions. On the fourth showing, ASRS counts both the miss and the correction. ARTS uses the first answer. In SM-2 and FSRS, the miss ends the showing. The fifth row is the scheduled retry. FSRS uses base intervals here. In practice, its small random adjustment to longer intervals can also change the dates of later reviews.
 
 ## Daily limits
 
-For SM-2 and FSRS, exercise tiles show **due reviews in green** and **new cards in blue**. Due reviews come first. The default allowance for each exercise is **10 new cards and 200 reviews per local day**. Change those numbers in **Settings → Practice**, or open an exercise’s **Daily Limits** submenu and clear **Use global** to override either number for that exercise.
+For SM-2 and FSRS, exercise tiles show **new cards in blue**, **missed cards awaiting a correct answer in red**, and **due reviews in green**. Below the search bar, **New**, **Learn**, and **Due** show the totals for checked exercise tiles that match the search text. A missed card stays in the red count while it waits and when it becomes due. Another miss on that card still counts as one. Due reviews come first. The default allowance for each exercise is **10 new cards and 200 reviews per local day**. Change those numbers in **Settings → Practice**, or open an exercise’s **Daily Limits** submenu and clear **Use global** to override either number for that exercise. Check **Unlimited** to remove the daily cap on new cards, reviews, or both. A limit of zero pauses that kind of practice.
+
+On the exercise screen, the counts appear at the top, immediately to the left of the score and streak, in **blue / red / green** order: new cards, outstanding incorrect cards, and due reviews. The underlined number identifies the current card’s queue. A retry that is due appears in both the red and green counts, with red underlined while you answer it.
+
+{% include shot.html src="keyboard-review.png" alt="Keyboard Note Identification with three colored counts next to the streak and Next interval beneath the keyboard" caption="With automatic grading, Next interval shows when this card will return if you answer correctly." %}
+
+After a miss, Alto sets the card aside and offers other eligible questions. If the missed card is the only review left within your daily limit, the exercise shows its return time and resumes automatically when it is due.
+
+{% include shot.html src="waiting-for-review.png" alt="An exercise waiting for a missed card, with its return time and the red outstanding-card count" caption="You can leave the exercise open. Practice resumes when the missed card is due." %}
 
 The two algorithms share the day’s allowances and keep separate review dates. Opening a new card uses one introduction slot. If you leave before answering, you can return to that card without using another slot. The allowances reset at local midnight, and overdue reviews remain due.
+
+You can see the next review date for a specific card in the [database browser]({{ '/statistics/' | relative_url }}#browsing-the-database).
+
+## Switching schedulers
+
+When a card first moves between SM-2 and FSRS, it keeps its due date, full review interval, and learning or relearning step. A card on a 180-day interval with 20 days left will still be due in 20 days. After that first transfer, each scheduler resumes its own saved schedule for the card.
+
+For mature cards, FSRS estimates stability and difficulty from the SM-2 interval and ease, assuming 90% historical recall. In the other direction, SM-2 uses the full FSRS interval and starts ease at 2.5. [FSRS conversion from SM-2](https://docs.rs/fsrs/6.6.2/fsrs/struct.FSRS.html#method.memory_state_from_sm2)
+
+ARTS and ASRS record your answers in your practice history. Calendar due dates, new cards, missed cards awaiting review, and daily allowances are independent of that practice.
 
 ## Your profile
 

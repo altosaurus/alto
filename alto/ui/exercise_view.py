@@ -15,11 +15,13 @@ True
 
 from __future__ import annotations
 
+import math
 import random
 import re
 import time
 from typing import TYPE_CHECKING
 
+from fsrs import Rating
 from PySide6.QtCore import (
     QEasingCurve,
     QEvent,
@@ -72,7 +74,7 @@ from alto.exercises.library import (
     ScaleIdentification,
 )
 from alto.learning import Learner
-from alto.learning.calendar import DEFAULT_SCHEDULER
+from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, ReviewInterval
 from alto.learning.learner import PracticeComplete
 from alto.settings import spell
 from alto.theory.pitch import (
@@ -115,7 +117,7 @@ from alto.ui.staff_input import (
     StaffInput,
 )
 from alto.ui.staff_playback import StaffPlayback
-from alto.ui.widgets import HelpButton
+from alto.ui.widgets import HelpButton, PracticeCounts
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -328,7 +330,7 @@ class ExerciseView(QWidget):
     question : Question or None
         The question on screen.
     answered : bool
-        True once the question has been answered right.
+        True once this showing is finished, including a miss in SM-2 or FSRS.
     missed : bool
         True once the question has been answered wrong, so it no longer counts toward the score.
     buttons : list of QPushButton
@@ -355,6 +357,8 @@ class ExerciseView(QWidget):
         The pane that holds the reference.
     lesson_requested : Signal
         Emitted with a lesson's key when the reference pane's lesson button is pressed.
+    shuffle_requested : Signal
+        Emitted when answer feedback ends or Next is clicked during shuffled practice.
 
     Examples
     --------
@@ -365,6 +369,7 @@ class ExerciseView(QWidget):
     """
 
     lesson_requested = Signal(str)
+    shuffle_requested = Signal()
 
     PANE_WIDTH = 290
     REFERENCE_WIDTH = 400
@@ -406,6 +411,7 @@ class ExerciseView(QWidget):
         self.correct = self.total = self.streak = 0
         self.question: Question | None = None
         self.answered = False
+        self.shuffle_answers = False
         self.missed = False
         self._attempts = 0  # answers given to the question on screen
         self._clock = time.monotonic()  # when the last answer was given, or the question appeared
@@ -413,6 +419,17 @@ class ExerciseView(QWidget):
         self._advance_remaining = -1
 
         self.score = QLabel()
+        self._review_preview: ReviewInterval | None = None
+        self._self_grading = False
+        self._rating_previews: dict[Rating, ReviewInterval] = {}
+        self.review_interval = QLabel()
+        self.review_interval.setToolTip("Next review after a correct answer")
+        self.review_interval.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.queue_counts = PracticeCounts()
+        self.queue_counts.hide()
+        self._count_timer = QTimer(self)
+        self._count_timer.setInterval(30_000)
+        self._count_timer.timeout.connect(self._refresh_queue_counts)
         self.prompt = DegreeLabel()
         self.prompt.setStyleSheet("font-size: 16pt;")
         self.staff = StaffWidget(max_step=MAX_STEP)
@@ -597,7 +614,8 @@ class ExerciseView(QWidget):
         self._busy = False
         self._advance = QTimer(self)
         self._advance.setSingleShot(True)
-        self._advance.timeout.connect(self.next_question)
+        self._advance.setTimerType(Qt.TimerType.PreciseTimer)
+        self._advance.timeout.connect(self._advance_question)
         self._anims: list[QVariantAnimation] = []
 
         top = QHBoxLayout()
@@ -605,6 +623,7 @@ class ExerciseView(QWidget):
         self.lesson_back_button.hide()
         top.addWidget(self.lesson_back_button)
         top.addStretch()
+        top.addWidget(self.queue_counts)
         top.addWidget(self.score)
         self.help_btn = HelpButton(exercise.instructions)
         top.addWidget(self.help_btn)
@@ -659,26 +678,29 @@ class ExerciseView(QWidget):
         prompt_row.addWidget(self.prompt, 100)
         prompt_row.addStretch(1)
         lay.addLayout(prompt_row)
-        lay.addWidget(self.staff, alignment=Qt.AlignmentFlag.AlignHCenter)  # a capped staff sits in the middle
-        lay.addWidget(self.circle, 1)
-        lay.addWidget(self.fork, alignment=Qt.AlignmentFlag.AlignHCenter)
-        lay.addWidget(self.input_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         placement_layout = lay
         if isinstance(self.scale_input, SignatureInput):
             signature_area = QWidget()
             placement_layout = QVBoxLayout(signature_area)
             placement_layout.setContentsMargins(0, 0, 0, 0)
             lay.addWidget(signature_area, alignment=Qt.AlignmentFlag.AlignHCenter)
-        placement_layout.addWidget(self.scale_input, alignment=Qt.AlignmentFlag.AlignHCenter)
-        placement_layout.addWidget(self.clef_input, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self._music_layout = QGridLayout()
+        placement_layout.addLayout(self._music_layout)
+        visuals = (self.staff, self.circle, self.fork, self.input_staff, self.scale_input, self.clef_input, self.key_staff)
+        for row, visual in enumerate(visuals):
+            self._music_layout.addWidget(visual, row, 0)
+        self._music_layout.addWidget(self.review_interval, 0, 1, -1, 1, Qt.AlignmentFlag.AlignBottom)
         placement_layout.addWidget(self.symbol_row)
         placement_layout.addWidget(self.place_status)
         placement_layout.addWidget(self.pitch_row)
         placement_layout.addWidget(self.accidental_row)
         placement_layout.addWidget(self.step_row)
         placement_layout.addWidget(self.answer_row)
-        lay.addWidget(self.key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addWidget(self.keyboard)
+        self._keyboard_interval_row = QWidget()
+        self._keyboard_interval_layout = QHBoxLayout(self._keyboard_interval_row)
+        self._keyboard_interval_layout.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._keyboard_interval_row)
         answers = QWidget()
         answers.setMaximumWidth(self.CHOICE_MAX_WIDTH)
         answer_layout = QVBoxLayout(answers)
@@ -698,10 +720,24 @@ class ExerciseView(QWidget):
         answer_row.addWidget(answers, 100)
         answer_row.addStretch(1)
         lay.addLayout(answer_row)
+        self.rating_row = QWidget()
+        grade_layout = QGridLayout(self.rating_row)
+        grade_layout.setContentsMargins(0, 0, 0, 0)
+        self.grade_controls: dict[Rating, tuple[QLabel, QPushButton]] = {}
+        for column, grade in enumerate((Rating.Hard, Rating.Good, Rating.Easy)):
+            label = QLabel()
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            button = QPushButton(grade.name)
+            label.setBuddy(button)
+            grade_layout.addWidget(label, 0, column)
+            grade_layout.addWidget(button, 1, column)
+            button.clicked.connect(lambda _checked=False, rating=grade: self._apply_rating(rating))
+            self.grade_controls[grade] = label, button
+        lay.addWidget(self.rating_row, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.next_button = QPushButton("Next")
         self.next_button.setMinimumHeight(40)
         self.next_button.setShortcut("Return")
-        self.next_button.clicked.connect(self.next_question)
+        self.next_button.clicked.connect(self._advance_question)
         lay.addWidget(self.next_button, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addStretch()
         outer = QHBoxLayout(self)
@@ -801,6 +837,7 @@ class ExerciseView(QWidget):
         >>> view._advance.isActive()
         False
         """
+        self._count_timer.stop()
         if self._hidden_at is None:
             self._hidden_at = time.monotonic()
             self._advance_remaining = self._advance.remainingTime()
@@ -834,6 +871,8 @@ class ExerciseView(QWidget):
             self._advance_remaining = -1
         if self.learner and (self._scheduler_mode != self.learner.mode or self.question is None):
             self.next_question()
+        else:
+            self._refresh_queue_counts()
         super().showEvent(event)
 
     def _bind(
@@ -1074,7 +1113,10 @@ class ExerciseView(QWidget):
         """
         if self.learner is None:
             return self.exercise.generate(self.rng)
-        return self.learner.pick(self.exercise, rng=self.rng, avoid=self.question.item_key() if self.question else None)
+        avoid = self.question.item_key() if self.question else None
+        if self._scheduler_mode in CALENDAR_SCHEDULERS and not self.missed:
+            avoid = None
+        return self.learner.pick(self.exercise, rng=self.rng, avoid=avoid)
 
     def scheduling_changed(self) -> None:
         """
@@ -1088,6 +1130,21 @@ class ExerciseView(QWidget):
             self.next_question()
         else:
             self._scheduler_mode = ""  # showEvent rechecks the budget without drawing a hidden card.
+
+    def _advance_question(self) -> None:
+        """
+        Advance a graded answer in shuffle mode or draw the next question locally.
+
+        Examples
+        --------
+        A calendar retry timer checks the current exercise again when no question is on screen.
+        """
+        if self._rating_previews:
+            return
+        if self.shuffle_answers and self.answered and self.question is not None:
+            self.shuffle_requested.emit()
+        else:
+            self.next_question()
 
     def next_question(self) -> None:
         """
@@ -1113,13 +1170,27 @@ class ExerciseView(QWidget):
         self.answer_button.setStyleSheet("")
         self.place_button.setStyleSheet("")
         self._scheduler_mode = self.learner.mode if self.learner else DEFAULT_SCHEDULER
-        self.settings_panel.refresh_limits(self._scheduler_mode)
+        self._self_grading = (
+            self.learner is not None and self._scheduler_mode in CALENDAR_SCHEDULERS and self.learner.self_grading
+        )
+        self.settings_panel.refresh_limits(self._scheduler_mode, self_grading=self._self_grading)
+        self._rating_previews.clear()
+        self.rating_row.hide()
         empty_sample = None
         try:
             q = self._pick_question()
-        except PracticeComplete:
+        except PracticeComplete as empty:
             empty_sample = self.exercise.generate(self.rng)
-            q = Question("You’re caught up for now.", choices=[], answer="") if empty_sample.answer else empty_sample
+            message = "You’re caught up for now."
+            if empty.retry_at is not None:
+                clock = time.strftime("%H:%M:%S", time.localtime(empty.retry_at))
+                message = (
+                    f"Next review at {clock}."
+                    if self._self_grading
+                    else f"Waiting for a missed card. Practice resumes at {clock}."
+                )
+                self._advance.start(max(1, math.ceil((empty.retry_at - time.time()) * 1000)))
+            q = Question(message, choices=[], answer="") if empty_sample.answer else empty_sample
         self.question = q
         self.next_button.setText("Next")
         if self.settings_panel is not None and self.settings_panel.choice_buttons_row is not None:
@@ -1287,7 +1358,45 @@ class ExerciseView(QWidget):
             self.answered = True
             self.next_button.setText("Check again")
             self.next_button.show()
+        self._show_review_interval()
         self._update_score()
+
+    def _show_review_interval(self) -> None:
+        """
+        Show the correct-answer interval beside the exercise or under the keyboard's right edge.
+
+        Examples
+        --------
+        A new FSRS question shows 10 min before the learner submits an answer.
+        """
+        self._review_preview = None
+        self.review_interval.hide()
+        self._keyboard_interval_row.hide()
+        self._music_layout.setAlignment(Qt.AlignmentFlag(0))
+        if self._self_grading or self.question is None or self.learner is None or self._scheduler_mode not in CALENDAR_SCHEDULERS:
+            return
+        self._review_preview = self.learner.calendar.correct_interval(
+            type(self.exercise).__name__,
+            profile=self.learner.profile.id,
+            key=self.question.item_key(),
+            mode=self._scheduler_mode,
+            now=time.time(),
+        )
+        text = self._review_preview.duration
+        self.review_interval.setAccessibleName(f"Next interval: {text}")
+        if self.keyboard.isHidden():
+            self.review_interval.setText(f"Next interval:\n{text}")
+            self.review_interval.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
+            self.review_interval.setMaximumWidth(self.review_interval.sizeHint().width())
+            self._music_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            self._music_layout.addWidget(self.review_interval, 0, 1, -1, 1, Qt.AlignmentFlag.AlignBottom)
+        else:
+            self.review_interval.setText(f"Next interval: {text}")
+            self.review_interval.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            self.review_interval.setMaximumWidth(self.keyboard.full_width())
+            self._keyboard_interval_layout.addWidget(self.review_interval)
+            self._keyboard_interval_row.show()
+        self.review_interval.show()
 
     @staticmethod
     def _style(color: QColor) -> str:
@@ -1512,8 +1621,7 @@ class ExerciseView(QWidget):
         """
         Check a note that was clicked onto the staff against the one asked for.
 
-        A correct placement uses the selected Next Question setting. A wrong note fades red, then the staff clears
-        for another attempt.
+        A correct placement uses the selected Next Question setting. A wrong note fades red before the scheduler handles the miss.
 
         Parameters
         ----------
@@ -1541,7 +1649,6 @@ class ExerciseView(QWidget):
         if ok:
             self._finish_answer(self.place_button, notes=[[note]])
         else:
-            self.missed = True
             self._busy = True
             self._flash_note("#c62828")
             token = self._pair_token
@@ -1562,7 +1669,7 @@ class ExerciseView(QWidget):
                 self.input_staff.refresh_preview()  # the note at the caret comes back, for the keyboard
                 self._show_placement_rows()
 
-            QTimer.singleShot(450, retry)
+            self._after_miss(retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -1596,10 +1703,14 @@ class ExerciseView(QWidget):
                 self._finish_answer(self.answer_button)
                 self._show_placement_rows()
             else:
-                self.missed = True
                 self.scale_input.set_note_color(QColor("#c62828"))
-                self.place_status.setText("Try again. Use Undo to change the signature, or add another sign.")
                 self.answer_button.setEnabled(False)
+                self._after_miss()
+                if self.answered:
+                    self.scale_input.locked = True
+                    self._show_placement_rows()
+                else:
+                    self.place_status.setText("Try again. Use Undo to change the signature, or add another sign.")
             self._update_score()
         elif q and q.construct_scale is not None:
             self._check_scale()
@@ -1717,6 +1828,8 @@ class ExerciseView(QWidget):
         """
         q = self.question
         if q is None or (q.construct is None and not q.places_sequence):
+            return "", ""
+        if self.answered and self.missed:
             return "", ""
         staff = self._input()
         if q.place_signature:
@@ -1922,8 +2035,8 @@ class ExerciseView(QWidget):
         """
         Check the scale placed on the staff against the one asked for.
 
-        A correct scale uses the selected Next Question setting. A wrong scale turns red and the staff clears for
-        another attempt. Only the first try counts toward the score.
+        A correct scale uses the selected Next Question setting. A wrong scale turns red.
+        Only the first try counts toward the score.
 
         Examples
         --------
@@ -1951,7 +2064,6 @@ class ExerciseView(QWidget):
             self._finish_answer(self.answer_button, notes=[[note] for note in notes])
         else:
             self._flash_note("#c62828")
-            self.missed = True
             self._busy = True
             token = self._pair_token
 
@@ -1969,7 +2081,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(450, retry)
+            self._after_miss(retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -2031,7 +2143,7 @@ class ExerciseView(QWidget):
 
         The symbol and the place must both be those that make the clef: the C clef on the second line is the mezzo-soprano clef,
         and anywhere else it is not. The baritone clef is either the F clef on the middle line or the C clef on the top line.
-        A correct clef uses the selected Next Question setting. A wrong one turns red and the staff clears for another try.
+        A correct clef uses the selected Next Question setting. A wrong clef turns red.
 
         Parameters
         ----------
@@ -2060,7 +2172,6 @@ class ExerciseView(QWidget):
             self._finish_answer(self.answer_button)
         else:
             self._flash_clef("#c62828")
-            self.missed = True
             self._busy = True
             token = self._pair_token
 
@@ -2079,7 +2190,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(450, retry)
+            self._after_miss(retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -2140,8 +2251,7 @@ class ExerciseView(QWidget):
         """
         Check the signature picked on the fork against the one asked for.
 
-        A correct signature uses the selected Next Question setting. A wrong signature turns the circle red, then
-        the fork returns to the natural sign for another attempt.
+        A correct signature uses the selected Next Question setting. A wrong signature turns the circle red.
 
         Examples
         --------
@@ -2165,7 +2275,6 @@ class ExerciseView(QWidget):
             self._finish_answer(self.answer_button)
         else:
             self._flash_fork("#c62828")
-            self.missed = True
             self._busy = True
             token = self._pair_token
 
@@ -2185,7 +2294,7 @@ class ExerciseView(QWidget):
                 self._busy = False
                 self._show_placement_rows()
 
-            QTimer.singleShot(450, retry)
+            self._after_miss(retry)
         self._show_placement_rows()
         self._update_score()
 
@@ -2253,7 +2362,12 @@ class ExerciseView(QWidget):
                 correct=ok,
                 attempt_no=self._attempts,
                 seconds=seconds,
+                preview=self._review_preview,
+                self_grading=self._self_grading,
             )
+            if not ok:
+                self.review_interval.hide()
+                self._keyboard_interval_row.hide()
         if not self.missed:  # only the first attempt counts toward the score
             self.total += 1
             self.correct += ok
@@ -2309,7 +2423,7 @@ class ExerciseView(QWidget):
         """
         Check a two-part answer once both parts are chosen.
 
-        A right answer is scored through `submit`; a wrong one fades both buttons red and clears them so it can be tried again.
+        A right answer is scored through `submit`. A wrong pair flashes red.
 
         Examples
         --------
@@ -2333,7 +2447,6 @@ class ExerciseView(QWidget):
             self.submit(choice, button=name_btn)  # scores it, flashes the name button, plays the note, moves on
             return
         self._record(False, choice=choice)
-        self.missed = True
         self._busy = True
         for b in (name_btn, octave_btn):
             self._flash(b, target="#c62828")
@@ -2356,7 +2469,7 @@ class ExerciseView(QWidget):
             self._pending = {}
             self._busy = False
 
-        QTimer.singleShot(400, reset)
+        self._after_miss(reset, delay=400)
 
     def submit(
         self,
@@ -2367,8 +2480,8 @@ class ExerciseView(QWidget):
         """
         Check an answer chosen with a button or by clicking the notation.
 
-        A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
-        so the learner can try another answer.
+        A correct answer uses the selected Next Question setting. An incorrect button flashes red.
+        In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS allow another answer on the same showing.
 
         Parameters
         ----------
@@ -2418,14 +2531,44 @@ class ExerciseView(QWidget):
         else:
             if q.circle is not None:
                 self.circle.flash_wrong()
-            self.missed = True
             if button is None:
                 self.prompt.setText(f"Try again. {q.prompt}")
             else:
                 button.clearFocus()  # Disabling a focused button would move focus to the next answer.
                 button.setEnabled(False)
                 self._flash(button, target="#c62828")
+            self._after_miss()
         self._update_score()
+
+    def _after_miss(self, retry: Callable[[], None] | None = None, *, delay: int = 450) -> None:
+        """
+        Finish a missed calendar or shuffled question, or reopen the input for another attempt.
+
+        Parameters
+        ----------
+        retry : callable or None
+            Reset the input when another attempt on this showing is allowed.
+        delay : int
+            Duration of the wrong-answer feedback in milliseconds.
+
+        Examples
+        --------
+        A missed SM-2 card receives a fresh first attempt when its scheduled retry comes due.
+        """
+        self.missed = True
+        calendar_review = self._scheduler_mode in CALENDAR_SCHEDULERS
+        if calendar_review or self.shuffle_answers:
+            self.answered = True
+            for button in self.buttons:
+                button.setEnabled(False)
+            self.prompt.setText("Incorrect. This card will return for review." if calendar_review else "Incorrect.")
+            self.prompt.show()
+            wait = not self._self_grading and self.settings_panel.next_question_mode == "Wait"
+            self.next_button.setVisible(wait)
+            immediate = self._self_grading or self.settings_panel.next_question_mode == "Immediately"
+            self._advance_after_feedback(90 if immediate else delay)
+        elif retry is not None:
+            QTimer.singleShot(delay, self, retry)
 
     def _finish_answer(self, button: QPushButton | None, *, notes: list[list[Note]] | None = None) -> None:
         """
@@ -2445,7 +2588,21 @@ class ExerciseView(QWidget):
         q = self.question
         assert q is not None
         self.answered = True
-        mode = self.settings_panel.next_question_mode
+        mode = "Wait" if self._self_grading else self.settings_panel.next_question_mode
+        if self._self_grading:
+            assert self.learner is not None
+            self._rating_previews = self.learner.calendar.passing_intervals(
+                type(self.exercise).__name__,
+                profile=self.learner.profile.id,
+                key=q.item_key(),
+                mode=self._scheduler_mode,
+                now=time.time(),
+            )
+            for rating, (label, control) in self.grade_controls.items():
+                preview = self._rating_previews[rating]
+                label.setText(preview.duration)
+                control.setAccessibleDescription(f"Next review in {preview.duration}")
+            self.rating_row.show()
         buttons = [choice for _, choice in self._pending.values()] or ([button] if button is not None else [])
         immediate = mode == "Immediately"
         if immediate:
@@ -2453,7 +2610,7 @@ class ExerciseView(QWidget):
                 choice.setStyleSheet(self._style(QColor(CORRECT_ANSWER_COLOR)))
             self._advance.start(90 if buttons else 0)  # Allow one visible flash before replacing the controls.
         else:
-            self.next_button.setVisible(mode == "Wait")
+            self.next_button.setVisible(mode == "Wait" and not self._self_grading)
             if mode == "Wait":
                 for answer in self.buttons:
                     answer.setEnabled(False)
@@ -2468,8 +2625,11 @@ class ExerciseView(QWidget):
                 gap = SCALE_GAP_MS
             elif self.staff.interval_voices and len(notes) == 2:
                 gap = MELODIC_INTERVAL_GAP_MS
-            playback = self._immediate_playback if immediate else self._answer_playback
-            playback.play(notes, gap_ms=gap, warmup=scale)
+            if immediate and self.shuffle_answers:
+                sounds.play_notes(notes, gap_ms=gap, warmup=scale)  # The sequence can outlast this exercise view.
+            else:
+                playback = self._immediate_playback if immediate else self._answer_playback
+                playback.play(notes, gap_ms=gap, warmup=scale)
             return
         if self.exercise.has_sound:
             sounds.play_correct(self.streak)
@@ -2485,6 +2645,37 @@ class ExerciseView(QWidget):
             self._flash(None, staff=True)
         self._advance_after_feedback(600)
 
+    def _apply_rating(self, rating: Rating) -> None:
+        """
+        Schedule the completed card at the displayed interval and advance the exercise.
+
+        Parameters
+        ----------
+        rating : Rating
+            Passing grade selected by the learner.
+
+        Examples
+        --------
+        Choosing Hard after a correct response still counts as a correct first attempt.
+        """
+        preview = self._rating_previews.get(rating)
+        if preview is None:
+            return
+        assert self.learner is not None and self.question is not None
+        self.learner.calendar.grade(
+            type(self.exercise).__name__,
+            profile=self.learner.profile.id,
+            key=self.question.item_key(),
+            mode=self._scheduler_mode,
+            correct=True,
+            manual_rating=rating,
+            now=time.time(),
+            preview=preview,
+        )
+        self._rating_previews.clear()
+        self.rating_row.hide()
+        self._advance_question()
+
     def _advance_after_feedback(self, delay: int) -> None:
         """
         Schedule the next question when automatic advancement is active.
@@ -2498,7 +2689,7 @@ class ExerciseView(QWidget):
         --------
         A question waiting for Next stays on screen after its final playback callback.
         """
-        if not self.next_button.isHidden():
+        if self._rating_previews or not self.next_button.isHidden():
             return
         if self._hidden_at is not None:
             self._advance_remaining = delay
@@ -2551,3 +2742,29 @@ class ExerciseView(QWidget):
         """
         pct = f"{100 * self.correct / self.total:.0f}%" if self.total else "–"
         self.score.setText(f"{self.correct}/{self.total} ({pct})   streak {self.streak}")
+        self._refresh_queue_counts()
+
+    def _refresh_queue_counts(self) -> None:
+        """
+        Update the calendar counts beside the score and streak while the exercise is visible.
+
+        Examples
+        --------
+        A newly introduced card stays in the blue count until the first answer is submitted.
+        """
+        if self.learner is None or self._scheduler_mode not in CALENDAR_SCHEDULERS:
+            self.queue_counts.hide()
+            self._count_timer.stop()
+            return
+        if self.isVisible():
+            key = self.question.item_key() if self.question is not None and self._attempts == 0 else None
+            counts, current = self.learner.calendar.study_counts(
+                self.exercise,
+                profile=self.learner.profile.id,
+                mode=self._scheduler_mode,
+                now=time.time(),
+                current_key=key,
+            )
+            self.queue_counts.set_counts(counts, studying=True, current=current)
+            self.queue_counts.show()
+            self._count_timer.start()

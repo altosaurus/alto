@@ -87,7 +87,7 @@ def test_every_link_in_a_guide_page_goes_to_a_page_that_exists(page: Path) -> No
 @pytest.mark.parametrize("page", [GUIDE / "index.md", *chapters()], ids=lambda p: p.name)
 def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(page: Path) -> None:
     """
-    Check that the only template code in a guide page is a `relative_url` link, since Jekyll runs Liquid over every page.
+    Allow relative links and screenshot includes in the guide, and flag other Liquid delimiters.
 
     Parameters
     ----------
@@ -95,6 +95,12 @@ def test_a_guide_page_has_no_stray_liquid_for_jekyll_to_trip_over(page: Path) ->
         The guide page, supplied by the parametrisation.
     """
     text = LINK.sub("", page.read_text(encoding="utf-8"))
+    text = re.sub(
+        r'^{% include shot\.html src="[\w-]+\.png" alt="[^"{}\n]+"(?: caption="[^"{}\n]+")? %}$',
+        "",
+        text,
+        flags=re.MULTILINE,
+    )
     assert "{{" not in text and "{%" not in text, f"{page.name} has braces that Jekyll would read as template code"
 
 

@@ -410,14 +410,19 @@ True
 ### ExerciseSettingsPanel.refresh_limits
 
 ```python
-def refresh_limits(mode: str) -> None
+def refresh_limits(
+    mode: str,
+    *,
+    self_grading: bool = False,
+) -> None
 ```
 
-Update the Daily Limits row for the active scheduler and profile.
+Update scheduling controls for the active scheduler and profile.
 
 **Parameters**
 
 - `mode` (*str*): Selected question scheduler.
+- `self_grading` (*bool*): Disable Next Question when a passing grade advances the exercise.
 
 **Examples**
 

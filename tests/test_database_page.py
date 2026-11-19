@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import pytest
@@ -19,6 +20,7 @@ from PySide6.QtWidgets import QToolButton
 
 from alto.exercises import REGISTRY
 from alto.exercises.base import Question
+from alto.exercises.library import NoteNames
 from alto.learning import Database, Learner
 from alto.learning.database import ItemRecord
 from alto.ui import database_page
@@ -28,6 +30,7 @@ from alto.ui.database_page import (
     DatabasePage,
     RowsModel,
 )
+from alto.ui.main_window import MainWindow
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.stats_dialog import StatsPage
 
@@ -89,8 +92,7 @@ def test_the_answers_table_lists_every_answer_newest_first(
     total = learner.db.count_attempts(learner.profile.id)
     assert page.proxy.rowCount() == total and f"{total:,} answers by Ada." in page.note.text()
     assert page.proxy.index(0, 0).data() >= page.proxy.index(total - 1, 0).data()  # sorted by time, newest at the top
-    headers = [page.model.headers[c] for c in range(7)]
-    assert headers == [
+    assert page.model.headers == [
         "When",
         "Exercise",
         "Question",
@@ -98,6 +100,7 @@ def test_the_answers_table_lists_every_answer_newest_first(
         "Result",
         "Attempt",
         "Time",
+        "Due",
     ]
     assert page.grab().width() > 0
 
@@ -151,6 +154,60 @@ def test_the_questions_and_profiles_tables(
     only = DatabasePage(practiced_learner(3, name="Solo"))
     only.tabs["profiles"].click()
     assert only.note.text() == "1 profile."
+
+
+@pytest.mark.parametrize("tab", ["answers", "questions"])
+def test_browser_shows_due_for_the_selected_scheduler(app: QApplication, tab: str) -> None:
+    """
+    Sort actual due timestamps and refresh the open table when the scheduler changes.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    tab : str
+        Browser table displaying the current due date.
+    """
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    exercise = NoteNames()
+    questions = [Question("Name the note", choices=["A", "B", "C"], answer=note) for note in "ABC"]
+    for question, (mode, when) in zip(questions, (("ASRS", 300), ("SM-2", 200), ("SM-2", 100)), strict=True):
+        learner.set_mode(mode)
+        learner.record(exercise, question=question, answer=question.answer, correct=True, attempt_no=1, seconds=1, now=when)
+    learner.set_mode("FSRS")
+    learner.record(exercise, question=questions[2], answer="?", correct=False, attempt_no=1, seconds=1, now=500)
+    learner.set_mode("SM-2")
+
+    window = MainWindow(learner)
+    window.open_database()
+    page = window._overlay
+    assert isinstance(page, DatabasePage)
+    page.tabs[tab].click()
+    column = page.model.headers.index("Due")
+    page.view.sortByColumn(column, Qt.SortOrder.AscendingOrder)
+    window.open_settings()
+    dialog = window._settings
+    assert dialog is not None
+    dialog.categories.setCurrentRow(7)  # Practice
+    # Two attempts at the third question share its current schedule.
+    repetitions = 2 if tab == "answers" else 1
+    for mode, due in (
+        ("SM-2", [86500] * repetitions + [86600]),
+        ("FSRS", [1100] * repetitions + [86600]),
+        ("ARTS", []),
+        ("ASRS", []),
+    ):
+        item = dialog.scheduler_list.findItems(mode, Qt.MatchFlag.MatchExactly)[0]
+        dialog.scheduler_list.setCurrentItem(item)
+        assert page.proxy.sortColumn() == column and page.proxy.rowCount() == 2 + repetitions
+        cells = [page.proxy.index(row, column) for row in range(page.proxy.rowCount())]
+        assert [cell.data(database_page.SORT_ROLE) for cell in cells if cell.data() != "—"] == due
+        assert [cell.data() for cell in cells if cell.data() != "—"] == [
+            datetime.fromtimestamp(stamp).strftime("%Y-%m-%d %H:%M:%S") for stamp in due
+        ]
+    dialog.close()
+    window.close()
 
 
 def test_searching_narrows_every_table_and_says_so(

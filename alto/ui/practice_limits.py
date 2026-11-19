@@ -6,6 +6,7 @@ from PySide6.QtCore import QSignalBlocker, Qt, Signal
 from PySide6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QSpinBox, QVBoxLayout, QWidget
 
 from alto.learning import Learner
+from alto.learning.calendar import DAILY_NEW, DAILY_REVIEWS, UNLIMITED
 
 
 class DailyLimitsEditor(QWidget):
@@ -42,26 +43,36 @@ class DailyLimitsEditor(QWidget):
         self.learner = learner
         self.exercise = exercise
         self.fields: list[QSpinBox] = []
+        self.unlimited: list[QCheckBox] = []
         self.inherit: list[QCheckBox] = []
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        for name in ("New cards/day", "Maximum reviews/day"):
+        for name, default in (("New cards/day", DAILY_NEW), ("Maximum reviews/day", DAILY_REVIEWS)):
             field = QSpinBox()
             field.setAccessibleName(name)
             field.setRange(0, 9999)
+            field.setValue(default)
             field.setKeyboardTracking(False)
             label = QLabel(name)
             label.setBuddy(field)
-            layout.addWidget(label)
-            row = QHBoxLayout()
-            row.addWidget(field)
-            self.fields.append(field)
+            heading = QHBoxLayout()
+            heading.addWidget(label)
+            heading.addStretch()
             if exercise:
                 inherit = QCheckBox("Use global")
                 inherit.setAccessibleName(f"Use global {name.lower()}")
                 inherit.toggled.connect(self._save)
-                row.addWidget(inherit)
+                heading.addWidget(inherit)
                 self.inherit.append(inherit)
+            layout.addLayout(heading)
+            row = QHBoxLayout()
+            row.addWidget(field)
+            self.fields.append(field)
+            unlimited = QCheckBox("Unlimited")
+            unlimited.setAccessibleName(f"Unlimited {name.lower().removeprefix('maximum ')}")
+            unlimited.toggled.connect(self._save)
+            row.addWidget(unlimited)
+            self.unlimited.append(unlimited)
             row.addStretch()
             layout.addLayout(row)
             field.valueChanged.connect(self._save)
@@ -80,12 +91,18 @@ class DailyLimitsEditor(QWidget):
         values = calendar.limits(profile, exercise=self.exercise)
         overrides = calendar.overrides(profile, exercise=self.exercise) if self.exercise else values
         for i, field in enumerate(self.fields):
-            with QSignalBlocker(field):
-                field.setValue(values[i])
+            unlimited = values[i] == UNLIMITED
+            inherited = overrides[i] is None
+            if not unlimited:
+                with QSignalBlocker(field):
+                    field.setValue(values[i])
+            with QSignalBlocker(self.unlimited[i]):
+                self.unlimited[i].setChecked(unlimited)
+            self.unlimited[i].setEnabled(not inherited)
+            field.setEnabled(not (inherited or unlimited))
             if self.exercise:
                 with QSignalBlocker(self.inherit[i]):
-                    self.inherit[i].setChecked(overrides[i] is None)
-                field.setEnabled(overrides[i] is not None)
+                    self.inherit[i].setChecked(inherited)
 
     def _save(self) -> None:
         """
@@ -95,7 +112,13 @@ class DailyLimitsEditor(QWidget):
         --------
         Checking Use global restores inheritance for that field alone.
         """
-        new, reviews = [None if self.exercise and self.inherit[i].isChecked() else f.value() for i, f in enumerate(self.fields)]
+        limits: list[int | None] = [
+            UNLIMITED if box.isChecked() else field.value() for box, field in zip(self.unlimited, self.fields, strict=True)
+        ]
+        for i, inherit in enumerate(self.inherit):
+            if inherit.isChecked():
+                limits[i] = None
+        new, reviews = limits
         self.learner.calendar.set_limits(self.learner.profile.id, exercise=self.exercise, new_cards=new, reviews=reviews)
         self.reload()
         self.changed.emit()

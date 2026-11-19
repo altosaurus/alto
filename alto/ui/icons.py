@@ -26,6 +26,8 @@ from PySide6.QtGui import (
 )
 from PySide6.QtSvg import QSvgRenderer
 
+ACTIVITY_ICON_SIZE = 20
+
 GLOSSARY = '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 5 4l3 8M3.2 9h3.6M12 5h9M12 10h9M3 16h18M3 21h13"/></g>'
 
 _BODY = '<path d="M3 9h4l5-4v14l-5-4H3z" fill="COLOR"/>'
@@ -363,6 +365,13 @@ BOOK = (
 SEARCH = (
     '<circle cx="10.5" cy="10.5" r="6" fill="none" stroke="COLOR" stroke-width="2"/>'
     '<path d="M15 15l5.5 5.5" fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round"/>'
+)
+
+# Category filter: a funnel.
+FILTER = '<path d="M3 4h18l-7 8v7l-4 2v-9z" fill="none" stroke="COLOR" stroke-width="2" stroke-linejoin="round"/>'
+SHUFFLE = (
+    '<g fill="none" stroke="COLOR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+    '<path d="M3 6h2c5 0 8 12 13 12h3m-3-3 3 3-3 3M3 18h2c2 0 4-2 6-5m2-4c2-2 3-3 5-3h3m-3-3 3 3-3 3"/></g>'
 )
 
 # Tile catalog: a two-by-two grid.

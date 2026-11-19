@@ -174,7 +174,7 @@ The screen for practicing one exercise.
 - `total` (*int*): Questions answered.
 - `streak` (*int*): Right answers in a row.
 - `question` (*Question or None*): The question on screen.
-- `answered` (*bool*): True once the question has been answered right.
+- `answered` (*bool*): True once this showing is finished, including a miss in SM-2 or FSRS.
 - `missed` (*bool*): True once the question has been answered wrong, so it no longer counts toward the score.
 - `buttons` (*list of QPushButton*): The answer buttons on screen.
 - `settings_panel` (*ExerciseSettingsPanel*): The exercise's settings, including how to advance after a correct answer.
@@ -188,6 +188,7 @@ The screen for practicing one exercise.
 - `book_btn` (*QToolButton or None*): Opens the exercise's reference in a pane on the right; None for an exercise that has none.
 - `reference_pane` (*QFrame or None*): The pane that holds the reference.
 - `lesson_requested` (*Signal*): Emitted with a lesson's key when the reference pane's lesson button is pressed.
+- `shuffle_requested` (*Signal*): Emitted when answer feedback ends or Next is clicked during shuffled practice.
 
 **Examples**
 
@@ -389,8 +390,8 @@ def submit(
 
 Check an answer chosen with a button or by clicking the notation.
 
-A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
-so the learner can try another answer.
+A correct answer uses the selected Next Question setting. An incorrect button flashes red.
+In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS allow another answer on the same showing.
 
 **Parameters**
 

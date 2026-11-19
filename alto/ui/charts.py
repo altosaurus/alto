@@ -44,8 +44,11 @@ from PySide6.QtGui import (
     QPen,
 )
 from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
     QSizePolicy,
     QToolTip,
+    QVBoxLayout,
     QWidget,
 )
 
@@ -732,6 +735,7 @@ class StackedBarChart(_Chart):
         self,
         title: str,
         *,
+        header_control: QWidget | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -741,6 +745,8 @@ class StackedBarChart(_Chart):
         ----------
         title : str
             Drawn at the top left.
+        header_control : QWidget or None, default None
+            Optional control at the right edge of the chart title row. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the chart. Keyword-only.
 
@@ -750,6 +756,21 @@ class StackedBarChart(_Chart):
         []
         """
         super().__init__(title, parent=parent)
+        self._heading: QLabel | None = None
+        if header_control is not None:
+            self._heading = QLabel(title)
+            self._heading.setWordWrap(True)
+            font = self.font()
+            font.setBold(True)
+            self._heading.setFont(font)
+            header = QHBoxLayout()
+            header.addWidget(self._heading, 1)
+            header.addWidget(header_control, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+            layout = QVBoxLayout(self)
+            layout.setContentsMargins(0, 0, self.RIGHT, 0)
+            layout.setSpacing(0)
+            layout.addLayout(header)
+            layout.addStretch()
         self.right: list[int] = []
         self.wrong: list[int] = []
 
@@ -779,8 +800,29 @@ class StackedBarChart(_Chart):
         >>> chart.right, chart.wrong
         ([2, 0], [0, 4])
         """
+        if self._heading is not None:
+            self._heading.setText(self.title)
         self.labels, self.right, self.wrong = list(labels), list(right), list(wrong)
         self.update()
+
+    def _plot(self) -> QRectF:
+        """
+        Reserve space above the bars for the title and its optional control.
+
+        Returns
+        -------
+        QRectF
+            The plot area below the header, including any wrapped title lines.
+
+        Examples
+        --------
+        >>> StackedBarChart("Questions")._plot().top()
+        34.0
+        """
+        plot = super()._plot()
+        if self._heading is not None:
+            plot.setTop(max(plot.top(), self._heading.geometry().bottom() + 8))
+        return plot
 
     def _centers(self) -> list[float]:
         """
@@ -820,7 +862,10 @@ class StackedBarChart(_Chart):
         False
         """
         p = QPainter(self)
-        self._frame(p)
+        if self._heading is None:
+            self._frame(p)
+        else:
+            p.setRenderHint(QPainter.RenderHint.Antialiasing)
         totals = [r + w for r, w in zip(self.right, self.wrong)]
         if not any(totals):
             self._message(p, text=self.empty)

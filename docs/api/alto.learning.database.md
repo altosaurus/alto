@@ -42,7 +42,7 @@ Check that bytes are an intact Alto database that this version can read, and say
 
 ```pycon
 >>> check_snapshot(Database().snapshot())
-(3, 0, 0)
+(6, 0, 0)
 >>> check_snapshot(b"not a database")
 Traceback (most recent call last):
     ...
@@ -208,7 +208,7 @@ Return the whole database as bytes: every profile, answer and question record, e
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> check_snapshot(db.snapshot())
-(3, 1, 0)
+(6, 1, 0)
 ```
 
 ### Database.restore
@@ -628,7 +628,7 @@ Return the newest answers first, each with the stored question it was an answer 
 
 **Returns**
 
-- *list of sqlite3.Row*: Each answer's time, exercise, question key, answer, correctness, attempt number, duration and question payload.
+- *list of sqlite3.Row*: Each answer's time, exercise, question key, answer, correctness, attempt number, duration, question payload, and the question's current due timestamp under the active scheduler (NULL if unscheduled).
 
 **Examples**
 
@@ -663,7 +663,7 @@ Return what is known about each of a profile's questions, the most strained firs
 
 **Returns**
 
-- *list of sqlite3.Row*: Every column of each question's record.
+- *list of sqlite3.Row*: Every column of each question's record and the active scheduler's due timestamp, or NULL if unscheduled.
 
 **Examples**
 

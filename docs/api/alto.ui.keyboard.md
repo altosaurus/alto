@@ -104,6 +104,25 @@ Some styles have a taller strip above the keys.
 True
 ```
 
+### KeyboardWidget.full_width
+
+```python
+def full_width() -> int
+```
+
+Measure the keyboard case when its keys reach their maximum width.
+
+**Returns**
+
+- *int*: Width of the case in pixels, including padding.
+
+**Examples**
+
+```pycon
+>>> KeyboardWidget().full_width()
+590
+```
+
 ### KeyboardWidget.resizeEvent
 
 ```python

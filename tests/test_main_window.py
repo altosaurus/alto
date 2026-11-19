@@ -16,7 +16,7 @@ from PySide6.QtCore import (
     QSize,
     Qt,
 )
-from PySide6.QtGui import QKeySequence
+from PySide6.QtGui import QHelpEvent, QKeySequence
 from PySide6.QtTest import (
     QSignalSpy,
     QTest,
@@ -29,6 +29,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QPushButton,
     QScrollArea,
+    QToolTip,
     QWidget,
 )
 
@@ -91,6 +92,38 @@ def test_every_card_shows_its_whole_name_and_description(app: QApplication) -> N
             else:
                 assert label.sizeHint().width() <= label.width(), (cls.name, label.text())
         card.close()
+
+
+def test_tile_count_hover_explains_the_colors_and_clicks_the_tile(app: QApplication) -> None:
+    """
+    Give the count strip its own hover target while keeping the whole exercise tile clickable.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    card = ExerciseCard(KeyboardIntervals)
+    card.set_counts((2, 4, 1))
+    card.show()
+    app.processEvents()
+    target = card.counts
+    assert card.childAt(target.geometry().center()) is target
+    point = target.rect().center()
+    app.sendEvent(target, QHelpEvent(QEvent.Type.ToolTip, point, target.mapToGlobal(point)))
+    assert QToolTip.text().splitlines() == [
+        "Blue — 4 new cards available",
+        "Red — 1 incorrect card awaiting a correct answer",
+        "Green — 2 reviews due",
+    ]
+    clicked = QSignalSpy(card.clicked)
+    QTest.mouseClick(target, Qt.MouseButton.LeftButton, pos=point)
+    assert clicked.count() == 1
+    point = card.rect().center()
+    app.sendEvent(card, QHelpEvent(QEvent.Type.ToolTip, point, card.mapToGlobal(point)))
+    assert QToolTip.text() == KeyboardIntervals.description
+    QToolTip.hideText()
+    card.close()
 
 
 def test_home_tile_and_button_borders_follow_theme_changes(app: QApplication, request: pytest.FixtureRequest) -> None:
@@ -167,6 +200,12 @@ def test_the_cards_are_laid_out_in_as_many_columns_as_fit(app: QApplication) -> 
     before = home._columns
     home._reflow()  # nothing changes when the width has not
     assert home._columns == before
+    home.category_filter.click()
+    home._filter_slide.setCurrentTime(home._filter_slide.duration())
+    assert home.filter_sidebar.isVisible() and home._columns < before
+    home.category_filter.click()
+    home._filter_slide.setCurrentTime(0)
+    assert home.filter_sidebar.isHidden() and home._columns == before
 
 
 def test_an_exercise_with_no_icon_of_its_own_gets_the_default(app: QApplication) -> None:
@@ -953,11 +992,15 @@ def test_the_app_opens_a_window_for_the_chosen_profile(
     tmp_path : Path
         A scratch folder unique to this test.
     """
-    db_profile = Database().add_profile("Ada")
+    path = tmp_path / "alto.db"
+    db = Database(path)
+    db_profile = db.add_profile("Ada")
+    db.close()
+    monkeypatch.setattr(entry, "database_path", lambda: path)
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry, "QApplication", FakeApp)
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(entry, "startup_profile", lambda db: db_profile)
+    monkeypatch.setattr(entry, "startup_profile", lambda db: db.profile(db_profile.id))
     shown = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry.MainWindow, "show", lambda self: shown.append(self))

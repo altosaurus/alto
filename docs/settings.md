@@ -142,6 +142,12 @@ updates…** in the menu looks for the newest release. On, it looks for the newe
 each change as soon as it is merged, before it has been released. That may be less stable. It applies to a copy installed with
 the install script; a packaged copy always follows releases. See [Getting started]({{ '/getting-started/' | relative_url }}).
 
+### Practice
+
+Select a scheduler for the current profile. With **SM-2** or **FSRS**, you can set daily limits and choose whether to grade correct answers yourself.
+
+{% include shot.html src="practice-settings.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" caption="This profile can start ten new cards per exercise each day and review every card that comes due." %}
+
 ## Exercise settings
 
 Note Identification, Keyboard Note Identification and Note Construction have a sliders button at the top right of the

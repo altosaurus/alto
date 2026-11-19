@@ -18,10 +18,7 @@ from PySide6.QtCore import (
     Qt,
     Signal,
 )
-from PySide6.QtGui import (
-    QFont,
-    QPalette,
-)
+from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
@@ -30,9 +27,9 @@ from PySide6.QtWidgets import (
 
 from alto.lessons import LESSONS
 from alto.ui import icons
-from alto.ui.colors import blend
 from alto.ui.home import EXERCISE_ICONS
 from alto.ui.icons import svg_icon
+from alto.ui.style import navigation_heading_style
 
 LESSON_ROLE = Qt.ItemDataRole.UserRole  # holds the lesson's key on a lesson's row
 STEP_ROLE = Qt.ItemDataRole.UserRole + 1  # holds the step's number on a step's row
@@ -63,14 +60,11 @@ def section_item(
     >>> section_item("Scales & Keys", palette=QPalette()).text()
     'SCALES & KEYS'
     """
-    font = QFont()
-    font.setPixelSize(10)
-    font.setBold(True)
-    font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.3)
+    font, ink = navigation_heading_style(palette)
     item = QListWidgetItem(text.upper())
     item.setFlags(Qt.ItemFlag.NoItemFlags)  # a section label: not selectable, no hover highlight
     item.setFont(font)
-    item.setForeground(blend(palette.color(QPalette.ColorRole.Text), b=palette.color(QPalette.ColorRole.Window), t=0.5))
+    item.setForeground(ink)
     item.setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
     item.setSizeHint(QSize(0, 40))
     return item
@@ -118,7 +112,7 @@ class LessonNav(QListWidget):
         """
         super().__init__(parent)
         self.setObjectName("nav")  # styled in style.py, as the exercise list is
-        self.setIconSize(QSize(20, 20))
+        self.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
         self.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
         self.setAccessibleName("Lessons")
         self.step_items: list[QListWidgetItem] = []
@@ -153,7 +147,7 @@ class LessonNav(QListWidget):
                 seen.add(lesson.category)
                 self.addItem(section_item(lesson.category, palette=self.palette()))
             row = QListWidgetItem(
-                svg_icon(EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES), color=ink, size=20),
+                svg_icon(EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES), color=ink, size=self.iconSize().width()),
                 lesson.title,
             )
             row.setData(LESSON_ROLE, lesson.key)

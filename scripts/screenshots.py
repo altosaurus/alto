@@ -41,17 +41,21 @@ from PySide6.QtWidgets import (
 
 import alto.ui.exercise_view as ev
 from alto import settings
+from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.exercises.base import Question
+from alto.exercises.library import ClefBasics, KeyboardNotes, NoteNames
 from alto.learning import (
     Database,
     Learner,
 )
+from alto.learning.calendar import UNLIMITED
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.database_page import (
     ROW_ROLE,
     DatabasePage,
 )
+from alto.ui.glossary import GlossaryPage
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import ProfileDialog
 from alto.ui.question_preview import QuestionPreview
@@ -80,6 +84,13 @@ SHOTS = (
     "arpeggios",
     "key-signatures",
     "circle-of-fifths",
+    "filtered-practice",
+    "filtered-exercise",
+    "keyboard-review",
+    "self-grading",
+    "waiting-for-review",
+    "practice-settings",
+    "database-questions",
     "stats",
     "stats-heatmap",
     "database",
@@ -335,13 +346,29 @@ def capture(
         save(window, name=name)
     window.show_home()
     wait()
+    # A few recent FSRS answers give the calendar controls actual new, missed, and due cards.
+    learner.set_mode("FSRS")
+    for ex in (NoteNames(), KeyboardNotes()):
+        for minutes_ago, correct in ((25, True), (15, False), (2, True)):
+            question = ex.generate(rng)
+            learner.record(
+                ex,
+                question=question,
+                answer=question.answer if correct else "Incorrect",
+                correct=correct,
+                attempt_no=1,
+                seconds=3.1,
+                now=now - minutes_ago * 60,
+            )
+
     window.open_stats()
     wait(400)
+    stats_page = window._overlay
+    assert isinstance(stats_page, StatsPage)
+    stats_page.granularity.setCurrentText("Week")
     save(window, name="stats", width=1500)
     if "stats-heatmap" in names:  # scroll down to the calendar of reviews and show it with the table under it
         # noinspection PyProtectedMember
-        stats_page = window._overlay
-        assert isinstance(stats_page, StatsPage)
         scroller = stats_page.findChild(QScrollArea)
         assert scroller is not None
         scroller.verticalScrollBar().setValue(stats_page.heatmap.y() - 16)
@@ -349,10 +376,14 @@ def capture(
         save(window, name="stats-heatmap", width=1500)
     window.open_database()
     wait(400)
-    save(window, name="database")
     # noinspection PyProtectedMember
     page = window._overlay
     assert isinstance(page, DatabasePage)
+    save(window, name="database")
+    if "database-questions" in names:
+        page.tabs["questions"].click()
+        page.view.sortByColumn(page.model.headers.index("Last seen"), Qt.SortOrder.DescendingOrder)
+        save(window, name="database-questions")
     page.tabs["answers"].click()
     wait(200)
     row = next(page.proxy.index(r, 0) for r in range(page.proxy.rowCount()) if "Chord" in page.proxy.index(r, 1).data())
@@ -370,8 +401,44 @@ def capture(
     preview.close()
     window.show_home()
 
+    if {"filtered-practice", "filtered-exercise", "keyboard-review", "self-grading", "waiting-for-review"}.intersection(names):
+        window.home.restore_tile_filters({"exercises": frozenset({NoteNames.name, KeyboardNotes.name})}, expanded=True)
+        window.shuffle_button.setChecked(True)
+        window.home.refresh_counts()
+        wait(1200)
+        save(window, name="filtered-practice")
+        window.home.category_filter.click()
+        window.open_exercise(NoteNames)
+        wait(500)
+        save(window, name="filtered-exercise")
+        window.shuffle_button.setChecked(False)
+        window.home.restore_tile_filters({}, expanded=False)
+
+        window.open_exercise(KeyboardNotes)
+        save(window, name="keyboard-review")
+
+        sounds.enabled = False  # capture answer feedback without opening an audio device
+        learner.set_self_grading(True)
+        learner.calendar.set_limits(learner.profile.id, exercise="NoteNames", new_cards=None, reviews=0)
+        window.open_exercise(NoteNames)
+        view = window._exercise_page
+        assert view is not None and view.question is not None
+        view.submit(view.question.answer, button=None)
+        save(window, name="self-grading")
+        if "waiting-for-review" in names:
+            learner.set_self_grading(False)
+            learner.calendar.set_limits(learner.profile.id, exercise="ClefBasics", new_cards=1, reviews=None)
+            window.open_exercise(ClefBasics)
+            view = window._exercise_page
+            assert view is not None
+            view.submit("Incorrect", button=None)
+            wait(800)
+            assert view.question is None
+            save(window, name="waiting-for-review")
+        window.show_home()
+
     # The app-wide settings: the Notation style section, and the Sound page showing the viola.
-    dialog = AppSettingsDialog(window)
+    dialog = AppSettingsDialog(window, learner=learner)
     dialog.resize(1000, 640)
     dialog.show()
     dialog.categories.setCurrentRow(2)
@@ -381,6 +448,11 @@ def capture(
     dialog.instruments.select("viola_bowed")
     wait(200)
     save(dialog, name="settings-sound", width=1000)
+    if "practice-settings" in names:
+        learner.set_self_grading(True)
+        learner.calendar.set_limits(learner.profile.id, new_cards=10, reviews=UNLIMITED)
+        dialog.categories.setCurrentItem(dialog.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[0])
+        save(dialog, name="practice-settings")
     dialog.close()
 
     if {"lesson-tiles", "lesson-workspace", "glossary"}.intersection(names):
@@ -391,7 +463,13 @@ def capture(
         window.open_lessons("pitches-and-notes")
         save(window, name="lesson-workspace")
     if "glossary" in names:
+        window.show_home()
         window.open_glossary()
+        glossary = window._overlay
+        assert isinstance(glossary, GlossaryPage)
+        glossary.search.setText("minor")
+        glossary.terms.setCurrentItem(glossary.terms.findItems("harmonic minor scale", Qt.MatchFlag.MatchExactly)[0])
+        wait(500)
         save(window, name="glossary")
     if "profile-create" in names or "profile-picker" in names:
         profiles = Database()

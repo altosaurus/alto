@@ -134,14 +134,34 @@ opens the matching list on the left; before you start an activity, the main pane
 
 The icon-only **Exercises / Lessons** pair sits at the top left, followed by an open/close navigation-pane button, a divider,
 and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
-selected section by name, description or category, and follows the sidebar's width.
+selected section by name, description or category, and follows the sidebar's width. On the tile grid or during an exercise, click the funnel icon
+at the right end of the search row to open the filter sidebar. Click it again to collapse the sidebar and keep your filters.
+The sidebar opens on the right with every category expanded. Check or clear a category to include or
+hide its activities, or check individual exercises or lessons. The tiles and navigation list show the same matches.
+A dash means some activities in a category are checked. **All categories** selects or clears the whole list.
+
+Turn on **Shuffle exercises**, just left of the funnel, to practice the exercises in your filtered list. After each
+right or wrong answer, Alto prefers an exercise from another category. If the other available exercises are in the
+current category, it picks one of those. For example, selecting only **Note Identification** and **Keyboard Note
+Identification** makes them alternate when both have questions available. Your **Next Question** setting controls when
+the switch happens. With **Wait**, click **Next** after reviewing your answer. You can change the filters while answering
+a question. Shuffle uses the updated list for the next question and returns to the tiles if the list is empty.
+Click the highlighted shuffle icon again to turn it off.
+
+{% include shot.html src="filtered-practice.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" caption="Only the checked exercises appear in the grid. The New, Learn, and Due totals at the left count cards from these two exercises." %}
 
 During an exercise or lesson, **Exercises / Lessons** switches the list while keeping your activity on screen. Selecting
 an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
 **Statistics** and **Browse database** are at the top right. The sliders button opens the exercise's own settings, and **?**
 explains it.
 
-{% include shot.html src="note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" caption="An exercise screen. The row of buttons below the staff holds the possible answers." %}
+{% include shot.html src="filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the next interval beside the staff" caption="The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice." %}
+
+## Glossary
+
+Open **Glossary** in the top toolbar to look up a term. Search for *minor*, for example, and select **harmonic minor scale**. You can hear the scale, try another example, or open a related exercise from the same page.
+
+{% include shot.html src="glossary.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" caption="In A harmonic minor, listen for the three half steps from F to G♯ and the half step from G♯ to A." %}
 
 ## Running the tests
 

@@ -174,6 +174,7 @@ Stats(
     days_practiced: int = 0,
     granularity: str = 'day',
     buckets: list[Bucket] = field(default_factory=list),
+    volume_buckets: list[Bucket] = field(default_factory=list),
     by_exercise: list[ExerciseStats] = field(default_factory=list),
     hardest: list[HardQuestion] = field(default_factory=list),
 )
@@ -191,6 +192,7 @@ Everything the statistics screen shows.
 - `days_practiced` (*int, default 0*): On how many different days there were answers. Keyword-only.
 - `granularity` (*str, default "day"*): The size of the chart periods: "hour", "day", "week" or "month". Keyword-only.
 - `buckets` (*list of Bucket*): One per period, oldest first. Keyword-only.
+- `volume_buckets` (*list of Bucket*): Period counts for the questions answered chart. These share the trend buckets when their periods match. Keyword-only.
 - `by_exercise` (*list of ExerciseStats*): One per exercise practiced, sorted by name. Keyword-only.
 - `hardest` (*list of HardQuestion*): The questions that need most practice. Keyword-only.
 
@@ -351,6 +353,7 @@ def collect(
     since: float | None = None,
     now: float | None = None,
     hardest: int = 8,
+    volume_granularity: str | None = None,
 ) -> Stats
 ```
 
@@ -364,6 +367,7 @@ Work out everything the statistics screen shows.
 - `since` (*float or None, default None*): Only answers from this timestamp on; the whole history if None. Keyword-only.
 - `now` (*float or None, default None*): The current time as a timestamp; the clock is used if None. Keyword-only.
 - `hardest` (*int, default 8*): How many questions to list as needing practice. Keyword-only.
+- `volume_granularity` (*str or None, default None*): Group question counts by hour, day, week or month. None follows the timeframe. Keyword-only.
 
 **Returns**
 

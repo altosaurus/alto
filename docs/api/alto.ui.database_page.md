@@ -236,7 +236,7 @@ Turn answers read from the database into the cells of a table, and the hidden de
 ...     db.attempt_rows(ada.id), names={"NoteNames": "Note Identification"}, texts=QuestionTexts()
 ... )
 >>> [text for text, _ in table[0]][1:]
-['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s']
+['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s', '—']
 >>> hidden[0]["exercise"]
 'NoteNames'
 ```
@@ -394,7 +394,11 @@ True
 ### DatabasePage.show_table
 
 ```python
-def show_table(key: str) -> None
+def show_table(
+    key: str,
+    *,
+    keep_sort: bool = False,
+) -> None
 ```
 
 Show one of the tables.
@@ -402,6 +406,7 @@ Show one of the tables.
 **Parameters**
 
 - `key` (*str*): "answers", "questions" or "profiles".
+- `keep_sort` (*bool*): Preserve the current column and order when refreshing the open table.
 
 **Examples**
 

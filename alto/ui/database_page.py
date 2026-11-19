@@ -235,19 +235,19 @@ class RowsModel(QAbstractTableModel):
         return None
 
 
-def _when(timestamp: float) -> tuple[str, float]:
+def _when(timestamp: float | None) -> tuple[str, float | None]:
     """
     Turn a timestamp into a cell: its text and its sort value.
 
     Parameters
     ----------
-    timestamp : float
-        Seconds since the epoch.
+    timestamp : float or None
+        Seconds since the epoch, or None for an unscheduled review.
 
     Returns
     -------
-    tuple of (str, float)
-        The local time as 'YYYY-MM-DD HH:MM:SS', and the timestamp itself.
+    tuple of (str, float or None)
+        Local time and the underlying sort value. Missing timestamps display a dash.
 
     Examples
     --------
@@ -255,10 +255,12 @@ def _when(timestamp: float) -> tuple[str, float]:
     >>> len(text), value
     (19, 0.0)
     """
+    if timestamp is None:
+        return "—", None
     return datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S"), timestamp
 
 
-ANSWER_HEADERS = ["When", "Exercise", "Question", "Answer given", "Result", "Attempt", "Time"]
+ANSWER_HEADERS = ["When", "Exercise", "Question", "Answer given", "Result", "Attempt", "Time", "Due"]
 
 
 class QuestionTexts:
@@ -360,7 +362,7 @@ def answer_cells(
     ...     db.attempt_rows(ada.id), names={"NoteNames": "Note Identification"}, texts=QuestionTexts()
     ... )
     >>> [text for text, _ in table[0]][1:]
-    ['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s']
+    ['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s', '—']
     >>> hidden[0]["exercise"]
     'NoteNames'
     """
@@ -390,6 +392,7 @@ def answer_cells(
                 ("Right", 1) if r["correct"] else ("Wrong", 0),
                 (str(r["attempt_no"]), r["attempt_no"]),
                 (f"{seconds:.1f} s", seconds),
+                _when(r["due"]),
             ],
         )
     return cells, extras
@@ -819,6 +822,7 @@ class DatabasePage(QWidget):
                     (str(r["wrong_attempts"]), r["wrong_attempts"]),
                     (f"{typical:.1f} s", typical),
                     _when(r["last_seen"]),
+                    _when(r["due"]),
                 ],
             )
         model = RowsModel(
@@ -831,6 +835,7 @@ class DatabasePage(QWidget):
                 "Missed",
                 "Typical time",
                 "Last seen",
+                "Due",
             ],
             rows=rows,
             numeric={
@@ -888,7 +893,7 @@ class DatabasePage(QWidget):
             f"{len(rows)} profile{'s' if len(rows) != 1 else ''}.",
         )
 
-    def show_table(self, key: str) -> None:
+    def show_table(self, key: str, *, keep_sort: bool = False) -> None:
         """
         Show one of the tables.
 
@@ -896,6 +901,8 @@ class DatabasePage(QWidget):
         ----------
         key : str
             "answers", "questions" or "profiles".
+        keep_sort : bool
+            Preserve the current column and order when refreshing the open table.
 
         Examples
         --------
@@ -916,12 +923,10 @@ class DatabasePage(QWidget):
         for col in range(model.columnCount()):
             stretch = model.headers[col] == "Question"
             head.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch if stretch else QHeaderView.ResizeMode.ResizeToContents)
-        if key == "answers":
-            self.view.sortByColumn(0, Qt.SortOrder.DescendingOrder)
-        elif key == "questions":
-            self.view.sortByColumn(2, Qt.SortOrder.DescendingOrder)
-        else:
-            self.view.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+        if not keep_sort:
+            column = 2 if key == "questions" else 0
+            order = Qt.SortOrder.AscendingOrder if key == "profiles" else Qt.SortOrder.DescendingOrder
+            self.view.sortByColumn(column, order)
         self._show_count()
 
     def _preview(self, index: QModelIndex) -> None:

@@ -31,7 +31,6 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QAbstractItemView,
-    QComboBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -39,6 +38,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QScrollArea,
+    QScrollBar,
     QSizePolicy,
     QTableWidget,
     QTableWidgetItem,
@@ -58,9 +58,11 @@ from alto.ui.charts import (
     StackedBarChart,
 )
 from alto.ui.database_page import ROW_ROLE, AnswerList, open_preview
+from alto.ui.dropdown import FieldComboBox
 
 DAY = 86400.0
 DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
+VOLUME_WINDOW = 48  # keep individual bars selectable when a fine interval spans a long history
 TIMEFRAMES = (
     ("Today", "today"),
     ("Last 7 days", 7),
@@ -264,9 +266,9 @@ class StatsPage(QWidget):
         Emitted by Escape; the main window provides the shared Back button.
     learner : Learner
         Whose answers are shown; only the active profile's own.
-    exercise : QComboBox
+    exercise : FieldComboBox
         The exercise filter.
-    timeframe : QComboBox
+    timeframe : FieldComboBox
         The timeframe filter.
     tiles : dict of str to Tile
         The headline numbers, by name.
@@ -321,11 +323,11 @@ class StatsPage(QWidget):
         who = QLabel(f"<b>{learner.profile.name}</b>")  # these are always the active profile's own numbers
         who.setToolTip("Statistics for the active profile")
         bar.addWidget(who)
-        self.exercise = QComboBox()
+        self.exercise = FieldComboBox()
         self.exercise.addItem("All exercises", None)
         for cls in REGISTRY:
             self.exercise.addItem(cls.name, cls.__name__)
-        self.timeframe = QComboBox()
+        self.timeframe = FieldComboBox()
         for label, span in TIMEFRAMES:
             self.timeframe.addItem(label, span)
         self.timeframe.setCurrentIndex(2)  # last 30 days
@@ -365,21 +367,32 @@ class StatsPage(QWidget):
             tiles.addWidget(tile, i // 3, i % 3)
         lay.addLayout(tiles)
 
-        self.volume = StackedBarChart("Questions answered")
+        self.granularity = FieldComboBox()
+        self.granularity.addItem("Auto", None)
+        for period in ("hour", "day", "week", "month"):
+            self.granularity.addItem(period.title(), period)
+        self.granularity.setAccessibleName("Questions answered chart granularity")
+        label = QLabel("Granularity")
+        label.setBuddy(self.granularity)
+        volume_filter = QWidget()
+        volume_controls = QHBoxLayout(volume_filter)
+        volume_controls.setContentsMargins(0, 0, 0, 0)
+        volume_controls.addWidget(label)
+        volume_controls.addWidget(self.granularity)
+        self.volume = StackedBarChart("Questions answered", header_control=volume_filter)
         self.accuracy = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
         self.speed = LineChart("Typical time to first answer", fmt=lambda v: f"{v:.1f} s")
         self.by_exercise = HBarChart("Right on the first try, by exercise")
         charts = QGridLayout()
         charts.setSpacing(14)
-        for i, chart in enumerate(
-            (
-                self.volume,
-                self.accuracy,
-                self.speed,
-                self.by_exercise,
-            ),
-        ):
-            charts.addWidget(chart, i // 2, i % 2)
+        charts.addWidget(self.volume, 0, 0)
+        charts.addWidget(self.accuracy, 0, 1)
+        self.volume_scroll = QScrollBar(Qt.Orientation.Horizontal)
+        self.volume_scroll.setAccessibleName("Questions answered chart periods")
+        self.volume_scroll.setPageStep(VOLUME_WINDOW)
+        charts.addWidget(self.volume_scroll, 1, 0)
+        charts.addWidget(self.speed, 2, 0)
+        charts.addWidget(self.by_exercise, 2, 1)
         lay.addLayout(charts)
 
         # The calendar always looks back about a year, whatever the timeframe, so it follows only the exercise filter.
@@ -448,12 +461,18 @@ class StatsPage(QWidget):
         self._reveal.timeout.connect(lambda: self.scroller.ensureWidgetVisible(self.detail))
         self._stats: stats.Stats | None = None  # what the charts show now, so a click can be turned into a period
         self._since: float | None = None
-        for chart in (self.volume, self.accuracy, self.speed):
+        self.volume.clicked.connect(lambda index: self._drill_period(index, volume=True))
+        self.volume_scroll.valueChanged.connect(self._show_volume)
+        for chart in (self.accuracy, self.speed):
             chart.clicked.connect(self._drill_period)
         self.by_exercise.clicked.connect(self._drill_exercise)
         self.heatmap.clicked.connect(self._drill_day)
 
-        for signal in (self.exercise.currentIndexChanged, self.timeframe.currentIndexChanged):
+        for signal in (
+            self.exercise.currentIndexChanged,
+            self.timeframe.currentIndexChanged,
+            self.granularity.currentIndexChanged,
+        ):
             signal.connect(lambda *_: self.refresh())
         self.refresh()
 
@@ -499,9 +518,9 @@ class StatsPage(QWidget):
             exercise=self.exercise.currentData(),
             since=since,
             now=now,
+            volume_granularity=self.granularity.currentData(),
         )
         self._stats, self._since = s, since
-        self._close_detail()  # the numbers have changed, so a list of answers from the old ones would no longer match
         names = self._names()
 
         who = self.learner.profile.name
@@ -519,18 +538,14 @@ class StatsPage(QWidget):
         self.tiles["time"].show_value(format_duration(s.practice_seconds))
 
         labels = [b.label for b in s.buckets]
-        per = {
-            "hour": "hour",
-            "day": "day",
-            "week": "week",
-            "month": "month",
-        }[s.granularity]
-        self.volume.title = f"Questions answered per {per}"
-        self.volume.set_data(
-            labels,
-            right=[b.first_right for b in s.buckets],
-            wrong=[b.questions - b.first_right for b in s.buckets],
-        )
+        per = s.granularity
+        last = max(0, len(s.volume_buckets) - VOLUME_WINDOW) if self.granularity.currentData() else 0
+        self.volume_scroll.blockSignals(True)
+        self.volume_scroll.setRange(0, last)
+        self.volume_scroll.setValue(last)
+        self.volume_scroll.blockSignals(False)
+        self.volume_scroll.setVisible(last > 0)
+        self._show_volume()
         self.accuracy.title = f"Right on the first try, per {per}"
         self.accuracy.set_data(labels, values=[b.accuracy for b in s.buckets])
         self.speed.title = f"Typical time to first answer, per {per}"
@@ -571,6 +586,36 @@ class StatsPage(QWidget):
                     item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table.setItem(row, col, item)
         self.table.setFixedHeight(self.table.horizontalHeader().height() + 30 * max(len(s.hardest), 1) + 6)
+
+    def _show_volume(self) -> None:
+        """
+        Show the visible periods of the questions answered chart.
+
+        Examples
+        --------
+        >>> from alto.learning import Database
+        >>> db = Database()
+        >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+        >>> page._show_volume()
+        >>> page.volume.labels
+        []
+        """
+        assert self._stats is not None
+        self._close_detail()
+        buckets = self._stats.volume_buckets
+        per = self.granularity.currentData() or self._stats.granularity
+        if self.volume_scroll.maximum():
+            start = self.volume_scroll.value()
+            buckets = buckets[start : start + VOLUME_WINDOW]
+        labels = [b.label for b in buckets]
+        if per == "hour" and buckets and buckets[0].start.date() != buckets[-1].start.date():
+            labels = [b.start.strftime("%b %d %H:%M") for b in buckets]
+        self.volume.title = f"Questions answered per {per}"
+        self.volume.set_data(
+            labels,
+            right=[b.first_right for b in buckets],
+            wrong=[b.questions - b.first_right for b in buckets],
+        )
 
     def _clear_selection(self) -> None:
         """
@@ -669,7 +714,7 @@ class StatsPage(QWidget):
         self.detail.show()
         self._reveal.start(0)  # scroll to it once the layout has made room for it
 
-    def _drill_period(self, index: object) -> None:
+    def _drill_period(self, index: object, *, volume: bool = False) -> None:
         """
         List the answers given in the period of a clicked bar or point, or close the list if that period is already open.
 
@@ -677,6 +722,8 @@ class StatsPage(QWidget):
         ----------
         index : object
             The index of the period, as the chart that was clicked emits it.
+        volume : bool, default False
+            Whether the click came from the questions answered chart. Keyword-only.
 
         Examples
         --------
@@ -694,24 +741,34 @@ class StatsPage(QWidget):
         True
         """
         s = self._stats
-        if s is None or not isinstance(index, int) or not 0 <= index < len(s.buckets):
+        chart = self.volume if volume else self.accuracy
+        if s is None or not isinstance(index, int) or not 0 <= index < len(chart.labels):
             return
-        if self.volume.selected == index:
+        if chart.selected == index:
             self._close_detail()
             return
-        bucket = s.buckets[index]
+        offset = self.volume_scroll.value()
+        bucket = s.volume_buckets[index + offset] if volume else s.buckets[index]
+        volume_period = self.granularity.currentData() or s.granularity
+        period = volume_period if volume else s.granularity
         begin = bucket.start.timestamp()
         if self._since is not None:
             begin = max(begin, self._since)  # the first period may begin before the timeframe does
         self._clear_selection()
         self._open_detail(
-            period_title(bucket.start, granularity=s.granularity),
+            period_title(bucket.start, granularity=period),
             exercise=self.exercise.currentData(),
             since=begin,
-            until=stats.period_end(bucket.start, granularity=s.granularity).timestamp(),
+            until=stats.period_end(bucket.start, granularity=period).timestamp(),
         )
-        for chart in (self.volume, self.accuracy, self.speed):
-            chart.set_selected(index)
+        if period == s.granularity:
+            trend_index = index + offset if volume else index
+            self.accuracy.set_selected(trend_index)
+            self.speed.set_selected(trend_index)
+        if period == volume_period:
+            bar_index = index if volume else index - offset
+            if 0 <= bar_index < len(self.volume.labels):
+                self.volume.set_selected(bar_index)
 
     def _drill_exercise(self, index: object) -> None:
         """
