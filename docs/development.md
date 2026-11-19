@@ -516,7 +516,7 @@ The Docs workflow (`.github/workflows/docs.yml`) builds them with Jekyll and kee
 GitHub Pages serves. `scripts/docs_site.py` writes what sits around the versions: `versions.json`, the home page that goes to the
 latest, and the sitemap. The files that belong to the whole site and not to one version are in `docs/site-root/`. One of them,
 `version-switcher.js`, fills the dropdown from `versions.json` at run time, so a release made years ago still offers the newest
-versions, and a fix to the dropdown reaches all of them.
+versions, and a fix to the dropdown reaches all of them. The dev entry shows the short Git hash recorded when those docs were built.
 
 Search engines are told to prefer the latest version: every page has a `canonical` address under `/latest/`, `dev` is `noindex`, and
 only `latest` is in the sitemap. A page that existed at the root before the docs had versions is sent to `/latest/` by `404.html`.
@@ -558,6 +558,7 @@ You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one ver
 cd docs
 printf 'baseurl: /alto/dev\ndocs_version: dev\n' > /tmp/version.yml
 bundle exec jekyll build --destination /tmp/site/dev --config _config.yml,/tmp/version.yml
+git rev-parse --short HEAD > /tmp/site/dev/commit.txt
 python ../scripts/docs_site.py finish /tmp/site --root-files site-root --site-url https://altosaurus.github.io/alto
 ```
 

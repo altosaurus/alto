@@ -69,13 +69,18 @@ topics:
 
 {% include shot.html src="stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green" caption="The review heatmap: every day you practiced, at a glance." %}
 
+## Development Status
+
+Alto is in alpha. You can work through the lessons and practice with the exercises now, but their content and layout may change between releases.
+
 {% assign v = site.app_version %}
 {% assign base = "https://github.com/altosaurus/alto/releases/download/v" | append: v | append: "/" %}
 {% assign source = '/getting-started/#install-and-run' | relative_url %}
 {% if v != "" %}
 <section class="dl" id="download" data-version="{{ v }}" data-source="{{ source }}">
   <h2>Download Alto</h2>
-  <p class="dl-sub"><b>Version {{ v }}</b>. Free on all platforms.</p>
+  <p class="dl-sub"><b>Version {{ v }}&nbsp;<span class="dl-alpha">Alpha</span></b><br>
+    <small>Free for Desktop</small></p>
   <div class="dl-main" id="dl-main"></div>
   <div id="dl-all">
     <div class="dl-os" data-os="windows" data-name="Windows" data-req="64-bit installer" data-file="alto-{{ v }}-windows-x64-setup.exe" data-url="{{ base }}alto-{{ v }}-windows-x64-setup.exe">

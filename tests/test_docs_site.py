@@ -117,9 +117,11 @@ def test_finishing_a_site_lists_dev_and_the_releases_and_names_the_latest(tmp_pa
         A new folder.
     """
     site, shared = make_site(tmp_path, folders=("dev", "latest", "v0.0.0", "v0.1.0"))
+    (site / "dev" / "commit.txt").write_text("abc1234\n", encoding="utf-8")
     docs_site.finish(site, root_files=shared, site_url=SITE_URL)
     assert json.loads((site / "versions.json").read_text(encoding="utf-8")) == {
         "latest": "v0.1.0",
+        "dev_commit": "abc1234",
         "versions": ["dev", "v0.1.0", "v0.0.0"],  # "latest" is an alias, not a version of its own
     }
 
@@ -236,11 +238,11 @@ def test_the_top_bar_has_the_version_then_the_theme_then_github_and_the_theme_is
     assert 'removeAttribute("data-theme")' in layout and "Escape" in layout  # System forgets the choice; Escape closes the menu
 
 
-def test_the_version_dropdown_is_made_like_the_theme_menu_with_dev_last_and_named_plainly() -> None:
-    """Check the version dropdown: a menu with icon tiles and not a native select, dev after the releases, and called "dev"."""
+def test_the_version_dropdown_uses_icon_tiles_and_lists_dev_with_its_commit_after_the_releases() -> None:
+    """Check that the dev label includes the build commit while its navigation value stays dev."""
     script = (SITE_ROOT / "version-switcher.js").read_text(encoding="utf-8")
     assert 'createElement("select")' not in script and 'class="avs-ico"' in script and "avs-menu" in script
-    assert "unreleased)" not in script and "label: name" in script  # the entry for the development docs says "dev" and no more
+    assert '"dev (" + data.dev_commit + ")"' in script and "value: name, name: label" in script
     assert 'concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : [])' in script  # releases first, then dev
     assert "Match your computer" not in script
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
@@ -329,9 +331,12 @@ def test_the_home_page_has_a_download_button_and_a_download_section_in_place_of_
     """Check the button under the first paragraph, the section it goes to, and the words in it."""
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     assert "## Get started" not in home  # the section for developers is gone; the Getting started page keeps those steps
-    hero = home[home.index('<div class="hero">') : home.index("</div>", home.index('<div class="hero">'))]
-    assert hero.index('class="lead"') < hero.index('class="dl-go" href="#download"')  # under the first paragraph
-    assert '<section class="dl" id="download"' in home and "<b>Version {{ v }}</b>. Free on all platforms." in home
+    hero = home[home.index('<div class="hero">') : home.index('<div class="practice-gallery"')]
+    assert hero.index('class="lead"') < hero.index('class="dl-go" href="#download"')
+    assert home.count("Free for Desktop") == 1
+    assert '<section class="dl" id="download"' in home
+    version = '<b>Version {{ v }}&nbsp;<span class="dl-alpha">Alpha</span></b><br>'
+    assert home.index("<h2>Download Alto</h2>") < home.index(version) < home.index("<small>Free for Desktop</small>")
     assert "Windows may warn" not in home and "publisher is unknown" not in home
     assert "run Alto from its source code" in home and "/getting-started/#install-and-run" in home
     assert "## Install and run" in (DOCS / "getting-started.md").read_text(encoding="utf-8")  # the section that link goes to
