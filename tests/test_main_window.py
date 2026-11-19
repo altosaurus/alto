@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QListWidget,
+    QMenu,
     QPushButton,
     QScrollArea,
     QWidget,
@@ -792,6 +793,70 @@ def test_the_menu_has_no_home_entry_and_ends_with_restart_above_quit(window: Mai
     assert names[-2:] == ["Restart", "Quit"]
     assert entries[-2].text() == "Restart" and entries[-1].text() == "Quit"  # no separator between them
     assert entries[-3].isSeparator()  # but one above the pair, after Check for updates…
+
+
+def test_help_report_an_issue_opens_the_github_issue_tracker(window: MainWindow, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Trigger the Help menu action and check the URL sent to the default browser.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window containing the Help menu.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the URL passed to the desktop.
+    """
+    opened: list[str] = []
+    monkeypatch.setattr(mw.QDesktopServices, "openUrl", lambda url: opened.append(url.toString()) or True)
+    help_menu = next(action.menu() for action in window.menu_button.menu().actions() if action.text() == "Help")
+    assert isinstance(help_menu, QMenu)
+    actions = help_menu.actions()
+    index = [action.text() for action in actions].index("Report an issue")
+    assert actions[index + 1].text() == "GitHub"
+    actions[index].trigger()
+    assert opened == ["https://github.com/altosaurus/alto/issues"]
+
+
+@pytest.mark.parametrize("installed", [True, False])
+def test_help_about_shows_the_development_status(window: MainWindow, monkeypatch: pytest.MonkeyPatch, installed: bool) -> None:
+    """
+    Open About through Help and check the status even when running without package metadata.
+
+    Parameters
+    ----------
+    window : MainWindow
+        The window containing the Help menu.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the dialog text and simulates unavailable package metadata.
+    installed : bool
+        Whether the dialog can read Alto's package metadata.
+    """
+    if not installed:
+
+        def missing_metadata(name: str) -> None:
+            """
+            Simulate a lookup for an uninstalled package.
+
+            Parameters
+            ----------
+            name : str
+                The requested distribution name.
+
+            Raises
+            ------
+            PackageNotFoundError
+                The distribution has no installed metadata.
+            """
+            raise mw.metadata.PackageNotFoundError(name)
+
+        monkeypatch.setattr(mw.metadata, "metadata", missing_metadata)
+    messages: list[str] = []
+    monkeypatch.setattr(mw.QMessageBox, "about", lambda parent, title, text: messages.append(text))
+    help_menu = next(action.menu() for action in window.menu_button.menu().actions() if action.text() == "Help")
+    assert isinstance(help_menu, QMenu)
+    next(action for action in help_menu.actions() if action.text() == "About").trigger()
+    assert len(messages) == 1
+    assert f"Development status: {'Alpha' if installed else 'Unknown'}" in messages[0]
 
 
 def test_the_menu_has_the_shortcuts(window: MainWindow) -> None:
