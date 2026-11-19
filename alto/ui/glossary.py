@@ -29,11 +29,12 @@ from alto.theory.pitch import Note
 from alto.ui.home import ExerciseCard, lesson_card
 from alto.ui.icons import SEARCH, svg_icon
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.reference import ExplorableCircle
 from alto.ui.staff import StaffWidget
 from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import SegmentedControl
 
-_STEP_LABELS = {1: "H", 2: "W"}
+_STEP_LABELS = {1: "H", 2: "W", 3: "3H"}
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,7 @@ class _Term:
     lesson: str
     keyboard: bool = False
     label_steps: bool = False
+    circle: bool = False
 
 
 TERMS = {
@@ -236,6 +238,132 @@ TERMS = {
         exercises=("KeySignatures", "KeySignatureConstruction"),
         lesson="circle-of-fifths",
     ),
+    "enharmonic": _Term(
+        definition="Enharmonic describes a change in spelling that keeps the same sounding pitch on an equal-tempered "
+        "instrument such as a piano. The spelling can show where a note is heading.",
+        guide="Play both phrases. The middle note sounds the same each time. C♯ leads up to D in the first "
+        "phrase. D♭ leads down to C in the second.",
+        examples=(
+            _Example("C4 C#4 D4", "C–C♯–D · a rising line"),
+            _Example("D4 Db4 C4", "D–D♭–C · a falling line"),
+        ),
+        exercises=("NoteNames", "NoteConstruction"),
+        lesson="pitches-and-notes",
+    ),
+    "enharmonically equivalent": _Term(
+        definition="Two notes are enharmonically equivalent when they have different written names but sound at "
+        "the same pitch in equal temperament.",
+        guide="Play each pair. The notehead moves to a different staff position, yet you hear one piano key "
+        "struck twice. Even a white key can have two names.",
+        examples=(
+            _Example("F#4 Gb4", "F♯ and G♭ share a black key"),
+            _Example("B#4 C5", "B♯ and C share a white key"),
+        ),
+        exercises=("NoteNames", "KeyboardNotes"),
+        lesson="pitches-and-notes",
+    ),
+    "transpose": _Term(
+        definition="To transpose music is to move every note up or down by the same interval. "
+        "The starting pitch changes while the distances between notes and their rhythm stay the same.",
+        guide="Play the phrase in C, then switch to D. Each note has moved up a whole step. "
+        "The last note moves from E to F♯ so the last step of the melody keeps its sound.",
+        examples=(
+            _Example("C4 D4 F4 E4", "Original phrase · C–D–F–E"),
+            _Example("D4 E4 G4 F#4", "Up a whole step · D–E–G–F♯", signature=2),
+        ),
+        exercises=("IntervalNames", "NoteConstruction"),
+        lesson="intervals",
+    ),
+    "circle of fifths": _Term(
+        definition="The circle of fifths is a diagram of keys arranged by their tonics. Each clockwise step "
+        "takes you up a perfect fifth. Starting at C major, the signatures gain one sharp per step clockwise "
+        "or one flat per step counterclockwise until the sharp and flat spellings meet.",
+        guide="Follow the major keys on the outer ring. Play the two tonics, then switch examples. "
+        "Moving clockwise from C to G to D gives one sharp, then two. Moving one place the other way from C gives F.",
+        examples=(
+            _Example("C4 G4", "C to G clockwise · G major has one sharp", signature=1),
+            _Example("G4 D5", "G to D clockwise · D major has two sharps", signature=2),
+            _Example("C5 F4", "C to F counterclockwise · F major has one flat", signature=-1),
+        ),
+        exercises=("CircleOfFifths", "KeySignatures"),
+        lesson="circle-of-fifths",
+        circle=True,
+    ),
+    "natural minor scale": _Term(
+        definition="A natural minor scale rises from its tonic by whole, half, whole, whole, half, whole, "
+        "and whole steps. It uses the notes of the minor key signature.",
+        guide="Find the two half steps, marked H. In A minor they fall between B and C and between E and F. "
+        "Switch to E minor and hear the same pattern from a different tonic.",
+        examples=(
+            _Example("A3 B3 C4 D4 E4 F4 G4 A4", "A natural minor · no sharps or flats"),
+            _Example("E4 F#4 G4 A4 B4 C5 D5 E5", "E natural minor · one sharp", signature=1),
+        ),
+        exercises=("ScaleIdentification", "ScaleConstruction"),
+        lesson="scale-identification",
+        label_steps=True,
+    ),
+    "harmonic minor scale": _Term(
+        definition="Harmonic minor raises the seventh degree of natural minor by a half step. "
+        "That seventh degree, the leading tone, is now a half step below the tonic.",
+        guide="Listen to the last three notes. The gap marked 3H spans three half steps from degree 6 to "
+        "degree 7. The leading tone then rises just one half step to the tonic.",
+        examples=(
+            _Example("A3 B3 C4 D4 E4 F4 G#4 A4", "A harmonic minor · F to G♯ to A"),
+            _Example("E4 F#4 G4 A4 B4 C5 D#5 E5", "E harmonic minor · C to D♯ to E", signature=1),
+        ),
+        exercises=("ScaleIdentification", "ScaleConstruction"),
+        lesson="scale-identification",
+        label_steps=True,
+    ),
+    "melodic minor scale": _Term(
+        definition="In the traditional ascending form, melodic minor raises the sixth and seventh degrees of "
+        "natural minor by a half step each. The traditional descending form uses natural minor.",
+        guide="Follow D minor up, then down. On the way up, B♮ and C♯ lead to D. On the way down, "
+        "listen for C♮ and B♭. The key signature stays the same.",
+        examples=(
+            _Example("D4 E4 F4 G4 A4 B4 C#5 D5", "D melodic minor ascending · B♮ and C♯", signature=-1),
+            _Example("D5 C5 Bb4 A4 G4 F4 E4 D4", "D melodic minor descending · C♮ and B♭", signature=-1),
+        ),
+        exercises=("ScaleIdentification", "ScaleConstruction"),
+        lesson="scale-identification",
+        label_steps=True,
+    ),
+    "minor pentachord": _Term(
+        definition="A minor pentachord consists of the first five notes of a minor scale. "
+        "From the tonic up to the fifth, its steps are whole, half, whole, whole.",
+        guide="Find the H between the second and third notes. All three forms of the minor scale begin "
+        "with this same five-note pattern.",
+        examples=(
+            _Example("A4 B4 C5 D5 E5", "Minor pentachord on A · the half step is B–C"),
+            _Example("D4 E4 F4 G4 A4", "Minor pentachord on D · the half step is E–F", signature=-1),
+        ),
+        exercises=("ScaleConstruction", "ScaleIdentification"),
+        lesson="scale-identification",
+        label_steps=True,
+    ),
+    "relative keys": _Term(
+        definition="Relative keys are a major key and a minor key with the same key signature. The tonic "
+        "of the relative minor lies a minor third below the tonic of the relative major.",
+        guide="Play both phrases. Each has one sharp, F♯. The first phrase settles on G. "
+        "The second settles on E, the tonic of G major’s relative minor.",
+        examples=(
+            _Example("G4 B4 D5 F#4 G4", "G major · listen for the return to G", signature=1),
+            _Example("E4 G4 B4 F#4 E4", "E minor · listen for the return to E", signature=1),
+        ),
+        exercises=("CircleOfFifths", "KeySignatures"),
+        lesson="key-signatures",
+    ),
+    "parallel keys": _Term(
+        definition="Parallel keys are a major key and a minor key with the same tonic. Their key signatures differ.",
+        guide="Both phrases start and end on D. Listen to the third note. The F♯ of D major becomes F♮ in D minor, "
+        "while D still sounds like home.",
+        examples=(
+            _Example("D4 E4 F#4 E4 D4", "D major · two sharps", signature=2),
+            _Example("D4 E4 F4 E4 D4", "D minor · one flat", signature=-1),
+        ),
+        exercises=("KeySignatures", "ScaleIdentification"),
+        lesson="key-signatures",
+    ),
 }
 
 
@@ -322,6 +450,10 @@ class GlossaryPage(QWidget):
         main = QVBoxLayout()
         main.setContentsMargins(0, 0, 0, 0)
         demo = QVBoxLayout()
+        self.example_circle = ExplorableCircle()
+        self.example_circle.set_interactive(False)
+        self.example_circle.setFixedHeight(280)
+        demo.addWidget(self.example_circle)
         self.example_staff = StaffWidget(gap=10, side=12, note_offset=60, margin=5, compact=True)
         self.example_keyboard = KeyboardWidget()
         self.example_keyboard.max_key_width = 26
@@ -429,6 +561,9 @@ class GlossaryPage(QWidget):
         example = term.examples[self._example_index % len(term.examples)]
         notes = [Note.parse(name) for name in example.pitches.split()]
         self._example_midis = [note.midi for note in notes]
+        self.example_circle.setVisible(term.circle)
+        if term.circle:
+            self.example_circle.select("outer", place=example.signature)
         self.example_keyboard.setVisible(term.keyboard)
         self.example_staff.setVisible(not term.keyboard)
         if term.keyboard:
