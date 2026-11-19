@@ -7,10 +7,11 @@ import random
 import sqlite3
 import time
 from dataclasses import replace
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from fsrs import Card, Rating, State
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QSignalSpy, QTest
 from PySide6.QtWidgets import QApplication
@@ -21,6 +22,7 @@ from alto.exercises.library import ChordQualities, NotationIdentification, NoteC
 from alto.learning import Database, Learner
 from alto.learning.calendar import DAILY_NEW
 from alto.learning.database import _CALENDAR_SCHEMA, _SCHEMA, check_snapshot
+from alto.learning.grading import DAY, MAX_DAYS, _fuzz, inherited_state, review_options
 from alto.learning.learner import PracticeComplete
 from alto.theory.pitch import Note
 from alto.ui.exercise_view import ExerciseView
@@ -28,6 +30,97 @@ from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import NotationSettingsPanel, NoteConstructionSettingsPanel, NoteNameSettingsPanel
 
 NOW = 1_700_000_000.0
+
+
+@pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
+def test_answer_buttons_through_learning_review_and_lapse(mode: str) -> None:
+    """
+    Check each learning step, ordered review grades and relearning after a lapse.
+
+    Parameters
+    ----------
+    mode : str
+        Calendar scheduler.
+    """
+    now = NOW
+    previous = None
+    for grade, expected_hard in [
+        (Rating.Hard, 330),
+        (Rating.Good, 330),
+        (Rating.Good, 600),
+        (Rating.Again, None),
+        (Rating.Again, 900),
+        (Rating.Hard, 900),
+        (Rating.Easy, 900),
+    ]:
+        outcomes = review_options("abc", mode=mode, previous=previous, due=now, now=now)
+        again, hard, good, easy = [outcomes[r][0] for r in Rating]
+        if expected_hard is None:
+            assert again == 600 and DAY <= hard < good < easy
+        else:
+            assert hard == expected_hard
+            if hard == 330:
+                assert (again, good) == (60, 600) and easy >= DAY
+            elif hard == 600:
+                assert again == 60 and DAY <= good < easy
+            else:
+                assert again == 600 and DAY <= good < easy
+                if mode == "SM-2":
+                    assert (good, easy) == (DAY, 2 * DAY)
+        seconds, previous = outcomes[grade]
+        now += seconds
+
+
+def test_sm2_existing_reviews_and_late_grades() -> None:
+    """Keep legacy ease, apply lateness to Good and Easy, and cap very long reviews."""
+    old = "[3, 15, 2.5]"
+    for grade, delta in [(Rating.Again, -0.2), (Rating.Hard, -0.15), (Rating.Good, 0), (Rating.Easy, 0.15)]:
+        on_time = review_options("abc", mode="SM-2", previous=old, due=NOW, now=NOW)[grade]
+        late = review_options("abc", mode="SM-2", previous=old, due=NOW, now=NOW + 20 * DAY)[grade]
+        assert json.loads(on_time[1])["ease"] == 2.5 + delta
+        assert late[0] > on_time[0] if grade in (Rating.Good, Rating.Easy) else late[0] == on_time[0]
+    assert _fuzz(MAX_DAYS * 2, minimum=MAX_DAYS + 1, factor=0.9) == MAX_DAYS
+
+
+def test_fsrs_review_fuzz_preserves_previous_interval() -> None:
+    """Keep a five-day review at least five days when the new estimate is close to five."""
+    when = datetime.fromtimestamp(NOW, UTC)
+    card = Card(card_id=123, state=State.Review, stability=2, difficulty=8, last_review=when - timedelta(days=5), due=when)
+    for key in ("a", "b", "c"):
+        choices = review_options(key, mode="FSRS", previous=card.to_json(), due=NOW, now=NOW)
+        hard, good, easy = (choices[r][0] for r in (Rating.Hard, Rating.Good, Rating.Easy))
+        assert 5 * DAY <= hard < good < easy
+
+
+@pytest.mark.parametrize(
+    "phase,step,seconds,grade",
+    [
+        ("learning", 1, 600, Rating.Good),
+        ("learning", 0, 330, Rating.Hard),
+        ("relearning", 0, 600, Rating.Again),
+    ],
+)
+def test_inherited_learning_steps(phase: str, step: int, seconds: int, grade: Rating) -> None:
+    """
+    Preserve the step, phase, delay and review time across both calendar representations.
+
+    Parameters
+    ----------
+    phase : str
+        SM-2 learning phase.
+    step : int
+        Current learning step.
+    seconds : int
+        Original delay until review.
+    grade : Rating
+        Source grade for this step.
+    """
+    state = json.dumps(dict(phase=phase, step=step, delay=seconds, interval=0, repetitions=0, ease=2.5))
+    fsrs = inherited_state("abc", source="SM-2", state=state, due=NOW + seconds, rating=grade)
+    card = Card.from_json(fsrs)
+    assert card.state.name.lower() == phase and card.step == step and card.last_review == datetime.fromtimestamp(NOW, UTC)
+    sm2 = inherited_state("abc", source="FSRS", state=fsrs, due=NOW + seconds, rating=grade)
+    assert json.loads(sm2) == json.loads(state)
 
 
 @pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
