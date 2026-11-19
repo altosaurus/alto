@@ -42,6 +42,37 @@ MIN_RECENCY = 0.02
 T = TypeVar("T")
 
 
+def arts_priority(intervening: int, *, correct: bool, duration_ms: int) -> float:
+    """
+    Score a previously answered item for Adaptive Response-Time-based Sequencing.
+
+    Parameters
+    ----------
+    intervening : int
+        Other first submissions since the last first submission to this item.
+    correct : bool
+        Whether the last first submission was correct.
+    duration_ms : int
+        Response time of that submission, in milliseconds.
+
+    Returns
+    -------
+    float
+        Priority for the next trial. A new item starts at 1.0.
+
+    Examples
+    --------
+    >>> arts_priority(1, correct=False, duration_ms=200)
+    2.0
+    >>> arts_priority(0, correct=True, duration_ms=3000)
+    0.0
+    """
+    # Equation 1 in Mettler, Massey & Kellman (2016), with a 100 ms reference for music drills.
+    # With a one-trial delay, N - D is exactly the number of intervening first submissions.
+    increment = 1.1 * math.log(max(duration_ms, 101) / 100) if correct else 20
+    return 0.1 * intervening * increment
+
+
 def speed_term(
     seconds: float,
     *,

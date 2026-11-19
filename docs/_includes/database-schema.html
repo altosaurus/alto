@@ -1,12 +1,16 @@
 <figure class="db-schema">
-  <svg viewBox="0 0 480 248" width="480" height="248" aria-labelledby="schema-title schema-desc">
+  <svg viewBox="0 0 720 338" width="720" height="338" aria-labelledby="schema-title schema-desc">
     <title id="schema-title">Alto practice database</title>
-    <desc id="schema-desc">One profile can own many attempts and many items. Attempts and items are matched by profile ID, exercise, and item key.</desc>
+    <desc id="schema-desc">One profile can own many attempts, items, practice cards, practice limits, and daily review counts. A practice card has a separate schedule for each calendar algorithm used. Attempts and items are matched by profile ID, exercise, and item key.</desc>
     <g fill="none" stroke="currentColor" stroke-width="2">
       <path d="M192 67V89H105V130 M288 67V89H375V130"/>
+      <path d="M329 36H600V130 M600 226V260"/>
+      <path d="M240 67V252H105V260 M240 252H375V260"/>
       <path d="M200 177H280" stroke-dasharray="5 4"/>
     </g>
     <g fill="currentColor" font-size="14" text-anchor="middle">
+      <text x="345" y="30">1</text><text x="621" y="120">0..*</text>
+      <text x="586" y="243">1</text><text x="622" y="253">0..*</text>
       <text x="179" y="82">1</text><text x="301" y="82">1</text>
       <text x="82" y="120">0..*</text><text x="398" y="120">0..*</text>
     </g>
@@ -27,6 +31,27 @@
       <text x="375" y="181">PK: profile_id,</text>
       <text x="375" y="201">exercise, item_key</text>
       <text x="375" y="226">FK: profile_id</text>
+    </a>
+    <a href="#practice-cards" aria-label="Practice cards data dictionary">
+      <rect x="495" y="130" width="212" height="96" rx="8"/>
+      <text x="601" y="157" class="db-entity">practice_cards</text>
+      <text x="601" y="185">PK: profile_id,</text>
+      <text x="601" y="206">exercise, item_key</text>
+    </a>
+    <a href="#practice-limits" aria-label="Practice limits data dictionary">
+      <rect x="10" y="260" width="190" height="72" rx="8"/>
+      <text x="105" y="286" class="db-entity">practice_limits</text>
+      <text x="105" y="312">PK: profile + exercise</text>
+    </a>
+    <a href="#daily-reviews" aria-label="Daily reviews data dictionary">
+      <rect x="270" y="260" width="210" height="72" rx="8"/>
+      <text x="375" y="286" class="db-entity">daily_reviews</text>
+      <text x="375" y="312">PK: profile + exercise + day</text>
+    </a>
+    <a href="#review-schedules" aria-label="Review schedules data dictionary">
+      <rect x="495" y="260" width="212" height="72" rx="8"/>
+      <text x="601" y="286" class="db-entity">review_schedules</text>
+      <text x="601" y="312">PK: card + scheduler</text>
     </a>
   </svg>
   <figcaption>PK = primary key. FK = foreign key. 0..* = zero or more rows.</figcaption>

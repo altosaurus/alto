@@ -72,6 +72,8 @@ from alto.exercises.library import (
     ScaleIdentification,
 )
 from alto.learning import Learner
+from alto.learning.calendar import DEFAULT_SCHEDULER
+from alto.learning.learner import PracticeComplete
 from alto.settings import spell
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
@@ -631,7 +633,7 @@ class ExerciseView(QWidget):
         self.sound_btn.clicked.connect(self._toggle_sound)
         self._show_sound_state()
         top.addWidget(self.sound_btn)
-        self.settings_panel = settings_panel_for(exercise)
+        self.settings_panel = settings_panel_for(exercise, learner=self.learner)
         if self.settings_panel:
             self.gear = QToolButton()
             self.gear.setIcon(svg_icon(SLIDERS, color=self.palette().color(QPalette.ColorRole.WindowText)))
@@ -830,6 +832,8 @@ class ExerciseView(QWidget):
             if self._advance_remaining >= 0:
                 self._advance.start(max(1, self._advance_remaining))
             self._advance_remaining = -1
+        if self.learner and (self._scheduler_mode != self.learner.mode or self.question is None):
+            self.next_question()
         super().showEvent(event)
 
     def _bind(
@@ -1072,6 +1076,19 @@ class ExerciseView(QWidget):
             return self.exercise.generate(self.rng)
         return self.learner.pick(self.exercise, rng=self.rng, avoid=self.question.item_key() if self.question else None)
 
+    def scheduling_changed(self) -> None:
+        """
+        Refresh the visible exercise or invalidate its queue until it is reopened.
+
+        Examples
+        --------
+        Lowering the daily allowance on the home page also applies to a previously opened exercise.
+        """
+        if self.isVisible():
+            self.next_question()
+        else:
+            self._scheduler_mode = ""  # showEvent rechecks the budget without drawing a hidden card.
+
     def next_question(self) -> None:
         """
         Show the next question: its staff, keyboard or text, and a fresh set of answer buttons.
@@ -1095,9 +1112,20 @@ class ExerciseView(QWidget):
         self.next_button.hide()
         self.answer_button.setStyleSheet("")
         self.place_button.setStyleSheet("")
-        q = self.question = self._pick_question()
+        self._scheduler_mode = self.learner.mode if self.learner else DEFAULT_SCHEDULER
+        self.settings_panel.refresh_limits(self._scheduler_mode)
+        empty_sample = None
+        try:
+            q = self._pick_question()
+        except PracticeComplete:
+            empty_sample = self.exercise.generate(self.rng)
+            q = Question("You’re caught up for now.", choices=[], answer="") if empty_sample.answer else empty_sample
+        self.question = q
+        self.next_button.setText("Next")
         if self.settings_panel is not None and self.settings_panel.choice_buttons_row is not None:
-            self.settings_panel.choice_buttons_row.setVisible(bool(q.choices))
+            self.settings_panel.choice_buttons_row.setVisible(
+                bool(q.choices) or (empty_sample is not None and bool(empty_sample.choices)),
+            )
         self.answered = False
         self.missed = False
         self._attempts = 0
@@ -1254,6 +1282,11 @@ class ExerciseView(QWidget):
                 number_bank.setAccessibleName("Mode buttons" if scale_buttons else "Interval number buttons")
                 number_bank.set_buttons(number_buttons)
                 self.octave_box.addWidget(number_bank, 1)
+        if empty_sample is not None:
+            self.question = None
+            self.answered = True
+            self.next_button.setText("Check again")
+            self.next_button.show()
         self._update_score()
 
     @staticmethod

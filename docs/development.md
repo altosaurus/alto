@@ -381,7 +381,7 @@ class MyExercise(ChoiceExercise):
     name = "My exercise"
     category = "Intervals"
     description = "One line shown on the home screen."
-    par_seconds = 5.0  # a good first-answer time; see How practice adapts
+    par_seconds = 5.0  # a good first-answer time; see Spaced Repetition
 
     def make_question(self, rng):
         ...

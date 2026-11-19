@@ -88,6 +88,8 @@ from alto.exercises.library import (
     ScaleConstruction,
     ScaleIdentification,
 )
+from alto.learning import Learner
+from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.notation_terms import CATALOG
 from alto.settings import (
     CLEFS,
@@ -126,6 +128,7 @@ from alto.ui.pictures import (
     ValuePictures,
     _Picture,
 )
+from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.staff import StaffWidget
 from alto.ui.store import (
     int_value,
@@ -1495,6 +1498,34 @@ class ExerciseSettingsPanel(QWidget):
     choice_buttons_row: _Row | None = None
     changed = Signal()
     restyled = Signal()
+
+    limits_row: _Row | None = None
+    limits_editor: DailyLimitsEditor
+    limits_page: int
+
+    def refresh_limits(self, mode: str) -> None:
+        """
+        Update the Daily Limits row for the active scheduler and profile.
+
+        Parameters
+        ----------
+        mode : str
+            Selected question scheduler.
+
+        Examples
+        --------
+        Switching to ASRS hides the row and leaves its submenu.
+        """
+        if self.limits_row is None:
+            return
+        enabled = mode in CALENDAR_SCHEDULERS
+        self.limits_row.setVisible(enabled)
+        if enabled:
+            self.limits_editor.reload()
+            new, reviews = (field.value() for field in self.limits_editor.fields)
+            self.limits_row.value.setText(f"{new} new · {reviews} reviews")
+        elif self.stack.currentIndex() == self.limits_page:
+            self.stack.setCurrentIndex(0)
 
 
 class _StaffRangePanel(ExerciseSettingsPanel):
@@ -6100,7 +6131,7 @@ def load_choice_buttons() -> None:
             cfg.button_count = cls.default_limit or 6
 
 
-def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel:
+def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) -> ExerciseSettingsPanel:
     """
     Return the settings panel for an exercise.
 
@@ -6108,6 +6139,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel:
     ----------
     exercise : Exercise
         The exercise.
+    learner : Learner or None
+        Profile whose calendar limits can be overridden.
 
     Returns
     -------
@@ -6181,6 +6214,14 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel:
         radio.clicked.connect(lambda _checked=False, value=mode: select(value))
     page = stack.addWidget(_subpage("Next Question", body=body, back=lambda: stack.slide_to(0)))
     row.clicked.connect(lambda: stack.slide_to(page))
+    if learner is not None:
+        panel.limits_editor = DailyLimitsEditor(learner, exercise=type(exercise).__name__)
+        panel.limits_row = _Row("Daily Limits")
+        layout.insertWidget(layout.count() - 1, panel.limits_row)
+        panel.limits_page = stack.addWidget(_subpage("Daily Limits", body=panel.limits_editor, back=lambda: stack.slide_to(0)))
+        panel.limits_row.clicked.connect(lambda: stack.slide_to(panel.limits_page))
+        panel.limits_editor.changed.connect(panel.changed)
+        panel.refresh_limits(learner.mode)
     stack.removeWidget(menu)
     stack.insertWidget(0, _scrolling(menu))
     stack.setCurrentIndex(0)

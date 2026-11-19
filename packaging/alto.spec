@@ -16,7 +16,7 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy
 
 a = Analysis(
     ["launcher.py"],
-    datas=collect_data_files("alto") + copy_metadata("alto"),
+    datas=collect_data_files("alto") + copy_metadata("alto") + copy_metadata("fsrs"),
     hiddenimports=["_cffi_backend", *collect_submodules("nacl")],
     excludes=["tkinter", "pytest"],
 )

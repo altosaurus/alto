@@ -41,6 +41,7 @@ Spaced repetition: who is learning (profiles), what they answered (a database) a
 | Module | What it is |
 |---|---|
 | [alto.learning.backup](alto.learning.backup/) | Backup files: everything Alto keeps, in one file that can be read back into a clean install. Pure Python (no Qt). |
+| [alto.learning.calendar](alto.learning.calendar/) | Daily exercise queues for SM-2 and FSRS. |
 | [alto.learning.database](alto.learning.database/) | The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt). |
 | [alto.learning.learner](alto.learning.learner/) | Ties the profile, the database and the scheduler together for the exercise screen. |
 | [alto.learning.scheduler](alto.learning.scheduler/) | How a question's history turns into how soon it comes back. Pure Python, no database and no Qt. |
@@ -104,6 +105,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.notes](alto.ui.notes/) | Engraved notes built from the Noto Music font's glyphs, the way notation software draws them. |
 | [alto.ui.package_update](alto.ui.package_update/) | The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next. |
 | [alto.ui.pictures](alto.ui.pictures/) | Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes. |
+| [alto.ui.practice_limits](alto.ui.practice_limits/) | Daily card allowances in profile and exercise settings. |
 | [alto.ui.profile_dialog](alto.ui.profile_dialog/) | Choosing who is practicing. There is no password: a profile is just a name that keeps its own history. |
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |

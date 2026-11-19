@@ -91,6 +91,12 @@ Because `.format` treats `{` and `}` as fields, every brace that is really CSS i
 and get a `KeyError` or `IndexError`, you forgot to double a brace. The sheet is rebuilt on every theme change, since the
 colors come from the palette.
 
+### Numeric fields
+
+Use a standard `QSpinBox` for an editable integer, as in **Settings → Practice** and the exercise’s **Daily Limits** submenu. The application stylesheet centers the value and gives the field the same rounded corners, heavier lower edge, and accent focus outline as Alto’s other fields. The two chevrons share a narrow column on the right. Qt handles stepping, typed input, and range limits.
+
+Place the label above the field, associate it with the field using `label.setBuddy(field)`, and give the field the same accessible name. Keep the control at its natural width. Check the widest allowed value, both step buttons, keyboard focus, and disabled text with the application stylesheet in light and dark themes.
+
 ## Painting your own widgets
 
 When no sheet can do it, draw it. The `Switch` in `settings_panel.py` is a good small example: about thirty lines of

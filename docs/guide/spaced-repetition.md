@@ -6,8 +6,28 @@ permalink: /guide/spaced-repetition/
 ---
 Alto's central idea is that practice time should go where it is needed: questions you miss or answer slowly come back sooner and
 more often, and questions you know well fade into the background. This chapter explains the learning science behind that, the
-family of algorithms people use for it, what Alto's own scheduler does and why it is not quite a "spaced repetition system", and
+family of algorithms people use for it, how ASRS schedules questions during practice, and
 how to change it without breaking it.
+
+## Practice algorithms
+
+Under **Settings → Practice → Question scheduling**, each profile can choose ASRS, ARTS, SM-2, or FSRS. The Alto Spaced Repetition System (ASRS) is the default.
+
+### ARTS
+
+Adaptive Response-Time-based Sequencing chooses the next question using your last first attempt and the number of other questions you have answered since. A miss can bring a question back after one intervening answer. A fast, correct answer usually gives you a longer gap. You can practice as long as you like.
+
+Alto applies the published ARTS priority equation to saved questions under the current exercise settings and a sample of freshly generated questions. It uses a 100-millisecond response-time reference to distinguish quick answers in music drills, a baseline priority of 1 for unseen questions, and a random choice among tied scores. Earlier first attempts in the same exercise count when you reopen the app or switch algorithms. [Mettler, Massey, and Kellman, equation 1](https://kellmanlab.psych.ucla.edu/files/mettler_massey_kellman_2016.pdf)
+
+### Calendar practice
+
+Under **Settings → Practice**, **New cards/day** and **Maximum reviews/day** set the daily allowance for each exercise. The defaults are 10 new cards and 200 reviews. Both algorithms share these settings and the day's usage. To change one exercise, open its gear menu and choose **Daily Limits**. Clear **Use global** beside either number to enter an override. A zero pauses that kind of practice.
+
+Exercise tiles show today's available reviews in green and new cards in blue. Showing a new card uses an introduction slot. An unanswered new card stays available in blue so you can finish it after leaving the exercise. Its first answer completes the introduction. Each subsequent review uses one review slot on the first submission, including a miss. Further attempts on the same showing use no additional slots. The allowances reset at local midnight, and overdue cards keep their scheduled dates.
+
+Due questions come first. The first submission supplies the review grade. SM-2 uses grade 4 for a correct answer and grade 2 for a miss, with a one-minute retry after a miss. FSRS uses Good and Again with the Python library’s default learning steps. Each algorithm keeps its own dates. A previously practiced card is ready for review the first time a profile uses a new scheduler. [SM-2 specification](https://super-memory.com/english/ol/sm2.htm) · [Python FSRS](https://github.com/open-spaced-repetition/py-fsrs)
+
+Note Identification, Note Construction, and Notation Identification count their full catalogs. In Notation Identification, each selected symbol counts as one card for **Answer Button** and one for **Click on Staff**. Different excerpts and staff positions share the symbol’s review date within each question type. If you select only Vertical turn and identify it correctly on your first SM-2 attempt, its first review is due one day later. Other generators sample questions up to the remaining daily allowance. A saved question is eligible under its original settings, when the exercise can adapt it to the current settings, or when the current generator produces the same question. Changing settings preserves its identity and schedule.
 
 ## Why scheduling matters: three findings
 
@@ -54,13 +74,9 @@ chance that a skill is "known" given a history of answers. Elo, adapted to educa
 the territory of the **multi-armed bandit** problem and the **exploration versus exploitation** trade-off. A **softmax**
 (or **Boltzmann**) policy picks each option with probability proportional to `exp(β × value)`. Hold that thought.
 
-## What Alto does, and why it is different
+## ASRS
 
-A flash-card program has a *deck*: a fixed set of cards. Alto does not. The question "name this note" has thousands of variants
-(every clef, range, key signature, note value, and naming style), generated on demand. Most variants are asked once, perhaps
-never again. A scheduler that depends on **due dates** per card would be waiting for cards that may never come around.
-
-So Alto's `Learner` does two things at once, and then draws:
+ASRS samples generated questions and prior attempts on each turn.
 
 1. **It generates fresh questions.** `FRESH = 10` new `Question`s are made by the exercise for each pick.
 2. **It adds stored ones.** From the database come questions this profile has met before *under the same settings*: the 25
@@ -216,7 +232,7 @@ seen) and look at long-run accuracy, as research on schedulers does.
 
 ## Design problems to know by name
 
-- **Cold start.** A new question has no history, so its weight is a guess. Alto uses `NEW_STRAIN` for it.
+- **Cold start.** A new question has no history, so its weight is a guess. ASRS uses `NEW_STRAIN` for it.
 - **Leeches.** An item that is failed again and again. It saturates at the strain ceiling and can crowd out everything else. Anki
   tags leeches and can suspend them; Alto does not, because strained questions are only more *likely*, and the recency term keeps them from
   repeating immediately.

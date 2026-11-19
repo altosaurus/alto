@@ -13,6 +13,7 @@ True
 
 from __future__ import annotations
 
+import time
 from collections.abc import (
     Iterable,
     Sequence,
@@ -44,6 +45,8 @@ from PySide6.QtWidgets import (
 )
 
 from alto.exercises.base import Exercise
+from alto.learning import Learner
+from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER
 from alto.lessons import (
     LESSONS,
     Lesson,
@@ -213,6 +216,45 @@ class ExerciseCard(TileCard):
             parent=parent,
         )
 
+        self.exercise_class = cls
+        self.counts = QLabel(self)
+        self.counts.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.counts.hide()
+
+    def set_counts(self, counts: tuple[int, int] | None) -> None:
+        """
+        Show the available reviews and new questions in the upper right corner.
+
+        Parameters
+        ----------
+        counts : tuple of int and int or None
+            Reviews due and new cards available, or None in untimed practice.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> card = ExerciseCard(NoteNames)
+        >>> card.set_counts((2, 3))
+        >>> card.counts.toolTip()
+        '2 reviews due, 3 new cards available'
+        """
+        if counts is None:
+            self.counts.hide()
+            self.setToolTip(self.exercise_class.description)
+            self.setAccessibleDescription(self.exercise_class.description)
+            return
+        reviews, new = counts
+        dark = self.palette().color(QPalette.ColorRole.Button).lightness() < 128
+        green, blue = ("#82cd93", "#89bbff") if dark else ("#226939", "#215fa7")
+        self.counts.setText(f'<b style="color:{green}">{reviews}</b> &nbsp; <b style="color:{blue}">{new}</b>')
+        description = f"{reviews} review{'' if reviews == 1 else 's'} due, {new} new card{'' if new == 1 else 's'} available"
+        self.setToolTip(f"{self.exercise_class.description} {description}")
+        self.setAccessibleDescription(self.toolTip())
+        self.counts.setToolTip(description)
+        self.counts.adjustSize()
+        self.counts.move(self.width() - self.counts.width() - 8, 3)
+        self.counts.show()
+
 
 def lesson_card(
     lesson: Lesson,
@@ -297,6 +339,7 @@ class HomePage(QWidget):
         registry: Iterable[type[Exercise]],
         *,
         parent: QWidget | None = None,
+        learner: Learner | None = None,
     ) -> None:
         """
         Build the page.
@@ -308,6 +351,9 @@ class HomePage(QWidget):
         parent : QWidget or None, default None
             The widget that owns the page. Keyword-only.
 
+        learner : Learner or None
+            Profile supplying the exercise tile counts.
+
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
@@ -315,6 +361,10 @@ class HomePage(QWidget):
         1
         """
         super().__init__(parent)
+        self.learner = learner
+        self._count_timer = QTimer(self)
+        self._count_timer.setInterval(30000)
+        self._count_timer.timeout.connect(self.refresh_counts)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             0,
@@ -446,6 +496,7 @@ class HomePage(QWidget):
         self.canvas.stop()  # a transition that is still playing ends where it was going
         leaving = self._sprites(self.lesson_cards if self.mode == "lessons" else self.cards)
         self.mode = mode
+        self.refresh_counts()
         self.mode_control.set_current(1 if mode == "lessons" else 0)
         store().setValue("ui/homeMode", mode)
         playing = animate and changed and self.isVisible() and transition.frame is not None
@@ -515,6 +566,29 @@ class HomePage(QWidget):
             if card.isVisible()
         ]
 
+    def refresh_counts(self) -> None:
+        """
+        Refresh the visible exercise tiles from the same queues used for practice.
+
+        Examples
+        --------
+        >>> HomePage([]).refresh_counts()
+        """
+        if not self.isVisible() or self.mode != "exercises":
+            self._count_timer.stop()
+            return
+        mode = self.learner.mode if self.learner else DEFAULT_SCHEDULER
+        now = time.time()
+        for card in self.cards:
+            counts = None
+            if self.learner and mode in CALENDAR_SCHEDULERS:
+                counts = self.learner.calendar.counts(card.exercise_class(), profile=self.learner.profile.id, mode=mode, now=now)
+            card.set_counts(counts)
+        if mode not in CALENDAR_SCHEDULERS:
+            self._count_timer.stop()
+        else:
+            self._count_timer.start()
+
     def showEvent(self, event: QShowEvent) -> None:
         """
         Bring the lesson cards up to date each time the page is shown, so they say where each lesson was left.
@@ -531,6 +605,7 @@ class HomePage(QWidget):
         >>> page.show()
         """
         super().showEvent(event)
+        self.refresh_counts()
         self._make_lesson_cards()
         self._reflow(force=True)
 

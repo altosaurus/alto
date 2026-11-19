@@ -93,6 +93,7 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
                 active=blend_name(border, b=text_c, t=0.36),
                 disabled=blend_name(window_c, b=border, t=0.40),
             )
+    ui_assets = Path(__file__).resolve().parent.parent / "assets" / "ui"
     sheet = _TEMPLATE.format(
         RADIUS=RADIUS,
         r2=RADIUS - 2,
@@ -113,8 +114,9 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
         accent_dim=blend_name(accent_c, b=base_c, t=0.55),
         nav_hover=blend_name(window_c, b=text_c, t=0.07),
         nav_selected=blend_name(window_c, b=accent_c, t=0.2),
-        check=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "check.svg").as_posix(),
-        chevron=(Path(__file__).resolve().parent.parent / "assets" / "ui" / "chevron.svg").as_posix(),
+        check=(ui_assets / "check.svg").as_posix(),
+        chevron_up=(ui_assets / "chevron-up.svg").as_posix(),
+        chevron=(ui_assets / "chevron.svg").as_posix(),
     )
     if paper_palette is None:
         paper_palette = palette
@@ -196,7 +198,7 @@ QTabWidget#settingsTabs QTabBar::tab:selected {{
 QTabWidget#settingsTabs QTabBar::tab:focus {{ background: {nav_hover}; }}
 
 /* Fields have rounded corners and a heavier lower edge. */
-QLineEdit[field="true"], QComboBox[field="true"] {{
+QLineEdit[field="true"], QComboBox[field="true"], QSpinBox {{
     border: 1px solid {edge};
     border-bottom-width: 2px;
     border-radius: {RADIUS}px;
@@ -206,7 +208,25 @@ QLineEdit[field="true"], QComboBox[field="true"] {{
     selection-color: palette(highlighted-text);
 }}
 QComboBox[field="true"] {{ combobox-popup: 0; }}  /* the list drops down below the box, and does not cover it and what is around it */
-QLineEdit[field="true"]:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on {{ border-color: palette(highlight); }}
+QLineEdit[field="true"]:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on,
+QSpinBox:hover, QSpinBox:focus {{ border-color: palette(highlight); }}
+QSpinBox {{ padding: 5px 22px 5px 5px; qproperty-alignment: AlignCenter; }}
+QSpinBox:disabled {{ background: palette(window); color: {button_disabled_text}; border-color: palette(midlight); }}
+QSpinBox::up-button, QSpinBox::down-button {{
+    subcontrol-origin: padding;
+    width: 22px;
+    background: transparent;
+    border: none;
+    border-left: 1px solid palette(mid);
+}}
+QSpinBox::up-button {{ subcontrol-position: top right; border-top-right-radius: {r2}px; }}
+QSpinBox::down-button {{ subcontrol-position: bottom right; border-bottom-right-radius: {r2}px; }}
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {{ background: {button_hover}; }}
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {{ background: {fill_pressed}; }}
+QSpinBox::up-arrow {{ image: url({chevron_up}); width: 14px; height: 14px; }}
+QSpinBox::down-arrow {{ image: url({chevron}); width: 14px; height: 14px; }}
+QSpinBox::up-button:off, QSpinBox::down-button:off,
+QSpinBox::up-button:disabled, QSpinBox::down-button:disabled {{ background: palette(window); }}
 QComboBox[field="true"]::drop-down {{ border: none; width: 28px; }}
 QComboBox[field="true"]::down-arrow {{ image: url({chevron}); width: 16px; height: 16px; }}
 QFrame#dropdownPopup {{

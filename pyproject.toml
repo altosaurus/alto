@@ -45,6 +45,7 @@ dependencies = [
     "numpy>=1.26",
     "PyNaCl>=1.5",  # checks the signature of an update (Ed25519)
     "certifi>=2024.2.2",  # the certificate authorities for the update check, which a packaged build cannot count on the system for
+    "fsrs>=6,<7",
 ]
 
 [project.urls]

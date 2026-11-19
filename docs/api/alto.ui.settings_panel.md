@@ -407,6 +407,24 @@ True
 [1]
 ```
 
+### ExerciseSettingsPanel.refresh_limits
+
+```python
+def refresh_limits(mode: str) -> None
+```
+
+Update the Daily Limits row for the active scheduler and profile.
+
+**Parameters**
+
+- `mode` (*str*): Selected question scheduler.
+
+**Examples**
+
+```pycon
+Switching to ASRS hides the row and leaves its submenu.
+```
+
 ## NoteNameSettingsPanel
 
 ```python
@@ -1455,7 +1473,11 @@ True
 ## settings_panel_for
 
 ```python
-def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel
+def settings_panel_for(
+    exercise: Exercise,
+    *,
+    learner: Learner | None = None,
+) -> ExerciseSettingsPanel
 ```
 
 Return the settings panel for an exercise.
@@ -1463,6 +1485,7 @@ Return the settings panel for an exercise.
 **Parameters**
 
 - `exercise` (*Exercise*): The exercise.
+- `learner` (*Learner or None*): Profile whose calendar limits can be overridden.
 
 **Returns**
 

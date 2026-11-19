@@ -15,13 +15,15 @@ from __future__ import annotations
 
 import sqlite3
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import (
     KW_ONLY,
     dataclass,
 )
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 3
 
 _SCHEMA = """
 CREATE TABLE profiles (
@@ -62,6 +64,59 @@ CREATE TABLE items (
 """
 
 
+_CALENDAR_SCHEMA = """
+ALTER TABLE profiles ADD COLUMN scheduler TEXT NOT NULL DEFAULT 'Alto';
+CREATE TABLE practice_cards (
+    profile_id INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    exercise TEXT NOT NULL,
+    item_key TEXT NOT NULL,
+    signature TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    introduced_on TEXT,
+    PRIMARY KEY (profile_id, exercise, item_key)
+);
+CREATE TABLE review_schedules (
+    profile_id INTEGER NOT NULL,
+    exercise TEXT NOT NULL,
+    item_key TEXT NOT NULL,
+    scheduler TEXT NOT NULL,
+    due REAL NOT NULL,
+    state TEXT NOT NULL,
+    PRIMARY KEY (profile_id, exercise, item_key, scheduler),
+    FOREIGN KEY (profile_id, exercise, item_key) REFERENCES practice_cards ON DELETE CASCADE
+);
+INSERT INTO practice_cards (profile_id, exercise, item_key, signature, payload)
+SELECT profile_id, exercise, item_key, signature, payload FROM items;
+CREATE TRIGGER remember_practiced_card AFTER INSERT ON items BEGIN
+    INSERT OR IGNORE INTO practice_cards (profile_id, exercise, item_key, signature, payload)
+    VALUES (NEW.profile_id, NEW.exercise, NEW.item_key, NEW.signature, NEW.payload);
+END;
+"""
+
+
+_LIMITS_SCHEMA = """
+CREATE TABLE practice_limits (
+    profile_id INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    exercise TEXT NOT NULL,
+    new_cards INTEGER CHECK (new_cards >= 0),
+    reviews INTEGER CHECK (reviews >= 0),
+    PRIMARY KEY (profile_id, exercise)
+);
+CREATE TABLE daily_reviews (
+    profile_id INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    exercise TEXT NOT NULL,
+    day TEXT NOT NULL,
+    completed INTEGER NOT NULL,
+    PRIMARY KEY (profile_id, exercise, day)
+);
+ALTER TABLE practice_cards ADD COLUMN pending_new INTEGER NOT NULL DEFAULT 0;
+UPDATE practice_cards AS c SET pending_new = 1 WHERE introduced_on IS NOT NULL
+    AND NOT EXISTS (SELECT 1 FROM items i WHERE (i.profile_id, i.exercise, i.item_key) = (c.profile_id, c.exercise, c.item_key))
+    AND NOT EXISTS (SELECT 1 FROM review_schedules s
+                    WHERE (s.profile_id, s.exercise, s.item_key) = (c.profile_id, c.exercise, c.item_key));
+"""
+
+
 def check_snapshot(data: bytes) -> tuple[int, int, int]:
     """
     Check that bytes are an intact Alto database that this version can read, and say what is in it.
@@ -84,7 +139,7 @@ def check_snapshot(data: bytes) -> tuple[int, int, int]:
     Examples
     --------
     >>> check_snapshot(Database().snapshot())
-    (1, 0, 0)
+    (3, 0, 0)
     >>> check_snapshot(b"not a database")
     Traceback (most recent call last):
         ...
@@ -105,6 +160,10 @@ def check_snapshot(data: bytes) -> tuple[int, int, int]:
             raise ValueError("This is not an Alto database.")
         if version > SCHEMA_VERSION:
             raise ValueError("This was made by a newer version of Alto. Update Alto to read it.")
+        if version >= 2 and not {"practice_cards", "review_schedules"} <= tables:
+            raise ValueError("The practice schedule is missing from this database.")
+        if version >= 3 and not {"practice_limits", "daily_reviews"} <= tables:
+            raise ValueError("The daily practice limits are missing from this database.")
         profiles = copy.execute("SELECT COUNT(*) FROM profiles").fetchone()[0]
         attempts = copy.execute("SELECT COUNT(*) FROM attempts").fetchone()[0]
         return version, profiles, attempts
@@ -224,20 +283,46 @@ class Database:
 
     def _migrate(self) -> None:
         """
-        Create the tables if the database is new.
+        Create the tables or migrate an existing database to the current schema.
 
         Examples
         --------
         >>> db = Database()
         >>> db._migrate()  # already up to date: nothing happens
         >>> sorted(r["name"] for r in db.conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'"))
-        ['attempts', 'items', 'profiles']
+        ['attempts', 'daily_reviews', 'items', 'practice_cards', 'practice_limits', 'profiles', 'review_schedules']
         """
         version = self.conn.execute("PRAGMA user_version").fetchone()[0]
-        if version == 0:
+        if version < SCHEMA_VERSION:
+            schema = "".join((_SCHEMA, _CALENDAR_SCHEMA, _LIMITS_SCHEMA)[version:])
             with self.conn:
-                self.conn.executescript(_SCHEMA)
-                self.conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+                self.conn.executescript(f"BEGIN;\n{schema}\nPRAGMA user_version = {SCHEMA_VERSION}; COMMIT;")
+
+    @contextmanager
+    def write_transaction(self) -> Iterator[None]:
+        """
+        Share the caller's write transaction or begin one before reading the state to be updated.
+
+        Yields
+        ------
+        None
+            Control while the transaction is active.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> with db.write_transaction():
+        ...     print(db.conn.in_transaction)
+        True
+        >>> db.conn.in_transaction
+        False
+        """
+        if self.conn.in_transaction:
+            yield
+        else:
+            with self.conn:
+                self.conn.execute("BEGIN IMMEDIATE")
+                yield
 
     def close(self) -> None:
         """
@@ -264,7 +349,7 @@ class Database:
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
         >>> check_snapshot(db.snapshot())
-        (1, 1, 0)
+        (3, 1, 0)
         """
         self.conn.commit()
         return self.conn.serialize()
@@ -297,13 +382,16 @@ class Database:
         ['Ada']
         """
         check_snapshot(data)  # nothing is touched unless the whole snapshot is sound
-        copy = sqlite3.connect(":memory:")
+        copy = Database()
         try:
-            copy.deserialize(data)
-            copy.backup(self.conn)  # SQLite's own online copy: the open connection ends up holding the snapshot
+            copy.conn.deserialize(data)
+            try:
+                copy._migrate()
+            except sqlite3.DatabaseError as error:
+                raise ValueError("The backup’s practice history could not be migrated.") from error
+            copy.conn.backup(self.conn)
         finally:
             copy.close()
-        self._migrate()
 
     # -- profiles --------------------------------------------------------------------------------------------
 
@@ -487,7 +575,7 @@ class Database:
         >>> db.get_item(ada.id, exercise="NoteNames", item_key="k").strain
         2.0
         """
-        with self.conn:
+        with self.write_transaction():
             self.conn.execute(
                 "INSERT INTO items (profile_id, exercise, item_key, strain, seen, first_try_right, wrong_attempts, "
                 "total_first_ms, last_seen, signature, payload) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
@@ -553,7 +641,7 @@ class Database:
         >>> [(r["answer"], r["correct"]) for r in db.attempts(ada.id)]
         [('C', 0)]
         """
-        with self.conn:
+        with self.write_transaction():
             self.conn.execute(
                 "INSERT INTO attempts (profile_id, exercise, item_key, attempt_no, answer, correct, duration_ms, "
                 "answered_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",

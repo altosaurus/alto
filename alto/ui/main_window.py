@@ -62,6 +62,7 @@ from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
 from alto.learning import Learner
+from alto.learning.calendar import DEFAULT_SCHEDULER
 from alto.ui import (
     backup_flow,
     icons,
@@ -398,7 +399,7 @@ class MainWindow(QMainWindow):
         self.lesson_nav.lesson_chosen.connect(self._lesson_picked)
         self.lesson_nav.step_chosen.connect(self._step_picked)
         self.stack = QStackedWidget()
-        self.home = HomePage(REGISTRY)  # start screen with a button for every exercise
+        self.home = HomePage(REGISTRY, learner=self.learner)  # start screen with a button for every exercise
         self.home.exercise_chosen.connect(self.open_exercise)
         self.home.lesson_chosen.connect(self.open_lessons)
         self.home.resume_button.clicked.connect(self._back_from_topbar)
@@ -1012,12 +1013,25 @@ class MainWindow(QMainWindow):
             self._settings.raise_()
             self._settings.activateWindow()
             return
-        dialog = AppSettingsDialog(self)
+        dialog = AppSettingsDialog(self, learner=self.learner)
+        dialog.scheduler_changed.connect(self.home.refresh_counts)
+        dialog.scheduler_changed.connect(self._scheduler_changed)
         dialog.defaults_requested.connect(self._restore_defaults)
         dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         dialog.finished.connect(self._settings_closed)
         self._settings = dialog
         dialog.show()
+
+    def _scheduler_changed(self) -> None:
+        """
+        Apply a new scheduling policy to an open exercise.
+
+        Examples
+        --------
+        >>> MainWindow()._scheduler_changed()
+        """
+        if self._exercise_page is not None:
+            self._exercise_page.scheduling_changed()
 
     def _restore_defaults(self) -> None:
         """
@@ -1027,6 +1041,9 @@ class MainWindow(QMainWindow):
         --------
         >>> _restore_defaults()  # doctest: +SKIP
         """
+        if self.learner:
+            self.learner.set_mode(DEFAULT_SCHEDULER)
+            self.learner.calendar.reset_limits(self.learner.profile.id)
         saved = store()
         retained = {key: saved.value(key) for key in saved.allKeys() if key.startswith(("profile/", "lessons/"))}
         import_settings(retained)
@@ -1822,7 +1839,10 @@ class MainWindow(QMainWindow):
         accepted = dialog.exec() == QDialog.DialogCode.Accepted
         chosen = dialog.chosen
         if accepted and chosen is not None and chosen != self.learner.profile:
+            if self._settings is not None:
+                self._settings.close()
             self.learner.profile = chosen
+            self.home.refresh_counts()
             # noinspection PyTypeChecker
             remember_profile(chosen)
             self._show_profile()

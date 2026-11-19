@@ -18,6 +18,21 @@ Ties the profile, the database and the scheduler together for the exercise scree
 True
 ```
 
+## PracticeComplete
+
+```python
+class PracticeComplete(Exception)
+```
+
+The current exercise has no scheduled cards available.
+
+**Examples**
+
+```pycon
+>>> issubclass(PracticeComplete, Exception)
+True
+```
+
 ## Learner
 
 ```python
@@ -67,6 +82,53 @@ Create a learner for one profile.
 'Ada'
 ```
 
+### Learner.mode
+
+```python
+@property
+def mode() -> str
+```
+
+Return this profile's question scheduler.
+
+**Returns**
+
+- *str*: ASRS, ARTS, SM-2 or FSRS.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> Learner(db, profile=db.add_profile("Ada")).mode
+'ASRS'
+```
+
+### Learner.set_mode
+
+```python
+def set_mode(mode: str) -> None
+```
+
+Select the question scheduler for this profile.
+
+**Parameters**
+
+- `mode` (*str*): Scheduler name.
+
+**Raises**
+
+- *ValueError*: For an unsupported scheduler.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> learner = Learner(db, profile=db.add_profile("Ada"))
+>>> learner.set_mode("FSRS")
+>>> learner.mode
+'FSRS'
+```
+
 ### Learner.pick
 
 ```python
@@ -79,7 +141,7 @@ def pick(
 ) -> Question
 ```
 
-Return the next question: a mix of new ones and ones asked before under the same settings, drawn by weight.
+Return the next eligible question using the profile's selected scheduler.
 
 **Parameters**
 
@@ -91,6 +153,10 @@ Return the next question: a mix of new ones and ones asked before under the same
 **Returns**
 
 - *Question*: The question to ask.
+
+**Raises**
+
+- *PracticeComplete*: If the calendar scheduler has no cards currently available.
 
 **Examples**
 

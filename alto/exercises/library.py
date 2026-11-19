@@ -14,6 +14,7 @@ Examples
 from __future__ import annotations
 
 import random
+from collections.abc import Iterator
 from dataclasses import replace
 from functools import lru_cache
 
@@ -252,6 +253,129 @@ class NoteNames(ChoiceExercise):
             acc = rng.choice([a for a in (-1, 0, 1) if a != in_key])
         note = Note.from_diatonic(letter_pos, accidental=acc)
 
+        return self._question_for(note, clef=clef, key=key, value=value)
+
+    def card_count(self) -> int:
+        """
+        Count written pitches across the selected ranges, clefs and signatures.
+
+        Returns
+        -------
+        int
+            Each staff position contributes one spelling, or three when accidentals are enabled.
+
+        Examples
+        --------
+        >>> NoteNames().card_count() > 0
+        True
+        """
+        cfg = settings.note_names
+        positions = sum(high - low + 1 for low, high in (cfg.range_for(clef) for clef in cfg.active_clefs()))
+        return positions * len(cfg.active_keys()) * (3 if self.accidentals or cfg.accidentals else 1)
+
+    def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
+        """
+        Visit each selectable written note once, in shuffled order.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Source of the daily order and answer choices.
+
+        Yields
+        ------
+        Question
+            A distinct question within the selected clefs, ranges and keys.
+
+        Examples
+        --------
+        >>> isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
+        True
+        """
+        cfg = settings.note_names
+        pitches = []
+        for clef in cfg.active_clefs():
+            low, high = cfg.range_for(clef)
+            for key in cfg.active_keys():
+                for step in range(low, high + 1):
+                    signs = (-1, 0, 1) if self.accidentals or cfg.accidentals else (key_accidental(step % 7, count=key),)
+                    pitches.extend((clef, key, Note.from_diatonic(step, accidental=sign)) for sign in signs)
+        rng.shuffle(pitches)
+        for clef, key, note in pitches:
+            yield self.limit_buttons(self._question_for(note, clef=clef, key=key, value=rng.choice(cfg.active_values())), rng=rng)
+
+    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+        """
+        Rebuild a previously seen note when its pitch and answer are eligible.
+
+        Parameters
+        ----------
+        question : Question
+            Saved note and answer.
+        same_settings : bool
+            Whether its original settings are active.
+
+        Returns
+        -------
+        Question or None
+            The note with the current answer bank, or None outside the selected material.
+
+        Examples
+        --------
+        >>> ex = NoteNames()
+        >>> q = ex.generate(random.Random(1))
+        >>> ex.review_question(q, same_settings=True) == q
+        True
+        """
+        if same_settings:
+            return self.refresh(question)
+        cfg = settings.note_names
+        if (
+            not question.staff
+            or not question.staff[0]
+            or question.clef not in cfg.active_clefs()
+            or question.key not in cfg.active_keys()
+        ):
+            return None
+        note = question.staff[0][0]
+        low, high = cfg.range_for(question.clef)
+        if not low <= note.diatonic <= high:
+            return None
+        if not (self.accidentals or cfg.accidentals) and note.accidental != key_accidental(note.letter, count=question.key):
+            return None
+        rng = random.Random(question.item_key())
+        updated = self._question_for(note, clef=question.clef, key=question.key, value=rng.choice(cfg.active_values()))
+        return self.limit_buttons(updated, rng=rng) if updated.item_key() == question.item_key() else None
+
+    def _question_for(self, note: Note, *, clef: str, key: int, value: str) -> Question:
+        """
+        Build the prompt and answer bank for a written pitch.
+
+        Parameters
+        ----------
+        note : Note
+            Pitch on the staff.
+        clef : str
+            Written clef.
+        key : int
+            Staff key signature.
+        value : str
+            Written duration.
+
+        Returns
+        -------
+        Question
+            The note and its full answer bank.
+
+        Examples
+        --------
+        >>> NoteNames()._question_for(Note.parse("C4"), clef="treble", key=0, value="whole").staff[0][0].name
+        'C'
+        """
+        cfg = settings.note_names
+        with_accidentals = self.accidentals or cfg.accidentals
+        in_key = key_accidental(note.letter, count=key)
+        acc = note.accidental
         name = spell(note, naming=cfg.naming, key=key)
         octaves = None
         joiner = ""
@@ -2511,26 +2635,264 @@ class NoteConstruction(Exercise):
         """
         cfg = settings.construction
         clef = rng.choice(cfg.active_clefs())
-        lo, hi = settings.DEFAULT_RANGES[clef]
         notes_only = cfg.question_type == "notes"
         minor = not notes_only and cfg.minor and (not cfg.major or rng.choice((False, True)))
-        keys = sorted(cfg.minor_keys) if minor and cfg.minor_keys else cfg.active_keys()
-        count = rng.choice(keys) if cfg.key_signature and not notes_only else 0
-        tonic = mode_tonic(count, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[count]
-        key_name = f"{tonic} {'minor' if minor else 'major'}"
-        if notes_only or not cfg.degrees or cfg.degrees == set(range(1, 8)):
-            diatonic = rng.randint(lo, hi)
-        else:
-            tonic_letter = (4 * count + (5 if minor else 0)) % 7
-            positions = [d for d in range(lo, hi + 1) if (d - tonic_letter) % 7 + 1 in cfg.degrees]
-            diatonic = rng.choice(positions)
-        staff_keys = sorted(cfg.staff_keys) if cfg.staff_keys is not None else [count]
-        staff_signature = rng.choice(staff_keys) if len(staff_keys) > 1 else (staff_keys[0] if staff_keys else 0)
+        count = rng.choice(self._scale_keys(minor)) if cfg.key_signature and not notes_only else 0
+        diatonic = rng.choice(self._positions(clef, count=count, minor=minor))
+        staff_keys = self._staff_keys(count)
+        staff_signature = rng.choice(staff_keys) if len(staff_keys) > 1 else staff_keys[0]
         implied = key_accidental(diatonic % 7, count=staff_signature if notes_only else count)
         accidental = implied
         if cfg.accidentals and rng.random() < (0.4 if cfg.key_signature else 0.5):
             accidental = rng.choice([a for a in (-1, 0, 1) if a != implied])  # a sign that differs from the key
         note = Note.from_diatonic(diatonic, accidental=accidental)
+        return self._placement(note, clef=clef, count=count, minor=minor, staff_signature=staff_signature)
+
+    @staticmethod
+    def _scale_keys(minor: bool) -> list[int]:
+        """
+        Return selectable scale signatures for one mode.
+
+        Parameters
+        ----------
+        minor : bool
+            Whether to use the minor key selection.
+
+        Returns
+        -------
+        list of int
+            The signature counts used by the question generator.
+
+        Examples
+        --------
+        >>> bool(NoteConstruction()._scale_keys(False))
+        True
+        """
+        cfg = settings.construction
+        if not cfg.key_signature or cfg.question_type == "notes":
+            return [0]
+        return sorted(cfg.minor_keys) if minor and cfg.minor_keys else cfg.active_keys()
+
+    @staticmethod
+    def _staff_keys(count: int) -> list[int]:
+        """
+        Return staff signatures allowed for a scale key.
+
+        Parameters
+        ----------
+        count : int
+            Scale signature.
+
+        Returns
+        -------
+        list of int
+            Selected staff signatures, or the scale signature when the staff follows the key.
+
+        Examples
+        --------
+        >>> bool(NoteConstruction()._staff_keys(0))
+        True
+        """
+        keys = settings.construction.staff_keys
+        return [count] if keys is None else sorted(keys) or [0]
+
+    @staticmethod
+    def _positions(clef: str, *, count: int, minor: bool) -> range | list[int]:
+        """
+        Return staff positions that meet the degree selection.
+
+        Parameters
+        ----------
+        clef : str
+            Selected clef.
+        count : int
+            Scale signature.
+        minor : bool
+            Whether degrees are relative to the minor tonic.
+
+        Returns
+        -------
+        range or list of int
+            Absolute diatonic positions.
+
+        Examples
+        --------
+        >>> bool(NoteConstruction()._positions("treble", count=0, minor=False))
+        True
+        """
+        cfg = settings.construction
+        low, high = settings.DEFAULT_RANGES[clef]
+        positions = range(low, high + 1)
+        if cfg.question_type == "notes" or not cfg.degrees or cfg.degrees == set(range(1, 8)):
+            return positions
+        tonic = 4 * count + (5 if minor else 0)
+        return [d for d in positions if (d - tonic) % 7 + 1 in cfg.degrees]
+
+    def _groups(self) -> Iterator[tuple[str, bool, int, int, range | list[int]]]:
+        """
+        Group construction cards by clef, mode, scale key and staff signature.
+
+        Yields
+        ------
+        tuple
+            A combination of settings and its eligible diatonic positions.
+
+        Examples
+        --------
+        >>> next(NoteConstruction()._groups())[0] in settings.RANGE_KEYS
+        True
+        """
+        cfg = settings.construction
+        modes = [False]
+        if cfg.minor and cfg.question_type != "notes":
+            modes = [False, True] if cfg.major else [True]
+        for clef in cfg.active_clefs():
+            for minor in modes:
+                for count in self._scale_keys(minor):
+                    positions = self._positions(clef, count=count, minor=minor)
+                    for staff_key in self._staff_keys(count):
+                        yield clef, minor, count, staff_key, positions
+
+    def card_count(self) -> int:
+        """
+        Count distinct construction cards without rendering them.
+
+        Returns
+        -------
+        int
+            Number of eligible written placements under the current settings.
+
+        Examples
+        --------
+        >>> NoteConstruction().card_count() > 0
+        True
+        """
+        return sum(len(positions) for *_, positions in self._groups()) * (3 if settings.construction.accidentals else 1)
+
+    def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
+        """
+        Visit all eligible placements in a randomized order.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Source for the order of the signatures and placements.
+
+        Yields
+        ------
+        Question
+            One playable placement for each combination.
+
+        Examples
+        --------
+        >>> next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
+        True
+        """
+        cfg = settings.construction
+        spellings = 3 if cfg.accidentals else 1
+        groups = []
+        for clef, minor, count, staff_key, positions in self._groups():
+            size = len(positions) * spellings
+            if size:
+                groups.append((clef, minor, count, staff_key, positions, rng.sample(range(size), size)))
+        while groups:
+            index = rng.randrange(len(groups))
+            clef, minor, count, staff_key, positions, remaining = groups[index]
+            pitch, sign = divmod(remaining.pop(), spellings)
+            step = positions[pitch]
+            accidental = (
+                sign - 1
+                if cfg.accidentals
+                else key_accidental(step % 7, count=staff_key if cfg.question_type == "notes" else count)
+            )
+            if not remaining:
+                groups[index] = groups[-1]
+                groups.pop()
+            yield self._placement(
+                Note.from_diatonic(step, accidental=accidental),
+                clef=clef,
+                count=count,
+                minor=minor,
+                staff_signature=staff_key,
+            )
+
+    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+        """
+        Determine whether an introduced placement belongs to the current construction catalog.
+
+        Parameters
+        ----------
+        question : Question
+            Stored construction card.
+        same_settings : bool
+            Whether its original settings are still active.
+
+        Returns
+        -------
+        Question or None
+            The playable card if its placement and prompt remain eligible.
+
+        Examples
+        --------
+        >>> ex = NoteConstruction()
+        >>> q = ex.generate(random.Random(3))
+        >>> ex.review_question(q, same_settings=True) == q
+        True
+        """
+        if same_settings:
+            return question
+        cfg = settings.construction
+        note = question.construct
+        minor = question.minor
+        notes_only = cfg.question_type == "notes"
+        if note is None or question.notes_only != notes_only or question.clef not in cfg.active_clefs():
+            return None
+        if minor and (notes_only or not cfg.minor) or (not minor and not notes_only and cfg.minor and not cfg.major):
+            return None
+        count = question.key
+        staff = count if question.staff_signature is None else question.staff_signature
+        if count not in self._scale_keys(minor) or staff not in self._staff_keys(count):
+            return None
+        if note.diatonic not in self._positions(question.clef, count=count, minor=minor):
+            return None
+        if not cfg.accidentals and note.accidental != key_accidental(note.letter, count=staff if notes_only else count):
+            return None
+        rebuilt = self._placement(note, clef=question.clef, count=count, minor=minor, staff_signature=staff)
+        return rebuilt if rebuilt.item_key() == question.item_key() else None
+
+    @staticmethod
+    def _placement(note: Note, *, clef: str, count: int, minor: bool, staff_signature: int) -> Question:
+        """
+        Build the question for a selected placement.
+
+        Parameters
+        ----------
+        note : Note
+            Required written pitch.
+        clef : str
+            Staff clef.
+        count : int
+            Scale signature.
+        minor : bool
+            Whether the scale is minor.
+        staff_signature : int
+            Signature printed on the staff.
+
+        Returns
+        -------
+        Question
+            The playable construction card.
+
+        Examples
+        --------
+        >>> NoteConstruction()._placement(Note.parse("C4"), clef="treble", count=0, minor=False, staff_signature=0).construct.name
+        'C'
+        """
+        cfg = settings.construction
+        notes_only = cfg.question_type == "notes"
+        tonic = mode_tonic(count, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[count]
+        key_name = f"{tonic} {'minor' if minor else 'major'}"
+        accidental = note.accidental
         naming = settings.note_names.naming
         if notes_only and naming in settings.DEGREE_NAMINGS:
             naming = "letters"
@@ -2744,6 +3106,7 @@ class NotationIdentification(ChoiceExercise):
     has_sound = False
 
     default_limit = 4
+    _phrases = ("E4 G4 A4 G4", "B4 A4 G4 E4", "G4 B4 D5 C5", "D5 C5 A4 B4")
 
     def settings_signature(self) -> str:
         """
@@ -2859,9 +3222,7 @@ class NotationIdentification(ChoiceExercise):
         """
         if all(term in settings.notation.terms for term in question.choices):
             return question
-        group = next(name for name, terms in CATALOG.items() if question.answer in terms)
-        choices = self._choices(question.answer, group=group, rng=random.Random(question.item_key()))
-        return replace(question, choices=choices, grid={choice: divmod(i, 2) for i, choice in enumerate(choices)})
+        return self._with_buttons(question, rng=random.Random(question.item_key()))
 
     def make_question(self, rng: random.Random) -> Question:
         """
@@ -2885,7 +3246,7 @@ class NotationIdentification(ChoiceExercise):
         """
         if not settings.notation.terms:
             return Question("Select a notation term in Settings to continue.", choices=[], answer="")
-        phrase = rng.choice(("E4 G4 A4 G4", "B4 A4 G4 E4", "G4 B4 D5 C5", "D5 C5 A4 B4"))
+        phrase = rng.choice(self._phrases)
         selected = [term for term in settings.NOTATION_TERMS if term in settings.notation.terms]
         repertoire = passages_by_term()
         represented = [term for term in selected if term in repertoire]
@@ -2897,6 +3258,54 @@ class NotationIdentification(ChoiceExercise):
             passage = rng.choice(list(repertoire[part]))
             locations = repertoire[part][passage]
             index = locations[0] if locate else rng.choice(locations)
+            return self._example(part, group=group, locate=locate, choices=choices, source=passage, position=index, excerpt=True)
+        position = rng.randrange(5 if part == "Staff line" else 4)
+        return self._example(part, group=group, locate=locate, choices=choices, source=phrase, position=position, excerpt=False)
+
+    @staticmethod
+    def _example(
+        part: str,
+        *,
+        group: str,
+        locate: bool,
+        choices: list[str],
+        source: str,
+        position: int,
+        excerpt: bool,
+    ) -> Question:
+        """
+        Build one playable question from an excerpt marker or a generated staff position.
+
+        Parameters
+        ----------
+        part : str
+            The target term.
+        group : str
+            Its notation category.
+        locate : bool
+            Whether the learner clicks on the staff.
+        choices : list of str
+            Enabled answer buttons.
+        source : str
+            Excerpt ID or space-separated pitches.
+        position : int
+            Marker index, note column, or staff line.
+        excerpt : bool
+            Whether the source names a bundled score.
+
+        Returns
+        -------
+        Question
+            The music, prompt, and target for the chosen presentation.
+
+        Examples
+        --------
+        >>> ex = NotationIdentification()
+        >>> ex._example("Slur", group="Staff and rhythm", locate=True, choices=[], source="E4 G4 A4 G4",
+        ...             position=0, excerpt=False).prompt
+        'Click the slur.'
+        """
+        if excerpt:
             prompt = "Which part of the music is highlighted?"
             if locate:
                 if group == "Accidentals":
@@ -2908,18 +3317,16 @@ class NotationIdentification(ChoiceExercise):
             return Question(
                 prompt,
                 show_staff=True,
-                notation_excerpt=passage,
-                notation_target=(part, index),
+                notation_excerpt=source,
+                notation_target=(part, position),
                 choices=choices,
                 grid={choice: divmod(i, 2) for i, choice in enumerate(choices)},
                 answer=part,
             )
         placement, symbol = MARKS[part]
-        position = rng.randrange(4)
+        phrase = source
         clef = "treble"
-        if part == "Staff line":
-            position = rng.randrange(5)
-        elif placement == "clef":
+        if placement == "clef":
             clef = str(symbol)
             phrase = {"bass": "G2 B2 C3 D3", "tenor": "D3 F3 A3 G3", "baritone": "B2 D3 F3 G3"}.get(clef, "C4 D4 E4 D4")
         notes = phrase.split()
@@ -2962,3 +3369,170 @@ class NotationIdentification(ChoiceExercise):
             answer=part,
             notation_target=(part, position),
         )
+
+    @classmethod
+    def _examples(cls, part: str) -> dict[str, Question]:
+        """
+        Index the current score examples for a term by their persistent card identities.
+
+        Parameters
+        ----------
+        part : str
+            Enabled notation term.
+
+        Returns
+        -------
+        dict of str to Question
+            Templates for the active question type, without distractors.
+
+        Examples
+        --------
+        >>> len(NotationIdentification._examples("Koron")) > 0
+        True
+        """
+        passages = passages_by_term().get(part, {})
+        return cls._catalog(
+            part,
+            locate=settings.notation.question_type == "staff",
+            passages=tuple((name, tuple(indices)) for name, indices in passages.items()),
+        )
+
+    @classmethod
+    @lru_cache(maxsize=512)
+    def _catalog(cls, part: str, *, locate: bool, passages: tuple[tuple[str, tuple[int, ...]], ...]) -> dict[str, Question]:
+        """
+        Enumerate distinct targets using the same engraving and prompts as ordinary practice.
+
+        Parameters
+        ----------
+        part : str
+            Target symbol.
+        locate : bool
+            Whether any matching excerpt marker can be clicked.
+        passages : tuple
+            Available excerpt IDs and matching marker indices.
+
+        Returns
+        -------
+        dict of str to Question
+            One template for each distinct question.
+
+        Examples
+        --------
+        >>> len(NotationIdentification._catalog("Slur", locate=True, passages=()))
+        1
+        """
+        group = next(name for name, terms in CATALOG.items() if part in terms)
+        positions = tuple(range(5 if part == "Staff line" else 4))
+        sources = passages or tuple((phrase, positions) for phrase in cls._phrases)
+        examples = {}
+        for source, indices in sources:
+            for index in indices[:1] if passages and locate else indices:
+                q = cls._example(
+                    part,
+                    group=group,
+                    locate=locate,
+                    choices=[],
+                    source=source,
+                    position=index,
+                    excerpt=bool(passages),
+                )
+                examples[q.item_key()] = q
+        return examples
+
+    def card_groups(self) -> dict[str, str]:
+        """
+        Group the active question type’s playable examples by the symbol being practiced.
+
+        Returns
+        -------
+        dict of str to str
+            Map from each eligible example’s item key to its selected term.
+
+        Examples
+        --------
+        >>> bool(NotationIdentification().card_groups())
+        True
+        """
+        return {key: term for term in settings.notation.terms for key in self._examples(term)}
+
+    def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
+        """
+        Choose one example for each selected notation term.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Randomizes term order, examples and distractors.
+
+        Yields
+        ------
+        Question
+            A distinct playable card with the current answer controls.
+
+        Examples
+        --------
+        >>> next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
+        True
+        """
+        terms = sorted(settings.notation.terms)
+        rng.shuffle(terms)
+        for term in terms:
+            example = rng.choice(list(self._examples(term).values()))
+            yield self._with_buttons(example, rng=rng)
+
+    def _with_buttons(self, question: Question, *, rng: random.Random) -> Question:
+        """
+        Apply the current answer controls to a notation card.
+
+        Parameters
+        ----------
+        question : Question
+            Playable score and target.
+        rng : random.Random
+            Source for the distractor selection.
+
+        Returns
+        -------
+        Question
+            The same target with the current answer layout.
+
+        Examples
+        --------
+        >>> ex = NotationIdentification()
+        >>> q = ex.generate(random.Random(4))
+        >>> ex._with_buttons(q, rng=random.Random(1)).item_key() == q.item_key()
+        True
+        """
+        if settings.notation.question_type == "staff":
+            return question
+        group = next(name for name, terms in CATALOG.items() if question.answer in terms)
+        choices = self._choices(question.answer, group=group, rng=rng)
+        return replace(question, choices=choices, grid={choice: divmod(i, 2) for i, choice in enumerate(choices)})
+
+    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+        """
+        Recover an eligible saved example under the current term and button selections.
+
+        Parameters
+        ----------
+        question : Question
+            Saved question.
+        same_settings : bool
+            Whether the presentation settings still match.
+
+        Returns
+        -------
+        Question or None
+            The current presentation of the card, or None if its term or example is outside the catalog.
+
+        Examples
+        --------
+        >>> ex = NotationIdentification()
+        >>> q = ex.generate(random.Random(4))
+        >>> ex.review_question(q, same_settings=True) == q
+        True
+        """
+        if question.answer not in settings.notation.terms or question.item_key() not in self._examples(question.answer):
+            return None
+        return self.refresh(question) if same_settings else self._with_buttons(question, rng=random.Random(question.item_key()))

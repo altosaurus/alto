@@ -7,7 +7,7 @@ The links below are the latest release's docs. Older releases are under their ve
 - [Home](@SITE@/latest/): what Alto is and what you can practice
 - [Getting started](@SITE@/latest/getting-started/): download, install, update and uninstall
 - [Exercises](@SITE@/latest/exercises/): every exercise and its options
-- [Practice](@SITE@/latest/practice/): how the spaced repetition schedule works
+- [Spaced Repetition](@SITE@/latest/practice/): how Alto schedules practice questions
 - [Statistics](@SITE@/latest/statistics/): the progress charts
 - [Releases](https://github.com/altosaurus/alto/releases): downloads and the changelog
 - [Source code](https://github.com/altosaurus/alto): MIT licensed, written in Python with PySide6

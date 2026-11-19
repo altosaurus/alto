@@ -44,6 +44,10 @@ enforce a rule, follow it anyway in every line you write or touch.
 - Keep long lists scrollable and verify that the closed control, longest notation, and popup fit their intended pane with
   the application stylesheet applied. Use palette colors so light, dark, and custom themes remain consistent.
 
+- Use a standard `QSpinBox` for editable integer settings. Alto’s application stylesheet supplies the rounded field,
+  centered value, and stacked step arrows. Give the field a label and accessible name, and check that its widest
+  value and both arrows fit in the settings pane. See the [numeric field guidelines](docs/guide/styling.md#numeric-fields).
+
 - Match arrow buttons to Alto's shared button styling in `alto/ui/style.py`. Reuse `_arrow()` in settings panels;
   elsewhere, mark `QToolButton` controls with `setProperty("arrowButton", True)`.
 - Preserve the shared rounded border, heavier lower edge, palette colors, and hover, focus, pressed, and disabled states.
