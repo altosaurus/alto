@@ -84,15 +84,15 @@ The [roadmap]({{ '/roadmap/' | relative_url }}) lists current features and plann
     <small>Free for Desktop</small></p>
   <div class="dl-main" id="dl-main"></div>
   <div id="dl-all">
-    <div class="dl-os" data-os="windows" data-name="Windows" data-req="64-bit installer" data-file="alto-{{ v }}-windows-x64-setup.exe" data-url="{{ base }}alto-{{ v }}-windows-x64-setup.exe">
-      <span class="dl-logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><use href="#os-windows"/></svg></span>
-      <div class="dl-txt"><span class="dl-name">Windows</span><span class="dl-file">alto-{{ v }}-windows-x64-setup.exe</span></div>
-      <div class="dl-act"><a class="dl-pill" href="{{ base }}alto-{{ v }}-windows-x64-setup.exe"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg>Download</a></div>
-    </div>
     <div class="dl-os" data-os="linux" data-name="Linux" data-req="x86-64" data-file="alto-{{ v }}-linux-x86_64.tar.gz" data-url="{{ base }}alto-{{ v }}-linux-x86_64.tar.gz">
       <span class="dl-logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><use href="#os-linux"/></svg></span>
       <div class="dl-txt"><span class="dl-name">Linux</span><span class="dl-file">alto-{{ v }}-linux-x86_64.tar.gz</span><span class="dl-note">Unpack it, then run <code>sh install.sh install</code>.</span></div>
       <div class="dl-act"><a class="dl-pill" href="{{ base }}alto-{{ v }}-linux-x86_64.tar.gz"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg>Download</a></div>
+    </div>
+    <div class="dl-os" data-os="windows" data-name="Windows" data-req="64-bit installer" data-file="alto-{{ v }}-windows-x64-setup.exe" data-url="{{ base }}alto-{{ v }}-windows-x64-setup.exe">
+      <span class="dl-logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><use href="#os-windows"/></svg></span>
+      <div class="dl-txt"><span class="dl-name">Windows</span><span class="dl-file">alto-{{ v }}-windows-x64-setup.exe</span></div>
+      <div class="dl-act"><a class="dl-pill" href="{{ base }}alto-{{ v }}-windows-x64-setup.exe"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg>Download</a></div>
     </div>
     <div class="dl-os" data-os="macos" data-name="macOS">
       <span class="dl-logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><use href="#os-apple"/></svg></span>
