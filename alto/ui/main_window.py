@@ -1052,6 +1052,7 @@ class MainWindow(QMainWindow):
         """
         if self.learner:
             self.learner.set_mode(DEFAULT_SCHEDULER)
+            self.learner.set_self_grading(False)
             self.learner.calendar.reset_limits(self.learner.profile.id)
         saved = store()
         retained = {key: saved.value(key) for key in saved.allKeys() if key.startswith(("profile/", "lessons/"))}

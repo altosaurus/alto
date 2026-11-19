@@ -246,6 +246,22 @@ class KeyboardWidget(QWidget):
         """
         return [m for m in range(self.lo, self.hi + 1) if m % 12 in WHITE_PITCH_CLASSES]
 
+    def full_width(self) -> int:
+        """
+        Measure the keyboard case when its keys reach their maximum width.
+
+        Returns
+        -------
+        int
+            Width of the case in pixels, including padding.
+
+        Examples
+        --------
+        >>> KeyboardWidget().full_width()
+        590
+        """
+        return round(len(self._whites()) * self.max_key_width + 2 * self.pad)
+
     def _key_width(self) -> float:
         """
         Return how wide a white key is drawn.

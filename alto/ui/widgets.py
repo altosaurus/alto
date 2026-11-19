@@ -41,6 +41,75 @@ from alto.ui.icons import (
 )
 
 
+class PracticeCounts(QLabel):
+    """
+    Colored counts for calendar practice on tiles and in the exercise screen.
+
+    Examples
+    --------
+    >>> label = PracticeCounts()
+    >>> label.set_counts((2, 3, 1), studying=True, current="incorrect")
+    >>> "1 incorrect card" in label.toolTip()
+    True
+    """
+
+    values: tuple[int, int, int] = (0, 0, 0)
+
+    def set_counts(
+        self,
+        counts: tuple[int, int, int],
+        *,
+        studying: bool = False,
+        current: str | None = None,
+        totals: bool = False,
+    ) -> None:
+        """
+        Show the counts in blue, red, green order and underline the active queue.
+
+        Parameters
+        ----------
+        counts : tuple of int
+            Due reviews, new cards, and outstanding incorrect cards.
+        studying : bool
+            Separate the exercise screen's counts with slashes.
+        current : str or None
+            The queue of the unanswered card, or None between cards.
+        totals : bool
+            Label the grid totals and show one queue per line.
+
+        Examples
+        --------
+        >>> label = PracticeCounts()
+        >>> label.set_counts((1, 2, 0))
+        >>> label.toolTip().startswith("Blue — 2 new cards available")
+        True
+        """
+        self.values = counts
+        reviews, new, incorrect = counts
+        dark = self.palette().color(QPalette.ColorRole.Button).lightness() < 128
+        green, blue, red = ("#82cd93", "#89bbff", "#ff9999") if dark else ("#226939", "#215fa7", "#aa3030")
+        values = (
+            ("new", new, blue, f"{new} new card{'' if new == 1 else 's'} available"),
+            ("incorrect", incorrect, red, f"{incorrect} incorrect card{'' if incorrect == 1 else 's'} awaiting a correct answer"),
+            ("review", reviews, green, f"{reviews} review{'' if reviews == 1 else 's'} due"),
+        )
+        numbers, descriptions = [], []
+        for (key, count, color, description), label in zip(values, ("New", "Learn", "Due"), strict=True):
+            value = f"<u>{count}</u>" if key == current else str(count)
+            if totals:
+                value = f"{value} {label}"
+            numbers.append(f'<b style="color:{color}">{value}</b>')
+            descriptions.append(description + (" (current card)" if key == current else ""))
+        separator = " / " if studying else " &nbsp; "
+        self.setText(("<br>" if totals else separator).join(numbers))
+        self.setAccessibleName(("Matching exercises, " if totals else "") + ", ".join(descriptions))
+        if studying:
+            self.setToolTip(self.accessibleName())
+        else:
+            legend = zip(("Blue", "Red", "Green"), descriptions, strict=True)
+            self.setToolTip("\n".join(f"{color} — {text}" for color, text in legend))
+
+
 class SidebarToggle(QToolButton):
     """
     A button that shows or hides the exercise list.

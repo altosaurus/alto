@@ -107,6 +107,7 @@ Interval construction comes first, followed by chord construction and staff-to-k
 | --- | --- | --- |
 | Guided lessons | Study pitches and notes, clefs, intervals, scales, key signatures, and the circle of fifths, then open related exercises. | {{ complete }} |
 | Spaced repetition and statistics | Review questions under the selected scheduler and inspect accuracy, response times, and individual answers in a local profile. | {{ complete }} |
+| Response-time grading | Use recorded practice times to establish thresholds for each exercise. A correct first answer earns a Hard, Good, or Easy rating based on its response time, and SM-2 or FSRS uses that rating to set the next review interval. | Planned |
 | Mixed practice | Combine an earlier prerequisite, a current topic, and a passage that uses both in one suggested session. | Planned |
 
 ### App features

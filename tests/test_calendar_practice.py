@@ -12,13 +12,13 @@ from pathlib import Path
 
 import pytest
 from fsrs import Card, Rating, State
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QPoint, Qt
 from PySide6.QtTest import QSignalSpy, QTest
 from PySide6.QtWidgets import QApplication
 
 from alto import settings
 from alto.exercises.base import Exercise, Question
-from alto.exercises.library import ChordQualities, NotationIdentification, NoteConstruction, NoteNames
+from alto.exercises.library import ChordQualities, KeyboardNotes, NotationIdentification, NoteConstruction, NoteNames, OrderOfKeys
 from alto.learning import Database, Learner
 from alto.learning.calendar import DAILY_NEW, UNLIMITED
 from alto.learning.database import (
@@ -38,6 +38,144 @@ from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import NotationSettingsPanel, NoteConstructionSettingsPanel, NoteNameSettingsPanel
 
 NOW = 1_700_000_000.0
+
+
+@pytest.mark.parametrize(("mode", "interval"), [("SM-2", "1 day"), ("FSRS", "10 min")])
+@pytest.mark.parametrize("exercise", [NoteNames, KeyboardNotes])
+def test_correct_review_interval_layout(app: QApplication, mode: str, interval: str, exercise: type[Exercise]) -> None:
+    """
+    Show one review delay beside the staff or directly below the right edge of the keyboard.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    mode : str
+        Calendar scheduler.
+    interval : str
+        Expected delay for a new card.
+    exercise : type of Exercise
+        Staff or keyboard exercise.
+    """
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode(mode)
+    view = ExerciseView(exercise(), learner=learner)
+    view.show()
+    label = view.review_interval
+    for width in (700, 1300):
+        view.resize(width, 700)
+        app.processEvents()
+        assert label.isVisible()
+        top_left = label.mapTo(view, QPoint())
+        if exercise is KeyboardNotes:
+            assert label.text() == f"Next interval: {interval}" and label.alignment() & Qt.AlignmentFlag.AlignRight
+            keyboard = view.keyboard
+            origin = keyboard.mapTo(view, QPoint())
+            right = origin.x() + (keyboard.width() + min(keyboard.full_width(), keyboard.width())) / 2
+            assert top_left.y() >= origin.y() + keyboard.height()
+            assert abs(top_left.x() + label.width() - right) <= 1
+            assert top_left.y() + label.height() <= view.choice_area.mapTo(view, QPoint()).y()
+        else:
+            assert label.text() == f"Next interval:\n{interval}" and label.alignment() & Qt.AlignmentFlag.AlignLeft
+            bottom_right = view.staff.mapTo(view, view.staff.rect().bottomRight())
+            assert 0 < top_left.x() - bottom_right.x() <= 16
+            assert top_left.y() + label.height() - 1 == bottom_right.y()
+    assert db.conn.execute("SELECT count(*) FROM review_schedules").fetchone()[0] == 0
+    view.settings_panel.next_question_mode = "Wait"
+    view.submit("wrong", button=None)
+    assert label.isHidden()
+    learner.set_mode("ASRS")
+    view.next_question()
+    assert label.isHidden()
+    view.close()
+
+
+@pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
+@pytest.mark.parametrize("grade", [Rating.Hard, Rating.Good, Rating.Easy])
+def test_self_grading_flow(app: QApplication, monkeypatch: pytest.MonkeyPatch, mode: str, grade: Rating) -> None:
+    """
+    Advance on a miss, then schedule a correct answer once at the chosen interval.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Fix the review clock and give the exercise two notes.
+    mode : str
+        Calendar scheduler.
+    grade : Rating
+        Button selected after the correct answer.
+    """
+    clock = [NOW]
+    monkeypatch.setattr(time, "time", lambda: clock[0])
+    cfg = settings.NoteNameSettings(clefs={"treble"}, ranges={"treble": (28, 29)}, key_signatures={0})
+    monkeypatch.setattr(settings, "note_names", cfg)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode(mode)
+    learner.set_self_grading(True)
+    view = ExerciseView(NoteNames(), learner=learner)
+    view.settings_panel.next_question_mode = "Wait"
+    view.show()
+    assert not view.settings_panel.next_question_row.isEnabled()
+    assert not view.settings_panel.next_question_choices.isEnabled()
+    assert view.review_interval.isHidden() and view.rating_row.isHidden()
+    first = view.question
+    assert first is not None
+    view.submit("wrong", button=None)
+    assert view.rating_row.isHidden() and view.next_button.isHidden() and view._advance.isActive()
+    assert tuple(db.conn.execute("SELECT last_rating, due FROM review_schedules").fetchone()) == (Rating.Again, NOW + 60)
+    view._advance.timeout.emit()
+    second = view.question
+    assert second is not None and second.item_key() != first.item_key()
+    view.shuffle_answers = True
+    shuffled = QSignalSpy(view.shuffle_requested)
+    view.submit(second.answer, button=None)
+    view._light_answer_notes(None)
+    view._advance_question()
+    assert shuffled.count() == 0 and not view._advance.isActive()
+    assert view.rating_row.isVisible() and view.next_button.isHidden() and view.review_interval.isHidden()
+    assert db.conn.execute("SELECT count(*) FROM review_schedules").fetchone()[0] == 1
+    assert [button.text() for _, button in view.grade_controls.values()] == ["Hard", "Good", "Easy"]
+    for rating, (label, button) in view.grade_controls.items():
+        assert label.isVisible() and label.geometry().bottom() < button.geometry().top()
+        assert label.text() == view._rating_previews[rating].duration
+    assert view.grade_controls[Rating.Hard][0].text() == "5 min 30 s"
+    assert view.grade_controls[Rating.Good][0].text() == "10 min"
+    easy = view._rating_previews[Rating.Easy].seconds / DAY
+    assert 3 <= easy <= 5 if mode == "SM-2" else easy > 5
+    preview = view._rating_previews[grade]
+    clock[0] += 5
+    view.grade_controls[grade][1].click()
+    view.grade_controls[grade][1].click()
+    assert shuffled.count() == 1 and view.rating_row.isHidden()
+    due, saved = db.conn.execute(
+        "SELECT due, last_rating FROM review_schedules WHERE item_key=?",
+        (second.item_key(),),
+    ).fetchone()
+    assert due == clock[0] + preview.seconds and saved == grade
+    assert [row["correct"] for row in db.attempts(learner.profile.id)] == [0, 1]
+    assert learner.calendar.study_counts(view.exercise, profile=learner.profile.id, mode=mode, now=clock[0], current_key=None)[
+        0
+    ] == (0, 0, 1)
+    # Replaying an old grade cannot charge another review or reschedule this card.
+    learner.calendar.grade(
+        "NoteNames",
+        profile=learner.profile.id,
+        key=second.item_key(),
+        mode=mode,
+        correct=True,
+        now=clock[0],
+        manual_rating=grade,
+        preview=preview,
+    )
+    assert db.conn.execute("SELECT count(*) FROM daily_reviews").fetchone()[0] == 0
+    learner.set_self_grading(False)
+    view.next_question()
+    assert view.settings_panel.next_question_row.isEnabled() and view.settings_panel.next_question_mode == "Wait"
+    view.close()
 
 
 @pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
@@ -79,6 +217,53 @@ def test_answer_buttons_through_learning_review_and_lapse(mode: str) -> None:
         now += seconds
 
 
+@pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
+def test_self_graded_learning_step_wakes_the_exercise(app: QApplication, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
+    """
+    Reopen a correctly answered one-card queue when the ten-minute step expires.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolate one card and advance its clock.
+    mode : str
+        Calendar scheduler under test.
+    """
+    clock = [NOW]
+    monkeypatch.setattr(time, "time", lambda: clock[0])
+    cfg = settings.NoteNameSettings(clefs={"treble"}, ranges={"treble": (28, 28)}, key_signatures={0})
+    monkeypatch.setattr(settings, "note_names", cfg)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode(mode)
+    learner.set_self_grading(True)
+    view = ExerciseView(NoteNames(), learner=learner)
+    view.show()
+    q = view.question
+    assert q is not None
+    view.submit(q.answer, button=None)
+    view.grade_controls[Rating.Good][1].click()
+    assert view.question is None and "Next review at" in view.prompt.text()
+    assert 599_000 <= view._advance.remainingTime() <= 600_000
+    clock[0] += 600
+    view._advance.timeout.emit()
+    assert view.question is not None and view.question.item_key() == q.item_key()
+    view.submit(q.answer, button=None)
+    assert view.grade_controls[Rating.Hard][0].text() == "10 min"
+    view.grade_controls[Rating.Easy][1].click()
+    assert db.conn.execute("SELECT completed FROM daily_reviews").fetchone()[0] == 1
+    learner.set_self_grading(False)
+    due = db.conn.execute("SELECT due FROM review_schedules").fetchone()[0]
+    clock[0] = due
+    view.next_question()
+    assert view.question is not None and view.review_interval.isVisible()
+    view.submit(q.answer, button=None)
+    assert db.conn.execute("SELECT due FROM review_schedules").fetchone()[0] > due
+    view.close()
+
+
 def test_sm2_existing_reviews_and_late_grades() -> None:
     """Keep legacy ease, apply lateness to Good and Easy, and cap very long reviews."""
     old = "[3, 15, 2.5]"
@@ -98,6 +283,35 @@ def test_fsrs_review_fuzz_preserves_previous_interval() -> None:
         choices = review_options(key, mode="FSRS", previous=card.to_json(), due=NOW, now=NOW)
         hard, good, easy = (choices[r][0] for r in (Rating.Hard, Rating.Good, Rating.Easy))
         assert 5 * DAY <= hard < good < easy
+
+
+def test_grading_preference_follows_profile(app: QApplication) -> None:
+    """
+    Toggle grading through Practice settings and retain it across calendar schedulers.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    """
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    window = MainWindow(learner)
+    window.open_settings()
+    dialog = window._settings
+    dialog.categories.setCurrentRow(7)
+    assert dialog.self_grading.isHidden()
+    dialog.scheduler_list.setCurrentRow(2)
+    assert not dialog.self_grading.isHidden() and not dialog.self_grading.isChecked()
+    dialog.self_grading.click()
+    dialog.scheduler_list.setCurrentRow(1)
+    assert dialog.self_grading.isHidden()
+    dialog.scheduler_list.setCurrentRow(3)
+    assert not dialog.self_grading.isHidden() and dialog.self_grading.isChecked()
+    assert Learner(db, profile=learner.profile).self_grading
+    assert not Learner(db, profile=db.add_profile("Ben")).self_grading
+    dialog.close()
+    window.close()
 
 
 def test_fsrs_preview_is_the_interval_saved_on_a_correct_review(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -157,6 +371,104 @@ def test_schedule_and_retries(mode: str) -> None:
     assert learner.pick(ex, rng=rng, now=state[0]).item_key() == q.item_key()
     learner.record(ex, question=q, answer=q.answer, correct=True, attempt_no=1, seconds=1, now=state[0])
     assert db.conn.execute("SELECT due FROM review_schedules").fetchone()[0] > state[0]
+
+
+@pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
+@pytest.mark.parametrize("next_mode", ["Immediately", "Wait", "After Animation"])
+def test_missed_calendar_card_returns_in_the_open_exercise(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    mode: str,
+    next_mode: str,
+) -> None:
+    """
+    Finish a missed showing, work through the other card, and wake the same exercise for the scheduled retry.
+
+    Parameters
+    ----------
+    app : QApplication
+        Desktop application fixture.
+    monkeypatch : pytest.MonkeyPatch
+        Isolate the clock and the two-note catalog.
+    mode : str
+        Calendar scheduler.
+    next_mode : str
+        Exercise advancement preference.
+    """
+    clock = [NOW]
+    monkeypatch.setattr(time, "time", lambda: clock[0])
+    cfg = settings.NoteNameSettings(clefs={"treble"}, ranges={"treble": (28, 29)}, key_signatures={0})
+    monkeypatch.setattr(settings, "note_names", cfg)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode(mode)
+    view = ExerciseView(NoteNames(), learner=learner)
+    view.settings_panel.next_question_mode = next_mode
+    view.show()
+    first = view.question
+    assert first is not None
+    view.submit("wrong", button=None)
+    view.submit(first.answer, button=None)
+    assert view.answered and view.missed and db.count_attempts(learner.profile.id) == 1
+    if next_mode == "Wait":
+        assert not view._advance.isActive()
+        view.next_button.click()
+    else:
+        assert view._advance.isActive()
+        view._advance.timeout.emit()
+    second = view.question
+    assert second is not None and second.item_key() != first.item_key()
+    view.submit(second.answer, button=None)
+    view.next_question()
+    assert view.question is None and "Waiting for a missed card" in view.prompt.text()
+    assert 59_000 <= view._advance.remainingTime() <= 60_000
+    view.next_button.click()
+    assert view.question is None
+    clock[0] += 60
+    view._advance.timeout.emit()
+    assert view.question is not None and view.question.item_key() == first.item_key()
+    view.submit(first.answer, button=None)
+    attempts = db.attempts(learner.profile.id)
+    assert [(row["correct"], row["attempt_no"]) for row in attempts] == [(0, 1), (1, 1), (1, 1)]
+    view.next_question()
+    assert view.question is None and not view._advance.isActive()
+    view.close()
+
+
+def test_missed_signature_waits_through_navigation(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Lock a missed construction and return to the scheduled review after leaving the waiting screen.
+
+    Parameters
+    ----------
+    app : QApplication
+        Desktop application fixture.
+    monkeypatch : pytest.MonkeyPatch
+        Choose a single signature and control the review clock.
+    """
+    monkeypatch.setattr(time, "time", lambda: NOW)
+    cfg = settings.OrderOfKeysSettings(clefs={"treble"}, modes={"Major (Ionian)"}, keys={1})
+    monkeypatch.setattr(settings, "order_of_keys", cfg)
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    learner.set_mode("SM-2")
+    view = ExerciseView(OrderOfKeys(), learner=learner)
+    view.settings_panel.next_question_mode = "Wait"
+    view.show()
+    first = view.question
+    assert first is not None
+    view.answer_button.click()  # Submit the blank staff for G major.
+    assert view.answered and view.missed and view.scale_input.locked
+    assert not view.answer_button.isEnabled() and "Incorrect" in view.prompt.text()
+    view.next_button.click()
+    assert view.question is None and view._advance.isActive()
+    view.hide()
+    assert not view._advance.isActive()
+    monkeypatch.setattr(time, "time", lambda: NOW + 61)
+    view.show()
+    assert view.question is not None and view.question.item_key() == first.item_key()
+    assert not view.scale_input.locked
+    view.close()
 
 
 @pytest.mark.parametrize("mode", ["SM-2", "FSRS"])
@@ -865,8 +1177,9 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     panel = view.settings_panel
     editor = panel.limits_editor
     assert not panel.limits_row.isHidden() and panel.limits_row.value.text() == "3 new · 8 reviews"
+    page_changed = QSignalSpy(panel.stack.currentChanged)
     panel.limits_row.click()
-    QTest.qWait(250)
+    assert page_changed.count() or page_changed.wait(2000)
     assert panel.stack.currentIndex() == panel.limits_page
     assert all(box.isChecked() for box in editor.inherit)
     editor.inherit[0].click()
@@ -889,6 +1202,22 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     dialog.close()
     tile.click()
     assert panel.limits_row.value.text() == "1 new · 4 reviews"
+    window.open_settings()
+    window._settings.categories.setCurrentRow(7)
+    global_editor = window._settings.daily_limits
+    global_editor.unlimited[0].click()
+    assert panel.limits_row.value.text() == "∞ new · 4 reviews"
+    assert editor.unlimited[0].isChecked() and not editor.unlimited[0].isEnabled()
+    editor.inherit[1].click()
+    editor.unlimited[1].click()
+    assert not editor.fields[1].isEnabled()
+    assert learner.calendar.overrides(learner.profile.id, exercise="NoteNames") == (None, UNLIMITED)
+    assert panel.limits_row.value.text() == "∞ new · ∞ reviews"
+    global_editor.unlimited[0].click()
+    assert panel.limits_row.value.text() == "1 new · ∞ reviews"
+    editor.inherit[1].click()
+    assert panel.limits_row.value.text() == "1 new · 4 reviews"
+    window._settings.close()
     window.close()
 
 

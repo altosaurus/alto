@@ -1493,6 +1493,7 @@ class ExerciseSettingsPanel(QWidget):
     """
 
     stack: SlideStack
+    next_question_choices: QWidget
     next_question_row: _Row
     next_question_mode = "After Animation"
     choice_buttons_row: _Row | None = None
@@ -1503,26 +1504,33 @@ class ExerciseSettingsPanel(QWidget):
     limits_editor: DailyLimitsEditor
     limits_page: int
 
-    def refresh_limits(self, mode: str) -> None:
+    def refresh_limits(self, mode: str, *, self_grading: bool = False) -> None:
         """
-        Update the Daily Limits row for the active scheduler and profile.
+        Update scheduling controls for the active scheduler and profile.
 
         Parameters
         ----------
         mode : str
             Selected question scheduler.
+        self_grading : bool
+            Disable Next Question when a passing grade advances the exercise.
 
         Examples
         --------
         Switching to ASRS hides the row and leaves its submenu.
         """
+        self.next_question_row.setEnabled(not self_grading)
+        self.next_question_choices.setEnabled(not self_grading)
         if self.limits_row is None:
             return
         enabled = mode in CALENDAR_SCHEDULERS
         self.limits_row.setVisible(enabled)
         if enabled:
             self.limits_editor.reload()
-            new, reviews = (field.value() for field in self.limits_editor.fields)
+            editor = self.limits_editor
+            new, reviews = (
+                "∞" if box.isChecked() else field.value() for box, field in zip(editor.unlimited, editor.fields, strict=True)
+            )
             self.limits_row.value.setText(f"{new} new · {reviews} reviews")
         elif self.stack.currentIndex() == self.limits_page:
             self.stack.setCurrentIndex(0)
@@ -6180,7 +6188,7 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
 
     row = panel.next_question_row = _Row("Next Question")
     layout.insertWidget(layout.count() - 1, row)
-    body = QWidget()
+    body = panel.next_question_choices = QWidget()
     choices = QVBoxLayout(body)
     choices.setContentsMargins(0, 0, 0, 0)
     key = f"nextQuestion/{type(exercise).__name__}"
@@ -6221,7 +6229,7 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
         panel.limits_page = stack.addWidget(_subpage("Daily Limits", body=panel.limits_editor, back=lambda: stack.slide_to(0)))
         panel.limits_row.clicked.connect(lambda: stack.slide_to(panel.limits_page))
         panel.limits_editor.changed.connect(panel.changed)
-        panel.refresh_limits(learner.mode)
+        panel.refresh_limits(learner.mode, self_grading=learner.mode in CALENDAR_SCHEDULERS and learner.self_grading)
     stack.removeWidget(menu)
     stack.insertWidget(0, _scrolling(menu))
     stack.setCurrentIndex(0)
