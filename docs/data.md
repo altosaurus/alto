@@ -30,9 +30,13 @@ your usual configuration location.
 
 | Table | Holds |
 |---|---|
-| `profiles` | Each profile's name and when it was created. |
+| `profiles` | Each profile's name, creation time, and selected scheduler. |
 | `attempts` | One row for every answer: the profile, exercise, question, your answer, whether it was right, the attempt number, how long it took and when. |
 | `items` | What is known about each question: its strain, how often it was answered and missed, its typical time, when it was last seen, and the question itself so it can be asked again. |
+| `practice_cards` | Introduced card identities, the questions themselves, and the local date each was introduced in scheduled practice. |
+| `review_schedules` | The next review time and algorithm state for each card studied with SM-2 or FSRS. |
+| `practice_limits` | Daily allowances for each profile and exercise. |
+| `daily_reviews` | Completed calendar reviews by profile, exercise, and day. |
 
 Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
 first. Alto's own [database browser]({{ '/statistics/' | relative_url }}) is read-only.

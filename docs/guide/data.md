@@ -34,9 +34,8 @@ Concepts the code relies on:
   string formatting your values in. That is what prevents **SQL injection**, and it is a rule with one narrow exception: in
   `database.py` a few queries build a `WHERE` clause from *fixed strings in the code*, never from user text, and
   still pass every value as a parameter.
-- **Transactions.** `with self.conn:` groups statements so they all happen or none do, and commits at the end. Alto writes an
-  attempt and an item update in one pass in `Learner.record`; a crash between them would be bad but not fatal, because the item can
-  be rebuilt from the attempts.
+- **Transactions.** `with self.conn:` groups statements so they all happen or none do, and commits at the end. Alto writes the
+  attempt, item summary and any review schedule update in one transaction in `Learner.record`.
 - **Indexes.** `CREATE INDEX attempts_by_item ON attempts(profile_id, exercise, item_key)` makes "find all attempts for this
   question" fast. Without it SQLite reads every row.
 - **`sqlite3.Row`** (`conn.row_factory = sqlite3.Row`) lets you read a column by name: `row["strain"]`.
@@ -67,7 +66,7 @@ CREATE TABLE items (                         -- one row per question per profile
 );
 ```
 
-The real definitions, with comments, are `_SCHEMA` in `alto/learning/database.py`. Two design decisions are worth understanding.
+The current definitions are `_SCHEMA` and `_CALENDAR_SCHEMA` in `alto/learning/database.py`. Two design decisions are worth understanding.
 
 **`attempts` is the log; `items` is a summary.** The log is **append-only**: facts that happened, never edited. The summary is
 **derived**: it could be rebuilt by replaying the log through `update_strain`. This is a miniature of a well-known pattern
@@ -87,44 +86,7 @@ load. `Learner.pick` handles an unreadable payload by skipping it, which is a sa
 
 A shipped database has users' history in it, so the structure cannot just change. A **migration** is a script that takes a
 database from one version to the next. SQLite has a built-in integer for this, the **`user_version` pragma**, which belongs to
-the application and which SQLite does not otherwise use. Alto's start-up is:
-
-```python
-version = self.conn.execute("PRAGMA user_version").fetchone()[0]
-if version == 0:  # a new, empty database
-    with self.conn:
-        self.conn.executescript(_SCHEMA)
-        self.conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
-```
-
-`SCHEMA_VERSION` is 1 today, and there is only the "create it" step so far. When you need to change the structure, extend `_migrate`
-so that it brings *any* older version up to date, one step at a time. For example, to add a note field to `items` as version 2:
-
-```python
-SCHEMA_VERSION = 2
-
-
-def _migrate(self) -> None:
-    version = self.conn.execute("PRAGMA user_version").fetchone()[0]
-    with self.conn:  # all the steps happen together, or none do
-        if version == 0:
-            self.conn.executescript(_SCHEMA)  # _SCHEMA must now describe version 2 (executescript commits first)
-        else:
-            if version < 2:
-                self.conn.execute("ALTER TABLE items ADD COLUMN note TEXT NOT NULL DEFAULT ''")
-        self.conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
-```
-
-Rules for doing this safely:
-
-1. **Update `_SCHEMA` too,** so a brand new database is created at the latest version directly.
-2. **Never edit an old step.** A migration that has shipped is history. Add a new one after it.
-3. **Add columns with a default.** `ALTER TABLE ... ADD COLUMN` is cheap and safe. Renaming, dropping or changing a column's type needs
-   the "make a new table, copy, drop, rename" dance (SQLite's documentation describes it under `ALTER TABLE`), which takes more care.
-4. **Test it against an old database.** Create a database at the old version (in a test, run the old `_SCHEMA` text and set
-   `user_version`), run the new code on it, and check the data survived. No such test exists yet because there has been only one
-   version; the doctest of `_migrate` and the in-memory `Database()` are the starting point.
-5. **Back up before migrating, in the release notes at least:** tell users to copy `alto.db`. There is no automatic backup.
+the application and which SQLite does not otherwise use. Version 2 adds the profile’s scheduler, practice cards and review schedules. Version 3 adds daily limits, completed review counts, and the status of unfinished introductions. Alto applies missing migrations in order within one transaction. Review counts start when the database is upgraded. The migration copies existing question identities into `practice_cards`, so learners can review questions they have already practiced.
 
 ## What each `Database` method is for
 

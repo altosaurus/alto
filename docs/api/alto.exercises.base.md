@@ -480,6 +480,101 @@ A stored question is only asked again while this is unchanged. Exercises with se
 ''
 ```
 
+### Exercise.card_groups
+
+```python
+def card_groups() -> dict[str, str] | None
+```
+
+Map playable examples to the skills that share a calendar review date.
+
+**Returns**
+
+- *dict of str to str or None*: Example item keys mapped to skill names, or None when every example has its own schedule.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import KeyboardNotes
+>>> KeyboardNotes().card_groups() is None
+True
+```
+
+### Exercise.card_count
+
+```python
+def card_count() -> int | None
+```
+
+Count distinct cards possible with the current settings when the exercise has an exact catalog.
+
+**Returns**
+
+- *int or None*: Catalog size, or None for an exercise that prepares a bounded daily sample.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import KeyboardNotes
+>>> KeyboardNotes().card_count() is None
+True
+```
+
+### Exercise.daily_candidates
+
+```python
+def daily_candidates(rng: random.Random) -> Iterator[Question]
+```
+
+Yield distinct questions until 100 consecutive draws find no new playable item.
+
+**Parameters**
+
+- `rng` (*random.Random*): The generator for this day's sample.
+
+**Yields**
+
+- *Question*: A playable question. Finite exercises can override this to visit every eligible item.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import KeyboardNotes
+>>> isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
+True
+```
+
+### Exercise.review_question
+
+```python
+def review_question(
+    question: Question,
+    *,
+    same_settings: bool,
+) -> Question | None
+```
+
+Adapt a stored question for review under the active settings.
+
+**Parameters**
+
+- `question` (*Question*): Previously introduced card.
+- `same_settings` (*bool*): Whether the saved presentation matches the active settings.
+
+**Returns**
+
+- *Question or None*: A playable question when the exercise recognizes this presentation.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import KeyboardNotes
+>>> ex = KeyboardNotes()
+>>> q = ex.generate(random.Random(1))
+>>> ex.review_question(q, same_settings=True) == q
+True
+```
+
 ### Exercise.refresh
 
 ```python

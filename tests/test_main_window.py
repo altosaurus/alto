@@ -532,7 +532,9 @@ def test_switching_profile_changes_who_is_practicing_and_goes_home(
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(mw, "ProfileDialog", Chooses)
     window.open_exercise(REGISTRY[0])
+    window.open_settings()
     window.switch_profile()
+    assert window._settings is None
     # noinspection PyUnresolvedReferences
     assert window.learner.profile == ben and window.profile_action.text() == "Profile: Ben…"
     assert window.stack.currentWidget() is window.home

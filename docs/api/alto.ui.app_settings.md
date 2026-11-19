@@ -193,7 +193,11 @@ Show each part's current color on its swatch.
 ## AppSettingsDialog
 
 ```python
-AppSettingsDialog(parent: QWidget | None = None)
+AppSettingsDialog(
+    parent: QWidget | None = None,
+    *,
+    learner: Learner | None = None,
+)
 ```
 
 Bases: `QDialog`
@@ -219,6 +223,8 @@ Pages are built when first selected, so hidden previews do not slow down opening
 - `transition_list` (*QListWidget*): The choice of transition, available after the Transitions section is first selected.
 - `transition_items` (*dict of str to QListWidgetItem*): The rows of that list, by the transition's key.
 - `transition_preview` (*TransitionPreview*): Plays the transition that is chosen, beside the choices.
+- `scheduler_list` (*QListWidget*): The algorithms on the Practice page, with the current profile's choice selected.
+- `scheduler_description` (*QLabel*): Explanation of the selected algorithm beside the list.
 
 **Examples**
 
@@ -235,6 +241,7 @@ Build the dialog with the Appearance page showing.
 **Parameters**
 
 - `parent` (*QWidget or None, default None*): The widget that owns the dialog.
+- `learner` (*Learner or None*): Profile whose practice preferences can be edited.
 
 **Constructor examples**
 

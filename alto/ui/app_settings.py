@@ -49,6 +49,8 @@ from PySide6.QtWidgets import (
 )
 
 from alto import updates
+from alto.learning import Learner
+from alto.learning.calendar import CALENDAR_SCHEDULERS, SCHEDULERS
 from alto.theory.pitch import Note
 from alto.ui import (
     keyboard_styles,
@@ -58,6 +60,7 @@ from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson_nav import section_item
 from alto.ui.pictures import ClefPictures
+from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.staff import StaffWidget
 from alto.ui.theme import (
     FAMILIES,
@@ -608,6 +611,10 @@ class AppSettingsDialog(QDialog):
         The rows of that list, by the transition's key.
     transition_preview : TransitionPreview
         Plays the transition that is chosen, beside the choices.
+    scheduler_list : QListWidget
+        The algorithms on the Practice page, with the current profile's choice selected.
+    scheduler_description : QLabel
+        Explanation of the selected algorithm beside the list.
 
     Examples
     --------
@@ -617,8 +624,9 @@ class AppSettingsDialog(QDialog):
     """
 
     defaults_requested = Signal()
+    scheduler_changed = Signal()
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(self, parent: QWidget | None = None, *, learner: Learner | None = None) -> None:
         """
         Build the dialog with the Appearance page showing.
 
@@ -627,6 +635,9 @@ class AppSettingsDialog(QDialog):
         parent : QWidget or None, default None
             The widget that owns the dialog.
 
+        learner : Learner or None
+            Profile whose practice preferences can be edited.
+
         Examples
         --------
         >>> dialog = AppSettingsDialog()
@@ -634,6 +645,7 @@ class AppSettingsDialog(QDialog):
         0
         """
         super().__init__(parent)
+        self.learner = learner
         self.setWindowTitle("Settings")
         self.setModal(False)  # the window stays usable while the settings are open
         self.resize(1000, 640)
@@ -669,7 +681,10 @@ class AppSettingsDialog(QDialog):
             item.setSizeHint(QSize(0, 32))
             self.categories.addItem(item)
         self.pages.add_page(self._appearance_page)
-        for name, factory, index in (("Sound", self._sound_page, 1), ("Updates", self._updates_page, 2)):
+        sections = [("Sound", self._sound_page, 1), ("Updates", self._updates_page, 2)]
+        if learner is not None:
+            sections.append(("Practice", self._practice_page, 3))
+        for name, factory, index in sections:
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, ("page", index))
             item.setSizeHint(QSize(0, 36))
@@ -1550,6 +1565,95 @@ class AppSettingsDialog(QDialog):
         card = self.keyboard_cards[keyboard_styles.CUSTOM]
         card.show_style(keyboard_styles.custom_style())
         card.setChecked(True)
+
+    def _practice_page(self) -> QWidget:
+        """
+        Build the current profile's question scheduling preference.
+
+        Returns
+        -------
+        QWidget
+            The practice settings page.
+
+        Examples
+        --------
+        >>> from alto.learning import Database
+        >>> db = Database()
+        >>> dialog = AppSettingsDialog(learner=Learner(db, profile=db.add_profile("Ada")))
+        >>> dialog.categories.setCurrentRow(7)
+        >>> dialog.scheduler_list.currentItem().text()
+        'ASRS'
+        """
+        page, layout = self._page()
+        assert self.learner is not None
+        self._heading(
+            layout,
+            title="Question scheduling",
+            about=f"Choose how Alto schedules questions for {self.learner.profile.name}.",
+        )
+        calendar_note = (
+            "<p>Exercise tiles show due reviews in green and new cards in blue. "
+            "These daily limits apply to each exercise in both SM-2 and FSRS. "
+            "You can change either limit in an exercise’s settings.</p>"
+        )
+        descriptions = {
+            "ASRS": (
+                "<h3>Alto Spaced Repetition System (ASRS)</h3>"
+                "<p>Practice for as long as you like. Questions you miss or take longer to answer come up more often. "
+                "Questions you answer quickly and correctly appear less often.</p>"
+            ),
+            "ARTS": (
+                "<h3>Adaptive Response-Time-based Sequencing (ARTS)</h3>"
+                "<p>ARTS spaces repetitions by counting the questions you answer in between. "
+                "If you miss a question or take longer to answer it correctly, it comes back sooner. "
+                "A quick, correct answer leaves more room for other questions.</p>"
+            ),
+            "SM-2": (
+                "<h3>SuperMemo 2 (SM-2)</h3>"
+                "<p>Your first answer sets the next review date. Answer a new card correctly and it returns in one day. "
+                "Answer correctly again and it returns six days later. A miss brings the card back in one minute.</p>"
+                + calendar_note
+            ),
+            "FSRS": (
+                "<h3>Free Spaced Repetition Scheduler (FSRS)</h3>"
+                "<p>FSRS uses your review history to estimate how likely you are to remember each card. "
+                "Your first answer updates that estimate. New cards have short learning steps, and cards you "
+                "consistently recall can go longer between reviews.</p>" + calendar_note
+            ),
+        }
+        self.scheduler_list = QListWidget()
+        self.scheduler_list.setObjectName("categories")
+        self.scheduler_list.setAccessibleName("Scheduling algorithms")
+        self.scheduler_list.setFixedWidth(150)
+        for mode in SCHEDULERS:
+            item = QListWidgetItem(mode, self.scheduler_list)
+            item.setSizeHint(QSize(0, 34))
+
+        selected = self.learner.mode
+        self.scheduler_list.setCurrentRow(SCHEDULERS.index(selected))
+        detail = QFrame()
+        detail.setObjectName("detailPane")
+        detail_layout = QVBoxLayout(detail)
+        detail_layout.setContentsMargins(16, 12, 16, 12)
+        self.scheduler_description = QLabel(descriptions[selected])
+        self.scheduler_description.setWordWrap(True)
+        detail_layout.addWidget(self.scheduler_description)
+        self.daily_limits = DailyLimitsEditor(self.learner)
+        self.daily_limits.setVisible(selected in CALENDAR_SCHEDULERS)
+        self.daily_limits.changed.connect(self.scheduler_changed)
+        detail_layout.addWidget(self.daily_limits)
+        detail_layout.addStretch()
+        body = QHBoxLayout()
+        body.setSpacing(14)
+        body.addWidget(self.scheduler_list)
+        body.addWidget(self._scrolling(detail), 1)
+        layout.addLayout(body, 1)
+
+        self.scheduler_list.currentTextChanged.connect(lambda mode: self.scheduler_description.setText(descriptions[mode]))
+        self.scheduler_list.currentTextChanged.connect(lambda mode: self.daily_limits.setVisible(mode in CALENDAR_SCHEDULERS))
+        self.scheduler_list.currentTextChanged.connect(self.learner.set_mode)
+        self.scheduler_list.currentTextChanged.connect(lambda: self.scheduler_changed.emit())
+        return page
 
     def _sound_page(self) -> QWidget:
         """

@@ -7,6 +7,7 @@ from PySide6.QtCore import (
     QEvent,
     QPoint,
     QPointF,
+    QRect,
     QSettings,
     Qt,
 )
@@ -18,6 +19,9 @@ from PySide6.QtGui import (
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
+    QSpinBox,
+    QStyle,
+    QStyleOptionSpinBox,
     QVBoxLayout,
     QWidget,
 )
@@ -789,6 +793,39 @@ def test_a_keyboard_with_no_width_or_no_white_keys_draws_nothing_and_does_not_fa
     keyboard.lo = keyboard.hi = 61  # a black key on its own: no white keys to draw
     keyboard.resize(300, 100)
     assert dark_pixels(keyboard, size=(300, 100)) == 0
+
+
+@pytest.mark.parametrize("variant", ["studio", "studio_dark"])
+def test_spinbox_arrows_are_visible_and_step_the_value(app: QApplication, variant: str) -> None:
+    """
+    Each step button draws a glyph inside its hit area with the application stylesheet.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    variant : str
+        Light or dark theme key.
+    """
+    colors = theme.custom_theme(variant)
+    assert colors is not None
+    field = QSpinBox()
+    field.setPalette(theme.theme_palette(colors))
+    field.setStyleSheet(app_style(field.palette()))
+    field.setRange(0, 9999)
+    field.setValue(9998)
+    field.resize(field.sizeHint())
+    field.show()
+    app.processEvents()
+    option = QStyleOptionSpinBox()
+    field.initStyleOption(option)
+    for button, expected in ((QStyle.SubControl.SC_SpinBoxUp, 9999), (QStyle.SubControl.SC_SpinBoxDown, 9998)):
+        target = field.style().subControlRect(QStyle.ComplexControl.CC_SpinBox, option, button, field).center()
+        glyph = field.grab(QRect(target.x() - 5, target.y() - 4, 11, 9)).toImage()
+        assert len({glyph.pixel(x, y) for x in range(glyph.width()) for y in range(glyph.height())}) > 1
+        QTest.mouseClick(field, Qt.MouseButton.LeftButton, pos=target)
+        assert field.value() == expected
+    field.close()
 
 
 def test_the_theme_is_saved_and_applied(app: QApplication) -> None:

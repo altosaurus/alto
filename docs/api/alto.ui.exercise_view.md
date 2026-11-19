@@ -307,6 +307,20 @@ Restore exercise settings navigation immediately after rebuilding the view.
 (True, 0, 0)
 ```
 
+### ExerciseView.scheduling_changed
+
+```python
+def scheduling_changed() -> None
+```
+
+Refresh the visible exercise or invalidate its queue until it is reopened.
+
+**Examples**
+
+```pycon
+Lowering the daily allowance on the home page also applies to a previously opened exercise.
+```
+
 ### ExerciseView.next_question
 
 ```python

@@ -4,7 +4,7 @@ parent: developer-guide
 order: 2
 permalink: /developer-guide/database/
 ---
-Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database starts at schema version 1, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
+Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 3, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
 
 A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends **two** rows to `attempts`, with durations of 3,000 and 1,000 milliseconds. It maintains **one** row in `items` for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.
 
@@ -22,7 +22,7 @@ Each attempt and each item belongs to exactly one profile. A profile may have ze
 
 ## Data dictionary
 
-The tables below follow the column order in `alto/learning/database.py`. Every column requires a value in a stored row. SQLite supplies the integer primary keys when Alto inserts a profile or an attempt. The four item counters have explicit defaults of zero. Times ending in `_at`, along with `last_seen`, are Unix timestamps in seconds. Durations use milliseconds.
+The tables below follow the column order in `alto/learning/database.py`. The introduction date is optional for cards first practiced with ASRS. SQLite supplies the integer primary keys when Alto inserts a profile or an attempt. The four item counters have explicit defaults of zero. Times ending in `_at`, along with `last_seen`, are Unix timestamps in seconds. Durations use milliseconds.
 
 ### Profiles
 
@@ -33,6 +33,7 @@ One row per local practice profile.
 | `id` | INTEGER | Primary key | Profile identifier used by both history tables. |
 | `name` | TEXT | Unique, `COLLATE NOCASE` | Display name. Alto trims and collapses whitespace before insertion. SQLite’s case-insensitive comparison treats names such as Ada and ada as duplicates. |
 | `created_at` | REAL | | Time the profile was created. |
+| `scheduler` | TEXT | Default `Alto` | The profile’s selected question scheduler. ASRS retains its original database identifier, `Alto`. |
 
 ### Attempts
 
@@ -67,3 +68,43 @@ One row per distinct question practiced by a particular profile within an exerci
 | `last_seen` | REAL | | Time of the most recent submission for this item, including a retry. |
 | `signature` | TEXT | | Identifier returned by `settings_signature()` for the most recently recorded exercise settings. Used to find eligible replay candidates. |
 | `payload` | TEXT | | JSON from `Question.to_dict()` for the most recently recorded question. Alto uses it for replay and answer previews. |
+
+### Practice cards
+
+Each row identifies one introduced card. Schema version 2 imports existing items as introduced cards so a scheduler change preserves their history.
+
+| Column | SQLite type | Meaning |
+|---|---|---|
+| `profile_id`, `exercise`, `item_key` | INTEGER, TEXT, TEXT | Composite primary key. Deleting the profile removes its cards. |
+| `signature`, `payload` | TEXT, TEXT | Exercise settings and playable question at introduction. |
+| `introduced_on` | TEXT | Local date of a calendar introduction. Empty for history imported from ASRS. |
+| `pending_new` | INTEGER | 1 until the first answer to a new introduction, then 0. |
+
+### Review schedules
+
+A practice card can have a separate schedule for SM-2 and FSRS. A card with no schedule for the selected algorithm is ready for its first review with that algorithm.
+
+| Column | SQLite type | Meaning |
+|---|---|---|
+| `profile_id`, `exercise`, `item_key` | INTEGER, TEXT, TEXT | Composite foreign key referencing the practice card, with cascading deletion. |
+| `scheduler` | TEXT | Together with the card identity, this forms the primary key. |
+| `due` | REAL | Unix timestamp of the next review. |
+| `state` | TEXT | JSON containing the SM-2 repetition count, interval and ease, or the FSRS library’s serialized card. |
+
+### Practice limits
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `profile_id` | INTEGER | Owning profile. Part of the primary key with `exercise`. |
+| `exercise` | TEXT | Exercise class name, or an empty string for the profile defaults. |
+| `new_cards` | INTEGER | Daily new-card allowance. NULL inherits the default. |
+| `reviews` | INTEGER | Daily review allowance. NULL inherits the default. |
+
+### Daily reviews
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `profile_id` | INTEGER | Owning profile. |
+| `exercise` | TEXT | Exercise class name. |
+| `day` | TEXT | Local date. Together with profile and exercise, identifies the row. |
+| `completed` | INTEGER | First submissions on review presentations that day across SM-2 and FSRS. |

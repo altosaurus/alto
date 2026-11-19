@@ -113,6 +113,78 @@ Make a note to name, on one of the chosen clefs, in a chosen key.
 True
 ```
 
+### NoteNames.card_count
+
+```python
+def card_count() -> int
+```
+
+Count written pitches across the selected ranges, clefs and signatures.
+
+**Returns**
+
+- *int*: Each staff position contributes one spelling, or three when accidentals are enabled.
+
+**Examples**
+
+```pycon
+>>> NoteNames().card_count() > 0
+True
+```
+
+### NoteNames.daily_candidates
+
+```python
+def daily_candidates(rng: random.Random) -> Iterator[Question]
+```
+
+Visit each selectable written note once, in shuffled order.
+
+**Parameters**
+
+- `rng` (*random.Random*): Source of the daily order and answer choices.
+
+**Yields**
+
+- *Question*: A distinct question within the selected clefs, ranges and keys.
+
+**Examples**
+
+```pycon
+>>> isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
+True
+```
+
+### NoteNames.review_question
+
+```python
+def review_question(
+    question: Question,
+    *,
+    same_settings: bool,
+) -> Question | None
+```
+
+Rebuild a previously seen note when its pitch and answer are eligible.
+
+**Parameters**
+
+- `question` (*Question*): Saved note and answer.
+- `same_settings` (*bool*): Whether its original settings are active.
+
+**Returns**
+
+- *Question or None*: The note with the current answer bank, or None outside the selected material.
+
+**Examples**
+
+```pycon
+>>> ex = NoteNames()
+>>> q = ex.generate(random.Random(1))
+>>> ex.review_question(q, same_settings=True) == q
+True
+```
+
 ## IntervalNames
 
 ```python
@@ -1093,6 +1165,78 @@ Make a note name to be placed on the staff.
 True
 ```
 
+### NoteConstruction.card_count
+
+```python
+def card_count() -> int
+```
+
+Count distinct construction cards without rendering them.
+
+**Returns**
+
+- *int*: Number of eligible written placements under the current settings.
+
+**Examples**
+
+```pycon
+>>> NoteConstruction().card_count() > 0
+True
+```
+
+### NoteConstruction.daily_candidates
+
+```python
+def daily_candidates(rng: random.Random) -> Iterator[Question]
+```
+
+Visit all eligible placements in a randomized order.
+
+**Parameters**
+
+- `rng` (*random.Random*): Source for the order of the signatures and placements.
+
+**Yields**
+
+- *Question*: One playable placement for each combination.
+
+**Examples**
+
+```pycon
+>>> next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
+True
+```
+
+### NoteConstruction.review_question
+
+```python
+def review_question(
+    question: Question,
+    *,
+    same_settings: bool,
+) -> Question | None
+```
+
+Determine whether an introduced placement belongs to the current construction catalog.
+
+**Parameters**
+
+- `question` (*Question*): Stored construction card.
+- `same_settings` (*bool*): Whether its original settings are still active.
+
+**Returns**
+
+- *Question or None*: The playable card if its placement and prompt remain eligible.
+
+**Examples**
+
+```pycon
+>>> ex = NoteConstruction()
+>>> q = ex.generate(random.Random(3))
+>>> ex.review_question(q, same_settings=True) == q
+True
+```
+
 ## ClefBasics
 
 ```python
@@ -1312,6 +1456,78 @@ Choose a phrase and a single visible feature to highlight.
 ```pycon
 >>> q = NotationIdentification().generate(random.Random(0))
 >>> q.notation_target[0] == q.answer
+True
+```
+
+### NotationIdentification.card_groups
+
+```python
+def card_groups() -> dict[str, str]
+```
+
+Group the active question type’s playable examples by the symbol being practiced.
+
+**Returns**
+
+- *dict of str to str*: Map from each eligible example’s item key to its selected term.
+
+**Examples**
+
+```pycon
+>>> bool(NotationIdentification().card_groups())
+True
+```
+
+### NotationIdentification.daily_candidates
+
+```python
+def daily_candidates(rng: random.Random) -> Iterator[Question]
+```
+
+Choose one example for each selected notation term.
+
+**Parameters**
+
+- `rng` (*random.Random*): Randomizes term order, examples and distractors.
+
+**Yields**
+
+- *Question*: A distinct playable card with the current answer controls.
+
+**Examples**
+
+```pycon
+>>> next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
+True
+```
+
+### NotationIdentification.review_question
+
+```python
+def review_question(
+    question: Question,
+    *,
+    same_settings: bool,
+) -> Question | None
+```
+
+Recover an eligible saved example under the current term and button selections.
+
+**Parameters**
+
+- `question` (*Question*): Saved question.
+- `same_settings` (*bool*): Whether the presentation settings still match.
+
+**Returns**
+
+- *Question or None*: The current presentation of the card, or None if its term or example is outside the catalog.
+
+**Examples**
+
+```pycon
+>>> ex = NotationIdentification()
+>>> q = ex.generate(random.Random(4))
+>>> ex.review_question(q, same_settings=True) == q
 True
 ```
 {% endraw %}

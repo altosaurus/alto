@@ -26,6 +26,38 @@ often while well-known ones fade into the background.
 2.8
 ```
 
+## arts_priority
+
+```python
+def arts_priority(
+    intervening: int,
+    *,
+    correct: bool,
+    duration_ms: int,
+) -> float
+```
+
+Score a previously answered item for Adaptive Response-Time-based Sequencing.
+
+**Parameters**
+
+- `intervening` (*int*): Other first submissions since the last first submission to this item.
+- `correct` (*bool*): Whether the last first submission was correct.
+- `duration_ms` (*int*): Response time of that submission, in milliseconds.
+
+**Returns**
+
+- *float*: Priority for the next trial. A new item starts at 1.0.
+
+**Examples**
+
+```pycon
+>>> arts_priority(1, correct=False, duration_ms=200)
+2.0
+>>> arts_priority(0, correct=True, duration_ms=3000)
+0.0
+```
+
 ## speed_term
 
 ```python

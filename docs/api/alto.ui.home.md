@@ -108,6 +108,28 @@ Build the card for one exercise.
 'Name the interval between two notes.'
 ```
 
+### ExerciseCard.set_counts
+
+```python
+def set_counts(counts: tuple[int, int] | None) -> None
+```
+
+Show the available reviews and new questions in the upper right corner.
+
+**Parameters**
+
+- `counts` (*tuple of int and int or None*): Reviews due and new cards available, or None in untimed practice.
+
+**Examples**
+
+```pycon
+>>> from alto.exercises.library import NoteNames
+>>> card = ExerciseCard(NoteNames)
+>>> card.set_counts((2, 3))
+>>> card.counts.toolTip()
+'2 reviews due, 3 new cards available'
+```
+
 ## lesson_card
 
 ```python
@@ -144,6 +166,7 @@ HomePage(
     registry: Iterable[type[Exercise]],
     *,
     parent: QWidget | None = None,
+    learner: Learner | None = None,
 )
 ```
 
@@ -184,6 +207,7 @@ Build the page.
 
 - `registry` (*iterable of type of Exercise*): The exercises to show, in the order to show them.
 - `parent` (*QWidget or None, default None*): The widget that owns the page. Keyword-only.
+- `learner` (*Learner or None*): Profile supplying the exercise tile counts.
 
 **Constructor examples**
 
@@ -244,6 +268,20 @@ waits on it.
 >>> page.mode, page.mode_control.current()
 ('lessons', 1)
 >>> page.set_mode("exercises")
+```
+
+### HomePage.refresh_counts
+
+```python
+def refresh_counts() -> None
+```
+
+Refresh the visible exercise tiles from the same queues used for practice.
+
+**Examples**
+
+```pycon
+>>> HomePage([]).refresh_counts()
 ```
 
 ### HomePage.showEvent

@@ -22,11 +22,26 @@ from alto.exercises.base import (
     Question,
 )
 from alto.learning import scheduler
+from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, SCHEDULERS, CalendarPractice
 from alto.learning.database import (
     Database,
     ItemRecord,
     Profile,
 )
+
+# The database identifier predates the ASRS name and is shared with older backups.
+_STORED_ASRS = "Alto"
+
+
+class PracticeComplete(Exception):
+    """
+    The current exercise has no scheduled cards available.
+
+    Examples
+    --------
+    >>> issubclass(PracticeComplete, Exception)
+    True
+    """
 
 
 class Learner:
@@ -81,6 +96,54 @@ class Learner:
         """
         self.db = db
         self.profile = profile
+        self.calendar = CalendarPractice(db)
+
+    @property
+    def mode(self) -> str:
+        """
+        Return this profile's question scheduler.
+
+        Returns
+        -------
+        str
+            ASRS, ARTS, SM-2 or FSRS.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> Learner(db, profile=db.add_profile("Ada")).mode
+        'ASRS'
+        """
+        stored = self.db.conn.execute("SELECT scheduler FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0]
+        return DEFAULT_SCHEDULER if stored == _STORED_ASRS else stored
+
+    def set_mode(self, mode: str) -> None:
+        """
+        Select the question scheduler for this profile.
+
+        Parameters
+        ----------
+        mode : str
+            Scheduler name.
+
+        Raises
+        ------
+        ValueError
+            For an unsupported scheduler.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> learner.set_mode("FSRS")
+        >>> learner.mode
+        'FSRS'
+        """
+        if mode != _STORED_ASRS and mode not in SCHEDULERS:
+            raise ValueError(f"Unknown question scheduler: {mode}")
+        stored = _STORED_ASRS if mode == DEFAULT_SCHEDULER else mode
+        with self.db.conn:
+            self.db.conn.execute("UPDATE profiles SET scheduler = ? WHERE id = ?", (stored, self.profile.id))
 
     def pick(
         self,
@@ -91,7 +154,7 @@ class Learner:
         now: float | None = None,
     ) -> Question:
         """
-        Return the next question: a mix of new ones and ones asked before under the same settings, drawn by weight.
+        Return the next eligible question using the profile's selected scheduler.
 
         Parameters
         ----------
@@ -109,6 +172,11 @@ class Learner:
         Question
             The question to ask.
 
+        Raises
+        ------
+        PracticeComplete
+            If the calendar scheduler has no cards currently available.
+
         Examples
         --------
         >>> from alto.exercises.library import NoteNames
@@ -120,6 +188,14 @@ class Learner:
         True
         """
         now = time.time() if now is None else now
+        mode = self.mode
+        if mode == "ARTS":
+            return self._pick_arts(exercise, rng=rng, avoid=avoid)
+        if mode in CALENDAR_SCHEDULERS:
+            card = self.calendar.take(exercise, profile=self.profile.id, mode=mode, now=now)
+            if card is None:
+                raise PracticeComplete
+            return card
         name = type(exercise).__name__
         options: dict[str, tuple[Question, float]] = {}
         for _ in range(self.FRESH):
@@ -144,6 +220,70 @@ class Learner:
             return exercise.generate(rng)
         questions, weights = zip(*options.values())
         return scheduler.choose(questions, weights=weights, rng=rng)
+
+    def _pick_arts(self, exercise: Exercise, *, rng: random.Random, avoid: str | None) -> Question:
+        """
+        Choose the highest-priority eligible question, breaking ties at random.
+
+        Parameters
+        ----------
+        exercise : Exercise
+            Exercise with the learner's current settings.
+        rng : random.Random
+            Source for new questions and tied priorities.
+        avoid : str or None
+            Last presented question, skipped when another is available.
+
+        Returns
+        -------
+        Question
+            A fresh question or a saved example selected by ARTS.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> db = Database()
+        >>> learner = Learner(db, profile=db.add_profile("Ada"))
+        >>> bool(learner._pick_arts(NoteNames(), rng=random.Random(1), avoid=None).answer)
+        True
+        """
+        fresh = {q.item_key(): q for q in (exercise.generate(rng) for _ in range(self.FRESH))}
+        priorities = dict.fromkeys(fresh, 1.0)
+        name = type(exercise).__name__
+        signature = exercise.settings_signature()
+        # Rank first submissions within this exercise. SQLite takes the answer columns from
+        # the row with the minimum gap, which is unique and is the item's latest trial.
+        rows = self.db.conn.execute(
+            "WITH trials AS (SELECT item_key, correct, duration_ms, ROW_NUMBER() OVER (ORDER BY id DESC) - 1 AS gap "
+            "FROM attempts WHERE profile_id = ? AND exercise = ? AND attempt_no = 1), "
+            "latest AS (SELECT item_key, correct, duration_ms, MIN(gap) AS intervening FROM trials GROUP BY item_key) "
+            "SELECT latest.*, i.signature FROM latest JOIN items i ON i.item_key = latest.item_key "
+            "WHERE i.profile_id = ? AND i.exercise = ?",
+            (self.profile.id, name, self.profile.id, name),
+        )
+        for row in rows:
+            key = row["item_key"]
+            if key in fresh or row["signature"] == signature:
+                priorities[key] = scheduler.arts_priority(
+                    row["intervening"],
+                    correct=row["correct"],
+                    duration_ms=row["duration_ms"],
+                )
+        if avoid is not None:
+            priorities.pop(avoid, None)
+        while priorities:
+            highest = max(priorities.values())
+            key = rng.choice([key for key, score in priorities.items() if score == highest])
+            if key in fresh:
+                return fresh[key]
+            item = self.db.get_item(self.profile.id, exercise=name, item_key=key)
+            if item is not None:
+                try:
+                    return exercise.refresh(Question.from_dict(json.loads(item.payload)))
+                except (ValueError, KeyError, TypeError):
+                    pass
+            del priorities[key]
+        return rng.choice(list(fresh.values()))
 
     def record(
         self,
@@ -192,38 +332,47 @@ class Learner:
         """
         now = time.time() if now is None else now
         name, key = type(exercise).__name__, question.item_key()
-        self.db.add_attempt(
-            self.profile.id,
-            exercise=name,
-            item_key=key,
-            attempt_no=attempt_no,
-            answer=answer,
-            correct=correct,
-            duration_ms=round(seconds * 1000),
-            answered_at=now,
-        )
-        old = self.db.get_item(self.profile.id, exercise=name, item_key=key)
-        strain = old.strain if old else scheduler.NEW_STRAIN
-        strain = scheduler.update_strain(
-            strain,
-            correct=correct,
-            attempt_no=attempt_no,
-            seconds=seconds,
-            par_seconds=exercise.par_seconds,
-        )
-        first = attempt_no == 1
-        self.db.save_item(
-            self.profile.id,
-            exercise=name,
-            item_key=key,
-            item=ItemRecord(
-                strain=strain,
-                seen=(old.seen if old else 0) + (1 if first else 0),
-                first_try_right=(old.first_try_right if old else 0) + (1 if first and correct else 0),
-                wrong_attempts=(old.wrong_attempts if old else 0) + (0 if correct else 1),
-                total_first_ms=(old.total_first_ms if old else 0) + (round(seconds * 1000) if first else 0),
-                last_seen=now,
-                signature=exercise.settings_signature(),
-                payload=json.dumps(question.to_dict()),
-            ),
-        )
+        with self.db.write_transaction():
+            self.db.add_attempt(
+                self.profile.id,
+                exercise=name,
+                item_key=key,
+                attempt_no=attempt_no,
+                answer=answer,
+                correct=correct,
+                duration_ms=round(seconds * 1000),
+                answered_at=now,
+            )
+            old = self.db.get_item(self.profile.id, exercise=name, item_key=key)
+            strain = old.strain if old else scheduler.NEW_STRAIN
+            strain = scheduler.update_strain(
+                strain,
+                correct=correct,
+                attempt_no=attempt_no,
+                seconds=seconds,
+                par_seconds=exercise.par_seconds,
+            )
+            first = attempt_no == 1
+            self.db.save_item(
+                self.profile.id,
+                exercise=name,
+                item_key=key,
+                item=ItemRecord(
+                    strain=strain,
+                    seen=(old.seen if old else 0) + (1 if first else 0),
+                    first_try_right=(old.first_try_right if old else 0) + (1 if first and correct else 0),
+                    wrong_attempts=(old.wrong_attempts if old else 0) + (0 if correct else 1),
+                    total_first_ms=(old.total_first_ms if old else 0) + (round(seconds * 1000) if first else 0),
+                    last_seen=now,
+                    signature=exercise.settings_signature(),
+                    payload=json.dumps(question.to_dict()),
+                ),
+            )
+            mode = self.mode
+            if first and mode in CALENDAR_SCHEDULERS:
+                self.calendar.grade(name, profile=self.profile.id, key=key, mode=mode, correct=correct, now=now)
+            elif first:
+                self.db.conn.execute(
+                    "UPDATE practice_cards SET pending_new=0 WHERE profile_id=? AND exercise=? AND item_key=? AND pending_new=1",
+                    (self.profile.id, name, key),
+                )

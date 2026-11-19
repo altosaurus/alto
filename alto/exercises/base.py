@@ -21,6 +21,7 @@ from abc import (
     ABC,
     abstractmethod,
 )
+from collections.abc import Iterator
 from dataclasses import (
     KW_ONLY,
     asdict,
@@ -624,6 +625,99 @@ class Exercise(ABC):
         ''
         """
         return ""
+
+    def card_groups(self) -> dict[str, str] | None:
+        """
+        Map playable examples to the skills that share a calendar review date.
+
+        Returns
+        -------
+        dict of str to str or None
+            Example item keys mapped to skill names, or None when every example has its own schedule.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import KeyboardNotes
+        >>> KeyboardNotes().card_groups() is None
+        True
+        """
+        return None
+
+    def card_count(self) -> int | None:
+        """
+        Count distinct cards possible with the current settings when the exercise has an exact catalog.
+
+        Returns
+        -------
+        int or None
+            Catalog size, or None for an exercise that prepares a bounded daily sample.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import KeyboardNotes
+        >>> KeyboardNotes().card_count() is None
+        True
+        """
+        groups = self.card_groups()
+        return len(set(groups.values())) if groups is not None else None
+
+    def daily_candidates(self, rng: random.Random) -> Iterator[Question]:
+        """
+        Yield distinct questions until 100 consecutive draws find no new playable item.
+
+        Parameters
+        ----------
+        rng : random.Random
+            The generator for this day's sample.
+
+        Yields
+        ------
+        Question
+            A playable question. Finite exercises can override this to visit every eligible item.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import KeyboardNotes
+        >>> isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
+        True
+        """
+        seen: set[str] = set()
+        misses = 0
+        while misses < 100:
+            question = self.generate(rng)
+            key = question.item_key()
+            if question.answer and key not in seen:
+                seen.add(key)
+                misses = 0
+                yield question
+            else:
+                misses += 1
+
+    def review_question(self, question: Question, *, same_settings: bool) -> Question | None:
+        """
+        Adapt a stored question for review under the active settings.
+
+        Parameters
+        ----------
+        question : Question
+            Previously introduced card.
+        same_settings : bool
+            Whether the saved presentation matches the active settings.
+
+        Returns
+        -------
+        Question or None
+            A playable question when the exercise recognizes this presentation.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import KeyboardNotes
+        >>> ex = KeyboardNotes()
+        >>> q = ex.generate(random.Random(1))
+        >>> ex.review_question(q, same_settings=True) == q
+        True
+        """
+        return self.refresh(question) if same_settings else None
 
     def refresh(self, question: Question) -> Question:
         """

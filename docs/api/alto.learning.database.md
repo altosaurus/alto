@@ -42,7 +42,7 @@ Check that bytes are an intact Alto database that this version can read, and say
 
 ```pycon
 >>> check_snapshot(Database().snapshot())
-(1, 0, 0)
+(3, 0, 0)
 >>> check_snapshot(b"not a database")
 Traceback (most recent call last):
     ...
@@ -151,6 +151,30 @@ Open the database, creating it and its tables if they do not exist.
 True
 ```
 
+### Database.write_transaction
+
+```python
+@contextmanager
+def write_transaction() -> Iterator[None]
+```
+
+Share the caller's write transaction or begin one before reading the state to be updated.
+
+**Yields**
+
+- *None*: Control while the transaction is active.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> with db.write_transaction():
+...     print(db.conn.in_transaction)
+True
+>>> db.conn.in_transaction
+False
+```
+
 ### Database.close
 
 ```python
@@ -184,7 +208,7 @@ Return the whole database as bytes: every profile, answer and question record, e
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> check_snapshot(db.snapshot())
-(1, 1, 0)
+(3, 1, 0)
 ```
 
 ### Database.restore
