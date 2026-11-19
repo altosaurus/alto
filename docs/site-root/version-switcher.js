@@ -101,7 +101,8 @@
       var ordered = data.versions.filter(function (name) { return name !== "dev"; }).concat(data.versions.indexOf("dev") >= 0 ? ["dev"] : []);
       ordered.forEach(function (name) {
         var isDev = name === "dev";
-        entries.push({ value: name, name: name, note: isDev ? "changes not yet in a release" : "", ico: isDev ? "branch" : "tag", label: name });
+        var label = isDev && /^[0-9a-f]{4,64}$/.test(data.dev_commit || "") ? "dev (" + data.dev_commit + ")" : name;
+        entries.push({ value: name, name: label, note: isDev ? "changes not yet in a release" : "", ico: isDev ? "branch" : "tag", label: label });
       });
       var shown = entries.filter(function (entry) { return entry.value === current; })[0] || { label: current };
 
@@ -113,7 +114,7 @@
       button.id = "version-button";
       button.setAttribute("aria-haspopup", "menu");
       button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-label", "Version of the docs");
+      button.setAttribute("aria-label", "Version of the docs: " + shown.label);
       button.innerHTML = "<span>" + shown.label + "</span>" + icon("chev", "avs-chev");
       var menu = document.createElement("div");
       menu.className = "avs-menu";

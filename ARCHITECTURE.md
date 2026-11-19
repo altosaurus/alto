@@ -3,7 +3,7 @@
 Alto is a desktop music theory trainer written in Python with PySide6 (Qt). It asks questions (name this note, read this key
 signature, place this note on the staff ...), notices which ones you find hard, and asks those more often.
 
-This page explains how the pieces fit together. For the long explanation, with the background ideas and reading lists, see the [developer guide](docs/guide/index.md). For every public class and function, see the [API reference](docs/api/index.md), which is written from the docstrings. For how to
+This page explains how the pieces fit together. For the long explanation, with the background ideas and reading lists, see [Resources](docs/guide/index.md). For every public class and function, see the [API reference](docs/api/index.md), which is written from the docstrings. For how to
 run the tests, add an exercise or an instrument, and the coding rules, see [docs/development.md](docs/development.md).
 
 ## The big idea

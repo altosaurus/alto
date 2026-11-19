@@ -111,8 +111,8 @@ Guides for every exercise, how the practice scheduling works, the statistics, se
 .venv/bin/ruff check alto tests
 ```
 
-The theory, exercises and learning code have no Qt dependency, so they can be tested without a display. See the
-[developer guide](docs/guide/index.md) for how the program works, and [For developers](docs/development.md) for commands and
+The theory, exercises and learning code have no Qt dependency, so they can be tested without a display. See
+[Resources](docs/guide/index.md) for how the program works, and [For developers](docs/development.md) for commands and
 recipes such as adding an exercise or a notation font.
 
 ## License

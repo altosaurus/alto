@@ -71,7 +71,7 @@
           {% comment %}
             Pages are listed in nav_order. A page with `nav_group` goes under that heading, which opens and closes. A heading that is also the
             title of a page (For developers) is that page's link, so the page is listed once. A page with `children` is one row that links to
-            it and opens its own pages (the developer guide, the API reference), also listed once. Whatever holds the current page is open.
+            it and opens its own pages (Resources, the API reference), also listed once. Whatever holds the current page is open.
           {% endcomment %}
           {% assign pages = site.pages | where_exp: "p", "p.nav_order" | sort: "nav_order" %}
           {% assign reading_order = "" | split: "" %}

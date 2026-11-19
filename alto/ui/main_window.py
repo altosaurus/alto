@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
+from importlib import metadata
 
 from PySide6.QtCore import (
     QAbstractAnimation,
@@ -471,6 +472,8 @@ class MainWindow(QMainWindow):
         documentation.triggered.connect(
             lambda: QDesktopServices.openUrl(QUrl("https://altosaurus.github.io/alto/getting-started/")),
         )
+        report_issue = help_menu.addAction(svg_icon(icons.ISSUE, color=glyph, size=18), "Report an issue")
+        report_issue.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto/issues")))
         github = help_menu.addAction(svg_icon(icons.GITHUB, color=glyph, size=18), "GitHub")
         github.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto")))
         about = help_menu.addAction(svg_icon(icons.INFO, color=glyph, size=18), "About")
@@ -969,16 +972,22 @@ class MainWindow(QMainWindow):
 
     def show_about(self) -> None:
         """
-        Show the application name, installed version and purpose.
+        Show the installed version, development status, and purpose of Alto.
 
         Examples
         --------
         >>> window.show_about()  # doctest: +SKIP
         """
+        try:
+            classifiers = metadata.metadata("alto").get_all("Classifier") or []
+        except metadata.PackageNotFoundError:
+            classifiers = []
+        status = next((item.rsplit(" - ", 1)[-1] for item in classifiers if item.startswith("Development Status :: ")), "Unknown")
         QMessageBox.about(
             self,
             "About Alto",
             f"<h3>Alto {updates.installed_version()}</h3>"
+            f"<p>Development status: {status}</p>"
             "<p>Learn and practice music theory with interactive exercises and lessons.</p>",
         )
 

@@ -139,6 +139,7 @@ jobs:
             bundle exec jekyll build --source source/docs --destination "site/$1" --config "source/docs/_config.yml,version.yml"
           }
           build "$VERSION" "$VERSION"
+          if [ "$VERSION" = dev ]; then git -C source rev-parse --short HEAD > site/dev/commit.txt; fi
           # The newest release is built a second time as latest, with the addresses of latest in its links and its sitemap.
           if [ "$VERSION" != dev ]; then
             newest=$(python3 tooling/scripts/docs_site.py latest $(git -C source tag --list 'v*'))

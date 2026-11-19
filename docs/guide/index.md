@@ -1,5 +1,5 @@
 ---
-title: Developer guide
+title: Resources
 nav_order: 10
 nav_group: For developers
 children: guide

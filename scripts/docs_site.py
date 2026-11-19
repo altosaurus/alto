@@ -231,6 +231,9 @@ def finish(
     latest = latest_release(versions)
     names = [*([DEV] if (site / DEV).is_dir() else []), *versions]
     listing: dict[str, object] = {"latest": latest, "versions": names}
+    commit_file = site / DEV / "commit.txt"
+    if commit_file.is_file():
+        listing["dev_commit"] = commit_file.read_text(encoding="utf-8").strip()
     (site / "versions.json").write_text(json.dumps(listing, indent=2) + "\n", encoding="utf-8")
 
     for source in sorted(root_files.iterdir()):

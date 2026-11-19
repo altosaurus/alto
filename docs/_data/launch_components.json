@@ -1,0 +1,54 @@
+{
+  "profile-create": [
+    {"label": "Name field and Create profile button", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/#profiledialog", "rect": [2,47,96,15]}
+  ],
+  "profile-picker": [
+    {"label": "Saved profile list", "type": "ProfileDialog", "href": "/api/alto.ui.profile_dialog/#profiledialog", "rect": [3,17,94,47]}
+  ],
+  "home": [
+    {"label": "Exercise and lesson switch", "type": "SegmentedControl", "href": "/api/alto.ui.widgets/#segmentedcontrol", "rect": [5.5,1,9,5]},
+    {"label": "Search field", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
+    {"label": "Note Identification tile", "type": "ExerciseCard", "href": "/api/alto.ui.home/#exercisecard", "rect": [13.5,15,17.3,26]},
+    {"label": "Exercise catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [13.5,42.5,73,54]}
+  ],
+  "note-identification": [
+    {"label": "Exercise list", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,15,30,77]},
+    {"label": "Notated question", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [42.8,20.5,45.5,47]},
+    {"label": "Answer buttons", "type": "ExerciseView", "href": "/api/alto.ui.exercise_view/#exerciseview", "rect": [34.5,68,62,7]}
+  ],
+  "lesson-tiles": [
+    {"label": "Lesson search", "type": "MainWindow", "href": "/api/alto.ui.main_window/#mainwindow", "rect": [1,7.5,30,5]},
+    {"label": "Pitches and Notes tile", "type": "TileCard", "href": "/api/alto.ui.home/#tilecard", "rect": [14,14,17,24]},
+    {"label": "Lesson catalog", "type": "HomePage", "href": "/api/alto.ui.home/#homepage", "rect": [32,14,55,50]}
+  ],
+  "lesson-workspace": [
+    {"label": "Lesson outline", "type": "LessonNav", "href": "/api/alto.ui.lesson_nav/#lessonnav", "rect": [1,14.5,29,66]},
+    {"label": "Leave lesson and Start over", "type": "LessonsPage", "href": "/api/alto.ui.lesson/#lessonspage", "rect": [32.5,13,66,5.5]},
+    {"label": "Step title and progress", "type": "LessonView", "href": "/api/alto.ui.lesson/#lessonview", "rect": [33,19.5,65,6.5]},
+    {"label": "Example and knowledge check", "type": "StepView", "href": "/api/alto.ui.lesson/#stepview", "rect": [33,26.7,52,34]}
+  ],
+  "glossary": [
+    {"label": "Term search and list", "type": "GlossaryPage", "href": "/api/alto.ui.glossary/#glossarypage", "rect": [32.5,13.5,19,83]},
+    {"label": "Accidental example", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [53.5,41.5,34.5,18]},
+    {"label": "Related exercise tiles", "type": "ExerciseCard", "href": "/api/alto.ui.home/#exercisecard", "rect": [54,69,35,24]}
+  ],
+  "stats": [
+    {"label": "Profile and filters", "type": "StatsPage", "href": "/api/alto.ui.stats_dialog/#statspage", "rect": [2.5,13,34,5]},
+    {"label": "Summary tiles", "type": "Tile", "href": "/api/alto.ui.stats_dialog/#tile", "rect": [2.5,22.5,94,21]},
+    {"label": "Daily question counts", "type": "StackedBarChart", "href": "/api/alto.ui.charts/#stackedbarchart", "rect": [2.5,46,45.5,23]},
+    {"label": "Daily accuracy", "type": "LineChart", "href": "/api/alto.ui.charts/#linechart", "rect": [50,46,46,23]},
+    {"label": "Accuracy by exercise", "type": "HBarChart", "href": "/api/alto.ui.charts/#hbarchart", "rect": [50,72,46,26]}
+  ],
+  "database": [
+    {"label": "Table selection and search", "type": "DatabasePage", "href": "/api/alto.ui.database_page/#databasepage", "rect": [2.5,13,96,5.5]},
+    {"label": "Table data", "type": "RowsModel", "href": "/api/alto.ui.database_page/#rowsmodel", "rect": [2.5,21.5,95,76]}
+  ],
+  "question-preview": [
+    {"label": "Saved notation", "type": "StaffWidget", "href": "/api/alto.ui.staff/#staffwidget", "rect": [5.5,8,89,63.5]},
+    {"label": "Answer and timing details", "type": "QuestionPreview", "href": "/api/alto.ui.question_preview/#questionpreview", "rect": [2,73.5,94,17]}
+  ],
+  "settings": [
+    {"label": "Settings categories", "type": "AppSettingsDialog", "href": "/api/alto.ui.app_settings/#appsettingsdialog", "rect": [1,2,17,89]},
+    {"label": "Notation font cards", "type": "StyleCard", "href": "/api/alto.ui.app_settings/#stylecard", "rect": [20,7,72,74]}
+  ]
+}

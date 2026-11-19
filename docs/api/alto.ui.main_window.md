@@ -208,7 +208,7 @@ Show an exercise.
 def show_about() -> None
 ```
 
-Show the application name, installed version and purpose.
+Show the installed version, development status, and purpose of Alto.
 
 **Examples**
 
