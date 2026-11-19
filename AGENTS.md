@@ -4,7 +4,22 @@
 - Use branches in the existing Alto repository for new work.
 - Do not create nested Git repositories or separate worktrees unless the user explicitly requests them.
 
+## Prose style
+
+- Prefer short noun phrases for section headings in documentation, lessons, and in-app help. Name the specific topic
+  readers will find in the section. Use parallel phrasing for related headings, such as “Major keys with sharps” and
+  “Major keys with flats.”
+- Use the body text for directions. Under “Major keys with sharps,” the first instruction might be “Find the last sharp
+  in the signature, then go up a half step.” Exercise prompts and button labels can also use direct verbs.
+
 ## UI consistency
+
+- Use `CORRECT_ANSWER_COLOR` from `alto/ui/colors.py` for correct-answer feedback, including animations on sounding notes.
+  Correct-answer animations default to green in every theme. Use another color only when explicitly requested.
+- When a correct answer plays notes, use the playback step callback to highlight exactly the pitches sounding at each onset.
+  Highlight chord tones together, move the highlight for a melody, and clear it when playback ends or is interrupted.
+  Follow the shared **Next Question** setting. **Immediately** plays the answer audio without highlighting the music, **Wait** requires Next,
+  and **After Animation** advances after feedback. Use the same animation timing when muted.
 
 - Include **Buttons** with **Limited**, **Button count**, and **All** by default whenever buttons are answer choices.
   Use `ChoiceExercise` for new multiple-choice exercises. Show this option in button-answer modes. Editing controls
@@ -17,6 +32,8 @@
 
 - Default new exercise options to a settings row that shows the current selection and opens a titled submenu with Back.
   Use radio buttons for one choice and checkboxes for independent choices. A simple on/off option can use an inline switch.
+  Group submenu choices at the top with consistent row spacing. Extra window height belongs below the group.
+  Use the shared scroll area for long option lists and check the layout at short and tall window sizes.
   Follow the [exercise option procedure](docs/development.md#adding-an-exercise-option).
 
 - Match dropdowns to Alto's existing controls. Use `FieldComboBox` from `alto/ui/dropdown.py`; it marks the field for the

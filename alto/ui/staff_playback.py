@@ -5,7 +5,7 @@ from collections.abc import Callable, Sequence
 from PySide6.QtCore import QEvent, QObject, Signal
 from PySide6.QtWidgets import QWidget
 
-from alto.audio import sounds
+from alto.audio import DEFAULT_NOTE_GAP_MS, sounds
 from alto.theory.pitch import Note
 
 
@@ -14,7 +14,7 @@ class StaffPlayback(QObject):
 
     step = Signal(object)  # a column index, or None when the highlight should clear
 
-    def __init__(self, parent: QWidget, *, highlight: Callable[[int | None], object]) -> None:
+    def __init__(self, parent: QWidget, *, highlight: Callable[[int | None], object] | None = None) -> None:
         """
         Attach playback to its view.
 
@@ -22,16 +22,24 @@ class StaffPlayback(QObject):
         ----------
         parent : QWidget
             The view containing the sample.
-        highlight : callable
-            Draw the current step on the displayed staff or staves.
+        highlight : callable or None
+            Draw the current step on the displayed staff or staves. Omit for audio-only playback.
         """
         super().__init__(parent)
-        self.step.connect(highlight)
+        if highlight is not None:
+            self.step.connect(highlight)
         self._notify = self.step.emit
         parent.installEventFilter(self)
         parent.destroyed.connect(self.stop)
 
-    def play(self, columns: Sequence[Sequence[Note]], *, gap_ms: int = 450, force: bool = False) -> None:
+    def play(
+        self,
+        columns: Sequence[Sequence[Note]],
+        *,
+        gap_ms: int = DEFAULT_NOTE_GAP_MS,
+        force: bool = False,
+        warmup: bool = False,
+    ) -> None:
         """
         Play the displayed notes in order.
 
@@ -43,8 +51,10 @@ class StaffPlayback(QObject):
             Time between onsets in milliseconds.
         force : bool
             Allow explicit auditions even when exercise sounds are muted.
+        warmup : bool
+            Prepare the audio streams before the first note.
         """
-        sounds.play_sample(columns, gap_ms=gap_ms, force=force, on_step=self._notify)
+        sounds.play_sample(columns, gap_ms=gap_ms, force=force, on_step=self._notify, warmup=warmup)
 
     def stop(self) -> None:
         """Clear this view's sounding note and cancel its pending audio."""

@@ -13,7 +13,7 @@ Connect a displayed music sample to the notes sounding on its staff.
 StaffPlayback(
     parent: QWidget,
     *,
-    highlight: Callable[[int | None], object],
+    highlight: Callable[[int | None], object] | None = None,
 )
 ```
 
@@ -28,7 +28,7 @@ Attach playback to its view.
 **Parameters**
 
 - `parent` (*QWidget*): The view containing the sample.
-- `highlight` (*callable*): Draw the current step on the displayed staff or staves.
+- `highlight` (*callable or None*): Draw the current step on the displayed staff or staves. Omit for audio-only playback.
 
 ### StaffPlayback.play
 
@@ -36,8 +36,9 @@ Attach playback to its view.
 def play(
     columns: Sequence[Sequence[Note]],
     *,
-    gap_ms: int = 450,
+    gap_ms: int = DEFAULT_NOTE_GAP_MS,
     force: bool = False,
+    warmup: bool = False,
 ) -> None
 ```
 
@@ -48,6 +49,7 @@ Play the displayed notes in order.
 - `columns` (*sequence of sequence of Note*): Notes grouped by onset.
 - `gap_ms` (*int*): Time between onsets in milliseconds.
 - `force` (*bool*): Allow explicit auditions even when exercise sounds are muted.
+- `warmup` (*bool*): Prepare the audio streams before the first note.
 
 ### StaffPlayback.stop
 

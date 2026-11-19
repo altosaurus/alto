@@ -47,7 +47,7 @@ KEY_SIGNATURES = Lesson(
     about="Read the sharps or flats after a clef and work out which ones to write for a given key.",
     summary="Read and build major and minor key signatures.",
     exercise="KeySignatures",
-    related_exercises=("KeySignatureConstruction",),
+    related_exercises=("KeySignatureConstruction", "OrderOfKeys"),
     steps=(
         Step(
             title="Two ways to write F sharp",
@@ -63,7 +63,7 @@ KEY_SIGNATURES = Lesson(
             hear_label="Hear F sharp",
         ),
         Step(
-            title="Read the sign beside the note",
+            title="A natural beside the note",
             text=(
                 "<p>Both staves still have F♯ in the signature. This time the F is in the bottom space, an octave "
                 "lower. Read the first note using the signature. On the second staff, a <b>natural</b> (♮) beside "
@@ -84,7 +84,7 @@ KEY_SIGNATURES = Lesson(
             ),
         ),
         Step(
-            title="Find a major key from its sharps",
+            title="Major keys with sharps",
             text=(
                 "<p>A key takes its name from its <b>tonic</b>, the note that feels like home. To find a major tonic "
                 "from a sharp signature, read the last sharp on the right and go up one half step.</p>"
@@ -95,7 +95,7 @@ KEY_SIGNATURES = Lesson(
             staves=(Staff("treble", key=1, caption="G major"), Staff("treble", key=2, caption="D major")),
         ),
         Step(
-            title="Find a major key from its flats",
+            title="Major keys with flats",
             text=(
                 "<p>Flats appear in the reverse order: <b>B E A D G C F</b>. With two or more flats, the "
                 "<b>next-to-last flat</b> names the major key. On the second staff the flats are B♭, E♭, A♭. "
@@ -124,7 +124,7 @@ KEY_SIGNATURES = Lesson(
             ),
         ),
         Step(
-            title="Choose the marks to write",
+            title="The signature for a given key",
             text=(
                 "<p>To write a sharp signature, stop when you reach the sharp a half step below the major tonic. "
                 "For D major, stop at C♯. Write F♯ and C♯.</p>"
@@ -147,7 +147,7 @@ KEY_SIGNATURES = Lesson(
             ),
         ),
         Step(
-            title="Read a fresh signature",
+            title="Key signatures in treble and bass clefs",
             text=(
                 "<p>Changing clefs moves the signs to different lines and spaces. Their letters and their order stay "
                 "the same. Read the signature, then use the major or minor cue in the question to decide on a tonic.</p>"
@@ -156,7 +156,7 @@ KEY_SIGNATURES = Lesson(
             make_task=_read_signature,
         ),
         Step(
-            title="Practice in both directions",
+            title="Reading and writing key signatures",
             text=(
                 "<p>In <b>Key Signature Identification</b>, read the marks after the clef and choose the tonic "
                 "for the scale named under the staff.</p>"

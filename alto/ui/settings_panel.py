@@ -19,6 +19,7 @@ from __future__ import annotations
 from collections.abc import (
     Callable,
     Iterable,
+    Mapping,
 )
 
 from PySide6.QtCore import (
@@ -54,6 +55,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QRadioButton,
     QScrollArea,
+    QSizePolicy,
     QStackedWidget,
     QTabWidget,
     QToolButton,
@@ -82,6 +84,7 @@ from alto.exercises.library import (
     NotationIdentification,
     NoteConstruction,
     NoteNames,
+    OrderOfKeys,
     ScaleConstruction,
     ScaleIdentification,
 )
@@ -99,10 +102,11 @@ from alto.settings import (
     key_name,
 )
 from alto.theory.pitch import (
+    ACCIDENTAL_SYMBOLS,
     MAJOR_KEYS,
     Note,
 )
-from alto.theory.scales import INVERSION_NAMES, mode_tonic
+from alto.theory.scales import INVERSION_NAMES, format_key_signature, mode_tonic
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
@@ -1486,6 +1490,8 @@ class ExerciseSettingsPanel(QWidget):
     """
 
     stack: SlideStack
+    next_question_row: _Row
+    next_question_mode = "After Animation"
     choice_buttons_row: _Row | None = None
     changed = Signal()
     restyled = Signal()
@@ -1501,6 +1507,7 @@ class _StaffRangePanel(ExerciseSettingsPanel):
     """
 
     cfg: settings.StaffRangeSettings
+    value_pictures: ValuePictures
     stack: SlideStack
 
     _persist: Callable[[], None]
@@ -1520,6 +1527,7 @@ class _StaffRangePanel(ExerciseSettingsPanel):
         self.clef_pictures.set_clefs(clefs)
         self.range_pictures.set_items([(c, *self.cfg.range_for(c)) for c in clefs])
         self.range_row.fit()
+        self.value_pictures.set_values(self.cfg.active_values())
 
     def _save_and_emit(self) -> None:
         """
@@ -1531,6 +1539,65 @@ class _StaffRangePanel(ExerciseSettingsPanel):
         """
         self._persist()
         self.changed.emit()
+
+    def _values_page(self, title: str) -> QWidget:
+        """
+        Build the shared note-value checklist with an engraved preview of each option.
+
+        Parameters
+        ----------
+        title : str
+            The settings row label.
+
+        Returns
+        -------
+        QWidget
+            The scrollable submenu.
+
+        Examples
+        --------
+        >>> NoteNameSettingsPanel(NoteNameSettings()).value_boxes["whole"].isChecked()
+        True
+        """
+        self.value_boxes = {v: QCheckBox(VALUE_NAMES[v]) for v in NOTE_VALUES}
+        values_body = QWidget()
+        vlay = QVBoxLayout(values_body)
+        vlay.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+        vlay.setSpacing(2)
+        values_hint = QLabel("One of the checked values is picked at random.")
+        values_hint.setWordWrap(True)
+        vlay.addWidget(values_hint)
+        for v, box in self.value_boxes.items():
+            picture = ValuePictures([v], scale=1.25, center_stemless=True)
+            box.setIcon(picture.to_icon())
+            box.setIconSize(picture.size())
+            box.setStyleSheet("QCheckBox { font-size: 11pt; }")
+            box.setChecked(v in self.cfg.note_values)
+            box.toggled.connect(self._values_edited)
+            vlay.addWidget(box)
+        vlay.addStretch()
+        _guard_last(list(self.value_boxes.values()))
+        return _subpage(title, body=_scrolling(values_body), back=lambda: self._go(0), fill=True)
+
+    def _values_edited(self) -> None:
+        """
+        Take the checked note values into the settings, save them and say so.
+
+        Examples
+        --------
+        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
+        >>> panel.value_boxes["half"].setChecked(True)
+        >>> "half" in panel.cfg.note_values
+        True
+        """
+        self.cfg.note_values = {v for v, b in self.value_boxes.items() if b.isChecked()}
+        _guard_last(list(self.value_boxes.values()))
+        self._save_and_emit()
 
     def _range_page(self) -> QWidget:
         """
@@ -1818,30 +1885,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         self.key_boxes = self.key_list.boxes
         keys_page = _subpage("Key signatures", body=self.key_list, back=lambda: self._go(0))
 
-        # layer 2: note values, a vertical list: the engraved symbol, then its name
-        self.value_boxes = {v: QCheckBox(VALUE_NAMES[v]) for v in NOTE_VALUES}
-        values_body = QWidget()
-        vlay = QVBoxLayout(values_body)
-        vlay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        vlay.setSpacing(2)
-        values_hint = QLabel("One of the checked values is picked at random.")
-        values_hint.setWordWrap(True)
-        vlay.addWidget(values_hint)
-        for v, box in self.value_boxes.items():
-            picture = ValuePictures([v], scale=1.25, center_stemless=True)
-            box.setIcon(picture.to_icon())
-            box.setIconSize(picture.size())
-            box.setStyleSheet("QCheckBox { font-size: 11pt; }")
-            box.setChecked(v in cfg.note_values)
-            box.toggled.connect(self._values_edited)
-            vlay.addWidget(box)
-        vlay.addStretch()
-        values_page = _subpage("Note values", body=values_body, back=lambda: self._go(0))
+        values_page = self._values_page("Note values")
 
         # layer 2: note names
         self.naming_radios = {k: QRadioButton() for k in NAMINGS}
@@ -1881,7 +1925,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         ):
             self.stack.addWidget(page)
         _guard_last(list(self.key_boxes.values()))
-        _guard_last(list(self.value_boxes.values()))
         self._refresh_summaries()
 
     def _refresh_summaries(self) -> None:
@@ -1902,7 +1945,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
             enabled=True,
             keys=set(self.cfg.active_keys()),
         )
-        self.value_pictures.set_values(self.cfg.active_values())
         self.name_picture.set_naming(self.cfg.naming)
 
     # clefs page
@@ -1940,21 +1982,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         """
         self.cfg.key_signatures = {k for k, b in self.key_boxes.items() if b.isChecked()}
         _guard_last(list(self.key_boxes.values()))
-        self._save_and_emit()
-
-    def _values_edited(self) -> None:
-        """
-        Take the checked note values into the settings, save them and say so.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel.value_boxes["half"].setChecked(True)
-        >>> "half" in panel.cfg.note_values
-        True
-        """
-        self.cfg.note_values = {v for v, b in self.value_boxes.items() if b.isChecked()}
-        _guard_last(list(self.value_boxes.values()))
         self._save_and_emit()
 
     def _names_edited(self) -> None:
@@ -2184,6 +2211,7 @@ class KeyChecklist(QWidget):
         selected: set[int],
         *,
         allow_empty: bool = False,
+        counts_only: bool = False,
         key_names: dict[int, str] | None = None,
         parent: QWidget | None = None,
     ) -> None:
@@ -2196,6 +2224,8 @@ class KeyChecklist(QWidget):
             The key signatures to check initially.
         allow_empty : bool, default False
             Allow every key to be unchecked. Keyword-only.
+        counts_only : bool, default False
+            Label each box with its accidental count instead of drawing a signature. Keyword-only.
         key_names : dict of int to str or None, default None
             Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
         parent : QWidget or None, default None
@@ -2237,8 +2267,12 @@ class KeyChecklist(QWidget):
                 grid.setColumnStretch(column, 1)
         else:
             for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
-                description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
-                _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
+                if counts_only:
+                    box.setText(f"{abs(k)} {'♭' if k < 0 else '♯'}" if k else "0")
+                    box.setAccessibleName(format_key_signature(k))
+                else:
+                    description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
+                    _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
             # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
             outer = QVBoxLayout(self)
             outer.setContentsMargins(
@@ -3252,6 +3286,7 @@ class ChoiceChecklist(QWidget):
         *,
         selected: set,
         allow_empty: bool = False,
+        positions: Mapping[object, tuple[int, int]] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -3265,6 +3300,8 @@ class ChoiceChecklist(QWidget):
             The keys to check initially. Keyword-only.
         allow_empty : bool, default False
             Allow all choices to be unchecked. Keyword-only.
+        positions : mapping or None, default None
+            Optional (row, column) for each key within its group. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns it. Keyword-only.
 
@@ -3278,6 +3315,7 @@ class ChoiceChecklist(QWidget):
         super().__init__(parent)
         self.allow_empty = allow_empty
         self.boxes: dict[object, QCheckBox] = {}
+        self.headings: dict[str, QLabel] = {}
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             0,
@@ -3290,13 +3328,25 @@ class ChoiceChecklist(QWidget):
             if title:
                 heading = QLabel(title)
                 heading.setStyleSheet("color: gray;")
+                self.headings[title] = heading
                 lay.addWidget(heading)
+            grid = None
+            if positions is not None:
+                grid = QGridLayout()
+                grid.setSpacing(lay.spacing())
+                lay.addLayout(grid)
+                items = sorted(items, key=lambda item: positions[item[0]])
             for key, label in items:
                 box = DegreeCheckBox(label) if "̂" in label else QCheckBox(label)
                 box.setChecked(key in selected)
                 box.toggled.connect(self._toggled)
                 self.boxes[key] = box
-                lay.addWidget(box)
+                if grid is not None and positions is not None:
+                    row, column = positions[key]
+                    grid.setColumnStretch(column, 1)
+                    grid.addWidget(box, row, column)
+                else:
+                    lay.addWidget(box)
         if not self.allow_empty:
             _guard_last(list(self.boxes.values()))
 
@@ -3403,6 +3453,63 @@ def _buttons_page(
     return _subpage("Buttons", body=body, back=back)
 
 
+def _direction_choices(
+    cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
+    *,
+    edited: Callable[[], None],
+) -> QWidget:
+    """
+    Choose the direction of a scale.
+
+    Parameters
+    ----------
+    cfg : ScaleIdentificationSettings or ScaleConstructionSettings
+        The exercise settings that store the selected motion.
+    edited : callable
+        Save the edit and refresh the exercise.
+
+    Returns
+    -------
+    QWidget
+        A pair of mutually exclusive Ascending and Descending radio buttons.
+
+    Examples
+    --------
+    >>> cfg = settings.ScaleIdentificationSettings()
+    >>> choices = _direction_choices(cfg, edited=lambda: None)
+    >>> next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
+    >>> cfg.motion
+    'descending'
+    """
+
+    def select(direction: str) -> None:
+        """
+        Save the direction when its radio button becomes checked.
+
+        Parameters
+        ----------
+        direction : str
+            The selected motion.
+
+        Examples
+        --------
+        Selecting Descending saves the edit immediately.
+        """
+        cfg.motion = direction
+        edited()
+
+    body = QWidget()
+    layout = QVBoxLayout(body)
+    layout.setContentsMargins(0, 0, 0, 0)
+    for direction in ("ascending", "descending"):
+        radio = QRadioButton(direction.title())
+        layout.addWidget(radio)
+        radio.setChecked(cfg.motion == direction)
+        radio.toggled.connect(lambda checked, value=direction: select(value) if checked else None)
+
+    return body
+
+
 def load_intervals() -> None:
     """
     Restore the saved staff interval options, keeping valid choices and per-clef ranges.
@@ -3420,11 +3527,18 @@ def load_intervals() -> None:
         set(text_value(saved, key="intervals/clefs", default="treble,bass").split(",")) & set(settings.RANGE_KEYS)
         or defaults.clefs
     )
+    values = text_value(saved, key="intervals/values", default="whole")
+    cfg.note_values = set(values.split(",")) & set(NOTE_VALUES) or {"whole"}
     cfg.displays = (
-        set(text_value(saved, key="intervals/display", default="Melodic").split(",")) & set(settings.INTERVAL_DISPLAYS)
+        set(text_value(saved, key="intervals/display", default="").split(",")) & set(settings.INTERVAL_DISPLAYS)
         or defaults.displays
     )
-    cfg.quality = text_value(saved, key="intervals/quality", default="true") != "false"
+    directions = text_value(saved, key="intervals/direction", default="").split(",")
+    cfg.directions = set(directions).intersection(settings.MELODIC_DIRECTIONS) or defaults.directions
+    quality = text_value(saved, key="intervals/quality", default=defaults.quality_mode)
+    if quality == "false":  # Older versions saved the Quality switch as "true" or "false".
+        quality = "interval"
+    cfg.quality_mode = quality if quality in settings.INTERVAL_QUALITY_MODES else defaults.quality_mode
     cfg.button_mode = "all" if text_value(saved, key="intervals/buttonMode", default="limited") == "all" else "limited"
     try:
         cfg.button_count = max(2, min(10, int_value(saved, key="intervals/buttonCount", default=6)))
@@ -3432,6 +3546,8 @@ def load_intervals() -> None:
         cfg.button_count = defaults.button_count
     keys = text_value(saved, key="intervals/staffKeys", default="0").split(",")
     cfg.staff_keys = {key for key in range(-7, 8) if str(key) in keys} or {0}
+    signs = text_value(saved, key="intervals/accidentals", default="").split(",")
+    cfg.accidentals = {sign for sign in settings.INTERVAL_ACCIDENTALS if str(sign) in signs} or defaults.accidentals
     names = text_value(saved, key="intervals/intervals", default=",".join(defaults.intervals))
     cfg.intervals = set(names.split(",")) & settings.WRITTEN_INTERVALS.keys()
     cfg.ranges = {}
@@ -3450,12 +3566,12 @@ class IntervalSettingsPanel(_StaffRangePanel):
     Examples
     --------
     >>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
-    7
+    10
     """
 
     def __init__(self, cfg: settings.IntervalSettings) -> None:
         """
-        Build the menu and its six submenus.
+        Build the interval settings menu with direction choices under Melodic.
 
         Parameters
         ----------
@@ -3464,8 +3580,8 @@ class IntervalSettingsPanel(_StaffRangePanel):
 
         Examples
         --------
-        >>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.isOn()
-        True
+        >>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
+        'Interval and Quality'
         """
         super().__init__()
         self.cfg: settings.IntervalSettings = cfg
@@ -3488,18 +3604,28 @@ class IntervalSettingsPanel(_StaffRangePanel):
         self.staff_key_row = _Row("Staff Key")
         self.key_diagram = KeyDiagram()
         self.staff_key_row.attach(self.key_diagram)
-        self.display_row = _Row("Display")
-        self.quality_row = _ToggleRow("Quality")
-        self.quality_row.setToolTip("Require the interval’s quality as well as its number")
-        self.quality_row.setOn(cfg.quality)
+        self.values_row = _Row("Note Value")
+        self.value_pictures = ValuePictures()
+        self.values_row.attach(self.value_pictures)
+        self.display_row = _Row("Display Mode")
+        self.quality_row = _Row("Quality")
+        self.accidentals_row = _Row("Accidentals")
         self.intervals_row = _Row("Intervals")
         self.buttons_row = _Row("Buttons")
         for index, row in enumerate(
-            (self.clefs_row, self.range_row, self.staff_key_row, self.display_row, self.intervals_row, self.buttons_row),
+            (
+                self.clefs_row,
+                self.range_row,
+                self.staff_key_row,
+                self.display_row,
+                self.quality_row,
+                self.intervals_row,
+                self.accidentals_row,
+                self.values_row,
+                self.buttons_row,
+            ),
             1,
         ):
-            if row is self.intervals_row:
-                layout.addWidget(self.quality_row)
             row.clicked.connect(lambda _checked=False, page=index: self._go(page))
             layout.addWidget(row)
         layout.addStretch()
@@ -3514,17 +3640,46 @@ class IntervalSettingsPanel(_StaffRangePanel):
         self.stack.addWidget(self._range_page())
         self.staff_keys = KeyChecklist(cfg.staff_keys)
         self.display = ChoiceChecklist([("", [(style, style) for style in settings.INTERVAL_DISPLAYS])], selected=cfg.displays)
+        self.direction_choices = ChoiceChecklist(
+            [("", [(direction, direction.title()) for direction in settings.MELODIC_DIRECTIONS])],
+            selected=cfg.directions,
+        )
+        self.direction_choices.changed.connect(self._save_and_emit)
+        self.direction_choices.setAccessibleName("Melodic direction")
+        self.direction_choices.setContentsMargins(18, 0, 0, 0)
+        display_layout = self.display.layout()
+        assert isinstance(display_layout, QVBoxLayout)
+        display_layout.insertWidget(display_layout.indexOf(self.display.boxes["Melodic"]) + 1, self.direction_choices)
         self.interval_list = ChoiceChecklist(
             [
                 (title, [(name, name) for name, iv in settings.WRITTEN_INTERVALS.items() if lo <= iv.number <= hi])
-                for title, lo, hi in (("Simple intervals", 1, 8), ("Compound intervals", 9, 15))
+                for title, lo, hi in (("Simple intervals", 2, 8), ("Compound intervals", 9, 15))
             ],
             selected=cfg.intervals,
             allow_empty=True,
+            positions={
+                name: ((iv.number - 2) % 7, settings.INTERVAL_QUALITY_ORDER[iv.quality])
+                for name, iv in settings.WRITTEN_INTERVALS.items()
+            },
         )
-        for title, picker in (("Staff Key", self.staff_keys), ("Display", self.display)):
-            self.stack.addWidget(_subpage(title, body=_scrolling(picker), back=lambda: self._go(0), fill=True))
-            picker.changed.connect(self._save_and_emit)
+        self.stack.addWidget(_subpage("Staff Key", body=_scrolling(self.staff_keys), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(
+            _subpage("Display Mode", body=_scrolling(self.display), back=lambda: self._go(0), fill=True),
+        )
+        self.staff_keys.changed.connect(self._save_and_emit)
+        self.display.changed.connect(self._save_and_emit)
+
+        quality_page = QWidget()
+        quality_layout = QVBoxLayout(quality_page)
+        quality_layout.setContentsMargins(0, 0, 0, 0)
+        self.quality_modes: dict[str, QRadioButton] = {}
+        for mode, label in settings.INTERVAL_QUALITY_MODES.items():
+            radio = QRadioButton(label)
+            quality_layout.addWidget(radio)
+            radio.setChecked(mode == cfg.quality_mode)
+            radio.toggled.connect(lambda checked: checked and self._save_and_emit())
+            self.quality_modes[mode] = radio
+        self.stack.addWidget(_subpage("Quality", body=quality_page, back=lambda: self._go(0)))
 
         intervals = QWidget()
         interval_layout = QVBoxLayout(intervals)
@@ -3541,8 +3696,20 @@ class IntervalSettingsPanel(_StaffRangePanel):
         interval_layout.addWidget(self.interval_list)
         self.interval_list.changed.connect(self._save_and_emit)
         self.stack.addWidget(_subpage("Intervals", body=_scrolling(intervals), back=lambda: self._go(0), fill=True))
+        self.accidental_list = ChoiceChecklist(
+            [("", [(sign, ACCIDENTAL_SYMBOLS[sign] or "♮") for sign in settings.INTERVAL_ACCIDENTALS])],
+            selected=cfg.accidentals,
+            positions={0: (0, 0), -1: (1, 0), 1: (1, 1), -2: (2, 0), 2: (2, 1)},
+        )
+        self.accidental_list.setStyleSheet("QCheckBox { font-size: 22pt; }")
+        for sign, name in settings.INTERVAL_ACCIDENTALS.items():
+            box = self.accidental_list.boxes[sign]
+            box.setAccessibleName(name)
+            box.setToolTip(name)
+        self.accidental_list.changed.connect(self._save_and_emit)
+        self.stack.addWidget(_subpage("Accidentals", body=self.accidental_list, back=lambda: self._go(0)))
+        self.stack.addWidget(self._values_page("Note Value"))
         self.stack.addWidget(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
-        self.quality_row.switched.connect(self._save_and_emit)
         self._refresh_summaries()
 
     def _select_all(self, on: bool) -> None:
@@ -3560,7 +3727,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         """
         if on:
             self._previous_intervals = set(self.cfg.intervals)
-        self._set_intervals(set(settings.WRITTEN_INTERVALS) if on else self._previous_intervals)
+        self._set_intervals(set(settings.WRITTEN_INTERVALS) if on else self._previous_intervals, restore=not on)
 
     def _select_span(self, low: int, high: int) -> None:  # noqa: PLR0917 (Qt passes both endpoints positionally)
         """
@@ -3577,7 +3744,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         """
         self._set_intervals({name for name, iv in settings.WRITTEN_INTERVALS.items() if low <= iv.number <= high})
 
-    def _set_intervals(self, names: set[str]) -> None:
+    def _set_intervals(self, names: set[str], *, restore: bool = False) -> None:
         """
         Apply a bulk interval selection in one edit.
 
@@ -3585,12 +3752,16 @@ class IntervalSettingsPanel(_StaffRangePanel):
         ----------
         names : set of str
             Checked interval spellings.
+        restore : bool
+            Restore the full selection saved before Select all, including hidden choices.
 
         Examples
         --------
         Moving a slider handle generates one new question.
         """
         for name, box in self.interval_list.boxes.items():
+            if box.isHidden() and not restore:
+                continue  # Preserve choices outside the current staff ranges.
             box.blockSignals(True)
             box.setChecked(name in names)
             box.blockSignals(False)
@@ -3603,19 +3774,36 @@ class IntervalSettingsPanel(_StaffRangePanel):
         Examples
         --------
         >>> IntervalSettingsPanel(settings.IntervalSettings()).display_row.value.text()
-        'Melodic'
+        'Harmonic'
         """
         super()._refresh_summaries()
         _show_keys(self.staff_key_row, diagram=self.key_diagram, enabled=True, keys=self.cfg.staff_keys)
         self.display_row.value.setText(", ".join(d for d in settings.INTERVAL_DISPLAYS if d in self.cfg.displays))
+        self.direction_choices.setVisible("Melodic" in self.cfg.displays)
+        self.quality_row.value.setText(settings.INTERVAL_QUALITY_MODES[self.cfg.quality_mode])
+        self.accidentals_row.value.setText(
+            " ".join(ACCIDENTAL_SYMBOLS[sign] or "♮" for sign in settings.INTERVAL_ACCIDENTALS if sign in self.cfg.accidentals),
+        )
         self.buttons_row.value.setText(self.cfg.button_mode.title())
-        numbers = [settings.WRITTEN_INTERVALS[name].number for name in self.cfg.intervals]
-        low, high = min(numbers, default=1), max(numbers, default=1)
-        self.slider.set_range(low, high=high, maximum=15, active=bool(numbers))
+        span = max(self.cfg.staff_span(clef) for clef in self.cfg.active_clefs())
+        available = {name for name, iv in settings.WRITTEN_INTERVALS.items() if iv.number <= span}
+        for name, box in self.interval_list.boxes.items():
+            box.setVisible(name in available)
+            box.setEnabled(name in available)
+        self.interval_list.headings["Simple intervals"].setVisible(span >= 2)
+        self.interval_list.headings["Compound intervals"].setVisible(span >= 9)
+        selected = self.cfg.intervals & available
+        numbers = [settings.WRITTEN_INTERVALS[name].number for name in selected]
+        low, high = min(numbers, default=2), max(numbers, default=2)
+        self.slider.set_range(low, high=high, minimum=2, maximum=min(span, 15), active=bool(numbers))
+        self.slider.setVisible(bool(available))
+        self.select_all.setEnabled(bool(available))
         self.interval_span.setText(f"Interval numbers  {low}–{high}" if numbers else "No intervals selected")
-        if self.cfg.intervals != set(settings.WRITTEN_INTERVALS):
+        if not available:
+            self.interval_span.setText("Widen a staff range to practice intervals.")
+        if not available or selected != available:
             self.select_all.setOn(False)
-        count = len(self.cfg.intervals)
+        count = len(selected)
         self.intervals_row.value.setText(f"{count} selected" if count else "None")
 
     def _save(self) -> None:
@@ -3631,15 +3819,20 @@ class IntervalSettingsPanel(_StaffRangePanel):
         _guard_last(self.boxes.values())
         cfg.staff_keys = self.staff_keys.selected()
         cfg.displays = self.display.selected()
-        cfg.quality = self.quality_row.isOn()
+        cfg.directions = self.direction_choices.selected()
+        cfg.accidentals = self.accidental_list.selected()
+        cfg.quality_mode = next(mode for mode, radio in self.quality_modes.items() if radio.isChecked())
         cfg.intervals = self.interval_list.selected()
         saved = store()
         saved.setValue("intervals/buttonMode", cfg.button_mode)
         saved.setValue("intervals/buttonCount", cfg.button_count)
         saved.setValue("intervals/clefs", ",".join(sorted(cfg.clefs)))
         saved.setValue("intervals/staffKeys", ",".join(map(str, sorted(cfg.staff_keys))))
+        saved.setValue("intervals/values", ",".join(cfg.active_values()))
         saved.setValue("intervals/display", ",".join(sorted(cfg.displays)))
-        saved.setValue("intervals/quality", "true" if cfg.quality else "false")
+        saved.setValue("intervals/accidentals", ",".join(map(str, sorted(cfg.accidentals))))
+        saved.setValue("intervals/direction", ",".join(sorted(cfg.directions)))
+        saved.setValue("intervals/quality", cfg.quality_mode)
         saved.setValue("intervals/intervals", ",".join(sorted(cfg.intervals)))
         saved.remove("intervals/range")
         for clef, (low, high) in cfg.ranges.items():
@@ -4574,6 +4767,20 @@ def load_key_construction() -> None:
     _load_key_settings(settings.key_construction, prefix="keyConstruction")
 
 
+def load_order_of_keys() -> None:
+    """
+    Restore the clefs, scales, and key signatures selected for Order of Keys.
+
+    Examples
+    --------
+    >>> load_order_of_keys()
+    """
+    cfg = settings.order_of_keys
+    _load_key_settings(cfg, prefix="orderOfKeys")
+    saved = text_value(store(), key="orderOfKeys/startingAccidentals", default="0").split(",")
+    cfg.starting_accidentals = {n for n in cfg.available_starts() if str(n) in saved} or {0}
+
+
 def load_scale_identification() -> None:
     """
     Load the saved scale identification options independently of scale construction.
@@ -4647,6 +4854,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         cfg: settings.KeySignatureSettings,
         *,
         prefix: str = "keySignatures",
+        keys_title: str = "Key signatures",
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -4658,6 +4866,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             The settings to edit.
         prefix : str, default "keySignatures"
             What the settings are saved under. Keyword-only.
+        keys_title : str, default "Key signatures"
+            Title for the signature checklist when the exercise uses a single list. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the panel. Keyword-only.
 
@@ -4695,7 +4905,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         )  # these have a signature for the staff and one for the scale
         self.clefs_row = _Row("Clefs")
         self.modes_row = _Row("Scales")
-        self.keys_row = _Row("Scale Key" if scales else "Key signatures")
+        self.keys_row = _Row("Scale Key" if scales else keys_title)
         self.staff_keys_row: _Row | None = _Row("Staff Key") if scales else None
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
@@ -4709,6 +4919,9 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         if self.staff_keys_row is not None:
             menu_rows.append(self.staff_keys_row)  # the staff's key and the scale's are next to each other
         menu_rows.append(self.keys_row)
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            self.starts_row = _Row("Starting Accidentals")
+            menu_rows.append(self.starts_row)
         if scales:
             self.motion_row = _Row("Motion")
             menu_rows.append(self.motion_row)
@@ -4802,17 +5015,27 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             staff_lay.addWidget(staff_note)
             pages.append(_subpage("Staff Key", body=staff_body, back=lambda: self._go(0)))
             pages.append(_subpage("Scale Key", body=_scrolling(self.scale_keys), back=lambda: self._go(0), fill=True))
-            motion_body = QWidget()
-            motion_layout = QVBoxLayout(motion_body)
-            motion_layout.setContentsMargins(0, 0, 0, 0)
-            for direction in ("ascending", "descending"):
-                radio = QRadioButton(direction.title())
-                motion_layout.addWidget(radio)
-                radio.setChecked(cfg.motion == direction)
-                radio.toggled.connect(lambda checked, value=direction: self._motion_edited(value, checked=checked))
-            pages.append(_subpage("Motion", body=motion_body, back=lambda: self._go(0)))
+            pages.append(_subpage("Motion", body=_direction_choices(cfg, edited=self._save_and_emit), back=lambda: self._go(0)))
         else:
-            pages.append(_subpage("Key signatures", body=self.key_list, back=lambda: self._go(0)))
+            pages.append(_subpage(keys_title, body=self.key_list, back=lambda: self._go(0)))
+
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            self.starts_list = KeyChecklist(cfg.starting_accidentals, counts_only=True)
+
+            def save_starts() -> None:
+                """
+                Apply the counts checked in Starting Accidentals.
+
+                Examples
+                --------
+                Checking two flats allows signatures to begin with two printed flats.
+                """
+                cfg.starting_accidentals = self.starts_list.selected()
+                self._refresh_summaries()
+                self._save_and_emit()
+
+            self.starts_list.changed.connect(save_starts)
+            pages.append(_subpage("Starting Accidentals", body=_scrolling(self.starts_list), back=lambda: self._go(0), fill=True))
 
         if isinstance(cfg, settings.ScaleIdentificationSettings):
             pages.append(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
@@ -4886,6 +5109,17 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             self.keys_row.value.setText(f"{len(self.key_list.selected())} major · {len(minor_keys.selected())} minor")
         else:
             _show_keys(self.keys_row, diagram=self.keys_diagram, enabled=True, keys=set(cfg.active_keys()))
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            allowed = cfg.available_starts()
+            selected = cfg.starting_accidentals.intersection(allowed) or {0}
+            cfg.starting_accidentals = selected
+            for count, box in self.starts_list.boxes.items():
+                box.blockSignals(True)
+                box.setChecked(count in selected)
+                box.blockSignals(False)
+                box.setEnabled(count in allowed and selected != {count})
+            summary = self.starts_list.boxes[next(iter(selected))].text() if len(selected) == 1 else f"{len(selected)} of 15"
+            self.starts_row.value.setText(summary)
         if self.staff_keys_row is not None and isinstance(
             cfg,
             (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
@@ -4921,6 +5155,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             keys = sorted(cfg.keys)
             saved_settings.setValue(f"{self.prefix}/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys)))
         saved_settings.setValue(f"{self.prefix}/keys", ",".join(str(k) for k in keys))
+        if isinstance(cfg, settings.OrderOfKeysSettings):
+            saved_settings.setValue(f"{self.prefix}/startingAccidentals", ",".join(map(str, sorted(cfg.starting_accidentals))))
         if isinstance(cfg, settings.ScaleConstructionSettings):
             saved_settings.setValue(f"{self.prefix}/steps", "true" if cfg.steps else "false")
             saved_settings.setValue(f"{self.prefix}/octave", "true" if cfg.octave else "false")
@@ -4932,29 +5168,6 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             saved_settings.setValue(f"{self.prefix}/buttonMode", cfg.button_mode)
             saved_settings.setValue(f"{self.prefix}/buttonCount", cfg.button_count)
         self.changed.emit()
-
-    def _motion_edited(self, direction: str, *, checked: bool) -> None:
-        """
-        Save the selected direction for this scale exercise.
-
-        Parameters
-        ----------
-        direction : str
-            The scale direction to save.
-        checked : bool
-            Whether the direction was selected. Keyword-only.
-
-        Examples
-        --------
-        >>> cfg = settings.ScaleIdentificationSettings()
-        >>> panel = KeySignatureSettingsPanel(cfg)
-        >>> panel._motion_edited("descending", checked=True)
-        >>> cfg.motion
-        'descending'
-        """
-        if checked and isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
-            self.cfg.motion = direction
-            self._save_and_emit()
 
     def _clefs_edited(self) -> None:
         """
@@ -5069,7 +5282,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.cfg.keys = self.key_list.selected()
         if isinstance(self.cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             self.cfg.minor_keys = self.scale_keys.minor_keys.selected()
-            self._refresh_summaries()
+        self._refresh_summaries()
         self._save_and_emit()
 
 
@@ -5535,6 +5748,10 @@ def _scrolling(body: QWidget) -> QScrollArea:
     >>> _scrolling(page).widget() is page
     True
     """
+    # Short option lists keep their natural height as the viewport grows.
+    policy = body.sizePolicy()
+    policy.setVerticalPolicy(QSizePolicy.Policy.Maximum)
+    body.setSizePolicy(policy)
     scroll = QScrollArea()
     scroll.setWidget(body)
     scroll.setWidgetResizable(True)
@@ -5883,7 +6100,7 @@ def load_choice_buttons() -> None:
             cfg.button_count = cls.default_limit or 6
 
 
-def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
+def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel:
     """
     Return the settings panel for an exercise.
 
@@ -5894,8 +6111,8 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
 
     Returns
     -------
-    ExerciseSettingsPanel or None
-        A panel with a `changed` signal, or None for an exercise with no settings.
+    ExerciseSettingsPanel
+        A panel with the exercise options and the shared Next Question setting.
 
     Examples
     --------
@@ -5906,8 +6123,6 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
     'IntervalSettingsPanel'
     """
     panel = _exercise_panel(exercise)
-    if not isinstance(exercise, ChoiceExercise):
-        return panel
 
     if panel is None:
         panel = ExerciseSettingsPanel()
@@ -5927,13 +6142,73 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
         assert menu is not None
         layout = menu.layout()
         assert isinstance(layout, QVBoxLayout)
+    if isinstance(exercise, ChoiceExercise):
+        _add_choice_buttons(panel, exercise=exercise, layout=layout)
+
+    row = panel.next_question_row = _Row("Next Question")
+    layout.insertWidget(layout.count() - 1, row)
+    body = QWidget()
+    choices = QVBoxLayout(body)
+    choices.setContentsMargins(0, 0, 0, 0)
+    key = f"nextQuestion/{type(exercise).__name__}"
+    modes = ("Immediately", "Wait", "After Animation")
+    saved_mode = text_value(store(), key=key, default=panel.next_question_mode)
+    if saved_mode in modes:
+        panel.next_question_mode = saved_mode
+    row.value.setText(panel.next_question_mode)
+
+    def select(mode: str) -> None:
+        """
+        Save how this exercise proceeds after a correct answer.
+
+        Parameters
+        ----------
+        mode : str
+            The selected radio button's label.
+
+        Examples
+        --------
+        Choosing Wait keeps the next correct answer on screen for review.
+        """
+        panel.next_question_mode = mode
+        row.value.setText(mode)
+        store().setValue(key, mode)
+
+    for mode in modes:
+        radio = QRadioButton(mode)
+        choices.addWidget(radio)
+        radio.setChecked(mode == panel.next_question_mode)
+        radio.clicked.connect(lambda _checked=False, value=mode: select(value))
+    page = stack.addWidget(_subpage("Next Question", body=body, back=lambda: stack.slide_to(0)))
+    row.clicked.connect(lambda: stack.slide_to(page))
+    stack.removeWidget(menu)
+    stack.insertWidget(0, _scrolling(menu))
+    stack.setCurrentIndex(0)
+    return panel
+
+
+def _add_choice_buttons(panel: ExerciseSettingsPanel, *, exercise: ChoiceExercise, layout: QVBoxLayout) -> None:
+    """
+    Append the Buttons row and its page to a multiple-choice exercise.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        The exercise settings panel.
+    exercise : ChoiceExercise
+        The exercise that owns the button preferences.
+    layout : QVBoxLayout
+        The settings menu containing the row.
+
+    Examples
+    --------
+    Chord Quality uses this row to limit the number of answers.
+    """
+    stack = panel.stack
     cfg = exercise.button_settings()
     row = panel.choice_buttons_row = _Row("Buttons")
     row.value.setText(cfg.button_mode.title())
     layout.insertWidget(layout.count() - 1, row)
-    stack.removeWidget(menu)
-    stack.insertWidget(0, _scrolling(menu))
-    stack.setCurrentIndex(0)
 
     def save() -> None:
         """
@@ -5952,7 +6227,6 @@ def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None:
 
     page = stack.addWidget(_buttons_page(cfg, changed=save, back=lambda: stack.slide_to(0)))
     row.clicked.connect(lambda: stack.slide_to(page))
-    return panel
 
 
 def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
@@ -5990,6 +6264,8 @@ def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
         return ArpeggioSettingsPanel(settings.arpeggio)
     if isinstance(exercise, KeySignatures):
         return KeySignatureSettingsPanel(settings.key_signatures)
+    if isinstance(exercise, OrderOfKeys):
+        return KeySignatureSettingsPanel(settings.order_of_keys, prefix="orderOfKeys", keys_title="Key Signatures")
     if isinstance(exercise, KeySignatureConstruction):
         return KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction")
     if isinstance(exercise, ScaleIdentification):

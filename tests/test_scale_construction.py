@@ -534,9 +534,11 @@ def test_right_click_steps_through_no_sign_sharp_and_flat(app: QApplication) -> 
     assert view.scale_input.notes == []
 
 
+@pytest.mark.parametrize("has_sound", [True, False])
 def test_a_right_scale_is_scored_plays_the_scale_and_moves_on(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
+    has_sound: bool,
 ) -> None:
     """
     Check that a right scale scores once, plays the eight notes one after another and moves on.
@@ -547,18 +549,22 @@ def test_a_right_scale_is_scored_plays_the_scale_and_moves_on(
         The shared Qt application.
     monkeypatch : pytest.MonkeyPatch
         Replaces settings, functions or attributes for the length of the test.
+    has_sound : bool
+        Whether the exercise plays the placed scale.
     """
     played = []
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr("alto.ui.exercise_view.sounds.play_notes", lambda notes, **_: played.append(notes))
     view = ExerciseView(ScaleConstruction(), rng=random.Random(4))
+    view.exercise.has_sound = has_sound
     view.resize(1000, 700)
     first = view.question
     assert first is not None and first.construct_scale is not None
     place_scale(view, notes=first.construct_scale)
     view.answer_button.click()
     assert view.answered and (view.correct, view.total, view.streak) == (1, 1, 1) and view.scale_input.locked
-    assert played == [[[n] for n in first.construct_scale]]
+    assert played == ([[[n] for n in first.construct_scale]] if has_sound else [])
+    assert view._advance.isActive() == (not has_sound)
     view.answer_button.click()  # a second press does not score again
     assert view.total == 1
     view._advance.stop()
@@ -571,7 +577,7 @@ def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
-    Check that the notes turn green one after another as they play, and are all green once the scale is over.
+    Check that only the sounding note is green and the last highlight clears when playback ends.
 
     Parameters
     ----------
@@ -582,32 +588,12 @@ def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
     """
     view, _ = ready_scale(monkeypatch, gap_ms=40)
     lit: list[tuple[int, ...]] = []
-    original = view._light_scale_note
-
-    def watch(
-        index: int | None,
-        *,
-        token: int,
-    ) -> None:
-        """
-        Pass a note's coloring on, noting which columns are green afterwards.
-
-        Parameters
-        ----------
-        index : int or None
-            The place of the note that started, or None for the end.
-        token : int
-            Which question it is for.
-        """
-        original(index, token=token)
-        lit.append(tuple(view.scale_input.column_colors))
-
-    monkeypatch.setattr(view, "_light_scale_note", watch)
+    view._answer_playback.step.connect(lambda _: lit.append(tuple(view.scale_input.column_colors)))
     assert view.scale_input.note_color is None and view.scale_input.column_colors == {}  # black until the scale plays
     view.answer_button.click()
     assert view.scale_input.note_color is None  # the notes are not turned green all at once: only as they sound
     QTest.qWait(600)
-    assert lit == [tuple(range(i + 1)) for i in range(8)] + [tuple(range(8))]  # one more each time, and all at the end
+    assert lit == [(i,) for i in range(8)] + [()]
     view._advance.stop()
 
 
@@ -1435,7 +1421,7 @@ def test_the_wedges_turn_green_with_the_notes_as_the_scale_plays(
     greens = set(staff.column_colors)
     assert greens and max(greens) < 7
     QTest.qWait(500)
-    assert set(staff.column_colors) == set(range(8)) and staff.wedge_colors == {}
+    assert staff.column_colors == {} and staff.wedge_colors == {}
 
 
 def test_the_switch_for_steps_is_in_the_settings_and_is_saved(app: QApplication) -> None:
@@ -1711,7 +1697,7 @@ def test_the_settings_have_a_staff_key_signature_apart_from_the_scales(app: QApp
     pane = view.settings_panel
     assert isinstance(pane, sp.KeySignatureSettingsPanel) and pane.staff_keys_row is not None and pane.staff_key_list is not None
     assert "Staff Key" in pane.staff_keys_row.title.text() and "Scale Key" in pane.keys_row.title.text()
-    assert pane.stack.count() == 6  # menu, clefs, scales, staff keys, scale keys, and motion
+    assert pane.stack.count() == 7  # menu, clefs, scales, staff keys, scale keys, motion, and Next Question
     for row, index in ((pane.clefs_row, 1), (pane.modes_row, 2), (pane.staff_keys_row, 3), (pane.keys_row, 4)):
         row.click()
         QTest.qWait(300)
@@ -1770,7 +1756,7 @@ def test_the_other_key_exercises_have_one_key_signature_setting(app: QApplicatio
     """
     other = ExerciseView(KeySignatures(), rng=random.Random(4)).settings_panel
     assert isinstance(other, sp.KeySignatureSettingsPanel) and other.staff_keys_row is None and other.staff_key_list is None
-    assert "Key signatures" in other.keys_row.title.text() and other.stack.count() == 5
+    assert "Key signatures" in other.keys_row.title.text() and other.stack.count() == 6
 
 
 def test_the_help_mentions_the_staffs_signature_only_when_the_staff_can_have_one() -> None:

@@ -92,6 +92,7 @@ def _isolated_state() -> Iterator[None]:
         "arpeggio",
         "key_signatures",
         "key_construction",
+        "order_of_keys",
         "scale_construction",
         "scale_identification",
         "clef_basics",

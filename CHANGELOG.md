@@ -7,11 +7,13 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Added
 
+- Order of Keys asks learners to write a named key signature one sharp or flat at a time on a blank staff. Learners can choose clefs, scales, key signatures, and how many accidentals are already written.
+
 - Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.
 
-- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
+- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality menu for practicing the interval number, quality, or both, and Limited or All answer buttons.
 
-- A Key Signatures lesson teaches how to read and write major and minor key signatures and links to both key signature exercises.
+- A Key Signatures lesson teaches how to read and write major and minor key signatures and links to the key signature exercises.
 - An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.
 
 - Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.
@@ -37,7 +39,7 @@ Alto uses [semantic versioning](https://semver.org/).
 - Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
   exercise tile outlines are near black and other standard button outlines are graphite gray.
 
-- Lesson questions and their feedback appear together in a “Check your understanding” callout.
+- Lesson questions and their feedback appear together in a “Knowledge check” callout.
 
 - Lesson samples and instrument previews play at the same volume as the corresponding exercise notes.
 - Playable staff examples in lessons, the glossary, and saved answer cards highlight each note or chord as it sounds.

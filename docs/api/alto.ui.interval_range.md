@@ -30,7 +30,7 @@ A draggable interval range with keyboard controls for either endpoint.
 
 - `edited` (*Signal*): Emits the selected lower and upper distances in half steps.
 - `low, high` (*int*): The selected distances, inclusive.
-- `maximum` (*int*): The largest available interval distance.
+- `minimum, maximum` (*int*): The smallest and largest available interval distances.
 - `active` (*bool*): Whether the current selection contains any intervals.
 
 **Examples**
@@ -64,6 +64,7 @@ def set_range(
     *,
     high: int,
     maximum: int,
+    minimum: int = 1,
     active: bool = True,
 ) -> None
 ```
@@ -75,6 +76,7 @@ Synchronize the slider without emitting an edit.
 - `low` (*int*): The lowest selected interval distance.
 - `high` (*int*): The highest selected interval distance. Keyword-only.
 - `maximum` (*int*): The largest available distance. Keyword-only.
+- `minimum` (*int, default 1*): The smallest available distance. Keyword-only.
 - `active` (*bool, default True*): Whether any intervals are selected. Keyword-only.
 
 **Examples**

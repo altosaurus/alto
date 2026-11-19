@@ -54,7 +54,7 @@ from alto.theory.fifths import (
     cells_of_key,
 )
 from alto.theory.scales import format_key_signature
-from alto.ui.colors import blend
+from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.engraving import (
     accidental_width,
     draw_accidental,
@@ -794,9 +794,8 @@ class FifthsCircle(QWidget):
             ring, place = self.target
             inner, outer = rings[ring]
             p.setBrush(Qt.BrushStyle.NoBrush)
-            p.setPen(
-                QPen(self.palette().color(QPalette.ColorRole.WindowText), max(radius / 100, 2.0)),
-            )  # the text color shows in either theme
+            outline = blend(self.palette().color(QPalette.ColorRole.WindowText), b=QColor(CORRECT_ANSWER_COLOR), t=self._glow)
+            p.setPen(QPen(outline, max(radius / 100, 2.0)))
             p.drawPath(wedge_path(center=center, inner=inner, outer=outer, index=place))
         self._draw_labels(p, center=center, radius=radius, scheme=scheme)
         self._draw_disc(p, center=center, radius=radius)

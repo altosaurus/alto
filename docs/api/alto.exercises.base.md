@@ -48,6 +48,8 @@ Question(
     show_staff: bool = False,
     caption: str = '',
     build_key: bool = False,
+    place_signature: bool = False,
+    starting_slots: list[int] = field(default_factory=list),
     construct_scale: list[Note] | None = None,
     construct_steps: list[str] | None = None,
     notes_only: bool = False,
@@ -75,7 +77,7 @@ One question, with what to show for it and which answer is right.
 - `clef` (*str, default "treble"*): The clef to draw on. Keyword-only.
 - `explanation` (*str, default ""*): Text shown after the answer to say why it is right. Keyword-only.
 - `key` (*int, default 0*): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.
-- `value` (*str, default "whole"*): The note value to draw (single notes only). Keyword-only.
+- `value` (*str, default "whole"*): The written duration for single notes and interval voices. Keyword-only.
 - `staff_signature` (*int or None*): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.
 - `minor` (*bool, default False*): Use the signature's relative minor for scale degree naming. Keyword-only.
 - `grid` (*dict of str to tuple of (int, int) or None*): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
@@ -92,6 +94,8 @@ One question, with what to show for it and which answer is right.
 - `show_staff` (*bool, default False*): Draw the staff even with no notes on it, to show only its clef and key signature. Keyword-only.
 - `caption` (*str, default ""*): Text written on the staff itself, under the music, in place of the prompt above it. Keyword-only.
 - `build_key` (*bool, default False*): The learner builds the key signature `key` on a blank staff with the fork widget, instead of pressing a button. Keyword-only.
+- `place_signature` (*bool, default False*): Place each accidental of the named key on the staff. Keyword-only.
+- `starting_slots` (*list of int*): Zero-based positions of the accidentals already printed in an Order of Keys question.
 - `construct_scale` (*list of Note or None*): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.
 - `construct_steps` (*list of str or None*): The steps between the notes of `construct_scale`, each "W" (whole) or "H" (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.
 - `notes_only` (*bool, default False*): Show note names without a scale degree context. Keyword-only.
@@ -230,6 +234,26 @@ Report whether a key signature built with the fork is the one asked for.
 >>> q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
 >>> q.check_built(2), q.check_built(-2)
 (True, False)
+```
+
+### Question.places_sequence
+
+```python
+@property
+def places_sequence() -> bool
+```
+
+Report whether the learner enters successive positions on the staff.
+
+**Returns**
+
+- *bool*: True for scales and handwritten key signatures.
+
+**Examples**
+
+```pycon
+>>> Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
+True
 ```
 
 ### Question.check

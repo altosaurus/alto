@@ -102,6 +102,7 @@ from alto.ui.settings_panel import (
     load_keyboard_intervals,
     load_notation_terms,
     load_note_names,
+    load_order_of_keys,
     load_scale_construction,
     load_scale_identification,
 )
@@ -495,6 +496,7 @@ class MainWindow(QMainWindow):
         load_arpeggio()
         load_key_signatures()
         load_key_construction()
+        load_order_of_keys()
         load_circle()
         load_clef_basics()
         load_notation_terms()
@@ -1028,6 +1030,7 @@ class MainWindow(QMainWindow):
             "arpeggio",
             "key_signatures",
             "key_construction",
+            "order_of_keys",
             "scale_identification",
             "scale_construction",
             "clef_basics",

@@ -26,8 +26,9 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings as app_settings
-from alto.audio import sounds
+from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
 from alto.exercises.base import Question
+from alto.exercises.library import IntervalNames
 from alto.settings import spell
 from alto.ui import icons
 from alto.ui.circle import FifthsCircle
@@ -118,6 +119,7 @@ class QuestionPreview(QDialog):
         staff = None
         if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
+            staff.interval_voices = exercise_name == IntervalNames.name
             if q.construct_steps:  # a scale with its steps shows them above the notes
                 staff.wedges = list(q.construct_steps)
             # a "place this note" or "place this scale" question shows the notes that were the answer
@@ -186,7 +188,8 @@ class QuestionPreview(QDialog):
             play = QPushButton("Play")
             if staff is not None and staff.columns == notes:
                 playback = StaffPlayback(self, highlight=staff.highlight_column)
-                play.clicked.connect(lambda: playback.play(notes))
+                gap_ms = MELODIC_INTERVAL_GAP_MS if staff.interval_voices and len(notes) == 2 else DEFAULT_NOTE_GAP_MS
+                play.clicked.connect(lambda: playback.play(notes, gap_ms=gap_ms))
             else:
                 play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)

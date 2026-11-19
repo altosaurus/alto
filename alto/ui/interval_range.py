@@ -40,8 +40,8 @@ class IntervalRangeSlider(QWidget):
         Emits the selected lower and upper distances in half steps.
     low, high : int
         The selected distances, inclusive.
-    maximum : int
-        The largest available interval distance.
+    minimum, maximum : int
+        The smallest and largest available interval distances.
     active : bool
         Whether the current selection contains any intervals.
 
@@ -70,6 +70,7 @@ class IntervalRangeSlider(QWidget):
         36
         """
         super().__init__(parent)
+        self.minimum = 1
         self.low, self.high, self.maximum = 1, 12, 24
         self.active = True
         self._endpoint = "low"
@@ -81,7 +82,7 @@ class IntervalRangeSlider(QWidget):
         self.setAccessibleName("Interval range")
         self.setToolTip("Drag either handle. Left and Right adjust it; Down selects the lower handle and Up the upper handle.")
 
-    def set_range(self, low: int, *, high: int, maximum: int, active: bool = True) -> None:
+    def set_range(self, low: int, *, high: int, maximum: int, minimum: int = 1, active: bool = True) -> None:
         """
         Synchronize the slider without emitting an edit.
 
@@ -93,6 +94,8 @@ class IntervalRangeSlider(QWidget):
             The highest selected interval distance. Keyword-only.
         maximum : int
             The largest available distance. Keyword-only.
+        minimum : int, default 1
+            The smallest available distance. Keyword-only.
         active : bool, default True
             Whether any intervals are selected. Keyword-only.
 
@@ -103,8 +106,9 @@ class IntervalRangeSlider(QWidget):
         >>> slider.low, slider.high
         (3, 7)
         """
-        self.maximum = max(1, maximum)
-        self.low = min(max(1, low), self.maximum)
+        self.minimum = minimum
+        self.maximum = max(minimum, maximum)
+        self.low = min(max(minimum, low), self.maximum)
         self.high = min(max(self.low, high), self.maximum)
         self.active = active
         self.setAccessibleDescription(f"Intervals {self.low} through {self.high}" if active else "No intervals selected")
@@ -151,7 +155,7 @@ class IntervalRangeSlider(QWidget):
         >>> IntervalRangeSlider()._position(1)
         12.0
         """
-        fraction = (value - 1) / max(1, self.maximum - 1)
+        fraction = (value - self.minimum) / max(1, self.maximum - self.minimum)
         if self.layoutDirection() == Qt.LayoutDirection.RightToLeft:
             fraction = 1.0 - fraction
         return self.PADDING + fraction * max(1.0, self.width() - 2 * self.PADDING)
@@ -172,7 +176,7 @@ class IntervalRangeSlider(QWidget):
         >>> slider.low
         12
         """
-        value = min(max(1, value), self.maximum)
+        value = min(max(self.minimum, value), self.maximum)
         before = self.low, self.high, self.active
         if not self.active:
             self.low = self.high = value
@@ -265,7 +269,7 @@ class IntervalRangeSlider(QWidget):
         fraction = (event.position().x() - self.PADDING) / max(1.0, self.width() - 2 * self.PADDING)
         if self.layoutDirection() == Qt.LayoutDirection.RightToLeft:
             fraction = 1.0 - fraction
-        self._commit(1 + round(fraction * (self.maximum - 1)))
+        self._commit(self.minimum + round(fraction * (self.maximum - self.minimum)))
         event.accept()
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
@@ -312,7 +316,7 @@ class IntervalRangeSlider(QWidget):
                 delta = -delta
             self.move_endpoint(self._endpoint, delta=delta)
         elif key in (Qt.Key.Key_Home, Qt.Key.Key_End):
-            self._commit(1 if key == Qt.Key.Key_Home else self.maximum)
+            self._commit(self.minimum if key == Qt.Key.Key_Home else self.maximum)
         else:
             super().keyPressEvent(event)
             return

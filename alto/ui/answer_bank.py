@@ -55,6 +55,7 @@ class AnswerBank(QScrollArea):
         """
         super().__init__(parent)
         self.buttons: list[QAbstractButton] = []
+        self._positions: list[tuple[int, int]] = []
         self.content = QWidget()
         self._grid = QGridLayout(self.content)
         self._grid.setContentsMargins(8, 8, 8, 8)
@@ -69,7 +70,7 @@ class AnswerBank(QScrollArea):
         self.setMinimumWidth(120)
         self.setAccessibleName("Interval answer buttons")
 
-    def set_buttons(self, buttons: list[QAbstractButton]) -> None:
+    def set_buttons(self, buttons: list[QAbstractButton], *, positions: list[tuple[int, int]] | None = None) -> None:
         """
         Display answer buttons in a stable order.
 
@@ -77,6 +78,8 @@ class AnswerBank(QScrollArea):
         ----------
         buttons : list of QAbstractButton
             The buttons to arrange. Their caller owns answer handling.
+        positions : list of tuple of (int, int) or None
+            Optional row and column for each button. Each row wraps independently when space is limited.
 
         Examples
         --------
@@ -87,6 +90,7 @@ class AnswerBank(QScrollArea):
         2
         """
         self.buttons = list(buttons)
+        self._positions = positions or []
         self._reflow()
 
     def _reflow(self) -> None:
@@ -109,13 +113,17 @@ class AnswerBank(QScrollArea):
             return
         width = max(72, *(button.sizeHint().width() for button in self.buttons))
         available = self.width() - self.verticalScrollBar().sizeHint().width() - 16
-        columns = max(1, min(6, len(self.buttons), (available + 8) // (width + 8)))
+        max_columns = max(col for _, col in self._positions) + 1 if self._positions else min(6, len(self.buttons))
+        columns = max(1, min(max_columns, (available + 8) // (width + 8)))
         height = max(max(button.minimumHeight(), button.sizeHint().height()) for button in self.buttons)
-        for index, button in enumerate(self.buttons):
-            self._grid.addWidget(button, index // columns, index % columns)
+        positions = self._positions or [(0, index) for index in range(len(self.buttons))]
+        wrapped_rows = sorted({(row, col // columns) for row, col in positions})
+        row_indices = {position: index for index, position in enumerate(wrapped_rows)}
+        for button, (row, col) in zip(self.buttons, positions, strict=True):
+            self._grid.addWidget(button, row_indices[row, col // columns], col % columns)
         for column in range(columns):
             self._grid.setColumnStretch(column, 1)
-        rows = (len(self.buttons) + columns - 1) // columns
+        rows = len(wrapped_rows)
         content_height = rows * height + max(0, rows - 1) * 8 + 16
         self.content.setMinimumHeight(content_height)
         visible_height = min(240, min(rows, 4) * height + max(0, min(rows, 4) - 1) * 8 + 16)

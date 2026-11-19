@@ -808,4 +808,4 @@ def test_the_exercise_has_its_own_settings_panel(app: QApplication) -> None:
     """
     panel = sp.settings_panel_for(ClefBasics())
     assert isinstance(panel, sp.ClefBasicsSettingsPanel)
-    assert panel.stack.count() == 4 and panel.choice_buttons_row is not None
+    assert panel.stack.count() == 5 and panel.choice_buttons_row is not None

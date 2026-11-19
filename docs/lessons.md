@@ -75,26 +75,26 @@ either exercise opens a hint and a link back to the lesson.
 
 Eight steps for a beginner:
 
-1. **Why keys need a map.** What a key is, and what a key signature is.
+1. **A map of major keys.** What a key is, and what a key signature is.
 2. **A fifth.** Counting five letter names, and hearing the interval. A small exercise: name the letter a fifth above.
-3. **Walking clockwise.** Each step clockwise adds a sharp.
-4. **Counting sharps.** Find the key with a given number of sharps.
-5. **Flats go the other way.** Counterclockwise adds flats; where the two meet. Find the key with a given number of flats.
-6. **The inner ring: relative minors.** Find the relative minor of a key.
+3. **Fifths clockwise from C.** Each step clockwise adds a sharp.
+4. **Sharp keys on the circle.** Find the key with a given number of sharps.
+5. **Flat keys on the circle.** Counterclockwise adds flats; where the two meet. Find the key with a given number of flats.
+6. **Relative minors on the inner ring.** Find the relative minor of a key.
 7. **A key and its neighbors.** The IV and V of a key. Find the key a fifth above or below another.
-8. **What you can do now.** A summary, and a button to practice in the Circle of Fifths exercise.
+8. **Circle of fifths practice.** A summary, and a button to practice in the Circle of Fifths exercise.
 
 ## The Clef Basics lesson
 
 Ten steps for a beginner:
 
-1. **What a clef does.** The same place on the staff is a different note in the treble and bass clefs.
-2. **Three symbols.** Every clef is the G clef, the C clef or the F clef, put on a line.
+1. **Pitch and the clef.** The same place on the staff is a different note in the treble and bass clefs.
+2. **The three clef symbols.** Every clef is the G clef, the C clef or the F clef, put on a line.
 3. **The G clef.** The treble clef, and the French violin clef on the bottom line.
 4. **The F clef.** The bass clef on the fourth line, the subbass clef on the top line, and the baritone clef.
 5. **The C clef and middle C.** Soprano, mezzo-soprano, alto and tenor are the C clef on four lines, and each centers on middle C.
 6. **The rarer clefs.** French violin, subbass and the two ways to write the baritone clef.
-7. **Name the symbol.** A clef is drawn: is it the G, C or F clef?
-8. **Find the line.** A named clef: which line of a blank staff is it written on?
-9. **Name the clef.** The two halves together, as in Clef Identification.
-10. **What you can do now.** A summary, and a button to practice in the Clef Basics exercise.
+7. **The clef symbol.** A clef is drawn: is it the G, C or F clef?
+8. **The clef’s line.** A named clef: which line of a blank staff is it written on?
+9. **The clef’s name.** The two halves together, as in Clef Identification.
+10. **Clef reading and placement.** A summary, and a button to practice in the Clef Basics exercise.

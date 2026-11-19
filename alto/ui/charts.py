@@ -49,9 +49,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto.ui.colors import blend
+from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 
-GOOD, BAD = QColor("#2e7d32"), QColor("#c62828")  # the same greens and reds the exercise feedback uses
+GOOD, BAD = QColor(CORRECT_ANSWER_COLOR), QColor("#c62828")  # the same greens and reds the exercise feedback uses
 FOCUS_LIGHTER = 125  # the element under the pointer is drawn this many percent as light (100 is unchanged)
 DIM_OPACITY = 0.45  # the others are drawn this opaque while one is under the pointer
 

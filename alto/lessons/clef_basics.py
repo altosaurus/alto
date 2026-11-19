@@ -138,7 +138,7 @@ CLEF_BASICS = Lesson(
     exercise="ClefBasics",
     steps=(
         Step(
-            title="What a clef does",
+            title="Pitch and the clef",
             text=(
                 "<p>A musical sound has a <b>pitch</b>: how high or low it sounds. A written <b>note</b> shows a pitch "
                 "by its place on a <b>staff</b>, a set of five lines. Notes sit on the lines and in the spaces between them. "
@@ -154,7 +154,7 @@ CLEF_BASICS = Lesson(
             ),
         ),
         Step(
-            title="Three symbols",
+            title="The three clef symbols",
             text=(
                 "<p>The clefs in this lesson use three symbols: the <b>G clef</b>, the <b>C clef</b> and the <b>F "
                 "clef</b>. They are "
@@ -232,7 +232,7 @@ CLEF_BASICS = Lesson(
             ),
         ),
         Step(
-            title="Name the symbol",
+            title="The clef symbol",
             text=(
                 "<p>Try the first half of the skill: which of the three symbols is this clef made with? Ignore the line for "
                 "now. You cannot get it wrong: you will get a hint, then the answer.</p>"
@@ -241,7 +241,7 @@ CLEF_BASICS = Lesson(
             make_task=symbol_task,
         ),
         Step(
-            title="Find the line",
+            title="The clef’s line",
             text=(
                 "<p>Now the second half: which line does a clef sit on? A named clef is shown, and the staff is blank. "
                 "Count the lines from the bottom.</p>"
@@ -250,7 +250,7 @@ CLEF_BASICS = Lesson(
             make_task=line_task,
         ),
         Step(
-            title="Name the clef",
+            title="The clef’s name",
             text=(
                 "<p>Now both halves: the symbol and the line. This is what the Clef Identification question asks. Work out "
                 "the symbol, then find the line it is on.</p>"
@@ -259,7 +259,7 @@ CLEF_BASICS = Lesson(
             make_task=identify_task,
         ),
         Step(
-            title="What you can do now",
+            title="Clef reading and placement",
             text=(
                 "<p>You can tell the clefs apart:</p>"
                 "<ul>"

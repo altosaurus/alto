@@ -50,6 +50,7 @@ from alto.exercises.library import (
     NotationIdentification,
     NoteConstruction,
     NoteNames,
+    OrderOfKeys,
     ScaleIdentification,
 )
 from alto.lessons import LESSONS
@@ -639,6 +640,11 @@ _READING_HINTS = {
         "<p>For major, go a half step above the last sharp or read the next-to-last flat. One flat gives F major, "
         "and an empty signature gives C major. For minor, take the sixth note of that major scale. "
         "For Dorian, take its second note.</p>"
+    ),
+    OrderOfKeys: (
+        "<p>Write sharps in the order F C G D A E B. Write flats in the reverse order, B E A D G C F. "
+        "Stop once you have written all the signs for the key. In treble clef, start sharps on the top line "
+        "and flats on the middle line. In bass clef, start sharps on the fourth line and flats on the second line.</p>"
     ),
     KeySignatureConstruction: (
         "<p>D major needs F♯ and C♯, so choose two sharps. E♭ major needs B♭, E♭, and A♭, so choose three flats. "

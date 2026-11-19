@@ -12,7 +12,7 @@ PITCHES_AND_NOTES = Lesson(
     related_exercises=("NoteNames", "NoteConstruction", "NotationIdentification"),
     steps=(
         Step(
-            title="Listen for pitch",
+            title="High and low pitches",
             text=(
                 "<p><b>Pitch</b> is how high or low a sound seems. Hum a comfortable sound, then hum a higher one. "
                 "You changed its pitch. Musicians give pitches names so someone else can sing or play them.</p>"
@@ -30,7 +30,7 @@ PITCHES_AND_NOTES = Lesson(
             ),
         ),
         Step(
-            title="Find C on a keyboard",
+            title="C on the piano keyboard",
             text=(
                 "<p>On a piano the white keys use seven letter names. Starting on C and moving right, they go "
                 "<b>C D E F G A B</b>, then begin again at C. The black keys form groups of two and three.</p>"
@@ -47,7 +47,7 @@ PITCHES_AND_NOTES = Lesson(
             ),
         ),
         Step(
-            title="Hear the letter names repeat",
+            title="Octaves and note names",
             text=(
                 "<p>Play C, then the next C above it. Both have the same letter name. The distance between them is "
                 "an <b>octave</b>. To specify which C to play, add an octave number. "
@@ -59,7 +59,7 @@ PITCHES_AND_NOTES = Lesson(
             hear_label="Hear middle C, then the highlighted C",
         ),
         Step(
-            title="Read a note on the staff",
+            title="Notes on lines and spaces",
             text=(
                 "<p>A <b>staff</b> has five lines. Read a note by the center of its oval, the <b>notehead</b>. "
                 "The vertical stroke attached to this oval on some notes is the <b>stem</b>. "
@@ -78,7 +78,7 @@ PITCHES_AND_NOTES = Lesson(
             ),
         ),
         Step(
-            title="Change the pitch of a letter",
+            title="Sharps, flats, and naturals",
             text=(
                 "<p>The distance from a piano key to its immediate neighbor, counting black and white keys, "
                 "is a <b>half step</b>. An <b>accidental</b> is a sign before a written note. A <b>sharp</b> (♯) "
@@ -92,7 +92,7 @@ PITCHES_AND_NOTES = Lesson(
             hear_label="Hear C, then C sharp",
         ),
         Step(
-            title="Read it or write it",
+            title="Reading and writing notes",
             text=(
                 "<p>Try the same idea in either direction. On a keyboard, find a group of black keys and count to "
                 "the highlighted note. On a staff, start at the clef’s known line and count letters to the notehead. "

@@ -304,10 +304,10 @@ def test_knowledge_check_wraps_answers_and_keeps_feedback_together(app: QApplica
         Shared Qt application.
     """
     assert StepView(KEY_SIGNATURES.steps[0]).task_box.isHidden()
-    view = StepView(next(step for step in CLEF_BASICS.steps if step.title == "Find the line"))
+    view = StepView(next(step for step in CLEF_BASICS.steps if step.title == "The clef’s line"))
     view.show()
     callout = view.task_box
-    assert callout.accessibleName() == "Check your understanding"
+    assert callout.accessibleName() == "Knowledge check"
     assert view.feedback.isHidden() and view.again.isHidden()
     assert view.task is not None
     wrong = next(button for button in view.choice_buttons if button.text() != view.task.correct)

@@ -109,10 +109,16 @@ make every switch slide.
 
 ### The right/wrong flash: animate a color
 
-`ExerciseView._flash` fades an answer button from black to green or red in 350 ms with a **linear** curve, because it is a color
-fade. It uses `QVariantAnimation` with a start of 0.0 and an end of 1.0 and in its callback computes `blend(start, b=end, t=t)`
+`ExerciseView._flash` fades an answer button from black to the correct-answer green in 180 ms. Calling it without a
+target uses `CORRECT_ANSWER_COLOR` from `alto/ui/colors.py`. The wrong-answer handler passes red explicitly.
+The flash uses `QVariantAnimation` with a start of 0.0 and an end of 1.0 and in its callback computes `blend(start, b=end, t=t)`
 and sets the button's style sheet from the result. The animations are kept in a list (`self._anims`) that is cleared when the next
 question appears, so nothing animates a button that no longer exists.
+
+Pass the answered notes to `ExerciseView._finish_answer`, grouped by onset. In **After Animation** and **Wait**,
+the playback callback colors each sounding staff column or piano key green and clears the highlight at the end.
+**After Animation** then starts the advance timer. **Wait** keeps the answer on screen until the learner presses
+**Next**. **Immediately** gives the answer button a brief green flash and plays the same audio without highlighting the music or delaying the next question.
 
 ### The fade of a sound
 

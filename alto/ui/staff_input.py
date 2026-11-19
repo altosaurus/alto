@@ -32,6 +32,7 @@ from alto.settings import (
     CLEF_SYMBOL_NAMES,
     RANGE_LIMITS,
 )
+from alto.theory.key_signatures import written_signature
 from alto.theory.pitch import (
     Note,
     key_accidental,
@@ -40,10 +41,13 @@ from alto.ui import engraving
 from alto.ui.notation import current as current_style
 from alto.ui.staff import (
     BOTTOM_LINE,
+    KEY_OFFSET,
+    KEY_STEP,
     MAX_STEP,
     MIDDLE_C,
     SYMBOL_CLEF,
     StaffWidget,
+    draw_signature_sign,
 )
 
 WHEEL_NOTCH = 120  # the angle delta of one notch of a mouse wheel
@@ -287,7 +291,7 @@ class StaffInput(StaffWidget):
         low, high = RANGE_LIMITS[self.clef]
         here = self.caret if self.caret is not None else self.caret_start()
         self.caret = min(max(here + steps, low), high)
-        self.refresh_preview()
+        self.show_note(self.caret_note(), color=PREVIEW)
         self.caret_moved.emit()
 
     def jump_to_letter(self, letter: int) -> None:
@@ -315,7 +319,7 @@ class StaffInput(StaffWidget):
         here = self.caret if self.caret is not None else self.caret_start()
         reachable = [d for d in range(low, high + 1) if d % 7 == letter]
         self.caret = min(reachable, key=lambda d: (abs(d - here), -d))  # a tie goes to the higher note
-        self.refresh_preview()
+        self.show_note(self.caret_note(), color=PREVIEW)
         self.caret_moved.emit()
 
     def place_caret(self) -> None:
@@ -874,7 +878,7 @@ class ScaleInput(StaffInput):
             return
         self._redraw(None)
         if self.caret is not None:  # the keyboard's next note shows where it would go
-            self.refresh_preview()
+            self._redraw(self.caret_note())
         self.notes_changed.emit()
 
     def place_caret(self) -> None:
@@ -925,6 +929,135 @@ class ScaleInput(StaffInput):
         elif event.button() == Qt.MouseButton.LeftButton:
             self.caret = None  # a click leaves nothing behind: the keyboard carries on from the last note
             self.place_next(None if self.complete else self.note_at(event.position().y()))
+
+
+class SignatureInput(ScaleInput):
+    """
+    Place accidentals in consecutive key-signature slots immediately after the clef.
+
+    Examples
+    --------
+    >>> staff = SignatureInput()
+    >>> staff.reset_scale("treble", slots=7, caption="D major")
+    >>> staff.place_next(Note.parse("F#5"))
+    >>> staff.notes, staff.columns
+    ([Note(octave=5, letter=3, accidental=1)], [])
+    """
+
+    preview: Note | None = None
+
+    template: tuple[Note | None, ...] = (None,) * MAX_ACCIDENTALS
+
+    def reset_signature(self, clef: str, *, key: int, caption: str, starting_slots: list[int]) -> None:
+        """
+        Set the fixed signs for this question and clear the learner’s entries.
+
+        Parameters
+        ----------
+        clef : str
+            Clef used to read the positions.
+        key : int
+            Target signature.
+        caption : str
+            Name of the key under the staff.
+        starting_slots : list of int
+            Positions to fill before the learner begins.
+
+        Examples
+        --------
+        >>> staff = SignatureInput()
+        >>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+        >>> len(staff.template), staff.template[1]
+        (7, Note(octave=5, letter=0, accidental=1))
+        """
+        slots: list[Note | None] = [None] * MAX_ACCIDENTALS
+        if starting_slots:
+            for i, note in enumerate(written_signature(clef, key=key)):
+                if i in starting_slots:
+                    slots[i] = note
+        self.template = tuple(slots)
+        self.reset_scale(clef, slots=self.template.count(None), caption=caption)
+
+    def entered_signature(self) -> list[Note | None]:
+        """
+        Combine the fixed signs and the learner's entries in staff order.
+
+        Returns
+        -------
+        list of Note or None
+            One pitch per occupied slot, with None in each remaining gap.
+
+        Examples
+        --------
+        >>> staff = SignatureInput()
+        >>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
+        >>> staff.place_next(Note.parse("F#5"))
+        >>> [str(n) for n in staff.entered_signature() if n is not None]
+        ['F♯5', 'C♯5']
+        """
+        entered = iter(self.notes)
+        return [fixed if fixed is not None else next(entered, None) for fixed in self.template]
+
+    def _redraw(self, preview: Note | None) -> None:
+        """
+        Update the next sign without adding any noteheads to the staff.
+
+        Parameters
+        ----------
+        preview : Note or None
+            Pitch under the pointer or keyboard caret.
+
+        Examples
+        --------
+        >>> staff = SignatureInput()
+        >>> staff._redraw(Note.parse("C#5"))
+        >>> str(staff.preview)
+        'C♯5'
+        """
+        self.preview = None if self.complete else preview
+        self.update()
+
+    def paintEvent(self, event: QPaintEvent) -> None:
+        """
+        Draw the blank staff and caption, then the placed signs and the next sign under the pointer.
+
+        Parameters
+        ----------
+        event : QPaintEvent
+            The paint request.
+
+        Examples
+        --------
+        >>> staff = SignatureInput()
+        >>> staff.reset_scale("bass", slots=7)
+        >>> staff.place_next(Note.parse("Bb2"))
+        >>> staff.grab().isNull()
+        False
+        """
+        super().paintEvent(event)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        bottom = self.staff_bottoms()[self.clef]
+        font = (self.notation_style or current_style()).font
+        signs = self.entered_signature()
+        preview_slot = signs.index(None) if self.preview is not None and not self.locked and None in signs else -1
+        for i, note in enumerate(signs):
+            ink = QColor("black") if self.template[i] is not None else self.note_color or QColor("black")
+            if i == preview_slot:
+                note, ink = self.preview, PREVIEW
+            if note is None:
+                continue
+            y = bottom - (note.diatonic - BOTTOM_LINE[self.clef]) * self.GAP / 2
+            draw_signature_sign(
+                painter,
+                sign=note.accidental,
+                x=self.side + KEY_OFFSET + i * KEY_STEP,
+                y=y,
+                gap=self.GAP,
+                color=ink,
+                font=font,
+            )
+        painter.end()
 
 
 class ClefInput(StaffWidget):

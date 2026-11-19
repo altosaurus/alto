@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import random
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
-from PySide6.QtTest import QTest
+from PySide6.QtCore import Qt
+from PySide6.QtTest import QSignalSpy, QTest
+from PySide6.QtWidgets import QRadioButton, QToolButton
 
 from alto import settings
 from alto.audio import sounds
@@ -14,13 +17,18 @@ from alto.exercises.library import (
     ArpeggioNames,
     ChordQualities,
     CircleOfFifths,
+    IntervalNames,
     KeyboardNotes,
+    KeySignatureConstruction,
     KeySignatures,
+    NotationIdentification,
     NoteConstruction,
     NoteNames,
 )
 from alto.theory.pitch import Note
+from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.store import store
 
 if TYPE_CHECKING:
     from PySide6.QtWidgets import QApplication
@@ -95,7 +103,7 @@ def test_the_speaker_button_mutes_and_unmutes(app: QApplication) -> None:
     assert sounds.enabled
 
 
-def test_chord_quality_has_a_buttons_only_settings_menu(app: QApplication) -> None:
+def test_chord_quality_has_buttons_and_next_question_settings(app: QApplication) -> None:
     """
     Check that chord quality offers its answer-button setting.
 
@@ -106,7 +114,126 @@ def test_chord_quality_has_a_buttons_only_settings_menu(app: QApplication) -> No
     """
     view = view_of(ChordQualities())
     assert view.settings_panel is not None and view.settings_panel.choice_buttons_row is not None
-    assert view.settings_panel.stack.count() == 2
+    assert view.settings_panel.stack.count() == 3
+
+
+@pytest.mark.parametrize("mode", ["Immediately", "Wait", "After Animation"])
+def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> None:
+    """
+    Set the pace from the menu and verify the answer, animation and next question.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    mode : str
+        The setting selected for Interval Identification.
+    """
+    view = view_of(IntervalNames())
+    view.show()
+    panel = view.settings_panel
+    before = asked(view)
+    panel.next_question_row.click()
+    panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
+    page = panel.stack.currentWidget()
+    radios = page.findChildren(QRadioButton)
+    assert [radio.text() for radio in radios] == ["Immediately", "Wait", "After Animation"]
+    next(radio for radio in radios if radio.text() == mode).click()
+    next(button for button in page.findChildren(QToolButton) if "Back" in button.text()).click()
+    panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
+    assert panel.stack.currentIndex() == 0
+    assert asked(view) is before and panel.next_question_row.value.text() == mode
+    assert view_of(IntervalNames()).settings_panel.next_question_mode == mode
+    assert view_of(NoteNames()).settings_panel.next_question_mode == "After Animation"
+    wrong = next(b for b in view.buttons if b.text() != before.answer)
+    right = next(b for b in view.buttons if b.text() == before.answer)
+    wrong.click()
+    assert view.missed and not view.answered and view.next_button.isHidden()
+    with patch.object(sounds, "_play_sequence") as play:
+        right.click()
+        play.assert_called_once()
+        on_step = play.call_args.kwargs["on_step"]
+        on_step(0)
+        if mode == "Immediately":
+            assert not view.staff.column_colors and CORRECT_ANSWER_COLOR in right.styleSheet()
+        else:
+            assert view.staff.column_colors[0].name() == CORRECT_ANSWER_COLOR
+            assert not view._advance.isActive()
+            on_step(None)
+            assert not view.staff.column_colors
+    if mode == "Wait":
+        for animation in view._anims:
+            animation.setCurrentTime(animation.duration())
+        assert view.next_button.isVisible() and not view._advance.isActive()
+        assert asked(view) is before and CORRECT_ANSWER_COLOR in right.styleSheet()
+        view.next_button.click()
+    else:
+        assert view.next_button.isHidden() and view._advance.isActive()
+        assert QSignalSpy(view._advance.timeout).wait(2000)
+    assert asked(view) is not before and view.next_button.isHidden() and not view.answered
+
+
+def test_immediate_melody_continues_across_questions(app: QApplication) -> None:
+    """
+    Sound the second interval note after the next question appears, with no staff highlights.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    store().setValue("nextQuestion/IntervalNames", "Immediately")
+    settings.intervals.displays = {"Melodic"}
+    view = view_of(IntervalNames())
+    view.show()
+    sounds.enabled = True
+    question = asked(view)
+    with patch.object(sounds, "_effect", return_value=object()), patch.object(sounds, "_play_column") as play:
+        view.buttons[question.choices.index(question.answer)].click()
+        assert play.call_count == 1 and not view.staff.column_colors
+        assert QSignalSpy(view._advance.timeout).wait(2000)
+        assert asked(view) is not question
+        assert QSignalSpy(view._immediate_playback.step).wait(2000)
+        assert [call.args[0] for call in play.call_args_list] == [[n.midi for n in column] for column in question.staff]
+        assert not view.staff.column_colors and not view._advance.isActive()
+        view.hide()
+
+
+@pytest.mark.parametrize("mode", ["Immediately", "Wait"])
+def test_next_question_on_construction_and_staff_clicks(app: QApplication, mode: str) -> None:
+    """
+    Apply the selected pace to a construction and a button-free notation answer.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    mode : str
+        The saved pace for each exercise.
+    """
+    store().setValue("nextQuestion/KeySignatureConstruction", mode)
+    view = view_of(KeySignatureConstruction())
+    q = asked(view)
+    view.fork.set_value(q.key, slide=False)
+    view.answer_button.click()
+    assert view.answered
+    if mode == "Wait":
+        assert not view._advance.isActive() and not view.next_button.isHidden()
+        for animation in view._anims:
+            animation.setCurrentTime(animation.duration())
+        assert CORRECT_ANSWER_COLOR in view.answer_button.styleSheet()
+        view.next_button.click()
+        assert not view.answer_button.styleSheet()
+    else:
+        assert not view._anims and CORRECT_ANSWER_COLOR in view.answer_button.styleSheet()
+
+    settings.notation.question_type = "staff"
+    store().setValue("nextQuestion/NotationIdentification", mode)
+    view = view_of(NotationIdentification())
+    view.submit(asked(view).answer, button=None)
+    assert view.answered
+    assert view._advance.isActive() == (mode == "Immediately")
+    assert bool(view._anims) == (mode == "Wait")
 
 
 def test_the_settings_pane_slides_open_and_shut(app: QApplication) -> None:
@@ -343,7 +470,8 @@ def test_right_click_cycles_note_construction_signs(app: QApplication) -> None:
     other._cycle_accidental()  # not a construction question at all
 
 
-def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(construction: ExerciseView) -> None:
+@pytest.mark.parametrize("has_sound", [True, False])
+def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(construction: ExerciseView, has_sound: bool) -> None:
     """
     Check that placing the right note scores locks the staff and moves on.
 
@@ -351,13 +479,22 @@ def test_placing_the_right_note_scores_locks_the_staff_and_moves_on(construction
     ----------
     construction : ExerciseView
         The note construction view or panel under test.
+    has_sound : bool
+        Whether the exercise plays the placed note.
     """
     q = asked(construction)
     assert q.construct is not None
     first = q
-    construction._place(q.construct)
+    construction.exercise.has_sound = has_sound
+    construction.input_staff.caret = q.construct.diatonic
+    construction.input_staff.accidental = q.construct.accidental
+    construction.input_staff.place_caret()
     assert construction.answered and (construction.correct, construction.total) == (1, 1)
-    assert construction.input_staff.locked and construction._advance.isActive()
+    assert construction.input_staff.locked
+    assert construction._advance.isActive() == (not has_sound)
+    if has_sound:
+        assert construction.input_staff.columns == [[q.construct]]
+        assert construction.input_staff.column_colors[0].name() == "#2e7d32"
     construction._place(q.construct)  # a second click on the same question is ignored
     assert construction.total == 1
     construction._advance.stop()
@@ -473,6 +610,39 @@ def test_choosing_a_different_type_unlights_the_one_before(app: QApplication) ->
 # -- feedback and the less common orderings -------------------------------------------------------------------------
 
 
+@pytest.mark.parametrize("keyboard", [False, True], ids=["mouse", "space"])
+def test_wrong_answer_does_not_focus_another_button(app: QApplication, keyboard: bool) -> None:
+    """
+    Let the learner choose the next answer after a miss.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    keyboard : bool
+        Activate the focused answer with Space or click it with the mouse.
+    """
+    view = view_of(IntervalNames())
+    view.show()
+    view.activateWindow()
+    app.processEvents()
+    q = asked(view)
+    wrong = next(b for b in view.buttons if b.text() != q.answer)
+    if keyboard:
+        wrong.setFocus()
+        QTest.keyClick(wrong, Qt.Key.Key_Space)
+    else:
+        QTest.mouseClick(wrong, Qt.MouseButton.LeftButton)
+    assert view.missed and not wrong.isEnabled()
+    assert app.focusWidget() is None
+    right = next(b for b in view.buttons if b.text() == q.answer)
+    clicked = QSignalSpy(right.clicked)
+    QTest.keySequence(view, right.shortcut())
+    assert clicked.count() or clicked.wait(1000)
+    assert view.answered
+    view.close()
+
+
 def test_a_right_answer_fades_the_staff_notes_to_green(app: QApplication) -> None:
     """
     Check that a right answer fades the staff notes to green.
@@ -484,15 +654,46 @@ def test_a_right_answer_fades_the_staff_notes_to_green(app: QApplication) -> Non
     """
     view = view_of(NoteNames(), seed=2)
     q = asked(view)
-    next(b for b in view.buttons if b.text() == q.answer).click()
-    QTest.qWait(450)  # the color fades in over about 350 ms
-    assert view.staff.note_color is not None and view.staff.note_color.green() > view.staff.note_color.red()
+    right = next(b for b in view.buttons if b.text() == q.answer)
+    right.click()
+    animation = view._anims[-1]
+    animation.setCurrentTime(animation.duration())
+    assert view.staff.column_colors[0].name() == "#2e7d32"
+    assert "#2e7d32" in right.styleSheet()
     view._advance.stop()
 
 
-def test_a_right_answer_fades_the_highlighted_key_to_green(app: QApplication) -> None:
+@pytest.mark.parametrize("exercise", [ArpeggioNames, ChordQualities])
+def test_staff_feedback_follows_the_played_notes(app: QApplication, exercise: type[Exercise]) -> None:
     """
-    Check that a right answer fades the highlighted key to green.
+    Highlight only the sounding column of an arpeggio or chord, including after a delayed start.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    exercise : type of Exercise
+        The exercise that supplies the written and played notes.
+    """
+    view = view_of(exercise())
+    q = asked(view)
+    with patch.object(sounds, "_play_sequence") as play:
+        view.submit(q.answer, button=None)
+        assert [midis for midis, _ in play.call_args.kwargs["steps"]] == [[n.midi for n in col] for col in q.staff]
+        on_step = play.call_args.kwargs["on_step"]
+        assert not view.staff.column_colors and view.staff.note_color is None
+        for index in range(len(q.staff)):
+            on_step(index)
+            assert list(view.staff.column_colors) == [index] and view.staff.column_colors[index].name() == "#2e7d32"
+            assert not view._advance.isActive()
+        on_step(None)
+        assert not view.staff.column_colors and view._advance.isActive()
+    view.close()
+
+
+def test_a_right_answer_lights_the_sounding_key(app: QApplication) -> None:
+    """
+    Highlight the identified key between its playback onset and completion.
 
     Parameters
     ----------
@@ -503,9 +704,38 @@ def test_a_right_answer_fades_the_highlighted_key_to_green(app: QApplication) ->
     assert view.settings_panel is not None and view.keyboard.isVisibleTo(view)
     q = asked(view)
     assert q.keyboard is not None
-    next(b for b in view.buttons if b.text() == q.answer).click()
-    QTest.qWait(450)
-    view._advance.stop()
+    original = view.keyboard.highlight_color
+    with patch.object(sounds, "_play_sequence") as play:
+        next(b for b in view.buttons if b.text() == q.answer).click()
+        on_step = play.call_args.kwargs["on_step"]
+        assert view.keyboard.highlight_color == original
+        on_step(0)
+        assert view.keyboard.highlight == q.keyboard.midi and view.keyboard.highlight_color.name() == "#2e7d32"
+        on_step(None)
+        assert view.keyboard.highlight_color == original and view._advance.isActive()
+    view.close()
+
+
+@pytest.mark.parametrize("mode", ["Immediately", "After Animation"])
+def test_correct_cue_without_playable_notes(app: QApplication, mode: str) -> None:
+    """
+    Keep the ordinary correct-answer cue when a sound-enabled question has no pitches.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    mode : str
+        The automatic advancement setting.
+    """
+    store().setValue("nextQuestion/KeySignatures", mode)
+    view = view_of(KeySignatures())
+    view.exercise.has_sound = True
+    with patch.object(sounds, "play_correct") as cue:
+        next(b for b in view.buttons if b.text() == asked(view).answer).click()
+        cue.assert_called_once_with(1)
+    assert view._advance.isActive() and not view.staff.column_colors
+    view.close()
 
 
 def test_a_second_submit_after_the_question_is_answered_is_ignored(app: QApplication) -> None:

@@ -137,7 +137,7 @@ def test_exercise_and_saved_preview_show_and_play_both_notes(app: QApplication, 
     """
     played: list[list[list[Note]]] = []
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(exercise_view.sounds, "play_notes", played.append)
+    monkeypatch.setattr(exercise_view.sounds, "play_notes", lambda notes, **_: played.append(notes))
     view = ExerciseView(KeyboardIntervals(), rng=random.Random(9))
     view.show()
     app.processEvents()
@@ -769,7 +769,7 @@ def test_compact_mode_is_saved_and_replaces_full_answer_buttons(app: QApplicatio
     view = ExerciseView(KeyboardIntervals(), rng=random.Random(4))
     panel = view.settings_panel
     assert isinstance(panel, KeyboardIntervalSettingsPanel)
-    assert panel.stack.count() == 4
+    assert panel.stack.count() == 5
     panel.buttons_row.click()
     panel.stack.setCurrentIndex(3)
     assert panel.button_modes["limited"].isChecked()

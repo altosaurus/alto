@@ -544,6 +544,7 @@ KeyChecklist(
     selected: set[int],
     *,
     allow_empty: bool = False,
+    counts_only: bool = False,
     key_names: dict[int, str] | None = None,
     parent: QWidget | None = None,
 )
@@ -575,6 +576,7 @@ Build the checklist.
 
 - `selected` (*set of int*): The key signatures to check initially.
 - `allow_empty` (*bool, default False*): Allow every key to be unchecked. Keyword-only.
+- `counts_only` (*bool, default False*): Label each box with its accidental count instead of drawing a signature. Keyword-only.
 - `key_names` (*dict of int to str or None, default None*): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
@@ -836,6 +838,7 @@ ChoiceChecklist(
     *,
     selected: set,
     allow_empty: bool = False,
+    positions: Mapping[object, tuple[int, int]] | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -868,6 +871,7 @@ Build the checklist.
 - `groups` (*list of tuple of (str, list of tuple of (object, str))*): The headings and, under each, the choices as (key, label); an empty heading shows none.
 - `selected` (*set*): The keys to check initially. Keyword-only.
 - `allow_empty` (*bool, default False*): Allow all choices to be unchecked. Keyword-only.
+- `positions` (*mapping or None, default None*): Optional (row, column) for each key within its group. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns it. Keyword-only.
 
 **Constructor examples**
@@ -928,12 +932,12 @@ Choose the notation and answer format for written intervals.
 
 ```pycon
 >>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
-7
+10
 ```
 
 **Constructor**
 
-Build the menu and its six submenus.
+Build the interval settings menu with direction choices under Melodic.
 
 **Parameters**
 
@@ -942,8 +946,8 @@ Build the menu and its six submenus.
 **Constructor examples**
 
 ```pycon
->>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.isOn()
-True
+>>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
+'Interval and Quality'
 ```
 
 ## KeyboardIntervalSettingsPanel
@@ -1087,6 +1091,20 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 >>> store().remove("keyConstruction")
 ```
 
+## load_order_of_keys
+
+```python
+def load_order_of_keys() -> None
+```
+
+Restore the clefs, scales, and key signatures selected for Order of Keys.
+
+**Examples**
+
+```pycon
+>>> load_order_of_keys()
+```
+
 ## load_scale_identification
 
 ```python
@@ -1134,6 +1152,7 @@ KeySignatureSettingsPanel(
     cfg: settings.KeySignatureSettings,
     *,
     prefix: str = 'keySignatures',
+    keys_title: str = 'Key signatures',
     parent: QWidget | None = None,
 )
 ```
@@ -1174,6 +1193,7 @@ Build the panel for a set of settings.
 
 - `cfg` (*KeySignatureSettings*): The settings to edit.
 - `prefix` (*str, default "keySignatures"*): What the settings are saved under. Keyword-only.
+- `keys_title` (*str, default "Key signatures"*): Title for the signature checklist when the exercise uses a single list. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
 
 **Constructor examples**
@@ -1435,7 +1455,7 @@ True
 ## settings_panel_for
 
 ```python
-def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel | None
+def settings_panel_for(exercise: Exercise) -> ExerciseSettingsPanel
 ```
 
 Return the settings panel for an exercise.
@@ -1446,7 +1466,7 @@ Return the settings panel for an exercise.
 
 **Returns**
 
-- *ExerciseSettingsPanel or None*: A panel with a `changed` signal, or None for an exercise with no settings.
+- *ExerciseSettingsPanel*: A panel with the exercise options and the shared Next Question setting.
 
 **Examples**
 

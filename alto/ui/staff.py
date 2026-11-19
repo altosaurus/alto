@@ -56,6 +56,7 @@ from PySide6.QtWidgets import (
 
 from alto.notation_excerpts import excerpts
 from alto.notation_terms import MARKS
+from alto.theory.key_signatures import BOTTOM_LINE, key_signature_positions
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     Note,
@@ -80,16 +81,6 @@ PICK_OFFSETS = sorted(
     key=lambda offset: offset[0] ** 2 + offset[1] ** 2,
 )
 
-# Diatonic index of the bottom staff line.
-BOTTOM_LINE = {
-    "treble": Note(4, letter=2).diatonic,  # E4
-    "bass": Note(2, letter=4).diatonic,  # G2
-    "alto": Note(3, letter=3).diatonic,  # F3
-    "tenor": Note(3, letter=1).diatonic,  # D3
-    "soprano": Note(4, letter=0).diatonic,  # C4
-    "mezzo": Note(3, letter=5).diatonic,  # A3
-    "baritone": Note(2, letter=6).diatonic,  # B2
-}
 CLEF_GLYPH = {
     "treble": "𝄞",
     "bass": "𝄢",
@@ -174,97 +165,8 @@ def clef_target_of(shape: str) -> tuple[str, int]:
     return glyph[0].upper(), 2 * line
 
 
-# Where each key-signature accidental sits, in order of appearance. Each is a fourth up or a fifth down from the one before
-# (sharps: F C G D A E B, flats: B E A D G C F), and the pattern is chosen so that all seven stay on the staff, or one step
-# above or below it. This gives the usual signatures for the treble, bass, alto and tenor clefs, and works out the rest.
-_SHARP_PATTERNS = (
-    (
-        -3,
-        4,
-        -3,
-        -3,
-        4,
-        -3,
-    ),
-    (
-        4,
-        -3,
-        4,
-        -3,
-        4,
-        -3,
-    ),
-)
-_FLAT_PATTERNS = (
-    (
-        3,
-        -4,
-        3,
-        -4,
-        3,
-        -4,
-    ),
-    (
-        -4,
-        3,
-        -4,
-        3,
-        -4,
-        3,
-    ),
-)
-
-
-def key_signature_positions(
-    clef: str,
-    *,
-    sign: int,
-) -> list[str]:
-    """
-    Return the notes the sharps or flats of a key signature are written on, in a clef.
-
-    Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-    pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
-    the treble, bass, alto and tenor clefs, and works out the rest.
-
-    Parameters
-    ----------
-    clef : str
-        A key of `BOTTOM_LINE`.
-    sign : int
-        1 for sharps, -1 for flats. Keyword-only.
-
-    Returns
-    -------
-    list of str
-        Seven note names with octaves, in the order the accidentals appear.
-
-    Raises
-    ------
-    ValueError
-        If no placement keeps all seven accidentals on the staff.
-
-    Examples
-    --------
-    >>> key_signature_positions("treble", sign=1)
-    ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
-    >>> key_signature_positions("bass", sign=-1)
-    ['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
-    """
-    bottom = BOTTOM_LINE[clef]
-    first, patterns = ("F", _SHARP_PATTERNS) if sign > 0 else ("B", _FLAT_PATTERNS)
-    for steps in patterns:
-        for start in range(bottom - 1, bottom + 10):
-            offsets = [0]
-            for s in steps:
-                offsets.append(offsets[-1] + s)
-            places = [start + o for o in offsets]
-            if Note.from_diatonic(start).name == first and all(bottom - 1 <= d <= bottom + 9 for d in places):
-                return [f"{n.name}{n.octave}" for n in [Note.from_diatonic(d) for d in places]]
-    raise ValueError(f"no key signature fits the {clef} clef")
-
-
 _KEY_POSITIONS = {(clef, sign): " ".join(key_signature_positions(clef, sign=sign)) for clef in BOTTOM_LINE for sign in (1, -1)}
+KEY_OFFSET = 56.0  # distance from the left end of an exercise staff to its first signature sign
 KEY_STEP = 13.0  # horizontal spacing between key-signature accidentals
 # A staff with few notes should not stretch across a wide window: each column of notes gets at most this much width, and the
 # staff is never made narrower than MIN_COLUMNS columns would need.
@@ -327,33 +229,58 @@ def draw_key_signature(
     >>> any(image.pixelColor(x_, y_).lightness() < 128 for x_ in range(10, 60) for y_ in range(20, 100))
     True
     """
-    if not key:
-        return
-    if font:
-        positions = _KEY_POSITIONS[(clef, 1 if key > 0 else -1)].split()
-        for i, name in enumerate(positions[: abs(key)]):
+    if key:
+        sign = 1 if key > 0 else -1
+        for i, name in enumerate(_KEY_POSITIONS[clef, sign].split()[: abs(key)]):
             y = bottom - (Note.parse(name).diatonic - BOTTOM_LINE[clef]) * gap / 2
-            engraving.draw_accidental(
-                p,
-                font=font,
-                sign=1 if key > 0 else -1,
-                x=x + i * step,
-                y=y,
-                gap=gap,
-                color=color,
-                fit=step - 1,
-            )
+            draw_signature_sign(p, sign=sign, x=x + i * step, y=y, gap=gap, color=color, step=step, size=size, font=font)
+
+
+def draw_signature_sign(
+    p: QPainter,
+    *,
+    sign: int,
+    x: float,
+    y: float,
+    gap: float,
+    color: QColor,
+    step: float = KEY_STEP,
+    size: float = 2.0,
+    font: str | None = None,
+) -> None:
+    """
+    Draw one sharp or flat at its written position in a key signature.
+
+    Parameters
+    ----------
+    p : QPainter
+        Active staff painter.
+    sign : int
+        Sharp (1) or flat (-1).
+    x, y : float
+        Left edge and staff pitch position in pixels.
+    gap : float
+        Distance between staff lines.
+    color : QColor
+        Ink for this sign.
+    step, size : float
+        Slot width in pixels and built-in glyph size in staff gaps.
+    font : str or None
+        SMuFL font, or None for the built-in notation.
+
+    Examples
+    --------
+    Both the printed signature and signs placed by the learner use this drawing.
+    """
+    if font:
+        engraving.draw_accidental(p, font=font, sign=sign, x=x, y=y, gap=gap, color=color, fit=step - 1)
         return
-    sign = "♯" if key > 0 else "♭"
-    positions = _KEY_POSITIONS[(clef, 1 if key > 0 else -1)].split()
     p.save()
     p.setPen(QPen(color, 1.4))
     sign_font = QFont("DejaVu Sans")
     sign_font.setPixelSize(max(int(gap * size * 1.33), 6))
     p.setFont(sign_font)
-    for i, name in enumerate(positions[: abs(key)]):
-        y = bottom - (Note.parse(name).diatonic - BOTTOM_LINE[clef]) * gap / 2
-        p.drawText(QPointF(x + i * step, y + gap * 0.5), sign)
+    p.drawText(QPointF(x, y + gap * 0.5), ACCIDENTAL_SYMBOLS[sign])
     p.restore()
 
 
@@ -484,6 +411,8 @@ class StaffWidget(QWidget):
         The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
     columns : list of list of Note
         The notes drawn; each inner list is one chord or note.
+    interval_voices : bool
+        Draw harmonic interval endpoints with their written duration and opposing stems.
     note_color : QColor or None
         Feedback color for the highlighted notation component, or for the notes in other exercises.
     column_colors : dict of int to QColor
@@ -562,6 +491,7 @@ class StaffWidget(QWidget):
         self.lesson_layout = lesson_layout
         self.max_step = max_step
         self.clef = "treble"
+        self.interval_voices = False
         self.columns: list[list[Note]] = []
         self.playback_column: int | None = None
         self.note_color: QColor | None = None  # None draws notes in the style's ink
@@ -609,7 +539,7 @@ class StaffWidget(QWidget):
         key : int, default 0
             The key signature: that many sharps if positive, flats if negative. Keyword-only.
         value : str, default "whole"
-            The note value to draw (stems are only drawn for single notes). Keyword-only.
+            The written duration for single notes and interval voices. Keyword-only.
         caption : str, default ""
             Text to write under the staff. Keyword-only.
         notation_target : tuple of (str, int) or None
@@ -806,10 +736,11 @@ class StaffWidget(QWidget):
             bounds = QRectF()
             offsets = []
             signs = []
-            value = self.value if len(col) == 1 else "whole"
+            value = self.value if self.interval_voices or len(col) == 1 else "whole"
             for note, clef, steps, x in self._positioned_notes(col):
                 y = -steps * gap / 2 + (bass_offset if clef == "bass" else 0)
-                bounds = bounds.united(_lesson_note_bounds(font, value=value, gap=gap, down=steps >= 4).translated(x, y))
+                down = note == min(col) if self.interval_voices and len(col) == 2 else steps >= 4
+                bounds = bounds.united(_lesson_note_bounds(font, value=value, gap=gap, down=down).translated(x, y))
                 if steps <= -2 or steps >= 10:
                     bounds = bounds.united(QRectF(x - gap, y, 2 * gap, 1))
                 if note.accidental != key_accidental(note.letter, count=self.key):
@@ -1256,7 +1187,7 @@ class StaffWidget(QWidget):
             draw_key_signature(
                 p,
                 clef=clef,
-                x=row.key_x if row else left + 56,
+                x=row.key_x if row else left + KEY_OFFSET,
                 key=self.key,
                 step=row.key_step if row else KEY_STEP,
                 bottom=bottom,
@@ -1327,7 +1258,8 @@ class StaffWidget(QWidget):
                             gap=gap,
                         )
                 p.setPen(Qt.PenStyle.NoPen)
-                value = self.value if len(col) == 1 else "whole"  # stems are only drawn for single notes
+                value = self.value if self.interval_voices or len(col) == 1 else "whole"
+                stem_down = note == min(col) if self.interval_voices and len(col) == 2 else steps >= 4
                 marked_note = placement == "note" and ci == position
                 if marked_note:
                     value = str(symbol)
@@ -1340,12 +1272,11 @@ class StaffWidget(QWidget):
                     stem_color = ink(("Stem", ci)) or ncol
                 regions: list[tuple[QRectF | None, QColor]] = [(None, head_color)]
                 if stem_color != head_color and value not in ("whole", "breve"):
-                    down = steps >= 4
-                    split = y + (0.55 if down else -0.55) * gap
+                    split = y + (0.55 if stem_down else -0.55) * gap
                     above, below = QRectF(self.rect()), QRectF(self.rect())
                     above.setBottom(split)
                     below.setTop(split)
-                    regions = [(above, head_color if down else stem_color), (below, stem_color if down else head_color)]
+                    regions = [(above, head_color if stem_down else stem_color), (below, stem_color if stem_down else head_color)]
                 for clip, color in regions:
                     p.save()
                     if clip is not None:
@@ -1359,11 +1290,11 @@ class StaffWidget(QWidget):
                             y=y,
                             gap=gap,
                             color=color,
-                            stem_down=steps >= 4,
+                            stem_down=stem_down,
                             flag_color=ink(("Flag", ci)) or ncol,
                         )
                     else:
-                        self._note(p, x=x, y=y, gap=gap, color=color, value=value, stem_down=steps >= 4, font=font)
+                        self._note(p, x=x, y=y, gap=gap, color=color, value=value, stem_down=stem_down, font=font)
                     p.restore()
                 p.setPen(QPen(ncol, 1.4))
                 # A sign is written only where the note differs from what the key signature already says.

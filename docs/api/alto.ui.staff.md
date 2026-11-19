@@ -72,44 +72,6 @@ Return the symbol and the place of one way of writing a clef.
 (('F', 6), ('C', 0))
 ```
 
-## key_signature_positions
-
-```python
-def key_signature_positions(
-    clef: str,
-    *,
-    sign: int,
-) -> list[str]
-```
-
-Return the notes the sharps or flats of a key signature are written on, in a clef.
-
-Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
-the treble, bass, alto and tenor clefs, and works out the rest.
-
-**Parameters**
-
-- `clef` (*str*): A key of `BOTTOM_LINE`.
-- `sign` (*int*): 1 for sharps, -1 for flats. Keyword-only.
-
-**Returns**
-
-- *list of str*: Seven note names with octaves, in the order the accidentals appear.
-
-**Raises**
-
-- *ValueError*: If no placement keeps all seven accidentals on the staff.
-
-**Examples**
-
-```pycon
->>> key_signature_positions("treble", sign=1)
-['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
->>> key_signature_positions("bass", sign=-1)
-['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
-```
-
 ## draw_key_signature
 
 ```python
@@ -157,6 +119,41 @@ True
 True
 ```
 
+## draw_signature_sign
+
+```python
+def draw_signature_sign(
+    p: QPainter,
+    *,
+    sign: int,
+    x: float,
+    y: float,
+    gap: float,
+    color: QColor,
+    step: float = KEY_STEP,
+    size: float = 2.0,
+    font: str | None = None,
+) -> None
+```
+
+Draw one sharp or flat at its written position in a key signature.
+
+**Parameters**
+
+- `p` (*QPainter*): Active staff painter.
+- `sign` (*int*): Sharp (1) or flat (-1).
+- `x, y` (*float*): Left edge and staff pitch position in pixels.
+- `gap` (*float*): Distance between staff lines.
+- `color` (*QColor*): Ink for this sign.
+- `step, size` (*float*): Slot width in pixels and built-in glyph size in staff gaps.
+- `font` (*str or None*): SMuFL font, or None for the built-in notation.
+
+**Examples**
+
+```pycon
+Both the printed signature and signs placed by the learner use this drawing.
+```
+
 ## StaffWidget
 
 ```python
@@ -187,6 +184,7 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `max_step` (*float or None*): The most width each column of notes may take.
 - `clef` (*str*): The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
 - `columns` (*list of list of Note*): The notes drawn; each inner list is one chord or note.
+- `interval_voices` (*bool*): Draw harmonic interval endpoints with their written duration and opposing stems.
 - `note_color` (*QColor or None*): Feedback color for the highlighted notation component, or for the notes in other exercises.
 - `column_colors` (*dict of int to QColor*): The color of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
 - `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
@@ -252,7 +250,7 @@ Show some notes, with a clef and a key signature.
 - `columns` (*list of list of Note*): The notes: each inner list is one note or chord, drawn left to right.
 - `clef` (*str, default "treble"*): The clef, or "grand" for a grand staff. Keyword-only.
 - `key` (*int, default 0*): The key signature: that many sharps if positive, flats if negative. Keyword-only.
-- `value` (*str, default "whole"*): The note value to draw (stems are only drawn for single notes). Keyword-only.
+- `value` (*str, default "whole"*): The written duration for single notes and interval voices. Keyword-only.
 - `caption` (*str, default ""*): Text to write under the staff. Keyword-only.
 - `notation_target` (*tuple of (str, int) or None*): Part and position to highlight in a notation question. Keyword-only.
 - `notation_excerpt` (*str or None*): Versioned score to show for a repertoire question. Keyword-only.

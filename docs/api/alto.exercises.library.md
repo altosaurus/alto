@@ -125,8 +125,8 @@ Name the interval between two written notes.
 
 ```pycon
 >>> q = IntervalNames().generate(random.Random(3))
->>> len(q.staff), q.answer in q.choices
-(2, True)
+>>> [len(chord) for chord in q.staff], q.answer in q.choices
+([2], True)
 ```
 
 ### IntervalNames.instructions
@@ -163,8 +163,32 @@ Identify the settings used to generate and grade the interval.
 **Examples**
 
 ```pycon
->>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
-''
+>>> "Harmonic" in IntervalNames().settings_signature()
+True
+```
+
+### IntervalNames.refresh
+
+```python
+def refresh(question: Question) -> Question
+```
+
+Arrange written interval answers by quality, with interval numbers in columns.
+
+**Parameters**
+
+- `question` (*Question*): A new or saved interval question.
+
+**Returns**
+
+- *Question*: The same answer choices in reading order. Perfect and major share a row.
+
+**Examples**
+
+```pycon
+>>> q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+>>> IntervalNames().refresh(q).choices
+['A3', 'M3', 'P4', 'm3', 'd3']
 ```
 
 ### IntervalNames.generate
@@ -452,6 +476,83 @@ Name a key whose signature is to be built.
 >>> q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
 True
 >>> q.answer == format_key_signature(q.key)
+True
+```
+
+## OrderOfKeys
+
+```python
+class OrderOfKeys(Exercise)
+```
+
+Write the accidentals of a named key signature in order.
+
+**Examples**
+
+```pycon
+>>> OrderOfKeys().generate(random.Random(1)).place_signature
+True
+```
+
+### OrderOfKeys.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the selections used to generate a practice question.
+
+**Returns**
+
+- *str*: The original empty signature at the defaults, so earlier questions remain available for review.
+
+**Examples**
+
+```pycon
+>>> OrderOfKeys().settings_signature()
+''
+```
+
+### OrderOfKeys.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to enter and submit a signature.
+
+**Returns**
+
+- *str*: The exercise help text.
+
+**Examples**
+
+```pycon
+>>> "Undo" in OrderOfKeys().instructions()
+True
+```
+
+### OrderOfKeys.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Choose a key from the selected scales and signatures and spell it in a selected clef.
+
+**Parameters**
+
+- `rng` (*random.Random*): Source for the key, mode, and clef.
+
+**Returns**
+
+- *Question*: The named key and the ordered signs with their exact staff octaves.
+
+**Examples**
+
+```pycon
+>>> q = OrderOfKeys().generate(random.Random(2))
+>>> q.show_staff and not q.choices
 True
 ```
 
