@@ -16,6 +16,7 @@ import base64
 import importlib.util
 import json
 import re
+from html import unescape
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -122,6 +123,20 @@ def test_no_picture_of_the_exercise_level_settings_is_made_or_kept() -> None:
     assert ".gear" not in (ROOT / "scripts" / "screenshots.py").read_text()
 
 
+def readme_badges() -> dict[str, tuple[str, str]]:
+    """
+    Read the linked badges in the README table.
+
+    Returns
+    -------
+    dict of str to tuple of str
+        Each image's accessible label mapped to its image URL and link destination.
+    """
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    links = re.findall(r'<a href="([^"]+)"><img src="([^"]+)" alt="([^"]+)"></a>', readme)
+    return {label: (unescape(src), unescape(href)) for href, src, label in links}
+
+
 def test_the_python_versions_in_the_readme_badge_are_the_ones_the_tests_run_on() -> None:
     """
     Check that the python versions in the readme badge are the ones the tests run on.
@@ -130,7 +145,7 @@ def test_the_python_versions_in_the_readme_badge_are_the_ones_the_tests_run_on()
     matrix = re.search(r"ALL:\s*'\[([^]]*)]'", workflow)  # the versions a push to main runs, in the scope job
     assert matrix is not None
     tested = re.findall(r'"([\d.]+)"', matrix.group(1))
-    badge = re.search(r"img\.shields\.io/badge/python-([^)]*?)-\w+(?:\?[^)]*)?\)", (ROOT / "README.md").read_text())
+    badge = re.match(r"https://img\.shields\.io/badge/python-([^-]+)-", readme_badges()["Python"][0])
     assert badge is not None, "the README has no Python versions badge"
     assert unquote(badge.group(1)).split(" | ") == tested
     # and the oldest of them is what pyproject.toml asks for
@@ -146,7 +161,7 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
     ASV and Jekyll, are not in its set. So each picture is carried in the badge's address. They must stay small,
     so that the address does, and be PNG files.
     """
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    badges = readme_badges()
     for label, workflow in (
         ("Tests", "tests.yml"),
         ("Ruff", "ruff.yml"),
@@ -154,15 +169,12 @@ def test_the_readme_badges_that_name_a_tool_carry_its_logo_as_a_small_embedded_p
         ("ASV", "performance.yml"),
         ("Docs", "docs.yml"),
     ):
-        found = re.search(rf"\[!\[{label}]\((https://img\.shields\.io/[^)]+)\)]\(([^)]+)\)", readme)
-        assert found is not None, f"the README has no {label} badge"
-        badge, link = found.groups()
+        badge, link = badges[label]
+        assert badge.startswith("https://img.shields.io/")
         assert f"/{workflow}?" in badge and (ROOT / ".github" / "workflows" / workflow).is_file()
         assert f"/actions/workflows/{workflow}" in link or label == "Docs"
     for label in ("Tests", "Ruff", "Pyright", "ASV", "Docs", "Python"):
-        badge = re.search(rf"\[!\[{label}]\((https://img\.shields\.io/[^)]+)\)]", readme)
-        assert badge is not None, f"the README has no {label} badge"
-        logo = re.search(r"[?&]logo=([^&)\s]+)", badge.group(1))
+        logo = re.search(r"[?&]logo=([^&\s]+)", badges[label][0])
         assert logo is not None, f"the {label} badge has no logo"
         image = unquote(logo.group(1))
         assert image.startswith("data:image/png;base64,")
