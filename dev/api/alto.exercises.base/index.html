@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.exercises.base · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.exercises.base · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -466,6 +470,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
@@ -1059,6 +1066,105 @@ True
 ''
 </code></pre>
 
+<h3 id="exercisecard_groups">Exercise.card_groups</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Map playable examples to the skills that share a calendar review date.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str or None</em>: Example item keys mapped to skill names, or None when every example has its own schedule.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; KeyboardNotes().card_groups() is None
+True
+</code></pre>
+
+<h3 id="exercisecard_count">Exercise.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Count distinct cards possible with the current settings when the exercise has an exact catalog.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int or None</em>: Catalog size, or None for an exercise that prepares a bounded daily sample.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; KeyboardNotes().card_count() is None
+True
+</code></pre>
+
+<h3 id="exercisedaily_candidates">Exercise.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Yield distinct questions until 100 consecutive draws find no new playable item.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The generator for this day’s sample.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A playable question. Finite exercises can override this to visit every eligible item.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
+True
+</code></pre>
+
+<h3 id="exercisereview_question">Exercise.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Adapt a stored question for review under the active settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Previously introduced card.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether the saved presentation matches the active settings.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: A playable question when the exercise recognizes this presentation.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; ex = KeyboardNotes()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 <h3 id="exerciserefresh">Exercise.refresh</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
@@ -1533,8 +1639,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

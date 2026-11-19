@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your data · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/data/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Your data · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/data/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -466,6 +470,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
@@ -619,7 +626,7 @@ your usual configuration location.</p>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">profiles</code></td>
-      <td>Each profile’s name and when it was created.</td>
+      <td>Each profile’s name, creation time, and selected scheduler.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">attempts</code></td>
@@ -628,6 +635,22 @@ your usual configuration location.</p>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">items</code></td>
       <td>What is known about each question: its strain, how often it was answered and missed, its typical time, when it was last seen, and the question itself so it can be asked again.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">practice_cards</code></td>
+      <td>Introduced card identities, the questions themselves, and the local date each was introduced in scheduled practice.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">review_schedules</code></td>
+      <td>The next review time and algorithm state for each card studied with SM-2 or FSRS.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">practice_limits</code></td>
+      <td>Daily allowances for each profile and exercise.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">daily_reviews</code></td>
+      <td>Completed calendar reviews by profile, exercise, and day.</td>
     </tr>
   </tbody>
 </table>
@@ -751,8 +774,8 @@ up to date as it is imported.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

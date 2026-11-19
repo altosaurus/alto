@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Database · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/developer-guide/database/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Database · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/developer-guide/database/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -468,6 +472,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -566,7 +573,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Database</h1>
-          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database starts at schema version 1, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
+          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database uses schema version 3, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
 
 <p>A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends <strong>two</strong> rows to <code class="language-plaintext highlighter-rouge">attempts</code>, with durations of 3,000 and 1,000 milliseconds. It maintains <strong>one</strong> row in <code class="language-plaintext highlighter-rouge">items</code> for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.</p>
 
@@ -583,14 +590,18 @@
 <p>Each attempt and each item belongs to exactly one profile. A profile may have zero or more of either, and deleting it cascades to both tables. The solid lines show those foreign keys. The dashed line shows how Alto looks up an item summary for an attempt. Many attempts can match the same summary, but an attempt can match at most one because the join uses the item’s full primary key. Select a table to jump to its dictionary.</p>
 
 <figure class="db-schema">
-  <svg viewBox="0 0 480 248" width="480" height="248" aria-labelledby="schema-title schema-desc">
+  <svg viewBox="0 0 720 338" width="720" height="338" aria-labelledby="schema-title schema-desc">
     <title id="schema-title">Alto practice database</title>
-    <desc id="schema-desc">One profile can own many attempts and many items. Attempts and items are matched by profile ID, exercise, and item key.</desc>
+    <desc id="schema-desc">One profile can own many attempts, items, practice cards, practice limits, and daily review counts. A practice card has a separate schedule for each calendar algorithm used. Attempts and items are matched by profile ID, exercise, and item key.</desc>
     <g fill="none" stroke="currentColor" stroke-width="2">
       <path d="M192 67V89H105V130 M288 67V89H375V130" />
+      <path d="M329 36H600V130 M600 226V260" />
+      <path d="M240 67V252H105V260 M240 252H375V260" />
       <path d="M200 177H280" stroke-dasharray="5 4" />
     </g>
     <g fill="currentColor" font-size="14" text-anchor="middle">
+      <text x="345" y="30">1</text><text x="621" y="120">0..*</text>
+      <text x="586" y="243">1</text><text x="622" y="253">0..*</text>
       <text x="179" y="82">1</text><text x="301" y="82">1</text>
       <text x="82" y="120">0..*</text><text x="398" y="120">0..*</text>
     </g>
@@ -612,13 +623,34 @@
       <text x="375" y="201">exercise, item_key</text>
       <text x="375" y="226">FK: profile_id</text>
     </a>
+    <a href="#practice-cards" aria-label="Practice cards data dictionary">
+      <rect x="495" y="130" width="212" height="96" rx="8" />
+      <text x="601" y="157" class="db-entity">practice_cards</text>
+      <text x="601" y="185">PK: profile_id,</text>
+      <text x="601" y="206">exercise, item_key</text>
+    </a>
+    <a href="#practice-limits" aria-label="Practice limits data dictionary">
+      <rect x="10" y="260" width="190" height="72" rx="8" />
+      <text x="105" y="286" class="db-entity">practice_limits</text>
+      <text x="105" y="312">PK: profile + exercise</text>
+    </a>
+    <a href="#daily-reviews" aria-label="Daily reviews data dictionary">
+      <rect x="270" y="260" width="210" height="72" rx="8" />
+      <text x="375" y="286" class="db-entity">daily_reviews</text>
+      <text x="375" y="312">PK: profile + exercise + day</text>
+    </a>
+    <a href="#review-schedules" aria-label="Review schedules data dictionary">
+      <rect x="495" y="260" width="212" height="72" rx="8" />
+      <text x="601" y="286" class="db-entity">review_schedules</text>
+      <text x="601" y="312">PK: card + scheduler</text>
+    </a>
   </svg>
   <figcaption>PK = primary key. FK = foreign key. 0..* = zero or more rows.</figcaption>
 </figure>
 
 <h2 id="data-dictionary">Data dictionary</h2>
 
-<p>The tables below follow the column order in <code class="language-plaintext highlighter-rouge">alto/learning/database.py</code>. Every column requires a value in a stored row. SQLite supplies the integer primary keys when Alto inserts a profile or an attempt. The four item counters have explicit defaults of zero. Times ending in <code class="language-plaintext highlighter-rouge">_at</code>, along with <code class="language-plaintext highlighter-rouge">last_seen</code>, are Unix timestamps in seconds. Durations use milliseconds.</p>
+<p>The tables below follow the column order in <code class="language-plaintext highlighter-rouge">alto/learning/database.py</code>. The introduction date is optional for cards first practiced with ASRS. SQLite supplies the integer primary keys when Alto inserts a profile or an attempt. The four item counters have explicit defaults of zero. Times ending in <code class="language-plaintext highlighter-rouge">_at</code>, along with <code class="language-plaintext highlighter-rouge">last_seen</code>, are Unix timestamps in seconds. Durations use milliseconds.</p>
 
 <h3 id="profiles">Profiles</h3>
 
@@ -651,6 +683,12 @@
       <td>REAL</td>
       <td> </td>
       <td>Time the profile was created.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">scheduler</code></td>
+      <td>TEXT</td>
+      <td>Default <code class="language-plaintext highlighter-rouge">Alto</code></td>
+      <td>The profile’s selected question scheduler. ASRS retains its original database identifier, <code class="language-plaintext highlighter-rouge">Alto</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -809,6 +847,146 @@
   </tbody>
 </table>
 
+<h3 id="practice-cards">Practice cards</h3>
+
+<p>Each row identifies one introduced card. Schema version 2 imports existing items as introduced cards so a scheduler change preserves their history.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>SQLite type</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">profile_id</code>, <code class="language-plaintext highlighter-rouge">exercise</code>, <code class="language-plaintext highlighter-rouge">item_key</code></td>
+      <td>INTEGER, TEXT, TEXT</td>
+      <td>Composite primary key. Deleting the profile removes its cards.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signature</code>, <code class="language-plaintext highlighter-rouge">payload</code></td>
+      <td>TEXT, TEXT</td>
+      <td>Exercise settings and playable question at introduction.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">introduced_on</code></td>
+      <td>TEXT</td>
+      <td>Local date of a calendar introduction. Empty for history imported from ASRS.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">pending_new</code></td>
+      <td>INTEGER</td>
+      <td>1 until the first answer to a new introduction, then 0.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="review-schedules">Review schedules</h3>
+
+<p>A practice card can have a separate schedule for SM-2 and FSRS. A card with no schedule for the selected algorithm is ready for its first review with that algorithm.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>SQLite type</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">profile_id</code>, <code class="language-plaintext highlighter-rouge">exercise</code>, <code class="language-plaintext highlighter-rouge">item_key</code></td>
+      <td>INTEGER, TEXT, TEXT</td>
+      <td>Composite foreign key referencing the practice card, with cascading deletion.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">scheduler</code></td>
+      <td>TEXT</td>
+      <td>Together with the card identity, this forms the primary key.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">due</code></td>
+      <td>REAL</td>
+      <td>Unix timestamp of the next review.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">state</code></td>
+      <td>TEXT</td>
+      <td>JSON containing the SM-2 repetition count, interval and ease, or the FSRS library’s serialized card.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="practice-limits">Practice limits</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>Type</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">profile_id</code></td>
+      <td>INTEGER</td>
+      <td>Owning profile. Part of the primary key with <code class="language-plaintext highlighter-rouge">exercise</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exercise</code></td>
+      <td>TEXT</td>
+      <td>Exercise class name, or an empty string for the profile defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">new_cards</code></td>
+      <td>INTEGER</td>
+      <td>Daily new-card allowance. NULL inherits the default.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">reviews</code></td>
+      <td>INTEGER</td>
+      <td>Daily review allowance. NULL inherits the default.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="daily-reviews">Daily reviews</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>Type</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">profile_id</code></td>
+      <td>INTEGER</td>
+      <td>Owning profile.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exercise</code></td>
+      <td>TEXT</td>
+      <td>Exercise class name.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">day</code></td>
+      <td>TEXT</td>
+      <td>Local date. Together with profile and exercise, identifies the row.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">completed</code></td>
+      <td>INTEGER</td>
+      <td>First submissions on review presentations that day across SM-2 and FSRS.</td>
+    </tr>
+  </tbody>
+</table>
+
           
           
           
@@ -903,8 +1081,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

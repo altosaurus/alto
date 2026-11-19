@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data and persistence · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/data/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Data and persistence · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/data/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -466,6 +470,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
@@ -617,9 +624,8 @@ means deleting a profile deletes its attempts and items.</li>
 string formatting your values in. That is what prevents <strong>SQL injection</strong>, and it is a rule with one narrow exception: in
 <code class="language-plaintext highlighter-rouge">database.py</code> a few queries build a <code class="language-plaintext highlighter-rouge">WHERE</code> clause from <em>fixed strings in the code</em>, never from user text, and
 still pass every value as a parameter.</li>
-  <li><strong>Transactions.</strong> <code class="language-plaintext highlighter-rouge">with self.conn:</code> groups statements so they all happen or none do, and commits at the end. Alto writes an
-attempt and an item update in one pass in <code class="language-plaintext highlighter-rouge">Learner.record</code>; a crash between them would be bad but not fatal, because the item can
-be rebuilt from the attempts.</li>
+  <li><strong>Transactions.</strong> <code class="language-plaintext highlighter-rouge">with self.conn:</code> groups statements so they all happen or none do, and commits at the end. Alto writes the
+attempt, item summary and any review schedule update in one transaction in <code class="language-plaintext highlighter-rouge">Learner.record</code>.</li>
   <li><strong>Indexes.</strong> <code class="language-plaintext highlighter-rouge">CREATE INDEX attempts_by_item ON attempts(profile_id, exercise, item_key)</code> makes “find all attempts for this
 question” fast. Without it SQLite reads every row.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">sqlite3.Row</code></strong> (<code class="language-plaintext highlighter-rouge">conn.row_factory = sqlite3.Row</code>) lets you read a column by name: <code class="language-plaintext highlighter-rouge">row["strain"]</code>.</li>
@@ -650,7 +656,7 @@ and every doctest uses one, and the simulation in <a href="/alto/dev/guide/space
 <span class="p">);</span>
 </code></pre></div></div>
 
-<p>The real definitions, with comments, are <code class="language-plaintext highlighter-rouge">_SCHEMA</code> in <code class="language-plaintext highlighter-rouge">alto/learning/database.py</code>. Two design decisions are worth understanding.</p>
+<p>The current definitions are <code class="language-plaintext highlighter-rouge">_SCHEMA</code> and <code class="language-plaintext highlighter-rouge">_CALENDAR_SCHEMA</code> in <code class="language-plaintext highlighter-rouge">alto/learning/database.py</code>. Two design decisions are worth understanding.</p>
 
 <p><strong><code class="language-plaintext highlighter-rouge">attempts</code> is the log; <code class="language-plaintext highlighter-rouge">items</code> is a summary.</strong> The log is <strong>append-only</strong>: facts that happened, never edited. The summary is
 <strong>derived</strong>: it could be rebuilt by replaying the log through <code class="language-plaintext highlighter-rouge">update_strain</code>. This is a miniature of a well-known pattern
@@ -670,44 +676,7 @@ load. <code class="language-plaintext highlighter-rouge">Learner.pick</code> han
 
 <p>A shipped database has users’ history in it, so the structure cannot just change. A <strong>migration</strong> is a script that takes a
 database from one version to the next. SQLite has a built-in integer for this, the <strong><code class="language-plaintext highlighter-rouge">user_version</code> pragma</strong>, which belongs to
-the application and which SQLite does not otherwise use. Alto’s start-up is:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"PRAGMA user_version"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># a new, empty database
-</span>    <span class="k">with</span> <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">:</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">_SCHEMA</span><span class="p">)</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s">"PRAGMA user_version = </span><span class="si">{</span><span class="n">SCHEMA_VERSION</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">SCHEMA_VERSION</code> is 1 today, and there is only the “create it” step so far. When you need to change the structure, extend <code class="language-plaintext highlighter-rouge">_migrate</code>
-so that it brings <em>any</em> older version up to date, one step at a time. For example, to add a note field to <code class="language-plaintext highlighter-rouge">items</code> as version 2:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SCHEMA_VERSION</span> <span class="o">=</span> <span class="mi">2</span>
-
-
-<span class="k">def</span> <span class="nf">_migrate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"PRAGMA user_version"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">with</span> <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">:</span>  <span class="c1"># all the steps happen together, or none do
-</span>        <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">_SCHEMA</span><span class="p">)</span>  <span class="c1"># _SCHEMA must now describe version 2 (executescript commits first)
-</span>        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">version</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"ALTER TABLE items ADD COLUMN note TEXT NOT NULL DEFAULT ''"</span><span class="p">)</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s">"PRAGMA user_version = </span><span class="si">{</span><span class="n">SCHEMA_VERSION</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>Rules for doing this safely:</p>
-
-<ol>
-  <li><strong>Update <code class="language-plaintext highlighter-rouge">_SCHEMA</code> too,</strong> so a brand new database is created at the latest version directly.</li>
-  <li><strong>Never edit an old step.</strong> A migration that has shipped is history. Add a new one after it.</li>
-  <li><strong>Add columns with a default.</strong> <code class="language-plaintext highlighter-rouge">ALTER TABLE ... ADD COLUMN</code> is cheap and safe. Renaming, dropping or changing a column’s type needs
-the “make a new table, copy, drop, rename” dance (SQLite’s documentation describes it under <code class="language-plaintext highlighter-rouge">ALTER TABLE</code>), which takes more care.</li>
-  <li><strong>Test it against an old database.</strong> Create a database at the old version (in a test, run the old <code class="language-plaintext highlighter-rouge">_SCHEMA</code> text and set
-<code class="language-plaintext highlighter-rouge">user_version</code>), run the new code on it, and check the data survived. No such test exists yet because there has been only one
-version; the doctest of <code class="language-plaintext highlighter-rouge">_migrate</code> and the in-memory <code class="language-plaintext highlighter-rouge">Database()</code> are the starting point.</li>
-  <li><strong>Back up before migrating, in the release notes at least:</strong> tell users to copy <code class="language-plaintext highlighter-rouge">alto.db</code>. There is no automatic backup.</li>
-</ol>
+the application and which SQLite does not otherwise use. Version 2 adds the profile’s scheduler, practice cards and review schedules. Version 3 adds daily limits, completed review counts, and the status of unfinished introductions. Alto applies missing migrations in order within one transaction. Review counts start when the database is upgraded. The migration copies existing question identities into <code class="language-plaintext highlighter-rouge">practice_cards</code>, so learners can review questions they have already practiced.</p>
 
 <h2 id="what-each-database-method-is-for">What each <code class="language-plaintext highlighter-rouge">Database</code> method is for</h2>
 
@@ -928,8 +897,8 @@ the chapter on stream processing covers the log-and-derived-state idea.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

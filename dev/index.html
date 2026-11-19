@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alto: a free music theory trainer for the desktop</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Alto: a free music theory trainer for the desktop">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -468,6 +472,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -597,7 +604,7 @@
 
 <div class="hero">
   <h1>Learn music theory with <span class="hl">Alto</span></h1>
-  <p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>
+  <p class="lead">Study music theory in short lessons and practice what you learn with spaced repetition.</p>
   <a class="dl-go" href="#download">Download Alto <svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-arrow" /></svg></a>
 </div>
 
@@ -693,7 +700,7 @@
 <h2 id="what-makes-it-different">What makes it different</h2>
 
 <ul>
-  <li><strong>It learns from your answers.</strong> Every answer is recorded under your profile. Questions you miss, or take a long time over, come back more often. Questions you answer quickly and correctly fade into the background. <a href="/alto/dev/practice/">How it works</a>.</li>
+  <li><strong>Spaced repetition.</strong> ASRS and ARTS use your accuracy and response time to choose the next exercise question. SM-2 and FSRS schedule a due date for each review. <a href="/alto/dev/practice/">Compare the four algorithms</a>.</li>
   <li><strong>Statistics and a database browser.</strong> Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. <a href="/alto/dev/statistics/">Statistics</a>.</li>
   <li><strong>Notation and keyboards your way.</strong> Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. <a href="/alto/dev/settings/">Settings</a>.</li>
   <li><strong>Local and private.</strong> Your history is one file on your computer. <a href="/alto/dev/data/">Your data</a>.</li>
@@ -740,7 +747,7 @@
   </div>
   <p class="dl-more"><a href="/alto/dev/release-notes/">Release notes</a> &middot; <a href="https://github.com/altosaurus/alto/releases">Older releases</a> &middot; <a href="/alto/dev/getting-started/">Getting started</a></p>
 </section>
-<script src="/alto/dev/assets/js/downloads.js?v=1795060306" defer=""></script>
+<script src="/alto/dev/assets/js/downloads.js?v=1795099021" defer=""></script>
 
 
           
@@ -813,8 +820,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

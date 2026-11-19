@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spaced repetition and adaptive practice · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/spaced-repetition/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Spaced repetition and adaptive practice · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/spaced-repetition/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -468,6 +472,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -568,8 +575,28 @@
           <h1>Spaced repetition and adaptive practice</h1>
           <p>Alto’s central idea is that practice time should go where it is needed: questions you miss or answer slowly come back sooner and
 more often, and questions you know well fade into the background. This chapter explains the learning science behind that, the
-family of algorithms people use for it, what Alto’s own scheduler does and why it is not quite a “spaced repetition system”, and
+family of algorithms people use for it, how ASRS schedules questions during practice, and
 how to change it without breaking it.</p>
+
+<h2 id="practice-algorithms">Practice algorithms</h2>
+
+<p>Under <strong>Settings → Practice → Question scheduling</strong>, each profile can choose ASRS, ARTS, SM-2, or FSRS. The Alto Spaced Repetition System (ASRS) is the default.</p>
+
+<h3 id="arts">ARTS</h3>
+
+<p>Adaptive Response-Time-based Sequencing chooses the next question using your last first attempt and the number of other questions you have answered since. A miss can bring a question back after one intervening answer. A fast, correct answer usually gives you a longer gap. You can practice as long as you like.</p>
+
+<p>Alto applies the published ARTS priority equation to saved questions under the current exercise settings and a sample of freshly generated questions. It uses a 100-millisecond response-time reference to distinguish quick answers in music drills, a baseline priority of 1 for unseen questions, and a random choice among tied scores. Earlier first attempts in the same exercise count when you reopen the app or switch algorithms. <a href="https://kellmanlab.psych.ucla.edu/files/mettler_massey_kellman_2016.pdf">Mettler, Massey, and Kellman, equation 1</a></p>
+
+<h3 id="calendar-practice">Calendar practice</h3>
+
+<p>Under <strong>Settings → Practice</strong>, <strong>New cards/day</strong> and <strong>Maximum reviews/day</strong> set the daily allowance for each exercise. The defaults are 10 new cards and 200 reviews. Both algorithms share these settings and the day’s usage. To change one exercise, open its gear menu and choose <strong>Daily Limits</strong>. Clear <strong>Use global</strong> beside either number to enter an override. A zero pauses that kind of practice.</p>
+
+<p>Exercise tiles show today’s available reviews in green and new cards in blue. Showing a new card uses an introduction slot. An unanswered new card stays available in blue so you can finish it after leaving the exercise. Its first answer completes the introduction. Each subsequent review uses one review slot on the first submission, including a miss. Further attempts on the same showing use no additional slots. The allowances reset at local midnight, and overdue cards keep their scheduled dates.</p>
+
+<p>Due questions come first. The first submission supplies the review grade. SM-2 uses grade 4 for a correct answer and grade 2 for a miss, with a one-minute retry after a miss. FSRS uses Good and Again with the Python library’s default learning steps. Each algorithm keeps its own dates. A previously practiced card is ready for review the first time a profile uses a new scheduler. <a href="https://super-memory.com/english/ol/sm2.htm">SM-2 specification</a> · <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS</a></p>
+
+<p>Note Identification, Note Construction, and Notation Identification count their full catalogs. In Notation Identification, each selected symbol counts as one card for <strong>Answer Button</strong> and one for <strong>Click on Staff</strong>. Different excerpts and staff positions share the symbol’s review date within each question type. If you select only Vertical turn and identify it correctly on your first SM-2 attempt, its first review is due one day later. Other generators sample questions up to the remaining daily allowance. A saved question is eligible under its original settings, when the exercise can adapt it to the current settings, or when the current generator produces the same question. Changing settings preserves its identity and schedule.</p>
 
 <h2 id="why-scheduling-matters-three-findings">Why scheduling matters: three findings</h2>
 
@@ -618,13 +645,9 @@ chance that a skill is “known” given a history of answers. Elo, adapted to e
 the territory of the <strong>multi-armed bandit</strong> problem and the <strong>exploration versus exploitation</strong> trade-off. A <strong>softmax</strong>
 (or <strong>Boltzmann</strong>) policy picks each option with probability proportional to <code class="language-plaintext highlighter-rouge">exp(β × value)</code>. Hold that thought.</p>
 
-<h2 id="what-alto-does-and-why-it-is-different">What Alto does, and why it is different</h2>
+<h2 id="asrs">ASRS</h2>
 
-<p>A flash-card program has a <em>deck</em>: a fixed set of cards. Alto does not. The question “name this note” has thousands of variants
-(every clef, range, key signature, note value, and naming style), generated on demand. Most variants are asked once, perhaps
-never again. A scheduler that depends on <strong>due dates</strong> per card would be waiting for cards that may never come around.</p>
-
-<p>So Alto’s <code class="language-plaintext highlighter-rouge">Learner</code> does two things at once, and then draws:</p>
+<p>ASRS samples generated questions and prior attempts on each turn.</p>
 
 <ol>
   <li><strong>It generates fresh questions.</strong> <code class="language-plaintext highlighter-rouge">FRESH = 10</code> new <code class="language-plaintext highlighter-rouge">Question</code>s are made by the exercise for each pick.</li>
@@ -835,7 +858,7 @@ seen) and look at long-run accuracy, as research on schedulers does.</p>
 <h2 id="design-problems-to-know-by-name">Design problems to know by name</h2>
 
 <ul>
-  <li><strong>Cold start.</strong> A new question has no history, so its weight is a guess. Alto uses <code class="language-plaintext highlighter-rouge">NEW_STRAIN</code> for it.</li>
+  <li><strong>Cold start.</strong> A new question has no history, so its weight is a guess. ASRS uses <code class="language-plaintext highlighter-rouge">NEW_STRAIN</code> for it.</li>
   <li><strong>Leeches.</strong> An item that is failed again and again. It saturates at the strain ceiling and can crowd out everything else. Anki
 tags leeches and can suspend them; Alto does not, because strained questions are only more <em>likely</em>, and the recency term keeps them from
 repeating immediately.</li>
@@ -1002,8 +1025,8 @@ multi-armed bandits, including softmax action selection (free from the authors a
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

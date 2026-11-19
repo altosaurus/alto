@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.exercises.library · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.exercises.library · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +111,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +325,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -466,6 +470,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
@@ -672,6 +679,82 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; q = NoteNames().generate(random.Random(2))
 &gt;&gt;&gt; q.clef in ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone", "grand")
+True
+</code></pre>
+
+<h3 id="notenamescard_count">NoteNames.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count written pitches across the selected ranges, clefs and signatures.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Each staff position contributes one spelling, or three when accidentals are enabled.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().card_count() &gt; 0
+True
+</code></pre>
+
+<h3 id="notenamesdaily_candidates">NoteNames.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Visit each selectable written note once, in shuffled order.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source of the daily order and answer choices.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A distinct question within the selected clefs, ranges and keys.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
+True
+</code></pre>
+
+<h3 id="notenamesreview_question">NoteNames.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Rebuild a previously seen note when its pitch and answer are eligible.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Saved note and answer.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether its original settings are active.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The note with the current answer bank, or None outside the selected material.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteNames()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
 True
 </code></pre>
 
@@ -1663,6 +1746,82 @@ True
 True
 </code></pre>
 
+<h3 id="noteconstructioncard_count">NoteConstruction.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count distinct construction cards without rendering them.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Number of eligible written placements under the current settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().card_count() &gt; 0
+True
+</code></pre>
+
+<h3 id="noteconstructiondaily_candidates">NoteConstruction.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Visit all eligible placements in a randomized order.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the order of the signatures and placements.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: One playable placement for each combination.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
+True
+</code></pre>
+
+<h3 id="noteconstructionreview_question">NoteConstruction.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Determine whether an introduced placement belongs to the current construction catalog.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Stored construction card.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether its original settings are still active.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The playable card if its placement and prompt remain eligible.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteConstruction()
+&gt;&gt;&gt; q = ex.generate(random.Random(3))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 <h2 id="clefbasics">ClefBasics</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
@@ -1887,6 +2046,82 @@ True
 True
 </code></pre>
 
+<h3 id="notationidentificationcard_groups">NotationIdentification.card_groups</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Group the active question type’s playable examples by the symbol being practiced.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str</em>: Map from each eligible example’s item key to its selected term.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; bool(NotationIdentification().card_groups())
+True
+</code></pre>
+
+<h3 id="notationidentificationdaily_candidates">NotationIdentification.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Choose one example for each selected notation term.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Randomizes term order, examples and distractors.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A distinct playable card with the current answer controls.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
+True
+</code></pre>
+
+<h3 id="notationidentificationreview_question">NotationIdentification.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Recover an eligible saved example under the current term and button selections.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Saved question.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether the presentation settings still match.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The current presentation of the card, or None if its term or example is outside the catalog.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
+&gt;&gt;&gt; q = ex.generate(random.Random(4))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 
           
           
@@ -2034,8 +2269,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -19,6 +19,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.learning.backup/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.learning.calendar/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.learning.database/</loc>
 </url>
 <url>
@@ -158,6 +161,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.pictures/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.practice_limits/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.profile_dialog/</loc>

@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How practice adapts · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <title>Spaced Repetition · Alto</title>
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/practice/">
   <meta name="robots" content="noindex">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
-  <meta property="og:title" content="How practice adapts · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:title" content="Spaced Repetition · Alto">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/practice/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/dev/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,11 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795060306">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795099021">
+  
+  <script defer src="/alto/dev/assets/vendor/temml-0.14.0/temml.min.js"
+          onload="temml.renderMathInElement(document.querySelector('article'), {fences: '(', annotate: true})"></script>
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -110,7 +114,7 @@
             
             
             
-            <li><a class="row" href="/alto/dev/practice/" aria-current="page">How practice adapts</a></li>
+            <li><a class="row" href="/alto/dev/practice/" aria-current="page">Spaced Repetition</a></li>
             
             
             
@@ -324,6 +328,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
@@ -468,6 +475,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -565,126 +575,558 @@
     <main id="content" class="content">
       <div class="page-grid" id="page-grid">
         <article>
-          <h1>How practice adapts</h1>
-          <p>Alto is not a flash-card list that shows every question equally often. It keeps track of how you do on each question
-and decides what to ask next from that.</p>
+          <h1>Spaced Repetition</h1>
+          <p>Choose a scheduling algorithm for your profile under <strong>Settings → Practice → Question scheduling</strong>. <strong>ASRS</strong> and <strong>ARTS</strong> let you practice for as long as you like. <strong>SM-2</strong> and <strong>FSRS</strong> give each card a review date. With either of those, the exercise pauses when you are caught up. Another review can come due later the same day.</p>
 
-<h2 id="what-is-recorded">What is recorded</h2>
-
-<p>Every answer is stored under your profile, including wrong ones: which exercise, which question, what you answered,
-whether it was right, which attempt it was, and how long it took. A question that took three tries leaves three rows.</p>
-
-<p>A <strong>question</strong> here is one specific problem, such as “treble clef, F♯4, in D major” or “place B♭2 on the staff”. The note
-value and the order of the answer buttons do not make it a different question.</p>
-
-<h2 id="strain">Strain</h2>
-
-<p>Each question has a score called <strong>strain</strong>, which says how much practice it needs. It starts at 1.5 for a question
-you have not seen, stays between 0 and 6, and changes with each answer.</p>
+<p>Consider a single Note Identification question, F♯ in treble clef. A scheduler can choose whether to show F♯ on the <strong>next turn</strong>, or it can set a <strong>due date</strong> for its next review. Even schedulers that make the same kind of decision use different evidence.</p>
 
 <table>
   <thead>
     <tr>
-      <th>What happened</th>
-      <th>Effect on strain</th>
+      <th>Scheduler</th>
+      <th>What changes after an answer?</th>
+      <th>How does F♯ return?</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>A wrong answer</td>
-      <td><strong>+1.5</strong> each time, so every extra attempt pushes the question higher</td>
+      <td><a href="#asrs">ASRS</a></td>
+      <td>Each attempt changes its strain.</td>
+      <td>A weighted draw on each turn. Its weight recovers as seconds pass.</td>
+    </tr>
+    <tr>
+      <td><a href="#arts">ARTS</a></td>
+      <td>The first answer sets how fast its priority grows.</td>
+      <td>It returns when its priority ranks highest. Each intervening question raises that priority.</td>
+    </tr>
+    <tr>
+      <td><a href="#sm-2">SM-2</a></td>
+      <td>The first answer updates its run of successes and ease factor.</td>
+      <td>Its review interval follows a sequence of day counts, with a short retry after a miss.</td>
+    </tr>
+    <tr>
+      <td><a href="#fsrs">FSRS</a></td>
+      <td>The first answer updates its estimated memory stability and difficulty.</td>
+      <td>After the learning steps, it gets a review date near the model’s 90% recall point.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="asrs">ASRS</h2>
+
+<p>The <strong>Alto Spaced Repetition System (ASRS)</strong> is the default scheduler. For each turn, it generates a few questions and adds some you have answered before under the same exercise settings. It draws from that pool at random, giving more weight to questions you find difficult. A question you just answered gets less weight for a while. The better you know it, the longer that effect lasts.</p>
+
+<h3 id="strain">Strain</h3>
+
+<p>Each question has a score called <strong>strain</strong>, which says how much practice it needs. It starts at 1.5, stays between 0 and 6, and changes with each answer.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Answer</th>
+      <th>Change in strain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Wrong</td>
+      <td>Add 1.5 for each miss.</td>
     </tr>
     <tr>
       <td>Right on the first try</td>
-      <td><strong>−0.5</strong></td>
+      <td>Subtract 0.5, then adjust for speed.</td>
     </tr>
     <tr>
-      <td>Right, but only after misses</td>
-      <td><strong>−0.2</strong></td>
-    </tr>
-    <tr>
-      <td>First answer very quick</td>
-      <td>up to <strong>−0.6</strong> more</td>
-    </tr>
-    <tr>
-      <td>First answer very slow</td>
-      <td>up to <strong>+1.0</strong> more</td>
+      <td>Right after a miss</td>
+      <td>Subtract 0.2.</td>
     </tr>
   </tbody>
 </table>
 
-<p>Because of the last two rows, a slow correct answer still counts against a question, and a very quick correct one
-counts strongly in its favor.</p>
+<h3 id="response-time">Response time</h3>
 
-<h3 id="how-speed-is-judged">How speed is judged</h3>
+<p>For a correct first answer, ASRS compares the time you took with the exercise’s <strong>par time</strong>. At par there is no speed adjustment. At half the par time or faster, ASRS subtracts another 0.6. At four times par or slower, it adds 1.0. The adjustment changes gradually in between. A slow but correct answer can therefore make the question more likely to return.</p>
 
-<p>Speed is measured on your <strong>first</strong> answer only, from the moment the question appears. It is compared with a “par” time
-for the exercise, since reading a note takes less time than spelling a scale:</p>
+<details>
+  <summary>Par times by exercise</summary>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Exercise</th>
+        <th>Par time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Note Identification, Keyboard Note Identification</td>
+        <td>3 s</td>
+      </tr>
+      <tr>
+        <td>Key Signature Identification, Clef Basics, Notation Identification</td>
+        <td>5 s</td>
+      </tr>
+      <tr>
+        <td>Interval Identification, Keyboard Interval Identification, Chord Quality, Note Construction, Key Signature Construction</td>
+        <td>6 s</td>
+      </tr>
+      <tr>
+        <td>Circle of Fifths</td>
+        <td>7 s</td>
+      </tr>
+      <tr>
+        <td>Scale Identification</td>
+        <td>8 s</td>
+      </tr>
+      <tr>
+        <td>Arpeggio Identification</td>
+        <td>9 s</td>
+      </tr>
+      <tr>
+        <td>Order of Keys</td>
+        <td>12 s</td>
+      </tr>
+      <tr>
+        <td>Scale Construction</td>
+        <td>25 s</td>
+      </tr>
+    </tbody>
+  </table>
+
+</details>
+
+<h3 id="probability-of-the-next-draw">Probability of the next draw</h3>
+
+<p>For a question with strain \(s\), ASRS sets a recovery time \(c\) in seconds. If \(t\) seconds have passed since the last answer, its weight \(w\) recovers according to</p>
+
+\[c = 120 \cdot 2^{3-s}\]
+
+\[w = e^{0.6s}\max\left(0.02,\,1-e^{-t/c}\right).\]
+
+<p>Higher strain gives a question both a higher eventual weight and a shorter recovery time. A fresh question gets a weight of \(e^{0.6\cdot 1.5}\approx 2.46\). To get the probability of drawing a question, divide its weight by the sum of all eligible weights.</p>
+
+<p>Suppose you miss F♯ once, moving its strain from 1.5 to 3, and leave it there. Later, the only two eligible candidates for a draw are F♯ and an unseen B. At strain 3 the recovery time is 120 seconds. After two minutes, F♯ has weight \(e^{1.8}(1-e^{-1})\approx 3.82\). Its chance of coming up next is</p>
+
+\[\frac{3.82}{3.82+2.46}\approx 61\%.\]
+
+<p>B can still win that draw.</p>
+
+<figure class="practice-chart">
+  <svg viewBox="0 0 403.2 190.8" class="practice-plot" role="img" aria-labelledby="asrs-title asrs-desc">
+    <title id="asrs-title">ASRS probability of drawing F♯</title>
+    <desc id="asrs-desc">With one unseen alternative, a missed F sharp has a 35% chance at 30 seconds, 49% at one minute and 61% at two minutes.</desc>
+    <defs>
+      <path id="asrs-m3f2d223dee" d="M 0 0 L 0 3" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="39.14" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m3f2d223dee" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="39.14" y="169.87">0</text>
+    <use x="126.78" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m3f2d223dee" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="126.78" y="169.87">60</text>
+    <use x="214.42" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m3f2d223dee" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="214.42" y="169.87">120</text>
+    <use x="302.06" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m3f2d223dee" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="302.06" y="169.87">180</text>
+    <use x="389.7" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m3f2d223dee" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="389.7" y="169.87">240</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="214.42" y="185.51">Seconds since the last answer to F♯</text>
+    <path d="M 39.14 155.01 L 389.7 155.01" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <defs>
+      <path id="asrs-m4461a38b5e" d="M 0 0 L -3 0" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="39.14" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m4461a38b5e" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="32.64" y="159.19">0</text>
+    <path d="M 39.14 118.05 L 389.7 118.05" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="39.14" y="118.05" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m4461a38b5e" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="32.64" y="122.23">20</text>
+    <path d="M 39.14 81.09 L 389.7 81.09" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="39.14" y="81.09" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m4461a38b5e" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="32.64" y="85.27">40</text>
+    <path d="M 39.14 44.14 L 389.7 44.14" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="39.14" y="44.14" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m4461a38b5e" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="32.64" y="48.32">60</text>
+    <path d="M 39.14 7.18 L 389.7 7.18" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="39.14" y="7.18" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#asrs-m4461a38b5e" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="32.64" y="11.36">80</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="11.36" y="81.09" transform="rotate(-90 11.36 81.09)">Chance of drawing F♯ (%)</text>
+    <path d="M 39.14 146.34 L 42.06 146.34 L 43.53 144.43 L 46.45 138.15 L 49.37 132.4 L 52.29 127.12 L 55.21 122.25 L 58.13 117.75 L 61.05 113.58 L 63.97 109.69 L 66.9 106.08 L 71.28 101.09 L 75.66 96.57 L 80.04 92.45 L 84.42 88.68 L 88.81 85.22 L 93.19 82.04 L 97.57 79.1 L 101.95 76.38 L 107.79 73.05 L 113.64 70.02 L 119.48 67.26 L 125.32 64.73 L 131.17 62.4 L 138.47 59.75 L 145.77 57.35 L 153.08 55.16 L 161.84 52.78 L 170.6 50.64 L 180.83 48.4 L 191.05 46.4 L 202.74 44.36 L 214.42 42.55 L 227.57 40.75 L 242.18 38.99 L 258.24 37.3 L 275.77 35.7 L 294.76 34.22 L 315.21 32.85 L 337.12 31.61 L 361.95 30.42 L 389.7 29.32 L 389.7 29.32" clip-path="url(#asrs-p4406b90dc8)" style="fill: none; stroke: var(--accent); stroke-width: 2.3; stroke-linecap: square" />
+    <defs>
+      <path id="asrs-md0a2780aee" d="M 0 3 C 0.8 3 1.56 2.68 2.12 2.12 C 2.68 1.56 3 0.8 3 0 C 3 -0.8 2.68 -1.56 2.12 -2.12 C 1.56 -2.68 0.8 -3 0 -3 C -0.8 -3 -1.56 -2.68 -2.12 -2.12 C -2.68 -1.56 -3 -0.8 -3 0 C -3 0.8 -2.68 1.56 -2.12 2.12 C -1.56 2.68 -0.8 3 0 3 z" style="stroke: var(--accent)" />
+    </defs>
+    <g clip-path="url(#asrs-p4406b90dc8)">
+      <use x="214.42" y="42.55" style="fill: var(--accent); stroke: var(--accent)" href="#asrs-md0a2780aee" />
+    </g>
+    <path d="M 39.14 155.01 L 39.14 7.18" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 39.14 155.01 L 389.7 155.01" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="214.42" y="35.55">61%</text>
+    <defs>
+      <clipPath id="asrs-p4406b90dc8">
+        <rect x="39.14" y="7.18" width="350.56" height="147.83" />
+      </clipPath>
+    </defs>
+  </svg>
+  <figcaption>With the same two candidates, elapsed time alone changes the odds.</figcaption>
+</figure>
+
+<h2 id="arts">ARTS</h2>
+
+<p><strong>Adaptive Response-Time-based Sequencing (ARTS)</strong> measures the gap between questions in turns. Its clock advances each time you give a first answer in this exercise. Retries during the same showing and time away from practice leave the clock where it was.</p>
+
+<h3 id="priority-per-turn">Priority per turn</h3>
+
+<p>Let \(h\) be the number of intervening first answers since you last answered F♯, and \(T\) the time in milliseconds you took on that first attempt. Alto uses a 100 ms reference time. The natural logarithm, \(\ln\), makes a slower correct answer count more, with a diminishing increase for each extra millisecond. <a href="https://kellmanlab.psych.ucla.edu/files/mettler_massey_kellman_2016.pdf">Mettler, Massey, and Kellman, equation 1</a></p>
 
 <table>
   <thead>
     <tr>
-      <th>Exercise</th>
-      <th>Par time</th>
+      <th>Last first answer</th>
+      <th>Priority now</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Note Identification, Keyboard Note Identification</td>
-      <td>3 s</td>
+      <td>Unseen</td>
+      <td>\(1\)</td>
     </tr>
     <tr>
-      <td>Key Signature Identification, Clef Basics</td>
-      <td>5 s</td>
+      <td>Incorrect</td>
+      <td>\(2h\)</td>
     </tr>
     <tr>
-      <td>Interval Identification, Keyboard Interval Identification, Chord Quality, Note Construction, Key Signature Construction</td>
-      <td>6 s</td>
-    </tr>
-    <tr>
-      <td>Circle of Fifths</td>
-      <td>7 s</td>
-    </tr>
-    <tr>
-      <td>Scale Identification</td>
-      <td>8 s</td>
-    </tr>
-    <tr>
-      <td>Scale Construction</td>
-      <td>25 s</td>
-    </tr>
-    <tr>
-      <td>Arpeggio Identification</td>
-      <td>9 s</td>
+      <td>Correct</td>
+      <td>\(0.11h\ln\!\left(\frac{\max(T,101)}{100}\right)\)</td>
     </tr>
   </tbody>
 </table>
 
-<p>At half the par time or quicker you get the full speed bonus. At par there is no effect. At four times par or slower
-you get the full slow penalty. In between it changes smoothly.</p>
+<p>Alto compares eligible questions under the current exercise settings and selects the highest priority. It breaks ties at random.</p>
 
-<h2 id="what-gets-asked-next">What gets asked next</h2>
+<h3 id="a-fast-and-a-slow-identification">A fast and a slow identification</h3>
 
-<p>Alto builds a small pool of candidates for each question: a handful of newly generated ones, plus questions you have
-been asked before under the same exercise settings (the ones with the highest strain, and a few at random). It then
-picks one at random, but weighted:</p>
+<p>Suppose F♯ and an unseen B are eligible. If you last identified F♯ in <strong>one second</strong>, after three other questions its score is \(0.11\cdot 3\ln(10)\approx 0.76\). B wins with 1. Had you taken <strong>four seconds</strong>, the same three questions would give F♯ a score of \(0.11\cdot 3\ln(40)\approx 1.22\), and F♯ would win. If you missed F♯, just one intervening answer would give it a score of 2.</p>
 
-<ul>
-  <li>The higher a question’s strain, the more likely it is. Weight grows steeply with strain, so a question you keep
-missing is far more likely than one you know.</li>
-  <li>A question you answered just now is held back for a while. For an easy question this lasts many minutes. For a hard
-one it is short, so what you struggle with returns within about a minute.</li>
-  <li>A question you have never seen is more likely than one you have mastered, so new material keeps arriving.</li>
-  <li>The question you just answered is never asked twice in a row.</li>
-</ul>
+<figure class="practice-chart">
+  <svg viewBox="0 0 403.2 190.8" class="practice-plot" role="img" aria-labelledby="arts-title arts-desc">
+    <title id="arts-title">ARTS priority by intervening answers</title>
+    <desc id="arts-desc">An unseen question stays at priority one. A four-second correct answer overtakes it after three other questions. A one-second answer overtakes it after four.</desc>
+    <defs>
+      <path id="arts-mcbd3676ebe" d="M 0 0 L 0 3" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="48.67" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-mcbd3676ebe" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="48.67" y="169.87">0</text>
+    <use x="134.83" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-mcbd3676ebe" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="134.83" y="169.87">1</text>
+    <use x="220.99" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-mcbd3676ebe" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="220.99" y="169.87">2</text>
+    <use x="307.15" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-mcbd3676ebe" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="307.15" y="169.87">3</text>
+    <use x="393.31" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-mcbd3676ebe" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="393.31" y="169.87">4</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="221.42" y="185.51">Other questions answered since F♯</text>
+    <path d="M 42.64 150.01 L 400.2 150.01" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <defs>
+      <path id="arts-m0e83e9c18a" d="M 0 0 L -3 0" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="42.64" y="150.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-m0e83e9c18a" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="36.14" y="154.19">0.0</text>
+    <path d="M 42.64 114.3 L 400.2 114.3" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="42.64" y="114.3" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-m0e83e9c18a" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="36.14" y="118.48">0.5</text>
+    <path d="M 42.64 78.6 L 400.2 78.6" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="42.64" y="78.6" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-m0e83e9c18a" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="36.14" y="82.77">1.0</text>
+    <path d="M 42.64 42.89 L 400.2 42.89" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="42.64" y="42.89" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-m0e83e9c18a" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="36.14" y="47.07">1.5</text>
+    <path d="M 42.64 7.18 L 400.2 7.18" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="42.64" y="7.18" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#arts-m0e83e9c18a" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="36.14" y="11.36">2.0</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="11.36" y="79.31" transform="rotate(-90 11.36 79.31)">Priority score</text>
+    <path d="M 48.67 150.01 L 134.83 121.03 L 220.99 92.05 L 307.15 63.08 L 393.31 34.1" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: square" />
+    <defs>
+      <path id="arts-mdb6256f642" d="M 0 3 C 0.8 3 1.56 2.68 2.12 2.12 C 2.68 1.56 3 0.8 3 0 C 3 -0.8 2.68 -1.56 2.12 -2.12 C 1.56 -2.68 0.8 -3 0 -3 C -0.8 -3 -1.56 -2.68 -2.12 -2.12 C -2.68 -1.56 -3 -0.8 -3 0 C -3 0.8 -2.68 1.56 -2.12 2.12 C -1.56 2.68 -0.8 3 0 3 z" style="stroke: var(--accent)" />
+    </defs>
+    <g clip-path="url(#arts-pae175c9f37)">
+      <use x="48.67" y="150.01" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+      <use x="134.83" y="121.03" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+      <use x="220.99" y="92.05" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+      <use x="307.15" y="63.08" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+      <use x="393.31" y="34.1" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+    </g>
+    <path d="M 48.67 150.01 L 134.83 131.92 L 220.99 113.83 L 307.15 95.75 L 393.31 77.66" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: var(--fg); stroke-width: 2" />
+    <defs>
+      <path id="arts-m56d495bc34" d="M -3 3 L 3 3 L 3 -3 L -3 -3 z" style="stroke: var(--fg); stroke-linejoin: miter" />
+    </defs>
+    <g clip-path="url(#arts-pae175c9f37)">
+      <use x="48.67" y="150.01" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+      <use x="134.83" y="131.92" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+      <use x="220.99" y="113.83" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+      <use x="307.15" y="95.75" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+      <use x="393.31" y="77.66" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+    </g>
+    <path d="M 42.64 78.6 L 400.2 78.6" clip-path="url(#arts-pae175c9f37)" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: var(--muted); stroke-width: 2" />
+    <path d="M 42.64 155.01 L 42.64 3.61" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 42.64 155.01 L 400.2 155.01" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 51.19 16.05 L 60.69 16.05 L 70.19 16.05" style="fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: square" />
+    <use x="60.69" y="16.05" style="fill: var(--accent); stroke: var(--accent)" href="#arts-mdb6256f642" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="77.79" y="19.38">Correct in 4 s</text>
+    <path d="M 51.19 30 L 60.69 30 L 70.19 30" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: var(--fg); stroke-width: 2" />
+    <use x="60.69" y="30" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#arts-m56d495bc34" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="77.79" y="33.32">Correct in 1 s</text>
+    <path d="M 51.19 43.94 L 60.69 43.94 L 70.19 43.94" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: var(--muted); stroke-width: 2" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="77.79" y="47.27">Unseen question</text>
+    <defs>
+      <clipPath id="arts-pae175c9f37">
+        <rect x="42.64" y="3.61" width="357.56" height="151.4" />
+      </clipPath>
+    </defs>
+  </svg>
+  <figcaption>After a correct answer, response time sets the increase in priority per turn.</figcaption>
+</figure>
 
-<p>Questions from earlier sessions are only replayed when the exercise settings match the ones they were asked under.
-If you change the clefs or key signatures, you will not be given old questions that no longer fit.</p>
+<h2 id="sm-2">SM-2</h2>
+
+<p><strong>SuperMemo 2 (SM-2)</strong> keeps a count of successive successful reviews, the last interval in days, and an <strong>ease factor</strong> \(E\) for each card. A new card starts with \(E=2.5\). Alto uses two grades from the SM-2 scale. The first submission in each showing supplies the grade, regardless of response speed. <a href="https://super-memory.com/english/ol/sm2.htm">Original SM-2 specification</a></p>
+
+<h3 id="review-intervals-and-ease">Review intervals and ease</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>First submission</th>
+      <th>Change to the card</th>
+      <th>Next review</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Correct (grade 4)</td>
+      <td>Add one success. Keep the current ease.</td>
+      <td>1 day for the first success and 6 days for the second. After that, \(I_{n}=\lceil I_{n-1}E\rceil\), the previous interval times the ease, rounded up to a whole day.</td>
+    </tr>
+    <tr>
+      <td>Incorrect (grade 2)</td>
+      <td>Reset the success count and interval to zero. Set the ease to \(\max(1.3,E-0.32)\).</td>
+      <td>1 minute. A correction during this showing leaves that date in place.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="three-reviews-of-f">Three reviews of F♯</h3>
+
+<p>Identify a new F♯ correctly on day 0 and it is due on day 1. Get it right on day 1 and it is due on day 7. A third success on day 7 gives an interval of \(6\cdot 2.5=15\) days, so the next due date is <strong>day 22</strong>.</p>
+
+<figure class="practice-chart">
+  <svg viewBox="0 0 403.2 190.8" class="practice-plot" role="img" aria-labelledby="sm2-title sm2-desc">
+    <title id="sm2-title">SM-2 interval after each successful review</title>
+    <desc id="sm2-desc">The first, second and third consecutive successes on a new card give next intervals of one, six and fifteen days.</desc>
+    <path d="M 93.51 155.01 L 93.51 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <defs>
+      <path id="sm2-m6ba9d54b06" d="M 0 0 L 0 3" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="93.51" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="93.51" y="169.87">0</text>
+    <path d="M 148.93 155.01 L 148.93 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="148.93" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="148.93" y="169.87">3</text>
+    <path d="M 204.36 155.01 L 204.36 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="204.36" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="204.36" y="169.87">6</text>
+    <path d="M 259.79 155.01 L 259.79 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="259.79" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="259.79" y="169.87">9</text>
+    <path d="M 315.21 155.01 L 315.21 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="315.21" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="315.21" y="169.87">12</text>
+    <path d="M 370.64 155.01 L 370.64 3" clip-path="url(#sm2-p0f27ecdef3)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="370.64" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#sm2-m6ba9d54b06" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="370.64" y="169.87">15</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="246.85" y="185.51">Days until the next review</text>
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="90.01" y="37.12">First success</text>
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="90.01" y="83.18">Second success</text>
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="90.01" y="129.25">Third success</text>
+    <path d="M 93.51 21.89 L 111.98 21.89 L 111.98 44 L 93.51 44 z" clip-path="url(#sm2-p0f27ecdef3)" style="fill: var(--accent)" />
+    <path d="M 93.51 67.95 L 204.36 67.95 L 204.36 90.06 L 93.51 90.06 z" clip-path="url(#sm2-p0f27ecdef3)" style="fill: var(--accent)" />
+    <path d="M 93.51 114.01 L 370.64 114.01 L 370.64 136.12 L 93.51 136.12 z" clip-path="url(#sm2-p0f27ecdef3)" style="fill: var(--accent)" />
+    <path d="M 93.51 155.01 L 93.51 3" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 93.51 155.01 L 400.2 155.01" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <text style="font-size: 11px; text-anchor: start; fill: var(--fg)" x="116.6" y="35.98">1</text>
+    <text style="font-size: 11px; text-anchor: start; fill: var(--fg)" x="208.98" y="82.04">6</text>
+    <text style="font-size: 11px; text-anchor: start; fill: var(--fg)" x="375.26" y="128.1">15</text>
+    <defs>
+      <clipPath id="sm2-p0f27ecdef3">
+        <rect x="93.51" y="3" width="306.69" height="152.01" />
+      </clipPath>
+    </defs>
+  </svg>
+  <figcaption>Each bar starts at a successful review and measures the gap to the next due date.</figcaption>
+</figure>
+
+<p>Suppose instead that you miss F♯ on day 7. Its ease falls to 2.18 and Alto schedules a retry one minute later. Three successive correct reviews from there give gaps of <strong>1, 6, and 14 days</strong>. The shorter third gap comes from the ceiling calculation \(\lceil 6\cdot 2.18\rceil=\lceil 13.08\rceil=14\).</p>
+
+<h2 id="fsrs">FSRS</h2>
+
+<p>The <strong>Free Spaced Repetition Scheduler (FSRS)</strong> models the chance you can recall a card as time passes. Alto uses FSRS-6 with its default parameters. A correct first submission earns <strong>Good</strong> and a miss earns <strong>Again</strong>, regardless of response speed. For a new card, Good puts its next learning step ten minutes away and Again puts it one minute away. A miss on a card already in review starts a ten-minute relearning step. <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS scheduler</a></p>
+
+<h3 id="estimated-recall-and-the-review-date">Estimated recall and the review date</h3>
+
+<p>FSRS tracks <strong>difficulty</strong> (\(D\), from 1 to 10) and <strong>stability</strong> (\(S\), measured in days). A stability of 8 days means the model expects a 90% chance of recall eight days after a review. <strong>Retrievability</strong> (\(R\)) is the predicted chance of recall after \(t\) whole days. With Alto’s default parameters the curve is approximately</p>
+
+\[R(t)=\left(1+0.98035\,\frac{t}{S}\right)^{-0.1542}.\]
+
+<p>The factor 0.98035 is chosen so that \(R(S)=0.90\). At the 90% target the base review interval therefore equals the updated stability in days. FSRS rounds it to whole days and may vary the scheduled day slightly to spread reviews out.</p>
+
+<figure class="practice-chart">
+  <svg viewBox="0 0 403.2 190.8" class="practice-plot" role="img" aria-labelledby="fsrs-title fsrs-desc">
+    <title id="fsrs-title">FSRS predicted recall at two stabilities</title>
+    <desc id="fsrs-desc">A card with two days of stability reaches the 90% target on day two. A card with eight days of stability reaches it on day eight.</desc>
+    <defs>
+      <path id="fsrs-mdc7c90a3aa" d="M 0 0 L 0 3" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="46.14" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="46.14" y="169.87">0</text>
+    <use x="115.55" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="115.55" y="169.87">2</text>
+    <use x="184.97" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="184.97" y="169.87">4</text>
+    <use x="254.38" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="254.38" y="169.87">6</text>
+    <use x="323.79" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="323.79" y="169.87">8</text>
+    <use x="393.2" y="155.01" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-mdc7c90a3aa" />
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--muted)" x="393.2" y="169.87">10</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="219.67" y="185.51">Days since the last review</text>
+    <path d="M 46.14 149.38 L 393.2 149.38" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <defs>
+      <path id="fsrs-m719e3e79e4" d="M 0 0 L -3 0" style="stroke: var(--muted); stroke-width: 0.8" />
+    </defs>
+    <use x="46.14" y="149.38" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="153.56">75</text>
+    <path d="M 46.14 121.23 L 393.2 121.23" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="46.14" y="121.23" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="125.41">80</text>
+    <path d="M 46.14 93.08 L 393.2 93.08" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="46.14" y="93.08" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="97.26">85</text>
+    <path d="M 46.14 64.93 L 393.2 64.93" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="46.14" y="64.93" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="69.11">90</text>
+    <path d="M 46.14 36.78 L 393.2 36.78" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="46.14" y="36.78" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="40.96">95</text>
+    <path d="M 46.14 8.63 L 393.2 8.63" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--line); stroke-width: 0.8; stroke-linecap: square" />
+    <use x="46.14" y="8.63" style="fill: var(--muted); stroke: var(--muted); stroke-width: 0.8" href="#fsrs-m719e3e79e4" />
+    <text style="font-size: 11px; text-anchor: end; fill: var(--muted)" x="39.64" y="12.81">100</text>
+    <text style="font-size: 11px; text-anchor: middle; fill: var(--fg)" x="11.36" y="79" transform="rotate(-90 11.36 79)">Predicted recall (%)</text>
+    <path d="M 46.14 8.63 L 80.85 18.58 L 115.55 27.34 L 150.26 35.16 L 184.97 42.22 L 219.67 48.63 L 254.38 54.5 L 289.08 59.91 L 323.79 64.93 L 358.5 69.6 L 393.2 73.96" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: square" />
+    <path d="M 46.14 8.63 L 80.85 42.22 L 115.55 64.93 L 150.26 81.92 L 184.97 95.4 L 219.67 106.51 L 254.38 115.94 L 289.08 124.11 L 323.79 131.29 L 358.5 137.69 L 393.2 143.45" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: var(--fg); stroke-width: 2" />
+    <path d="M 46.14 64.93 L 393.2 64.93" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: var(--muted); stroke-width: 2" />
+    <path d="M 46.14 155.01 L 46.14 3" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 46.14 155.01 L 393.2 155.01" style="fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+    <path d="M 323.79 64.93" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: square" />
+    <defs>
+      <path id="fsrs-me081975ce1" d="M 0 3 C 0.8 3 1.56 2.68 2.12 2.12 C 2.68 1.56 3 0.8 3 0 C 3 -0.8 2.68 -1.56 2.12 -2.12 C 1.56 -2.68 0.8 -3 0 -3 C -0.8 -3 -1.56 -2.68 -2.12 -2.12 C -2.68 -1.56 -3 -0.8 -3 0 C -3 0.8 -2.68 1.56 -2.12 2.12 C -1.56 2.68 -0.8 3 0 3 z" style="stroke: var(--accent)" />
+    </defs>
+    <g clip-path="url(#fsrs-pe243a9c5c9)">
+      <use x="323.79" y="64.93" style="fill: var(--accent); stroke: var(--accent)" href="#fsrs-me081975ce1" />
+    </g>
+    <path d="M 115.55 64.93" clip-path="url(#fsrs-pe243a9c5c9)" style="fill: none; stroke: var(--fg); stroke-width: 1.5; stroke-linecap: square" />
+    <defs>
+      <path id="fsrs-m35cb354f68" d="M -3 3 L 3 3 L 3 -3 L -3 -3 z" style="stroke: var(--fg); stroke-linejoin: miter" />
+    </defs>
+    <g clip-path="url(#fsrs-pe243a9c5c9)">
+      <use x="115.55" y="64.93" style="fill: var(--fg); stroke: var(--fg); stroke-linejoin: miter" href="#fsrs-m35cb354f68" />
+    </g>
+    <path d="M 54.69 113.27 L 64.19 113.27 L 73.69 113.27" style="fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: square" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="81.29" y="116.59">Stability 8 days</text>
+    <path d="M 54.69 127.21 L 64.19 127.21 L 73.69 127.21" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: var(--fg); stroke-width: 2" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="81.29" y="130.54">Stability 2 days</text>
+    <path d="M 54.69 141.16 L 64.19 141.16 L 73.69 141.16" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: var(--muted); stroke-width: 2" />
+    <text style="font-size: 9.5px; text-anchor: start; fill: var(--fg)" x="81.29" y="144.48">90% target</text>
+    <defs>
+      <clipPath id="fsrs-pe243a9c5c9">
+        <rect x="46.14" y="3" width="347.06" height="152.01" />
+      </clipPath>
+    </defs>
+  </svg>
+  <figcaption>Both cards start at 100% estimated recall. The more stable card takes longer to reach the review target.</figcaption>
+</figure>
+
+<h3 id="a-successful-review-on-day-eight">A successful review on day eight</h3>
+
+<p>Suppose your F♯ card has \(D=5\) and \(S=8\) days. On day eight its predicted recall is 0.90. You identify F♯ correctly. For a <strong>Good</strong> review at least a day after the previous one, the stability update has two parts. The factor \(k\) depends on the card’s current difficulty and stability.</p>
+
+\[k = e^{1.8722}(11-D)S^{-0.1666}.\]
+
+\[S_{\mathrm{new}}=S\left[1+k\left(e^{0.796(1-R)}-1\right)\right].\]
+
+<p>The quantity in square brackets is about <strong>3.29</strong>, giving a new stability of <strong>26.29 days</strong> and a base interval of <strong>26 days</strong>. The term involving \(R\) explains why timing matters. If you recall the same card earlier, \(R\) is higher and the gain in stability is smaller. A miss uses a separate stability update before relearning.</p>
+
+<h2 id="review-intervals-for-f">Review intervals for F♯</h2>
+
+<p>Suppose you see a new F♯ card five times in Note Identification. Each row shows your answer and the gap <strong>until the next showing</strong>. For ASRS and ARTS, assume you answer one other question every 10 seconds. After each of those answers, F♯ competes with one unseen card. For SM-2 and FSRS, assume you review F♯ whenever it is due.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Showing and answer</th>
+      <th>ASRS (median gap)</th>
+      <th>ARTS</th>
+      <th>SM-2</th>
+      <th>FSRS (base interval)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. Correct in 4 s</td>
+      <td>9 questions (90 s)</td>
+      <td>3 questions (30 s)</td>
+      <td>1 day</td>
+      <td>10 min</td>
+    </tr>
+    <tr>
+      <td>2. Correct in 1 s</td>
+      <td>19 questions (190 s)</td>
+      <td>4 questions (40 s)</td>
+      <td>6 days</td>
+      <td>2 days</td>
+    </tr>
+    <tr>
+      <td>3. Correct in 1 s</td>
+      <td>19 questions (190 s)</td>
+      <td>4 questions (40 s)</td>
+      <td>15 days</td>
+      <td>11 days</td>
+    </tr>
+    <tr>
+      <td>4. Miss, then correct on retry</td>
+      <td>8 questions (80 s)</td>
+      <td>1 question (10 s)</td>
+      <td>1 min</td>
+      <td>10 min</td>
+    </tr>
+    <tr>
+      <td>5. Correct in 4 s</td>
+      <td>11 questions (110 s)</td>
+      <td>3 questions (30 s)</td>
+      <td>1 day</td>
+      <td>2 days</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>After the first answer, ASRS draws F♯ again within nine intervening questions about half the time. ARTS picks it as soon as it outranks the unseen card, after three questions. On the fourth showing, ASRS counts both the miss and the correction. The other three schedulers use the miss as the grade for that showing. FSRS uses base intervals here. In practice, its small random adjustment to longer intervals can also change the dates of later reviews.</p>
+
+<h2 id="daily-limits">Daily limits</h2>
+
+<p>For SM-2 and FSRS, exercise tiles show <strong>due reviews in green</strong> and <strong>new cards in blue</strong>. Due reviews come first. The default allowance for each exercise is <strong>10 new cards and 200 reviews per local day</strong>. Change those numbers in <strong>Settings → Practice</strong>, or open an exercise’s <strong>Daily Limits</strong> submenu and clear <strong>Use global</strong> to override either number for that exercise.</p>
+
+<p>The two algorithms share the day’s allowances and keep separate review dates. Opening a new card uses one introduction slot. If you leave before answering, you can return to that card without using another slot. The allowances reset at local midnight, and overdue reviews remain due.</p>
 
 <h2 id="your-profile">Your profile</h2>
 
-<p>Each profile has its own history, so two people sharing a computer do not affect each other’s questions. The profile
-name is shown in the menu (☰), where you can switch or add profiles. See <a href="/alto/dev/statistics/">Statistics</a> to check a profile’s progress.</p>
+<p>Alto tracks individual questions, such as identifying F♯4 in treble clef in D major. Changing the order of the answer buttons still counts as practice on the same question.</p>
+
+<p>Every submission is saved under your profile. A question that takes three tries leaves three entries, each with your answer, whether it was correct, and how long it took. Switching algorithms keeps that history. You can switch profiles in the menu (☰) and see your accuracy and response times in <a href="/alto/dev/statistics/">Statistics</a>.</p>
 
           
           
@@ -762,8 +1204,8 @@ name is shown in the menu (☰), where you can switch or add profiles. See <a hr
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795060306" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795060306" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795099021" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795099021" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
