@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import random
 import time
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import pytest
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QPoint, Qt
 from PySide6.QtGui import (
     QKeySequence,
     QShortcut,
@@ -205,6 +206,96 @@ def all_time_page(learner: Learner) -> StatsPage:
     page = StatsPage(learner)
     page.timeframe.setCurrentIndex(page.timeframe.findText("All time"))
     return page
+
+
+def test_volume_filter_stays_in_the_upper_right(app: QApplication) -> None:
+    """
+    Keep the filter aligned with the plot and clear of the title as the chart resizes.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    db = Database()
+    page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
+    page.granularity.setCurrentText("Month")
+    page.show()
+    chart, field = page.volume, page.granularity
+    for width in (1200, 640):
+        page.resize(width, 780)
+        app.processEvents()
+        corner = field.mapTo(chart, QPoint())
+        assert corner.y() == 0
+        assert corner.x() + field.width() == chart._plot().right()
+        heading = chart._heading
+        assert heading is not None and heading.text() == "Questions answered per month"
+        assert heading.height() >= heading.heightForWidth(heading.width())
+        assert heading.geometry().right() < corner.x()
+        assert max(heading.height(), field.height()) < chart._plot().top()
+    page.close()
+
+
+def test_volume_granularity_and_period_details(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Group the same first attempts at each resolution and drill into their original answers.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Fix the end of the chart at midday.
+    """
+    db = Database()
+    learner = Learner(db, profile=db.add_profile("Ada"))
+    now = datetime(2026, 3, 10, 12).timestamp()
+    monkeypatch.setattr(time, "time", lambda: now)
+    for day, hour, attempt, ok in [(1, 8, 1, True), (10, 10, 1, False), (10, 10, 2, True), (10, 11, 1, True)]:
+        db.add_attempt(
+            learner.profile.id,
+            exercise="NoteNames",
+            item_key="C",
+            attempt_no=attempt,
+            answer="C",
+            correct=ok,
+            duration_ms=500,
+            answered_at=datetime(2026, 3, day, hour).timestamp(),
+        )
+    page = all_time_page(learner)
+    trends = page.accuracy.labels.copy()
+    assert page.granularity.currentText() == "Auto" and page.volume.labels == trends
+    for period, bars in [("Month", 1), ("Week", 3), ("Day", 10)]:
+        page.granularity.setCurrentText(period)
+        assert page.volume.title == f"Questions answered per {period.lower()}"
+        assert len(page.volume.labels) == bars
+        assert sum(page.volume.right) == 2 and sum(page.volume.wrong) == 1
+        assert page.speed.labels == page.accuracy.labels == trends
+    page.granularity.setCurrentText("Hour")
+    assert not page.volume_scroll.isHidden()
+    missed = page.volume.wrong.index(1)
+    page.volume.clicked.emit(missed)
+    assert page.answers.proxy.rowCount() == 2
+    assert page.volume.selected == missed and page.accuracy.selected is None
+    page.accuracy.clicked.emit(len(trends) - 1)
+    assert page.answers.proxy.rowCount() == 3
+    assert page.volume.selected is None and page.speed.selected == len(trends) - 1
+    page.volume_scroll.setValue(0)
+    assert page.detail.isHidden() and sum(page.volume.right) == 1
+    page.volume.clicked.emit(page.volume.right.index(1))
+    assert page.answers.proxy.rowCount() == 1
+    page.timeframe.setCurrentText("Today")
+    assert page.volume_scroll.isHidden() and page.detail.isHidden()
+    assert page.volume.title.endswith("hour") and sum(page.volume.right) == sum(page.volume.wrong) == 1
+    page.granularity.setCurrentText("Month")
+    page.volume.clicked.emit(0)
+    assert page.answers.proxy.rowCount() == 3
+    page.exercise.setCurrentIndex(page.exercise.findData("NoteNames"))
+    assert sum(page.volume.right) == 1
+    page.exercise.setCurrentIndex(page.exercise.findData("NoteConstruction"))
+    assert page.volume.labels == [] and page.volume.title.endswith("month")
+    page.granularity.setCurrentText("Auto")
+    assert page.volume.labels == page.accuracy.labels
 
 
 def test_clicking_a_bar_lists_the_answers_of_that_period(

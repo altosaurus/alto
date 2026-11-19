@@ -21,8 +21,9 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 - **Summary tiles:** questions answered, how often the first answer was right, the typical time to a first answer,
   attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
   practice time, so leaving the app open does not inflate it.
-- **Questions answered:** a bar per day, with the questions you got right on the first try in green and the ones you missed in red.
-  Short timeframes switch to hours, and long ones to weeks or months.
+- **Questions answered** shows first-try correct answers in green and misses in red. Use **Granularity** in the chart’s upper-right corner to
+  choose **Hour**, **Day**, **Week**, or **Month** for each bar. **Auto** picks a period based on the timeframe.
+  If your choice produces more than 48 bars, scroll left beneath the chart to see earlier periods.
 - **Right on the first try:** your first-try accuracy over time. Days with no answers leave a gap.
 - **Typical time to first answer:** the median, over time, so a single slow answer does not distort it.
 - **By exercise:** accuracy, number of questions and typical time for each exercise.
@@ -36,8 +37,7 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 Every chart responds to the pointer. **Hover** a bar, a point, an exercise row or a calendar day and it brightens while the
 rest of the chart fades back, with its numbers in a tooltip. **Click** one and the answers behind it are listed in a panel under the charts:
 
-- a bar or a point of the three charts over time lists the answers given in that period (a day, a week, an hour, depending on the
-  timeframe);
+- a bar or point lists the answers given during its hour, day, week, or month within the selected timeframe;
 - a row of the by-exercise chart lists the answers to that exercise within the timeframe;
 - a square of the calendar lists the answers given on that day.
 

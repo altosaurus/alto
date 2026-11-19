@@ -204,6 +204,8 @@ class Stats:
         The size of the chart periods: "hour", "day", "week" or "month". Keyword-only.
     buckets : list of Bucket
         One per period, oldest first. Keyword-only.
+    volume_buckets : list of Bucket
+        Period counts for the questions answered chart. These share the trend buckets when their periods match. Keyword-only.
     by_exercise : list of ExerciseStats
         One per exercise practiced, sorted by name. Keyword-only.
     hardest : list of HardQuestion
@@ -226,6 +228,7 @@ class Stats:
     days_practiced: int = 0
     granularity: str = "day"
     buckets: list[Bucket] = field(default_factory=list)
+    volume_buckets: list[Bucket] = field(default_factory=list)
     by_exercise: list[ExerciseStats] = field(default_factory=list)
     hardest: list[HardQuestion] = field(default_factory=list)
 
@@ -560,6 +563,37 @@ def daily_counts(
     return counts
 
 
+def _period_buckets(start: datetime, *, end: datetime, gran: str) -> dict[datetime, Bucket]:
+    """
+    Build consecutive chart periods, including periods without an answer.
+
+    Parameters
+    ----------
+    start : datetime
+        First time in the selection.
+    end : datetime
+        Last time in the selection. Keyword-only.
+    gran : str
+        Hour, day, week or month. Keyword-only.
+
+    Returns
+    -------
+    dict of datetime to Bucket
+        Empty buckets indexed by the local start of each period.
+
+    Examples
+    --------
+    >>> len(_period_buckets(datetime(2026, 1, 1), end=datetime(2026, 1, 3), gran="day"))
+    3
+    """
+    cursor = _floor(start, gran=gran)
+    buckets: dict[datetime, Bucket] = {}
+    while cursor <= end:
+        buckets[cursor] = Bucket(cursor, label=_label(cursor, gran=gran))
+        cursor = _next(cursor, gran=gran)
+    return buckets
+
+
 def collect(
     db: Database,
     *,
@@ -568,6 +602,7 @@ def collect(
     since: float | None = None,
     now: float | None = None,
     hardest: int = 8,
+    volume_granularity: str | None = None,
 ) -> Stats:
     """
     Work out everything the statistics screen shows.
@@ -586,6 +621,8 @@ def collect(
         The current time as a timestamp; the clock is used if None. Keyword-only.
     hardest : int, default 8
         How many questions to list as needing practice. Keyword-only.
+    volume_granularity : str or None, default None
+        Group question counts by hour, day, week or month. None follows the timeframe. Keyword-only.
 
     Returns
     -------
@@ -610,11 +647,10 @@ def collect(
     if rows:
         start = datetime.fromtimestamp(since if since is not None else rows[0]["answered_at"])
         out.granularity = gran = _granularity((now - start.timestamp()) / 86400)
-        cursor, end = _floor(start, gran=gran), datetime.fromtimestamp(now)
-        buckets: dict[datetime, Bucket] = {}
-        while cursor <= end:
-            buckets[cursor] = Bucket(cursor, label=_label(cursor, gran=gran))
-            cursor = _next(cursor, gran=gran)
+        end = datetime.fromtimestamp(now)
+        buckets = _period_buckets(start, end=end, gran=gran)
+        volume_period = volume_granularity or gran
+        volume = _period_buckets(start, end=end, gran=volume_period) if volume_period != gran else {}
         per_exercise: dict[str, list[tuple[bool, float]]] = {}
         times: list[float] = []
         days = set()
@@ -634,7 +670,13 @@ def collect(
                 b.questions += 1
                 b.first_right += ok
                 b.times.append(seconds)
+            if volume:
+                count = volume.get(_floor(when, gran=volume_period))
+                if count:
+                    count.questions += 1
+                    count.first_right += ok
         out.buckets = list(buckets.values())
+        out.volume_buckets = list(volume.values()) if volume else out.buckets
         out.days_practiced = len(days)
         out.median_seconds = statistics.median(times) if times else None
         out.by_exercise = sorted(

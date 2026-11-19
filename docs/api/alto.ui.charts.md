@@ -59,6 +59,7 @@ True
 StackedBarChart(
     title: str,
     *,
+    header_control: QWidget | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -88,6 +89,7 @@ Create an empty chart.
 **Parameters**
 
 - `title` (*str*): Drawn at the top left.
+- `header_control` (*QWidget or None, default None*): Optional control at the right edge of the chart title row. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the chart. Keyword-only.
 
 **Constructor examples**
