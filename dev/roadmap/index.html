@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -973,6 +976,11 @@
       <td><strong class="roadmap-complete">Complete</strong></td>
     </tr>
     <tr>
+      <td>Response-time grading</td>
+      <td>Use recorded practice times to establish thresholds for each exercise. A correct first answer earns a Hard, Good, or Easy rating based on its response time, and SM-2 or FSRS uses that rating to set the next review interval.</td>
+      <td>Planned</td>
+    </tr>
+    <tr>
       <td>Mixed practice</td>
       <td>Combine an earlier prerequisite, a current topic, and a passage that uses both in one suggested session.</td>
       <td>Planned</td>
@@ -1006,6 +1014,11 @@
       <td>Install custom exercises and lessons and use them alongside Alto’s built-in material.</td>
       <td>Planned</td>
     </tr>
+    <tr>
+      <td>Glossary plugins</td>
+      <td>Install a plugin that adds new terms to the glossary, with definitions, interactive examples, and links to related lessons and exercises.</td>
+      <td>Planned</td>
+    </tr>
   </tbody>
 </table>
 
@@ -1015,6 +1028,8 @@
 
 <p>A second goal is to refactor the codebase so it is easier to read, test, and maintain. That work includes simplifying complicated code, removing duplication, and using tests to verify behavior as the implementation changes.</p>
 
+          
+          
           
           
           
@@ -1291,8 +1306,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

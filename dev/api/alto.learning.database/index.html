@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -331,6 +331,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/" aria-current="page">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
@@ -623,7 +626,7 @@
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; check_snapshot(Database().snapshot())
-(3, 0, 0)
+(6, 0, 0)
 &gt;&gt;&gt; check_snapshot(b"not a database")
 Traceback (most recent call last):
     ...
@@ -788,7 +791,7 @@ False
 <pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
 &gt;&gt;&gt; ada = db.add_profile("Ada")
 &gt;&gt;&gt; check_snapshot(db.snapshot())
-(3, 1, 0)
+(6, 1, 0)
 </code></pre>
 
 <h3 id="databaserestore">Database.restore</h3>
@@ -1228,7 +1231,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>list of sqlite3.Row</em>: Each answer’s time, exercise, question key, answer, correctness, attempt number, duration and question payload.</li>
+  <li><em>list of sqlite3.Row</em>: Each answer’s time, exercise, question key, answer, correctness, attempt number, duration, question payload, and the question’s current due timestamp under the active scheduler (NULL if unscheduled).</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1265,7 +1268,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>list of sqlite3.Row</em>: Every column of each question’s record.</li>
+  <li><em>list of sqlite3.Row</em>: Every column of each question’s record and the active scheduler’s due timestamp, or NULL if unscheduled.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1431,7 +1434,7 @@ True
           
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.learning.calendar/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.learning.calendar</span></a>
-            <a class="next" href="/alto/dev/api/alto.learning.learner/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.learning.learner<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/dev/api/alto.learning.grading/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.learning.grading<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -1493,8 +1496,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

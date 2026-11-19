@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -331,6 +331,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
@@ -589,6 +592,51 @@
 
 <pre><code class="language-pycon">&gt;&gt;&gt; SidebarToggle().toolTip()
 'Hide exercise list'
+</code></pre>
+
+<h2 id="practicecounts">PracticeCounts</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PracticeCounts</span><span class="p">(</span><span class="n">QLabel</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Colored counts for calendar practice on tiles and in the exercise screen.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; label = PracticeCounts()
+&gt;&gt;&gt; label.set_counts((2, 3, 1), studying=True, current="incorrect")
+&gt;&gt;&gt; "1 incorrect card" in label.toolTip()
+True
+</code></pre>
+
+<h3 id="practicecountsset_counts">PracticeCounts.set_counts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts</span><span class="p">(</span>
+    <span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">studying</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">current</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">totals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the counts in blue, red, green order and underline the active queue.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">counts</code> (<em>tuple of int</em>): Due reviews, new cards, and outstanding incorrect cards.</li>
+  <li><code class="language-plaintext highlighter-rouge">studying</code> (<em>bool</em>): Separate the exercise screen’s counts with slashes.</li>
+  <li><code class="language-plaintext highlighter-rouge">current</code> (<em>str or None</em>): The queue of the unanswered card, or None between cards.</li>
+  <li><code class="language-plaintext highlighter-rouge">totals</code> (<em>bool</em>): Label the grid totals and show one queue per line.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; label = PracticeCounts()
+&gt;&gt;&gt; label.set_counts((1, 2, 0))
+&gt;&gt;&gt; label.toolTip().startswith("Blue — 2 new cards available")
+True
 </code></pre>
 
 <h2 id="sidebartoggle">SidebarToggle</h2>
@@ -1052,6 +1100,8 @@ True
           
           
           
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.update_flow/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.update_flow</span></a>
             <a class="next" href="/alto/dev/roadmap/" rel="next"><span class="np-label">Next</span><span class="np-title">Roadmap<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1116,8 +1166,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

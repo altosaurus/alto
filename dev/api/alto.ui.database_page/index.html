@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -821,7 +824,7 @@ True
 ...     db.attempt_rows(ada.id), names={"NoteNames": "Note Identification"}, texts=QuestionTexts()
 ... )
 &gt;&gt;&gt; [text for text, _ in table[0]][1:]
-['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s']
+['Note Identification', '(no longer stored)', 'C', 'Right', '1', '2.5 s', '—']
 &gt;&gt;&gt; hidden[0]["exercise"]
 'NoteNames'
 </code></pre>
@@ -980,7 +983,11 @@ True
 
 <h3 id="databasepageshow_table">DatabasePage.show_table</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_table</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_table</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">keep_sort</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
 <p>Show one of the tables.</p>
@@ -989,6 +996,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): “answers”, “questions” or “profiles”.</li>
+  <li><code class="language-plaintext highlighter-rouge">keep_sort</code> (<em>bool</em>): Preserve the current column and order when refreshing the open table.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1002,6 +1010,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1198,8 +1208,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

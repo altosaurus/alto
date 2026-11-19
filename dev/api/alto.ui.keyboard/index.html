@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -678,6 +681,25 @@ True
 &gt;&gt;&gt; keyboard.refit()
 &gt;&gt;&gt; keyboard.height() &gt; 0
 True
+</code></pre>
+
+<h3 id="keyboardwidgetfull_width">KeyboardWidget.full_width</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">full_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Measure the keyboard case when its keys reach their maximum width.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Width of the case in pixels, including padding.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardWidget().full_width()
+590
 </code></pre>
 
 <h3 id="keyboardwidgetresizeevent">KeyboardWidget.resizeEvent</h3>
@@ -1157,6 +1179,8 @@ False
           
           
           
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.key_fork/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.key_fork</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.keyboard_styles/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.keyboard_styles<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1221,8 +1245,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

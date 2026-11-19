@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -819,6 +822,16 @@ updates…</strong> in the menu looks for the newest release. On, it looks for t
 each change as soon as it is merged, before it has been released. That may be less stable. It applies to a copy installed with
 the install script; a packaged copy always follows releases. See <a href="/alto/dev/getting-started/">Getting started</a>.</p>
 
+<h3 id="practice">Practice</h3>
+
+<p>Select a scheduler for the current profile. With <strong>SM-2</strong> or <strong>FSRS</strong>, you can set daily limits and choose whether to grade correct answers yourself.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/practice-settings.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/practice-settings-dark.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" loading="lazy" />
+  <figcaption>This profile can start ten new cards per exercise each day and review every card that comes due.</figcaption>
+</figure>
+
 <h2 id="exercise-settings">Exercise settings</h2>
 
 <p>Note Identification, Keyboard Note Identification and Note Construction have a sliders button at the top right of the
@@ -914,8 +927,8 @@ practice history. See <a href="/alto/dev/data/">Your data</a>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

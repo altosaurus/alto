@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -331,6 +331,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
@@ -582,7 +585,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Database</h1>
-          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database uses schema version 3, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
+          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database uses schema version 6, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
 
 <p>A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends <strong>two</strong> rows to <code class="language-plaintext highlighter-rouge">attempts</code>, with durations of 3,000 and 1,000 milliseconds. It maintains <strong>one</strong> row in <code class="language-plaintext highlighter-rouge">items</code> for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.</p>
 
@@ -698,6 +701,12 @@
       <td>TEXT</td>
       <td>Default <code class="language-plaintext highlighter-rouge">Alto</code></td>
       <td>The profile’s selected question scheduler. ASRS retains its original database identifier, <code class="language-plaintext highlighter-rouge">Alto</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">self_grading</code></td>
+      <td>INTEGER</td>
+      <td>Default 0</td>
+      <td>Whether this profile rates correct answers in SM-2 and FSRS.</td>
     </tr>
   </tbody>
 </table>
@@ -858,7 +867,7 @@
 
 <h3 id="practice-cards">Practice cards</h3>
 
-<p>Each row identifies one introduced card. Schema version 2 imports existing items as introduced cards so a scheduler change preserves their history.</p>
+<p>Each row identifies a calendar practice card. Version 6 removes adaptive-only entries from this table and retains their answer history in <code class="language-plaintext highlighter-rouge">items</code> and <code class="language-plaintext highlighter-rouge">attempts</code>.</p>
 
 <table>
   <thead>
@@ -882,7 +891,7 @@
     <tr>
       <td><code class="language-plaintext highlighter-rouge">introduced_on</code></td>
       <td>TEXT</td>
-      <td>Local date of a calendar introduction. Empty for history imported from ASRS.</td>
+      <td>Local date of a calendar introduction. May be empty for scheduled cards imported by older versions.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">pending_new</code></td>
@@ -894,7 +903,7 @@
 
 <h3 id="review-schedules">Review schedules</h3>
 
-<p>A practice card can have a separate schedule for SM-2 and FSRS. A card with no schedule for the selected algorithm is ready for its first review with that algorithm.</p>
+<p>A practice card can have a separate schedule for SM-2 and FSRS. On entry to a calendar scheduler, missing schedules are initialized from the other calendar scheduler for that profile. The inherited row preserves the due timestamp and last grade, with the state translated for its new scheduler. Existing schedules resume independently.</p>
 
 <table>
   <thead>
@@ -923,7 +932,12 @@
     <tr>
       <td><code class="language-plaintext highlighter-rouge">state</code></td>
       <td>TEXT</td>
-      <td>JSON containing the SM-2 repetition count, interval and ease, or the FSRS library’s serialized card.</td>
+      <td>Automatic SM-2 stores repetitions, interval and ease. Self-graded SM-2 also stores the learning phase, step and scheduled delay. FSRS stores its serialized card.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">last_rating</code></td>
+      <td>INTEGER</td>
+      <td>The most recent grade (1 Again, 2 Hard, 3 Good, 4 Easy). Again marks a missed card for the red counter.</td>
     </tr>
   </tbody>
 </table>
@@ -952,12 +966,12 @@
     <tr>
       <td><code class="language-plaintext highlighter-rouge">new_cards</code></td>
       <td>INTEGER</td>
-      <td>Daily new-card allowance. NULL inherits the default.</td>
+      <td>Daily new-card allowance. Zero pauses introductions, −1 allows unlimited introductions, and NULL inherits the default.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">reviews</code></td>
       <td>INTEGER</td>
-      <td>Daily review allowance. NULL inherits the default.</td>
+      <td>Daily review allowance. Zero pauses reviews, −1 allows unlimited reviews, and NULL inherits the default.</td>
     </tr>
   </tbody>
 </table>
@@ -991,7 +1005,7 @@
     <tr>
       <td><code class="language-plaintext highlighter-rouge">completed</code></td>
       <td>INTEGER</td>
-      <td>First submissions on review presentations that day across SM-2 and FSRS.</td>
+      <td>Reviews graded that day across SM-2 and FSRS.</td>
     </tr>
   </tbody>
 </table>
@@ -1090,8 +1104,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

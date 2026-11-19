@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -760,18 +763,18 @@
 
 <h3 id="glossary">Glossary</h3>
 
-<p>The glossary button opens a searchable term list. Selecting <strong>accidental</strong> updates the definition, the example on the staff, and the links to related practice. The example uses the same staff class as Note Identification.</p>
+<p>The glossary button opens a searchable term list. Selecting <strong>harmonic minor scale</strong> updates the definition, the example on the staff, and the links to related practice. The example uses the same staff class as Note Identification.</p>
 
 <figure class="shot component-shot">
   <div class="component-map">
-    <img class="for-light" src="/alto/dev/assets/img/glossary.png" alt="The accidental glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="768" loading="lazy" />
-    <img class="for-dark" src="/alto/dev/assets/img/glossary-dark.png" alt="The accidental glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="768" loading="lazy" />
+    <img class="for-light" src="/alto/dev/assets/img/glossary.png" alt="The harmonic minor scale glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="720" loading="lazy" />
+    <img class="for-dark" src="/alto/dev/assets/img/glossary-dark.png" alt="The harmonic minor scale glossary entry with a term list, a staff example, and related exercise tiles." width="1100" height="720" loading="lazy" />
     
-    <a class="component-region" href="/alto/dev/api/alto.ui.glossary/#glossarypage" aria-label="Term search and list (GlossaryPage)" title="Term search and list (GlossaryPage)" style="left: 32.5%; top: 13.5%; width: 19%; height: 83%"><span aria-hidden="true">1</span></a>
+    <a class="component-region" href="/alto/dev/api/alto.ui.glossary/#glossarypage" aria-label="Term search and list (GlossaryPage)" title="Term search and list (GlossaryPage)" style="left: 2.5%; top: 14.5%; width: 19%; height: 82%"><span aria-hidden="true">1</span></a>
     
-    <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Accidental example (StaffWidget)" title="Accidental example (StaffWidget)" style="left: 53.5%; top: 41.5%; width: 34.5%; height: 18%"><span aria-hidden="true">2</span></a>
+    <a class="component-region" href="/alto/dev/api/alto.ui.staff/#staffwidget" aria-label="Harmonic minor scale example (StaffWidget)" title="Harmonic minor scale example (StaffWidget)" style="left: 62.5%; top: 15.5%; width: 34.5%; height: 19.5%"><span aria-hidden="true">2</span></a>
     
-    <a class="component-region" href="/alto/dev/api/alto.ui.home/#exercisecard" aria-label="Related exercise tiles (ExerciseCard)" title="Related exercise tiles (ExerciseCard)" style="left: 54%; top: 69%; width: 35%; height: 24%"><span aria-hidden="true">3</span></a>
+    <a class="component-region" href="/alto/dev/api/alto.ui.home/#exercisecard" aria-label="Related exercise tiles (ExerciseCard)" title="Related exercise tiles (ExerciseCard)" style="left: 24%; top: 70%; width: 35.5%; height: 26%"><span aria-hidden="true">3</span></a>
     
   </div>
   <figcaption>
@@ -779,7 +782,7 @@
       
       <li><a href="/alto/dev/api/alto.ui.glossary/#glossarypage">Term search and list</a> · <code>GlossaryPage</code></li>
       
-      <li><a href="/alto/dev/api/alto.ui.staff/#staffwidget">Accidental example</a> · <code>StaffWidget</code></li>
+      <li><a href="/alto/dev/api/alto.ui.staff/#staffwidget">Harmonic minor scale example</a> · <code>StaffWidget</code></li>
       
       <li><a href="/alto/dev/api/alto.ui.home/#exercisecard">Related exercise tiles</a> · <code>ExerciseCard</code></li>
       
@@ -789,18 +792,18 @@
 
 <h3 id="statistics">Statistics</h3>
 
-<p>The chart button opens <code class="language-plaintext highlighter-rouge">StatsPage</code> for the active learner. Changing the exercise or date filter updates both the totals and the graphs. Each chart paints its own data. For example, the stacked bars show question counts, while the line beside them shows daily accuracy.</p>
+<p>The chart button opens <code class="language-plaintext highlighter-rouge">StatsPage</code> for the active learner. Changing the exercise or date filter updates both the totals and the graphs. Each chart paints its own data. For example, the stacked bars group questions by the period selected under <strong>Granularity</strong>, while the line beside them shows daily accuracy.</p>
 
 <figure class="shot component-shot">
   <div class="component-map">
-    <img class="for-light" src="/alto/dev/assets/img/stats.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="768" loading="lazy" />
-    <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="768" loading="lazy" />
+    <img class="for-light" src="/alto/dev/assets/img/stats.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="720" loading="lazy" />
+    <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="Statistics with filters, six summary tiles, and charts for question volume, accuracy, and speed." width="1100" height="720" loading="lazy" />
     
     <a class="component-region" href="/alto/dev/api/alto.ui.stats_dialog/#statspage" aria-label="Profile and filters (StatsPage)" title="Profile and filters (StatsPage)" style="left: 2.5%; top: 13%; width: 34%; height: 5%"><span aria-hidden="true">1</span></a>
     
     <a class="component-region" href="/alto/dev/api/alto.ui.stats_dialog/#tile" aria-label="Summary tiles (Tile)" title="Summary tiles (Tile)" style="left: 2.5%; top: 22.5%; width: 94%; height: 21%"><span aria-hidden="true">2</span></a>
     
-    <a class="component-region" href="/alto/dev/api/alto.ui.charts/#stackedbarchart" aria-label="Daily question counts (StackedBarChart)" title="Daily question counts (StackedBarChart)" style="left: 2.5%; top: 46%; width: 45.5%; height: 23%"><span aria-hidden="true">3</span></a>
+    <a class="component-region" href="/alto/dev/api/alto.ui.charts/#stackedbarchart" aria-label="Weekly question counts (StackedBarChart)" title="Weekly question counts (StackedBarChart)" style="left: 2.5%; top: 46%; width: 45.5%; height: 23%"><span aria-hidden="true">3</span></a>
     
     <a class="component-region" href="/alto/dev/api/alto.ui.charts/#linechart" aria-label="Daily accuracy (LineChart)" title="Daily accuracy (LineChart)" style="left: 50%; top: 46%; width: 46%; height: 23%"><span aria-hidden="true">4</span></a>
     
@@ -814,7 +817,7 @@
       
       <li><a href="/alto/dev/api/alto.ui.stats_dialog/#tile">Summary tiles</a> · <code>Tile</code></li>
       
-      <li><a href="/alto/dev/api/alto.ui.charts/#stackedbarchart">Daily question counts</a> · <code>StackedBarChart</code></li>
+      <li><a href="/alto/dev/api/alto.ui.charts/#stackedbarchart">Weekly question counts</a> · <code>StackedBarChart</code></li>
       
       <li><a href="/alto/dev/api/alto.ui.charts/#linechart">Daily accuracy</a> · <code>LineChart</code></li>
       
@@ -832,8 +835,8 @@
 
 <figure class="shot component-shot">
   <div class="component-map">
-    <img class="for-light" src="/alto/dev/assets/img/database.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="768" loading="lazy" />
-    <img class="for-dark" src="/alto/dev/assets/img/database-dark.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="768" loading="lazy" />
+    <img class="for-light" src="/alto/dev/assets/img/database.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="720" loading="lazy" />
+    <img class="for-dark" src="/alto/dev/assets/img/database-dark.png" alt="The database browser with Answers selected, a search field, and rows of recorded attempts." width="1100" height="720" loading="lazy" />
     
     <a class="component-region" href="/alto/dev/api/alto.ui.database_page/#databasepage" aria-label="Table selection and search (DatabasePage)" title="Table selection and search (DatabasePage)" style="left: 2.5%; top: 13%; width: 96%; height: 5.5%"><span aria-hidden="true">1</span></a>
     
@@ -990,8 +993,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

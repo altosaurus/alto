@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -331,6 +331,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
@@ -588,6 +591,46 @@
 <p>The scheduler controls when an introduced card is due. Each exercise supplies new
 questions under its current settings. Counting a prepared question does not introduce it.</p>
 
+<h2 id="reviewinterval">ReviewInterval</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReviewInterval</span><span class="p">(</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">identity</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">previous_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">rating</span><span class="p">:</span> <span class="n">Rating</span> <span class="o">=</span> <span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">,</span>
+    <span class="n">graded_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">previous_due</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>A preview of one rating for a card in its current scheduling state.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ReviewInterval(600, (1, "NoteNames", "abc", "FSRS"), None).seconds
+600
+</code></pre>
+
+<h3 id="reviewintervalduration">ReviewInterval.duration</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">duration</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Format a review interval for display above a grade button or beside the music.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: A whole-day interval or a short learning step in minutes and seconds.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ReviewInterval(330, (1, "NoteNames", "abc", "FSRS"), None).duration
+'5 min 30 s'
+</code></pre>
+
 <h2 id="calendarpractice">CalendarPractice</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span>
@@ -618,6 +661,29 @@ questions under its current settings. Counting a prepared question does not intr
 {}
 </code></pre>
 
+<h3 id="calendarpracticeinherit_schedules">CalendarPractice.inherit_schedules</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">inherit_schedules</span><span class="p">(</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Initialize missing schedules for this profile from the other calendar scheduler.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Profile entering calendar practice.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Selected scheduler. Adaptive practice uses no calendar schedules.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Switching to FSRS carries over an SM-2 due date without consuming a review.
+</code></pre>
+
 <h3 id="calendarpracticelimits">CalendarPractice.limits</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">limits</span><span class="p">(</span>
@@ -639,7 +705,7 @@ questions under its current settings. Counting a prepared question does not intr
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>tuple of int and int</em>: New cards and completed reviews allowed per exercise per local day.</li>
+  <li><em>tuple of int and int</em>: New cards and completed reviews allowed per exercise per local day. UNLIMITED removes the cap.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -696,8 +762,8 @@ questions under its current settings. Counting a prepared question does not intr
 <ul>
   <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile.</li>
   <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): Exercise class name, or an empty string for the profile defaults.</li>
-  <li><code class="language-plaintext highlighter-rouge">new_cards</code> (<em>int or None</em>): Daily introductions, or None to inherit.</li>
-  <li><code class="language-plaintext highlighter-rouge">reviews</code> (<em>int or None</em>): Daily reviews, or None to inherit.</li>
+  <li><code class="language-plaintext highlighter-rouge">new_cards</code> (<em>int or None</em>): Daily introductions, UNLIMITED for no cap, or None to inherit.</li>
+  <li><code class="language-plaintext highlighter-rouge">reviews</code> (<em>int or None</em>): Daily reviews, UNLIMITED for no cap, or None to inherit.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -802,6 +868,77 @@ True
 True
 </code></pre>
 
+<h3 id="calendarpracticetile_counts">CalendarPractice.tile_counts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tile_counts</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Count available reviews, new cards, and missed cards awaiting a correct review.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): Exercise with the current settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile ID.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Active calendar scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Current timestamp.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of int, int, int</em>: Due reviews, available new cards, and outstanding incorrect cards. A due retry counts in both review totals.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; CalendarPractice(db).tile_counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[2]
+0
+</code></pre>
+
+<h3 id="calendarpracticestudy_counts">CalendarPractice.study_counts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">study_counts</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">current_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Count the exercise queues and identify the queue of the question on screen.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): Exercise with the current settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile ID.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Active calendar scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Current timestamp.</li>
+  <li><code class="language-plaintext highlighter-rouge">current_key</code> (<em>str or None</em>): Item key of the question awaiting an answer.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple</em>: The same review, new, and incorrect counts as the tiles, plus the current queue if a question is active.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A missed card that comes due again is underlined as incorrect during its retry.
+</code></pre>
+
 <h3 id="calendarpracticetake">CalendarPractice.take</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take</span><span class="p">(</span>
@@ -840,6 +977,143 @@ True
 True
 </code></pre>
 
+<h3 id="calendarpracticetake_or_wait">CalendarPractice.take_or_wait</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">take_or_wait</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">avoid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">wait_learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Draw an eligible card or return the time when a missed card can be reviewed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): Exercise with the current settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile ID.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Active calendar scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Presentation timestamp.</li>
+  <li><code class="language-plaintext highlighter-rouge">avoid</code> (<em>str or None</em>): Prefer another available card to the one just shown.</li>
+  <li><code class="language-plaintext highlighter-rouge">wait_learning</code> (<em>bool</em>): Also wake the exercise when a correctly answered learning card comes due.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple</em>: The next question and, when the queue is waiting for a retry, its due timestamp.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A single missed card can wake the exercise when its learning step expires.
+</code></pre>
+
+<h3 id="calendarpracticeintroduce">CalendarPractice.introduce</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Register a calendar introduction once, in the caller’s draw or answer transaction.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): Exercise that supplied this question.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Practicing profile.</li>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): New or previously introduced question.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Time of introduction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Answering a pending card keeps its original introduction day.
+</code></pre>
+
+<h3 id="calendarpracticecorrect_interval">CalendarPractice.correct_interval</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">correct_interval</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReviewInterval</span>
+</code></pre></div></div>
+
+<p>Preview the next correct answer without grading the card.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): Exercise class name.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile ID.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Card identity.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Calendar scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Presentation timestamp.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>ReviewInterval</em>: Delay to display and reuse when the answer is submitted.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; CalendarPractice(Database()).correct_interval("NoteNames", profile=1, key="abc", mode="FSRS", now=1000).seconds
+600
+</code></pre>
+
+<h3 id="calendarpracticepassing_intervals">CalendarPractice.passing_intervals</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">passing_intervals</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Preview the three passing outcomes from one snapshot of this card.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): Exercise class name.</li>
+  <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Card identity.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Calendar scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Time of the correct answer.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict</em>: Passing grades and their previews, including the state to save.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; practice = CalendarPractice(Database())
+&gt;&gt;&gt; practice.passing_intervals("NoteNames", profile=1, key="abc", mode="SM-2", now=0)[Rating.Good].seconds
+600
+</code></pre>
+
 <h3 id="calendarpracticegrade">CalendarPractice.grade</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">grade</span><span class="p">(</span>
@@ -850,6 +1124,8 @@ True
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">manual_rating</span><span class="p">:</span> <span class="n">Rating</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">preview</span><span class="p">:</span> <span class="n">ReviewInterval</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -863,7 +1139,9 @@ True
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Stable card identity.</li>
   <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Scheduler selected for this review.</li>
   <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>bool</em>): Whether the first submission was correct.</li>
+  <li><code class="language-plaintext highlighter-rouge">manual_rating</code> (<em>Rating or None</em>): Button grade or automatic Again in self-grading mode. None uses the automatic schedule.</li>
   <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Answer timestamp.</li>
+  <li><code class="language-plaintext highlighter-rouge">preview</code> (<em>ReviewInterval or None</em>): Correct-answer interval shown for this presentation.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1029,8 +1307,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -779,8 +782,8 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">back</code> (<em>Signal</em>): Emitted by Escape; the main window provides the shared Back button.</li>
   <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner</em>): Whose answers are shown; only the active profile’s own.</li>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>QComboBox</em>): The exercise filter.</li>
-  <li><code class="language-plaintext highlighter-rouge">timeframe</code> (<em>QComboBox</em>): The timeframe filter.</li>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>FieldComboBox</em>): The exercise filter.</li>
+  <li><code class="language-plaintext highlighter-rouge">timeframe</code> (<em>FieldComboBox</em>): The timeframe filter.</li>
   <li><code class="language-plaintext highlighter-rouge">tiles</code> (<em>dict of str to Tile</em>): The headline numbers, by name.</li>
   <li><code class="language-plaintext highlighter-rouge">detail</code> (<em>QFrame</em>): The panel under the charts that lists the answers behind a clicked bar, point, row or day. Hidden until one is clicked.</li>
   <li><code class="language-plaintext highlighter-rouge">answers</code> (<em>AnswerList</em>): The table in the detail panel.</li>
@@ -833,6 +836,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1089,8 +1094,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

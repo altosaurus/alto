@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -750,6 +753,7 @@ True
     <span class="n">days_practiced</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'day'</span><span class="p">,</span>
     <span class="n">buckets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Bucket</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
+    <span class="n">volume_buckets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Bucket</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">by_exercise</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ExerciseStats</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">hardest</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">HardQuestion</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
 <span class="p">)</span>
@@ -768,6 +772,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">days_practiced</code> (<em>int, default 0</em>): On how many different days there were answers. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">granularity</code> (<em>str, default “day”</em>): The size of the chart periods: “hour”, “day”, “week” or “month”. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">buckets</code> (<em>list of Bucket</em>): One per period, oldest first. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">volume_buckets</code> (<em>list of Bucket</em>): Period counts for the questions answered chart. These share the trend buckets when their periods match. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">by_exercise</code> (<em>list of ExerciseStats</em>): One per exercise practiced, sorted by name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">hardest</code> (<em>list of HardQuestion</em>): The questions that need most practice. Keyword-only.</li>
 </ul>
@@ -933,6 +938,7 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     <span class="n">since</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">hardest</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="n">volume_granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Stats</span>
 </code></pre></div></div>
 
@@ -947,6 +953,7 @@ counts questions (first attempts), not attempts, like everything else here.</p>
   <li><code class="language-plaintext highlighter-rouge">since</code> (<em>float or None, default None</em>): Only answers from this timestamp on; the whole history if None. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float or None, default None</em>): The current time as a timestamp; the clock is used if None. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">hardest</code> (<em>int, default 8</em>): How many questions to list as needing practice. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">volume_granularity</code> (<em>str or None, default None</em>): Group question counts by hour, day, week or month. None follows the timeframe. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -969,6 +976,8 @@ counts questions (first attempts), not attempts, like everything else here.</p>
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1127,8 +1136,8 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

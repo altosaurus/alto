@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -685,24 +688,26 @@ True
 
 <h3 id="exercisecardset_counts">ExerciseCard.set_counts</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts</span><span class="p">(</span><span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts</span><span class="p">(</span><span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Show the available reviews and new questions in the upper right corner.</p>
+<p>Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">counts</code> (<em>tuple of int and int or None</em>): Reviews due and new cards available, or None in untimed practice.</li>
+  <li><code class="language-plaintext highlighter-rouge">counts</code> (<em>tuple of int or None</em>): Reviews due, new cards available, and optionally the outstanding incorrect count. None hides the counts.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
 &gt;&gt;&gt; card = ExerciseCard(NoteNames)
-&gt;&gt;&gt; card.set_counts((2, 3))
-&gt;&gt;&gt; card.counts.toolTip()
-'2 reviews due, 3 new cards available'
+&gt;&gt;&gt; card.set_counts((2, 3, 1))
+&gt;&gt;&gt; print(card.counts.toolTip())
+Blue — 3 new cards available
+Red — 1 incorrect card awaiting a correct answer
+Green — 2 reviews due
 </code></pre>
 
 <h2 id="lesson_card">lesson_card</h2>
@@ -743,6 +748,7 @@ True
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">filter_layout</span><span class="p">:</span> <span class="n">QHBoxLayout</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -755,11 +761,13 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">exercise_chosen</code> (<em>Signal</em>): Emitted with the <code class="language-plaintext highlighter-rouge">Exercise</code> class when a card is clicked.</li>
   <li><code class="language-plaintext highlighter-rouge">lesson_chosen</code> (<em>Signal</em>): Emitted with a lesson’s key when its card is clicked.</li>
+  <li><code class="language-plaintext highlighter-rouge">filters_changed</code> (<em>Signal</em>): Emitted after a change to the search, tile selection or displayed section.</li>
   <li><code class="language-plaintext highlighter-rouge">cards</code> (<em>list of ExerciseCard</em>): One per exercise, in registry order.</li>
   <li><code class="language-plaintext highlighter-rouge">lesson_cards</code> (<em>list of TileCard</em>): One per lesson, with how far through it you are.</li>
   <li><code class="language-plaintext highlighter-rouge">canvas</code> (<em>TransitionCanvas</em>): Where the transition between the exercises and the lessons is drawn.</li>
   <li><code class="language-plaintext highlighter-rouge">mode_control</code> (<em>SegmentedControl</em>): The switch between the exercises and the lessons. The main window puts it in its top bar.</li>
   <li><code class="language-plaintext highlighter-rouge">resume_button</code> (<em>QPushButton</em>): Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.</li>
+  <li><code class="language-plaintext highlighter-rouge">category_filter</code> (<em>QToolButton</em>): Shows or hides the filter sidebar from the right end of the search row.</li>
   <li><code class="language-plaintext highlighter-rouge">no_results</code> (<em>QLabel</em>): Shown when no tiles match the search.</li>
   <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): “exercises” or “lessons”: which cards are showing.</li>
   <li><code class="language-plaintext highlighter-rouge">scroll_area</code> (<em>QScrollArea</em>): Scrolls the rows when the window is shorter than all of them.</li>
@@ -786,6 +794,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">registry</code> (<em>iterable of type of Exercise</em>): The exercises to show, in the order to show them.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the page. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None</em>): Profile supplying the exercise tile counts.</li>
+  <li><code class="language-plaintext highlighter-rouge">filter_layout</code> (<em>QHBoxLayout or None</em>): Shared workspace layout for the filter sidebar. A standalone page places it beside its tiles.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
@@ -805,7 +814,7 @@ True
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): Case-insensitive search text; empty text restores all tiles.</li>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): Case-insensitive search text. Empty text shows every tile in the selected category.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -815,6 +824,128 @@ True
 &gt;&gt;&gt; page.set_search("keyboard")
 &gt;&gt;&gt; page._query
 'keyboard'
+</code></pre>
+
+<h3 id="homepagematches_filter">HomePage.matches_filter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">matches_filter</span><span class="p">(</span>
+    <span class="n">card</span><span class="p">:</span> <span class="n">TileCard</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">section</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Check whether a tile matches the search text and the selection for its section.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">card</code> (<em>TileCard</em>): Exercise or lesson tile to check.</li>
+  <li><code class="language-plaintext highlighter-rouge">section</code> (<em>str</em>): Section containing the tile, either “exercises” or “lessons”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if both filters include the tile.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; page = HomePage([NoteNames])
+&gt;&gt;&gt; page.matches_filter(page.cards[0], section="exercises")
+True
+</code></pre>
+
+<h3 id="homepageeventfilter">HomePage.eventFilter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
+    <span class="n">watched</span><span class="p">:</span> <span class="n">QObject</span><span class="p">,</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Fit the open filter sidebar when its workspace changes width.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">watched</code> (<em>QObject</em>): Widget containing the activity and sidebar.</li>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): Event delivered to the widget.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: Whether the base widget consumes the event.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Dragging the navigation divider resizes the space available for the filters.
+</code></pre>
+
+<h3 id="homepageset_filter_available">HomePage.set_filter_available</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_filter_available</span><span class="p">(</span><span class="n">available</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the filter control on browsing and exercise pages, remembering the sidebar’s open state.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">available</code> (<em>bool</em>): Whether the current page supports filtering.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = HomePage([])
+&gt;&gt;&gt; page.set_filter_available(False)
+&gt;&gt;&gt; page.category_filter.isHidden()
+True
+</code></pre>
+
+<h3 id="homepagerestore_tile_filters">HomePage.restore_tile_filters</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restore_tile_filters</span><span class="p">(</span>
+    <span class="n">selections</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">expanded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore exercise and lesson checkboxes after a theme change.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">selections</code> (<em>dict of str to frozenset of str</em>): Checked tile titles for each section with a saved filter.</li>
+  <li><code class="language-plaintext highlighter-rouge">expanded</code> (<em>bool or None</em>): Restore the sidebar at its open or closed width immediately. None keeps its current state.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; HomePage([]).restore_tile_filters({})
+</code></pre>
+
+<h3 id="homepageset_category">HomePage.set_category</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_category</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Select the tiles of one category, or all tiles when the category is absent.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str or None</em>): Case-folded category name, or None for all tiles.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; HomePage([]).set_category(None)
 </code></pre>
 
 <h3 id="homepageset_mode">HomePage.set_mode</h3>
@@ -848,12 +979,27 @@ waits on it.</p>
 &gt;&gt;&gt; page.set_mode("exercises")
 </code></pre>
 
+<h3 id="homepagepage_changed">HomePage.page_changed</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">page_changed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Animate the tiles from an empty grid on return, or stop the animation when leaving.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = HomePage([])
+&gt;&gt;&gt; page.page_changed()
+&gt;&gt;&gt; page.canvas.running
+False
+</code></pre>
+
 <h3 id="homepagerefresh_counts">HomePage.refresh_counts</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_counts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Refresh the visible exercise tiles from the same queues used for practice.</p>
+<p>Refresh each exercise tile and the totals for the current filters.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -904,6 +1050,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1112,8 +1260,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

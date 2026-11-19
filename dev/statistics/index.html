@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -331,6 +331,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
@@ -587,12 +590,6 @@
 <p>Open the statistics from the chart button next to the menu button, or from the menu. They always show the active
 profile’s own answers. Use <strong>← Back</strong> or <kbd>Esc</kbd> to return to the page you came from.</p>
 
-<figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/stats.png" alt="The statistics page with summary tiles and four charts" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="The statistics page with summary tiles and four charts" loading="lazy" />
-  <figcaption>Statistics for a demo profile.</figcaption>
-</figure>
-
 <h3 id="filters">Filters</h3>
 
 <ul>
@@ -600,14 +597,21 @@ profile’s own answers. Use <strong>← Back</strong> or <kbd>Esc</kbd> to retu
   <li><strong>Timeframe:</strong> today, the last 7, 30 or 90 days, the last year, or all time.</li>
 </ul>
 
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/stats.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" loading="lazy" />
+  <figcaption>Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day.</figcaption>
+</figure>
+
 <h3 id="what-you-see">What you see</h3>
 
 <ul>
   <li><strong>Summary tiles:</strong> questions answered, how often the first answer was right, the typical time to a first answer,
 attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
 practice time, so leaving the app open does not inflate it.</li>
-  <li><strong>Questions answered:</strong> a bar per day, with the questions you got right on the first try in green and the ones you missed in red.
-Short timeframes switch to hours, and long ones to weeks or months.</li>
+  <li><strong>Questions answered</strong> shows first-try correct answers in green and misses in red. Use <strong>Granularity</strong> in the chart’s upper-right corner to
+choose <strong>Hour</strong>, <strong>Day</strong>, <strong>Week</strong>, or <strong>Month</strong> for each bar. <strong>Auto</strong> picks a period based on the timeframe.
+If your choice produces more than 48 bars, scroll left beneath the chart to see earlier periods.</li>
   <li><strong>Right on the first try:</strong> your first-try accuracy over time. Days with no answers leave a gap.</li>
   <li><strong>Typical time to first answer:</strong> the median, over time, so a single slow answer does not distort it.</li>
   <li><strong>By exercise:</strong> accuracy, number of questions and typical time for each exercise.</li>
@@ -623,8 +627,7 @@ timeframe.</li>
 rest of the chart fades back, with its numbers in a tooltip. <strong>Click</strong> one and the answers behind it are listed in a panel under the charts:</p>
 
 <ul>
-  <li>a bar or a point of the three charts over time lists the answers given in that period (a day, a week, an hour, depending on the
-timeframe);</li>
+  <li>a bar or point lists the answers given during its hour, day, week, or month within the selected timeframe;</li>
   <li>a row of the by-exercise chart lists the answers to that exercise within the timeframe;</li>
   <li>a square of the calendar lists the answers given on that day.</li>
 </ul>
@@ -651,8 +654,8 @@ The <strong>Question Statistics</strong> button on the card opens that question�
 <p>The database button next to the statistics button opens a read-only view of what is stored. It never changes anything.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/database.png" alt="The database browser listing answers in a table" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/database-dark.png" alt="The database browser listing answers in a table" loading="lazy" />
+  <img class="for-light" src="/alto/dev/assets/img/database.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/database-dark.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy" />
   
 </figure>
 
@@ -660,9 +663,17 @@ The <strong>Question Statistics</strong> button on the card opens that question�
 
 <ul>
   <li><strong>Answers:</strong> every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.</li>
-  <li><strong>Questions:</strong> the record kept for each question: its strain, how often it was answered, right on the first try, missed, typical time and when it was last seen.</li>
+  <li><strong>Questions</strong> shows each question’s strain, answer counts, typical response time, and last practice time.</li>
   <li><strong>Profiles:</strong> everyone who has a profile, with how many answers and questions each has.</li>
 </ul>
+
+<p>In both <strong>Answers</strong> and <strong>Questions</strong>, <strong>Due</strong> shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/database-questions-dark.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy" />
+  <figcaption>Last seen records when you practiced the question. Due shows when the scheduler wants to show it again.</figcaption>
+</figure>
 
 <p>Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
 limited to the newest 10,000 rows each; the line above the table says when that applies.</p>
@@ -759,8 +770,8 @@ up to that point. Hover over a point for its value. You can also open these grap
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

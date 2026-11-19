@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -759,7 +762,7 @@ digit takes that digit.</p>
   <li><code class="language-plaintext highlighter-rouge">total</code> (<em>int</em>): Questions answered.</li>
   <li><code class="language-plaintext highlighter-rouge">streak</code> (<em>int</em>): Right answers in a row.</li>
   <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question or None</em>): The question on screen.</li>
-  <li><code class="language-plaintext highlighter-rouge">answered</code> (<em>bool</em>): True once the question has been answered right.</li>
+  <li><code class="language-plaintext highlighter-rouge">answered</code> (<em>bool</em>): True once this showing is finished, including a miss in SM-2 or FSRS.</li>
   <li><code class="language-plaintext highlighter-rouge">missed</code> (<em>bool</em>): True once the question has been answered wrong, so it no longer counts toward the score.</li>
   <li><code class="language-plaintext highlighter-rouge">buttons</code> (<em>list of QPushButton</em>): The answer buttons on screen.</li>
   <li><code class="language-plaintext highlighter-rouge">settings_panel</code> (<em>ExerciseSettingsPanel</em>): The exercise’s settings, including how to advance after a correct answer.</li>
@@ -773,6 +776,7 @@ digit takes that digit.</p>
   <li><code class="language-plaintext highlighter-rouge">book_btn</code> (<em>QToolButton or None</em>): Opens the exercise’s reference in a pane on the right; None for an exercise that has none.</li>
   <li><code class="language-plaintext highlighter-rouge">reference_pane</code> (<em>QFrame or None</em>): The pane that holds the reference.</li>
   <li><code class="language-plaintext highlighter-rouge">lesson_requested</code> (<em>Signal</em>): Emitted with a lesson’s key when the reference pane’s lesson button is pressed.</li>
+  <li><code class="language-plaintext highlighter-rouge">shuffle_requested</code> (<em>Signal</em>): Emitted when answer feedback ends or Next is clicked during shuffled practice.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -972,8 +976,8 @@ True
 
 <p>Check an answer chosen with a button or by clicking the notation.</p>
 
-<p>A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
-so the learner can try another answer.</p>
+<p>A correct answer uses the selected Next Question setting. An incorrect button flashes red.
+In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS allow another answer on the same showing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1004,6 +1008,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1208,8 +1214,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

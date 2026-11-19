@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795102623">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
   
 </head>
 <body>
@@ -329,6 +329,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.database/">database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.grading/">grading</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
@@ -717,7 +720,25 @@ opens the matching list on the left; before you start an activity, the main pane
 
 <p>The icon-only <strong>Exercises / Lessons</strong> pair sits at the top left, followed by an open/close navigation-pane button, a divider,
 and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
-selected section by name, description or category, and follows the sidebar’s width.</p>
+selected section by name, description or category, and follows the sidebar’s width. On the tile grid or during an exercise, click the funnel icon
+at the right end of the search row to open the filter sidebar. Click it again to collapse the sidebar and keep your filters.
+The sidebar opens on the right with every category expanded. Check or clear a category to include or
+hide its activities, or check individual exercises or lessons. The tiles and navigation list show the same matches.
+A dash means some activities in a category are checked. <strong>All categories</strong> selects or clears the whole list.</p>
+
+<p>Turn on <strong>Shuffle exercises</strong>, just left of the funnel, to practice the exercises in your filtered list. After each
+right or wrong answer, Alto prefers an exercise from another category. If the other available exercises are in the
+current category, it picks one of those. For example, selecting only <strong>Note Identification</strong> and <strong>Keyboard Note
+Identification</strong> makes them alternate when both have questions available. Your <strong>Next Question</strong> setting controls when
+the switch happens. With <strong>Wait</strong>, click <strong>Next</strong> after reviewing your answer. You can change the filters while answering
+a question. Shuffle uses the updated list for the next question and returns to the tiles if the list is empty.
+Click the highlighted shuffle icon again to turn it off.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/filtered-practice.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/filtered-practice-dark.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" loading="lazy" />
+  <figcaption>Only the checked exercises appear in the grid. The New, Learn, and Due totals at the left count cards from these two exercises.</figcaption>
+</figure>
 
 <p>During an exercise or lesson, <strong>Exercises / Lessons</strong> switches the list while keeping your activity on screen. Selecting
 an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
@@ -725,9 +746,19 @@ an item starts or resumes it. The top-left pane button hides and shows the list 
 explains it.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/note-identification-dark.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
-  <figcaption>An exercise screen. The row of buttons below the staff holds the possible answers.</figcaption>
+  <img class="for-light" src="/alto/dev/assets/img/filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the next interval beside the staff" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/filtered-exercise-dark.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the next interval beside the staff" loading="lazy" />
+  <figcaption>The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice.</figcaption>
+</figure>
+
+<h2 id="glossary">Glossary</h2>
+
+<p>Open <strong>Glossary</strong> in the top toolbar to look up a term. Search for <em>minor</em>, for example, and select <strong>harmonic minor scale</strong>. You can hear the scale, try another example, or open a related exercise from the same page.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/glossary.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/glossary-dark.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" loading="lazy" />
+  <figcaption>In A harmonic minor, listen for the three half steps from F to G♯ and the half step from G♯ to A.</figcaption>
 </figure>
 
 <h2 id="running-the-tests">Running the tests</h2>
@@ -808,8 +839,8 @@ explains it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795102623" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795102623" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
