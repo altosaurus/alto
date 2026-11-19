@@ -200,6 +200,12 @@ def test_the_cards_are_laid_out_in_as_many_columns_as_fit(app: QApplication) -> 
     before = home._columns
     home._reflow()  # nothing changes when the width has not
     assert home._columns == before
+    home.category_filter.click()
+    home._filter_slide.setCurrentTime(home._filter_slide.duration())
+    assert home.filter_sidebar.isVisible() and home._columns < before
+    home.category_filter.click()
+    home._filter_slide.setCurrentTime(0)
+    assert home.filter_sidebar.isHidden() and home._columns == before
 
 
 def test_an_exercise_with_no_icon_of_its_own_gets_the_default(app: QApplication) -> None:
