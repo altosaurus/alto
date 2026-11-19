@@ -195,8 +195,8 @@ The statistics, as a page of the main window.
 
 - `back` (*Signal*): Emitted by Escape; the main window provides the shared Back button.
 - `learner` (*Learner*): Whose answers are shown; only the active profile's own.
-- `exercise` (*QComboBox*): The exercise filter.
-- `timeframe` (*QComboBox*): The timeframe filter.
+- `exercise` (*FieldComboBox*): The exercise filter.
+- `timeframe` (*FieldComboBox*): The timeframe filter.
 - `tiles` (*dict of str to Tile*): The headline numbers, by name.
 - `detail` (*QFrame*): The panel under the charts that lists the answers behind a clicked bar, point, row or day. Hidden until one is clicked.
 - `answers` (*AnswerList*): The table in the detail panel.

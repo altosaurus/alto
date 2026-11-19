@@ -31,7 +31,6 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QAbstractItemView,
-    QComboBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -58,6 +57,7 @@ from alto.ui.charts import (
     StackedBarChart,
 )
 from alto.ui.database_page import ROW_ROLE, AnswerList, open_preview
+from alto.ui.dropdown import FieldComboBox
 
 DAY = 86400.0
 DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
@@ -264,9 +264,9 @@ class StatsPage(QWidget):
         Emitted by Escape; the main window provides the shared Back button.
     learner : Learner
         Whose answers are shown; only the active profile's own.
-    exercise : QComboBox
+    exercise : FieldComboBox
         The exercise filter.
-    timeframe : QComboBox
+    timeframe : FieldComboBox
         The timeframe filter.
     tiles : dict of str to Tile
         The headline numbers, by name.
@@ -321,11 +321,11 @@ class StatsPage(QWidget):
         who = QLabel(f"<b>{learner.profile.name}</b>")  # these are always the active profile's own numbers
         who.setToolTip("Statistics for the active profile")
         bar.addWidget(who)
-        self.exercise = QComboBox()
+        self.exercise = FieldComboBox()
         self.exercise.addItem("All exercises", None)
         for cls in REGISTRY:
             self.exercise.addItem(cls.name, cls.__name__)
-        self.timeframe = QComboBox()
+        self.timeframe = FieldComboBox()
         for label, span in TIMEFRAMES:
             self.timeframe.addItem(label, span)
         self.timeframe.setCurrentIndex(2)  # last 30 days

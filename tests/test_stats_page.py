@@ -21,6 +21,7 @@ from alto.learning import (
     stats,
 )
 from alto.ui import stats_dialog
+from alto.ui.dropdown import FieldComboBox
 from alto.ui.stats_dialog import (
     StatsPage,
     format_duration,
@@ -127,6 +128,7 @@ def test_every_timeframe_and_exercise_can_be_chosen(
         Builds a learner with a history of answers.
     """
     page = StatsPage(practiced_learner())
+    assert isinstance(page.exercise, FieldComboBox) and isinstance(page.timeframe, FieldComboBox)
     counts = {}
     for i in range(page.timeframe.count()):
         page.timeframe.setCurrentIndex(i)
