@@ -72,6 +72,7 @@ topics:
 ## Development Status
 
 Alto is in alpha. You can work through the lessons and practice with the exercises now, but their content and layout may change between releases.
+The [roadmap]({{ '/roadmap/' | relative_url }}) lists current features and planned exercises.
 
 {% assign v = site.app_version %}
 {% assign base = "https://github.com/altosaurus/alto/releases/download/v" | append: v | append: "/" %}
