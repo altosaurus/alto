@@ -22,7 +22,7 @@ Changes that are in the development docs and not in a release yet.
 
 - Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.
 
-- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality switch for number-only practice, and Limited or All answer buttons.
+- Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality menu for practicing the interval number, quality, or both, and Limited or All answer buttons.
 
 - A Key Signatures lesson teaches how to read and write major and minor key signatures and links to both key signature exercises.
 - An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.

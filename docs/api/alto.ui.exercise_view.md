@@ -177,7 +177,7 @@ The screen for practicing one exercise.
 - `answered` (*bool*): True once the question has been answered right.
 - `missed` (*bool*): True once the question has been answered wrong, so it no longer counts toward the score.
 - `buttons` (*list of QPushButton*): The answer buttons on screen.
-- `settings_panel` (*QWidget or None*): The exercise's settings, or None for an exercise with none.
+- `settings_panel` (*ExerciseSettingsPanel*): The exercise's settings, including how to advance after a correct answer.
 - `staff` (*StaffWidget*): Shows the notes of a question.
 - `keyboard` (*KeyboardWidget*): Shows the key of a keyboard question.
 - `input_staff` (*StaffInput*): The staff to click, for "place this note" questions.
@@ -375,8 +375,8 @@ def submit(
 
 Check an answer chosen with a button or by clicking the notation.
 
-A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
-fades red and its button is switched off, so another can be tried.
+A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
+so the learner can try another answer.
 
 **Parameters**
 

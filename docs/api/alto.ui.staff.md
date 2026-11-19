@@ -187,6 +187,7 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 - `max_step` (*float or None*): The most width each column of notes may take.
 - `clef` (*str*): The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
 - `columns` (*list of list of Note*): The notes drawn; each inner list is one chord or note.
+- `interval_voices` (*bool*): Draw harmonic interval endpoints with their written duration and opposing stems.
 - `note_color` (*QColor or None*): Feedback color for the highlighted notation component, or for the notes in other exercises.
 - `column_colors` (*dict of int to QColor*): The color of particular columns of notes, by position from 0; they are drawn in these instead of `note_color`.
 - `wedges` (*list of str*): The step between each column and the next, such as "W" or "H", drawn as two lines rising from the notes to a point above them, with the letter over the point; "" for none there.
@@ -252,7 +253,7 @@ Show some notes, with a clef and a key signature.
 - `columns` (*list of list of Note*): The notes: each inner list is one note or chord, drawn left to right.
 - `clef` (*str, default "treble"*): The clef, or "grand" for a grand staff. Keyword-only.
 - `key` (*int, default 0*): The key signature: that many sharps if positive, flats if negative. Keyword-only.
-- `value` (*str, default "whole"*): The note value to draw (stems are only drawn for single notes). Keyword-only.
+- `value` (*str, default "whole"*): The written duration for single notes and interval voices. Keyword-only.
 - `caption` (*str, default ""*): Text to write under the staff. Keyword-only.
 - `notation_target` (*tuple of (str, int) or None*): Part and position to highlight in a notation question. Keyword-only.
 - `notation_excerpt` (*str or None*): Versioned score to show for a repertoire question. Keyword-only.

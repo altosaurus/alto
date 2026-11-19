@@ -561,6 +561,8 @@ def test_what_is_drawn_for_each_state(app: QApplication) -> None:
     circle.reveal(animate=False)
     lit = color()
     assert lit.hue() <= 8 or lit.hue() >= 352 and lit.lightness() > asked_color.lightness()  # brighter than when asked
+    edge = wedge_middle(center=center, radius=radius, index=0).toPoint()
+    assert circle.grab().toImage().pixelColor(edge).name() == "#2e7d32"
 
 
 def test_the_circle_is_square_and_fits_whatever_room_it_has(app: QApplication) -> None:
@@ -1046,7 +1048,7 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(app: QApplication)
     """
     view = ExerciseView(CircleOfFifths(), rng=random.Random(4))
     pane = view.settings_panel
-    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 5
+    assert isinstance(pane, sp.CircleSettingsPanel) and pane.stack.count() == 6
     assert pane.questions_row.value.text() == "3 of 3"
     assert list(pane.questions.boxes) == list(settings.CIRCLE_QUESTIONS)
     pane.questions.boxes["major"].setChecked(False)

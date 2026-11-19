@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from PySide6.QtGui import QColor
 
+CORRECT_ANSWER_COLOR = "#2e7d32"
+
 
 def blend(
     a: QColor,

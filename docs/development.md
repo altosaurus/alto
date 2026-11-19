@@ -430,12 +430,13 @@ The template exercise gives you a place to try the option in Alto. Its panel and
 | **Key signatures** | A single checklist of signature counts. Some exercises also let the learner turn signatures on or off. | **Note Identification** uses `KeyChecklist`. For the version with a switch inside the submenu, follow **Keyboard Note Identification** and `KeySignaturePage`. |
 | **Scales** | Check the scale types or modes that can appear, such as major, Dorian, and natural minor. | **Scale Construction** uses `ChoiceChecklist` and shows the selected count in the row. |
 | **Motion** | Choose **Ascending** or **Descending** with radio buttons. | **Scale Identification** and **Scale Construction** share this page in `KeySignatureSettingsPanel`. |
-| **Display** | Choose how the notes appear on the staff. Checked presentations can be mixed. | **Interval Identification** offers Melodic and Harmonic checkboxes. |
-| **Quality** | An inline switch requires the interval quality as part of the answer. Turning it off asks for the number alone. | **Interval Identification** uses `_ToggleRow`. |
+| **Display Mode** | Choose how the notes appear on the staff. Checked presentations can be mixed. | **Interval Identification** displays Ascending and Descending as indented checkboxes directly below Melodic when it is selected. At least one direction stays checked. |
+| **Quality** | Choose **Interval Only**, **Interval and Quality** (default), or **Quality Only**. | **Interval Identification** uses a submenu with three radio buttons. |
 | **Question Type** | Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts. | **Notation Identification** has **Click on Staff** and **Answer Button** radios. **Scale Identification** has independent **Key** and **Mode** boxes. **Note Construction** shows its keys and degrees when **Scale and Degree** is selected. |
 | **Buttons** | One submenu for answer layouts. **Limited** caps the number offered, with **Button count** directly below it. **All** shows the full answer set. | **Scale Identification** and **Interval Identification** share the Limited and All submenu. **Keyboard Interval Identification** adds **Compact**, where the learner picks a quality and an interval number in either order. |
+| **Next Question** | Choose **Immediately**, **Wait**, or **After Animation** (default). Each exercise remembers its own pace. | The shared settings panel adds this row to every exercise. Route completed answers through `ExerciseView._finish_answer`. |
 | **Octave** | An inline switch that makes the octave part of the required answer. | **Note Construction** uses `_ToggleRow`. **Keyboard Note Identification** labels its variant **Octave number**. |
-| **Note names**, **Note values**, **Accidentals** | Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options. | **Note Identification** has the naming and value previews and the Accidentals switch. |
+| **Note names**, **Note values**, **Accidentals** | Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options. | **Note Identification** has the naming preview and Accidentals switch. Its illustrated note-value checklist is also used by **Interval Identification** under **Note Value**. For a choice of written signs, the **Accidentals** submenu in **Interval Identification** uses a checklist. |
 | **Terms**, **Degrees**, **Arpeggio types**, **Inversions** | Check the items eligible for practice. **Terms** also restricts the distractors. **Degrees** is a section within **Scale and Degree**. | All use `ChoiceChecklist`. **Notation Identification** groups terms, **Note Construction** lists degrees, and **Arpeggio Identification** has separate pages for types and inversions. |
 | **Intervals** | Choose interval sizes individually or by endpoints. The available sizes depend on the keyboard range. | **Keyboard Interval Identification** combines `ChoiceChecklist` and `IntervalRangeSlider`. **Interval Identification** uses the slider for interval numbers and the checklist for written spellings, so A4 and d5 can be selected separately. |
 
@@ -456,7 +457,10 @@ entry when introducing a reusable option or variant so it can be requested by na
    **Click on Staff** and **Answer Button**, belong together in a submenu.
 2. Open the option with the panel’s `SlideStack`. Build its page with `_subpage` so the title matches the row and
    Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
-   several can apply. Keep long lists scrollable.
+   several can apply. Group controls below the header at their natural height and leave extra space below the
+   last row. For scrollable option lists, use `_scrolling` for the body and `fill=True` on `_subpage` so the
+   viewport can grow while the choices stay together. Verify row spacing at short and tall window sizes and
+   check that the last option remains reachable when scrolling.
 3. Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
    update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
    current question. Include settings that affect question selection in the exercise’s review signature.

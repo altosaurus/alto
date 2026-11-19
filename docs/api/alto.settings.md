@@ -97,6 +97,7 @@ StaffRangeSettings(
     clefs: set[str] = field(default_factory=lambda: {'treble', 'bass'}),
     *,
     ranges: dict[str, tuple[int, int]] = field(default_factory=dict),
+    note_values: set[str] = field(default_factory=lambda: {'whole'}),
 )
 ```
 
@@ -107,6 +108,25 @@ Selected clefs and inclusive pitch limits for each staff.
 ```pycon
 >>> StaffRangeSettings().active_clefs()
 ['treble', 'bass']
+```
+
+### StaffRangeSettings.active_values
+
+```python
+def active_values() -> list[str]
+```
+
+Return the note values to draw, from longest to shortest.
+
+**Returns**
+
+- *list of str*: The chosen values in the order of `NOTE_VALUES`, or whole notes if none are chosen.
+
+**Examples**
+
+```pycon
+>>> NoteNameSettings(note_values={"half", "whole"}).active_values()
+['whole', 'half']
 ```
 
 ### StaffRangeSettings.active_clefs
@@ -161,7 +181,6 @@ Return the range of notes that may be asked on a clef.
 NoteNameSettings(
     *,
     key_signatures: set[int] = field(default_factory=lambda: {0}),
-    note_values: set[str] = field(default_factory=lambda: {'whole'}),
     naming: str = 'letters',
     accidentals: bool = False,
     require_octave: bool = False,
@@ -209,35 +228,18 @@ Return the key signatures to draw from, lowest first.
 [-1, 2]
 ```
 
-### NoteNameSettings.active_values
-
-```python
-def active_values() -> list[str]
-```
-
-Return the note values to draw, from longest to shortest.
-
-**Returns**
-
-- *list of str*: The chosen values in the order of `NOTE_VALUES`, or whole notes if none are chosen.
-
-**Examples**
-
-```pycon
->>> NoteNameSettings(note_values={"half", "whole"}).active_values()
-['whole', 'half']
-```
-
 ## IntervalSettings
 
 ```python
 IntervalSettings(
     *,
     staff_keys: set[int] = field(default_factory=lambda: {0}),
-    displays: set[str] = field(default_factory=lambda: {'Melodic'}),
+    displays: set[str] = field(default_factory=lambda: {'Harmonic'}),
+    directions: set[str] = field(default_factory=lambda: {'ascending'}),
     button_mode: str = 'limited',
     button_count: int = 6,
-    quality: bool = True,
+    accidentals: set[int] = field(default_factory=lambda: set(DEFAULT_INTERVAL_ACCIDENTALS)),
+    quality_mode: str = 'combined',
     intervals: set[str] = field(default_factory=lambda: {name for name, iv in WRITTEN_INTERVALS.items() if 2 <= iv.number <= 7 or name == 'P8'}),
 )
 ```
@@ -249,8 +251,31 @@ Staff signatures, presentations, answer format and spelled intervals for Interva
 **Examples**
 
 ```pycon
->>> IntervalSettings().quality
-True
+>>> IntervalSettings().quality_mode
+'combined'
+```
+
+### IntervalSettings.staff_span
+
+```python
+def staff_span(clef: str) -> int
+```
+
+Count the written staff positions in a clef's selected range, including both endpoints.
+
+**Parameters**
+
+- `clef` (*str*): The clef whose range to measure.
+
+**Returns**
+
+- *int*: The largest diatonic interval number that fits.
+
+**Examples**
+
+```pycon
+>>> IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
+3
 ```
 
 ## key_name

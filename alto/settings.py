@@ -255,6 +255,24 @@ class StaffRangeSettings:
     _: KW_ONLY
     ranges: dict[str, tuple[int, int]] = field(default_factory=dict)  # overrides of DEFAULT_RANGES
 
+    note_values: set[str] = field(default_factory=lambda: {"whole"})
+
+    def active_values(self) -> list[str]:
+        """
+        Return the note values to draw, from longest to shortest.
+
+        Returns
+        -------
+        list of str
+            The chosen values in the order of `NOTE_VALUES`, or whole notes if none are chosen.
+
+        Examples
+        --------
+        >>> NoteNameSettings(note_values={"half", "whole"}).active_values()
+        ['whole', 'half']
+        """
+        return [v for v in NOTE_VALUES if v in self.note_values] or ["whole"]
+
     def active_clefs(self) -> list[str]:
         """
         Return the clefs to draw from, in canonical order.
@@ -329,7 +347,6 @@ class NoteNameSettings(StaffRangeSettings):
 
     _: KW_ONLY
     key_signatures: set[int] = field(default_factory=lambda: {0})  # sharps (+) / flats (-) of the keys to use
-    note_values: set[str] = field(default_factory=lambda: {"whole"})
     naming: str = "letters"  # key of NAMINGS
     accidentals: bool = False  # also ask notes with explicit sharps/flats/naturals
     require_octave: bool = False  # the answer also includes the note's written octave
@@ -350,30 +367,19 @@ class NoteNameSettings(StaffRangeSettings):
         """
         return sorted(self.key_signatures) or [0]
 
-    def active_values(self) -> list[str]:
-        """
-        Return the note values to draw, from longest to shortest.
-
-        Returns
-        -------
-        list of str
-            The chosen values in the order of `NOTE_VALUES`, or whole notes if none are chosen.
-
-        Examples
-        --------
-        >>> NoteNameSettings(note_values={"half", "whole"}).active_values()
-        ['whole', 'half']
-        """
-        return [v for v in NOTE_VALUES if v in self.note_values] or ["whole"]
-
 
 note_names = NoteNameSettings()
 
-INTERVAL_DISPLAYS = ("Melodic", "Harmonic")
+INTERVAL_DISPLAYS = ("Harmonic", "Melodic")
+MELODIC_DIRECTIONS = ("ascending", "descending")
+INTERVAL_QUALITY_MODES = {"interval": "Interval Only", "combined": "Interval and Quality", "quality": "Quality Only"}
+INTERVAL_ACCIDENTALS = {0: "Natural (no accidentals)", -1: "Flat", -2: "Double flat", 1: "Sharp", 2: "Double sharp"}
+DEFAULT_INTERVAL_ACCIDENTALS = frozenset({-1, 0, 1})
+INTERVAL_QUALITY_ORDER = {"A": 0, "M": 1, "P": 1, "m": 2, "d": 3}
 WRITTEN_INTERVALS = {
     f"{quality}{number}": Interval(number, quality=quality)
-    for number in range(1, 16)
-    for quality in (("P",) if number == 1 else ("P", "A", "d") if number % 7 in (1, 4, 5) else ("m", "M", "A", "d"))
+    for number in range(2, 16)
+    for quality in (("P", "A", "d") if number % 7 in (1, 4, 5) else ("m", "M", "A", "d"))
 }
 
 
@@ -384,19 +390,43 @@ class IntervalSettings(StaffRangeSettings):
 
     Examples
     --------
-    >>> IntervalSettings().quality
-    True
+    >>> IntervalSettings().quality_mode
+    'combined'
     """
 
     _: KW_ONLY
     staff_keys: set[int] = field(default_factory=lambda: {0})
-    displays: set[str] = field(default_factory=lambda: {"Melodic"})
+    displays: set[str] = field(default_factory=lambda: {"Harmonic"})
+    directions: set[str] = field(default_factory=lambda: {"ascending"})
     button_mode: str = "limited"
     button_count: int = 6
-    quality: bool = True
+    accidentals: set[int] = field(default_factory=lambda: set(DEFAULT_INTERVAL_ACCIDENTALS))
+    quality_mode: str = "combined"
     intervals: set[str] = field(
         default_factory=lambda: {name for name, iv in WRITTEN_INTERVALS.items() if 2 <= iv.number <= 7 or name == "P8"},
     )
+
+    def staff_span(self, clef: str) -> int:
+        """
+        Count the written staff positions in a clef's selected range, including both endpoints.
+
+        Parameters
+        ----------
+        clef : str
+            The clef whose range to measure.
+
+        Returns
+        -------
+        int
+            The largest diatonic interval number that fits.
+
+        Examples
+        --------
+        >>> IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
+        3
+        """
+        low, high = self.range_for(clef)
+        return high - low + 1
 
 
 intervals = IntervalSettings()

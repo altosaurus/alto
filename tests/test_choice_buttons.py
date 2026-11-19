@@ -31,10 +31,7 @@ def test_each_button_answer_has_a_buttons_submenu(app: QApplication, cls: type[E
     settings.clef_basics.question_type = "identification"
     view = ExerciseView(cls(), rng=random.Random(22))
     panel = view.settings_panel
-    if panel is None:
-        assert not view.question.choices
-        view.close()
-        return
+    assert panel.next_question_row.value.text() == "After Animation"
     page_titles = [b.text() for b in panel.stack.findChildren(QRadioButton)]
     assert ("Limited" in page_titles and "All" in page_titles) == bool(view.question.choices)
     if isinstance(view.exercise, ChoiceExercise):

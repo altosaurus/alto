@@ -366,7 +366,7 @@ Starting a preview silences the one before it.
 def play_notes(
     columns: Iterable[Sequence[Note]],
     *,
-    gap_ms: int = 450,
+    gap_ms: int = DEFAULT_NOTE_GAP_MS,
     warmup: bool = False,
     force: bool = False,
     on_step: Callable[[int | None], object] | None = None,
@@ -420,6 +420,7 @@ def play_sample(
     gap_ms: int,
     on_step: Callable[[int | None], object],
     force: bool = False,
+    warmup: bool = False,
 ) -> None
 ```
 
@@ -431,6 +432,7 @@ Play a displayed sample and report the sounding column until it ends or is inter
 - `gap_ms` (*int*): Time between column onsets in milliseconds.
 - `on_step` (*callable*): Receives each sounding column index and None to clear the display.
 - `force` (*bool*): Audition the sample even when exercise audio is muted.
+- `warmup` (*bool*): Prepare the audio streams before the first note.
 
 **Examples**
 

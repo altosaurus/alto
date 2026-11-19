@@ -484,6 +484,8 @@ class StaffWidget(QWidget):
         The clef being drawn ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone" or "grand").
     columns : list of list of Note
         The notes drawn; each inner list is one chord or note.
+    interval_voices : bool
+        Draw harmonic interval endpoints with their written duration and opposing stems.
     note_color : QColor or None
         Feedback color for the highlighted notation component, or for the notes in other exercises.
     column_colors : dict of int to QColor
@@ -562,6 +564,7 @@ class StaffWidget(QWidget):
         self.lesson_layout = lesson_layout
         self.max_step = max_step
         self.clef = "treble"
+        self.interval_voices = False
         self.columns: list[list[Note]] = []
         self.playback_column: int | None = None
         self.note_color: QColor | None = None  # None draws notes in the style's ink
@@ -609,7 +612,7 @@ class StaffWidget(QWidget):
         key : int, default 0
             The key signature: that many sharps if positive, flats if negative. Keyword-only.
         value : str, default "whole"
-            The note value to draw (stems are only drawn for single notes). Keyword-only.
+            The written duration for single notes and interval voices. Keyword-only.
         caption : str, default ""
             Text to write under the staff. Keyword-only.
         notation_target : tuple of (str, int) or None
@@ -806,10 +809,11 @@ class StaffWidget(QWidget):
             bounds = QRectF()
             offsets = []
             signs = []
-            value = self.value if len(col) == 1 else "whole"
+            value = self.value if self.interval_voices or len(col) == 1 else "whole"
             for note, clef, steps, x in self._positioned_notes(col):
                 y = -steps * gap / 2 + (bass_offset if clef == "bass" else 0)
-                bounds = bounds.united(_lesson_note_bounds(font, value=value, gap=gap, down=steps >= 4).translated(x, y))
+                down = note == min(col) if self.interval_voices and len(col) == 2 else steps >= 4
+                bounds = bounds.united(_lesson_note_bounds(font, value=value, gap=gap, down=down).translated(x, y))
                 if steps <= -2 or steps >= 10:
                     bounds = bounds.united(QRectF(x - gap, y, 2 * gap, 1))
                 if note.accidental != key_accidental(note.letter, count=self.key):
@@ -1327,7 +1331,8 @@ class StaffWidget(QWidget):
                             gap=gap,
                         )
                 p.setPen(Qt.PenStyle.NoPen)
-                value = self.value if len(col) == 1 else "whole"  # stems are only drawn for single notes
+                value = self.value if self.interval_voices or len(col) == 1 else "whole"
+                stem_down = note == min(col) if self.interval_voices and len(col) == 2 else steps >= 4
                 marked_note = placement == "note" and ci == position
                 if marked_note:
                     value = str(symbol)
@@ -1340,12 +1345,11 @@ class StaffWidget(QWidget):
                     stem_color = ink(("Stem", ci)) or ncol
                 regions: list[tuple[QRectF | None, QColor]] = [(None, head_color)]
                 if stem_color != head_color and value not in ("whole", "breve"):
-                    down = steps >= 4
-                    split = y + (0.55 if down else -0.55) * gap
+                    split = y + (0.55 if stem_down else -0.55) * gap
                     above, below = QRectF(self.rect()), QRectF(self.rect())
                     above.setBottom(split)
                     below.setTop(split)
-                    regions = [(above, head_color if down else stem_color), (below, stem_color if down else head_color)]
+                    regions = [(above, head_color if stem_down else stem_color), (below, stem_color if stem_down else head_color)]
                 for clip, color in regions:
                     p.save()
                     if clip is not None:
@@ -1359,11 +1363,11 @@ class StaffWidget(QWidget):
                             y=y,
                             gap=gap,
                             color=color,
-                            stem_down=steps >= 4,
+                            stem_down=stem_down,
                             flag_color=ink(("Flag", ci)) or ncol,
                         )
                     else:
-                        self._note(p, x=x, y=y, gap=gap, color=color, value=value, stem_down=steps >= 4, font=font)
+                        self._note(p, x=x, y=y, gap=gap, color=color, value=value, stem_down=stem_down, font=font)
                     p.restore()
                 p.setPen(QPen(ncol, 1.4))
                 # A sign is written only where the note differs from what the key signature already says.

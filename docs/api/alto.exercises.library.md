@@ -125,8 +125,8 @@ Name the interval between two written notes.
 
 ```pycon
 >>> q = IntervalNames().generate(random.Random(3))
->>> len(q.staff), q.answer in q.choices
-(2, True)
+>>> [len(chord) for chord in q.staff], q.answer in q.choices
+([2], True)
 ```
 
 ### IntervalNames.instructions
@@ -163,8 +163,32 @@ Identify the settings used to generate and grade the interval.
 **Examples**
 
 ```pycon
->>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
-''
+>>> "Harmonic" in IntervalNames().settings_signature()
+True
+```
+
+### IntervalNames.refresh
+
+```python
+def refresh(question: Question) -> Question
+```
+
+Arrange written interval answers by quality, with interval numbers in columns.
+
+**Parameters**
+
+- `question` (*Question*): A new or saved interval question.
+
+**Returns**
+
+- *Question*: The same answer choices in reading order. Perfect and major share a row.
+
+**Examples**
+
+```pycon
+>>> q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+>>> IntervalNames().refresh(q).choices
+['A3', 'M3', 'P4', 'm3', 'd3']
 ```
 
 ### IntervalNames.generate

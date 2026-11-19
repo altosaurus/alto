@@ -57,7 +57,7 @@ class Question:
     key : int, default 0
         The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.
     value : str, default "whole"
-        The note value to draw (single notes only). Keyword-only.
+        The written duration for single notes and interval voices. Keyword-only.
     staff_signature : int or None
         Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.
     minor : bool, default False
@@ -143,7 +143,7 @@ class Question:
     key: int = 0  # key signature to draw: sharps (+) / flats (-)
     staff_signature: int | None = None
     minor: bool = False  # interpret the signature as a natural minor key for scale degrees
-    value: str = "whole"  # note value to draw (single notes only)
+    value: str = "whole"  # written duration for single notes and interval voices
     # Optional button placement: choice -> (row, column). Without it the choices form one row.
     grid: dict[str, tuple[int, int]] | None = None
     keyboard: Note | None = None  # a piano key to highlight, instead of drawing a staff

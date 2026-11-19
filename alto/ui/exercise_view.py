@@ -58,7 +58,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings as app_settings
-from alto.audio import sounds
+from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
 from alto.exercises.base import (
     ChoiceExercise,
     Exercise,
@@ -74,12 +74,13 @@ from alto.learning import Learner
 from alto.settings import spell
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
+    QUALITY_NAMES,
     Note,
 )
 from alto.theory.scales import format_key_signature
 from alto.ui.answer_bank import AnswerBank
 from alto.ui.circle import FifthsCircle
-from alto.ui.colors import blend
+from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.degree_text import (
     DegreeButton,
     DegreeLabel,
@@ -109,6 +110,7 @@ from alto.ui.staff_input import (
     ScaleInput,
     StaffInput,
 )
+from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import HelpButton
 
 if TYPE_CHECKING:
@@ -119,6 +121,7 @@ SCALE_GAP_MS = 280  # the time between the notes of a scale that plays after a r
 
 NOTE_CHOICE = re.compile(r"^[A-G][♯♭]?m?$")  # an answer that is a note or key name: C, F♯, B♭, or a minor key such as F♯m
 DEGREE_CHOICE = re.compile(r"^([♯♭𝄪𝄫]?)([1-7])$")
+INTERVAL_QUALITY_SYMBOLS = {name: symbol for symbol, name in QUALITY_NAMES.items()}
 
 
 def choice_keys(choices: list[str]) -> list[str]:
@@ -326,8 +329,8 @@ class ExerciseView(QWidget):
         True once the question has been answered wrong, so it no longer counts toward the score.
     buttons : list of QPushButton
         The answer buttons on screen.
-    settings_panel : QWidget or None
-        The exercise's settings, or None for an exercise with none.
+    settings_panel : ExerciseSettingsPanel
+        The exercise's settings, including how to advance after a correct answer.
     staff : StaffWidget
         Shows the notes of a question.
     keyboard : KeyboardWidget
@@ -409,6 +412,9 @@ class ExerciseView(QWidget):
         self.prompt = DegreeLabel()
         self.prompt.setStyleSheet("font-size: 16pt;")
         self.staff = StaffWidget(max_step=MAX_STEP)
+        self.staff.interval_voices = isinstance(exercise, IntervalNames)
+        self._answer_playback = StaffPlayback(self, highlight=self._light_answer_notes)
+        self._immediate_playback = StaffPlayback(self)  # Continues across questions and stops when the view closes.
         self.keyboard = KeyboardWidget()
         self.circle = FifthsCircle()  # for questions on the circle of fifths
         self.fork = KeyFork()  # for 'build this key signature' questions
@@ -682,6 +688,11 @@ class ExerciseView(QWidget):
         answer_row.addWidget(answers, 100)
         answer_row.addStretch(1)
         lay.addLayout(answer_row)
+        self.next_button = QPushButton("Next")
+        self.next_button.setMinimumHeight(40)
+        self.next_button.setShortcut("Return")
+        self.next_button.clicked.connect(self.next_question)
+        lay.addWidget(self.next_button, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addStretch()
         outer = QHBoxLayout(self)
         outer.addWidget(main, 1)
@@ -1066,11 +1077,16 @@ class ExerciseView(QWidget):
         >>> view.answered, len(view.buttons) == len(view.question.choices)
         (False, True)
         """
+        self._answer_playback.stop()
         self._advance.stop()
+        self._advance_remaining = -1
         for animation in self._anims:  # a fade still running would color buttons that are about to be replaced
             animation.stop()
             animation.deleteLater()
         self._anims.clear()
+        self.next_button.hide()
+        self.answer_button.setStyleSheet("")
+        self.place_button.setStyleSheet("")
         q = self.question = self._pick_question()
         if self.settings_panel is not None and self.settings_panel.choice_buttons_row is not None:
             self.settings_panel.choice_buttons_row.setVisible(bool(q.choices))
@@ -1165,6 +1181,9 @@ class ExerciseView(QWidget):
         keys = choice_keys(q.choices)
         for i, c in enumerate(q.choices):
             b = DegreeButton(c)
+            if isinstance(self.exercise, IntervalNames) and c in INTERVAL_QUALITY_SYMBOLS:
+                b.setText(INTERVAL_QUALITY_SYMBOLS[c])
+                b.setAccessibleName(c)
             b.setMinimumHeight(40)
             for function in app_settings.DEGREE_FUNCTIONS:
                 if c.endswith(function):
@@ -1186,7 +1205,10 @@ class ExerciseView(QWidget):
             if not interval_bank:
                 self.choice_box.addWidget(b, row, col)
             self.buttons.append(b)
-        self.interval_answers.set_buttons(list(self.buttons) if interval_bank else [])
+        bank_positions = (
+            [q.grid[c] for c in q.choices] if interval_bank and isinstance(self.exercise, IntervalNames) and q.grid else None
+        )
+        self.interval_answers.set_buttons(list(self.buttons) if interval_bank else [], positions=bank_positions)
         if not interval_bank:
             for col in {(q.grid[c][1] if q.grid else i) for i, c in enumerate(q.choices)}:
                 self.choice_box.setColumnStretch(col, 1)  # equal-width columns
@@ -1239,7 +1261,7 @@ class ExerciseView(QWidget):
 
         Examples
         --------
-        >>> ExerciseView._style(QColor("#2e7d32"))
+        >>> ExerciseView._style(QColor(CORRECT_ANSWER_COLOR))
         'QPushButton, QPushButton:disabled { background: #2e7d32; color: white; }'
         """
         return f"QPushButton, QPushButton:disabled {{ background: {color.name()}; color: white; }}"
@@ -1248,7 +1270,7 @@ class ExerciseView(QWidget):
         self,
         button: QPushButton | None,
         *,
-        target: str,
+        target: str = CORRECT_ANSWER_COLOR,
         staff: bool = False,
     ) -> None:
         """
@@ -1259,7 +1281,7 @@ class ExerciseView(QWidget):
         button : QPushButton or None
             The button to color, if the learner used one.
         target : str
-            The color to fade to, such as '#2e7d32'. Keyword-only.
+            The feedback color. Defaults to the correct-answer green. Keyword-only.
         staff : bool, default False
             Also color the notes on the staff, or the highlighted key. Keyword-only.
 
@@ -1267,7 +1289,7 @@ class ExerciseView(QWidget):
         --------
         >>> from alto.exercises.library import NoteNames
         >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
-        >>> view._flash(view.buttons[0], target="#2e7d32")
+        >>> view._flash(view.buttons[0])
         >>> len(view._anims)
         1
         """
@@ -1413,14 +1435,14 @@ class ExerciseView(QWidget):
             current = self._input().accidental
             self._set_accidental(order[(order.index(current) + direction) % len(order)] if current in order else None)
 
-    def _flash_note(self, target: str) -> None:
+    def _flash_note(self, target: str = CORRECT_ANSWER_COLOR) -> None:
         """
         Fade the placed note from the staff's ink to a color.
 
         Parameters
         ----------
         target : str
-            The color to fade to, such as '#c62828'.
+            The feedback color. Defaults to the correct-answer green.
 
         Examples
         --------
@@ -1443,8 +1465,8 @@ class ExerciseView(QWidget):
         """
         Check a note that was clicked onto the staff against the one asked for.
 
-        A right note is scored, fades green, plays and moves on; a wrong one fades red and the staff clears so another can be
-        tried.
+        A correct placement uses the selected Next Question setting. A wrong note fades red, then the staff clears
+        for another attempt.
 
         Parameters
         ----------
@@ -1470,11 +1492,7 @@ class ExerciseView(QWidget):
         self._record(ok, choice=note_name(note, key=None if q.notes_only else q.key, minor=q.minor))
         self.input_staff.locked = True
         if ok:
-            self.answered = True
-            self._flash_note("#2e7d32")
-            if self.exercise.has_sound:
-                sounds.play_notes([[note]])
-            self._advance.start(600)
+            self._finish_answer(self.place_button, notes=[[note]])
         else:
             self.missed = True
             self._busy = True
@@ -1825,8 +1843,8 @@ class ExerciseView(QWidget):
         """
         Check the scale placed on the staff against the one asked for.
 
-        A right scale is scored, turns green, plays and moves on. A wrong one turns red and the staff is cleared so that
-        another can be tried; only the first try counts toward the score.
+        A correct scale uses the selected Next Question setting. A wrong scale turns red and the staff clears for
+        another attempt. Only the first try counts toward the score.
 
         Examples
         --------
@@ -1850,20 +1868,10 @@ class ExerciseView(QWidget):
         answer = " ".join(note_name(n) for n in notes)
         self._record(ok, choice=f"{answer} | {' '.join(steps)}" if with_steps else answer)
         self.scale_input.locked = True
-        if not ok:
-            self._flash_note("#c62828")
         if ok:
-            self.answered = True
-            token = self._pair_token
-            if self.exercise.has_sound:  # the notes turn green one by one as they play, even with the sound muted
-                sounds.play_notes(
-                    [[n] for n in notes],  # as the learner placed it, in whichever octave that was
-                    gap_ms=SCALE_GAP_MS,
-                    warmup=True,
-                    on_step=lambda i: self._light_scale_note(i, token=token),
-                )
-            self._advance.start(SCALE_GAP_MS * len(notes) + 400)  # on to the next question once the scale has played
+            self._finish_answer(self.answer_button, notes=[[note] for note in notes])
         else:
+            self._flash_note("#c62828")
             self.missed = True
             self._busy = True
             token = self._pair_token
@@ -1885,41 +1893,6 @@ class ExerciseView(QWidget):
             QTimer.singleShot(450, retry)
         self._show_placement_rows()
         self._update_score()
-
-    def _light_scale_note(
-        self,
-        index: int | None,
-        *,
-        token: int,
-    ) -> None:
-        """
-        Turn the notes of the scale green as they sound: the one that has just started and every one before it.
-
-        The notes are black until the scale starts to play, and all of them are green once it has finished.
-
-        Parameters
-        ----------
-        index : int or None
-            The place of the note that has just started, from 0, or None once the last note has had its time.
-        token : int
-            Which question the scale was played for; nothing changes once another question has replaced it. Keyword-only.
-
-        Examples
-        --------
-        >>> from alto.exercises.library import ScaleConstruction
-        >>> view = ExerciseView(ScaleConstruction(), rng=random.Random(2))
-        >>> view._light_scale_note(2, token=view._pair_token)
-        >>> sorted(view.scale_input.column_colors)
-        [0, 1, 2]
-        >>> view._light_scale_note(None, token=view._pair_token)
-        >>> len(view.scale_input.column_colors) == view.scale_input.slots
-        True
-        """
-        if token != self._pair_token:
-            return
-        sounded = self.scale_input.slots if index is None else index + 1
-        self.scale_input.column_colors = {i: QColor("#2e7d32") for i in range(sounded)}
-        self.scale_input.update()
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: PLR0917  (Qt calls it with both)
         """
@@ -1979,7 +1952,7 @@ class ExerciseView(QWidget):
 
         The symbol and the place must both be those that make the clef: the C clef on the second line is the mezzo-soprano clef,
         and anywhere else it is not. The baritone clef is either the F clef on the middle line or the C clef on the top line.
-        A right one is scored, turns green and moves on; a wrong one turns red and the staff clears so another can be tried.
+        A correct clef uses the selected Next Question setting. A wrong one turns red and the staff clears for another try.
 
         Parameters
         ----------
@@ -2004,11 +1977,10 @@ class ExerciseView(QWidget):
         ok = (symbol, step) in clef_targets(q.place_clef)
         self._record(ok, choice=f"{symbol} clef at {step}")
         self.clef_input.locked = True
-        self._flash_clef("#2e7d32" if ok else "#c62828")
         if ok:
-            self.answered = True
-            self._advance.start(600)
+            self._finish_answer(self.answer_button)
         else:
+            self._flash_clef("#c62828")
             self.missed = True
             self._busy = True
             token = self._pair_token
@@ -2032,14 +2004,14 @@ class ExerciseView(QWidget):
         self._show_placement_rows()
         self._update_score()
 
-    def _flash_clef(self, target: str) -> None:
+    def _flash_clef(self, target: str = CORRECT_ANSWER_COLOR) -> None:
         """
         Fade the placed clef from black to a color.
 
         Parameters
         ----------
         target : str
-            The color to fade to, such as '#c62828'.
+            The feedback color. Defaults to the correct-answer green.
 
         Examples
         --------
@@ -2089,8 +2061,8 @@ class ExerciseView(QWidget):
         """
         Check the signature picked on the fork against the one asked for.
 
-        A right one is scored, turns the circle green and moves on; a wrong one turns it red and the fork returns to the
-        natural sign so another can be tried.
+        A correct signature uses the selected Next Question setting. A wrong signature turns the circle red, then
+        the fork returns to the natural sign for another attempt.
 
         Examples
         --------
@@ -2110,11 +2082,10 @@ class ExerciseView(QWidget):
         ok = q.check_built(count)
         self._record(ok, choice=format_key_signature(count))
         self.fork.locked = True
-        self._flash_fork("#2e7d32" if ok else "#c62828")
         if ok:
-            self.answered = True
-            self._advance.start(600)
+            self._finish_answer(self.answer_button)
         else:
+            self._flash_fork("#c62828")
             self.missed = True
             self._busy = True
             token = self._pair_token
@@ -2139,14 +2110,14 @@ class ExerciseView(QWidget):
         self._show_placement_rows()
         self._update_score()
 
-    def _flash_fork(self, target: str) -> None:
+    def _flash_fork(self, target: str = CORRECT_ANSWER_COLOR) -> None:
         """
         Fade the fork's circle from the ink color to a color.
 
         Parameters
         ----------
         target : str
-            The color to fade to, such as '#c62828'.
+            The feedback color. Defaults to the correct-answer green.
 
         Examples
         --------
@@ -2280,7 +2251,6 @@ class ExerciseView(QWidget):
         (name, name_btn), (octave, octave_btn) = self._pending["name"], self._pending["octave"]
         choice = name + q.joiner + octave
         if q.check(choice):
-            self._flash(octave_btn, target="#2e7d32")
             self.submit(choice, button=name_btn)  # scores it, flashes the name button, plays the note, moves on
             return
         self._record(False, choice=choice)
@@ -2318,8 +2288,8 @@ class ExerciseView(QWidget):
         """
         Check an answer chosen with a button or by clicking the notation.
 
-        A right answer is scored, fades green, plays (unless the exercise is silent) and moves on after a moment; a wrong one
-        fades red and its button is switched off, so another can be tried.
+        A correct answer uses the selected Next Question setting. An incorrect button flashes red and becomes disabled
+        so the learner can try another answer.
 
         Parameters
         ----------
@@ -2355,81 +2325,137 @@ class ExerciseView(QWidget):
         if ok and q.required and button is not None:  # mark each part as it is found
             self._found.add(choice)
             button.setEnabled(False)
-            self._flash(button, target="#2e7d32")
             if not q.complete(self._found):
+                self._flash(button)
                 self.circle.set_subtitle("and its other name")
                 return
             choice = " ".join(name for name in q.required)
         self._record(ok, choice=choice)
-        if q.circle is not None:  # the cell brightens and names itself, or flashes a warning
-            if ok:
-                self.circle.reveal()
-            else:
-                self.circle.flash_wrong()
         if ok:
-            self.answered = True  # the other buttons stay as they are; only the one pressed animates
             if button is None:
                 self.prompt.setText(q.prompt)
-            identified_scale = isinstance(self.exercise, ScaleIdentification)
-            self._flash(button, target="#2e7d32", staff=not identified_scale)
             notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
-            if identified_scale:
-                token = self._pair_token
-                sounds.play_notes(
-                    [[note] for column in q.staff for note in column],
-                    gap_ms=SCALE_GAP_MS,
-                    warmup=True,
-                    on_step=lambda index: self._light_identified_note(index, token=token),
-                )
-            elif not self.exercise.has_sound:
-                pass  # no tone for this exercise
-            elif notes:
-                sounds.play_notes(notes)
-            else:
-                sounds.play_correct(self.streak)
-            if not identified_scale:
-                self._advance.start(600)
+            self._finish_answer(button, notes=notes)
         else:
+            if q.circle is not None:
+                self.circle.flash_wrong()
             self.missed = True
             if button is None:
                 self.prompt.setText(f"Try again. {q.prompt}")
             else:
+                button.clearFocus()  # Disabling a focused button would move focus to the next answer.
                 button.setEnabled(False)
                 self._flash(button, target="#c62828")
         self._update_score()
 
-    def _light_identified_note(
-        self,
-        index: int | None,
-        *,
-        token: int,
-    ) -> None:
+    def _finish_answer(self, button: QPushButton | None, *, notes: list[list[Note]] | None = None) -> None:
         """
-        Highlight the sounding scale note and advance only after playback finishes.
+        Show correct-answer feedback and apply the exercise's Next Question preference.
+
+        Parameters
+        ----------
+        button : QPushButton or None
+            The answer control, if the question has one.
+        notes : list of list of Note or None
+            The answered pitches grouped by onset, including notes placed by the learner.
+
+        Examples
+        --------
+        Wait runs the usual playback and keeps the correct buttons green until Next is pressed.
+        """
+        q = self.question
+        assert q is not None
+        self.answered = True
+        mode = self.settings_panel.next_question_mode
+        buttons = [choice for _, choice in self._pending.values()] or ([button] if button is not None else [])
+        immediate = mode == "Immediately"
+        if immediate:
+            for choice in buttons:
+                choice.setStyleSheet(self._style(QColor(CORRECT_ANSWER_COLOR)))
+            self._advance.start(90 if buttons else 0)  # Allow one visible flash before replacing the controls.
+        else:
+            self.next_button.setVisible(mode == "Wait")
+            if mode == "Wait":
+                for answer in self.buttons:
+                    answer.setEnabled(False)
+            for choice in buttons:
+                self._flash(choice)
+            if q.circle is not None:
+                self.circle.reveal()
+        if notes and self.exercise.has_sound:
+            scale = q.construct_scale is not None or isinstance(self.exercise, ScaleIdentification)
+            gap = DEFAULT_NOTE_GAP_MS
+            if scale:
+                gap = SCALE_GAP_MS
+            elif self.staff.interval_voices and len(notes) == 2:
+                gap = MELODIC_INTERVAL_GAP_MS
+            playback = self._immediate_playback if immediate else self._answer_playback
+            playback.play(notes, gap_ms=gap, warmup=scale)
+            return
+        if self.exercise.has_sound:
+            sounds.play_correct(self.streak)
+        if immediate:
+            return
+        if q.place_clef:
+            self._flash_clef()
+        elif q.build_key:
+            self._flash_fork()
+        elif q.construct is not None or q.construct_scale is not None:
+            self._flash_note()
+        else:
+            self._flash(None, staff=True)
+        self._advance_after_feedback(600)
+
+    def _advance_after_feedback(self, delay: int) -> None:
+        """
+        Schedule the next question when automatic advancement is active.
+
+        Parameters
+        ----------
+        delay : int
+            Time in milliseconds to leave the completed feedback visible.
+
+        Examples
+        --------
+        A question waiting for Next stays on screen after its final playback callback.
+        """
+        if not self.next_button.isHidden():
+            return
+        if self._hidden_at is not None:
+            self._advance_remaining = delay
+        else:
+            self._advance.start(delay)
+
+    def _light_answer_notes(self, index: int | None) -> None:
+        """
+        Color the notes at the current audio onset and clear the feedback when playback ends.
 
         Parameters
         ----------
         index : int or None
-            The sounding column, or None at the end of the melody.
-        token : int
-            The question that started playback; stale callbacks are ignored. Keyword-only.
+            The sounding column, or None after the final column or an interruption.
 
         Examples
         --------
         >>> view = ExerciseView(ScaleIdentification(), rng=random.Random(2))
-        >>> view._light_identified_note(2, token=view._pair_token)
+        >>> view.answered = True
+        >>> view._light_answer_notes(2)
         >>> list(view.staff.column_colors)
         [2]
         """
-        if token != self._pair_token:
+        q = self.question
+        if q is None or not self.answered:
             return
-        self.staff.column_colors = {index: QColor("#2e7d32")} if index is not None else {}
-        self.staff.set_note_color(QColor("#2e7d32") if index is None else None)
+        green = QColor(CORRECT_ANSWER_COLOR)
+        if q.keyboard_notes or q.keyboard is not None:
+            self.keyboard.set_highlight_color(green if index is not None else self.palette().color(QPalette.ColorRole.Highlight))
+        else:
+            staff = self._input() if q.construct is not None or q.construct_scale is not None else self.staff
+            staff.column_colors = {index: green} if index is not None else {}
+            staff.update()
         if index is None:
-            if self._hidden_at is not None:
-                self._advance_remaining = 400
-            else:
-                self._advance.start(400)
+            delay = 400 if q.construct_scale is not None or isinstance(self.exercise, ScaleIdentification) else 150
+            self._advance_after_feedback(delay)
 
     def _update_score(self) -> None:
         """

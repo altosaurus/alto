@@ -14,6 +14,12 @@ shows its key when you hover over it.
 
 Answer-choice exercises include **Buttons** in their settings. Choose **All** for the full answer bank or **Limited** to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.
 
+Each exercise remembers its own **Next Question** setting.
+
+- **Immediately** flashes the correct button green and advances. The answer audio can finish while you read the next question. The music stays unanimated.
+- **Wait** plays the animation and keeps the correct answer button green. Press **Next** when you’re ready.
+- **After Animation** (default) advances automatically when the feedback finishes.
+
 ## Note Identification
 
 A note is drawn on a staff. Press the button with its name.
@@ -155,7 +161,7 @@ In the exercise settings you can choose:
 
 ## Interval Identification
 
-Name the interval between the two written notes. On first use, the notes ascend on a treble or bass staff, and the exercise asks for both quality and number.
+Name the interval between the two written notes. By default the notes appear together on a treble or bass staff, and the exercise asks for both quality and number.
 
 An interval has a quality and a number. The number counts the letter names it spans, including both notes. The quality
 is **P** (perfect), **M** (major), **m** (minor), **A** (augmented) or **d** (diminished). So C to E is M3, and C to E♭
@@ -164,13 +170,17 @@ is m3.
 - **Clefs** chooses which staves can appear, including the grand staff.
 - **Range** sets the lowest and highest written notes for each checked clef. Both notes must fit.
 - **Staff Key** selects the signatures drawn on the staff. Choose zero for a blank signature.
-- **Display** has two checkboxes. **Melodic** shows the lower note followed by the higher one. **Harmonic** shows both together. Check both to mix them.
-- **Quality** is on by default. Switch it off to answer **3** for either C–E or C–E♭.
+- **Display Mode** defaults to **Harmonic**, which shows and plays both notes together. **Melodic** shows and plays them one at a time. Under Melodic, check **Ascending** (lower note first, the default), **Descending** (higher note first), or both to practice them in random order. You can also check both Harmonic and Melodic to mix presentations.
+- **Quality** sets what you identify. For C up to E♭, choose **3** in **Interval Only**, **m3** in **Interval and Quality** (default), or **m** in **Quality Only**.
 - **Intervals** selects the spellings you want to practice, including compound intervals through a fifteenth.
-  Drag the handles to select a span of interval numbers, then check individual spellings. **Select all** can temporarily include every spelling.
-  Only selected intervals that fit the range can be asked. If none fit, widen the range or choose a smaller interval.
+  Each row shows one interval number. From left to right, the columns are augmented, major or perfect, minor, and diminished.
+  The checklist and slider offer intervals that fit at least one selected clef's range. For example, a staff range from C4 to E4 offers seconds and thirds.
+  Drag the handles to select a span of interval numbers, then check individual spellings. **Select all** temporarily includes every available spelling.
+  Widening a range restores any previously checked intervals that now fit.
+- **Accidentals** controls the signs allowed beside either note. **♮** allows an unmarked note following the staff key. For example, in G major an unmarked F sounds as F♯. The default selection is **♮**, **♭**, and **♯**. Check **𝄫** for double flats or **𝄪** for double sharps.
+- **Note Value** chooses which written durations can appear. Both notes use the same value.
 - **Buttons** defaults to **Limited**, with six answers. Choose a **Button count** from 2 to 10. The count includes the correct answer.
-  Choose **All** to show every selected interval that fits the current staff range. With **Quality** off, each interval number appears once.
+  Choose **All** to show every eligible answer for the current staff range and selected intervals. Each distinct number or quality appears once when practicing that part alone.
 
 {% include shot.html src="intervals.png" alt="Interval Identification showing two notes and the interval buttons" %}
 
@@ -293,9 +303,8 @@ Then click to place the note. A sign is used up by the note it goes on. Only the
 - **Undo** (or Backspace) takes back the last thing you placed.
 - **Answer** (or Enter) hands in the scale once everything is placed.
 
-A wrong scale is cleared so that you can try again, and only your first try counts toward your score. A right one plays
-the scale: the notes start black and each one turns green as the instrument sounds it. They turn green even with the
-sound muted, and the next question comes when the scale has finished.
+A wrong scale is cleared so that you can try again, and only your first try counts toward your score. With **After Animation**
+or **Wait**, a correct scale plays back. Each note turns green as it sounds, with the same timing when muted.
 
 In the exercise settings you can choose:
 

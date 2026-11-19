@@ -231,6 +231,7 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         *,
         gap_ms: int,
         warmup: bool,
+        force: bool,
         on_step: Callable[[int | None], object],
     ) -> None:
         """
@@ -238,6 +239,8 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
 
         Parameters
         ----------
+        force : bool
+            Whether to override the mute setting.
         warmup : bool
             Silently initialize audio streams before starting playback.
         midis : list of int
@@ -248,7 +251,7 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
             The visual callback.
 
         """
-        assert warmup
+        assert warmup and not force
         assert gap_ms == 280
         played.extend(note.midi for column in midis for note in column)
         callbacks.append(on_step)
@@ -269,7 +272,12 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         assert view.staff.note_color is None and not view._advance.isActive()
         assert view.question is question
     callbacks[0](None)
-    assert view._advance.isActive() and view.staff.note_color is not None
+    assert view._advance.isActive() and not view.staff.column_colors and view.staff.note_color is None
+    view.hide()
+    callbacks[0](None)  # a completion delivered while away must leave advancement paused
+    assert not view._advance.isActive()
+    view.show()
+    assert view._advance.isActive()
     view.next_question()
     callbacks[0](3)
     assert not view.staff.column_colors and view.staff.note_color is None

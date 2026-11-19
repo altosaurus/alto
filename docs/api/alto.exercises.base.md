@@ -75,7 +75,7 @@ One question, with what to show for it and which answer is right.
 - `clef` (*str, default "treble"*): The clef to draw on. Keyword-only.
 - `explanation` (*str, default ""*): Text shown after the answer to say why it is right. Keyword-only.
 - `key` (*int, default 0*): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.
-- `value` (*str, default "whole"*): The note value to draw (single notes only). Keyword-only.
+- `value` (*str, default "whole"*): The written duration for single notes and interval voices. Keyword-only.
 - `staff_signature` (*int or None*): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.
 - `minor` (*bool, default False*): Use the signature's relative minor for scale degree naming. Keyword-only.
 - `grid` (*dict of str to tuple of (int, int) or None*): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.

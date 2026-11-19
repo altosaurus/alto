@@ -55,7 +55,11 @@ True
 ### AnswerBank.set_buttons
 
 ```python
-def set_buttons(buttons: list[QAbstractButton]) -> None
+def set_buttons(
+    buttons: list[QAbstractButton],
+    *,
+    positions: list[tuple[int, int]] | None = None,
+) -> None
 ```
 
 Display answer buttons in a stable order.
@@ -63,6 +67,7 @@ Display answer buttons in a stable order.
 **Parameters**
 
 - `buttons` (*list of QAbstractButton*): The buttons to arrange. Their caller owns answer handling.
+- `positions` (*list of tuple of (int, int) or None*): Optional row and column for each button. Each row wraps independently when space is limited.
 
 **Examples**
 

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import replace
+from functools import lru_cache
 
 from alto import settings
 from alto.exercises.base import (
@@ -302,6 +303,64 @@ class NoteNames(ChoiceExercise):
         )
 
 
+@lru_cache(maxsize=64)
+def _interval_starts(
+    intervals: tuple[Interval, ...],
+    *,
+    bounds: tuple[int, int],
+    key: int,
+    accidentals: frozenset[int],
+) -> dict[Interval, list[Note]]:
+    """
+    Find lower notes whose upper partners also fit the staff and accidental selection.
+
+    Parameters
+    ----------
+    intervals : tuple of Interval
+        The selected interval spellings.
+    bounds : tuple of int
+        Inclusive diatonic staff positions.
+    key : int
+        Signature drawn on the staff.
+    accidentals : frozenset of int
+        Allowed written signs. Zero allows a note with no sign beside it.
+
+    Returns
+    -------
+    dict of Interval to list of Note
+        Possible starting notes for each playable interval.
+
+    Examples
+    --------
+    >>> third = Interval.parse("M3")
+    >>> _interval_starts((third,), bounds=(28, 30), key=0, accidentals=frozenset({0}))[third]
+    [Note(octave=4, letter=0, accidental=0)]
+    """
+    allowed = []
+    for letter in range(7):
+        implied = key_accidental(letter, count=key)
+        signs = accidentals - {0, implied}
+        if 0 in accidentals:
+            signs = signs | {implied}
+        allowed.append(sorted(signs))
+
+    bottom, top = bounds
+    starts = {}
+    for iv in intervals:
+        notes = []
+        for position in range(bottom, top - iv.number + 2):
+            natural = Note.from_diatonic(position)
+            upper = natural.transpose(iv)
+            notes.extend(
+                Note.from_diatonic(position, accidental=sign)
+                for sign in allowed[natural.letter]
+                if upper.accidental + sign in allowed[upper.letter]
+            )
+        if notes:
+            starts[iv] = notes
+    return starts
+
+
 @register
 class IntervalNames(Exercise):
     """
@@ -310,8 +369,8 @@ class IntervalNames(Exercise):
     Examples
     --------
     >>> q = IntervalNames().generate(random.Random(3))
-    >>> len(q.staff), q.answer in q.choices
-    (2, True)
+    >>> [len(chord) for chord in q.staff], q.answer in q.choices
+    ([2], True)
     """
 
     name = "Interval Identification"
@@ -334,11 +393,13 @@ class IntervalNames(Exercise):
         True
         """
         return (
-            "<b>Interval Identification</b><br>Two notes are shown. Name the interval from the lower note to the "
-            "higher one.<br><br>An interval has a quality followed by a number. The number counts the letter names it "
+            "<b>Interval Identification</b><br>Name the interval between the two written notes."
+            "<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
-            "d (diminished). Turn off Quality to answer with the number alone. Use Display to choose how the two notes "
-            "appear. You can click an answer or use the shortcut shown on its button."
+            "d (diminished). In Quality, choose whether to answer with the number, the full interval, or the quality alone. "
+            "Use Display Mode to choose how the two notes appear. Under Melodic, check Ascending, Descending, or both. "
+            "Note Value sets the written duration of both notes. You can click an answer or use the shortcut "
+            "shown on its button."
         )
 
     def settings_signature(self) -> str:
@@ -352,19 +413,60 @@ class IntervalNames(Exercise):
 
         Examples
         --------
-        >>> IntervalNames().settings_signature()  # earlier versions stored default questions under this signature
-        ''
+        >>> "Harmonic" in IntervalNames().settings_signature()
+        True
         """
         cfg = settings.intervals
-        if cfg == settings.IntervalSettings():
+        if cfg == settings.IntervalSettings(displays={"Melodic"}):
+            # The original melodic questions were stored with an empty signature.
             return ""
         parts = vars(cfg).copy()
+        if cfg.quality_mode != "quality":
+            # Keep reviews saved under the original on/off Quality switch.
+            del parts["quality_mode"]
+            parts["quality"] = cfg.quality_mode == "combined"
+        if cfg.accidentals == settings.DEFAULT_INTERVAL_ACCIDENTALS and cfg.staff_keys == {0}:
+            del parts["accidentals"]  # These are the same spellings that earlier blank-staff questions allowed.
+        del parts["directions"]
+        if "Melodic" in cfg.displays and "descending" in cfg.directions:
+            # Preserve the stored motion key and its single-direction value for existing reviews.
+            parts["motion"] = ",".join(sorted(cfg.directions))
+        if cfg.note_values == {"whole"}:
+            del parts["note_values"]  # Preserve review signatures for earlier whole-note questions.
         if cfg.button_mode == "limited" and cfg.button_count == 6:
             # Match questions saved before the Buttons setting existed.
             del parts["button_mode"], parts["button_count"]
         elif cfg.button_mode == "all":
             del parts["button_count"]
         return signature(parts)
+
+    def refresh(self, question: Question) -> Question:
+        """
+        Arrange written interval answers by quality, with interval numbers in columns.
+
+        Parameters
+        ----------
+        question : Question
+            A new or saved interval question.
+
+        Returns
+        -------
+        Question
+            The same answer choices in reading order. Perfect and major share a row.
+
+        Examples
+        --------
+        >>> q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+        >>> IntervalNames().refresh(q).choices
+        ['A3', 'M3', 'P4', 'm3', 'd3']
+        """
+        rows = settings.INTERVAL_QUALITY_ORDER
+        if not question.choices or any(name[:1] not in rows or not name[1:].isdigit() for name in question.choices):
+            return question
+        intervals = [Interval.parse(name) for name in question.choices]
+        numbers = sorted({iv.number for iv in intervals})
+        grid = {iv.short: (rows[iv.quality], numbers.index(iv.number)) for iv in intervals}
+        return replace(question, choices=sorted(question.choices, key=grid.__getitem__), grid=grid)
 
     def generate(self, rng: random.Random) -> Question:
         """
@@ -387,40 +489,50 @@ class IntervalNames(Exercise):
         True
         """
         cfg = settings.intervals
-        selected = [iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals]
-        if not selected:
-            return Question("Select an interval in Settings to continue.", choices=[], answer="")
-        smallest = min(iv.number for iv in selected)
-        clefs = []
-        for clef in cfg.active_clefs():
-            bottom, top = cfg.range_for(clef)
-            if top - bottom + 1 >= smallest:
-                clefs.append(clef)
+        selected = tuple(iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals)
+        smallest = min((iv.number for iv in selected), default=2)
+        clefs = [clef for clef in cfg.active_clefs() if cfg.staff_span(clef) >= smallest]
         if not clefs:
             return Question("Widen a clef’s Range or choose a smaller interval in Settings.", choices=[], answer="")
-        clef = rng.choice(clefs)
-        bottom, top = cfg.range_for(clef)
-        available = [iv for iv in selected if iv.number <= top - bottom + 1]
+        if not selected:
+            return Question("Select an interval in Settings to continue.", choices=[], answer="")
+        staves = [(clef, key) for clef in clefs for key in sorted(cfg.staff_keys)]
+        rng.shuffle(staves)
+        for clef, key in staves:
+            starts = _interval_starts(selected, bounds=cfg.range_for(clef), key=key, accidentals=frozenset(cfg.accidentals))
+            if starts:
+                break
+        else:
+            return Question("Change Accidentals, Intervals, Staff Key, or Range to fit an interval.", choices=[], answer="")
+        available = list(starts)
         iv = rng.choice(available)
-        position = rng.randint(bottom, top - iv.number + 1)
-        natural = Note.from_diatonic(position)
-        upper_accidental = natural.transpose(iv).accidental
-        accidental = rng.choice([acc for acc in (-1, 0, 1) if abs(acc + upper_accidental) <= 1])
-        low = Note.from_diatonic(position, accidental=accidental)
+        low = rng.choice(starts[iv])
         high = low.transpose(iv)
         display = rng.choice(sorted(cfg.displays))
-        staff = [[low, high]] if display == "Harmonic" else [[low], [high]]
-        answer = iv.short if cfg.quality else str(iv.number)
-        pool = list(dict.fromkeys(other.short if cfg.quality else str(other.number) for other in available))
-        return Question(
-            "" if cfg.quality else "What is the interval number?",
+        descending = display == "Melodic" and rng.choice(sorted(cfg.directions)) == "descending"
+        first, second = (high, low) if descending else (low, high)
+        staff = [[first, second]] if display == "Harmonic" else [[first], [second]]
+        if cfg.quality_mode == "interval":
+            prompt, answer = "What is the interval number?", str(iv.number)
+            pool = list(dict.fromkeys(str(other.number) for other in available))
+        elif cfg.quality_mode == "quality":
+            prompt, answer = "What is the interval quality?", QUALITY_NAMES[iv.quality]
+            qualities = {other.quality for other in available}
+            pool = [QUALITY_NAMES[quality] for quality in settings.INTERVAL_QUALITY_ORDER if quality in qualities]
+        else:
+            prompt, answer = "", iv.short
+            pool = [other.short for other in available]
+        question = Question(
+            prompt,
             choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
             answer=answer,
             staff=staff,
             clef=clef,
-            key=rng.choice(sorted(cfg.staff_keys)),
-            explanation=f"{low} to {high}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
+            key=key,
+            value=rng.choice(cfg.active_values()),
+            explanation=f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
         )
+        return self.refresh(question)
 
 
 @register
