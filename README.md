@@ -9,10 +9,10 @@
 [![Docs](https://img.shields.io/github/actions/workflow/status/altosaurus/alto/docs.yml?branch=main&label=docs&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd%2BUAAAET0lEQVRIx7XUX0xTVxwH8O%2B5955zz70EJNBWFLOh1c06F4gLcXbORUh0i3Nxm3PJkj0s7o03l%2Fg2H2bi4t72tmzRLCMMEFMjzayMWGYs%2BAfcCHppLxWqK5SiYEurYv%2Fce%2FfQZE%2BjUmA3uQ83J7%2Fzyff3y%2F0RLOP54cef3qyoWPPL7KOHeUVRbjmdzu66ujr%2Fpo11yRfVSssBy8vLuczYhsloVAmGgq61a9d%2B5Ha7r9%2FVtO%2BNXO73%2BoaG%2FGK1wnJAu92%2Buaqqiu3bvx9HjnwKW7WtPDg6ug%2BW1cpkuWVVE545c1ZROP9AlmUxn8%2Bjvr4e7l27wGSGbCbDfT6fvVh9yQlr1q3bTil1A4AoihAEAZIkgTGGwcHBjmPHjp1eNfDjw58QVVUPiqJYbRgmREkCpRSUUaTm51NDQ0Nt2Ww2vWrgoUOHqhljBwpfFqgk%2FftOTk7e9nq9t190R9EZjo2NcVVVtymKspsQUjl0%2B8%2BMKEou0zQhimIhHaXI5nJmMBj06ro%2Bv2xQ0zQllUq953A4vlFV9bVMJmMIApkjAlFMw4DMOSgtzC4%2BE58KBAI9S%2BnSoi0NhULZXC6XFEXRYRiGFQ6HdcMwOQEBIQRUkiBRBgIgEon80d7efm9FoMPhUFwu1xeCINij0eiNYCh0q7Kyssw0DUiUgsoy6L17ePrg%2FvMRTbtoWVZ2ReCWLVu%2BFATh8PT09N2urq5TtbUb6kRKRcs0IaZSIOfOQejswHQiqV3u7Q0sBSs6Q87517OzszGPx%2FOV85VX81yWdywEAsj5LkEMh4FoFNbJk1Y48dg30Nf3cKngogkTiUSup6fnxPHjx6%2FU2OwHcwMDFanvTsO6dAlSOAy%2Bvhbz27fP3bw1%2BBsAa8Wg3%2B%2F%2FtqWlxePtu7qOzD56N9Pnh5hOgwGQAbCmvYgSct3T2TGyVKxoS48ePfozgAVOSBMikc2ZUQ1SMomy6mpww0D27T15bSJyMT419awUsNimmT%2FrucDps6cfmvFpyUgkIQOQJQm8oQGPatdP9Pmv%2BEvBXgTCppa5mEDeyhOCim3bwCmFMDMDsucdjKdSvd7z5%2F9eNTCo66qtovyz9MiILXvzJtaoKpgggNfU4OkbO9J%2F3bnbDcAoFVx0hsnk%2FKnEg%2FufWzduECUex5PxcVRaFuTdu%2FFAVYe9FzyDpWJFE%2BrhsMVisTIxFEJufBzMsiAzBrO52dRjMa82PJxYVfAlu90pTUzIRiwGZlngqgrF5cJjp3O6v7%2F%2F8nKwoiB9PNec1TSQdLrw35kmpOZm3M9mr3a2tuqrDhraqJqPREANowByjuc7d2ZG9LGLmYWFJS3qkkBzYhzW3FwBA8AbGxGvtgV7L%2FuuLRcDii3vl%2BuQN8zCKmMMOPA%2B9Iczvqu9vfH%2FBRSb9t6pfPLkda7rYG43Qps2jvR0df2KEhb1f9672EFjU%2FP1%2FNatNNlQL97hPHCuu%2FtEZ1vb0EowAPgHJp3FXFoyWQQAAAAASUVORK5CYII%3D)](https://altosaurus.github.io/alto/)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd%2BUAAAD80lEQVRIx62WT4hVVRzHv%2Be9%2B0anGadJkDQbISIRHJGZJKIMC0oTLSUiKapFi7DaZejOlRsXRkG1SBCpFhJhoKtoqGQSUukPYWoGRSpuLKxRZnrvnvP5tnh33rz3ZnxTTQcOl9%2B98Pvc7%2Fd8z7k3qMN48u0TmpgYHzI8D9xn0gDQB2Qm5aT0J%2FALpKOGA8f3Pv2bZhmlTg8nJsZX2%2F7A9jabxdhLDD2GeUAv9lLDWuM9wBv37ni%2Ff05A2xttlkp%2B1rDRKZ0DBEkGmaSirhi2ARtmA2YdgbDQxiScYrTtAkQBornODHfNCQgpGPdDOmS5ajMwA6hRA2FuCu2TNu%2FZDrKDMTYyDEFaBchOBSzJeDbeFHDzvi8qttca1kFaCARSkmGMybVKjebVdoWAKiUyX3l1u1JYKSnKnJH4KCx582oL8LHXj3UBO2zvtOk3xVrZqiuaXrdba6wsoyRpi6RHZSSnJMdhX3xxRxh4d7yRUmC97F2GfkCYTuGYVttIsiSFusdJci5RK4v8GTk%2B2LItbD8F3DxD3Atls9WWJXVlHpfjfJFratb6RG1Ti6WGNf9GUYuVdpHocPGJod8vK%2BUrRJIc1bg63dMO7Bz3xERMXDc2CVGsoZGkANavKxZPHHx53aUNStwmYgGMk8A7WoCY%2Bc3xprDVUAMOr1k29vnwwFgqB4JtqREe1FWOWrNs7Kblt17fInhEjqEOSk3Q1NuucAJY0KaQUmD%2F4e3f%2FbioN39F1u2SghTqAZlqWBKpRylldTXNyhq21loVki4YVjZbGZN%2F2rP55xOLevJ9IixqOu%2BmYE6awb42YJScLrSklMSp9kM5wbm1d%2F6xXJ6ENatqJLCYebEN2u5NTsfPWrcFfGy4Zk8pFNTKwd0NGOnGDdvvOW96kXhF5sNWheZTYD%2FQfGSVLdctJJd8I0itAzjlkg5IOjkJbJzu9%2B861GN7o0mrgUoe%2Ff2pXd8MlZRemx4GRuX41dQ%2BixIxyBE5IWKo%2B68zko6EwePXpgFn%2FFpcemmvnHbOEIbTIj9bpLAsR4uInA6FwS8P%2F%2BfPk8glNSexoWhQxMEiROdFXCCnJZJ%2FkNQR2PEXQ67RmrZpgfla5mE5Pif5Wv3tOo%2FZFJ6WUxQxaz05Goq7JPdJ6peUSzo7R2A8Ksd3RHxBjr2ttiLJqySNSPpL0kFJn8wGnPUfxOc3zZN5SI6Pizgsx8UyXZKqki5L%2BlbSEUnHwuDx6pyBLfAfHuiTuUXSvELV1ebI%2F29jePhuLV%2B3f8Zn67e9pa1bt%2F7jXh0V7t69O3R3d5cqlUpWqVSyLMuycrlcCiEE204pkVKKeZ7HPM9jtVpldHTUIyMjN%2Bz5NxwyvNFnwN4eAAAAAElFTkSuQmCC)](https://github.com/altosaurus/alto/blob/main/.github/workflows/tests.yml)
 
-**Music theory practice for the Linux desktop that remembers what you get wrong.**
+**Music theory practice with spaced repetition.**
 
-Alto is a free music theory trainer. Read notes on any clef, name intervals, chords and arpeggios, spell scales, learn key
-signatures, find keys on a keyboard. It uses spaced repetition to optimize the learning process by feeding you problems that you find more challenging, and skipping over ones that are already easy.
+Alto is a free desktop music theory trainer. Read notes on any clef, name intervals, chords and arpeggios, spell scales,
+learn key signatures, and find keys on a keyboard. Your answers determine when each question comes back for review.
 
 <p align="center">
   <picture>
@@ -40,15 +40,19 @@ Almost everything is adjustable.
   </picture>
 </p>
 
-## It remembers what you get wrong
+## Spaced repetition
 
-Every answer goes into a local database under your profile. Alto scores each question by how hard you find it:
+Choose a spaced repetition algorithm under **Settings → Practice**.
 
-- **Wrong answers count against it.** Every extra attempt pushes the question higher, so it returns more often.
-- **Speed counts too.** A slow answer is held against a question, even when it is right. A very quick one earns it a
-  rest.
-- **Your progress is visible.** Charts show your accuracy, speed and volume over time, a calendar heatmap shows a year of
-  practice at a glance, all filtered by exercise, and a read-only browser lets you look at everything stored.
+- **ASRS and ARTS** use accuracy and response time to choose the next question. If you hesitate over an interval,
+  you may see it again sooner even when you name it correctly.
+- **SM-2 and FSRS** give each question a review date based on your first answer each time you see it.
+  Each exercise shows how many reviews are due and how many new cards are available that day.
+
+Alto saves each answer in a local database under your profile. You can filter accuracy, response time, and practice
+volume by exercise, see a year of practice on the calendar heatmap, or browse individual answers.
+For a comparison, follow the same note through all four algorithms in the
+[spaced repetition guide](https://altosaurus.github.io/alto/dev/practice/).
 
 <p align="center">
   <picture>

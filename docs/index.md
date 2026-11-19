@@ -39,7 +39,7 @@ topics:
 {% include exercise-icons.html %}
 <div class="hero">
   <h1>Learn music theory with <span class="hl">Alto</span></h1>
-  <p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>
+  <p class="lead">Study music theory in short lessons and practice what you learn with spaced repetition.</p>
   {% if site.app_version != "" %}<a class="dl-go" href="#download">Download Alto <svg class="i" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>{% endif %}
 </div>
 
@@ -59,7 +59,7 @@ topics:
 
 ## What makes it different
 
-- **It learns from your answers.** Every answer is recorded under your profile. Questions you miss, or take a long time over, come back more often. Questions you answer quickly and correctly fade into the background. [How it works]({{ '/practice/' | relative_url }}).
+- **Spaced repetition.** ASRS and ARTS use your accuracy and response time to choose the next exercise question. SM-2 and FSRS schedule a due date for each review. [Compare the four algorithms]({{ '/practice/' | relative_url }}).
 - **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}).
 - **Notation and keyboards your way.** Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. [Settings]({{ '/settings/' | relative_url }}).
 - **Local and private.** Your history is one file on your computer. [Your data]({{ '/data/' | relative_url }}).

@@ -592,7 +592,7 @@ def test_the_home_page_opens_with_the_title_and_the_one_sentence_it_was_asked_to
     """Check the words at the top of the home page, and that the name Alto in the title is marked."""
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     assert '<h1>Learn music theory with <span class="hl">Alto</span></h1>' in home
-    assert '<p class="lead">Alto provides exercises and lessons on music theory, optimized with spaced repetition.</p>' in home
+    assert '<p class="lead">Study music theory in short lessons and practice what you learn with spaced repetition.</p>' in home
     assert "Music theory drills for the desktop" not in home
     css = (DOCS / "assets" / "css" / "site.css").read_text(encoding="utf-8")
     assert ".hero h1 .hl { color: var(--accent); }" in css
