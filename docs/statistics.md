@@ -6,7 +6,7 @@ permalink: /statistics/
 ---
 ## Statistics
 
-Open the statistics from the chart button next to the menu button, or from the menu. They always show the active
+Open **Statistics** using the chart button at the upper right of the main window. They always show the active
 profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page you came from.
 
 ### Filters

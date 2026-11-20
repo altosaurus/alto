@@ -7,10 +7,7 @@ permalink: /exercises/
 
 Each exercise has a **?** button with a short explanation. Open the sliders button to change an exercise’s settings.
 
-**Every exercise can be done with the keyboard alone, and without clicking on the staff.** The answer buttons have keys,
-and where you place notes on a staff there are buttons and keys to move the note, choose its sign and place it, so the
-mouse is never needed. The keys are listed on the [Shortcuts]({{ '/shortcuts/' | relative_url }}) page, and each button
-shows its key when you hover over it.
+Hover over an answer button to see its keyboard shortcut. In Note, Interval, and Scale Construction, use the arrow keys to move the note and Return to place it. For keyboard practice in Notation Identification, choose **Answer Button** under **Question Type**. [Shortcuts]({{ '/shortcuts/' | relative_url }})
 
 Answer-choice exercises include **Buttons** in their settings. Choose **All** for the full answer bank or **Limited** to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.
 
@@ -19,6 +16,8 @@ Each exercise remembers its own **Next Question** setting.
 - **Immediately** flashes the correct button green and advances. The answer audio can finish while you read the next question. The music stays unanimated.
 - **Wait** plays the animation and keeps the correct answer button green. Press **Next** when you’re ready.
 - **After Animation** (default) advances automatically when the feedback finishes.
+
+With SM-2 or FSRS, a missed card returns later. If you grade correct answers yourself, choosing **Hard**, **Good**, or **Easy** schedules the card and advances to the next question. [Spaced repetition]({{ '/practice/' | relative_url }})
 
 ## Note Identification
 
@@ -29,7 +28,7 @@ In the exercise settings you can choose:
 - **Clefs:** the grand staff, or any of the seven single-staff clefs, listed in three groups: treble, bass, alto and
   tenor; then soprano, mezzo-soprano and baritone (written as an F clef, or as a C clef if you choose that in
   [Settings]({{ '/settings/' | relative_url }})). Each clef is shown with its name beside it. The same list is used by every
-  exercise that has a clef setting, apart from the grand staff, which only Note Identification and Note Construction use.
+  exercise with these single-staff clefs. The staff interval exercises also offer the grand staff.
 - **Range:** the lowest and highest note that can appear, per clef.
 - **Key signatures:** which keys appear. When a key is on, the note's name has to agree with the signature.
 - **Note values:** whole notes up to thirty-second notes, and the double whole note.
@@ -38,6 +37,7 @@ In the exercise settings you can choose:
   Degrees refer to the major key signature (C major without a signature). Caret labels use accidental prefixes,
   while function labels use words such as **Raised Supertonic** and **Lowered Mediant**.
 - **Accidentals:** whether notes with their own sharp, flat or natural sign appear.
+- **Octave:** turn this on to answer with both the note name and its octave. Middle C is C4.
 
 The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
 that option. Changes apply to the next question right away.
@@ -83,7 +83,7 @@ or C major when key signatures are off. When octaves are required, degree and oc
 The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
 It uses the **Note names** setting from Note Identification. With scale degrees selected, the question names the
 key, degree and octave. Under **Question Type**, choose **Notes Only** for note names or **Scale and Degree** to use selected keys. Switch between **Major** and **Minor** to choose signatures for each. To practice just one group, leave the other tab’s keys unchecked. Minor uses the natural minor scale.
-Select C major or A minor for a staff with no sharps or flats.
+Under **Degrees**, check the scale degrees to practice. For example, choose D major and degree 3 to practice placing F♯.
 
 - **Octave** is on by default. Turn it off to place the note in any octave. Middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.
 - **Staff Key** selects the signatures drawn on the staff independently of the keys in the prompts. Choose the unmarked
@@ -288,19 +288,29 @@ Open the exercise settings to choose **Clefs**, **Scales**, and **Key Signatures
 
 **Starting Accidentals** lets you choose how many sharps or flats are already on the staff. The default, **0**, starts with a blank signature. For example, with **2 ♯** selected, a question in A major shows two of its three sharps in their usual positions. Place the missing signs from left to right. You can enter up to seven signs in total, including those already shown. If the key needs six and you submit seven, the answer is marked wrong. **Undo** removes only signs you placed. When all the signs are already present, press **Answer**. Counts must fit one of your selected key signatures. If changing keys rules out every selected count, the setting returns to **0**.
 
-## Scale Spelling
+<a id="scale-spelling"></a>
 
-A question such as "In B♭ Dorian, what is scale degree 3?" Press the note's name. Each scale uses every letter name
-once, so use a sharp or flat where the pattern needs one. Alto asks about:
+## Scale Identification
 
-Major (Ionian), Dorian, Phrygian, Lydian, Mixolydian, natural minor (Aeolian), Locrian, harmonic minor and melodic minor.
+Read the eight notes on the staff. The first and last notes give the tonic. The pattern of whole and half steps gives the mode.
+For example, a scale from D to D with no sharps or flats is D Dorian. Under **Question Type**, check **Key** to answer D,
+**Mode** to answer Dorian, or both to identify the full scale.
+
+Open **Clefs** and **Scales** to choose the staves and modes to practice. **Motion** sets the direction of the written scale.
+**Scale Key** selects the signatures the scales may use, with separate Major and Minor tabs. **Staff Key** controls the signature
+drawn beside the clef. Read any accidentals beside the notes when the two signatures differ.
+
+Under **Buttons**, **Limited** offers complete answers up to the selected button count. With **All** and both question types
+enabled, choose a tonic and a mode from separate groups in either order.
+
+{% include shot.html src="scales.png" alt="Scale Identification with an eight-note staff example and scale names on the answer buttons." %}
 
 ## Scale Construction
 
 A blank staff is shown with the name of a scale under it, such as "D Major", "E♭ minor" or "A Dorian". Click the staff to
 place the scale's notes from left to right in the requested direction, ending an octave from the first note: eight notes in
 all. In **Motion**, choose Ascending or Descending. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
-do not move as you add more. Any octave will do, as long as the whole scale is in the same one.
+do not move as you add more. With **Octave** off, choose any starting octave that leaves room for all eight notes.
 
 You never have to click the staff. **Higher**, **Lower**, **Octave ↑** and **Octave ↓** under it move the next note, the sign
 buttons choose its sign, and **Place note** puts it in the next place; the same things are on the keys (see
@@ -338,7 +348,7 @@ The settings are kept apart from those of the other exercises.
 
 ### Starting in the right octave
 
-By default any octave will do, as long as all eight notes are in the same one, and the scale is named without an octave,
+By default the first and last notes must be an octave apart, and the scale is named without a starting octave,
 such as "G Major". With **Octave** on, the name says which octave the first note is in, such as "G2 Major" or "B♭4 minor",
 using the same numbers as note names everywhere in Alto (middle C is C4). The scale then has to be placed there: the right
 notes an octave higher or lower are wrong.

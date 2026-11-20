@@ -86,7 +86,10 @@ load. `Learner.pick` handles an unreadable payload by skipping it, which is a sa
 
 A shipped database has users' history in it, so the structure cannot just change. A **migration** is a script that takes a
 database from one version to the next. SQLite has a built-in integer for this, the **`user_version` pragma**, which belongs to
-the application and which SQLite does not otherwise use. Version 2 adds the profile’s scheduler, practice cards and review schedules. Version 3 adds daily limits, completed review counts, and the status of unfinished introductions. Alto applies missing migrations in order within one transaction. Review counts start when the database is upgraded. The migration copies existing question identities into `practice_cards`, so learners can review questions they have already practiced.
+the application and which SQLite does not otherwise use. Alto applies missing migrations in order within one transaction.
+When a 0.0.1 database is opened in 0.0.2, its profiles, answers, and question history are preserved. SM-2 and FSRS start
+with a fresh review queue. Eligible earlier answers can still contribute to response-time grading. Schema version 7 records
+each profile’s grading thresholds and whether an answer’s timing is usable.
 
 ## What each `Database` method is for
 
@@ -160,10 +163,7 @@ into a clean install through the real window.
 
 ## Privacy
 
-A profile's name is only a label, kept in the local database. A network call, analytics or an account is a decision to make
-deliberately, and to describe where users will look. The one network feature today is the menu's **Check for updates…**
-(`alto/ui/update_flow.py`), which runs only when the user chooses it and is described in
-[Getting started]({{ '/getting-started/' | relative_url }}).
+Profiles and practice history stay in the local database. On supported installations, Alto checks GitHub for a published release up to once a day while the main grid is active. The request does not include profile names or practice records. Turn off automatic checks in **Settings → Updates**, or check manually with **Tools → Check for updates…**. [Updating Alto]({{ '/getting-started/' | relative_url }}#updating-alto)
 
 ## Words to search for
 

@@ -108,11 +108,10 @@ Things to notice:
 
 ## Calibrating `par_seconds`
 
-`par_seconds` is the time a fluent person takes to answer correctly the *first* time. The scheduler rewards answers at half par
-or faster and penalises answers over four times par. Too small and everything looks slow, so strain rises for everyone; too large
-and nothing is ever rewarded. A good method: answer fifty questions yourself in a row, at the speed you would call "fluent", and
-take the median of your answer times (the statistics page shows the median per exercise). The existing exercises run from 3 seconds
-(naming a note) to 9 (naming an arpeggio's type and inversion); scale spelling is 8. See [Spaced repetition]({{ '/guide/spaced-repetition/' | relative_url }}).
+`par_seconds` estimates how long a fluent first answer takes. ASRS uses it to adjust a question’s strain. To estimate par
+for a new exercise, answer fifty questions at a fluent pace and check the median first-answer time in Statistics.
+Alto uses 3 seconds for Note Identification, 8 seconds for Interval Construction, and 25 seconds for Scale Construction.
+The full table appears under [Response time]({{ '/practice/' | relative_url }}#response-time).
 
 ## Adding settings to an exercise
 

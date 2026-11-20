@@ -126,8 +126,8 @@ To switch to someone else, or add another profile, open the menu (☰) and choos
 ## Your first session
 
 1. Click an exercise on the home screen.
-2. Answer by clicking a button, or by pressing the number key shown in its tooltip.
-3. A correct answer turns green and plays the note. A wrong one turns red. Try again until you get it.
+2. Follow the prompt. Click an answer button or use the shortcut in its tooltip. For a construction question, place the requested note or sign.
+3. A correct answer turns green. With the default scheduler, try a missed question again. With SM-2 or FSRS, a miss moves the card to the learning queue for a later retry.
 4. The counter at the top shows how many you have right and your current streak.
 
 The **Exercises / Lessons** control at the top left selects what to browse. Alto starts with tiles. **Navigation Pane**

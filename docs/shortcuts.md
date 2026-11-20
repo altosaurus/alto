@@ -7,7 +7,7 @@ permalink: /shortcuts/
 
 ## Keyboard
 
-Every exercise can be answered without the mouse. When you choose an exercise from the list, the keyboard goes to it,
+For keyboard practice in Notation Identification, select **Question Type → Answer Button**. When you choose an exercise from the list, the keyboard goes to it,
 so its keys work at once. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> move between the buttons, and
 <kbd>Space</kbd> presses the one that has the focus. Hover over any button to see its key.
 
@@ -26,7 +26,7 @@ With scale-degree answers, digits name the degrees. In a bank with more than nin
 or <kbd>Ctrl</kbd> for a flat; add <kbd>Alt</kbd> as well for a double sharp or double flat. The octave row uses
 <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>, <kbd>F</kbd> and so on, as shown on its buttons.
 
-### Placing notes on the staff (Note Construction and Scale Construction)
+### Staff placement in Note, Interval, and Scale Construction
 
 Clicking the staff is never needed. A pale note, the **caret**, shows the note that would be placed, and the line under the
 staff says what comes next, in words that a screen reader can read.
@@ -40,6 +40,8 @@ staff says what comes next, in words that a screen reader can read.
 | <kbd>+</kbd> <kbd>-</kbd> <kbd>0</kbd>    | ♯ ♭ ♮            | Choose a sharp, a flat or a natural for the next note.                                                  |
 | <kbd>Return</kbd>                         | Place note          | Place the note at the caret.                                                                            |
 | <kbd>Backspace</kbd>                      | Undo                | Scale Construction: take back the last note or step.                                                    |
+
+Interval Construction also accepts <kbd>Ctrl</kbd>+<kbd>-</kbd> for a double flat and <kbd>Ctrl</kbd>+<kbd>+</kbd> for a double sharp.
 
 Once all the notes of a scale are placed, and the **Steps** setting is on, the same keys mark the steps:
 
@@ -84,7 +86,7 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 
 | Action                        | Where                                                        | What it does                                                                             |
 |-------------------------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| Click the staff               | Note Construction, Scale Construction                        | Place the note.                                                                          |
+| Click the staff               | Note, Interval, and Scale Construction                        | Place the note.                                                                          |
 | Right-click the staff         | Note Construction, Scale Construction                         | Step through no sign, sharp, flat and natural.                                           |
 | Turn the wheel over the staff | Scale Construction                                           | Step through the signs while notes are placed, then switch between whole and half steps. |
 | Double-click a row            | Database: Answers or Questions                               | Preview that question.                                                                   |
@@ -95,5 +97,6 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 ## The menu
 
 Open the ☰ menu at the top left for **Profile**, **Settings…**, **Tools**, **Help**, **Restart**, or **Quit**.
+Under **Help**, **About** shows the installed version and development status. **Report an issue** opens Alto’s GitHub issues page.
 Under **Tools**, choose **Import backup…**, **Export backup…**, **Anki Exporter**, or **Check for updates…**.
 For deck selection, scheduling, and import instructions, see [Anki decks]({{ '/data/' | relative_url }}#anki-decks).
