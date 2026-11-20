@@ -39,17 +39,17 @@ On the first launch, the main window opens to the exercise tiles. The toolbar an
 
 Choosing **Note Identification** calls `MainWindow.open_exercise()`. It opens an `ExerciseView` for the exercise and connects it to the active learner. The staff is a separate widget. When tracing a misplaced note, start with `StaffWidget`. For a click on an answer button, start with `ExerciseView`.
 
-{% include component-shot.html screen="note-identification" width=1100 height=720 alt="Note Identification with the exercise list on the left, a treble staff, and letter answers." %}
+{% include component-shot.html screen="note-identification" width=1100 height=720 alt="Note Identification with the exercise list on the left and a note on the staff above the letter buttons." %}
 
 ### Lesson catalog and reader
 
 The graduation-cap button switches the catalog to lessons. `HomePage` uses a `TileCard` for each lesson and emits the lesson’s key when the learner selects it.
 
-{% include component-shot.html screen="lesson-tiles" width=1100 height=768 alt="The lesson catalog with Pitches and Notes, Clef Basics, Intervals, and other lesson tiles." %}
+{% include component-shot.html screen="lesson-tiles" width=1100 height=720 alt="The lesson catalog with Pitches and Notes, Clef Basics, Intervals, and other lesson tiles." %}
 
 Opening **Pitches and Notes** puts the lesson outline on the left. On the right, `LessonsPage` supplies **Leave lesson** and **Start over**. Inside it, `LessonView` tracks the current step and `StepView` displays that step’s text, example, and question.
 
-{% include component-shot.html screen="lesson-workspace" width=1100 height=768 alt="Pitches and Notes open to its first step, with the outline, sound example, and knowledge check." %}
+{% include component-shot.html screen="lesson-workspace" width=1100 height=720 alt="Pitches and Notes open to its first step, with the outline, sound example, and knowledge check." %}
 
 ### Glossary
 
@@ -73,7 +73,7 @@ The [Database chapter]({{ '/developer-guide/database/' | relative_url }}) diagra
 
 Double-clicking an answer opens a separate `QuestionPreview` dialog. It recreates the question from the saved record. This chord example has a `StaffWidget` above the answer and timing details.
 
-{% include component-shot.html screen="question-preview" width=560 height=518 alt="A saved Chord Quality question with its staff, correct answer, and recorded response time." %}
+{% include component-shot.html screen="question-preview" width=560 height=519 alt="A saved Chord Quality question with its staff, correct answer, and recorded response time." %}
 
 ### Application settings
 

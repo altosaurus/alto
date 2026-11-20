@@ -147,6 +147,8 @@ To revisit a skipped release, choose **Tools → Check for updates…**. To stop
 
 **Follow the main branch** switches manual checks to the latest commit for copies installed with the install script. Automatic release checks pause on that channel. Packaged copies always follow releases. See [Getting started]({{ '/getting-started/' | relative_url }}).
 
+{% include shot.html src="settings-updates.png" alt="The Updates settings page with automatic daily checks enabled and Follow the main branch unchecked." %}
+
 ### Practice
 
 Select a scheduler for the current profile. With **SM-2** or **FSRS**, you can set daily limits and choose whether to grade correct answers yourself.

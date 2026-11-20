@@ -101,6 +101,7 @@ SHOTS = (
     "question-preview",
     "settings",
     "settings-sound",
+    "settings-updates",
 )
 
 
@@ -471,6 +472,9 @@ def capture(
     dialog.instruments.select("viola_bowed")
     wait(200)
     save(dialog, name="settings-sound", width=1000)
+    if "settings-updates" in names:
+        dialog.categories.setCurrentItem(dialog.categories.findItems("Updates", Qt.MatchFlag.MatchExactly)[0])
+        save(dialog, name="settings-updates")
     if "practice-settings" in names:
         learner.set_self_grading(True)
         learner.calendar.set_limits(learner.profile.id, new_cards=10, reviews=UNLIMITED)

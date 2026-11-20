@@ -137,7 +137,8 @@ Alto is installed from source today. When you want to cut a release:
 2. **Make sure the checks pass on a clean checkout**, in CI, on all Python versions.
 3. **Migrations.** If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
    copy `alto.db` first.
-4. **Regenerate** screenshots and the API pages, and check [Your data]({{ '/data/' | relative_url }}) is still true.
+4. Refresh and review the screenshots in both themes using the [pre-release checklist]({{ '/development/' | relative_url }}#pre-release-checklist).
+   Regenerate the API pages and check that [Your data]({{ '/data/' | relative_url }}) is current.
 5. **Update the license notices** in `THIRD_PARTY_NOTICES.md` if you added fonts or recordings, and check their licenses allow
    redistribution.
 6. **Build** the package: `python -m pip install build` then `python -m build` produces a source distribution and a wheel in `dist/`.
