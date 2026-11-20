@@ -60,6 +60,7 @@ from alto.ui.glossary import GlossaryPage
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import ProfileDialog
 from alto.ui.question_preview import QuestionPreview
+from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.stats_dialog import StatsPage
 from alto.ui.store import store
 from alto.ui.theme import apply_theme
@@ -92,6 +93,7 @@ SHOTS = (
     "self-grading",
     "waiting-for-review",
     "practice-settings",
+    "response-times",
     "anki-exporter",
     "anki-export-summary",
     "database-questions",
@@ -480,6 +482,11 @@ def capture(
         learner.calendar.set_limits(learner.profile.id, new_cards=10, reviews=UNLIMITED)
         dialog.categories.setCurrentItem(dialog.categories.findItems("Practice", Qt.MatchFlag.MatchExactly)[0])
         save(dialog, name="practice-settings")
+    if "response-times" in names:
+        distribution = ResponseTimeDialog(learner, parent=window, exercise="NoteNames")
+        distribution.show()
+        save(distribution, name="response-times")
+        distribution.close()
     dialog.close()
 
     if {"lesson-tiles", "lesson-workspace", "glossary"}.intersection(names):

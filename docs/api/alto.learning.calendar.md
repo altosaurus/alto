@@ -491,6 +491,7 @@ def passing_intervals(
     key: str,
     mode: str,
     now: float,
+    displayed: dict[Rating, ReviewInterval] | None = None,
 ) -> dict[Rating, ReviewInterval]
 ```
 
@@ -502,7 +503,8 @@ Preview the three passing outcomes from one snapshot of this card.
 - `profile` (*int*): Active profile.
 - `key` (*str*): Card identity.
 - `mode` (*str*): Calendar scheduler.
-- `now` (*float*): Time of the correct answer.
+- `now` (*float*): Presentation or answer timestamp.
+- `displayed` (*dict or None*): Previously displayed outcomes to reuse while this card's schedule is current.
 
 **Returns**
 
@@ -541,7 +543,7 @@ Reschedule a card from the first submission to this presentation.
 - `key` (*str*): Stable card identity.
 - `mode` (*str*): Scheduler selected for this review.
 - `correct` (*bool*): Whether the first submission was correct.
-- `manual_rating` (*Rating or None*): Button grade or automatic Again in self-grading mode. None uses the automatic schedule.
+- `manual_rating` (*Rating or None*): Explicit grade from a button or response time. None uses the original automatic schedule.
 - `now` (*float*): Answer timestamp.
 - `preview` (*ReviewInterval or None*): Correct-answer interval shown for this presentation.
 

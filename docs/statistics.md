@@ -16,6 +16,8 @@ profile's own answers. Use **← Back** or <kbd>Esc</kbd> to return to the page 
 
 {% include shot.html src="stats.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" caption="Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day." %}
 
+Choose **Response-time distribution…** below the speed chart to see the recent times used for automatic grading. The tool opens on the selected exercise and uses its latest 100 eligible answers across timeframes. [Response-time grading]({{ '/practice/' | relative_url }}#response-time-grading).
+
 ### What you see
 
 - **Summary tiles:** questions answered, how often the first answer was right, the typical time to a first answer,
