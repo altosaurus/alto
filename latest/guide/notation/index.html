@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rendering music notation · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/notation/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Rendering music notation · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/notation/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><details class="nav-section" open>
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -495,7 +615,7 @@ Western Music Notation</strong>, abbreviated <strong>CWMN</strong>.</p>
 “this is G above middle C”. A bass clef puts F below middle C on the second line from the top. A C clef says “middle C is
 here” and can sit on any line (alto, tenor, soprano, mezzo-soprano, and the baritone variants).</li>
   <li>The <strong>key signature</strong> is the group of sharps or flats after the clef.</li>
-  <li>A <strong>note</strong> has a <strong>notehead</strong> (filled, open or breve), usually a <strong>stem</strong>, and for short notes <strong>flags</strong>. Accidentals (sharp,
+  <li>A <strong>note</strong> has a <strong>notehead</strong> (filled, open or double whole), usually a <strong>stem</strong>, and for short notes <strong>flags</strong>. Accidentals (sharp,
 flat, natural) go in front of the head.</li>
   <li><strong>Ledger lines</strong> are short extra lines for notes above or below the staff.</li>
   <li>The <strong>grand staff</strong> joins a treble and a bass staff with a <strong>brace</strong>.</li>
@@ -621,7 +741,7 @@ font’s metadata: line, stem and ledger thickness and the stem anchors.</p>
 taken once at 100 pixels to the em (so one staff space is 25 units) and cached with <code class="language-plaintext highlighter-rouge">@cache</code>.</li>
   <li>The code works out where the glyph’s <strong>origin</strong> belongs and moves and scales the outline there: <code class="language-plaintext highlighter-rouge">_place</code> builds a
 <code class="language-plaintext highlighter-rouge">QTransform</code> that translates to the position and scales by <code class="language-plaintext highlighter-rouge">gap / 25</code>.</li>
-  <li>The outline is <strong>filled</strong> with the current colour.</li>
+  <li>The outline is <strong>filled</strong> with the current color.</li>
 </ol>
 
 <p>Why not simply call <code class="language-plaintext highlighter-rouge">drawText</code>? Because text drawing positions glyphs by the font’s advance widths and snaps to the pixel grid
@@ -632,8 +752,8 @@ fractions of a pixel, and the same code scales to any size.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># alto/ui/engraving.py: draw_note, simplified
 </span><span class="n">left</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ink</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"noteheadBlack"</span><span class="p">)</span>  <span class="c1"># the head's ink box, in staff spaces
-</span><span class="n">ox</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gap</span>  <span class="c1"># centre the drawn head on x
-</span><span class="n">_fill</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">_place</span><span class="p">(</span><span class="n">_outline</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"noteheadBlack"</span><span class="p">),</span> <span class="n">x</span><span class="o">=</span><span class="n">ox</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">),</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">)</span>
+</span><span class="n">ox</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gap</span>  <span class="c1"># center the drawn head on x
+</span><span class="n">_fill</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">_place</span><span class="p">(</span><span class="n">_outline</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"noteheadBlack"</span><span class="p">),</span> <span class="n">x</span><span class="o">=</span><span class="n">ox</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span> <span class="o">=</span> <span class="n">_anchor</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"noteheadBlack"</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s">"stemUpSE"</span><span class="p">)</span>  <span class="c1"># where an up-stem attaches
 </span><span class="n">thick</span> <span class="o">=</span> <span class="n">_metrics</span><span class="p">(</span><span class="n">font</span><span class="p">)[</span><span class="s">"stem"</span><span class="p">]</span> <span class="o">*</span> <span class="n">gap</span>  <span class="c1"># stem width from the font
@@ -692,9 +812,9 @@ setting looks the same as in a question.</p>
 <span class="n">p</span><span class="p">.</span><span class="n">setRenderHint</span><span class="p">(</span><span class="n">QPainter</span><span class="p">.</span><span class="n">RenderHint</span><span class="p">.</span><span class="n">Antialiasing</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">p</span><span class="p">.</span><span class="n">drawLine</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="n">gap</span><span class="p">,</span> <span class="mi">280</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="n">gap</span><span class="p">)</span>
-<span class="n">engraving</span><span class="p">.</span><span class="n">draw_clef</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="n">engraving</span><span class="p">.</span><span class="n">draw_clef</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
 <span class="n">engraving</span><span class="p">.</span><span class="n">draw_note</span><span class="p">(</span>
-    <span class="n">p</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="n">gap</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 <span class="n">p</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
 <span class="n">image</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">"/tmp/notation-example.png"</span><span class="p">)</span>
@@ -704,7 +824,7 @@ setting looks the same as in a question.</p>
 
 <h2 id="adding-a-notation-font">Adding a notation font</h2>
 
-<p>The steps are in <a href="/alto/latest/development/">For developers</a>. In outline: put the <code class="language-plaintext highlighter-rouge">.otf</code> and its licence in
+<p>The steps are in <a href="/alto/latest/development/">For developers</a>. In outline: put the <code class="language-plaintext highlighter-rouge">.otf</code> and its license in
 <code class="language-plaintext highlighter-rouge">alto/assets/fonts/</code>, add its numbers to <code class="language-plaintext highlighter-rouge">engraving.json</code> from the font’s SMuFL metadata, register the file in <code class="language-plaintext highlighter-rouge">_FILES</code>, and add
 a <code class="language-plaintext highlighter-rouge">NotationStyle</code>. Fonts without full SMuFL metadata may need the fallback numbers in <code class="language-plaintext highlighter-rouge">_anchor</code>. The test suite draws every style
 and checks that something appears (<code class="language-plaintext highlighter-rouge">tests/test_rendering.py</code>). Look at the result by eye too: a wrong anchor still draws, just
@@ -788,22 +908,6 @@ notes, pitches and intervals in code.</li>
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/guide/styling/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Styling beyond QtWidgets</span></a>
             <a class="next" href="/alto/latest/guide/audio/" rel="next"><span class="np-label">Next</span><span class="np-title">Computer audio<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -820,7 +924,7 @@ notes, pitches and intervals in code.</li>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -868,8 +972,8 @@ notes, pitches and intervals in code.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.staff · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.staff/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.staff · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.staff/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -548,48 +668,6 @@ True
 (('F', 6), ('C', 0))
 </code></pre>
 
-<h2 id="key_signature_positions">key_signature_positions</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_signature_positions</span><span class="p">(</span>
-    <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">sign</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the notes the sharps or flats of a key signature are written on, in a clef.</p>
-
-<p>Each accidental is a fourth up or a fifth down from the one before (sharps: F C G D A E B, flats: B E A D G C F), and the
-pattern is chosen so that all seven stay on the staff, or one step above or below it. This gives the usual signatures for
-the treble, bass, alto and tenor clefs, and works out the rest.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): A key of <code class="language-plaintext highlighter-rouge">BOTTOM_LINE</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">sign</code> (<em>int</em>): 1 for sharps, -1 for flats. Keyword-only.</li>
-</ul>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: Seven note names with octaves, in the order the accidentals appear.</li>
-</ul>
-
-<p><strong>Raises</strong></p>
-
-<ul>
-  <li><em>ValueError</em>: If no placement keeps all seven accidentals on the staff.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; key_signature_positions("treble", sign=1)
-['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
-&gt;&gt;&gt; key_signature_positions("bass", sign=-1)
-['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
-</code></pre>
-
 <h2 id="draw_key_signature">draw_key_signature</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_key_signature</span><span class="p">(</span>
@@ -618,7 +696,7 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
   <li><code class="language-plaintext highlighter-rouge">x</code> (<em>float</em>): The left edge of the first accidental, in pixels. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">bottom</code> (<em>float</em>): The y position of the staff’s bottom line, in pixels. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">gap</code> (<em>float</em>): The distance between staff lines, in pixels. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): The colour to draw in. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): The color to draw in. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">step</code> (<em>float, default KEY_STEP</em>): The horizontal spacing between accidentals. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">size</code> (<em>float, default 2.0</em>): The size of the built-in characters, in staff gaps. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">font</code> (<em>str or None, default None</em>): A SMuFL font to engrave them in; None uses the built-in sharp and flat characters. Keyword-only.</li>
@@ -637,6 +715,41 @@ True
 True
 </code></pre>
 
+<h2 id="draw_signature_sign">draw_signature_sign</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">draw_signature_sign</span><span class="p">(</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">QPainter</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">sign</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">QColor</span><span class="p">,</span>
+    <span class="n">step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">KEY_STEP</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">font</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Draw one sharp or flat at its written position in a key signature.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">p</code> (<em>QPainter</em>): Active staff painter.</li>
+  <li><code class="language-plaintext highlighter-rouge">sign</code> (<em>int</em>): Sharp (1) or flat (-1).</li>
+  <li><code class="language-plaintext highlighter-rouge">x, y</code> (<em>float</em>): Left edge and staff pitch position in pixels.</li>
+  <li><code class="language-plaintext highlighter-rouge">gap</code> (<em>float</em>): Distance between staff lines.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor</em>): Ink for this sign.</li>
+  <li><code class="language-plaintext highlighter-rouge">step, size</code> (<em>float</em>): Slot width in pixels and built-in glyph size in staff gaps.</li>
+  <li><code class="language-plaintext highlighter-rouge">font</code> (<em>str or None</em>): SMuFL font, or None for the built-in notation.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Both the printed signature and signs placed by the learner use this drawing.
+</code></pre>
+
 <h2 id="staffwidget">StaffWidget</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffWidget</span><span class="p">(</span>
@@ -648,6 +761,7 @@ True
     <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.0</span><span class="p">,</span>
     <span class="n">compact</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">max_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">lesson_layout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -666,10 +780,11 @@ True
   <li><code class="language-plaintext highlighter-rouge">max_step</code> (<em>float or None</em>): The most width each column of notes may take.</li>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef being drawn (“treble”, “bass”, “alto”, “tenor”, “soprano”, “mezzo”, “baritone” or “grand”).</li>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>list of list of Note</em>): The notes drawn; each inner list is one chord or note.</li>
-  <li><code class="language-plaintext highlighter-rouge">note_color</code> (<em>QColor or None</em>): The colour of the notes; None draws them in the notation style’s ink.</li>
-  <li><code class="language-plaintext highlighter-rouge">column_colors</code> (<em>dict of int to QColor</em>): The colour of particular columns of notes, by position from 0; they are drawn in these instead of <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_voices</code> (<em>bool</em>): Draw harmonic interval endpoints with their written duration and opposing stems.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_color</code> (<em>QColor or None</em>): Feedback color for the highlighted notation component, or for the notes in other exercises.</li>
+  <li><code class="language-plaintext highlighter-rouge">column_colors</code> (<em>dict of int to QColor</em>): The color of particular columns of notes, by position from 0; they are drawn in these instead of <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">wedges</code> (<em>list of str</em>): The step between each column and the next, such as “W” or “H”, drawn as two lines rising from the notes to a point above them, with the letter over the point; “” for none there.</li>
-  <li><code class="language-plaintext highlighter-rouge">wedge_colors</code> (<em>dict of int to QColor</em>): The colour of particular wedges, by position from 0. The others take the colour of the note on their right, or <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">wedge_colors</code> (<em>dict of int to QColor</em>): The color of particular wedges, by position from 0. The others take the color of the note on their right, or <code class="language-plaintext highlighter-rouge">note_color</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">notation_style</code> (<em>NotationStyle or None</em>): A style to use instead of the one chosen in the settings.</li>
   <li><code class="language-plaintext highlighter-rouge">clef_hidden</code> (<em>bool</em>): Draw the staff without its clef, for a clef the learner places.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): The key signature drawn: sharps if positive, flats if negative.</li>
@@ -700,6 +815,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">margin</code> (<em>float, default 8.0</em>): The space kept above and below the staff for ledger lines, in gaps. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">compact</code> (<em>bool, default False</em>): Size the widget to fit instead of the 220 px default. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">max_step</code> (<em>float or None, default None</em>): The most width each column of notes may take: the staff then stops growing once its notes would be spread wider than that, so a few notes stay easy to read in a wide window. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">lesson_layout</code> (<em>bool, default False</em>): Space the excerpt by its printed symbols and wrap at note or chord boundaries. Keyword-only.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
@@ -717,6 +833,9 @@ True
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">notation_target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">locate_notation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">notation_excerpt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -728,8 +847,11 @@ True
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>list of list of Note</em>): The notes: each inner list is one note or chord, drawn left to right.</li>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str, default “treble”</em>): The clef, or “grand” for a grand staff. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (stems are only drawn for single notes). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The written duration for single notes and interval voices. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text to write under the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_target</code> (<em>tuple of (str, int) or None</em>): Part and position to highlight in a notation question. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_excerpt</code> (<em>str or None</em>): Versioned score to show for a repertoire question. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">locate_notation</code> (<em>bool, default False</em>): Render the target in ordinary ink for the learner to find. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -747,12 +869,12 @@ True
 
 <p>Return the size the staff would like.</p>
 
-<p>A capped staff asks for its full capped width, so a layout that centres it gives it that much.</p>
+<p>A capped staff asks for its full capped width, so a layout that centers it gives it that much.</p>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>QSize</em>: The capped width and the minimum height for a staff with a <code class="language-plaintext highlighter-rouge">max_step</code>; otherwise Qt’s default.</li>
+  <li><em>QSize</em>: The capped width and minimum height for a lesson or a staff with a <code class="language-plaintext highlighter-rouge">max_step</code>. Other staves use Qt’s default.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -763,17 +885,57 @@ True
 500
 </code></pre>
 
+<h3 id="staffwidgetresizeevent">StaffWidget.resizeEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Reflow a lesson excerpt when its available width changes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QResizeEvent</em>): Previous and current widget size.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget(lesson_layout=True)
+&gt;&gt;&gt; staff.resize(300, staff.height())
+</code></pre>
+
+<h3 id="staffwidgethighlight_column">StaffWidget.highlight_column</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">highlight_column</span><span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Highlight a sounding note or chord, preserving the staff’s other markings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int or None</em>): The sounding column, or None to restore its usual ink.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
+&gt;&gt;&gt; staff.highlight_column(0)
+&gt;&gt;&gt; staff.playback_column
+0
+</code></pre>
+
 <h3 id="staffwidgetset_note_color">StaffWidget.set_note_color</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_note_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">QColor</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw the notes in a colour, for feedback, or back in the style’s ink.</p>
+<p>Apply feedback to the highlighted notation component or to the notes when there is no component target.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The colour; None to use the notation style’s ink.</li>
+  <li><code class="language-plaintext highlighter-rouge">color</code> (<em>QColor or None</em>): The feedback color. None restores the usual ink and highlight colors.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -831,37 +993,69 @@ True
 '#ffffff'
 </code></pre>
 
+<h3 id="staffwidgetmousemoveevent">StaffWidget.mouseMoveEvent</h3>
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QMouseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Preview the component under the pointer in Click on Staff questions.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QMouseEvent</em>): The pointer position relative to the score.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hasMouseTracking()
+False
+</code></pre>
+
+<h3 id="staffwidgetleaveevent">StaffWidget.leaveEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">leaveEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Clear the component preview when the pointer leaves the music.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The pointer leaving the staff.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
+</code></pre>
+
+<h3 id="staffwidgethits_notation">StaffWidget.hits_notation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hits_notation</span><span class="p">(</span><span class="n">point</span><span class="p">:</span> <span class="n">QPoint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Check for target ink within four logical pixels of a click on the score.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">point</code> (<em>QPoint</em>): Click position relative to the staff widget.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: Whether the clicked neighborhood contains the selected marking.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hits_notation(QPoint(0, 0))
+False
+</code></pre>
+
+
           
           
           
@@ -1074,7 +1268,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1122,8 +1316,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

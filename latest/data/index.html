@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your data · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/data/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Your data · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/data/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/" aria-current="page">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -482,6 +602,7 @@
 <ul>
   <li>Alto has no accounts, no sync and no analytics.</li>
   <li>Your name is only a label for a profile in a local file.</li>
+  <li>On supported installations Alto contacts GitHub to check for releases. You can turn off daily checks in <strong>Settings → Updates</strong>.</li>
 </ul>
 
 <h2 id="where-it-is">Where it is</h2>
@@ -511,7 +632,7 @@
   </tbody>
 </table>
 
-<p>To keep a second copy of Alto apart, for example one you are changing while you use the installed one to practise, set
+<p>To keep a second copy of Alto apart, for example one you are changing while you use the installed one to practice, set
 <code class="language-plaintext highlighter-rouge">ALTO_HOME</code> to a folder. Alto then keeps its history in <code class="language-plaintext highlighter-rouge">data/alto.db</code> there and its settings in <code class="language-plaintext highlighter-rouge">config/</code>, and leaves the
 usual places alone. <code class="language-plaintext highlighter-rouge">scripts/dev.sh</code> starts Alto from a clone this way, in <code class="language-plaintext highlighter-rouge">~/.alto-dev</code>.</p>
 
@@ -530,7 +651,7 @@ your usual configuration location.</p>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">profiles</code></td>
-      <td>Each profile’s name and when it was created.</td>
+      <td>Each profile’s name, creation time, scheduler, self-grading preference, and response-time grading thresholds.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">attempts</code></td>
@@ -540,17 +661,90 @@ your usual configuration location.</p>
       <td><code class="language-plaintext highlighter-rouge">items</code></td>
       <td>What is known about each question: its strain, how often it was answered and missed, its typical time, when it was last seen, and the question itself so it can be asked again.</td>
     </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">practice_cards</code></td>
+      <td>Introduced card identities, the questions themselves, and the local date each was introduced in scheduled practice.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">review_schedules</code></td>
+      <td>The next review time and algorithm state for each card studied with SM-2 or FSRS.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">practice_limits</code></td>
+      <td>Daily allowances for each profile and exercise.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">daily_reviews</code></td>
+      <td>Completed calendar reviews by profile, exercise, and day.</td>
+    </tr>
   </tbody>
 </table>
 
 <p>Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
 first. Alto’s own <a href="/alto/latest/statistics/">database browser</a> is read-only.</p>
 
+<h2 id="anki-decks">Anki decks</h2>
+
+<p>Open <strong>☰ → Tools → Anki Exporter</strong> to turn Alto exercises into flashcards you can study in Anki. You can keep
+practicing in Alto while the exporter is open.</p>
+
+<h3 id="deck-selection-and-preview">Deck selection and preview</h3>
+
+<p>Check the exercises you want to export. Checking a category selects every exercise in it. Choose <strong>All exercises</strong> to
+select the whole list. Clicking an exercise name displays a sample card, even if its box is unchecked. <strong>Front</strong>
+shows the question and its illustration, when there is one. <strong>Back</strong> adds the answer and explanation.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/anki-exporter.png" alt="Anki Exporter with Note Identification and Interval Identification checked and an interval card in the preview." loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/anki-exporter-dark.png" alt="Anki Exporter with Note Identification and Interval Identification checked and an interval card in the preview." loading="lazy" />
+  
+</figure>
+
+<p>The settings button in the upper right opens the highlighted exercise’s options. These start with your current
+practice settings. Changes you make here apply only to the export. For example, you can narrow an Interval
+Identification deck to thirds and sixths and keep practicing all intervals in Alto. Exercises with a fixed set of
+cards export every matching card. Exercises that generate a sample of questions export each distinct card in that sample.</p>
+
+<h3 id="review-scheduling">Review scheduling</h3>
+
+<p>By default, exported cards start as new in Anki. If your Alto profile uses SM-2 or FSRS, check <strong>Include scheduling</strong>
+to carry over due dates and intervals for matching cards you’ve already reviewed. The exporter uses the schedule
+from when you opened the window. Cards you haven’t studied start as new.</p>
+
+<h3 id="export-summary-and-file">Export summary and file</h3>
+
+<p>Choose <strong>Export…</strong> to see how many cards match. The table groups decks by exercise type. Each group starts expanded.
+A row marked <strong>No cards</strong> is skipped. The total below the table is the number of cards in the package.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/anki-export-summary.png" alt="Export summary with separate Notation and Intervals groups, a card count for each deck, and a total below the table." loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/anki-export-summary-dark.png" alt="Export summary with separate Notation and Intervals groups, a card count for each deck, and a total below the table." loading="lazy" />
+  
+</figure>
+
+<p>Use <strong>Browse…</strong> to choose a destination or enter a path in <strong>File name</strong>. A filename alone saves to your home
+directory. The suggested name is <code class="language-plaintext highlighter-rouge">alto.apkg</code> for multiple exercises or, for a single exercise, a name such as
+<code class="language-plaintext highlighter-rouge">alto - Interval Identification.apkg</code>.</p>
+
+<p>Click <strong>Export</strong> to save. A spinner marks the deck being prepared and a green check marks each finished deck.
+The progress bar tracks the whole package, including the final save. To stop, click <strong>Cancel</strong> and confirm.
+Canceling preserves any existing file at the destination. When the status reads <strong>Export successful</strong>, click
+<strong>Close</strong> to return to the exporter.</p>
+
+<h3 id="import-into-anki">Import into Anki</h3>
+
+<p>Open the saved <code class="language-plaintext highlighter-rouge">.apkg</code> file in Anki. If you exported schedules, enable <strong>Import any learning progress</strong> during
+import to keep the review dates and intervals. Anki schedules subsequent reviews independently of Alto.</p>
+
+<p>A package containing one nonempty deck places it directly under <strong>Alto</strong>. With several nonempty decks, Anki
+groups them by Alto’s exercise categories, for example <strong>Alto → Intervals → Interval Identification</strong> and
+<strong>Alto → Notation → Note Identification</strong>. Exporting the same question again preserves its card identity.</p>
+
 <h2 id="backing-up-and-restoring">Backing up and restoring</h2>
 
-<p>Open the menu (☰) and choose <strong>Export backup…</strong> to save everything Alto keeps to one file: all the profiles, every answer
+<p>Open the ☰ menu and choose <strong>Tools</strong> → <strong>Export backup…</strong> to save everything Alto keeps to one file: all the profiles, every answer
 and the record of each question, and every setting (the theme, the notation and keyboard styles, the instrument, each
-exercise’s options and the profile you used last). Choose <strong>Import backup…</strong> to read one back.</p>
+exercise’s options and the profile you used last). Choose <strong>Tools</strong> → <strong>Import backup…</strong> to read one back.</p>
 
 <p>Importing <strong>replaces everything</strong> with the backup, so on a clean install, or on another computer, Alto comes up exactly as it
 was when the backup was made: same profiles, same history, same settings, and the same profile open. Nothing is merged. What
@@ -598,21 +792,6 @@ up to date as it is imported.</li>
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/shortcuts/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Shortcuts</span></a>
             <a class="next" href="/alto/latest/development/" rel="next"><span class="np-label">Next</span><span class="np-title">For developers<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -629,7 +808,7 @@ up to date as it is imported.</li>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -677,8 +856,8 @@ up to date as it is imported.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

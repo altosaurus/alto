@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.exercises.library · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.exercises.library · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.library/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -487,7 +607,7 @@ the exercises to the home screen.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises import REGISTRY
 &gt;&gt;&gt; [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Identification', 'Note Construction']
+['Note Identification', 'Keyboard Note Identification', 'Note Construction']
 </code></pre>
 
 <h2 id="notenames">NoteNames</h2>
@@ -495,7 +615,7 @@ the exercises to the home screen.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">Exercise</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ChoiceExercise</code></p>
 
 <p>Name the note shown on a staff.</p>
 
@@ -522,9 +642,9 @@ the exercises to the home screen.</p>
 True
 </code></pre>
 
-<h3 id="notenamessettings_signature">NoteNames.settings_signature</h3>
+<h3 id="notenamespractice_signature">NoteNames.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -560,9 +680,9 @@ True
 True
 </code></pre>
 
-<h3 id="notenamesgenerate">NoteNames.generate</h3>
+<h3 id="notenamesmake_question">NoteNames.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a note to name, on one of the chosen clefs, in a chosen key.</p>
@@ -586,24 +706,94 @@ True
 True
 </code></pre>
 
+<h3 id="notenamescard_count">NoteNames.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count written pitches across the selected ranges, clefs and signatures.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Each staff position contributes one spelling, or three when accidentals are enabled.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().card_count() &gt; 0
+True
+</code></pre>
+
+<h3 id="notenamesdaily_candidates">NoteNames.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Visit each selectable written note once, in shuffled order.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source of the daily order and answer choices.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A distinct question within the selected clefs, ranges and keys.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
+True
+</code></pre>
+
+<h3 id="notenamesreview_question">NoteNames.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Rebuild a previously seen note when its pitch and answer are eligible.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Saved note and answer.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether its original settings are active.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The note with the current answer bank, or None outside the selected material.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteNames()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 <h2 id="intervalnames">IntervalNames</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Name the interval between two notes, up to an octave.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">QUALITIES</code> (<em>dict of int to str</em>): For each interval number, the qualities that can occur, separated by spaces.</li>
-</ul>
+<p>Name the interval between two written notes.</p>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(3))
-&gt;&gt;&gt; len(q.staff), q.answer in q.choices
-(2, True)
+&gt;&gt;&gt; [len(chord) for chord in q.staff], q.answer in q.choices
+([2], True)
 </code></pre>
 
 <h3 id="intervalnamesinstructions">IntervalNames.instructions</h3>
@@ -623,6 +813,51 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; "quality followed by a number" in IntervalNames().instructions()
 True
+</code></pre>
+
+<h3 id="intervalnamessettings_signature">IntervalNames.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the settings used to generate and grade the interval.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The stored-question review signature.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Harmonic" in IntervalNames().settings_signature()
+True
+</code></pre>
+
+<h3 id="intervalnamesrefresh">IntervalNames.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Arrange written interval answers by quality, with interval numbers in columns.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): A new or saved interval question.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The same answer choices in reading order. Perfect and major share a row.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
+&gt;&gt;&gt; IntervalNames().refresh(q).choices
+['A3', 'M3', 'P4', 'm3', 'd3']
 </code></pre>
 
 <h3 id="intervalnamesgenerate">IntervalNames.generate</h3>
@@ -651,9 +886,167 @@ True
 True
 </code></pre>
 
+<h2 id="intervalconstruction">IntervalConstruction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Place a second written note at the requested interval from a given note.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalConstruction().generate(random.Random(2))
+&gt;&gt;&gt; q.construct is not None and q.check_placed(q.construct)
+True
+</code></pre>
+
+<h3 id="intervalconstructioninstructions">IntervalConstruction.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain staff placement and spelling for interval construction.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Instructions for mouse and keyboard input.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">The reference describes the difference between melodic and harmonic placement.
+</code></pre>
+
+<h3 id="intervalconstructionsettings_signature">IntervalConstruction.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the construction settings used to generate a stored card.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Stable signature of the exercise options.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A change in staff ranges changes which stored questions are eligible.
+</code></pre>
+
+<h3 id="intervalconstructiongenerate">IntervalConstruction.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Generate a staff, an interval prompt, and its eligible placements.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Generator for the presentation.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: Written interval to construct.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A harmonic question asks for a note above its starting note.
+</code></pre>
+
+<h2 id="keyboardintervals">KeyboardIntervals</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardIntervals</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Identify the ascending interval between two highlighted piano keys.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">INTERVALS</code> (<em>tuple of str</em>): Conventional names for every distance on the piano, including compound intervals and combined tritone answers.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardIntervals().generate(random.Random(5))
+&gt;&gt;&gt; len(q.keyboard_notes), q.answer in q.choices, q.staff
+(2, True, [])
+</code></pre>
+
+<h3 id="keyboardintervalssettings_signature">KeyboardIntervals.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the keyboard range and selected intervals for stored-question reviews.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The settings that determine which questions can be asked.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; bool(KeyboardIntervals().settings_signature())
+True
+</code></pre>
+
+<h3 id="keyboardintervalsinstructions">KeyboardIntervals.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to identify an interval from two highlighted keys.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: HTML explaining interval names and enharmonic ambiguity on the keyboard.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "A4 / d5" in KeyboardIntervals().instructions()
+True
+</code></pre>
+
+<h3 id="keyboardintervalsgenerate">KeyboardIntervals.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Highlight two distinct keys at a selected interval within the chosen range.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The random number generator.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: Two highlighted keys and either a limited number of choices or a fixed bank for every selected interval. A prompt is returned if none are selected.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardIntervals().generate(random.Random(7))
+&gt;&gt;&gt; 1 &lt;= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi &lt;= 12
+True
+</code></pre>
+
 <h2 id="keysignatures">KeySignatures</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeySignatures</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Read a key signature drawn on a staff and name the key it belongs to.</p>
@@ -665,9 +1058,9 @@ True
 True
 </code></pre>
 
-<h3 id="keysignaturessettings_signature">KeySignatures.settings_signature</h3>
+<h3 id="keysignaturespractice_signature">KeySignatures.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -729,9 +1122,9 @@ True
 '_ minor'
 </code></pre>
 
-<h3 id="keysignaturesgenerate">KeySignatures.generate</h3>
+<h3 id="keysignaturesmake_question">KeySignatures.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a key signature to read.</p>
@@ -835,45 +1228,141 @@ True
 True
 </code></pre>
 
-<h2 id="scaledegrees">ScaleDegrees</h2>
+<h2 id="orderofkeys">OrderOfKeys</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleDegrees</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">OrderOfKeys</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Spell a note of a scale or mode from its tonic.</p>
+<p>Write the accidentals of a named key signature in order.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(7))
-&gt;&gt;&gt; q.prompt.startswith("In ") and q.answer in q.choices
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().generate(random.Random(1)).place_signature
 True
 </code></pre>
 
-<h3 id="scaledegreesinstructions">ScaleDegrees.instructions</h3>
+<h3 id="orderofkeyssettings_signature">OrderOfKeys.settings_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the help text for the exercise.</p>
+<p>Identify the selections used to generate a practice question.</p>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>str</em>: Simple HTML.</li>
+  <li><em>str</em>: The original empty signature at the defaults, so earlier questions remain available for review.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "degree" in ScaleDegrees().instructions()
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().settings_signature()
+''
+</code></pre>
+
+<h3 id="orderofkeysinstructions">OrderOfKeys.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to enter and submit a signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The exercise help text.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Undo" in OrderOfKeys().instructions()
 True
 </code></pre>
 
-<h3 id="scaledegreesgenerate">ScaleDegrees.generate</h3>
+<h3 id="orderofkeysgenerate">OrderOfKeys.generate</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
-<p>Make a question asking for one degree of a scale.</p>
+<p>Choose a key from the selected scales and signatures and spell it in a selected clef.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the key, mode, and clef.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The named key and the ordered signs with their exact staff octaves.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = OrderOfKeys().generate(random.Random(2))
+&gt;&gt;&gt; q.show_staff and not q.choices
+True
+</code></pre>
+
+<h2 id="scaleidentification">ScaleIdentification</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ScaleIdentification</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Identify the tonic and type of a scale drawn on a staff.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(7))
+&gt;&gt;&gt; len(q.staff), q.answer in q.choices
+(8, True)
+</code></pre>
+
+<h3 id="scaleidentificationsettings_signature">ScaleIdentification.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the clefs, scale types and staff and scale signatures in force.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The serialized question settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleIdentification().settings_signature().startswith("[")
+True
+</code></pre>
+
+<h3 id="scaleidentificationinstructions">ScaleIdentification.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to identify the scale, including a staff with a different signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Simple HTML help text.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Scale Identification" in ScaleIdentification().instructions()
+True
+</code></pre>
+
+<h3 id="scaleidentificationgenerate">ScaleIdentification.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Draw a one-octave scale and offer scale names without revealing the answer on the staff.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -884,13 +1373,13 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Question</em>: For example ‘In E♭ Dorian, what is scale degree 6?’, answered ‘C’.</li>
+  <li><em>Question</em>: Eight staff notes and a choice of tonic and scale type.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleDegrees().generate(random.Random(8))
-&gt;&gt;&gt; "scale degree" in q.prompt
+<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(8))
+&gt;&gt;&gt; q.staff[0][0].name == q.staff[-1][0].name and not q.caption
 True
 </code></pre>
 
@@ -962,7 +1451,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Question</em>: A blank staff captioned with the scale, such as ‘D Major’; <code class="language-plaintext highlighter-rouge">construct_scale</code> is its eight notes, going up an octave.</li>
+  <li><em>Question</em>: A blank staff captioned with the scale, such as ‘D Major’. The eight notes in the selected direction are stored in <code class="language-plaintext highlighter-rouge">construct_scale</code>.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -977,7 +1466,7 @@ True
 
 <h2 id="circleoffifths">CircleOfFifths</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CircleOfFifths</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Questions on the circle of fifths: a relative major, a relative minor, or the Roman numeral of a chord.</p>
@@ -989,9 +1478,9 @@ True
 True
 </code></pre>
 
-<h3 id="circleoffifthssettings_signature">CircleOfFifths.settings_signature</h3>
+<h3 id="circleoffifthspractice_signature">CircleOfFifths.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1027,9 +1516,9 @@ True
 True
 </code></pre>
 
-<h3 id="circleoffifthsgenerate">CircleOfFifths.generate</h3>
+<h3 id="circleoffifthsmake_question">CircleOfFifths.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Pick a kind of question that is switched on, and ask it.</p>
@@ -1057,7 +1546,7 @@ True
 
 <h2 id="chordqualities">ChordQualities</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChordQualities</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Identify the quality of a triad or seventh chord in root position.</p>
@@ -1088,9 +1577,9 @@ True
 True
 </code></pre>
 
-<h3 id="chordqualitiesgenerate">ChordQualities.generate</h3>
+<h3 id="chordqualitiesmake_question">ChordQualities.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a chord in root position whose quality is to be named.</p>
@@ -1116,7 +1605,7 @@ True
 
 <h2 id="arpeggionames">ArpeggioNames</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArpeggioNames</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Name the type and the inversion of a broken chord.</p>
@@ -1128,9 +1617,9 @@ True
 True
 </code></pre>
 
-<h3 id="arpeggionamessettings_signature">ArpeggioNames.settings_signature</h3>
+<h3 id="arpeggionamespractice_signature">ArpeggioNames.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1166,9 +1655,9 @@ True
 True
 </code></pre>
 
-<h3 id="arpeggionamesgenerate">ArpeggioNames.generate</h3>
+<h3 id="arpeggionamesmake_question">ArpeggioNames.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make an arpeggio on one of the chosen clefs, in a chosen position.</p>
@@ -1200,7 +1689,7 @@ True
 
 <h2 id="keyboardnotes">KeyboardNotes</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyboardNotes</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Name the highlighted key on a piano keyboard.</p>
@@ -1212,9 +1701,9 @@ True
 True
 </code></pre>
 
-<h3 id="keyboardnotessettings_signature">KeyboardNotes.settings_signature</h3>
+<h3 id="keyboardnotespractice_signature">KeyboardNotes.practice_signature</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1250,9 +1739,9 @@ True
 True
 </code></pre>
 
-<h3 id="keyboardnotesgenerate">KeyboardNotes.generate</h3>
+<h3 id="keyboardnotesmake_question">KeyboardNotes.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Make a keyboard with one key highlighted.</p>
@@ -1355,9 +1844,85 @@ True
 True
 </code></pre>
 
+<h3 id="noteconstructioncard_count">NoteConstruction.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count distinct construction cards without rendering them.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Number of eligible written placements under the current settings.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().card_count() &gt; 0
+True
+</code></pre>
+
+<h3 id="noteconstructiondaily_candidates">NoteConstruction.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Visit all eligible placements in a randomized order.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the order of the signatures and placements.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: One playable placement for each combination.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
+True
+</code></pre>
+
+<h3 id="noteconstructionreview_question">NoteConstruction.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Determine whether an introduced placement belongs to the current construction catalog.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Stored construction card.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether its original settings are still active.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The playable card if its placement and prompt remain eligible.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteConstruction()
+&gt;&gt;&gt; q = ex.generate(random.Random(3))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 <h2 id="clefbasics">ClefBasics</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefBasics</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Put a named clef on a blank staff: choose the G, C or F symbol and put it on the line that makes the clef asked for.</p>
@@ -1372,6 +1937,24 @@ True
 <h3 id="clefbasicssettings_signature">ClefBasics.settings_signature</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Use button preferences for reviews only when the learner answers with buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The signature for the active question type.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
+</code></pre>
+
+<h3 id="clefbasicspractice_signature">ClefBasics.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
 <p>Return what identifies the settings that shape these questions.</p>
@@ -1407,9 +1990,9 @@ True
 True
 </code></pre>
 
-<h3 id="clefbasicsgenerate">ClefBasics.generate</h3>
+<h3 id="clefbasicsmake_question">ClefBasics.make_question</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
 </code></pre></div></div>
 
 <p>Name a clef to place, or draw a clef to name.</p>
@@ -1438,35 +2021,206 @@ True
 &gt;&gt;&gt; settings.clef_basics.question_type = "construction"
 </code></pre>
 
+<h2 id="notationidentification">NotationIdentification</h2>
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NotationIdentification</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Identify the highlighted part of a written phrase.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(2))
+&gt;&gt;&gt; bool(q.staff or q.notation_excerpt) and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="notationidentificationsettings_signature">NotationIdentification.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Use button preferences for reviews only when the learner answers with buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The signature for the active question type.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
+</code></pre>
+
+<h3 id="notationidentificationpractice_signature">NotationIdentification.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the terms eligible for review.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The selected terms, or the original empty signature when all terms are enabled.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NotationIdentification().settings_signature()
+''
+</code></pre>
+
+<h3 id="notationidentificationinstructions">NotationIdentification.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to answer the notation question.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Help for mouse and keyboard users.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "number" in NotationIdentification().instructions()
+True
+</code></pre>
+
+<h3 id="notationidentificationrefresh">NotationIdentification.refresh</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Replace unchecked distractors in older practice questions before replay.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Stored question matching the current settings signature.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The original notation with eligible answer buttons.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.refresh(q) == q
+True
+</code></pre>
+
+<h3 id="notationidentificationmake_question">NotationIdentification.make_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Choose a phrase and a single visible feature to highlight.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the phrase, feature, and its position.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A short phrase with the selected marking and checked answer choices.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(0))
+&gt;&gt;&gt; q.notation_target[0] == q.answer
+True
+</code></pre>
+
+<h3 id="notationidentificationcard_groups">NotationIdentification.card_groups</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Group the active question type’s playable examples by the symbol being practiced.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str</em>: Map from each eligible example’s item key to its selected term.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; bool(NotationIdentification().card_groups())
+True
+</code></pre>
+
+<h3 id="notationidentificationdaily_candidates">NotationIdentification.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Choose one example for each selected notation term.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Randomizes term order, examples and distractors.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A distinct playable card with the current answer controls.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
+True
+</code></pre>
+
+<h3 id="notationidentificationreview_question">NotationIdentification.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Recover an eligible saved example under the current term and button selections.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Saved question.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether the presentation settings still match.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: The current presentation of the card, or None if its term or example is outside the catalog.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
+&gt;&gt;&gt; q = ex.generate(random.Random(4))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
+
           
           
           
@@ -1567,7 +2321,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1615,8 +2369,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

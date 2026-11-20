@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Statistics and database · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/statistics/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Statistics and database · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/statistics/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -479,14 +599,8 @@
           <h1>Statistics and database</h1>
           <h2 id="statistics">Statistics</h2>
 
-<p>Open the statistics from the chart button next to the menu button, or from the menu. They always show the active
+<p>Open <strong>Statistics</strong> using the chart button at the upper right of the main window. They always show the active
 profile’s own answers. Use <strong>← Back</strong> or <kbd>Esc</kbd> to return to the page you came from.</p>
-
-<figure class="shot">
-  <img class="for-light" src="/alto/latest/assets/img/stats.png" alt="The statistics page with summary tiles and four charts" loading="lazy" />
-  <img class="for-dark" src="/alto/latest/assets/img/stats-dark.png" alt="The statistics page with summary tiles and four charts" loading="lazy" />
-  <figcaption>Statistics for a demo profile.</figcaption>
-</figure>
 
 <h3 id="filters">Filters</h3>
 
@@ -495,15 +609,24 @@ profile’s own answers. Use <strong>← Back</strong> or <kbd>Esc</kbd> to retu
   <li><strong>Timeframe:</strong> today, the last 7, 30 or 90 days, the last year, or all time.</li>
 </ul>
 
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/stats.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/stats-dark.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" loading="lazy" />
+  <figcaption>Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day.</figcaption>
+</figure>
+
+<p>Choose <strong>Response-time distribution…</strong> below the speed chart to see the recent times used for automatic grading. The tool opens on the selected exercise and uses its latest 100 eligible answers across timeframes. <a href="/alto/latest/practice/#response-time-grading">Response-time grading</a>.</p>
+
 <h3 id="what-you-see">What you see</h3>
 
 <ul>
   <li><strong>Summary tiles:</strong> questions answered, how often the first answer was right, the typical time to a first answer,
-attempts per question, days practised, and time spent practising. A single answer counts for at most two minutes of
+attempts per question, days practiced, and time spent practicing. A single answer counts for at most two minutes of
 practice time, so leaving the app open does not inflate it.</li>
-  <li><strong>Questions answered:</strong> a bar per day, with the questions you got right first time in green and the ones you missed in red.
-Short timeframes switch to hours, and long ones to weeks or months.</li>
-  <li><strong>Right first time:</strong> your first-try accuracy over time. Days with no answers leave a gap.</li>
+  <li><strong>Questions answered</strong> shows first-try correct answers in green and misses in red. Use <strong>Granularity</strong> in the chart’s upper-right corner to
+choose <strong>Hour</strong>, <strong>Day</strong>, <strong>Week</strong>, or <strong>Month</strong> for each bar. <strong>Auto</strong> picks a period based on the timeframe.
+If your choice produces more than 48 bars, scroll left beneath the chart to see earlier periods.</li>
+  <li><strong>Right on the first try:</strong> your first-try accuracy over time. Days with no answers leave a gap.</li>
   <li><strong>Typical time to first answer:</strong> the median, over time, so a single slow answer does not distort it.</li>
   <li><strong>By exercise:</strong> accuracy, number of questions and typical time for each exercise.</li>
   <li><strong>Reviews:</strong> a calendar of the last 12 months, a square per day (weeks run left to right, Monday at the top), darker
@@ -518,8 +641,7 @@ timeframe.</li>
 rest of the chart fades back, with its numbers in a tooltip. <strong>Click</strong> one and the answers behind it are listed in a panel under the charts:</p>
 
 <ul>
-  <li>a bar or a point of the three charts over time lists the answers given in that period (a day, a week, an hour, depending on the
-timeframe);</li>
+  <li>a bar or point lists the answers given during its hour, day, week, or month within the selected timeframe;</li>
   <li>a row of the by-exercise chart lists the answers to that exercise within the timeframe;</li>
   <li>a square of the calendar lists the answers given on that day.</li>
 </ul>
@@ -528,6 +650,9 @@ timeframe);</li>
 also closes when you change the exercise or the timeframe, because its numbers would no longer match. Periods and days with no
 answers cannot be clicked. The list has the same columns as the database browser below, sorts when you click a heading, and
 <strong>double-clicking</strong> a row previews the question. It shows the newest 500 answers, and says when there are more.</p>
+
+<p>Double-click any cell in <strong>Questions that need practice</strong> to open the saved question and its answer.
+The <strong>Question Statistics</strong> button on the card opens that question’s speed and accuracy graphs.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/latest/assets/img/stats-heatmap.png" alt="A calendar heatmap of the last twelve months, a square per day in shades of green, above the list of questions that need practice" loading="lazy" />
@@ -543,8 +668,8 @@ answers cannot be clicked. The list has the same columns as the database browser
 <p>The database button next to the statistics button opens a read-only view of what is stored. It never changes anything.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/latest/assets/img/database.png" alt="The database browser listing answers in a table" loading="lazy" />
-  <img class="for-dark" src="/alto/latest/assets/img/database-dark.png" alt="The database browser listing answers in a table" loading="lazy" />
+  <img class="for-light" src="/alto/latest/assets/img/database.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/database-dark.png" alt="The Answers table with the next review date in the Due column at the right" loading="lazy" />
   
 </figure>
 
@@ -552,16 +677,27 @@ answers cannot be clicked. The list has the same columns as the database browser
 
 <ul>
   <li><strong>Answers:</strong> every answer the active profile has given, newest first, with the question, your answer, whether it was right, the attempt number and the time.</li>
-  <li><strong>Questions:</strong> the record kept for each question: its strain, how often it was answered, right first time, missed, typical time and when it was last seen.</li>
+  <li><strong>Questions</strong> shows each question’s strain, answer counts, typical response time, and last practice time.</li>
   <li><strong>Profiles:</strong> everyone who has a profile, with how many answers and questions each has.</li>
 </ul>
+
+<p>In both <strong>Answers</strong> and <strong>Questions</strong>, <strong>Due</strong> shows the next review in local time for the selected SM-2 or FSRS schedule. All answers to the same question show its current due date. A dash means the question has no due date under the current scheduler.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/database-questions.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/database-questions-dark.png" alt="The Questions table sorted by Last seen with Due dates beside the most recently practiced questions" loading="lazy" />
+  <figcaption>Last seen records when you practiced the question. Due shows when the scheduler wants to show it again.</figcaption>
+</figure>
 
 <p>Click a column heading to sort, and use the search box to filter every column at once. Answers and questions are
 limited to the newest 10,000 rows each; the line above the table says when that applies.</p>
 
 <h3 id="previewing-a-question">Previewing a question</h3>
 
-<p>Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.</p>
+<p>Double-click a row in Answers or Questions to see that question as the exercise showed it, with its answer.
+Choose the <strong>Question Statistics</strong> bar chart icon in the upper-right corner to graph your practice history for that question. Each point represents one time you were asked.
+The speed graph shows seconds to your first answer. The accuracy graph shows the percentage answered correctly on the first try
+up to that point. Hover over a point for its value. You can also open these graphs from an answer in Statistics.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/latest/assets/img/question-preview.png" alt="A popup showing a chord on a staff with its answer and what was answered" loading="lazy" />
@@ -584,19 +720,8 @@ limited to the newest 10,000 rows each; the line above the table says when that 
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/latest/practice/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>How practice adapts</span></a>
+            <a class="prev" href="/alto/latest/practice/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Spaced Repetition</span></a>
             <a class="next" href="/alto/latest/lessons/" rel="next"><span class="np-label">Next</span><span class="np-title">Lessons<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -611,7 +736,7 @@ limited to the newest 10,000 rows each; the line above the table says when that 
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -659,8 +784,8 @@ limited to the newest 10,000 rows each; the line above the table says when that 
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

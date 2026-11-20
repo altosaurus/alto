@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.settings · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.settings/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.settings · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.settings/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg" open>
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -497,22 +617,28 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="n">note</span><span class="p">:</span> <span class="n">Note</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return the pitch-class name of a note in the chosen naming system.</p>
+<p>Return a note name in the chosen naming system, optionally including its octave.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note</em>): The note.</li>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, or “solfege” for Do Re Mi. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): “letters” for C D E, “solfege” for Do Re Mi, “degrees” for caret scale degrees, or “functions” for function names. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The major key signature for scale degrees: sharps if positive, flats if negative. Zero means C major. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Include the note’s octave, separated from a scale degree by “ / “. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use the relative natural minor as the scale degree reference. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>str</em>: The name with its accidental, without the octave.</li>
+  <li><em>str</em>: The name and, if requested, octave. Carets use accidental prefixes; function names use Raised or Lowered prefixes.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -521,6 +647,18 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 'F♯'
 &gt;&gt;&gt; spell(Note.parse("F#4"), naming="solfege")
 'Fa♯'
+&gt;&gt;&gt; spell(Note.parse("F#4"), naming="degrees", key=1)
+'7̂'
+&gt;&gt;&gt; spell(Note.parse("F4"), naming="degrees", key=1)
+'♭7̂'
+&gt;&gt;&gt; spell(Note.parse("Eb4"), naming="degrees")
+'♭3̂'
+&gt;&gt;&gt; spell(Note.parse("G4"), naming="functions", key=1)
+'Tonic'
+&gt;&gt;&gt; spell(Note.parse("F4"), naming="functions", key=1)
+'Lowered Leading tone'
+&gt;&gt;&gt; spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
+'1̂ / 4'
 </code></pre>
 
 <h2 id="diatonic_name">diatonic_name</h2>
@@ -548,40 +686,44 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 'E4'
 </code></pre>
 
-<h2 id="notenamesettings">NoteNameSettings</h2>
+<h2 id="staffrangesettings">StaffRangeSettings</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettings</span><span class="p">(</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffRangeSettings</span><span class="p">(</span>
     <span class="n">clefs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'treble'</span><span class="p">,</span> <span class="s">'bass'</span><span class="p">}),</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">ranges</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">),</span>
-    <span class="n">key_signatures</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
     <span class="n">note_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'whole'</span><span class="p">}),</span>
-    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
-    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>The settings of the note identification exercise.</p>
+<p>Selected clefs and inclusive pitch limits for each staff.</p>
 
-<p><strong>Attributes</strong></p>
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; StaffRangeSettings().active_clefs()
+['treble', 'bass']
+</code></pre>
+
+<h3 id="staffrangesettingsactive_values">StaffRangeSettings.active_values</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the note values to draw, from longest to shortest.</p>
+
+<p><strong>Returns</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
-  <li><code class="language-plaintext highlighter-rouge">ranges</code> (<em>dict of str to tuple of (int, int)</em>): Overrides of <code class="language-plaintext highlighter-rouge">DEFAULT_RANGES</code>, as inclusive staff-step ranges. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">key_signatures</code> (<em>set of int</em>): The keys to use, as sharps (positive) or flats (negative). Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">note_values</code> (<em>set of str</em>): The note values to draw, from <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): A key of <code class="language-plaintext highlighter-rouge">NAMINGS</code>. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask notes with explicit sharps, flats and naturals. Keyword-only.</li>
+  <li><em>list of str</em>: The chosen values in the order of <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>, or whole notes if none are chosen.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
-&gt;&gt;&gt; cfg.active_clefs(), cfg.active_keys()
-(['bass'], [2])
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
+['whole', 'half']
 </code></pre>
 
-<h3 id="notenamesettingsactive_clefs">NoteNameSettings.active_clefs</h3>
+<h3 id="staffrangesettingsactive_clefs">StaffRangeSettings.active_clefs</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div></div>
@@ -602,45 +744,7 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 ['treble']
 </code></pre>
 
-<h3 id="notenamesettingsactive_keys">NoteNameSettings.active_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the key signatures to draw from, lowest first.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(key_signatures={2, -1}).active_keys()
-[-1, 2]
-</code></pre>
-
-<h3 id="notenamesettingsactive_values">NoteNameSettings.active_values</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the note values to draw, from longest to shortest.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen values in the order of <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>, or whole notes if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
-['whole', 'half']
-</code></pre>
-
-<h3 id="notenamesettingsrange_for">NoteNameSettings.range_for</h3>
+<h3 id="staffrangesettingsrange_for">StaffRangeSettings.range_for</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">range_for</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
@@ -663,8 +767,111 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings().range_for("treble")
 (22, 52)
-&gt;&gt;&gt; NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given the wrong way round
+&gt;&gt;&gt; NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
 (30, 40)
+</code></pre>
+
+<h2 id="notenamesettings">NoteNameSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key_signatures</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">require_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangeSettings</code></p>
+
+<p>The settings of the note identification exercise.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
+  <li><code class="language-plaintext highlighter-rouge">ranges</code> (<em>dict of str to tuple of (int, int)</em>): Overrides of <code class="language-plaintext highlighter-rouge">DEFAULT_RANGES</code>, as inclusive staff-step ranges. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_signatures</code> (<em>set of int</em>): The keys to use, as sharps (positive) or flats (negative). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">note_values</code> (<em>set of str</em>): The note values to draw, from <code class="language-plaintext highlighter-rouge">NOTE_VALUES</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming</code> (<em>str, default “letters”</em>): A key of <code class="language-plaintext highlighter-rouge">NAMINGS</code>. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask notes with explicit sharps, flats and naturals. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">require_octave</code> (<em>bool, default False</em>): Also require the written octave as part of the answer. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
+&gt;&gt;&gt; cfg.active_clefs(), cfg.active_keys()
+(['bass'], [2])
+</code></pre>
+
+<h3 id="notenamesettingsactive_keys">NoteNameSettings.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(key_signatures={2, -1}).active_keys()
+[-1, 2]
+</code></pre>
+
+<h2 id="intervalsettings">IntervalSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+    <span class="n">displays</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'Harmonic'</span><span class="p">}),</span>
+    <span class="n">directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'ascending'</span><span class="p">}),</span>
+    <span class="n">button_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'limited'</span><span class="p">,</span>
+    <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">accidentals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">DEFAULT_INTERVAL_ACCIDENTALS</span><span class="p">)),</span>
+    <span class="n">quality_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'combined'</span><span class="p">,</span>
+    <span class="n">intervals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">iv</span> <span class="ow">in</span> <span class="n">WRITTEN_INTERVALS</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">iv</span><span class="p">.</span><span class="n">number</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s">'P8'</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangeSettings</code></p>
+
+<p>Staff signatures, presentations, answer format and spelled intervals for Interval Identification.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings().quality_mode
+'combined'
+</code></pre>
+
+<h3 id="intervalsettingsstaff_span">IntervalSettings.staff_span</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">staff_span</span><span class="p">(</span><span class="n">clef</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Count the written staff positions in a clef’s selected range, including both endpoints.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef whose range to measure.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The largest diatonic interval number that fits.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
+3
 </code></pre>
 
 <h2 id="key_name">key_name</h2>
@@ -744,6 +951,131 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 [-3, -2, -1, 0, 1, 2, 3]
 </code></pre>
 
+<h2 id="keyboard_interval_name">keyboard_interval_name</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keyboard_interval_name</span><span class="p">(</span><span class="n">distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Name a keyboard interval by its distance, including compound intervals.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">distance</code> (<em>int</em>): The distance in half steps, from 1 through the full piano span.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: A conventional interval name, with both spellings for tritones.</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>ValueError</em>: If the distance cannot occur between two distinct piano keys.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; keyboard_interval_name(13), keyboard_interval_name(18), keyboard_interval_name(24)
+('m9', 'A11 / d12', 'P15')
+&gt;&gt;&gt; keyboard_interval_name(87)
+'m52'
+</code></pre>
+
+<h2 id="keyboardintervalsettings">KeyboardIntervalSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardIntervalSettings</span><span class="p">(</span>
+    <span class="n">low</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KEYBOARD_DEFAULT</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">high</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">KEYBOARD_DEFAULT</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">intervals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">))),</span>
+    <span class="n">all_interval_buttons</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">compact_buttons</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The keyboard range and interval distances used for keyboard interval identification.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest key, as a MIDI number. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest key, inclusive. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">intervals</code> (<em>set of int</em>): Selected distances in half steps, up to the full piano span. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button_count</code> (<em>int, default 6</em>): Maximum answer buttons in limited mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">compact_buttons</code> (<em>bool, default False</em>): Answer with separate quality-letter and interval-number buttons. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">all_interval_buttons</code> (<em>bool, default False</em>): Show a fixed answer button for every selected interval instead of a limited number of choices. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings().bounds()
+(48, 72)
+</code></pre>
+
+<h3 id="keyboardintervalsettingsanswer_button_limit">KeyboardIntervalSettings.answer_button_limit</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">answer_button_limit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Return the requested count within the supported range of 1 to 87 buttons.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: The bounded maximum number of answer buttons in limited mode.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings().answer_button_limit()
+6
+&gt;&gt;&gt; KeyboardIntervalSettings(button_count=0).answer_button_limit()
+1
+</code></pre>
+
+<h3 id="keyboardintervalsettingsbounds">KeyboardIntervalSettings.bounds</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bounds</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return a piano range containing at least two distinct keys.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>tuple of (int, int)</em>: Sorted bounds within the full piano range, widened by one key if necessary.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings(low=60, high=60).bounds()
+(60, 61)
+</code></pre>
+
+<h3 id="keyboardintervalsettingsactive_intervals">KeyboardIntervalSettings.active_intervals</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_intervals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return selected interval distances that fit the keyboard range.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sorted positive distances that fit; empty if none are selected. Invalid nonempty selections use a minor second.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings(low=60, high=64, intervals={3, 4, 12}).active_intervals()
+[3, 4]
+&gt;&gt;&gt; KeyboardIntervalSettings(intervals=set()).active_intervals()
+[]
+</code></pre>
+
 <h2 id="constructionsettings">ConstructionSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ConstructionSettings</span><span class="p">(</span>
@@ -751,7 +1083,14 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="o">*</span><span class="p">,</span>
     <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">key_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'scale'</span><span class="p">,</span>
+    <span class="n">degrees</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))),</span>
+    <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -763,7 +1102,14 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
   <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The clefs to ask on, any of <code class="language-plaintext highlighter-rouge">RANGE_KEYS</code>, so “grand” is allowed.</li>
   <li><code class="language-plaintext highlighter-rouge">accidentals</code> (<em>bool, default False</em>): Also ask for sharps and flats, which the answer then has to include. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key_signature</code> (<em>bool, default False</em>): Draw a key signature; it applies to the note unless the note is given its own sign. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">question_type</code> (<em>str, default “scale”</em>): Use the selected scale keys or ask for notes without a scale key. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">degrees</code> (<em>set of int</em>): Scale degrees to ask for in Scale and Degree mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default True</em>): Require the note to be placed in a specific octave. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int or None</em>): Staff signatures chosen independently. None uses the question key. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">major</code> (<em>bool, default True</em>): Use major keys. With key signatures off, use C major. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use relative minor keys. With key signatures off, use A minor. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The key signatures to draw from, as sharps (positive) or flats (negative). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures selected for minor keys. None uses the original shared selection. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1031,6 +1377,49 @@ used.</p>
 [-4, 3]
 </code></pre>
 
+<h2 id="orderofkeyssettings">OrderOfKeysSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">OrderOfKeysSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">starting_accidentals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
+
+<p>Choose the starting signs for writing a key signature.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">starting_accidentals</code> (<em>set of int</em>): Allowed counts of given signs. Negative counts represent flats and positive counts represent sharps.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeysSettings(keys={-2, 4}).available_starts()
+range(-2, 5)
+</code></pre>
+
+<h3 id="orderofkeyssettingsavailable_starts">OrderOfKeysSettings.available_starts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">available_starts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">range</span>
+</code></pre></div></div>
+
+<p>Return starting counts that fit at least one selected signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>range</em>: Counts from the flattest eligible start through the sharpest, always including zero.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; list(OrderOfKeysSettings(keys={-2}).available_starts())
+[-2, -1, 0]
+</code></pre>
+
 <h2 id="keyconstructionsettings">KeyConstructionSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyConstructionSettings</span><span class="p">()</span>
@@ -1055,10 +1444,66 @@ used.</p>
 ([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
 </code></pre>
 
+<h2 id="scaleidentificationsettings">ScaleIdentificationSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleIdentificationSettings</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'combined'</span><span class="p">,</span>
+    <span class="n">button_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'limited'</span><span class="p">,</span>
+    <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">motion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'ascending'</span><span class="p">,</span>
+    <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeySignatureSettings</code></p>
+
+<p>Choose the clefs, scale types and independent staff and scale key signatures for identification.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int</em>): Signatures drawn on the staff, independently of the scale’s own signature. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion</code> (<em>str, default “ascending”</em>): Direction of the scale, “ascending” or “descending”. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button_mode</code> (<em>str, default “limited”</em>): Show a limited set of complete answers or separate tonic and mode buttons in “all” mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">button_count</code> (<em>int, default 6</em>): Maximum number of answer buttons in limited mode. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">question_type</code> (<em>str, default “combined”</em>): Ask for the mode, the tonic (key), or both. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures for natural minor. None uses the shared key selection. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
+&gt;&gt;&gt; cfg.active_keys(), cfg.active_staff_keys()
+([2], [-3])
+</code></pre>
+
+<h3 id="scaleidentificationsettingsactive_staff_keys">ScaleIdentificationSettings.active_staff_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_staff_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the selected staff signatures, falling back to no signature.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Signature counts in ascending order.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
+[0]
+</code></pre>
+
 <h2 id="scaleconstructionsettings">ScaleConstructionSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ScaleConstructionSettings</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
+    <span class="n">minor_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">motion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'ascending'</span><span class="p">,</span>
     <span class="n">steps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">staff_keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
@@ -1082,6 +1527,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
   <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>bool, default False</em>): Also mark the whole and half steps between the notes, once the notes are placed. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">staff_keys</code> (<em>set of int</em>): The key signatures that may be drawn on the staff, as sharps (positive) or flats (negative); 0 is none. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">octave</code> (<em>bool, default False</em>): Name the octave of the first note, such as “G2 Major”, and require the scale to start there; any scale asked then fits on the staff and its ledger lines. Without it any octave is accepted. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion</code> (<em>str, default “ascending”</em>): Direction of the scale, “ascending” or “descending”. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor_keys</code> (<em>set of int or None</em>): Signatures for natural minor. None uses the shared key selection. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1204,6 +1651,22 @@ on the second line. The three symbols can always be chosen from.</p>
 ['treble', 'alto']
 </code></pre>
 
+<h2 id="notationsettings">NotationSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NotationSettings</span><span class="p">(</span>
+    <span class="n">terms</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">NOTATION_TERMS</span><span class="p">)),</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'button'</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Terms eligible to be highlighted in Notation Identification.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Notehead" in NotationSettings().terms
+True
+</code></pre>
+
 <h2 id="circlesettings">CircleSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettings</span><span class="p">(</span>
@@ -1219,8 +1682,8 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>set of str</em>): The kinds of question to ask, keys of <code class="language-plaintext highlighter-rouge">CIRCLE_QUESTIONS</code>: the relative major of a minor key, the relative minor of a major key, and the Roman numeral of a chord of a key.</li>
-  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>str</em>): The key of the colour scheme the circle is drawn in: a preset of <code class="language-plaintext highlighter-rouge">alto.circle_schemes</code> or one of <code class="language-plaintext highlighter-rouge">customs</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">customs</code> (<em>list of CustomRecord</em>): The colour schemes the user made.</li>
+  <li><code class="language-plaintext highlighter-rouge">scheme</code> (<em>str</em>): The key of the color scheme the circle is drawn in: a preset of <code class="language-plaintext highlighter-rouge">alto.circle_schemes</code> or one of <code class="language-plaintext highlighter-rouge">customs</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">customs</code> (<em>list of CustomRecord</em>): The color schemes the user made.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1259,12 +1722,12 @@ on the second line. The three symbols can always be chosen from.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_scheme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Scheme</span>
 </code></pre></div></div>
 
-<p>Return the colour scheme to draw the circle in.</p>
+<p>Return the color scheme to draw the circle in.</p>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>Scheme</em>: The chosen scheme, or the default one if the choice is not a scheme any more (a deleted one of the user’s own).</li>
+  <li><em>Scheme</em>: The chosen scheme, or the default if the saved choice is no longer available, such as a deleted custom scheme.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1276,31 +1739,6 @@ on the second line. The three symbols can always be chosen from.</p>
 </code></pre>
 
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -1395,7 +1833,7 @@ on the second line. The three symbols can always be chosen from.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1443,8 +1881,8 @@ on the second line. The three symbols can always be chosen from.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

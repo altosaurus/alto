@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.exercises.base · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.exercises.base · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.exercises.base/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -478,7 +598,7 @@
         <article>
           <h1>alto.exercises.base</h1>
           
-<p>Exercise framework. To add an exercise: subclass Exercise, decorate with @register.</p>
+<p>Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks.</p>
 
 <p>An <code class="language-plaintext highlighter-rouge">Exercise</code> makes <code class="language-plaintext highlighter-rouge">Question</code> objects. The <code class="language-plaintext highlighter-rouge">Question</code> says what to show (a staff, a keyboard or only text), which
 buttons to offer and which answer is right. The exercise screen and the scheduler work with those two classes only, so
@@ -502,9 +622,12 @@ a new exercise needs no new interface code.</p>
     <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'treble'</span><span class="p">,</span>
     <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">staff_signature</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'whole'</span><span class="p">,</span>
     <span class="n">grid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">keyboard</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">keyboard_notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">key_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">keyboard_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">octaves</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
@@ -516,8 +639,12 @@ a new exercise needs no new interface code.</p>
     <span class="n">show_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">build_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">place_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">starting_slots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">),</span>
     <span class="n">construct_scale</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">construct_steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">notes_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">any_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">exact_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">circle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">circle_kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
@@ -525,6 +652,8 @@ a new exercise needs no new interface code.</p>
     <span class="n">circle_key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">required</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">place_clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">notation_target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">notation_excerpt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -540,9 +669,12 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str, default “treble”</em>): The clef to draw on. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">explanation</code> (<em>str, default ““</em>): Text shown after the answer to say why it is right. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature to draw: that many sharps if positive, flats if negative. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The note value to draw (single notes only). Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>str, default “whole”</em>): The written duration for single notes and interval voices. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">staff_signature</code> (<em>int or None</em>): Override the signature shown on the staff while retaining the key for scale degrees. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">minor</code> (<em>bool, default False</em>): Use the signature’s relative minor for scale degree naming. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">grid</code> (<em>dict of str to tuple of (int, int) or None</em>): Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard</code> (<em>Note or None</em>): A piano key to highlight, instead of drawing a staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keyboard_notes</code> (<em>list of Note</em>): Multiple piano keys to highlight together instead of drawing a staff. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">key_staff</code> (<em>bool, default False</em>): Draw <code class="language-plaintext highlighter-rouge">key</code> as a small key-signature staff above the keyboard. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_range</code> (<em>tuple of (int, int) or None</em>): The keys (MIDI numbers, inclusive) the keyboard picture should show. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">octaves</code> (<em>list of str or None</em>): When set, the answer is a choice button plus one of these second-row buttons. Keyword-only.</li>
@@ -554,14 +686,20 @@ a new exercise needs no new interface code.</p>
   <li><code class="language-plaintext highlighter-rouge">show_staff</code> (<em>bool, default False</em>): Draw the staff even with no notes on it, to show only its clef and key signature. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text written on the staff itself, under the music, in place of the prompt above it. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">build_key</code> (<em>bool, default False</em>): The learner builds the key signature <code class="language-plaintext highlighter-rouge">key</code> on a blank staff with the fork widget, instead of pressing a button. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">place_signature</code> (<em>bool, default False</em>): Place each accidental of the named key on the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">starting_slots</code> (<em>list of int</em>): Zero-based positions of the accidentals already printed in an Order of Keys question.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_scale</code> (<em>list of Note or None</em>): The notes of a scale to place on the staff one after another, left to right: the answer is the whole row. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">construct_steps</code> (<em>list of str or None</em>): The steps between the notes of <code class="language-plaintext highlighter-rouge">construct_scale</code>, each “W” (whole) or “H” (half), to mark once the notes are placed; None if the steps are not asked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notes_only</code> (<em>bool, default False</em>): Show note names without a scale degree context. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">any_octave</code> (<em>bool, default False</em>): Accept a single constructed note with the right spelling in any octave. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">exact_octave</code> (<em>bool, default False</em>): The scale has to be placed in the octave asked, not in any octave. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle</code> (<em>int or None</em>): A question on the circle of fifths: the place asked about, clockwise from C at 0. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle_kind</code> (<em>str, default ““</em>): What the circle asks: “major” (the relative major of a minor key), “minor” (the relative minor of a major key) or “numeral” (the Roman numeral of a chord of a key). Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle_ring</code> (<em>str, default “outer”</em>): Which ring the cell asked about is in: “outer” for the major keys or “inner” for the minor ones. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">circle_key</code> (<em>int or None</em>): For a Roman numeral question, the place of the key whose chords they are. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">required</code> (<em>tuple of str</em>): Answers that must all be given, one after another in any order, such as both names of a key with two: B and C♭. Empty for an ordinary question with one answer. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_target</code> (<em>tuple of (str, int) or None</em>): Notation part and zero-based note column or staff line to highlight. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">notation_excerpt</code> (<em>str or None</em>): Versioned score containing the target. Its position is an index into the excerpt manifest. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">place_clef</code> (<em>str, default ““</em>): The clef to put on a blank staff: the answer is a clef symbol (G, C or F) and a place on the staff, not a button. Empty for any other question. Keyword-only.</li>
 </ul>
 
@@ -581,7 +719,7 @@ True
 
 <p>Report whether a note placed on the staff is the one asked for.</p>
 
-<p>The spelling and octave must match exactly, so G♯4 is not A♭4.</p>
+<p>The spelling must match exactly. The octave must also match unless <code class="language-plaintext highlighter-rouge">any_octave</code> is set.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -592,7 +730,7 @@ True
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>bool</em>: True if it equals the note in <code class="language-plaintext highlighter-rouge">construct</code>.</li>
+  <li><em>bool</em>: True if it matches the requested note spelling and any required octave.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -602,6 +740,32 @@ True
 True
 &gt;&gt;&gt; q.check_placed(Note.parse("B#3"))  # sounds the same, but is spelled differently
 False
+</code></pre>
+
+<h3 id="questionplacement_columns">Question.placement_columns</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">placement_columns</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Return the given and placed notes grouped by onset, omitting the answer until it is placed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): Pitch under the pointer or submitted by the learner.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of list of Note</em>: Visible notes in playback order.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
+&gt;&gt;&gt; q.placement_columns(None) == [[Note.parse("C4")]]
+True
 </code></pre>
 
 <h3 id="questioncheck_scale">Question.check_scale</h3>
@@ -698,6 +862,26 @@ True
 (True, False)
 </code></pre>
 
+<h3 id="questionplaces_sequence">Question.places_sequence</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">places_sequence</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Report whether the learner enters successive positions on the staff.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True for scales and handwritten key signatures.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
+True
+</code></pre>
+
 <h3 id="questioncheck">Question.check</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">choice</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
@@ -760,7 +944,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">item_key</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div></div>
 
-<p>Return a stable identity for the question, so the same one can be recognised when it comes round again.</p>
+<p>Return a stable identity for the question, so the same one can be recognized when it comes around again.</p>
 
 <p>It covers what is asked and where it is drawn, but not the note value or the order of the buttons.</p>
 
@@ -932,6 +1116,105 @@ True
 ''
 </code></pre>
 
+<h3 id="exercisecard_groups">Exercise.card_groups</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_groups</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Map playable examples to the skills that share a calendar review date.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to str or None</em>: Example item keys mapped to skill names, or None when every example has its own schedule.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; KeyboardNotes().card_groups() is None
+True
+</code></pre>
+
+<h3 id="exercisecard_count">Exercise.card_count</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_count</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Count distinct cards possible with the current settings when the exercise has an exact catalog.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int or None</em>: Catalog size, or None for an exercise that prepares a bounded daily sample.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; KeyboardNotes().card_count() is None
+True
+</code></pre>
+
+<h3 id="exercisedaily_candidates">Exercise.daily_candidates</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">daily_candidates</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Yield distinct questions until 100 consecutive draws find no new playable item.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The generator for this day’s sample.</li>
+</ul>
+
+<p><strong>Yields</strong></p>
+
+<ul>
+  <li><em>Question</em>: A playable question. Finite exercises can override this to visit every eligible item.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
+True
+</code></pre>
+
+<h3 id="exercisereview_question">Exercise.review_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">review_question</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">same_settings</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Adapt a stored question for review under the active settings.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): Previously introduced card.</li>
+  <li><code class="language-plaintext highlighter-rouge">same_settings</code> (<em>bool</em>): Whether the saved presentation matches the active settings.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question or None</em>: A playable question when the exercise recognizes this presentation.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeyboardNotes
+&gt;&gt;&gt; ex = KeyboardNotes()
+&gt;&gt;&gt; q = ex.generate(random.Random(1))
+&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
+True
+</code></pre>
+
 <h3 id="exerciserefresh">Exercise.refresh</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
@@ -1015,6 +1298,180 @@ True
 &gt;&gt;&gt; q = NoteNames().generate(random.Random(1))
 &gt;&gt;&gt; q.answer in q.choices
 True
+</code></pre>
+
+<h2 id="buttonsettings">ButtonSettings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ButtonSettings</span><span class="p">(</span>
+    <span class="n">button_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'all'</span><span class="p">,</span>
+    <span class="n">button_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>An exercise’s choice of answer layout and maximum number of buttons per group.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ButtonSettings().button_mode
+'all'
+</code></pre>
+
+<h2 id="choiceexercise">ChoiceExercise</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ChoiceExercise</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A button-answer exercise with its own standard Buttons submenu.</p>
+
+<p>Supply the eligible choices in <code class="language-plaintext highlighter-rouge">make_question</code>. Set <code class="language-plaintext highlighter-rouge">default_limit</code> to start in Limited mode.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import ChordQualities
+&gt;&gt;&gt; ChordQualities.button_settings().button_mode
+'limited'
+</code></pre>
+
+<h3 id="choiceexercisebutton_settings">ChoiceExercise.button_settings</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">classmethod</span>
+<span class="o">@</span><span class="n">cache</span>
+<span class="k">def</span> <span class="nf">button_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ButtonSettings</span>
+</code></pre></div></div>
+
+<p>Return the preferences shared by instances of this particular exercise.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>ButtonSettings</em>: The exercise’s answer layout.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; NoteNames.button_settings().button_mode
+'all'
+</code></pre>
+
+<h3 id="choiceexercisesettings_signature">ChoiceExercise.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Include custom answer layouts when deciding which questions can be replayed.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The original practice signature at the historical default, or a layout-specific signature.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import ChordQualities
+&gt;&gt;&gt; ChordQualities().settings_signature()
+''
+</code></pre>
+
+<h3 id="choiceexercisepractice_signature">ChoiceExercise.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the exercise settings other than the answer layout.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The signature for questions using the default layout.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import ChordQualities
+&gt;&gt;&gt; ChordQualities().practice_signature()
+''
+</code></pre>
+
+<h3 id="choiceexercisegenerate">ChoiceExercise.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Generate the musical task and apply the selected button count.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for the exercise and the distractor sample.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: A question with its answer buttons ready for practice.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import ChordQualities
+&gt;&gt;&gt; len(ChordQualities().generate(random.Random(0)).choices)
+5
+</code></pre>
+
+<h3 id="choiceexerciselimit_buttons">ChoiceExercise.limit_buttons</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">limit_buttons</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Limit each answer group while keeping all the buttons needed to complete the question.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The task and its eligible answer choices.</li>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Source for sampling distractors.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The question with its chosen layout.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A note and octave question keeps the correct name and octave in their respective groups.
+</code></pre>
+
+<h3 id="choiceexercisemake_question">ChoiceExercise.make_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">abstractmethod</span>
+<span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Generate the task and eligible answer choices before the button limit is applied.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): The exercise’s random source.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The musical task.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Note Identification supplies the note names appropriate to the active clef and key settings.
 </code></pre>
 
 <h2 id="register">register</h2>
@@ -1170,33 +1627,6 @@ True
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/api/alto.updates/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.updates</span></a>
             <a class="next" href="/alto/latest/api/alto.exercises.library/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.exercises.library<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1213,7 +1643,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1261,8 +1691,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

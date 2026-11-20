@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.home · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.home/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.home · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.home/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/" aria-current="page">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -488,6 +608,31 @@
 &gt;&gt;&gt; page = HomePage(REGISTRY)
 &gt;&gt;&gt; len(page.cards) == len(REGISTRY)
 True
+</code></pre>
+
+<h2 id="category_tree">category_tree</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">category_tree</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QTreeWidget</span>
+</code></pre></div></div>
+
+<p>Build a navigation tree with themed checkboxes and right-aligned expansion arrows.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): Accessible name of the tree.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>QTreeWidget</em>: Empty tree ready for categories and exercises.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; category_tree("Decks").columnCount()
+2
 </code></pre>
 
 <h2 id="tilecard">TileCard</h2>
@@ -523,7 +668,7 @@ True
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">icon</code> (<em>str</em>): The inside of a 24 by 24 SVG, drawn in the text colour. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">icon</code> (<em>str</em>): The inside of a 24 by 24 SVG, drawn in the text color. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str</em>): The small heading above the name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">about</code> (<em>str</em>): A line of description, which is also the tooltip. Keyword-only.</li>
@@ -575,7 +720,31 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import IntervalNames
 &gt;&gt;&gt; ExerciseCard(IntervalNames).toolTip()
-'Name the interval between two notes (up to an octave).'
+'Name the interval between two notes.'
+</code></pre>
+
+<h3 id="exercisecardset_counts">ExerciseCard.set_counts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_counts</span><span class="p">(</span><span class="n">counts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show due reviews, new cards, and outstanding incorrect cards in the upper right corner.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">counts</code> (<em>tuple of int or None</em>): Reviews due, new cards available, and optionally the outstanding incorrect count. None hides the counts.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; card = ExerciseCard(NoteNames)
+&gt;&gt;&gt; card.set_counts((2, 3, 1))
+&gt;&gt;&gt; print(card.counts.toolTip())
+Blue — 3 new cards available
+Red — 1 incorrect card awaiting a correct answer
+Green — 2 reviews due
 </code></pre>
 
 <h2 id="lesson_card">lesson_card</h2>
@@ -587,7 +756,7 @@ True
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TileCard</span>
 </code></pre></div></div>
 
-<p>Make the card of a lesson: the icon of the exercise that practises the same topic, and how far through it you are.</p>
+<p>Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -606,7 +775,7 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; card = lesson_card(LESSONS[0])
 &gt;&gt;&gt; card.accessibleName()
-'The Circle of Fifths, Scales &amp; Keys'
+'Pitches and Notes, Notation'
 </code></pre>
 
 <h2 id="homepage">HomePage</h2>
@@ -615,6 +784,8 @@ True
     <span class="n">registry</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Exercise</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">filter_layout</span><span class="p">:</span> <span class="n">QHBoxLayout</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -627,10 +798,14 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">exercise_chosen</code> (<em>Signal</em>): Emitted with the <code class="language-plaintext highlighter-rouge">Exercise</code> class when a card is clicked.</li>
   <li><code class="language-plaintext highlighter-rouge">lesson_chosen</code> (<em>Signal</em>): Emitted with a lesson’s key when its card is clicked.</li>
+  <li><code class="language-plaintext highlighter-rouge">filters_changed</code> (<em>Signal</em>): Emitted after a change to the search, tile selection or displayed section.</li>
   <li><code class="language-plaintext highlighter-rouge">cards</code> (<em>list of ExerciseCard</em>): One per exercise, in registry order.</li>
   <li><code class="language-plaintext highlighter-rouge">lesson_cards</code> (<em>list of TileCard</em>): One per lesson, with how far through it you are.</li>
   <li><code class="language-plaintext highlighter-rouge">canvas</code> (<em>TransitionCanvas</em>): Where the transition between the exercises and the lessons is drawn.</li>
   <li><code class="language-plaintext highlighter-rouge">mode_control</code> (<em>SegmentedControl</em>): The switch between the exercises and the lessons. The main window puts it in its top bar.</li>
+  <li><code class="language-plaintext highlighter-rouge">resume_button</code> (<em>QPushButton</em>): Returns to the retained activity. The main window places it beside search and shows it on tiles after an activity begins.</li>
+  <li><code class="language-plaintext highlighter-rouge">category_filter</code> (<em>QToolButton</em>): Shows or hides the filter sidebar from the right end of the search row.</li>
+  <li><code class="language-plaintext highlighter-rouge">no_results</code> (<em>QLabel</em>): Shown when no tiles match the search.</li>
   <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): “exercises” or “lessons”: which cards are showing.</li>
   <li><code class="language-plaintext highlighter-rouge">scroll_area</code> (<em>QScrollArea</em>): Scrolls the rows when the window is shorter than all of them.</li>
 </ul>
@@ -655,6 +830,8 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">registry</code> (<em>iterable of type of Exercise</em>): The exercises to show, in the order to show them.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the page. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None</em>): Profile supplying the exercise tile counts.</li>
+  <li><code class="language-plaintext highlighter-rouge">filter_layout</code> (<em>QHBoxLayout or None</em>): Shared workspace layout for the filter sidebar. A standalone page places it beside its tiles.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
@@ -662,6 +839,150 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
 &gt;&gt;&gt; len(HomePage([NoteNames]).cards)
 1
+</code></pre>
+
+<h3 id="homepageset_search">HomePage.set_search</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_search</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show only tiles matching a title, description or category search.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">text</code> (<em>str</em>): Case-insensitive search text. Empty text shows every tile in the selected category.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises import REGISTRY
+&gt;&gt;&gt; page = HomePage(REGISTRY)
+&gt;&gt;&gt; page.set_search("keyboard")
+&gt;&gt;&gt; page._query
+'keyboard'
+</code></pre>
+
+<h3 id="homepagematches_filter">HomePage.matches_filter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">matches_filter</span><span class="p">(</span>
+    <span class="n">card</span><span class="p">:</span> <span class="n">TileCard</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">section</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Check whether a tile matches the search text and the selection for its section.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">card</code> (<em>TileCard</em>): Exercise or lesson tile to check.</li>
+  <li><code class="language-plaintext highlighter-rouge">section</code> (<em>str</em>): Section containing the tile, either “exercises” or “lessons”.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if both filters include the tile.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
+&gt;&gt;&gt; page = HomePage([NoteNames])
+&gt;&gt;&gt; page.matches_filter(page.cards[0], section="exercises")
+True
+</code></pre>
+
+<h3 id="homepageeventfilter">HomePage.eventFilter</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
+    <span class="n">watched</span><span class="p">:</span> <span class="n">QObject</span><span class="p">,</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Fit the open filter sidebar when its workspace changes width.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">watched</code> (<em>QObject</em>): Widget containing the activity and sidebar.</li>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): Event delivered to the widget.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: Whether the base widget consumes the event.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Dragging the navigation divider resizes the space available for the filters.
+</code></pre>
+
+<h3 id="homepageset_filter_available">HomePage.set_filter_available</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_filter_available</span><span class="p">(</span><span class="n">available</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Show the filter control on browsing and exercise pages, remembering the sidebar’s open state.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">available</code> (<em>bool</em>): Whether the current page supports filtering.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = HomePage([])
+&gt;&gt;&gt; page.set_filter_available(False)
+&gt;&gt;&gt; page.category_filter.isHidden()
+True
+</code></pre>
+
+<h3 id="homepagerestore_tile_filters">HomePage.restore_tile_filters</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">restore_tile_filters</span><span class="p">(</span>
+    <span class="n">selections</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">expanded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore exercise and lesson checkboxes after a theme change.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">selections</code> (<em>dict of str to frozenset of str</em>): Checked tile titles for each section with a saved filter.</li>
+  <li><code class="language-plaintext highlighter-rouge">expanded</code> (<em>bool or None</em>): Restore the sidebar at its open or closed width immediately. None keeps its current state.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; HomePage([]).restore_tile_filters({})
+</code></pre>
+
+<h3 id="homepageset_category">HomePage.set_category</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_category</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Select the tiles of one category, or all tiles when the category is absent.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str or None</em>): Case-folded category name, or None for all tiles.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; HomePage([]).set_category(None)
 </code></pre>
 
 <h3 id="homepageset_mode">HomePage.set_mode</h3>
@@ -693,6 +1014,33 @@ waits on it.</p>
 &gt;&gt;&gt; page.mode, page.mode_control.current()
 ('lessons', 1)
 &gt;&gt;&gt; page.set_mode("exercises")
+</code></pre>
+
+<h3 id="homepagepage_changed">HomePage.page_changed</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">page_changed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Animate the tiles from an empty grid on return, or stop the animation when leaving.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; page = HomePage([])
+&gt;&gt;&gt; page.page_changed()
+&gt;&gt;&gt; page.canvas.running
+False
+</code></pre>
+
+<h3 id="homepagerefresh_counts">HomePage.refresh_counts</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_counts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Refresh each exercise tile and the totals for the current filters.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; HomePage([]).refresh_counts()
 </code></pre>
 
 <h3 id="homepageshowevent">HomePage.showEvent</h3>
@@ -891,31 +1239,8 @@ True
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/latest/api/alto.ui.exercise_view/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.exercise_view</span></a>
+            <a class="prev" href="/alto/latest/api/alto.ui.glossary/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.glossary</span></a>
             <a class="next" href="/alto/latest/api/alto.ui.icons/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.icons<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -930,7 +1255,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -978,8 +1303,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

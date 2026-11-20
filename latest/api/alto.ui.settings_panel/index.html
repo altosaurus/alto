@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>alto.ui.settings_panel · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/alto.ui.settings_panel/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="alto.ui.settings_panel · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/alto.ui.settings_panel/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/" aria-current="page">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -877,6 +997,29 @@ True
 [1]
 </code></pre>
 
+<h3 id="exercisesettingspanelrefresh_limits">ExerciseSettingsPanel.refresh_limits</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_limits</span><span class="p">(</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">self_grading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Update scheduling controls for the active scheduler and profile.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Selected question scheduler.</li>
+  <li><code class="language-plaintext highlighter-rouge">self_grading</code> (<em>bool</em>): Disable Next Question when a passing grade advances the exercise.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Switching to ASRS hides the row and leaves its submenu.
+</code></pre>
+
 <h2 id="notenamesettingspanel">NoteNameSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteNameSettingsPanel</span><span class="p">(</span>
@@ -886,12 +1029,12 @@ True
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
 
 <p>The settings of the note identification exercise: a menu leading to a page for each group of settings.</p>
 
-<p>Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names and an Accidentals switch) and a page for each.
-Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>Two layers: the menu (Clefs, Range, Key signatures, Note values, Note names, Accidentals and Octave) and a page for
+each. Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -901,7 +1044,8 @@ Edits are live: each changes the settings, saves them and emits <code class="lan
   <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">key_boxes</code> (<em>dict of int to QCheckBox</em>): The key signature checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">value_boxes</code> (<em>dict of str to QCheckBox</em>): The note value checkboxes.</li>
-  <li><code class="language-plaintext highlighter-rouge">naming_radios</code> (<em>dict of str to QRadioButton</em>): The letters and solfège choices.</li>
+  <li><code class="language-plaintext highlighter-rouge">naming_radios</code> (<em>dict of str to QRadioButton</em>): The letters and solfège choices, plus caret and function notation in the Scale degrees group.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>_ToggleRow</em>): Whether the answer must include the written octave.</li>
   <li><code class="language-plaintext highlighter-rouge">range_editors</code> (<em>dict of str to RangeEditor</em>): The range editor of each clef in use, built when the Range page opens.</li>
 </ul>
 
@@ -967,11 +1111,48 @@ True
 True
 </code></pre>
 
+<h2 id="load_keyboard_intervals">load_keyboard_intervals</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_keyboard_intervals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_keyboard_intervals()
+&gt;&gt;&gt; settings.keyboard_intervals.bounds()[0] &lt; settings.keyboard_intervals.bounds()[1]
+True
+</code></pre>
+
+<h2 id="save_keyboard_intervals">save_keyboard_intervals</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_keyboard_intervals</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the keyboard interval range and selected distances.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardIntervalSettings</em>): The settings to save.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_keyboard_intervals(settings.KeyboardIntervalSettings())
+&gt;&gt;&gt; int(store().value("keyboardIntervals/low"))
+48
+</code></pre>
+
 <h2 id="keychecklist">KeyChecklist</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyChecklist</span><span class="p">(</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
+    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">counts_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -980,12 +1161,12 @@ True
 
 <p>Checkboxes for the 15 major keys, flats on the left and sharps on the right.</p>
 
-<p>At least one stays checked. Each is labelled with a picture of its signature.</p>
+<p>At least one stays checked. Each is labeled with a picture of its signature.</p>
 
 <p><strong>Attributes</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is ticked or unticked.</li>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is checked or unchecked.</li>
   <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of int to QCheckBox</em>): The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).</li>
 </ul>
 
@@ -1002,7 +1183,10 @@ True
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to tick at first.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">counts_only</code> (<em>bool, default False</em>): Label each box with its accidental count instead of drawing a signature. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1017,7 +1201,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the ticked key signatures.</p>
+<p>Return the checked key signatures.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1037,6 +1221,8 @@ True
     <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1068,7 +1254,9 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">enabled</code> (<em>bool</em>): Whether key signatures are on.</li>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to tick at first. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1103,7 +1291,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Return the ticked key signatures.</p>
+<p>Return the checked key signatures.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1179,9 +1367,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("construction/accidentals", "true")
 &gt;&gt;&gt; load_construction()
 &gt;&gt;&gt; settings.construction.accidentals
-True
-&gt;&gt;&gt; store().setValue("construction/accidentals", "false")
-&gt;&gt;&gt; load_construction()
+False
 </code></pre>
 
 <h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
@@ -1197,7 +1383,7 @@ True
 
 <p>The settings of the note construction exercise: a menu with a page for the staff and one for the keys.</p>
 
-<p>The menu has Clefs, Accidentals, Key signatures and Keys. Edits are live: each changes the settings, saves them and
+<p>The menu has Clefs, Staff Key, Question Type, and Octave. Edits are live: each changes the settings, saves them and
 emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1206,7 +1392,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ConstructionSettings</em>): The settings being edited.</li>
   <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages.</li>
   <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of str to QCheckBox</em>): The clef checkboxes, including the grand staff.</li>
-  <li><code class="language-plaintext highlighter-rouge">key_page</code> (<em>KeySignaturePage</em>): The key signature sub-page.</li>
+  <li><code class="language-plaintext highlighter-rouge">key_tabs</code> (<em>QTabWidget</em>): The key signature sub-page.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1230,7 +1416,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <p><strong>Constructor examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-3
+4
 </code></pre>
 
 <h2 id="load_arpeggio">load_arpeggio</h2>
@@ -1258,18 +1444,21 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
     <span class="n">groups</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span>
+    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">positions</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
 
-<p>Checkboxes for a list of choices, optionally under small headings. At least one stays checked.</p>
+<p>Checkboxes for a list of choices, optionally under headings and allowing an empty selection.</p>
 
 <p><strong>Attributes</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is ticked or unticked.</li>
+  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is checked or unchecked.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool</em>): Whether all choices may be unchecked.</li>
   <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict</em>): The checkbox of each choice, by its key.</li>
 </ul>
 
@@ -1289,7 +1478,9 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">groups</code> (<em>list of tuple of (str, list of tuple of (object, str))</em>): The headings and, under each, the choices as (key, label); an empty heading shows none.</li>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set</em>): The keys to tick at first. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set</em>): The keys to check initially. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow all choices to be unchecked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">positions</code> (<em>mapping or None, default None</em>): Optional (row, column) for each key within its group. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
 </ul>
 
@@ -1306,18 +1497,129 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span>
 </code></pre></div></div>
 
-<p>Return the ticked choices.</p>
+<p>Return the checked choices.</p>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>set</em>: The keys of the ticked boxes.</li>
+  <li><em>set</em>: The keys of the checked boxes.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
 {0, 1}
+</code></pre>
+
+<h2 id="load_intervals">load_intervals</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_intervals</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the saved staff interval options, keeping valid choices and per-clef ranges.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>IntervalSettings or None</em>): Settings to populate. Defaults to Interval Identification.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): Independent settings-store group for the exercise.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_intervals()
+&gt;&gt;&gt; bool(settings.intervals.active_clefs())
+True
+</code></pre>
+
+<h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
+
+<p>Choose the notation and answer format for written intervals.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
+10
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the interval settings menu with direction choices under Melodic.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>IntervalSettings</em>): The interval exercise settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): Settings-store group for identification or construction.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
+'Interval and Quality'
+</code></pre>
+
+<h2 id="keyboardintervalsettingspanel">KeyboardIntervalSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyboardIntervalSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>Range and interval selection pages for keyboard interval identification.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardIntervalSettings</em>): The settings being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The settings menu, range page, and interval page.</li>
+  <li><code class="language-plaintext highlighter-rouge">span</code> (<em>KeyboardSpan</em>): The draggable range selector.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_range</code> (<em>QWidget</em>): The interval range controls directly below Select all.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_slider</code> (<em>IntervalRangeSlider</em>): The two-handle interval selector.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_low_label, interval_high_label</code> (<em>FieldComboBox</em>): Clickable endpoint notation with scrollable interval lists.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_page</code> (<em>ChoiceChecklist</em>): The interval checkboxes, keyed by distance in half steps.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+&gt;&gt;&gt; panel.stack.count()
+4
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the range selector and interval checklist.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardIntervalSettings</em>): The settings to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
+&gt;&gt;&gt; panel.low_label.text(), panel.high_label.text()
+('C3', 'C5')
 </code></pre>
 
 <h2 id="arpeggiosettingspanel">ArpeggioSettingsPanel</h2>
@@ -1409,6 +1711,32 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 &gt;&gt;&gt; store().remove("keyConstruction")
 </code></pre>
 
+<h2 id="load_order_of_keys">load_order_of_keys</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_order_of_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the clefs, scales, and key signatures selected for Order of Keys.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_order_of_keys()
+</code></pre>
+
+<h2 id="load_scale_identification">load_scale_identification</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_identification</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved scale identification options independently of scale construction.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_scale_identification()
+&gt;&gt;&gt; settings.scale_identification.active_staff_keys()
+[0]
+</code></pre>
+
 <h2 id="load_scale_construction">load_scale_construction</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1437,6 +1765,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
     <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'keySignatures'</span><span class="p">,</span>
+    <span class="n">keys_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'Key signatures'</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1445,12 +1774,11 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p>The settings of a key signature exercise: a menu with a page for each group of settings.</p>
 
-<p>The same panel serves key signature identification, key signature construction and scale construction, each saving
+<p>The same panel serves key signature identification, key signature construction and both scale exercises, each saving
 under its own name.</p>
 
-<p>The menu has Clefs, Scales and Key signatures. Scale construction has two key signature choices side by side, one for
-the staff (Staff keys) and one for the scale itself (Scale keys), and Octave and Steps switches. Edits are live: each
-changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+<p>The menu has Clefs, Scales and Key signatures. Both scale exercises have independent staff and scale key choices;
+construction also has Octave and Steps switches. Edits are live: each changes the settings, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Attributes</strong></p>
 
@@ -1480,6 +1808,7 @@ changes the settings, saves them and emits <code class="language-plaintext highl
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeySignatureSettings</em>): The settings to edit.</li>
   <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str, default “keySignatures”</em>): What the settings are saved under. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">keys_title</code> (<em>str, default “Key signatures”</em>): Title for the signature checklist when the exercise uses a single list. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
 </ul>
 
@@ -1487,6 +1816,45 @@ changes the settings, saves them and emits <code class="language-plaintext highl
 
 <pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
 4
+</code></pre>
+
+<h2 id="load_notation_terms">load_notation_terms</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_notation_terms</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the question type and term selection, defaulting to Answer Button and all terms.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_notation_terms()
+&gt;&gt;&gt; bool(settings.notation.terms)
+True
+</code></pre>
+
+<h2 id="notationsettingspanel">NotationSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NotationSettingsPanel</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>Choose the question type and the notation terms to practice.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "Trill" in NotationSettingsPanel().terms.boxes
+True
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the settings menu and its Question Type and Terms pages.</p>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
+True
 </code></pre>
 
 <h2 id="load_clef_basics">load_clef_basics</h2>
@@ -1588,7 +1956,7 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 <p>Load the saved circle of fifths settings into the shared settings object.</p>
 
 <p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-saved colour scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.</p>
+saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -1634,28 +2002,28 @@ saved colour scheme that no longer exists (it was deleted, or comes from a newer
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
 
-<p>The settings of the circle of fifths exercise: which kinds of question to ask, and the colours of the circle.</p>
+<p>The settings of the circle of fifths exercise: which kinds of question to ask, and the colors of the circle.</p>
 
-<p>The menu has two rows. Questions opens a page of switches. Colours opens a page of colour schemes to choose from, with a
+<p>The menu has two rows. Questions opens a page of switches. Colors opens a page of color schemes to choose from, with a
 button to make one of your own, which opens an editor. Edits are live: each changes the settings and saves them. A new kind
-of question emits <code class="language-plaintext highlighter-rouge">changed</code>, and a new colour scheme emits <code class="language-plaintext highlighter-rouge">restyled</code>, which keeps the question.</p>
+of question emits <code class="language-plaintext highlighter-rouge">changed</code>, and a new color scheme emits <code class="language-plaintext highlighter-rouge">restyled</code>, which keeps the question.</p>
 
 <p><strong>Attributes</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings being edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages: the menu, the questions, the colour schemes and the editor of a scheme.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages: the menu, the questions, the color schemes and the editor of a scheme.</li>
   <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>_Row</em>): The menu row for the questions.</li>
-  <li><code class="language-plaintext highlighter-rouge">colours_row</code> (<em>_Row</em>): The menu row for the colours; its value is the name of the chosen scheme.</li>
+  <li><code class="language-plaintext highlighter-rouge">colors_row</code> (<em>_Row</em>): The menu row for the colors; its value is the name of the chosen scheme.</li>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>ChoiceChecklist</em>): The kinds of question: relative major, relative minor and Roman numerals.</li>
-  <li><code class="language-plaintext highlighter-rouge">schemes</code> (<em>SchemePage</em>): The colour schemes.</li>
+  <li><code class="language-plaintext highlighter-rouge">schemes</code> (<em>SchemePage</em>): The color schemes.</li>
   <li><code class="language-plaintext highlighter-rouge">editor</code> (<em>SchemeEditor</em>): The editor of a scheme of your own.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; panel = CircleSettingsPanel(settings.CircleSettings())
-&gt;&gt;&gt; panel.questions_row.value.text(), panel.colours_row.value.text()
+&gt;&gt;&gt; panel.questions_row.value.text(), panel.colors_row.value.text()
 ('3 of 3', 'Cyan to indigo')
 </code></pre>
 
@@ -1672,13 +2040,43 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colours and the editor
+<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
+</code></pre>
+
+<h2 id="load_choice_buttons">load_choice_buttons</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_choice_buttons</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the independent button preferences for each multiple-choice exercise.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_choice_buttons()
+&gt;&gt;&gt; NoteNames.button_settings().button_mode in {"all", "limited"}
+True
+</code></pre>
+
+<h2 id="load_exercise_settings">load_exercise_settings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_exercise_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved exercise options before creating a practice or export settings panel.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_exercise_settings()
 </code></pre>
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span><span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span> <span class="o">|</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Exercise</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExerciseSettingsPanel</span>
 </code></pre></div></div>
 
 <p>Return the settings panel for an exercise.</p>
@@ -1687,12 +2085,13 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>Exercise</em>): The exercise.</li>
+  <li><code class="language-plaintext highlighter-rouge">learner</code> (<em>Learner or None</em>): Profile whose calendar limits can be overridden.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>ExerciseSettingsPanel or None</em>: A panel with a <code class="language-plaintext highlighter-rouge">changed</code> signal, or None for an exercise with no settings.</li>
+  <li><em>ExerciseSettingsPanel</em>: A panel with the exercise options and the shared Next Question setting.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1700,40 +2099,11 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 <pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import IntervalNames, NoteNames
 &gt;&gt;&gt; type(settings_panel_for(NoteNames())).__name__
 'NoteNameSettingsPanel'
-&gt;&gt;&gt; settings_panel_for(IntervalNames()) is None
-True
+&gt;&gt;&gt; type(settings_panel_for(IntervalNames())).__name__
+'IntervalSettingsPanel'
 </code></pre>
 
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -1929,7 +2299,7 @@ True
           
           
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/latest/api/alto.ui.reference/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.reference</span></a>
+            <a class="prev" href="/alto/latest/api/alto.ui.score_excerpt/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.score_excerpt</span></a>
             <a class="next" href="/alto/latest/api/alto.ui.staff/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.staff<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -1944,7 +2314,7 @@ True
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1992,8 +2362,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

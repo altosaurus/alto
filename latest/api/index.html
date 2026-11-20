@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>API reference · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/api/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="API reference · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/api/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section" open>
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/" aria-current="page">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -492,12 +612,16 @@
   </thead>
   <tbody>
     <tr>
+      <td><a href="alto.anki_export/">alto.anki_export</a></td>
+      <td>Write portable Anki decks from Alto questions and optional calendar review dates.</td>
+    </tr>
+    <tr>
       <td><a href="alto.audio/">alto.audio</a></td>
       <td>Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes.</td>
     </tr>
     <tr>
       <td><a href="alto.circle_schemes/">alto.circle_schemes</a></td>
-      <td>The colour schemes of the circle of fifths: the presets, and the schemes a user makes.</td>
+      <td>The color schemes of the circle of fifths: the presets, and the schemes a user makes.</td>
     </tr>
     <tr>
       <td><a href="alto.instrument_info/">alto.instrument_info</a></td>
@@ -506,6 +630,14 @@
     <tr>
       <td><a href="alto.location/">alto.location</a></td>
       <td>Where Alto keeps its practice history and its settings, and how to keep them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.notation_excerpts/">alto.notation_excerpts</a></td>
+      <td>Public-domain piano excerpts available for offline notation practice.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.notation_terms/">alto.notation_terms</a></td>
+      <td>Notation Identification terms, grouped by subject with their score placement and SMuFL code points.</td>
     </tr>
     <tr>
       <td><a href="alto.selfupdate/">alto.selfupdate</a></td>
@@ -536,7 +668,7 @@
   <tbody>
     <tr>
       <td><a href="alto.exercises.base/">alto.exercises.base</a></td>
-      <td>Exercise framework. To add an exercise: subclass Exercise, decorate with @register.</td>
+      <td>Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks.</td>
     </tr>
     <tr>
       <td><a href="alto.exercises.library/">alto.exercises.library</a></td>
@@ -562,12 +694,24 @@
       <td>Backup files: everything Alto keeps, in one file that can be read back into a clean install. Pure Python (no Qt).</td>
     </tr>
     <tr>
+      <td><a href="alto.learning.calendar/">alto.learning.calendar</a></td>
+      <td>Daily exercise queues for SM-2 and FSRS.</td>
+    </tr>
+    <tr>
       <td><a href="alto.learning.database/">alto.learning.database</a></td>
       <td>The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt).</td>
     </tr>
     <tr>
+      <td><a href="alto.learning.grading/">alto.learning.grading</a></td>
+      <td>Answer-button intervals for Anki’s default SM-2 and FSRS-6 deck settings.</td>
+    </tr>
+    <tr>
       <td><a href="alto.learning.learner/">alto.learning.learner</a></td>
       <td>Ties the profile, the database and the scheduler together for the exercise screen.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.learning.response_times/">alto.learning.response_times</a></td>
+      <td>Rolling response times for one learner and exercise.</td>
     </tr>
     <tr>
       <td><a href="alto.learning.scheduler/">alto.learning.scheduler</a></td>
@@ -604,6 +748,22 @@
       <td><a href="alto.lessons.clef_basics/">alto.lessons.clef_basics</a></td>
       <td>The lesson on clefs, taught from nothing.</td>
     </tr>
+    <tr>
+      <td><a href="alto.lessons.intervals/">alto.lessons.intervals</a></td>
+      <td>A guided introduction to naming intervals on the staff and keyboard.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.key_signatures/">alto.lessons.key_signatures</a></td>
+      <td>A guided lesson on reading and writing key signatures.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.pitches_and_notes/">alto.lessons.pitches_and_notes</a></td>
+      <td>A first lesson connecting a sound, a piano key, and a written note.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.scale_identification/">alto.lessons.scale_identification</a></td>
+      <td>Reading scales and recognizing their interval patterns.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -622,6 +782,10 @@
     <tr>
       <td><a href="alto.theory.fifths/">alto.theory.fifths</a></td>
       <td>The circle of fifths: the twelve keys in order, each major with its relative minor.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.theory.key_signatures/">alto.theory.key_signatures</a></td>
+      <td>Staff positions for written key signatures.</td>
     </tr>
     <tr>
       <td><a href="alto.theory.pitch/">alto.theory.pitch</a></td>
@@ -647,6 +811,14 @@
   </thead>
   <tbody>
     <tr>
+      <td><a href="alto.ui.anki_exporter/">alto.ui.anki_exporter</a></td>
+      <td>Modeless Anki deck exporter using Alto’s exercise controls and music engraving.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.answer_bank/">alto.ui.answer_bank</a></td>
+      <td>A responsive, scrollable grid for large banks of answer buttons.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.app_settings/">alto.ui.app_settings</a></td>
       <td>The application-wide settings dialog.</td>
     </tr>
@@ -656,23 +828,31 @@
     </tr>
     <tr>
       <td><a href="alto.ui.charts/">alto.ui.charts</a></td>
-      <td>Small charts drawn with QPainter, in the application’s theme colours.</td>
+      <td>Small charts drawn with QPainter, in the application’s theme colors.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.circle/">alto.ui.circle</a></td>
       <td>The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside.</td>
     </tr>
     <tr>
-      <td><a href="alto.ui.circle_colours/">alto.ui.circle_colours</a></td>
-      <td>The pages of the circle of fifths settings that choose its colours: a grid of schemes to pick from, and an editor to make one.</td>
+      <td><a href="alto.ui.circle_colors/">alto.ui.circle_colors</a></td>
+      <td>The pages of the circle of fifths settings that choose its colors: a grid of schemes to pick from, and an editor to make one.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.colors/">alto.ui.colors</a></td>
-      <td>Mixing colours. The interface blends palette colours to get its soft tints and highlights.</td>
+      <td>Mixing colors. The interface blends palette colors to get its soft tints and highlights.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.database_page/">alto.ui.database_page</a></td>
       <td>A read-only look at what is stored: every answer, every question’s record, and the profiles.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.degree_text/">alto.ui.degree_text</a></td>
+      <td>Draw scale-degree carets above their digits without relying on font-specific combining accents.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.dropdown/">alto.ui.dropdown</a></td>
+      <td>Shared dropdown fields with rounded popup windows.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.engraving/">alto.ui.engraving</a></td>
@@ -683,16 +863,24 @@
       <td>The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.glossary/">alto.ui.glossary</a></td>
+      <td>A searchable glossary of the notation terms used in Alto.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.home/">alto.ui.home</a></td>
       <td>The start screen: a card for every exercise, or for every lesson, in rows.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.icons/">alto.ui.icons</a></td>
-      <td>Small monochrome icons drawn from SVG, tinted with the current theme’s text colour.</td>
+      <td>Small monochrome icons drawn from SVG, tinted with the current theme’s text color.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.instrument_picker/">alto.ui.instrument_picker</a></td>
       <td>Choosing the instrument that plays notes, with a summary of what each one is made from.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.interval_range/">alto.ui.interval_range</a></td>
+      <td>A two-handle slider for selecting interval distances without changing the keyboard range.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.key_fork/">alto.ui.key_fork</a></td>
@@ -704,7 +892,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.keyboard_styles/">alto.ui.keyboard_styles</a></td>
-      <td>Keyboard styles: the colours and materials the on-screen piano keys are drawn in.</td>
+      <td>Keyboard styles: the colors and materials the on-screen piano keys are drawn in.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.lesson/">alto.ui.lesson</a></td>
@@ -716,7 +904,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.main_window/">alto.ui.main_window</a></td>
-      <td>The main window: a menu, the exercise list on the left that can be collapsed, and the page on the right.</td>
+      <td>The main window: tile browsing or a workspace with an independently selected exercise or lesson list.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.notation/">alto.ui.notation</a></td>
@@ -735,8 +923,12 @@
       <td>Small pictures of musical things (clefs, note values, key signatures, note ranges …) for the settings panes.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.practice_limits/">alto.ui.practice_limits</a></td>
+      <td>Daily card allowances in profile and exercise settings.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.profile_dialog/">alto.ui.profile_dialog</a></td>
-      <td>Choosing who is practising. There is no password: a profile is just a name that keeps its own history.</td>
+      <td>Choosing who is practicing. There is no password: a profile is just a name that keeps its own history.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.question_preview/">alto.ui.question_preview</a></td>
@@ -745,6 +937,18 @@
     <tr>
       <td><a href="alto.ui.reference/">alto.ui.reference</a></td>
       <td>The reference pane: an interactive circle of fifths to look things up on, with an explanation under it.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.response_times/">alto.ui.response_times</a></td>
+      <td>Profile speed-grading settings and the rolling distribution for each exercise.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.scale_explorer/">alto.ui.scale_explorer</a></td>
+      <td>Interactive notation and step patterns for learning scales.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.score_excerpt/">alto.ui.score_excerpt</a></td>
+      <td>Paint the engraved score and locate symbols from a pixel map made from the same SVG.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.settings_panel/">alto.ui.settings_panel</a></td>
@@ -757,6 +961,10 @@
     <tr>
       <td><a href="alto.ui.staff_input/">alto.ui.staff_input</a></td>
       <td>The staffs you click to place notes or a clef.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.staff_playback/">alto.ui.staff_playback</a></td>
+      <td>Connect a displayed music sample to the notes sounding on its staff.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.stats_dialog/">alto.ui.stats_dialog</a></td>
@@ -772,7 +980,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.theme/">alto.ui.theme</a></td>
-      <td>The colour theme: follow the system, force light or dark, or use a theme with colours of its own.</td>
+      <td>The color theme: follow the system, force light or dark, or use a theme with colors of its own.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.theme_cards/">alto.ui.theme_cards</a></td>
@@ -780,7 +988,7 @@
     </tr>
     <tr>
       <td><a href="alto.ui.theme_editor/">alto.ui.theme_editor</a></td>
-      <td>The editor for a theme of the user’s own: a name, and a colour for every part of its light and dark versions.</td>
+      <td>The editor for a theme of the user’s own: a name, and a color for every part of its light and dark versions.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.transition_preview/">alto.ui.transition_preview</a></td>
@@ -861,34 +1069,9 @@
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/guide/reading/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Glossary and further reading</span></a>
-            <a class="next" href="/alto/latest/api/alto.audio/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.audio<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/latest/api/alto.anki_export/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.anki_export<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -902,7 +1085,7 @@
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -950,8 +1133,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

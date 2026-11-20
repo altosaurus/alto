@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Computer audio · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/guide/audio/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Computer audio · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/guide/audio/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><details class="nav-section" open>
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -520,7 +640,7 @@ a sound with many high partials, which is why <code class="language-plaintext hi
 
 <ul>
   <li><strong>Clipping</strong>: a sample cannot go beyond -1 or 1. A calculation that goes past it is flattened (“clipped”), which sounds harsh.
-Anything you generate should be scaled down (<strong>normalised</strong>) so its peak is below 1. <code class="language-plaintext highlighter-rouge">synth_piano</code> scales its result so the
+Anything you generate should be scaled down (<strong>normalized</strong>) so its peak is below 1. <code class="language-plaintext highlighter-rouge">synth_piano</code> scales its result so the
 loudest sample is 0.8.</li>
   <li><strong>Decibels</strong> are a logarithmic scale for amplitude: <code class="language-plaintext highlighter-rouge">20 * log10(ratio)</code>. Halving the amplitude is -6 dB. Because hearing is
 roughly logarithmic too, a linear volume of 0.5 does not sound “half as loud”; it sounds only a little quieter. Qt’s
@@ -577,7 +697,7 @@ of these, since each note is played once at one level.</p>
 <ol>
   <li><strong><code class="language-plaintext highlighter-rouge">_note_file</code></strong> returns the recording’s path if that note has one. If it does not, it picks the <em>nearest</em> recorded note and
 makes a new WAV by shifting its pitch (below), saved in <code class="language-plaintext highlighter-rouge">alto_sounds</code> in the system temporary folder. The piano is special:
-beyond two semitones from a recording it is synthesised instead (below).</li>
+beyond two semitones from a recording it is synthesized instead (below).</li>
   <li><strong><code class="language-plaintext highlighter-rouge">_effect</code></strong> wraps the file in a <code class="language-plaintext highlighter-rouge">QSoundEffect</code> the first time and keeps it, so a note is loaded once.
 <strong><code class="language-plaintext highlighter-rouge">QSoundEffect</code></strong> is Qt Multimedia’s class for short, uncompressed sounds that must start with low delay: it loads the whole
 file into memory, so <code class="language-plaintext highlighter-rouge">play()</code> is quick. Qt has two others: <code class="language-plaintext highlighter-rouge">QMediaPlayer</code> streams longer, compressed audio and starts slower,
@@ -596,7 +716,7 @@ and <code class="language-plaintext highlighter-rouge">QAudioSink</code> is a lo
 </code></pre></div></div>
 
 <p>To raise a recording by two semitones, read it 12% faster: take the samples at positions 0, 1.122, 2.245, … and interpolate
-between neighbours. This is <strong>resampling</strong>, and it is the simplest pitch shifter. It has two well-known side effects: the
+between neighbors. This is <strong>resampling</strong>, and it is the simplest pitch shifter. It has two well-known side effects: the
 sound gets <strong>shorter</strong> (a note shifted up two semitones lasts 1/1.122 of the time, which the arithmetic above confirms: 70,560
 samples become 62,861), and the <strong>timbre</strong> changes, because everything speeds up together (the “chipmunk effect”). For one or
 two semitones on a flute or a viola neither is noticeable, which is why Alto shifts only to fill the odd missing note.</p>
@@ -638,7 +758,7 @@ short burst of <strong>filtered noise</strong> for the hammer’s thump (white n
 and a 50 ms fade-out so the file does not end with a click.</li>
 </ul>
 
-<p>You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesised middle C
+<p>You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesized middle C
 is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz):</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
@@ -670,7 +790,7 @@ go. A recording played in full sounds as if the <strong>damper pedal</strong> we
 so each note ends as the next begins, the way fingers move from key to key. The last note of a melody is left to fade by
 itself.</p>
 
-<p>An abrupt stop is audible as a click, and a fade avoids it. The same idea (<strong>an envelope</strong>) shapes every synthesised note.
+<p>An abrupt stop is audible as a click, and a fade avoids it. The same idea (<strong>an envelope</strong>) shapes every synthesized note.
 The classical envelope is <strong>ADSR</strong>: <em>attack</em> (how fast the sound begins), <em>decay</em>, <em>sustain</em> level, <em>release</em> (how it ends).</p>
 
 <h3 id="timing-a-sequence">Timing a sequence</h3>
@@ -684,7 +804,7 @@ polls <code class="language-plaintext highlighter-rouge">status()</code> every 1
 finishes. If starting one note takes a while, the others are not pushed later and the rhythm stays even. The test
 <code class="language-plaintext highlighter-rouge">test_a_note_that_is_slow_to_start_does_not_upset_the_rhythm</code> checks this.</li>
   <li><strong>A newer sequence cancels an older one.</strong> Each sequence has a run number, and a step that finds a newer number does nothing.
-This pattern, a <em>token</em>, appears in the animations too: callbacks scheduled for later cannot be cancelled easily, so they
+This pattern, a <em>token</em>, appears in the animations too: callbacks scheduled for later cannot be canceled easily, so they
 check whether they are still wanted.</li>
 </ol>
 
@@ -699,14 +819,14 @@ get an <strong>underrun</strong> (a glitch). None of that applies to Alto, and i
 
 <p>The steps are in <a href="/alto/latest/development/">For developers</a>: the WAV files named by MIDI number in
 <code class="language-plaintext highlighter-rouge">alto/assets/samples/&lt;key&gt;/</code>, an <code class="language-plaintext highlighter-rouge">Instrument</code> in <code class="language-plaintext highlighter-rouge">INSTRUMENTS</code>, an entry in <code class="language-plaintext highlighter-rouge">instrument_info.INFO</code>, and the credit in
-<code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>. Check that the licence permits redistribution. A few practical points:</p>
+<code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>. Check that the license permits redistribution. A few practical points:</p>
 
 <ul>
-  <li><strong>Trim silence at the start</strong>, or the note feels late. Normalise levels so that notes of one instrument are similar, then set
+  <li><strong>Trim silence at the start</strong>, or the note feels late. Normalize levels so that notes of one instrument are similar, then set
 <code class="language-plaintext highlighter-rouge">gain</code> to balance instruments against each other.</li>
   <li><strong>Mono, 16-bit</strong> files at any common rate (44.1 or 48 kHz) work; <code class="language-plaintext highlighter-rouge">QSoundEffect</code> resamples at playback.</li>
   <li>Mark <code class="language-plaintext highlighter-rouge">sustained=True</code> for bowed and blown instruments, and <code class="language-plaintext highlighter-rouge">damped=True</code> for an instrument with dampers, such as the piano; leave both off for struck and plucked ones that ring on.</li>
-  <li>Gaps are fine: a missing note is made from its nearest neighbour.</li>
+  <li>Gaps are fine: a missing note is made from its nearest neighbor.</li>
 </ul>
 
 <h2 id="testing-audio-without-speakers">Testing audio without speakers</h2>
@@ -720,7 +840,7 @@ the world: replace the world with a recorder.</p>
 
 <p><em>PCM, WAV, RIFF.</em> <em>Nyquist frequency, aliasing, anti-aliasing filter.</em> <em>Quantisation, dither.</em> <em>Dynamic range, decibel,
 loudness, psychoacoustics, equal-loudness contours.</em> <em>Overtone, partial, harmonic series, timbre, inharmonicity.</em> <em>Additive,
-subtractive, FM, wavetable and physical-modelling synthesis.</em> <em>Karplus-Strong algorithm</em> (a famous few-line plucked-string
+subtractive, FM, wavetable and physical-modeling synthesis.</em> <em>Karplus-Strong algorithm</em> (a famous few-line plucked-string
 model). <em>Convolution</em> and <em>impulse response</em> (how reverb is done). <em>Fourier transform, FFT, spectrogram, window function.</em>
 <em>Resampling, interpolation, sinc interpolation, polyphase filter.</em> <em>Time-stretching, phase vocoder, PSOLA.</em> <em>Sampler,
 multisampling, velocity layer, round robin, loop point.</em> <em>SoundFont and SFZ</em> (sample instrument formats). <em>Latency, buffer,
@@ -731,7 +851,7 @@ underrun, callback.</em> <em>MIDI</em> (the standard also defines messages, chan
 <ul>
   <li>Julius O. Smith III, <em>Mathematics of the Discrete Fourier Transform</em>, <em>Introduction to Digital Filters</em>, <em>Physical Audio Signal
 Processing</em> and <em>Spectral Audio Signal Processing</em> (W3K Publishing, 2007; free at ccrma.stanford.edu/~jos, the author’s
-Stanford page, which is the primary source). The best free route from the sampling theorem to physical modelling of
+Stanford page, which is the primary source). The best free route from the sampling theorem to physical modeling of
 instruments.</li>
   <li>Ken C. Pohlmann, <em>Principles of Digital Audio</em>, 6th ed. (McGraw-Hill, 2010): sampling, quantisation, converters, file formats.</li>
   <li>Alan V. Oppenheim and Ronald W. Schafer, <em>Discrete-Time Signal Processing</em>, 3rd ed. (Pearson, 2010): the standard textbook
@@ -799,23 +919,6 @@ of the recordings Alto ships.</li>
           
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/guide/notation/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Rendering music notation</span></a>
             <a class="next" href="/alto/latest/guide/spaced-repetition/" rel="next"><span class="np-label">Next</span><span class="np-title">Spaced repetition and adaptive practice<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -832,7 +935,7 @@ of the recordings Alto ships.</li>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -880,8 +983,8 @@ of the recordings Alto ships.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

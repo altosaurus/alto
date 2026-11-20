@@ -1,0 +1,1 @@
+Sitemap: https://altosaurus.github.io/alto/v0.0.2/sitemap.xml

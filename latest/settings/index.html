@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Settings · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/settings/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Settings · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/settings/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -484,7 +604,7 @@
 <p>Open them from the menu (☰) with <strong>Settings…</strong> or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. The dialog does not block the window: you can
 keep it open and use the exercises, and opening it again brings the same one forward. A new theme is applied to the window when you close
 the settings. Categories are listed on the left, and
-the selected one’s settings appear on the right.</p>
+the selected one’s settings appear on the right. <strong>Restore defaults…</strong> resets app and exercise preferences after confirmation. It removes custom themes and keyboard colors and keeps your profiles and practice history.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/latest/assets/img/settings.png" alt="The settings dialog showing theme and notation style options" loading="lazy" />
@@ -494,27 +614,27 @@ the selected one’s settings appear on the right.</p>
 
 <h3 id="appearance">Appearance</h3>
 
-<p>The Appearance page has four sections, <strong>Theme</strong>, <strong>Notation style</strong>, <strong>Keyboard style</strong> and <strong>Transitions</strong>, which you switch between with the pill-shaped control at the top.</p>
+<p>Expand <strong>Appearance</strong> in the left sidebar to choose <strong>Theme</strong>, <strong>Notation style</strong>, <strong>Keyboard style</strong>, or <strong>Transitions</strong>.</p>
 
 <p><strong>Theme.</strong> The themes are in a list on the left. The right side is the theme’s card: its name, three pictures of the window one
-above another. Beside the Light and Dark pictures are squares of that version’s colours, and the window, accent and ink colours
+above another. Beside the Light and Dark pictures are squares of that version’s colors, and the window, accent and ink colors
 written out as hexadecimal codes. The pictures are <strong>Light</strong>, <strong>Dark</strong> and <strong>System</strong>. The System picture is cut through
 on a slant, light on one side and dark on the other, because that version is light when your operating system is set to light and
 dark when it is set to dark, and changes with it. Choosing a theme in the list uses it at once, in whichever of Light, Dark and
 System you chose last, so you can go down the list and see each theme in the version you prefer. Clicking a picture changes the
 version. The picture in use is outlined, and its theme is bold in the list. The first theme, <strong>Default</strong>, is the desktop’s own
-colours. Then there is <strong>Studio</strong>, with cool greys and a clear blue, and twenty-four more: Parchment, Slate Blue, Sage, Harbour,
+colors. Then there is <strong>Studio</strong>, with cool grays and a clear blue, and twenty-four more: Parchment, Slate Blue, Sage, Harbor,
 Lavender Hush, Rosewater, Marigold, Pine, Indigo Ink, Graphite, Terracotta, Mint, Sky, Plum, Sand, Teal, Copper, Charcoal and Gold,
 Cherry, Moss, Arctic, Dusk, Lime Shock and Ember.</p>
 
 <p><strong>Your own themes.</strong> The top of the theme list is <strong>My themes</strong>, with a row <strong>＋ New theme…</strong>. Choosing it opens an editor in
-place of the card. <strong>Save</strong> (filled in the accent colour), <strong>Cancel</strong> and, for a theme already saved, <strong>Delete theme</strong> are at the top
-right of the editor, where they stay in view while the colours below them scroll. Give the theme a name, then choose a colour for each part of its <strong>Light version</strong> and its <strong>Dark version</strong>:
-the window, panels, text, quiet text, outlines, accent and the track behind a switch. Click a colour to open the colour picker: the pointer becomes a hand over a colour, a ring appears round it, and the code beside it turns bold and dark. A
-small picture of each version follows the colours as you change them. A new theme starts as a copy of Studio, and choosing another
-theme in the <strong>Start from</strong> list takes that theme’s colours at once, for both versions. <strong>Save</strong> keeps the theme and uses it, in the
+place of the card. <strong>Save</strong> (filled in the accent color), <strong>Cancel</strong> and, for a theme already saved, <strong>Delete theme</strong> are at the top
+right of the editor, where they stay in view while the colors below them scroll. Give the theme a name, then choose a color for each part of its <strong>Light version</strong> and its <strong>Dark version</strong>:
+the window, panels, text, quiet text, outlines, accent and the track behind a switch. Click a color to open the color picker: the pointer becomes a hand over a color, a ring appears around it, and the code beside it turns bold and dark. A
+small picture of each version follows the colors as you change them. A new theme starts as a copy of Studio, and choosing another
+theme in the <strong>Start from</strong> list takes that theme’s colors at once, for both versions. <strong>Save</strong> keeps the theme and uses it, in the
 version you last chose. Your themes are kept with your other settings, so they are there next time, and they are part of a
-backup. A theme of your own appears in the list with the same three pictures as any other, and its card has a <strong>Change colours…</strong>
+backup. A theme of your own appears in the list with the same three pictures as any other, and its card has a <strong>Change colors…</strong>
 button for the editor, from which you can also <strong>Delete theme</strong> after it asks.</p>
 
 <p><strong>Notation style.</strong> The music font used to draw clefs, notes and accidentals. Each choice shows a preview. Your choice
@@ -534,7 +654,7 @@ applies to every staff in the app, including the small pictures in the settings 
     </tr>
     <tr>
       <td>Leland</td>
-      <td>MuseScore 4’s font. Light and modern, modelled on SCORE.</td>
+      <td>MuseScore 4’s font. Light and modern, modeled on SCORE.</td>
     </tr>
     <tr>
       <td>Bravura</td>
@@ -579,8 +699,8 @@ applies to every staff in the app, including the small pictures in the settings 
 (the bottom line is B2 and the top line is C4):</p>
 
 <ul>
-  <li><strong>F clef, on the middle line</strong> is the default. It looks like a bass clef moved up, with its dots either side of the middle line.</li>
-  <li><strong>C clef, on the top line</strong> looks like an alto clef moved up, with its centre on the top line.</li>
+  <li><strong>F clef, on the middle line</strong> is the default. It looks like a bass clef moved up, with its dots on either side of the middle line.</li>
+  <li><strong>C clef, on the top line</strong> looks like an alto clef moved up, with its center on the top line.</li>
 </ul>
 
 <p>The choice applies to every baritone staff in the app and its pictures, in whichever music font you have chosen.</p>
@@ -614,7 +734,7 @@ small picture of the keys. Your choice applies to every keyboard in the app. The
     </tr>
     <tr>
       <td>Harpsichord, French</td>
-      <td>Reversed colours: ebony naturals with bone-topped sharps.</td>
+      <td>Reversed colors: ebony naturals with bone-topped sharps.</td>
     </tr>
     <tr>
       <td>Baroque pipe organ</td>
@@ -633,8 +753,8 @@ small picture of the keys. Your choice applies to every keyboard in the app. The
       <td>Ink on paper, like a plate in an old method book.</td>
     </tr>
     <tr>
-      <td>Colour by note</td>
-      <td>One hue per semitone, so every C has the same colour.</td>
+      <td>Color by note</td>
+      <td>One hue per semitone, so every C has the same color.</td>
     </tr>
     <tr>
       <td>Midnight neon</td>
@@ -647,15 +767,15 @@ small picture of the keys. Your choice applies to every keyboard in the app. The
   </tbody>
 </table>
 
-<p>The colours are typical of the materials, not measurements of one instrument.</p>
+<p>The colors are typical of the materials, not measurements of one instrument.</p>
 
 <p><strong>Build your own.</strong> Below the cards, each part of the keyboard has a row: <strong>Naturals</strong>, <strong>Sharps</strong>, <strong>Case</strong>, <strong>Felt strip</strong> and
-<strong>Sharp caps</strong>. Click a part’s swatch to open the colour picker, or click one of the round chips for a colour named after a
-material: Acrylic white, Mother-of-pearl, Ivory, Bone, Boxwood, Maple, Cypress, Oak, Walnut, Rosewood, Ebonised pearwood, Ebony,
-Black acrylic, Aluminium, Brass, Red felt, Green baize and Blue felt. Hover a chip to see its name. The case, felt and caps can be
-left out with the ✕ chip. Changing any part switches to the <strong>Custom</strong> style, and your colours are remembered.</p>
+<strong>Sharp caps</strong>. Click a part’s swatch to open the color picker, or click one of the round chips for a color named after a
+material: Acrylic white, Mother-of-pearl, Ivory, Bone, Boxwood, Maple, Cypress, Oak, Walnut, Rosewood, Ebonized pearwood, Ebony,
+Black acrylic, Aluminum, Brass, Red felt, Green baize and Blue felt. Hover a chip to see its name. The case, felt and caps can be
+left out with the ✕ chip. Changing any part switches to the <strong>Custom</strong> style, and your colors are remembered.</p>
 
-<p>The breve is always drawn in its square form, whichever font you choose. All the fonts are bundled with Alto except Noto Music, which is read from your system.</p>
+<p>The double whole note is always drawn in its square form, whichever font you choose. All the fonts are bundled with Alto except Noto Music, which is read from your system.</p>
 
 <p><strong>Transitions.</strong> How the home page changes when you switch between the exercises and the lessons. The choices are in a list on
 the left, and a preview on the right plays the one you pick, once, on a mock of the home page with the app’s own cards and the
@@ -679,13 +799,13 @@ There are twenty-nine in all, and they fall into a few families:</p>
 
 <p><strong>Instrument.</strong> The sound used for notes and for the correct-answer chime. The instruments are listed in a box on the
 left: piano, flute, French horn, viola, marimba and vibraphone. The one in use is in bold and
-ticked. Choose any of them to see a summary on the right of what its sound is made from:</p>
+checked. Choose any of them to see a summary on the right of what its sound is made from:</p>
 
 <ul>
   <li>where the recordings come from, who played them, and when and how they were recorded;</li>
   <li>which articulation and dynamic were used, such as blown without vibrato at fortissimo or struck with yarn mallets;</li>
   <li>how many notes are recorded, their range, and whether every semitone is covered (notes in between are shifted from
-a neighbour);</li>
+a neighbor);</li>
   <li>how much space they take, and the terms they are available under.</li>
 </ul>
 
@@ -709,37 +829,46 @@ only play as the synthesized piano.</p>
 
 <h3 id="updates">Updates</h3>
 
-<p>Shows the version of Alto you are running, and has one choice: <strong>Follow the main branch</strong>. Off (the default), <strong>Check for
-updates…</strong> in the menu looks for the newest release. On, it looks for the newest change on the main branch instead, so you get
-each change as soon as it is merged, before it has been released. That may be less stable. It applies to a copy installed with
-the install script; a packaged copy always follows releases. See <a href="/alto/latest/getting-started/">Getting started</a>.</p>
+<p><strong>Automatically check for new releases daily</strong> is on by default. When a new release is available and the main grid is active, Alto asks whether you want to update.</p>
+
+<ul>
+  <li><strong>Yes</strong> starts the update or opens the download page, depending on how you installed Alto.</li>
+  <li><strong>No</strong> lets Alto offer the same version again after 24 hours.</li>
+  <li><strong>Don’t remind me again</strong> skips this version. Alto will still notify you when a newer version is available.</li>
+</ul>
+
+<p>To revisit a skipped release, choose <strong>Tools → Check for updates…</strong>. To stop automatic prompts for all releases, turn off <strong>Automatically check for new releases daily</strong>.</p>
+
+<p><strong>Follow the main branch</strong> switches manual checks to the latest commit for copies installed with the install script. Automatic release checks pause on that channel. Packaged copies always follow releases. See <a href="/alto/latest/getting-started/">Getting started</a>.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/settings-updates.png" alt="The Updates settings page with automatic daily checks enabled and Follow the main branch unchecked." loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/settings-updates-dark.png" alt="The Updates settings page with automatic daily checks enabled and Follow the main branch unchecked." loading="lazy" />
+  
+</figure>
+
+<h3 id="practice">Practice</h3>
+
+<p>Select a scheduler for the current profile. With <strong>SM-2</strong> or <strong>FSRS</strong>, you can set daily limits and choose whether to grade correct answers yourself. Open <strong>Response-time grading…</strong> to adjust the automatic Hard and Easy percentages and inspect the times for each exercise. <a href="/alto/latest/practice/#response-time-grading">Response-time grading</a>.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/practice-settings.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/practice-settings-dark.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" loading="lazy" />
+  <figcaption>This profile can start ten new cards per exercise each day and review every card that comes due.</figcaption>
+</figure>
 
 <h2 id="exercise-settings">Exercise settings</h2>
 
-<p>Note Identification, Keyboard Identification and Note Construction have a sliders button at the top right of the
-exercise. It opens a pane on the right. Each row summarises its setting with a small picture, and clicking a row opens
+<p>Open the sliders button at the top right of an exercise to see its options. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
 that setting’s page. See <a href="/alto/latest/exercises/">Exercises</a> for what each option does.</p>
 
-<p>Changing a setting starts a new question straight away, and the settings are remembered the next time you open Alto.</p>
+<p>Changing a setting starts a new question right away, and the settings are remembered the next time you open Alto.</p>
 
 <h2 id="where-settings-are-stored">Where settings are stored</h2>
 
 <p>Settings are kept by Qt in your user configuration (for example <code class="language-plaintext highlighter-rouge">~/.config/alto/alto.conf</code> on Linux), separate from your
 practice history. See <a href="/alto/latest/data/">Your data</a>.</p>
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -774,7 +903,7 @@ practice history. See <a href="/alto/latest/data/">Your data</a>.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -822,8 +951,8 @@ practice history. See <a href="/alto/latest/data/">Your data</a>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

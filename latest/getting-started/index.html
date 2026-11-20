@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Getting started · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/getting-started/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="Getting started · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/getting-started/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -485,14 +605,14 @@
   <li>Alto installs <a href="https://doc.qt.io/qtforpython-6/">PySide6</a> (6.8 or newer) and numpy for you.</li>
 </ul>
 
-<p>The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs installing. Only the
+<p>The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs to be installed. Only the
 “Noto Music” style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
 change the notation style in <a href="/alto/latest/settings/">Settings</a>.</p>
 
 <h2 id="download-and-install">Download and install</h2>
 
 <p>Each release on the <a href="https://github.com/altosaurus/alto/releases">Releases page</a> has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs installing.</p>
+carry their own Python and Qt, so nothing else needs to be installed.</p>
 
 <p><strong>Linux.</strong> Download <code class="language-plaintext highlighter-rouge">alto-&lt;version&gt;-linux-x86_64.tar.gz</code>, unpack it, and in the folder it makes run:</p>
 
@@ -532,7 +652,9 @@ can check that yours arrived complete and unchanged. Download it from the same r
 
 <h2 id="updating-alto">Updating Alto</h2>
 
-<p>Whichever way you installed Alto, you can update from inside it: open the menu (☰) and choose <strong>Check for updates…</strong>. By default Alto asks GitHub for the
+<p>Alto checks for published releases in the background when the main grid is active, up to once every 24 hours. If a newer version is available, Alto asks whether you want to upgrade. Choose <strong>Yes</strong> to start the upgrade, <strong>No</strong> for a reminder after 24 hours, or <strong>Don’t remind me again</strong> to skip that release. You can turn off automatic checks in <strong>Settings → Updates</strong>.</p>
+
+<p>To update Alto, open the ☰ menu and choose <strong>Tools</strong> → <strong>Check for updates…</strong>. By default Alto asks GitHub for the
 newest <strong>release</strong> and compares it with the version you have (<strong>Settings → Updates</strong> shows it). If yours is the newest, it
 says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
 OK.</p>
@@ -551,7 +673,7 @@ downloaded, as is a build that has no way to check a download.</li>
 download only if the signature on the list is valid, the signed list names that file, and the file’s SHA-256 hash is the one
 listed. If any of that fails, it says why and installs nothing. If an update fails while installing on Linux, the copy you had is kept.</p>
 
-<p>To get changes as soon as they are merged, before they are released, tick <strong>Follow the main branch</strong> in <strong>Settings →
+<p>To get changes as soon as they are merged, before they are released, select <strong>Follow the main branch</strong> in <strong>Settings →
 Updates</strong>. The check then compares commits on the main branch instead of releases. This works for a copy installed with the
 script, and may be less stable than a release; a packaged copy always follows releases.</p>
 
@@ -601,18 +723,56 @@ separate from anyone else who uses the same computer. Next time Alto opens strai
 
 <ol>
   <li>Click an exercise on the home screen.</li>
-  <li>Answer by clicking a button, or by pressing the number key shown in its tooltip.</li>
-  <li>A correct answer turns green and plays the note. A wrong one turns red. Try again until you get it.</li>
+  <li>Follow the prompt. Click an answer button or use the shortcut in its tooltip. For a construction question, place the requested note or sign.</li>
+  <li>A correct answer turns green. With the default scheduler, try a missed question again. With SM-2 or FSRS, a miss moves the card to the learning queue for a later retry.</li>
   <li>The counter at the top shows how many you have right and your current streak.</li>
 </ol>
 
-<p>The sidebar on the left switches between exercises. The button at the top left of the exercise hides and shows it. The sliders button at the top right opens the
-exercise’s own settings, and the <strong>?</strong> button explains the exercise.</p>
+<p>The <strong>Exercises / Lessons</strong> control at the top left selects what to browse. Alto starts with tiles. <strong>Navigation Pane</strong>
+opens the matching list on the left; before you start an activity, the main panel says “Select an exercise to begin.” or
+“Select a lesson to begin.” Use the separate <strong>Tiles</strong> grid button to return to tiles without losing your place.</p>
+
+<p>The icon-only <strong>Exercises / Lessons</strong> pair sits at the top left, followed by an open/close navigation-pane button, a divider,
+and a separate grid button for returning to tiles. Hover over an icon to see its name. The search field below filters the
+selected section by name, description or category, and follows the sidebar’s width. On the tile grid or during an exercise, click the funnel icon
+at the right end of the search row to open the filter sidebar. Click it again to collapse the sidebar and keep your filters.
+The sidebar opens on the right with every category expanded. Check or clear a category to include or
+hide its activities, or check individual exercises or lessons. The tiles and navigation list show the same matches.
+A dash means some activities in a category are checked. <strong>All categories</strong> selects or clears the whole list.</p>
+
+<p>Turn on <strong>Shuffle exercises</strong>, just left of the funnel, to practice the exercises in your filtered list. After each
+right or wrong answer, Alto prefers an exercise from another category. If the other available exercises are in the
+current category, it picks one of those. For example, selecting only <strong>Note Identification</strong> and <strong>Keyboard Note
+Identification</strong> makes them alternate when both have questions available. Your <strong>Next Question</strong> setting controls when
+the switch happens. With <strong>Wait</strong>, click <strong>Next</strong> after reviewing your answer. You can change the filters while answering
+a question. Shuffle uses the updated list for the next question and returns to the tiles if the list is empty.
+Click the highlighted shuffle icon again to turn it off.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/latest/assets/img/note-identification.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
-  <img class="for-dark" src="/alto/latest/assets/img/note-identification-dark.png" alt="Note Identification showing a note on a bass clef staff with buttons C to B" loading="lazy" />
-  <figcaption>An exercise screen. The row of buttons below the staff holds the possible answers.</figcaption>
+  <img class="for-light" src="/alto/latest/assets/img/filtered-practice.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/filtered-practice-dark.png" alt="Exercise grid with two checked note exercises in the right sidebar and the blue shuffle icon above it" loading="lazy" />
+  <figcaption>Only the checked exercises appear in the grid. The New, Learn, and Due totals at the left count cards from these two exercises.</figcaption>
+</figure>
+
+<p>During an exercise or lesson, <strong>Exercises / Lessons</strong> switches the list while keeping your activity on screen. Selecting
+an item starts or resumes it. The top-left pane button hides and shows the list without leaving your activity.
+<strong>Statistics</strong> and <strong>Browse database</strong> are at the top right. The sliders button opens the exercise’s own settings, and <strong>?</strong>
+explains it.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the Easy, Good, and Hard intervals beside the staff" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/filtered-exercise-dark.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the Easy, Good, and Hard intervals beside the staff" loading="lazy" />
+  <figcaption>The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice.</figcaption>
+</figure>
+
+<h2 id="glossary">Glossary</h2>
+
+<p>Open <strong>Glossary</strong> in the top toolbar to look up a term. Search for <em>minor</em>, for example, and select <strong>harmonic minor scale</strong>. You can hear the scale, try another example, or open a related exercise from the same page.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/latest/assets/img/glossary.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" loading="lazy" />
+  <img class="for-dark" src="/alto/latest/assets/img/glossary-dark.png" alt="Glossary search results for minor with harmonic minor scale selected and its notes labeled on a staff" loading="lazy" />
+  <figcaption>In A harmonic minor, listen for the three half steps from F to G♯ and the half step from G♯ to A.</figcaption>
 </figure>
 
 <h2 id="running-the-tests">Running the tests</h2>
@@ -621,14 +781,6 @@ exercise’s own settings, and the <strong>?</strong> button explains the exerci
 .venv/bin/pytest
 </code></pre></div></div>
 
-          
-          
-          
-          
-          
-          
-          
-          
           
           
           
@@ -653,7 +805,7 @@ exercise’s own settings, and the <strong>?</strong> button explains the exerci
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -701,8 +853,8 @@ exercise’s own settings, and the <strong>?</strong> button explains the exerci
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

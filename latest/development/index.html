@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>For developers · Alto</title>
-  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta name="description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   
   
   <link rel="canonical" href="https://altosaurus.github.io/alto/latest/development/">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alto">
   <meta property="og:title" content="For developers · Alto">
-  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. It drills note reading, intervals, chords, scales and key signatures, and uses spaced repetition to ask again what you get wrong.">
+  <meta property="og:description" content="Alto is a free desktop music theory trainer for Linux and Windows. Its exercises use spaced repetition to schedule review of notes, intervals, chords, scales, and key signatures.">
   <meta property="og:url" content="https://altosaurus.github.io/alto/latest/development/">
   <meta property="og:image" content="https://altosaurus.github.io/alto/latest/assets/img/note-identification.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,8 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/latest/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1794806461">
+  <link rel="stylesheet" href="/alto/latest/assets/css/site.css?v=1795154141">
+  
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -44,7 +45,7 @@
     <div class="top-actions">
       <div class="version" id="version-slot" data-version="latest" data-root="/alto"><span class="version-name">latest</span></div>
       <div class="dd" id="theme-dd">
-        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Colour theme" title="Colour theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="light"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="dd-text">Light</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
           <button type="button" class="dd-item" role="menuitemradio" aria-checked="false" data-theme-choice="dark"><span class="dd-ico"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="dd-text">Dark</span><svg class="i dd-check" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg></button>
@@ -66,13 +67,16 @@
           
           
           
+          
           <ul class="nav-list">
             
             
             
             
             
+            
             <li><a class="row" href="/alto/latest/">Home</a></li>
+            
             
             
             
@@ -97,6 +101,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/exercises/">Exercises</a></li>
             
             
@@ -105,7 +110,9 @@
             
             
             
-            <li><a class="row" href="/alto/latest/practice/">How practice adapts</a></li>
+            
+            <li><a class="row" href="/alto/latest/practice/">Spaced Repetition</a></li>
+            
             
             
             
@@ -121,7 +128,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/lessons/">Lessons</a></li>
+            
             
             
             
@@ -137,6 +146,7 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/shortcuts/">Shortcuts</a></li>
             
             
@@ -145,7 +155,9 @@
             
             
             
+            
             <li><a class="row" href="/alto/latest/data/">Your data</a></li>
+            
             
             
             
@@ -166,8 +178,36 @@
             
             
             
+            
             <li><details class="nav-section">
-              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/developer-guide/">Developer guide</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/application-launch/">Application launch</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/developer-guide/database/">Database</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/latest/guide/">Resources</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -221,8 +261,11 @@
             
             
             
+            
             <li><details class="nav-section">
               <summary class="nav-row"><a class="row grow" href="/alto/latest/api/">API reference</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
               
               
               <ul class="kids">
@@ -232,6 +275,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.anki_export/">anki_export</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.audio/">audio</a></li>
@@ -244,6 +290,12 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.location/">location</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_excerpts/">notation_excerpts</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.selfupdate/">selfupdate</a></li>
@@ -276,10 +328,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.backup/">backup</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.calendar/">calendar</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.database/">database</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.grading/">grading</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.learner/">learner</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.learning.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.learning.scheduler/">scheduler</a></li>
@@ -303,6 +364,18 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.lessons.clef_basics/">clef_basics</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.intervals/">intervals</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.lessons.scale_identification/">scale_identification</a></li>
+                
+                
                 </ul></details></li>
                 <li><details class="nav-pkg">
                   <summary>alto.theory<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
@@ -310,6 +383,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.fifths/">fifths</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.theory.key_signatures/">key_signatures</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.theory.pitch/">pitch</a></li>
@@ -324,6 +400,12 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.anki_exporter/">anki_exporter</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.answer_bank/">answer_bank</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
@@ -336,7 +418,7 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.circle/">circle</a></li>
                 
                 
-                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colours/">circle_colours</a></li>
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.circle_colors/">circle_colors</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.colors/">colors</a></li>
@@ -345,10 +427,19 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.database_page/">database_page</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.degree_text/">degree_text</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.dropdown/">dropdown</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.engraving/">engraving</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.exercise_view/">exercise_view</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.glossary/">glossary</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.home/">home</a></li>
@@ -358,6 +449,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.instrument_picker/">instrument_picker</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.interval_range/">interval_range</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.key_fork/">key_fork</a></li>
@@ -390,6 +484,9 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.pictures/">pictures</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.practice_limits/">practice_limits</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.profile_dialog/">profile_dialog</a></li>
                 
                 
@@ -399,6 +496,15 @@
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.response_times/">response_times</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.scale_explorer/">scale_explorer</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.settings_panel/">settings_panel</a></li>
                 
                 
@@ -406,6 +512,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_input/">staff_input</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/latest/api/alto.ui.staff_playback/">staff_playback</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/latest/api/alto.ui.stats_dialog/">stats_dialog</a></li>
@@ -445,6 +554,7 @@
             
             
             
+            
             </ul></details></li>
             
             
@@ -456,7 +566,17 @@
             
             
             
+            <li><a class="row" href="/alto/latest/roadmap/">Roadmap</a></li>
+            
+            
+            
+            
+            
+            
+            
+            
             <li><a class="row" href="/alto/latest/release-notes/">Release notes</a></li>
+            
             
             
             
@@ -479,7 +599,7 @@
           <h1>For developers</h1>
           <p>Alto is a Python application using PySide6. The source is at <a href="https://github.com/altosaurus/alto">github.com/altosaurus/alto</a>.</p>
 
-<p>This page is the quick reference: commands, tooling and the short recipes. The <a href="/alto/latest/guide/">developer guide</a> explains how
+<p>This page is the quick reference: commands, tooling and the short recipes. <a href="/alto/latest/guide/">Resources</a> explains how
 the program works and the ideas underneath it (audio, notation, spaced repetition, styling, animation), with reading lists.</p>
 
 <h2 id="layout">Layout</h2>
@@ -530,34 +650,56 @@ pytest
 <p>The tests that touch widgets run with Qt’s offscreen platform, so no display is needed.</p>
 
 <p>The tests never read or change your own settings, profile or history. <code class="language-plaintext highlighter-rouge">tests/conftest.py</code> points them at a throwaway
-folder, closes every window and database a test leaves open, and turns the sound off. Every line of <code class="language-plaintext highlighter-rouge">alto/</code> is covered, so a
-change that adds code should add a test for it; <code class="language-plaintext highlighter-rouge">pytest --cov --cov-report=term-missing</code> shows which lines are missed.</p>
+folder, closes every window and database a test leaves open, and turns the sound off. Coverage measures executable statements under <code class="language-plaintext highlighter-rouge">alto/</code>. The pre-push hook and the pytest job that collects coverage require tests
+to execute every added or modified statement in that package. The Codecov project percentage tracks historical gaps.</p>
 
-<p>GitHub Actions runs the tests on every pull request (<code class="language-plaintext highlighter-rouge">.github/workflows/tests.yml</code>) and reports coverage to Codecov
-(<code class="language-plaintext highlighter-rouge">.github/workflows/codecov.yml</code>). To measure coverage yourself:</p>
+<p>For code pull requests and pushes to <code class="language-plaintext highlighter-rouge">main</code>, the oldest Python version in the pytest matrix (currently 3.11)
+runs the suite with coverage and checks the patch. Download the <code class="language-plaintext highlighter-rouge">pytest-coverage</code> artifact from the Tests run
+to inspect <code class="language-plaintext highlighter-rouge">coverage.xml</code>. The Codecov workflow reads that same artifact. To measure coverage locally:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pytest <span class="nt">--cov</span> <span class="nt">--cov-report</span><span class="o">=</span>term-missing
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh scripts/run-tests.sh <span class="nt">--patch-coverage</span>
 </code></pre></div></div>
 
 <h3 id="which-checks-run-for-which-change">Which checks run for which change</h3>
 
-<p>Neither the workflows nor the pre-push hook run everything for every change. <code class="language-plaintext highlighter-rouge">scripts/changed_tests.py</code> looks at the files that
-changed and decides, and anything it does not recognise is a reason to run everything:</p>
+<p>The pre-push hook runs the full pytest suite once and checks the resulting coverage against the branch diff from
+<code class="language-plaintext highlighter-rouge">origin/main</code>. Fetch the target branch first and set <code class="language-plaintext highlighter-rouge">ALTO_COVERAGE_BASE</code> when targeting another branch.
+On pull requests, GitHub selects pytest and coverage using the changes since the branch diverged from its base.</p>
 
-<ul>
-  <li><strong>Only docs</strong> (<code class="language-plaintext highlighter-rouge">docs/**</code> and the Markdown files at the top): the tests that read the docs. A pull request also builds the docs
-with Jekyll (the Docs check workflow), and runs no Pyright, Ruff or coverage.</li>
-  <li><strong>A change to <code class="language-plaintext highlighter-rouge">alto/</code> or to a test:</strong> the tests that import the changed module, directly or through others, their doctests, and
-the tests that read every module or page. The pre-push hook runs exactly these, so a small change is checked in seconds;
-<code class="language-plaintext highlighter-rouge">ALTO_TEST_ALL=1 git push</code> runs the whole suite. The workflows run the whole suite.</li>
-  <li><strong>Anything else</strong> (a script, a workflow, <code class="language-plaintext highlighter-rouge">pyproject.toml</code>, a <code class="language-plaintext highlighter-rouge">conftest.py</code>, the packaging files, a picture): everything.</li>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Pull request changes</th>
+      <th>Pytest</th>
+      <th>Coverage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Only local previews (<code class="language-plaintext highlighter-rouge">work/**</code>), <code class="language-plaintext highlighter-rouge">.gitignore</code>, or <code class="language-plaintext highlighter-rouge">.git-blame-ignore-revs</code></td>
+      <td>Skip</td>
+      <td>Skip</td>
+    </tr>
+    <tr>
+      <td>Documentation under <code class="language-plaintext highlighter-rouge">docs/</code> or top-level Markdown, optionally mixed with the housekeeping files above</td>
+      <td>Run the documentation tests on Python 3.14</td>
+      <td>Skip</td>
+    </tr>
+    <tr>
+      <td>Anything else, including application assets, dependencies, packaging, tests, or workflows</td>
+      <td>Run the full suite on the oldest and newest supported Python</td>
+      <td>Measure coverage and enforce patch coverage</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>In the workflows, a pull request runs the tests on the oldest and the newest Python version (a change to the docs alone, on one),
-and a push to <code class="language-plaintext highlighter-rouge">main</code> runs every supported version. A new push to a pull request cancels the runs still going for the old one.
-Nothing requires these checks to pass before a merge, so the ones a change skips do not leave it waiting; if you add required
-checks to the <code class="language-plaintext highlighter-rouge">main</code> ruleset, change the <code class="language-plaintext highlighter-rouge">paths-ignore</code> rules to job-level <code class="language-plaintext highlighter-rouge">if</code> conditions first, because a workflow that is skipped
-never reports and a required check would wait for it.</p>
+<p>Ruff and Pyright run on pull requests that change Python source, type stubs, or inputs to the
+respective tool. For example, a Ruff configuration change runs Ruff, a change to
+<code class="language-plaintext highlighter-rouge">scripts/typecheck.sh</code> runs Pyright, and a change to <code class="language-plaintext highlighter-rouge">pyproject.toml</code> runs both.
+The Docs check builds the site for changes under <code class="language-plaintext highlighter-rouge">docs/</code>, to <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>, or to its workflow.</p>
+
+<p>Pushes to <code class="language-plaintext highlighter-rouge">main</code> run the full suite on every supported Python version, along with Ruff, Pyright,
+and coverage. A new push to a pull request cancels its previous run.</p>
 
 <h2 id="keeping-alto-fast">Keeping Alto fast</h2>
 
@@ -635,6 +777,24 @@ the commit stops so you can review the change, then commit again.</p>
 <p>The test suite and Pyright run when you <strong>push</strong>, not on every commit, so commits stay quick. A failing test or a type
 error stops the push. Run the commit checks by hand with <code class="language-plaintext highlighter-rouge">pre-commit run --all-files</code>, the push checks with
 <code class="language-plaintext highlighter-rouge">pre-commit run --all-files --hook-stage pre-push</code>, and update the pinned hook versions with <code class="language-plaintext highlighter-rouge">pre-commit autoupdate</code>.</p>
+
+<h3 id="merged-local-branches">Merged local branches</h3>
+
+<p>Run <code class="language-plaintext highlighter-rouge">pre-commit install</code> again in an existing clone to install the post-merge hook. When a merge or
+fast-forward pull updates your checked-out <code class="language-plaintext highlighter-rouge">main</code>, the hook deletes local branches whose tips are in
+both <code class="language-plaintext highlighter-rouge">main</code> and <code class="language-plaintext highlighter-rouge">origin/main</code>. Each deletion prints the branch name and its previous commit.
+Branches with new local commits or commits incorporated only by a squash merge stay available for review.</p>
+
+<p>The hook skips every branch checked out in a worktree and always keeps <code class="language-plaintext highlighter-rouge">main</code>, <code class="language-plaintext highlighter-rouge">gh-pages</code>, and
+<code class="language-plaintext highlighter-rouge">asv-results</code>. To keep another long-running branch in this clone, add its exact name before pulling.
+Repeat the command for each branch you want to keep.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--local</span> <span class="nt">--add</span> alto.keepBranch gd_dev
+sh scripts/prune-branches.sh <span class="nt">--dry-run</span>
+</code></pre></div></div>
+
+<p>The preview refreshes <code class="language-plaintext highlighter-rouge">origin</code> and lists eligible local branches. The automatic hook uses the
+references already in your clone and only deletes local branches.</p>
 
 <h2 id="linting">Linting</h2>
 
@@ -735,39 +895,377 @@ only the next statement.</li>
 function, and say why when it is not obvious. A few things that are not obvious:</p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">PyUnusedLocal</code> is not honoured for the parameters of a fake that has to match what it replaces; delete them explicitly
+  <li><code class="language-plaintext highlighter-rouge">PyUnusedLocal</code> is not honored for the parameters of a fake that has to match what it replaces; delete them explicitly
 (<code class="language-plaintext highlighter-rouge">del volume, kwargs</code>) instead.</li>
   <li>Read saved text with <code class="language-plaintext highlighter-rouge">text_value</code> in <code class="language-plaintext highlighter-rouge">alto/ui/store.py</code>, not <code class="language-plaintext highlighter-rouge">str(settings.value(...))</code>, which PyCharm flags and Pyright
 needs.</li>
   <li>Declare every attribute in <code class="language-plaintext highlighter-rouge">__init__</code>, not in the method that first sets it.</li>
 </ul>
 
+<h2 id="designing-lessons-and-exercises">Designing lessons and exercises</h2>
+
+<p>A <strong>lesson</strong> teaches a musical idea that a learner can apply in several situations. An <strong>exercise</strong> gives repeated
+practice in one specific technique. In an identification exercise, the learner reads or hears an example and names
+what it is. In a construction exercise, the learner starts with a specification and supplies the notes or symbols
+that satisfy it.</p>
+
+<p>Plan the relationship by learning goal. One lesson can prepare a learner for several exercises, and an exercise can
+reinforce ideas introduced in several lessons. Reuse an existing lesson when it already explains the idea a new
+exercise depends on.</p>
+
+<p>Order the lesson tiles by prerequisite in <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with a lesson that assumes no music theory
+knowledge. When adding a lesson, place it after the ideas it uses and before lessons that build on it.</p>
+
+<ol>
+  <li><strong>Choose the lesson outcome.</strong> Write one sentence describing what a first-time learner should understand by the
+end. Use that sentence to decide which examples belong and where the lesson should stop.</li>
+  <li><strong>Map the practice.</strong> For each related exercise, describe what the learner is given, what they do, and what makes
+the answer correct. Check the exercise catalog for a match before proposing a new drill.</li>
+  <li><strong>Check the vocabulary in teaching order.</strong> Read the lesson as a learner who has completed only the preceding
+lessons. For each musical term, find where its meaning was taught. If it is new, give a plain-language definition
+where the learner first needs it, before a diagram or question asks them to use it. A mention in a title or a
+glossary entry alone does not teach the term. For example, introduce the tonic as the note that feels like home,
+then ask the learner to find it. Repeat this check when reordering lessons.</li>
+  <li><strong>Build a short guided sequence.</strong> Introduce the idea with an example the learner can read or hear. Change one
+feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
+Use the closing step to name the skills the learner can practice next. Choose the primary practice target with <code class="language-plaintext highlighter-rouge">Lesson.exercise</code> and list
+additional practice targets in <code class="language-plaintext highlighter-rouge">Lesson.related_exercises</code>.</li>
+  <li><strong>Time a first pass.</strong> Aim for <strong>20 minutes or less</strong>, including reading, listening, guided questions, and time
+to use a hint. Count independent exercise practice separately. If the lesson runs long, move repeated trials
+into an exercise or split off a concept that has its own learning outcome.</li>
+</ol>
+
+<h3 id="engraving-lesson-examples">Engraving lesson examples</h3>
+
+<p>Let the music determine the width of a lesson example. Measure spacing in <strong>staff spaces</strong>, where one space is the
+distance between the centers of adjacent staff lines. The values below are starting points for Alto. Measure
+horizontal gaps between the visible edges of the symbols, except where the table specifies notehead centers.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Where</th>
+      <th>Starting spacing</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Clef to key signature</td>
+      <td>Leave 1 staff space before the first sharp or flat and ¼ space between successive signature marks.</td>
+    </tr>
+    <tr>
+      <td>Key signature to first note</td>
+      <td>Leave 1½ spaces before the notehead or its local accidental. With an empty signature, measure directly from the clef.</td>
+    </tr>
+    <tr>
+      <td>Local accidental to notehead</td>
+      <td>Leave ¼ space so the sign reads with its note. Stagger accidentals in a chord as needed to clear other signs, notes, and ledger lines.</td>
+    </tr>
+    <tr>
+      <td>Notes in a phrase</td>
+      <td>Start equal quarter notes 3½ spaces apart, measured from center to center. Give longer values more room and shorter values less. Allow clearance for flags, dots, and accidentals. Keep simultaneous pitches at the same rhythmic position.</td>
+    </tr>
+    <tr>
+      <td>End of a short staff</td>
+      <td>End the lines about 2 spaces past the last symbol, including when the example shows only a key signature.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Anchor short examples at the left. When the pane widens, let the extra room fall beyond the staff. When a longer
+phrase needs another line, wrap at a musical boundary and repeat the clef and key signature. For paired examples,
+align the left edges and clefs, keep the staff size consistent, and align corresponding beats when comparing phrases.
+Size the white box to the wider of the music and its caption, with a small margin around both. Once the example
+fits on one line, keep the box at that width as the pane grows. Let long captions wrap below the staff in a narrow
+pane. Allow enough height for the clef, accidentals, ledger lines, and every line of the caption.</p>
+
+<p>Group related staves and their playback button in one bordered panel. Arrange the staves in reading order across
+the panel, with a vertical divider between neighbors on the same row. Use continuous white notation paper all
+the way to the panel border, including between staves and behind the playback button beneath the music. Use the
+theme’s light button colors on that paper. At a
+lesson content width of 760 pixels or more, align the top of the panel with the top of the explanation. Below
+that width, place the panel after the opening paragraph and before the remaining text and question. Keep paired
+staves together whenever both fit and wrap them when necessary.</p>
+
+<p>Put each guided question in the <strong>Knowledge check</strong> callout. Keep its prompt, choices, hints, explanation,
+and retry control together. Let answer buttons wrap in reading order when space is tight.</p>
+
+<p>Use <code class="language-plaintext highlighter-rouge">StaffPlayback</code> for a playable staff example. Its callback identifies each onset by position, so repeated notes
+light in reading order and a chord lights together. When two diagrams show the same sounding note, highlight both.
+Clear the playback highlight at the end and when changing examples.</p>
+
+<p>Lesson diagrams use <code class="language-plaintext highlighter-rouge">StaffWidget(lesson_layout=True)</code> in <code class="language-plaintext highlighter-rouge">alto/ui/lesson.py</code> and the lesson’s scale explorer.
+The renderer measures the selected notation font and keeps each chord together when wrapping. In the scale explorer,
+a step label followed by an arrow leads to the first pitch on the next line.</p>
+
+<p>To check a layout change, view an F natural in G major, a three-flat bass-clef signature on its own, and a short
+run of quarter notes in both narrow and wide panes. The natural should read with the F, the flats should read as
+one group, and widening the pane should preserve the distance between the quarter notes. Also try a single note
+with a caption wider than its staff. Narrow the pane until the caption wraps, then widen it again. The last word
+should stay visible throughout, and the white box should stop growing once the caption fits on one line.</p>
+
+<h3 id="reviewing-the-lesson-sequence-for-gaps">Reviewing the lesson sequence for gaps</h3>
+
+<p>Review the affected stretch whenever a lesson is added, moved, or substantially revised. Every few lesson changes,
+walk the full sequence in the order given by <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with an absolute beginner and carry
+forward what each lesson actually teaches. An optional exercise or glossary lookup can reinforce a skill, but a
+learner can reach the next tile without doing either.</p>
+
+<ol>
+  <li>Work through the next lesson’s examples and questions. For each, finish the sentence “To do this, I already need
+to be able to …” Include reading the diagram, hearing a difference, and interpreting the answer choices.</li>
+  <li>For each prerequisite, record the earlier lesson and step that teaches it, or the worked example in the current
+lesson before its first use. Distinguish seeing a definition, following a demonstration, and using the idea on a
+fresh example. Match the evidence to what the question actually asks the learner to do.</li>
+  <li>Try one fresh example with the same demands. For instance, after a learner reads a note just above a known line,
+ask them to read one just below it. When possible, watch a first-time learner try it before giving a hint.
+Record where their reasoning stops. A walkthrough by the author and an observed learner result are different evidence.</li>
+  <li>Flag a <strong>blocking gap</strong> when an essential action requires knowledge the sequence has yet to teach. Flag a
+<strong>practice gap</strong> when the explanation exists but the jump to independent use needs a smaller example.
+Record one row per finding. Keep a row open until someone retries the original task using the revised sequence.</li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>First lesson and step that needs the skill</th>
+      <th>What the learner must do</th>
+      <th>Where it was taught</th>
+      <th>Finding and smallest repair</th>
+      <th>Recheck</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Scale Identification · The major scale pattern</td>
+      <td>Locate middle C on a treble staff to follow the C-major example</td>
+      <td>Intervals · C and E♭ on the staff traces E4 on the bottom line through D4 to C4 on its ledger line. The staff shows C4 and E♭4.</td>
+      <td>The worked example now connects the bottom line to middle C before scales.</td>
+      <td>Open. Ask a first-time learner to locate C4 on a fresh treble staff and explain how they found it.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Prefer a short bridge at first use when it serves one lesson. Move a prerequisite earlier when several lessons rely
+on it. Add a separate lesson when the missing skill needs its own guided sequence to keep a first pass within
+about 20 minutes.</p>
+
+<h3 id="example-lesson-plan-for-scales">Example lesson plan for scales</h3>
+
+<p>A lesson on <strong>Scales</strong> could ask, “How can the same major-scale pattern start on two different notes?” Have the
+learner play C major, locate the half steps, then start on G and decide whether F or F♯ preserves the pattern.
+Close by playing the G scale they predicted. An illustrative first pass allows four minutes for C major, six for
+the guided G major example, and three for the comparison and recap.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Related exercise</th>
+      <th>What the learner practices</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Scale Identification</td>
+      <td>Given a written scale, identify its tonic or mode from the notes and their spacing.</td>
+    </tr>
+    <tr>
+      <td>Scale Construction</td>
+      <td>Given a tonic and a scale type, place the notes on the staff with the correct spelling.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="adding-an-exercise">Adding an exercise</h2>
 
-<p>Subclass <code class="language-plaintext highlighter-rouge">Exercise</code> in <code class="language-plaintext highlighter-rouge">alto/exercises/library.py</code>, decorate it with <code class="language-plaintext highlighter-rouge">@register</code>, and implement <code class="language-plaintext highlighter-rouge">generate</code>, which returns a
-<code class="language-plaintext highlighter-rouge">Question</code>:</p>
+<p>For an exercise with answer choices, subclass <code class="language-plaintext highlighter-rouge">ChoiceExercise</code> in <code class="language-plaintext highlighter-rouge">alto/exercises/library.py</code> and implement <code class="language-plaintext highlighter-rouge">make_question</code>. Supply the full set of eligible answers. Alto adds the <strong>Buttons</strong> submenu and applies <strong>Limited</strong> or <strong>All</strong>. A construction exercise whose buttons edit or submit an answer uses <code class="language-plaintext highlighter-rouge">Exercise.generate</code>.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">register</span>
-<span class="k">class</span> <span class="nc">MyExercise</span><span class="p">(</span><span class="n">Exercise</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MyExercise</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s">"My exercise"</span>
     <span class="n">category</span> <span class="o">=</span> <span class="s">"Intervals"</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s">"One line shown on the home screen."</span>
-    <span class="n">par_seconds</span> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># a good first-answer time; see How practice adapts
+    <span class="n">par_seconds</span> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># a good first-answer time; see Spaced Repetition
 </span>
-    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
         <span class="p">...</span>
-        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"What is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">answer</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="p">(</span><span class="s">"What is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">staff</span><span class="o">=</span><span class="p">[[</span><span class="n">note</span><span class="p">]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">Question</code> describes everything the screen needs: a prompt, the answer buttons, the notes to draw, a key signature, a keyboard key to highlight, and so on.</li>
-  <li>If your exercise reads user settings, override <code class="language-plaintext highlighter-rouge">settings_signature()</code> and return <code class="language-plaintext highlighter-rouge">signature(...)</code> of those settings. Stored questions are only replayed while the signature is unchanged.</li>
+  <li>If your exercise reads user settings, override <code class="language-plaintext highlighter-rouge">practice_signature()</code> for a <code class="language-plaintext highlighter-rouge">ChoiceExercise</code> or <code class="language-plaintext highlighter-rouge">settings_signature()</code> for other exercises and return <code class="language-plaintext highlighter-rouge">signature(...)</code> of those settings. Stored questions are only replayed while the signature is unchanged.</li>
   <li>Give the exercise an icon in <code class="language-plaintext highlighter-rouge">alto/ui/home.py</code> so it appears properly on the home screen.</li>
   <li>Pick its <code class="language-plaintext highlighter-rouge">category</code> from the existing ones, or make a new one. <code class="language-plaintext highlighter-rouge">@register</code> places the exercise next to the others of its category, so the home screen and the exercise list show each category once, whatever order the classes are written in.</li>
 </ul>
 
 <p>Everything else comes with it: the question is recorded in the database, scored for speed, drawn in the chosen
 notation font and included in the statistics.</p>
+
+<h3 id="adding-an-exercise-option">Adding an exercise option</h3>
+
+<h4 id="requesting-exercise-options">Requesting exercise options</h4>
+
+<p>Use the option names below when asking an agent to design or implement exercise settings. An <strong>option</strong> is a row in
+the exercise’s settings menu. A <strong>choice</strong> is a value inside that row, such as <strong>Descending</strong> under <strong>Motion</strong>.
+<strong>Answer buttons</strong> are the controls the learner presses during practice. The <strong>Buttons</strong> option configures them.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>What to ask</th>
+      <th>What to expect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>“Propose options for Interval Identification.”</td>
+      <td>A short table of options that fit the exercise. For each, give its menu label, what changes for the learner, the template exercise, the choices and default, and any behavior that would need new work.</td>
+    </tr>
+    <tr>
+      <td>“Add standard Clefs to Interval Identification.”</td>
+      <td>A working Clefs row modeled on Note Identification, with the shared picker and selected-clef preview. The exercise generates questions using the checked clefs.</td>
+    </tr>
+    <tr>
+      <td>“Use Range from Keyboard Note Identification. Default to C4–C5.”</td>
+      <td>The named exercise supplies the keyboard range editor, preview, and interactions. The requested range sets the initial endpoints.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Standard</strong> means to reuse the option in the table below. <strong>From [exercise]</strong> selects a specific variant. An explicit
+override takes precedence. For example, “default to treble and bass” sets the boxes checked on first use. “Offer only
+treble and bass” limits which boxes appear. If the request leaves the default open, preserve the target exercise’s
+current behavior where possible. Reusing a picker gives the target exercise its own saved selection unless the
+request calls for a shared preference or the exercises already share it.</p>
+
+<h4 id="exercise-option-vocabulary">Exercise option vocabulary</h4>
+
+<p>The template exercise gives you a place to try the option in Alto. Its panel and the named helpers are in
+<code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>. Start with the option’s effect on the question or answer to choose among variants.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option to request</th>
+      <th>What the learner gets</th>
+      <th>Template to reuse</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Clefs</strong> (also “Clef”)</td>
+      <td>A row showing the selected clef symbols. Its submenu has grouped, illustrated checkboxes. At least one stays checked. Offer the grand staff when the exercise supports questions on both staves.</td>
+      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">ClefPictures</code> with <code class="language-plaintext highlighter-rouge">_clefs_page</code>. <strong>Scale Construction</strong> shows the single-staff variant of the same picker.</td>
+    </tr>
+    <tr>
+      <td><strong>Range</strong></td>
+      <td>Low and high pitches. Staff exercises can keep a range per clef. Keyboard exercises select a span on a piano and show a miniature keyboard in the row.</td>
+      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">RangeEditor</code> with <code class="language-plaintext highlighter-rouge">RangePictures</code>. <strong>Keyboard Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">KeyboardSpan</code> and endpoint arrows.</td>
+    </tr>
+    <tr>
+      <td><strong>Staff Key</strong></td>
+      <td>Check which signatures can be drawn at the start of the staff, including the blank signature. The row previews the selection.</td>
+      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">KeyChecklist</code> and <code class="language-plaintext highlighter-rouge">KeyDiagram</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Scale Key</strong></td>
+      <td>Choose the musical keys used in questions. Underlined Major and Minor tabs each offer 15 signatures. Either tab may be empty if the other has a selection. The row counts selections by mode.</td>
+      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">_ScaleKeyPicker</code>. When both key options apply, place <strong>Staff Key</strong> above <strong>Scale Key</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>Key signatures</strong></td>
+      <td>A single checklist of signature counts. Some exercises also let the learner turn signatures on or off.</td>
+      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">KeyChecklist</code>. For the version with a switch inside the submenu, follow <strong>Keyboard Note Identification</strong> and <code class="language-plaintext highlighter-rouge">KeySignaturePage</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Scales</strong></td>
+      <td>Check the scale types or modes that can appear, such as major, Dorian, and natural minor.</td>
+      <td><strong>Scale Construction</strong> uses <code class="language-plaintext highlighter-rouge">ChoiceChecklist</code> and shows the selected count in the row.</td>
+    </tr>
+    <tr>
+      <td><strong>Motion</strong></td>
+      <td>Choose <strong>Ascending</strong> or <strong>Descending</strong> with radio buttons.</td>
+      <td><strong>Scale Identification</strong> and <strong>Scale Construction</strong> share this page in <code class="language-plaintext highlighter-rouge">KeySignatureSettingsPanel</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Display Mode</strong></td>
+      <td>Choose how the notes appear on the staff. Checked presentations can be mixed.</td>
+      <td><strong>Interval Identification</strong> displays Ascending and Descending as indented checkboxes directly below Melodic when it is selected. At least one direction stays checked.</td>
+    </tr>
+    <tr>
+      <td><strong>Quality</strong></td>
+      <td>Choose <strong>Interval Only</strong>, <strong>Interval and Quality</strong> (default), or <strong>Quality Only</strong>.</td>
+      <td><strong>Interval Identification</strong> uses a submenu with three radio buttons.</td>
+    </tr>
+    <tr>
+      <td><strong>Question Type</strong></td>
+      <td>Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts.</td>
+      <td><strong>Notation Identification</strong> has <strong>Click on Staff</strong> and <strong>Answer Button</strong> radios. <strong>Scale Identification</strong> has independent <strong>Key</strong> and <strong>Mode</strong> boxes. <strong>Note Construction</strong> shows its keys and degrees when <strong>Scale and Degree</strong> is selected.</td>
+    </tr>
+    <tr>
+      <td><strong>Buttons</strong></td>
+      <td>One submenu for answer layouts. <strong>Limited</strong> caps the number offered, with <strong>Button count</strong> directly below it. <strong>All</strong> shows the full answer set.</td>
+      <td><strong>Scale Identification</strong> and <strong>Interval Identification</strong> share the Limited and All submenu. <strong>Keyboard Interval Identification</strong> adds <strong>Compact</strong>, where the learner picks a quality and an interval number in either order.</td>
+    </tr>
+    <tr>
+      <td><strong>Next Question</strong></td>
+      <td>Choose <strong>Immediately</strong>, <strong>Wait</strong>, or <strong>After Animation</strong> (default). Each exercise remembers its own pace.</td>
+      <td>The shared settings panel adds this row to every exercise. Route completed answers through <code class="language-plaintext highlighter-rouge">ExerciseView._finish_answer</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Octave</strong></td>
+      <td>An inline switch that makes the octave part of the required answer.</td>
+      <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">_ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>Note names</strong>, <strong>Note values</strong>, <strong>Accidentals</strong></td>
+      <td>Choose a naming system, check the durations that can appear, or switch on questions with written accidentals. These are separate options.</td>
+      <td><strong>Note Identification</strong> has the naming preview and Accidentals switch. Its illustrated note-value checklist is also used by <strong>Interval Identification</strong> under <strong>Note Value</strong>. For a choice of written signs, the <strong>Accidentals</strong> submenu in <strong>Interval Identification</strong> uses a checklist.</td>
+    </tr>
+    <tr>
+      <td><strong>Terms</strong>, <strong>Degrees</strong>, <strong>Arpeggio types</strong>, <strong>Inversions</strong></td>
+      <td>Check the items eligible for practice. <strong>Terms</strong> also restricts the distractors. <strong>Degrees</strong> is a section within <strong>Scale and Degree</strong>.</td>
+      <td>All use <code class="language-plaintext highlighter-rouge">ChoiceChecklist</code>. <strong>Notation Identification</strong> groups terms, <strong>Note Construction</strong> lists degrees, and <strong>Arpeggio Identification</strong> has separate pages for types and inversions.</td>
+    </tr>
+    <tr>
+      <td><strong>Intervals</strong></td>
+      <td>Choose interval sizes individually or by endpoints. The available sizes depend on the keyboard range.</td>
+      <td><strong>Keyboard Interval Identification</strong> combines <code class="language-plaintext highlighter-rouge">ChoiceChecklist</code> and <code class="language-plaintext highlighter-rouge">IntervalRangeSlider</code>. <strong>Interval Identification</strong> uses the slider for interval numbers and the checklist for written spellings, so A4 and d5 can be selected separately.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For exercise-specific options, use the existing exercise as the reference. Examples include <strong>Black keys</strong> in
+Keyboard Note Identification, <strong>Steps</strong> in Scale Construction, and <strong>Questions</strong> and <strong>Colors</strong> in Circle of Fifths.</p>
+
+<h4 id="implementing-the-request">Implementing the request</h4>
+
+<p>Start by opening the template’s settings row and tracing its panel, saved settings, and question or answer behavior.
+Reuse the shared picker, preview, and selection rules where they fit. If two exercises need the same behavior and
+it currently lives inside one panel, share that implementation while preserving the original exercise’s behavior.
+When a new option needs a distinct interaction, describe the difference from its closest template. Add a vocabulary
+entry when introducing a reusable option or variant so it can be requested by name next time.</p>
+
+<ol>
+  <li>Give the option a row on the exercise settings menu. Use the shared <code class="language-plaintext highlighter-rouge">_Row</code> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code> with
+the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
+such as <strong>Octave</strong>, an inline <code class="language-plaintext highlighter-rouge">Switch</code> in a row without a chevron is appropriate. Two named modes, such as
+<strong>Click on Staff</strong> and <strong>Answer Button</strong>, belong together in a submenu.</li>
+  <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">_subpage</code> so the title matches the row and
+Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
+several can apply. Group controls below the header at their natural height and leave extra space below the
+last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">_scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">_subpage</code> so the
+viewport can grow while the choices stay together. Verify row spacing at short and tall window sizes and
+check that the last option remains reachable when scrolling.</li>
+  <li>Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
+update the row summary, and apply it to the exercise. Opening the submenu or pressing Back should keep the
+current question. Include settings that affect question selection in the exercise’s review signature.</li>
+  <li>Test the path from the exercise gear through the row and back. Verify the first-use default, the effect on
+questions and answers, the updated summary, and the restored choice when reopening the app. For example, select
+only bass under <strong>Clefs</strong>, generate questions, and check that the row preview and each staff show bass. If the
+implementation touched a shared picker, run the original exercise’s settings tests too.</li>
+</ol>
 
 <h2 id="adding-an-instrument">Adding an instrument</h2>
 
@@ -782,27 +1280,27 @@ the terms. This is what the summary in the Sound settings shows.</li>
   <li>Credit the recordings in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> and the folder’s <code class="language-plaintext highlighter-rouge">SOURCE.txt</code>.</li>
 </ol>
 
-<p>Only add recordings whose licence allows redistribution.</p>
+<p>Only add recordings whose license allows redistribution.</p>
 
 <h2 id="adding-a-notation-font">Adding a notation font</h2>
 
 <p>Alto draws notes with fonts that follow the <a href="https://www.smufl.org/">SMuFL</a> standard.</p>
 
 <ol>
-  <li>Put the font file and its licence in <code class="language-plaintext highlighter-rouge">alto/assets/fonts/</code>.</li>
+  <li>Put the font file and its license in <code class="language-plaintext highlighter-rouge">alto/assets/fonts/</code>.</li>
   <li>Add its stem anchors and engraving defaults to <code class="language-plaintext highlighter-rouge">engraving.json</code>, read from the font’s SMuFL metadata file.</li>
   <li>Register the file name in <code class="language-plaintext highlighter-rouge">_FILES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/engraving.py</code>.</li>
   <li>Add a <code class="language-plaintext highlighter-rouge">NotationStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/notation.py</code>.</li>
   <li>Record the font in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>.</li>
 </ol>
 
-<p>Only add fonts whose licence allows redistribution, such as the SIL Open Font License.</p>
+<p>Only add fonts whose license allows redistribution, such as the SIL Open Font License.</p>
 
 <h2 id="adding-a-keyboard-style">Adding a keyboard style</h2>
 
-<p>Add a <code class="language-plaintext highlighter-rouge">KeyboardStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/keyboard_styles.py</code>: the colours of the naturals and sharps, and any extras such as
+<p>Add a <code class="language-plaintext highlighter-rouge">KeyboardStyle</code> to <code class="language-plaintext highlighter-rouge">STYLES</code> in <code class="language-plaintext highlighter-rouge">alto/ui/keyboard_styles.py</code>: the colors of the naturals and sharps, and any extras such as
 a case, felt, bone caps or stop knobs. The settings page, the keyboard and the range picker all read from that list, so nothing
-else needs changing. Add a row to the table in <code class="language-plaintext highlighter-rouge">docs/settings.md</code>. The colours named after materials in the builder are <code class="language-plaintext highlighter-rouge">MATERIALS</code> in the same file.</p>
+else needs to be changed. Add a row to the table in <code class="language-plaintext highlighter-rouge">docs/settings.md</code>. The colors named after materials in the builder are <code class="language-plaintext highlighter-rouge">MATERIALS</code> in the same file.</p>
 
 <h2 id="versions-of-the-docs">Versions of the docs</h2>
 
@@ -819,7 +1317,7 @@ A page of an old release says so in a banner, and links to the same page in the 
 GitHub Pages serves. <code class="language-plaintext highlighter-rouge">scripts/docs_site.py</code> writes what sits around the versions: <code class="language-plaintext highlighter-rouge">versions.json</code>, the home page that goes to the
 latest, and the sitemap. The files that belong to the whole site and not to one version are in <code class="language-plaintext highlighter-rouge">docs/site-root/</code>. One of them,
 <code class="language-plaintext highlighter-rouge">version-switcher.js</code>, fills the dropdown from <code class="language-plaintext highlighter-rouge">versions.json</code> at run time, so a release made years ago still offers the newest
-versions, and a fix to the dropdown reaches all of them.</p>
+versions, and a fix to the dropdown reaches all of them. The dev entry shows the short Git hash recorded when those docs were built.</p>
 
 <p>Search engines are told to prefer the latest version: every page has a <code class="language-plaintext highlighter-rouge">canonical</code> address under <code class="language-plaintext highlighter-rouge">/latest/</code>, <code class="language-plaintext highlighter-rouge">dev</code> is <code class="language-plaintext highlighter-rouge">noindex</code>, and
 only <code class="language-plaintext highlighter-rouge">latest</code> is in the sitemap. A page that existed at the root before the docs had versions is sent to <code class="language-plaintext highlighter-rouge">/latest/</code> by <code class="language-plaintext highlighter-rouge">404.html</code>.</p>
@@ -855,7 +1353,7 @@ soon after merging, because the one copy no longer has <code class="language-pla
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">children</code>, <code class="language-plaintext highlighter-rouge">parent</code></td>
-      <td>A page with <code class="language-plaintext highlighter-rouge">children: name</code> is one row that links to it and opens the pages that say <code class="language-plaintext highlighter-rouge">parent: name</code>, in their <code class="language-plaintext highlighter-rouge">order</code>. Those pages can also say <code class="language-plaintext highlighter-rouge">package:</code> to be grouped under a small heading that opens and closes (the API reference).</td>
+      <td>A page with <code class="language-plaintext highlighter-rouge">children: name</code> opens the pages with <code class="language-plaintext highlighter-rouge">parent: name</code>. Guide chapters use <code class="language-plaintext highlighter-rouge">order</code> for their reading sequence. The API reference lists packages alphabetically and sorts modules by title within each package.</td>
     </tr>
   </tbody>
 </table>
@@ -868,9 +1366,7 @@ headings, and on a narrower one a box above the text. Nothing needs to be writte
 home page, says <code class="language-plaintext highlighter-rouge">toc: false</code> in its front matter. <code class="language-plaintext highlighter-rouge">docs/api/index.md</code> is written by
 <code class="language-plaintext highlighter-rouge">scripts/api_docs.py</code>, so change its front matter there.</p>
 
-<p>Every page in the sidebar ends with a link to the previous page at the bottom left and to the next at the bottom right, in the sidebar’s
-own order: the pages by <code class="language-plaintext highlighter-rouge">nav_order</code>, each followed by its <code class="language-plaintext highlighter-rouge">children</code> in their <code class="language-plaintext highlighter-rouge">order</code>. Nothing needs to be written for them. The first page has
-no previous link and the last no next one.</p>
+<p>The previous and next links at the bottom of each page follow the sidebar’s reading order.</p>
 
 <h3 id="building-the-docs">Building the docs</h3>
 
@@ -879,6 +1375,7 @@ no previous link and the last no next one.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>docs
 <span class="nb">printf</span> <span class="s1">'baseurl: /alto/dev\ndocs_version: dev\n'</span> <span class="o">&gt;</span> /tmp/version.yml
 bundle <span class="nb">exec </span>jekyll build <span class="nt">--destination</span> /tmp/site/dev <span class="nt">--config</span> _config.yml,/tmp/version.yml
+git rev-parse <span class="nt">--short</span> HEAD <span class="o">&gt;</span> /tmp/site/dev/commit.txt
 python ../scripts/docs_site.py finish /tmp/site <span class="nt">--root-files</span> site-root <span class="nt">--site-url</span> https://altosaurus.github.io/alto
 </code></pre></div></div>
 
@@ -899,6 +1396,11 @@ needs a display or <code class="language-plaintext highlighter-rouge">QT_QPA_PLA
 machine you normally use and look at the pictures before committing them. To add a picture, include it in a docs page
 with <code class="language-plaintext highlighter-rouge">shot.html</code>, and add its name to <code class="language-plaintext highlighter-rouge">SHOTS</code> in the script. <code class="language-plaintext highlighter-rouge">tests/test_docs.py</code> checks that both match and that both themes
 exist.</p>
+
+<p>The Developer guide uses <code class="language-plaintext highlighter-rouge">component-shot.html</code> for clickable screenshots. Give the include the capture’s width and
+height. In <code class="language-plaintext highlighter-rouge">docs/_data/launch_components.json</code>, each region records its label, class, destination, and rectangle
+(left, top, width, height as percentages of the image). The screenshot and its numbered key share those destinations.
+After a recapture, check that each region still covers its component in both themes.</p>
 
 <p>The pre-push hook runs <code class="language-plaintext highlighter-rouge">scripts/check-docs.sh</code>, which warns when the interface (<code class="language-plaintext highlighter-rouge">alto/ui</code>) has changed since the pictures
 were last updated. It only warns; set <code class="language-plaintext highlighter-rouge">ALTO_DOCS_STRICT=1</code> to make it fail.</p>
@@ -923,7 +1425,7 @@ caught by the tests, the pre-push hook and the pull request.</p>
 <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a> layout. A change a user would notice (a new exercise, a changed menu, a
 fixed bug) adds a line under <strong>Unreleased</strong> in the same pull request. Internal tidying does not need one.</p>
 
-<p>To make a release:</p>
+<h3 id="pre-release-checklist">Pre-release checklist</h3>
 
 <ol>
   <li>Choose the version. Alto uses <a href="https://semver.org/">semantic versioning</a>: a new feature raises the middle number, a fix
@@ -933,6 +1435,14 @@ raises the last.</li>
 the Release notes page of the docs (<code class="language-plaintext highlighter-rouge">docs/release-notes.md</code>) from the changelog; <code class="language-plaintext highlighter-rouge">--check</code> says whether it is up to date, and a
 test fails when it is not, so a changelog line always arrives with its page.</li>
   <li>Set the same version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. <code class="language-plaintext highlighter-rouge">tests/test_changelog.py</code> fails if the changelog has no notes for it.</li>
+  <li>Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
+Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
+feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.</li>
+  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py</code> to refresh every
+documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
+In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
+updated images and any caption or region corrections in the release PR.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
 </ol>
@@ -951,7 +1461,7 @@ prints the version of the copy you run.</p>
 
 <p>The script makes a clean virtual environment under <code class="language-plaintext highlighter-rouge">.package-build/</code>, installs Alto and PyInstaller (the <code class="language-plaintext highlighter-rouge">package</code> extra in
 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>) in it, freezes Alto with <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code>, and packs the result with <code class="language-plaintext highlighter-rouge">packaging/linux/install.sh</code>, a
-README, the licence and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
+README, the license and the third-party notices. Nothing is installed on your computer. Before it packs anything it checks that the
 frozen program says <code class="language-plaintext highlighter-rouge">Alto &lt;version&gt;</code> and that it opens its window (under Qt’s offscreen platform, with its own data folder, so a
 real profile is never touched).</p>
 
@@ -1028,22 +1538,23 @@ file and the changelog notes. Started by hand from the Actions tab, it only buil
 <p>Open an issue on <a href="https://github.com/altosaurus/alto/issues">GitHub</a>. Say which operating system and Python version you
 use, and which exercise you were in.</p>
 
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+<h2 id="adding-a-notation-excerpt">Adding a notation excerpt</h2>
+
+<p>Choose a passage whose music and source edition are in the public domain. For a modern transcription, verify the
+transcriber’s public-domain dedication as well. Record the precise source file URL, its SHA-256 digest, the historical
+edition, the part, and the measure numbers in <code class="language-plaintext highlighter-rouge">excerpt.json</code>. Add the edition to <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code>.</p>
+
+<p>Store the extracted <code class="language-plaintext highlighter-rouge">score.musicxml</code> and its engraved <code class="language-plaintext highlighter-rouge">score.svg</code> beside the manifest under
+<code class="language-plaintext highlighter-rouge">alto/assets/excerpts/&lt;work&gt;-m&lt;first-measure&gt;-v&lt;version&gt;/</code>. Preserve the prevailing clefs, key, and meter.
+Give each independently selectable component a group ID such as <code class="language-plaintext highlighter-rouge">mark-0</code>, and put its Alto notation term
+at the corresponding index in the manifest’s <code class="language-plaintext highlighter-rouge">targets</code> list. Mark every visible instance of a term that can be asked.
+Keep neighboring symbols as musical context. Tintable shapes inherit their group’s fill or use <code class="language-plaintext highlighter-rouge">currentColor</code> for strokes.</p>
+
+<p>Run <code class="language-plaintext highlighter-rouge">QT_QPA_PLATFORM=offscreen .venv/bin/python scripts/excerpt_hit_map.py &lt;excerpt-directory&gt;</code> to generate
+<code class="language-plaintext highlighter-rouge">hits.png</code> from the engraved ink. Inspect both answer modes at narrow and wide sizes.
+Published IDs identify saved questions. Give corrected music or a changed marker order a new version and keep the
+original directory so older answers can still be opened.</p>
+
           
           
           
@@ -1070,7 +1581,7 @@ use, and which exercise you were in.</p>
           
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/latest/data/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Your data</span></a>
-            <a class="next" href="/alto/latest/guide/" rel="next"><span class="np-label">Next</span><span class="np-title">Developer guide<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/latest/developer-guide/" rel="next"><span class="np-label">Next</span><span class="np-title">Developer guide<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -1084,7 +1595,7 @@ use, and which exercise you were in.</p>
     var menu = document.getElementById("menu");
     if (menu && window.matchMedia("(min-width: 821px)").matches) { menu.open = true; }
 
-    // Colour theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
+    // Color theme: a picture of the current one, and a menu to choose Light, Dark or System (follow the computer). A choice is
     // remembered; System forgets it, and the page then follows the system again.
     var root = document.documentElement, button = document.getElementById("theme-button");
     var menu = document.getElementById("theme-menu"), items = menu.querySelectorAll("[data-theme-choice]");
@@ -1132,8 +1643,8 @@ use, and which exercise you were in.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/latest/assets/js/nav.js?v=1794806461" defer></script>
-  <script src="/alto/latest/assets/js/toc.js?v=1794806461" defer></script>
+  <script src="/alto/latest/assets/js/nav.js?v=1795154141" defer></script>
+  <script src="/alto/latest/assets/js/toc.js?v=1795154141" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
