@@ -46,6 +46,7 @@ Spaced repetition: who is learning (profiles), what they answered (a database) a
 | [alto.learning.database](alto.learning.database/) | The SQLite store: profiles, every answer given, and what is known about each question. Pure Python (no Qt). |
 | [alto.learning.grading](alto.learning.grading/) | Answer-button intervals for Anki's default SM-2 and FSRS-6 deck settings. |
 | [alto.learning.learner](alto.learning.learner/) | Ties the profile, the database and the scheduler together for the exercise screen. |
+| [alto.learning.response_times](alto.learning.response_times/) | Rolling response times for one learner and exercise. |
 | [alto.learning.scheduler](alto.learning.scheduler/) | How a question's history turns into how soon it comes back. Pure Python, no database and no Qt. |
 | [alto.learning.stats](alto.learning.stats/) | Numbers and series for the statistics screen, worked out from the answers in the database. Pure Python, no Qt. |
 
@@ -112,6 +113,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.profile_dialog](alto.ui.profile_dialog/) | Choosing who is practicing. There is no password: a profile is just a name that keeps its own history. |
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |
 | [alto.ui.reference](alto.ui.reference/) | The reference pane: an interactive circle of fifths to look things up on, with an explanation under it. |
+| [alto.ui.response_times](alto.ui.response_times/) | Profile speed-grading settings and the rolling distribution for each exercise. |
 | [alto.ui.scale_explorer](alto.ui.scale_explorer/) | Interactive notation and step patterns for learning scales. |
 | [alto.ui.score_excerpt](alto.ui.score_excerpt/) | Paint the engraved score and locate symbols from a pixel map made from the same SVG. |
 | [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |

@@ -59,6 +59,7 @@ from alto.ui.charts import (
 )
 from alto.ui.database_page import ROW_ROLE, AnswerList, open_preview
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.response_times import ResponseTimeDialog
 
 DAY = 86400.0
 DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
@@ -393,6 +394,11 @@ class StatsPage(QWidget):
         charts.addWidget(self.volume_scroll, 1, 0)
         charts.addWidget(self.speed, 2, 0)
         charts.addWidget(self.by_exercise, 2, 1)
+        self.response_times_button = QPushButton("Response-time distribution…")
+        self.response_times_button.clicked.connect(
+            lambda: ResponseTimeDialog(learner, parent=self, exercise=self.exercise.currentData()).open(),
+        )
+        charts.addWidget(self.response_times_button, 3, 0, Qt.AlignmentFlag.AlignLeft)
         lay.addLayout(charts)
 
         # The calendar always looks back about a year, whatever the timeframe, so it follows only the exercise filter.

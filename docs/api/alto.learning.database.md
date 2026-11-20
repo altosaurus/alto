@@ -41,8 +41,8 @@ Check that bytes are an intact Alto database that this version can read, and say
 **Examples**
 
 ```pycon
->>> check_snapshot(Database().snapshot())
-(6, 0, 0)
+>>> check_snapshot(Database().snapshot()) == (SCHEMA_VERSION, 0, 0)
+True
 >>> check_snapshot(b"not a database")
 Traceback (most recent call last):
     ...
@@ -207,8 +207,8 @@ Return the whole database as bytes: every profile, answer and question record, e
 ```pycon
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
->>> check_snapshot(db.snapshot())
-(6, 1, 0)
+>>> check_snapshot(db.snapshot()) == (SCHEMA_VERSION, 1, 0)
+True
 ```
 
 ### Database.restore
@@ -425,6 +425,7 @@ def add_attempt(
     correct: bool,
     duration_ms: int,
     answered_at: float,
+    timing_valid: bool = True,
 ) -> None
 ```
 
@@ -440,6 +441,7 @@ Log one answer, right or wrong.
 - `correct` (*bool*): Whether it was right. Keyword-only.
 - `duration_ms` (*int*): How long it took, in milliseconds. Keyword-only.
 - `answered_at` (*float*): When it was answered, as a timestamp. Keyword-only.
+- `timing_valid` (*bool*): Whether the question remained available for an uninterrupted response.
 
 **Examples**
 

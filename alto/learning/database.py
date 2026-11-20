@@ -23,7 +23,7 @@ from dataclasses import (
 )
 from pathlib import Path
 
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 7
 
 _SCHEMA = """
 CREATE TABLE profiles (
@@ -155,6 +155,15 @@ UPDATE practice_cards AS c SET pending_new=1 WHERE introduced_on IS NOT NULL AND
 """
 
 
+_RESPONSE_TIME_SCHEMA = """
+ALTER TABLE profiles ADD COLUMN easy_percent INTEGER NOT NULL DEFAULT 15 CHECK(easy_percent BETWEEN 0 AND 100);
+ALTER TABLE profiles ADD COLUMN hard_percent INTEGER NOT NULL DEFAULT 15 CHECK(hard_percent BETWEEN 0 AND 100);
+ALTER TABLE attempts ADD COLUMN timing_valid INTEGER NOT NULL DEFAULT 1;
+CREATE INDEX attempts_by_speed_sample ON attempts(profile_id, exercise, answered_at DESC, id DESC)
+WHERE attempt_no = 1 AND correct = 1 AND duration_ms > 0 AND timing_valid = 1;
+"""
+
+
 def check_snapshot(data: bytes) -> tuple[int, int, int]:
     """
     Check that bytes are an intact Alto database that this version can read, and say what is in it.
@@ -176,8 +185,8 @@ def check_snapshot(data: bytes) -> tuple[int, int, int]:
 
     Examples
     --------
-    >>> check_snapshot(Database().snapshot())
-    (6, 0, 0)
+    >>> check_snapshot(Database().snapshot()) == (SCHEMA_VERSION, 0, 0)
+    True
     >>> check_snapshot(b"not a database")
     Traceback (most recent call last):
         ...
@@ -333,9 +342,15 @@ class Database:
         version = self.conn.execute("PRAGMA user_version").fetchone()[0]
         if version < SCHEMA_VERSION:
             schema = "".join(
-                (_SCHEMA, _CALENDAR_SCHEMA, _LIMITS_SCHEMA, _UNLIMITED_LIMITS_SCHEMA, _GRADING_SCHEMA, _ISOLATE_CALENDAR_SCHEMA)[
-                    version:
-                ],
+                (
+                    _SCHEMA,
+                    _CALENDAR_SCHEMA,
+                    _LIMITS_SCHEMA,
+                    _UNLIMITED_LIMITS_SCHEMA,
+                    _GRADING_SCHEMA,
+                    _ISOLATE_CALENDAR_SCHEMA,
+                    _RESPONSE_TIME_SCHEMA,
+                )[version:],
             )
             with self.conn:
                 self.conn.executescript(f"BEGIN;\n{schema}\nPRAGMA user_version = {SCHEMA_VERSION}; COMMIT;")
@@ -390,8 +405,8 @@ class Database:
         --------
         >>> db = Database()
         >>> ada = db.add_profile("Ada")
-        >>> check_snapshot(db.snapshot())
-        (6, 1, 0)
+        >>> check_snapshot(db.snapshot()) == (SCHEMA_VERSION, 1, 0)
+        True
         """
         self.conn.commit()
         return self.conn.serialize()
@@ -651,6 +666,7 @@ class Database:
         correct: bool,
         duration_ms: int,
         answered_at: float,
+        timing_valid: bool = True,
     ) -> None:
         """
         Log one answer, right or wrong.
@@ -674,6 +690,9 @@ class Database:
         answered_at : float
             When it was answered, as a timestamp. Keyword-only.
 
+        timing_valid : bool
+            Whether the question remained available for an uninterrupted response.
+
         Examples
         --------
         >>> db = Database()
@@ -686,7 +705,7 @@ class Database:
         with self.write_transaction():
             self.conn.execute(
                 "INSERT INTO attempts (profile_id, exercise, item_key, attempt_no, answer, correct, duration_ms, "
-                "answered_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "answered_at, timing_valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     profile_id,
                     exercise,
@@ -696,6 +715,7 @@ class Database:
                     int(correct),
                     duration_ms,
                     answered_at,
+                    timing_valid,
                 ),
             )
 

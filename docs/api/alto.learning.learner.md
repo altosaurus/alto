@@ -163,6 +163,57 @@ Read the profile's SM-2 and FSRS grading preference.
 False
 ```
 
+### Learner.response_times
+
+```python
+def response_times(exercise: str) -> ResponseTimes
+```
+
+Read the rolling sample for one exercise and the current profile's thresholds.
+
+**Parameters**
+
+- `exercise` (*str*): Registered exercise class name.
+
+**Returns**
+
+- *ResponseTimes*: Up to 100 recent, uninterrupted, correct first answers across practice modes.
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
+()
+```
+
+### Learner.set_speed_thresholds
+
+```python
+def set_speed_thresholds(
+    *,
+    easy: int,
+    hard: int,
+) -> None
+```
+
+Save the two tail percentages for this profile.
+
+**Parameters**
+
+- `easy` (*int*): Percentage of fastest correct answers.
+- `hard` (*int*): Percentage of slowest correct answers.
+
+**Raises**
+
+- *ValueError*: If the bands overlap or a percentage is negative.
+
+**Examples**
+
+```pycon
+Setting both tails to zero assigns Good to every correct first answer.
+```
+
 ### Learner.set_self_grading
 
 ```python
@@ -265,8 +316,10 @@ def record(
     seconds: float,
     now: float | None = None,
     preview: ReviewInterval | None = None,
+    passing_previews: dict[Rating, ReviewInterval] | None = None,
     self_grading: bool = False,
-) -> None
+    timing_valid: bool = True,
+) -> ReviewInterval | None
 ```
 
 Log one answer and update what is known about the question.
@@ -281,7 +334,13 @@ Log one answer and update what is known about the question.
 - `seconds` (*float*): How long the answer took. Keyword-only.
 - `now` (*float or None, default None*): When it was answered, as a timestamp; the clock is used if None. Keyword-only.
 - `preview` (*ReviewInterval or None*): Correct-answer interval displayed for this question.
+- `passing_previews` (*dict or None*): Hard, Good, and Easy intervals shown during speed grading.
 - `self_grading` (*bool*): Defer scheduling a correct calendar answer until the learner rates it.
+- `timing_valid` (*bool*): Whether the presentation was uninterrupted. False excludes it from timing.
+
+**Returns**
+
+- *ReviewInterval or None*: The interval chosen by speed grading, once enough earlier answers exist.
 
 **Examples**
 

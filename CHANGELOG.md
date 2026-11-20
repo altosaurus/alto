@@ -19,6 +19,8 @@ Alto uses [semantic versioning](https://semver.org/).
 
 - Interval Construction asks learners to place a second note above or below a given note on the staff.
 
+- Automatic SM-2 and FSRS grades use each learner’s recent response times for the exercise. After calibration, each card shows the Hard, Good, and Easy review intervals before the learner answers. Practice settings include adjustable percentiles and a chart of the times used.
+
 - The Anki Exporter in the Tools menu saves selected exercises as decks in one Anki package. You can preview cards,
   filter each deck, and include review schedules from an SM-2 or FSRS profile.
 

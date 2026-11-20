@@ -151,7 +151,7 @@ To revisit a skipped release, choose **Tools → Check for updates…**. To stop
 
 ### Practice
 
-Select a scheduler for the current profile. With **SM-2** or **FSRS**, you can set daily limits and choose whether to grade correct answers yourself.
+Select a scheduler for the current profile. With **SM-2** or **FSRS**, you can set daily limits and choose whether to grade correct answers yourself. Open **Response-time grading…** to adjust the automatic Hard and Easy percentages and inspect the times for each exercise. [Response-time grading]({{ '/practice/' | relative_url }}#response-time-grading).
 
 {% include shot.html src="practice-settings.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" caption="This profile can start ten new cards per exercise each day and review every card that comes due." %}
 

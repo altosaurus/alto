@@ -157,7 +157,7 @@ an item starts or resumes it. The top-left pane button hides and shows the list 
 **Statistics** and **Browse database** are at the top right. The sliders button opens the exercise's own settings, and **?**
 explains it.
 
-{% include shot.html src="filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the next interval beside the staff" caption="The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice." %}
+{% include shot.html src="filtered-exercise.png" alt="Note Identification with two exercises in the navigation pane, Shuffle enabled, and the Easy, Good, and Hard intervals beside the staff" caption="The navigation pane lists the same two exercises as the filtered grid. The blue shuffle button stays available while you practice." %}
 
 ## Glossary
 
