@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
 </head>
 <body>
@@ -340,6 +340,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -491,6 +494,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
@@ -830,7 +836,7 @@ the install script; a packaged copy always follows releases. See <a href="/alto/
 
 <h3 id="practice">Practice</h3>
 
-<p>Select a scheduler for the current profile. With <strong>SM-2</strong> or <strong>FSRS</strong>, you can set daily limits and choose whether to grade correct answers yourself.</p>
+<p>Select a scheduler for the current profile. With <strong>SM-2</strong> or <strong>FSRS</strong>, you can set daily limits and choose whether to grade correct answers yourself. Open <strong>Response-time grading…</strong> to adjust the automatic Hard and Easy percentages and inspect the times for each exercise. <a href="/alto/dev/practice/#response-time-grading">Response-time grading</a>.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/dev/assets/img/practice-settings.png" alt="Practice settings with FSRS selected, self-grading enabled, ten new cards per day, and unlimited reviews" loading="lazy" />
@@ -933,8 +939,8 @@ practice history. See <a href="/alto/dev/data/">Your data</a>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

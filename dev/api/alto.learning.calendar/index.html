@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
 </head>
 <body>
@@ -340,6 +340,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -491,6 +494,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
@@ -1092,6 +1098,7 @@ True
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">displayed</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Rating</span><span class="p">,</span> <span class="n">ReviewInterval</span><span class="p">]</span>
 </code></pre></div></div>
 
@@ -1104,7 +1111,8 @@ True
   <li><code class="language-plaintext highlighter-rouge">profile</code> (<em>int</em>): Active profile.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Card identity.</li>
   <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Calendar scheduler.</li>
-  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Time of the correct answer.</li>
+  <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Presentation or answer timestamp.</li>
+  <li><code class="language-plaintext highlighter-rouge">displayed</code> (<em>dict or None</em>): Previously displayed outcomes to reuse while this card’s schedule is current.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -1145,7 +1153,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): Stable card identity.</li>
   <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Scheduler selected for this review.</li>
   <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>bool</em>): Whether the first submission was correct.</li>
-  <li><code class="language-plaintext highlighter-rouge">manual_rating</code> (<em>Rating or None</em>): Button grade or automatic Again in self-grading mode. None uses the automatic schedule.</li>
+  <li><code class="language-plaintext highlighter-rouge">manual_rating</code> (<em>Rating or None</em>): Explicit grade from a button or response time. None uses the original automatic schedule.</li>
   <li><code class="language-plaintext highlighter-rouge">now</code> (<em>float</em>): Answer timestamp.</li>
   <li><code class="language-plaintext highlighter-rouge">preview</code> (<em>ReviewInterval or None</em>): Correct-answer interval shown for this presentation.</li>
 </ul>
@@ -1315,8 +1323,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

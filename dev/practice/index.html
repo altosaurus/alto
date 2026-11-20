@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
   <script defer src="/alto/dev/assets/vendor/temml-0.14.0/temml.min.js"
           onload="temml.renderMathInElement(document.querySelector('article'), {fences: '(', annotate: true})"></script>
@@ -343,6 +343,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -496,6 +499,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
@@ -629,6 +635,29 @@
     </tr>
   </tbody>
 </table>
+
+<h2 id="response-time-grading">Response-time grading</h2>
+
+<p>In automatic SM-2 and FSRS practice, Alto compares a correct first answer with your previous answers to the same exercise.
+The fastest 15% earn <strong>Easy</strong>, the slowest 15% earn <strong>Hard</strong>, and the middle earns <strong>Good</strong>. A miss always earns <strong>Again</strong>.
+Each exercise has its own distribution, so time spent placing notes on a staff has no effect on the cutoff for identifying a keyboard note.</p>
+
+<p>Open <strong>Settings → Practice → Response-time grading…</strong> to see the distribution for an exercise and its cutoffs in seconds.
+Change the Easy and Hard percentages there. Good gets the remaining share. The percentages apply to this profile across exercises
+and both calendar schedulers. A zero disables that tail. Answers exactly at a cutoff earn Good.</p>
+
+<p>Alto starts with Good until there are 40 eligible answers. It recalculates the cutoffs from the most recent 100 timed, correct
+first answers before grading each new response. Previous practice in any mode counts. Retries and interrupted timings are excluded.
+A correct interrupted answer earns Good. After calibration, the intervals appear to the right of the music, with Easy at the top, Good in the middle, and Hard at the bottom. Keyboard exercises show Hard, Good, and Easy from left to right beneath the keys. After a correct answer, Alto shows the assigned grade and interval.</p>
+
+<p>Keyboard Note Identification and Keyboard Interval Identification each need 40 timed, correct first answers of their own. If you see three intervals under one keyboard and a single interval under the other, the second exercise is still collecting timings.
+The scheduler uses the same intervals as the corresponding grade buttons.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/response-times.png" alt="Response-time grading for Note Identification with percentile settings, cutoffs in seconds, and the number of answers in each time range." loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/response-times-dark.png" alt="Response-time grading for Note Identification with percentile settings, cutoffs in seconds, and the number of answers in each time range." loading="lazy" />
+  
+</figure>
 
 <h2 id="self-grading-a-new-card">Self-grading a new card</h2>
 
@@ -942,14 +971,14 @@
 
 <h2 id="sm-2">SM-2</h2>
 
-<p><strong>SuperMemo 2 (SM-2)</strong> keeps a count of successive successful reviews, the last interval in days, and an <strong>ease factor</strong> \(E\) for each card. A new card starts with \(E=2.5\). By default, Alto grades a correct first answer Good and a miss Again. Under <strong>Settings → Practice</strong>, select <strong>Grade correct answers with Hard, Good, or Easy</strong> to choose the grade yourself. Each button shows its interval above it. A wrong answer records Again and advances automatically. The exercise’s <strong>Next Question</strong> preference is disabled while self-grading is on. <a href="https://super-memory.com/english/ol/sm2.htm">Original SM-2 specification</a></p>
+<p><strong>SuperMemo 2 (SM-2)</strong> keeps a count of successive successful reviews, the last interval in days, and an <strong>ease factor</strong> \(E\) for each card. A new card starts with \(E=2.5\). During calibration, Alto grades a correct first answer Good and a miss Again. Under <strong>Settings → Practice</strong>, select <strong>Grade correct answers with Hard, Good, or Easy</strong> to choose the grade yourself. Each button shows its interval above it. A wrong answer records Again and advances automatically. The exercise’s <strong>Next Question</strong> preference is disabled while self-grading is on. <a href="https://super-memory.com/english/ol/sm2.htm">Original SM-2 specification</a></p>
 
 <h3 id="review-intervals-and-ease">Review intervals and ease</h3>
 
 <table>
   <thead>
     <tr>
-      <th>First submission with automatic grading</th>
+      <th>First submission during calibration</th>
       <th>Change to the card</th>
       <th>Next review</th>
     </tr>
@@ -974,7 +1003,7 @@
 
 <p>Once a card graduates, Hard starts at 1.2 times the previous interval. Good multiplies the previous interval by the card’s ease, and Easy applies a further 1.3 multiplier. Good credits half the days overdue and Easy credits all of them. Hard lowers ease by 0.15, Easy raises it by 0.15, and Good preserves it. A miss lowers ease by 0.20 and starts a ten-minute relearning step. At that step Hard waits 15 minutes, Good schedules one day, and Easy schedules two days. <a href="https://docs.ankiweb.net/deck-options.html">Anki deck options</a></p>
 
-<h3 id="three-reviews-of-f-with-automatic-grading">Three reviews of F♯ with automatic grading</h3>
+<h3 id="three-reviews-of-f-during-calibration">Three reviews of F♯ during calibration</h3>
 
 <p>Identify a new F♯ correctly on day 0 and it is due on day 1. Get it right on day 1 and it is due on day 7. A third success on day 7 gives an interval of \(6\cdot 2.5=15\) days, so the next due date is <strong>day 22</strong>.</p>
 
@@ -1028,7 +1057,7 @@
 
 <h2 id="fsrs">FSRS</h2>
 
-<p>The <strong>Free Spaced Repetition Scheduler (FSRS)</strong> models the chance you can recall a card as time passes. Alto uses FSRS-6 with its default parameters. A correct first submission earns <strong>Good</strong> by default. With self-grading on, you can choose <strong>Hard</strong>, <strong>Good</strong>, or <strong>Easy</strong> after a correct answer. A miss always earns <strong>Again</strong>. For a new card, Good puts its next learning step ten minutes away and Again puts it one minute away. A miss on a card already in review starts a ten-minute relearning step. <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS scheduler</a></p>
+<p>The <strong>Free Spaced Repetition Scheduler (FSRS)</strong> models the chance you can recall a card as time passes. Alto uses FSRS-6 with its default parameters. A correct first submission earns <strong>Good</strong> during calibration. With self-grading on, you can choose <strong>Hard</strong>, <strong>Good</strong>, or <strong>Easy</strong> after a correct answer. A miss always earns <strong>Again</strong>. For a new card, Good puts its next learning step ten minutes away and Again puts it one minute away. A miss on a card already in review starts a ten-minute relearning step. <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS scheduler</a></p>
 
 <p>With self-grading, a new FSRS card starts with the same Hard and Good learning steps as SM-2. Easy graduates it directly using FSRS-6’s estimate of memory stability at 90% desired retention. On review cards, the three intervals use the same random adjustment and are ordered Hard, Good, Easy up to the maximum of 36,500 days. The interval printed above a button is the one Alto schedules. <a href="https://github.com/ankitects/anki/blob/main/rslib/src/scheduler/states/review.rs">Anki review scheduling</a></p>
 
@@ -1128,7 +1157,7 @@
 
 <h2 id="review-intervals-for-f">Review intervals for F♯</h2>
 
-<p>Suppose you see a new F♯ card five times in Note Identification. Each row shows your answer and the gap <strong>until the next showing</strong>. For ASRS and ARTS, assume you answer one other question every 10 seconds. After each of those answers, F♯ competes with one unseen card. For SM-2 and FSRS, assume you review F♯ whenever it is due.</p>
+<p>Suppose you see a new F♯ card five times in Note Identification. Each row shows your answer and the gap <strong>until the next showing</strong>. For ASRS and ARTS, assume you answer one other question every 10 seconds. After each of those answers, F♯ competes with one unseen card. For SM-2 and FSRS, assume you review F♯ whenever it is due and the exercise is still collecting its first 40 timed answers.</p>
 
 <table>
   <thead>
@@ -1188,9 +1217,9 @@
 <p>On the exercise screen, the counts appear at the top, immediately to the left of the score and streak, in <strong>blue / red / green</strong> order: new cards, outstanding incorrect cards, and due reviews. The underlined number identifies the current card’s queue. A retry that is due appears in both the red and green counts, with red underlined while you answer it.</p>
 
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/keyboard-review.png" alt="Keyboard Note Identification with three colored counts next to the streak and Next interval beneath the keyboard" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/keyboard-review-dark.png" alt="Keyboard Note Identification with three colored counts next to the streak and Next interval beneath the keyboard" loading="lazy" />
-  <figcaption>With automatic grading, Next interval shows when this card will return if you answer correctly.</figcaption>
+  <img class="for-light" src="/alto/dev/assets/img/keyboard-review.png" alt="Keyboard Note Identification with the queue counts next to the streak and review intervals beneath the keyboard" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/keyboard-review-dark.png" alt="Keyboard Note Identification with the queue counts next to the streak and review intervals beneath the keyboard" loading="lazy" />
+  <figcaption>After calibration, the keyboard shows the next interval for each passing grade.</figcaption>
 </figure>
 
 <p>After a miss, Alto sets the card aside and offers other eligible questions. If the missed card is the only review left within your daily limit, the exercise shows its return time and resumes automatically when it is due.</p>
@@ -1295,8 +1324,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

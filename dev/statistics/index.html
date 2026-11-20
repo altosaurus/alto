@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
 </head>
 <body>
@@ -340,6 +340,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -493,6 +496,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
@@ -608,6 +614,8 @@ profile’s own answers. Use <strong>← Back</strong> or <kbd>Esc</kbd> to retu
   <img class="for-dark" src="/alto/dev/assets/img/stats-dark.png" alt="Statistics for the last 30 days with Week selected in the upper-right corner of the Questions answered chart" loading="lazy" />
   <figcaption>Each bar counts a week of questions. The neighboring accuracy chart still shows one point per day.</figcaption>
 </figure>
+
+<p>Choose <strong>Response-time distribution…</strong> below the speed chart to see the recent times used for automatic grading. The tool opens on the selected exercise and uses its latest 100 eligible answers across timeframes. <a href="/alto/dev/practice/#response-time-grading">Response-time grading</a>.</p>
 
 <h3 id="what-you-see">What you see</h3>
 
@@ -776,8 +784,8 @@ up to that point. Hover over a point for its value. You can also open these grap
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

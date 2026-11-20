@@ -34,6 +34,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.learning.learner/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.learning.response_times/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.learning.scheduler/</loc>
 </url>
 <url>
@@ -184,6 +187,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.reference/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.response_times/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.scale_explorer/</loc>
 </url>
 <url>
@@ -271,10 +277,10 @@
 <loc>https://altosaurus.github.io/alto/dev/getting-started/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
+<loc>https://altosaurus.github.io/alto/dev/api/</loc>
 </url>
 <url>
-<loc>https://altosaurus.github.io/alto/dev/api/</loc>
+<loc>https://altosaurus.github.io/alto/dev/guide/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/</loc>

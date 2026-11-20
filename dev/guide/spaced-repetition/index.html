@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
 </head>
 <body>
@@ -340,6 +340,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -493,6 +496,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
@@ -612,14 +618,16 @@ how to change it without breaking it.</p>
 
 <p>Exercise tiles show new cards in blue, outstanding incorrect cards in red, and today’s available reviews in green. The red count includes missed cards under the current settings even when their retry time is in the future or the daily review limit has been reached. Showing a new card uses an introduction slot. An unanswered new card stays available in blue so you can finish it after leaving the exercise. Grading the first answer completes the introduction. Grading a subsequent review uses one review slot, including a miss. A miss ends that showing. While the missed card waits for its scheduled retry, Alto offers other eligible cards. If only the retry remains and a review slot is available, the open exercise waits for it and resumes automatically. The allowances reset at local midnight, and overdue cards keep their scheduled dates.</p>
 
-<p>Due questions come first. By default, Alto grades the first submission automatically. SM-2 uses grade 4 for a correct answer and grade 2 for a miss, with a one-minute retry after a miss. FSRS uses Good and Again with the Python library’s default learning steps. The first time a card moves between SM-2 and FSRS, the new scheduler inherits its due date and review progress. On later switches, each scheduler resumes its own schedule for that card. ARTS and ASRS practice leaves both calendar queues intact. <a href="https://super-memory.com/english/ol/sm2.htm">SM-2 specification</a> · <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS</a></p>
+<p>Due questions come first. By default, Alto grades the first submission automatically. During the initial timing calibration, SM-2 uses grade 4 for a correct answer and grade 2 for a miss, with a one-minute retry after a miss. FSRS uses Good and Again with the Python library’s default learning steps. The first time a card moves between SM-2 and FSRS, the new scheduler inherits its due date and review progress. On later switches, each scheduler resumes its own schedule for that card. ARTS and ASRS practice leaves both calendar queues intact. <a href="https://super-memory.com/english/ol/sm2.htm">SM-2 specification</a> · <a href="https://github.com/open-spaced-repetition/py-fsrs">Python FSRS</a></p>
 
-<p>With automatic grading, <strong>Next interval</strong> shows how long after a correct first answer the card will be due. The value appears at the lower right of the music,
+<p>During calibration, <strong>Next interval</strong> shows how long after a correct first answer the card will be due. The value appears at the lower right of the music,
 or on one line beneath the keyboard. A new SM-2 card shows <strong>1 day</strong>, and a new FSRS card shows <strong>10 min</strong>.</p>
 
+<p>After 40 timed, correct first answers in an exercise, automatic grading uses that profile’s rolling distribution. View the chart and adjust the cutoffs in <strong>Settings → Practice → Response-time grading…</strong>. Before you answer, the three possible intervals appear beside the music or in one row below the keyboard. A correct answer displays the assigned grade and interval. <a href="/alto/dev/practice/#response-time-grading">Response-time grading</a>.</p>
+
 <figure class="shot">
-  <img class="for-light" src="/alto/dev/assets/img/keyboard-review.png" alt="A calendar review showing the next interval along the lower-right edge of the piano keyboard" loading="lazy" />
-  <img class="for-dark" src="/alto/dev/assets/img/keyboard-review-dark.png" alt="A calendar review showing the next interval along the lower-right edge of the piano keyboard" loading="lazy" />
+  <img class="for-light" src="/alto/dev/assets/img/keyboard-review.png" alt="A calibrated review showing Hard, Good, and Easy intervals below the keyboard" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/keyboard-review-dark.png" alt="A calibrated review showing Hard, Good, and Easy intervals below the keyboard" loading="lazy" />
   
 </figure>
 
@@ -1056,8 +1064,8 @@ multi-armed bandits, including softmax action selection (free from the authors a
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

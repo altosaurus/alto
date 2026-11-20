@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
   
 </head>
 <body>
@@ -340,6 +340,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.learner/">learner</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.learning.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.learning.scheduler/">scheduler</a></li>
                 
                 
@@ -493,6 +496,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.reference/">reference</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.response_times/">response_times</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.scale_explorer/">scale_explorer</a></li>
                 
                 
@@ -591,7 +597,7 @@
       <div class="page-grid" id="page-grid">
         <article>
           <h1>Database</h1>
-          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database uses schema version 6, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
+          <p>Alto keeps practice history for all local profiles in one SQLite file. At launch, <code class="language-plaintext highlighter-rouge">Database(database_path())</code> opens <code class="language-plaintext highlighter-rouge">alto.db</code> in the application data directory, or <code class="language-plaintext highlighter-rouge">$ALTO_HOME/data/alto.db</code> when a development directory is set. A new database uses schema version 7, recorded in SQLite’s <code class="language-plaintext highlighter-rouge">PRAGMA user_version</code>. <a href="/alto/dev/developer-guide/application-launch/">Application launch</a></p>
 
 <p>A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends <strong>two</strong> rows to <code class="language-plaintext highlighter-rouge">attempts</code>, with durations of 3,000 and 1,000 milliseconds. It maintains <strong>one</strong> row in <code class="language-plaintext highlighter-rouge">items</code> for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.</p>
 
@@ -714,6 +720,18 @@
       <td>Default 0</td>
       <td>Whether this profile rates correct answers in SM-2 and FSRS.</td>
     </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">easy_percent</code></td>
+      <td>INTEGER</td>
+      <td>Default 15</td>
+      <td>Fastest share of correct first answers graded Easy, in percent.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">hard_percent</code></td>
+      <td>INTEGER</td>
+      <td>Default 15</td>
+      <td>Slowest share graded Hard, in percent.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -784,6 +802,12 @@
       <td>REAL</td>
       <td> </td>
       <td>Time the answer was submitted.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">timing_valid</code></td>
+      <td>INTEGER</td>
+      <td>Default 1</td>
+      <td>Set to zero when the exercise was hidden or Alto lost focus during the question. Older attempts retain their recorded times.</td>
     </tr>
   </tbody>
 </table>
@@ -1110,8 +1134,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
