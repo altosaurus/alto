@@ -60,6 +60,7 @@ topics:
 ## What makes it different
 
 - **Spaced repetition.** ASRS and ARTS use your accuracy and response time to choose the next exercise question. SM-2 and FSRS schedule a due date for each review. [Compare the four algorithms]({{ '/practice/' | relative_url }}).
+- **Anki-compatible decks.** Add music theory to your usual Anki reviews by exporting just the exercises you want, such as interval identification in bass clef. [Anki export guide]({{ '/data/' | relative_url }}#anki-decks).
 - **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}).
 - **Notation and keyboards your way.** Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. [Settings]({{ '/settings/' | relative_url }}).
 - **Local and private.** Your history is one file on your computer. [Your data]({{ '/data/' | relative_url }}).

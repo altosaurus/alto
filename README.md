@@ -28,6 +28,7 @@
       <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-013243?logo=numpy&amp;logoColor=white" alt="NumPy"></a>
       <a href="https://pypi.org/project/fsrs/"><img src="docs/assets/img/fsrs-badge.svg" alt="FSRS 6"></a>
       <a href="https://sqlite.org/"><img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite&amp;logoColor=white" alt="SQLite"></a>
+      <a href="docs/data.md#anki-decks"><img src="docs/assets/img/anki-compatible.svg" alt="Anki compatible"></a>
     </td>
   </tr>
 </table>
@@ -36,6 +37,9 @@
 
 Alto is a free desktop music theory trainer. Read notes on any clef, name intervals, chords and arpeggios, spell scales,
 learn key signatures, and find keys on a keyboard. Your answers determine when each question comes back for review.
+
+If you already study with Anki, you can export selected exercises as flashcards and review them alongside your other decks.
+You can also carry over due dates and intervals from SM-2 or FSRS. [Anki export guide](docs/data.md#anki-decks).
 
 <p align="center">
   <picture>

@@ -20,6 +20,9 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- The Anki Exporter in the Tools menu saves selected exercises as decks in one Anki package. You can preview cards,
+  filter each deck, and include review schedules from an SM-2 or FSRS profile.
+
 - Order of Keys asks learners to write a named key signature one sharp or flat at a time on a blank staff. Learners can choose clefs, scales, key signatures, and how many accidentals are already written.
 
 - Every exercise with answer choices now offers Limited and All button layouts. Each exercise remembers its own selection.

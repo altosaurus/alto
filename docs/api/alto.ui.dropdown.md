@@ -67,31 +67,15 @@ False
 >>> picker.hidePopup()
 ```
 
-### FieldComboBox.eventFilter
+## style_combo_popup
 
 ```python
-def eventFilter(
-    watched: QObject,
-    event: QEvent,
-) -> bool
+def style_combo_popup(combo: QComboBox) -> None
 ```
 
-Keep popup clipping synchronized with layout and size changes.
+Apply the shared field and popup styling to a dropdown, including one created by Qt.
 
 **Parameters**
 
-- `watched` (*QObject*): The object receiving the event.
-- `event` (*QEvent*): The event being filtered.
-
-**Returns**
-
-- *bool*: Whether the superclass consumes the event.
-
-**Examples**
-
-```pycon
->>> picker = FieldComboBox()
->>> picker.eventFilter(picker, QEvent(QEvent.Type.None_))
-False
-```
+- `combo` (*QComboBox*): Field whose item view and outer popup should follow the application theme.
 {% endraw %}

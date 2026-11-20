@@ -18,6 +18,29 @@ A switch at the top chooses between the exercises and the lessons.
 True
 ```
 
+## category_tree
+
+```python
+def category_tree(name: str) -> QTreeWidget
+```
+
+Build a navigation tree with themed checkboxes and right-aligned expansion arrows.
+
+**Parameters**
+
+- `name` (*str*): Accessible name of the tree.
+
+**Returns**
+
+- *QTreeWidget*: Empty tree ready for categories and exercises.
+
+**Examples**
+
+```pycon
+>>> category_tree("Decks").columnCount()
+2
+```
+
 ## TileCard
 
 ```python

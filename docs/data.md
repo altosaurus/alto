@@ -41,11 +41,60 @@ your usual configuration location.
 Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
 first. Alto's own [database browser]({{ '/statistics/' | relative_url }}) is read-only.
 
+## Anki decks
+
+Open **☰ → Tools → Anki Exporter** to turn Alto exercises into flashcards you can study in Anki. You can keep
+practicing in Alto while the exporter is open.
+
+### Deck selection and preview
+
+Check the exercises you want to export. Checking a category selects every exercise in it. Choose **All exercises** to
+select the whole list. Clicking an exercise name displays a sample card, even if its box is unchecked. **Front**
+shows the question and its illustration, when there is one. **Back** adds the answer and explanation.
+
+{% include shot.html src="anki-exporter.png" alt="Anki Exporter with Note Identification and Interval Identification checked and an interval card in the preview." %}
+
+The settings button in the upper right opens the highlighted exercise’s options. These start with your current
+practice settings. Changes you make here apply only to the export. For example, you can narrow an Interval
+Identification deck to thirds and sixths and keep practicing all intervals in Alto. Exercises with a fixed set of
+cards export every matching card. Exercises that generate a sample of questions export each distinct card in that sample.
+
+### Review scheduling
+
+By default, exported cards start as new in Anki. If your Alto profile uses SM-2 or FSRS, check **Include scheduling**
+to carry over due dates and intervals for matching cards you’ve already reviewed. The exporter uses the schedule
+from when you opened the window. Cards you haven’t studied start as new.
+
+### Export summary and file
+
+Choose **Export…** to see how many cards match. The table groups decks by exercise type. Each group starts expanded.
+A row marked **No cards** is skipped. The total below the table is the number of cards in the package.
+
+{% include shot.html src="anki-export-summary.png" alt="Export summary with separate Notation and Intervals groups, a card count for each deck, and a total below the table." %}
+
+Use **Browse…** to choose a destination or enter a path in **File name**. A filename alone saves to your home
+directory. The suggested name is `alto.apkg` for multiple exercises or, for a single exercise, a name such as
+`alto - Interval Identification.apkg`.
+
+Click **Export** to save. A spinner marks the deck being prepared and a green check marks each finished deck.
+The progress bar tracks the whole package, including the final save. To stop, click **Cancel** and confirm.
+Canceling preserves any existing file at the destination. When the status reads **Export successful**, click
+**Close** to return to the exporter.
+
+### Import into Anki
+
+Open the saved `.apkg` file in Anki. If you exported schedules, enable **Import any learning progress** during
+import to keep the review dates and intervals. Anki schedules subsequent reviews independently of Alto.
+
+A package containing one nonempty deck places it directly under **Alto**. With several nonempty decks, Anki
+groups them by Alto’s exercise categories, for example **Alto → Intervals → Interval Identification** and
+**Alto → Notation → Note Identification**. Exporting the same question again preserves its card identity.
+
 ## Backing up and restoring
 
-Open the menu (☰) and choose **Export backup…** to save everything Alto keeps to one file: all the profiles, every answer
+Open the ☰ menu and choose **Tools** → **Export backup…** to save everything Alto keeps to one file: all the profiles, every answer
 and the record of each question, and every setting (the theme, the notation and keyboard styles, the instrument, each
-exercise's options and the profile you used last). Choose **Import backup…** to read one back.
+exercise's options and the profile you used last). Choose **Tools** → **Import backup…** to read one back.
 
 Importing **replaces everything** with the backup, so on a clean install, or on another computer, Alto comes up exactly as it
 was when the backup was made: same profiles, same history, same settings, and the same profile open. Nothing is merged. What

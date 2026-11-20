@@ -50,6 +50,7 @@ from alto.learning import (
     Learner,
 )
 from alto.learning.calendar import UNLIMITED
+from alto.ui.anki_exporter import AnkiExporter
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.database_page import (
     ROW_ROLE,
@@ -90,6 +91,8 @@ SHOTS = (
     "self-grading",
     "waiting-for-review",
     "practice-settings",
+    "anki-exporter",
+    "anki-export-summary",
     "database-questions",
     "stats",
     "stats-heatmap",
@@ -360,6 +363,24 @@ def capture(
                 seconds=3.1,
                 now=now - minutes_ago * 60,
             )
+
+    if {"anki-exporter", "anki-export-summary"}.intersection(names):
+        exporter = AnkiExporter(learner, reviews={}, selected="IntervalNames")
+        exporter.items[NoteNames].setCheckState(0, Qt.CheckState.Checked)
+        exporter.show()
+        save(exporter, name="anki-exporter")
+        if "anki-export-summary" in names:
+            exporter.save.click()
+            summary = exporter.export_dialog
+            assert summary is not None
+            summary.filename.setText("alto.apkg")
+            summary.filename.deselect()
+            summary.summary.setFocus()
+            while summary._counter is not None:
+                wait(50)
+            save(summary, name="anki-export-summary")
+            summary.close()
+        exporter.close()
 
     window.open_stats()
     wait(400)

@@ -60,7 +60,7 @@ The list is signed as well (`SHA256SUMS.sig`). Alto checks that signature itself
 
 ## Updating Alto
 
-Whichever way you installed Alto, you can update from inside it: open the menu (☰) and choose **Check for updates…**. By default Alto asks GitHub for the
+To update Alto, open the ☰ menu and choose **Tools** → **Check for updates…**. By default Alto asks GitHub for the
 newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
 says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
 OK.
