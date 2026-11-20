@@ -60,6 +60,8 @@ The list is signed as well (`SHA256SUMS.sig`). Alto checks that signature itself
 
 ## Updating Alto
 
+Alto checks for published releases in the background when the main grid is active, up to once every 24 hours. If a newer version is available, Alto asks whether you want to upgrade. Choose **Yes** to start the upgrade, **No** for a reminder after 24 hours, or **Don’t remind me again** to skip that release. You can turn off automatic checks in **Settings → Updates**.
+
 To update Alto, open the ☰ menu and choose **Tools** → **Check for updates…**. By default Alto asks GitHub for the
 newest **release** and compares it with the version you have (**Settings → Updates** shows it). If yours is the newest, it
 says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press

@@ -26,6 +26,7 @@ from alto import (
     selfupdate,
     updates,
 )
+from alto.exercises.library import NoteNames
 from alto.selfupdate import (
     Prepared,
     Target,
@@ -156,6 +157,7 @@ class Fakes:
         monkeypatch.setattr(updates, "fetch_text", self._fetch)
         monkeypatch.setattr(QMessageBox, "warning", lambda _parent, _title, text: self.shown.append(("warning", text)))
         monkeypatch.setattr(QMessageBox, "information", lambda _parent, _title, text: self.shown.append(("information", text)))
+        monkeypatch.setattr(QMessageBox, "exec", lambda box: self._release_prompt(box))
         monkeypatch.setattr(QMessageBox, "question", lambda _parent, _title, text, _buttons, _default: self._ask(text))
         monkeypatch.setattr(flow.QDesktopServices, "openUrl", lambda url: self.opened.append(url.toString()) or True)
         monkeypatch.setattr(QDialog, "exec", lambda dialog: self._exec(dialog))
@@ -248,6 +250,27 @@ class Fakes:
         self.ran.append("install")
         self.installs.append(tag)
         return uv, ["-c", self.install_script]
+
+    def _release_prompt(self, box: QMessageBox) -> int:
+        """
+        Click the configured answer in the release dialog's visible button row.
+
+        Parameters
+        ----------
+        box : QMessageBox
+            Release offer.
+
+        Returns
+        -------
+        int
+            The dialog result after selecting a button.
+        """
+        box.show()
+        buttons = sorted(box.buttons(), key=lambda button: button.x())
+        assert [button.text() for button in buttons] == ["Yes", "No", "Don't remind me again"]
+        index = [YES, NO, QMessageBox.StandardButton.Ignore].index(self._ask(box.text()))
+        buttons[index].click()
+        return box.result()
 
     def _ask(self, text: str) -> QMessageBox.StandardButton:
         """
@@ -406,12 +429,15 @@ def test_updates_follow_releases_unless_the_main_branch_is_chosen(app: QApplicat
 # -- a copy installed with the script, following releases (the default) ----------------------------------------------
 
 
-def test_a_newer_release_is_offered_and_agreeing_installs_that_tag_and_restarts(app: QApplication, fakes: Fakes) -> None:
+@pytest.mark.parametrize("automatic", [False, True])
+def test_a_newer_release_is_offered_and_agreeing_installs_that_tag_and_restarts(
+    app: QApplication,
+    fakes: Fakes,
+    monkeypatch: pytest.MonkeyPatch,
+    automatic: bool,
+) -> None:
     """
-    Check the whole successful path on the releases channel.
-
-    The versions are named, the tag is installed, the output is shown, the window says Alto will restart after OK, and it then
-    does.
+    Follow the manual and scheduled release checks through an accepted upgrade and restart.
 
     Parameters
     ----------
@@ -419,8 +445,22 @@ def test_a_newer_release_is_offered_and_agreeing_installs_that_tag_and_restarts(
         The shared Qt application.
     fakes : Fakes
         The stand-ins.
+    monkeypatch : pytest.MonkeyPatch
+        Keep the exercise grid active and intercept the restart.
+    automatic : bool
+        Start the background timer or invoke the menu command.
     """
-    check(fakes)
+    if automatic:
+        window = MainWindow()
+        monkeypatch.setattr(window, "isActiveWindow", lambda: True)
+        monkeypatch.setattr(window, "restart_app", fakes.restart)
+        flow.DailyReleaseCheck(window)
+        deadline = time.monotonic() + 5
+        while not fakes.restarts and time.monotonic() < deadline:
+            QTest.qWait(10)
+        window.close()
+    else:
+        check(fakes)
     assert fakes.fetched == [updates.RELEASES_API] and "check" not in fakes.ran
     assert len(fakes.shown) == 1 and fakes.shown[0][0] == "question"
     assert "0.0.0 → 0.1.0" in fakes.shown[0][1] and fakes.shown[0][1].endswith("Update now?")
@@ -1173,3 +1213,105 @@ def test_the_menu_offers_the_check_with_or_without_a_profile_and_hands_it_the_re
     assert window.update_action.text() == "Check for updates…" and window.update_action.isVisible()
     window.update_action.trigger()
     assert calls == [(window, window.restart_app)]
+
+
+def test_daily_release_check(app: QApplication, monkeypatch: pytest.MonkeyPatch, fakes: Fakes) -> None:
+    """
+    Throttle checks across launches and defer each upgrade offer until the grid is active.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Control the clock and network reply.
+    fakes : Fakes
+        Record prompts and upgrade actions.
+    """
+    now = 1800000000
+    monkeypatch.setattr(flow.time, "time", lambda: now)
+    window = MainWindow()
+    monkeypatch.setattr(window, "isActiveWindow", lambda: True)
+    fakes.answer = NO
+    saved = flow.store()
+    saved.setValue("updates/lastReleaseCheck", "invalid")
+    fetches = []
+    monkeypatch.setattr(flow.ReleaseFetcher, "start", lambda self, *, seconds: fetches.append(seconds))
+    clock = flow.DailyReleaseCheck(window)
+    clock.stop()
+    clock._check()
+    assert fetches == [flow.RELEASE_SECONDS]
+    reopened = flow.DailyReleaseCheck(window)
+    reopened.stop()
+    reopened._check()
+    assert reopened.interval() == flow.DAY_SECONDS * 1000 and len(fetches) == 1
+    reopened.stop()
+
+    window.open_exercise(NoteNames)
+    clock._received(200, RELEASE)
+    assert not fakes.shown and clock.pending is not None
+    window.show_home()
+    clock._check()
+    assert len(fakes.shown) == 1 and "0.1.0" in fakes.shown[0][1] and not fakes.installs
+    now += flow.DAY_SECONDS - 60
+    reopened._received(200, RELEASE)
+    assert reopened.interval() == 60_000 and len(fakes.shown) == 1
+    now += 60
+    fakes.answer = QMessageBox.StandardButton.Ignore
+    reopened._check()
+    assert len(fakes.shown) == 2 and not fakes.installs
+    reopened.stop()
+    for status, response in [
+        (200, RELEASE),
+        (200, RELEASE.replace("0.1.0", "0.0.0")),
+        (404, ""),
+        (0, "offline"),
+        (200, RELEASE.replace('"prerelease": false', '"prerelease": true')),
+    ]:
+        now += flow.DAY_SECONDS
+        clock._check()
+        clock._received(status, response)
+    assert len(fetches) == 6 and len(fakes.shown) == 2
+    now += flow.DAY_SECONDS
+    clock._check()
+    clock._received(200, RELEASE.replace("0.1.0", "0.2.0"))
+    assert len(fakes.shown) == 3 and "0.2.0" in fakes.shown[-1][1]
+    clock.stop()
+    window.close()
+
+
+def test_daily_release_check_preferences(app: QApplication, fakes: Fakes, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Honor the opt-out, installation type, and channel even when a request is already in flight.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    fakes : Fakes
+        Supply installation metadata and collect prompts.
+    monkeypatch : pytest.MonkeyPatch
+        Control window activation and network access.
+    """
+    window = MainWindow()
+    monkeypatch.setattr(window, "isActiveWindow", lambda: True)
+    monkeypatch.setattr(flow.ReleaseFetcher, "start", lambda self, *, seconds: fakes.fetched.append("releases"))
+    fakes.installed = None
+    assert not flow.DailyReleaseCheck(window).isActive()
+    fakes.installed = SOURCE
+    clock = flow.DailyReleaseCheck(window)
+    clock.stop()
+    save_channel(updates.MAIN)
+    clock._check()
+    assert not fakes.fetched
+    fakes.frozen = True
+    packaged = flow.DailyReleaseCheck(window)
+    packaged.stop()
+    packaged._check()
+    assert fakes.fetched == ["releases"]
+    flow.store().setValue("updates/automatic", False)
+    packaged._received(200, RELEASE)
+    assert packaged.pending is None and not fakes.shown
+    clock.stop()
+    packaged.stop()
+    window.close()

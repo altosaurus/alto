@@ -28,6 +28,7 @@ from alto.ui.theme import (
     apply_theme,
     saved_theme,
 )
+from alto.ui.update_flow import DailyReleaseCheck
 from alto.updates import self_check
 
 
@@ -79,6 +80,7 @@ def main() -> int:
     # noinspection PyUnresolvedReferences
     app.main_window = window  # pyright: ignore[reportAttributeAccessIssue]
     window.show()
+    DailyReleaseCheck(window)
     return app.exec()
 
 

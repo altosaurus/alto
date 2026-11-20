@@ -137,10 +137,15 @@ only play as the synthesized piano.
 
 ### Updates
 
-Shows the version of Alto you are running, and has one choice: **Follow the main branch**. Off (the default), **Check for
-updates…** in the menu looks for the newest release. On, it looks for the newest change on the main branch instead, so you get
-each change as soon as it is merged, before it has been released. That may be less stable. It applies to a copy installed with
-the install script; a packaged copy always follows releases. See [Getting started]({{ '/getting-started/' | relative_url }}).
+**Automatically check for new releases daily** is on by default. When a new release is available and the main grid is active, Alto asks whether you want to update.
+
+- **Yes** starts the update or opens the download page, depending on how you installed Alto.
+- **No** lets Alto offer the same version again after 24 hours.
+- **Don’t remind me again** skips this version. Alto will still notify you when a newer version is available.
+
+To revisit a skipped release, choose **Tools → Check for updates…**. To stop automatic prompts for all releases, turn off **Automatically check for new releases daily**.
+
+**Follow the main branch** switches manual checks to the latest commit for copies installed with the install script. Automatic release checks pause on that channel. Packaged copies always follow releases. See [Getting started]({{ '/getting-started/' | relative_url }}).
 
 ### Practice
 

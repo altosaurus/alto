@@ -62,6 +62,7 @@ from alto.ui.lesson_nav import section_item
 from alto.ui.pictures import ClefPictures
 from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.staff import StaffWidget
+from alto.ui.store import store
 from alto.ui.theme import (
     FAMILIES,
     USER_PREFIX,
@@ -1717,6 +1718,10 @@ class AppSettingsDialog(QDialog):
             about="Choose Tools → Check for updates… to look for a newer version of Alto.",
         )
         lay.addWidget(QLabel(f"You have Alto {updates.installed_version()}."))
+        self.auto_updates = QCheckBox("Automatically check for new releases daily")
+        self.auto_updates.setChecked(bool(store().value("updates/automatic", True, type=bool)))
+        self.auto_updates.toggled.connect(lambda on: store().setValue("updates/automatic", on))
+        lay.addWidget(self.auto_updates)
         self.main_channel = QCheckBox("Follow the main branch (the latest changes, which may be unstable)")
         self.main_channel.setChecked(saved_channel() == updates.MAIN)
         self.main_channel.toggled.connect(self._choose_channel)

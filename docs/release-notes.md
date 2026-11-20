@@ -20,6 +20,8 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- Alto checks for new releases daily and offers upgrades from the main grid. Learners can update, defer the reminder for 24 hours, or skip a release. Automatic checks can be turned off in Settings → Updates.
+
 - Interval Construction asks learners to place a second note above or below a given note on the staff.
 
 - The Anki Exporter in the Tools menu saves selected exercises as decks in one Anki package. You can preview cards,

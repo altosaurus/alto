@@ -315,6 +315,36 @@ def cancel() -> None
 
 Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.
 
+## DailyReleaseCheck
+
+```python
+DailyReleaseCheck(window: MainWindow)
+```
+
+Bases: `QTimer`
+
+Check for published releases in the background and honor the learner’s reminder choice at the exercise grid.
+
+**Examples**
+
+```pycon
+Reopening Alto on the same afternoon reuses the previous check time.
+```
+
+**Constructor**
+
+Schedule the first check after the startup window has opened.
+
+**Parameters**
+
+- `window` (*MainWindow*): The window that owns the timer and presents upgrade offers.
+
+**Constructor examples**
+
+```pycon
+Source checkouts continue to use Git for updates.
+```
+
 ## ReleaseDialog
 
 ```python
@@ -489,6 +519,39 @@ Ask GitHub for the latest release and compare it with the version that is runnin
 >>> check_release  # doctest: +SKIP
 ```
 
+## offer_release
+
+```python
+def offer_release(
+    parent: QWidget,
+    *,
+    release: Release,
+    kind: InstallKind,
+    source: Source | None,
+    installed: str,
+    restart: Callable[[], None],
+    quit_app: Callable[[], None],
+) -> None
+```
+
+Ask whether to upgrade using the installation's supported update path.
+
+**Parameters**
+
+- `parent` (*QWidget*): Window that owns the upgrade prompt.
+- `release` (*Release*): Published release to offer.
+- `kind` (*InstallKind*): Installation type.
+- `source` (*Source or None*): Repository used by a script installation.
+- `installed` (*str*): Current version.
+- `restart` (*Callable*): Restart a script installation after upgrading.
+- `quit_app` (*Callable*): Close a packaged copy after handing off to its installer.
+
+**Examples**
+
+```pycon
+A manual check can offer a version the learner previously declined.
+```
+
 ## check_main
 
 ```python
@@ -549,19 +612,17 @@ def update_package(
     *,
     release: updates.Release,
     target: selfupdate.Target,
-    installed: str,
     quit_app: Callable[[], None],
 ) -> None
 ```
 
-Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.
+Replace a packaged copy after the user agrees: download and check it, say that Alto will restart, and hand over.
 
 **Parameters**
 
 - `parent` (*QWidget*): The window the questions are asked over.
 - `release` (*updates.Release*): The newer release. Keyword-only.
 - `target` (*selfupdate.Target*): The copy that will be replaced. Keyword-only.
-- `installed` (*str*): The version that is running. Keyword-only.
 - `quit_app` (*Callable*): What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.
 
 **Examples**

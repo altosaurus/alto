@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import shutil
 import threading
+import time
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import (
@@ -52,6 +53,7 @@ from alto import (
 )
 from alto.ui.package_update import PackageUpdateDialog
 from alto.ui.store import (
+    int_value,
     store,
     text_value,
 )
@@ -66,9 +68,12 @@ from alto.updates import (
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from alto.ui.main_window import MainWindow
+
 CHECK_TITLE, UPDATE_TITLE = "Check for updates", "Update Alto"
 CHECK_SECONDS = 20
 RELEASE_SECONDS = 15
+DAY_SECONDS = 24 * 60 * 60
 QUIET = {
     "UV_NO_PROGRESS": "1",  # plain lines of text, not a progress bar drawn with control characters
     "NO_COLOR": "1",
@@ -531,6 +536,106 @@ class ReleaseFetcher(QObject):
                 return
 
 
+class DailyReleaseCheck(QTimer):
+    """
+    Check for published releases in the background and honor the learner’s reminder choice at the exercise grid.
+
+    Examples
+    --------
+    Reopening Alto on the same afternoon reuses the previous check time.
+    """
+
+    def __init__(self, window: MainWindow) -> None:
+        """
+        Schedule the first check after the startup window has opened.
+
+        Parameters
+        ----------
+        window : MainWindow
+            The window that owns the timer and presents upgrade offers.
+
+        Examples
+        --------
+        Source checkouts continue to use Git for updates.
+        """
+        super().__init__(window)
+        self.window = window
+        self.source = updates.installed_source()
+        self.kind = updates.install_kind(self.source, tool=updates.is_tool_install(), frozen=updates.is_frozen())
+        self.pending: Release | None = None
+        self.fetcher = ReleaseFetcher(self)
+        self.fetcher.done.connect(self._received)
+        self.setSingleShot(True)
+        self.timeout.connect(self._check)
+        if updates.cannot_update(self.kind) is None:
+            self.start(0)
+
+    def _check(self) -> None:
+        """Wait until a check is due or a pending release can be offered."""
+        saved = store()
+        if not saved.value("updates/automatic", True, type=bool) or (
+            self.kind is InstallKind.SCRIPT and saved_channel() == updates.MAIN
+        ):
+            self.pending = None
+            self.start(60_000)
+            return
+        now = int(time.time())
+        try:
+            elapsed = now - int_value(saved, key="updates/lastReleaseCheck", default=0)
+        except (ValueError, OverflowError):
+            elapsed = DAY_SECONDS
+        remaining = DAY_SECONDS - elapsed if 0 <= elapsed < DAY_SECONDS else 0
+        if self.pending is None and remaining:
+            self.start(remaining * 1000)
+            return
+        if (
+            self.window.stack.currentWidget() is not self.window.home
+            or not self.window.isActiveWindow()
+            or QApplication.activeModalWidget()
+        ):
+            self.start(15_000)
+            return
+        if self.pending is not None:
+            release = self.pending
+            reminder = text_value(saved, key=f"updates/releaseReminder/{release.version}", default="")
+            if reminder.isascii() and reminder.isdecimal() and len(reminder) <= 12:
+                delay = int(reminder) - now
+                if 0 < delay <= DAY_SECONDS:
+                    self.start(delay * 1000)
+                    return
+            self.pending = None
+            if reminder != "skip":
+                offer_release(
+                    self.window,
+                    release=release,
+                    kind=self.kind,
+                    source=self.source,
+                    installed=updates.installed_version(),
+                    restart=self.window.restart_app,
+                    quit_app=QApplication.quit,
+                )
+            self.start(max(1, remaining) * 1000)
+            return
+        saved.setValue("updates/lastReleaseCheck", now)
+        self.fetcher.start(seconds=RELEASE_SECONDS)
+
+    def _received(self, status: int, text: str) -> None:  # noqa: PLR0917 (Qt signal arguments)
+        """
+        Queue a newer release for the next safe opportunity to present it.
+
+        Parameters
+        ----------
+        status : int
+            HTTP status from the background fetch.
+        text : str
+            GitHub response or network error message.
+        """
+        answer = updates.release_answer(status, text=text)
+        if isinstance(answer, Release) and updates.is_newer(answer.version, installed=updates.installed_version()):
+            self.pending = answer
+        self._check()
+
+
 class ReleaseDialog(WaitDialog):
     """
     A waiting window while GitHub is asked for the latest release.
@@ -836,29 +941,75 @@ def check_release(
     if not updates.is_newer(release.version, installed=installed):
         QMessageBox.information(parent, CHECK_TITLE, f"Alto is up to date ({installed}).")
         return
-    if kind is InstallKind.PACKAGE or source is None:
-        target = selfupdate.self_update_target() if updates.UPDATE_PUBLIC_KEYS else None
-        if target is not None:  # this copy can replace itself, and has a key to check what it downloads with
-            update_package(parent, release=release, target=target, installed=installed, quit_app=quit_app)
-            return
-        asked = QMessageBox.question(
-            parent,
-            CHECK_TITLE,
-            f"Alto {release.version} is available (you have {installed}).\n\nOpen the page where it can be downloaded?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.Yes,
-        )
-        if asked == QMessageBox.StandardButton.Yes:
-            QDesktopServices.openUrl(QUrl(release.url))
-        return
-    asked = QMessageBox.question(
-        parent,
-        CHECK_TITLE,
-        f"An update is available ({installed} \u2192 {release.version}).\n\nUpdate now?",
-        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-        QMessageBox.StandardButton.Yes,
+    offer_release(parent, release=release, kind=kind, source=source, installed=installed, restart=restart, quit_app=quit_app)
+
+
+def offer_release(
+    parent: QWidget,
+    *,
+    release: Release,
+    kind: InstallKind,
+    source: Source | None,
+    installed: str,
+    restart: Callable[[], None],
+    quit_app: Callable[[], None],
+) -> None:
+    """
+    Ask whether to upgrade using the installation's supported update path.
+
+    Parameters
+    ----------
+    parent : QWidget
+        Window that owns the upgrade prompt.
+    release : Release
+        Published release to offer.
+    kind : InstallKind
+        Installation type.
+    source : Source or None
+        Repository used by a script installation.
+    installed : str
+        Current version.
+    restart : Callable
+        Restart a script installation after upgrading.
+    quit_app : Callable
+        Close a packaged copy after handing off to its installer.
+
+    Examples
+    --------
+    A manual check can offer a version the learner previously declined.
+    """
+    packaged = kind is InstallKind.PACKAGE or source is None
+    target = selfupdate.self_update_target() if packaged and updates.UPDATE_PUBLIC_KEYS else None
+    download_page = packaged and target is None
+    question = (
+        f"Alto {release.version} is available (you have {installed}).\n\nOpen the page where it can be downloaded?"
+        if download_page
+        else f"An update is available ({installed} → {release.version}).\n\nUpdate now?"
     )
-    if asked == QMessageBox.StandardButton.Yes:
+    box = QMessageBox(QMessageBox.Icon.Question, CHECK_TITLE, question, parent=parent)
+    box.setOption(QMessageBox.Option.DontUseNativeDialog)
+    # A single role keeps these choices in reading order across Qt platform layouts.
+    role = QMessageBox.ButtonRole.ActionRole
+    yes = box.addButton("Yes", role)
+    no = box.addButton("No", role)
+    skip = box.addButton("Don't remind me again", role)
+    box.setDefaultButton(yes)
+    box.setEscapeButton(no)
+    box.exec()
+    choice = box.clickedButton()
+    reminder_key = f"updates/releaseReminder/{release.version}"
+    if choice is skip:
+        store().setValue(reminder_key, "skip")
+        return
+    store().setValue(reminder_key, str(int(time.time()) + DAY_SECONDS))
+    if choice is not yes:
+        return
+    if target is not None:
+        update_package(parent, release=release, target=target, quit_app=quit_app)
+    elif download_page:
+        QDesktopServices.openUrl(QUrl(release.url))
+    else:
+        assert source is not None
         install(parent, source=source, tag=release.tag, restart=restart)
 
 
@@ -948,11 +1099,10 @@ def update_package(
     *,
     release: updates.Release,
     target: selfupdate.Target,
-    installed: str,
     quit_app: Callable[[], None],
 ) -> None:
     """
-    Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.
+    Replace a packaged copy after the user agrees: download and check it, say that Alto will restart, and hand over.
 
     Parameters
     ----------
@@ -962,8 +1112,6 @@ def update_package(
         The newer release. Keyword-only.
     target : selfupdate.Target
         The copy that will be replaced. Keyword-only.
-    installed : str
-        The version that is running. Keyword-only.
     quit_app : Callable
         What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.
 
@@ -971,15 +1119,6 @@ def update_package(
     --------
     >>> update_package  # doctest: +SKIP
     """
-    asked = QMessageBox.question(
-        parent,
-        CHECK_TITLE,
-        f"An update is available ({installed} \u2192 {release.version}).\n\nUpdate now?",
-        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-        QMessageBox.StandardButton.Yes,
-    )
-    if asked != QMessageBox.StandardButton.Yes:
-        return
     prepared = PackageUpdateDialog(parent, release=release, target=target).run()
     if prepared is None:
         return
