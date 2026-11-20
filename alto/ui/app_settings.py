@@ -61,6 +61,7 @@ from alto.ui.keyboard import KeyboardWidget
 from alto.ui.lesson_nav import section_item
 from alto.ui.pictures import ClefPictures
 from alto.ui.practice_limits import DailyLimitsEditor
+from alto.ui.response_times import ResponseTimeDialog
 from alto.ui.staff import StaffWidget
 from alto.ui.theme import (
     FAMILIES,
@@ -1611,8 +1612,8 @@ class AppSettingsDialog(QDialog):
             ),
             "SM-2": (
                 "<h3>SuperMemo 2 (SM-2)</h3>"
-                "<p>Your first answer sets the next review date. Answer a new card correctly and it returns in one day. "
-                "Answer correctly again and it returns six days later. With self-grading, a new card uses Anki’s "
+                "<p>Your first answer sets the next review date. During calibration, a new correct card returns in one day. "
+                "After 40 timed answers to an exercise, speed determines the grade. Speed and button grading use Anki’s "
                 "learning steps instead. Hard repeats the step, Good advances, and Easy skips to a day-based review.</p>"
                 + calendar_note
             ),
@@ -1649,6 +1650,10 @@ class AppSettingsDialog(QDialog):
         self.self_grading.toggled.connect(self.learner.set_self_grading)
         self.self_grading.toggled.connect(lambda: self.scheduler_changed.emit())
         detail_layout.addWidget(self.self_grading)
+        self.response_times_button = QPushButton("Response-time grading…")
+        self.response_times_button.setToolTip("Adjust automatic grades and inspect response times by exercise")
+        self.response_times_button.clicked.connect(self._response_times)
+        detail_layout.addWidget(self.response_times_button)
         self.daily_limits = DailyLimitsEditor(self.learner)
         self.daily_limits.setVisible(selected in CALENDAR_SCHEDULERS)
         self.daily_limits.changed.connect(self.scheduler_changed)
@@ -1666,6 +1671,17 @@ class AppSettingsDialog(QDialog):
         self.scheduler_list.currentTextChanged.connect(self.learner.set_mode)
         self.scheduler_list.currentTextChanged.connect(lambda: self.scheduler_changed.emit())
         return page
+
+    def _response_times(self) -> None:
+        """
+        Open the profile's response-time distribution and grading thresholds.
+
+        Examples
+        --------
+        The exercise picker shows separate samples for staff and keyboard note identification.
+        """
+        assert self.learner is not None
+        ResponseTimeDialog(self.learner, parent=self).open()
 
     def _sound_page(self) -> QWidget:
         """
