@@ -86,6 +86,7 @@ def _isolated_state() -> Iterator[None]:
     names = (
         "note_names",
         "intervals",
+        "interval_construction",
         "keyboard",
         "keyboard_intervals",
         "construction",

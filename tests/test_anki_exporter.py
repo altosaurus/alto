@@ -28,6 +28,7 @@ from alto.exercises.library import (
     ChordQualities,
     CircleOfFifths,
     ClefBasics,
+    IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
     KeyboardNotes,
@@ -304,6 +305,7 @@ def test_checked_decks_share_a_package_and_preview_the_exported_fields(
     root.setCheckState(0, Qt.CheckState.Unchecked)
     assert not window.save.isEnabled()
     group.setCheckState(0, Qt.CheckState.Checked)
+    window.items[IntervalConstruction].setCheckState(0, Qt.CheckState.Unchecked)
     settings.notation.terms.clear()
     window.items[NotationIdentification].setCheckState(0, Qt.CheckState.Checked)
     window.items[ClefBasics].setCheckState(0, Qt.CheckState.Checked)

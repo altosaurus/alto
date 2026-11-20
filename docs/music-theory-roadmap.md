@@ -9,7 +9,7 @@ permalink: /roadmap/
 
 Alto is in alpha. **Complete** means the feature is available in the current development version. **Planned** marks the proposed development sequence. **Under consideration** marks a candidate for future work.
 
-Interval construction comes first, followed by chord construction and staff-to-keyboard practice. Ear training and rhythm come next. Both provide the groundwork for melodic dictation and harmonic analysis.
+Chord construction and staff-to-keyboard practice are next. Ear training and rhythm come next. Both provide the groundwork for melodic dictation and harmonic analysis.
 
 {% assign complete = '<strong class="roadmap-complete">Complete</strong>' %}
 
@@ -29,7 +29,7 @@ Interval construction comes first, followed by chord construction and staff-to-k
 | --- | --- | --- |
 | Staff intervals | Identify written seconds through fifteenths, shown together or in ascending or descending order. | {{ complete }} |
 | Keyboard notes and intervals | Name a highlighted piano key or identify the interval between two highlighted keys. | {{ complete }} |
-| Interval construction | Place the second note a named interval above or below the first. Feedback distinguishes an incorrect staff position from an incorrect accidental. | Planned |
+| Interval construction | Place the second note a named interval above or below the first. Feedback distinguishes an incorrect staff position from an incorrect accidental. | {{ complete }} |
 | Staff-to-keyboard practice | Select the piano key for a written note, then play scales and select chord tones on the keyboard. | Planned |
 | Transposition | Rewrite a phrase in a new key or convert a transposing instrument’s part to concert pitch. | Planned |
 | Interval inversion and reduction | Invert a minor sixth or reduce a major tenth to its simple interval. | Under consideration |

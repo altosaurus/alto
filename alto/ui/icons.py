@@ -172,6 +172,12 @@ EXERCISE_INTERVALS = (
     '<path d="M17.0 5H19.6V19H17.0" fill="none" stroke="COLOR" stroke-width=".95" stroke-linecap="round" stroke-linejoin="round"/>'
 )
 
+EXERCISE_INTERVAL_CONSTRUCTION = (
+    f'<path d="{_INTERVAL_NOTE}" fill="COLOR"/>'
+    f'<path d="{_INTERVAL_NOTE}" fill="COLOR" opacity=".55" transform="translate(0 -14)"/>'
+    '<path d="M18 19V5m-3 3 3-3 3 3" fill="none" stroke="COLOR" stroke-width="1.4" stroke-linejoin="round"/>'
+)
+
 # Key signature identification: a sharp and a flat side by side, in the Noto Music outlines the app icon uses.
 _SHARP_PATH = (
     "M12.12 14.58L9.92 15.54L9.92 19.45L8.87 19.45L8.87 15.97L5.25 17.72L5.25 21.65"

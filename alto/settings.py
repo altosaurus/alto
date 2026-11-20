@@ -430,6 +430,7 @@ class IntervalSettings(StaffRangeSettings):
 
 
 intervals = IntervalSettings()
+interval_construction = IntervalSettings()
 
 # Keyboard exercise: the whole piano is A0..C8 (MIDI 21..108); by default it asks C3..C5.
 KEYBOARD_FULL = (21, 108)

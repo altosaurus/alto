@@ -76,6 +76,7 @@ from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
     ClefBasics,
+    IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
     KeyboardNotes,
@@ -3549,9 +3550,16 @@ def _direction_choices(
     return body
 
 
-def load_intervals() -> None:
+def load_intervals(cfg: settings.IntervalSettings | None = None, *, prefix: str = "intervals") -> None:
     """
     Restore the saved staff interval options, keeping valid choices and per-clef ranges.
+
+    Parameters
+    ----------
+    cfg : IntervalSettings or None
+        Settings to populate. Defaults to Interval Identification.
+    prefix : str
+        Independent settings-store group for the exercise.
 
     Examples
     --------
@@ -3560,38 +3568,38 @@ def load_intervals() -> None:
     True
     """
     saved = store()
-    cfg = settings.intervals
+    cfg = settings.intervals if cfg is None else cfg
     defaults = settings.IntervalSettings()
     cfg.clefs = (
-        set(text_value(saved, key="intervals/clefs", default="treble,bass").split(",")) & set(settings.RANGE_KEYS)
+        set(text_value(saved, key=f"{prefix}/clefs", default="treble,bass").split(",")) & set(settings.RANGE_KEYS)
         or defaults.clefs
     )
-    values = text_value(saved, key="intervals/values", default="whole")
+    values = text_value(saved, key=f"{prefix}/values", default="whole")
     cfg.note_values = set(values.split(",")) & set(NOTE_VALUES) or {"whole"}
     cfg.displays = (
-        set(text_value(saved, key="intervals/display", default="").split(",")) & set(settings.INTERVAL_DISPLAYS)
+        set(text_value(saved, key=f"{prefix}/display", default="").split(",")) & set(settings.INTERVAL_DISPLAYS)
         or defaults.displays
     )
-    directions = text_value(saved, key="intervals/direction", default="").split(",")
+    directions = text_value(saved, key=f"{prefix}/direction", default="").split(",")
     cfg.directions = set(directions).intersection(settings.MELODIC_DIRECTIONS) or defaults.directions
-    quality = text_value(saved, key="intervals/quality", default=defaults.quality_mode)
+    quality = text_value(saved, key=f"{prefix}/quality", default=defaults.quality_mode)
     if quality == "false":  # Older versions saved the Quality switch as "true" or "false".
         quality = "interval"
     cfg.quality_mode = quality if quality in settings.INTERVAL_QUALITY_MODES else defaults.quality_mode
-    cfg.button_mode = "all" if text_value(saved, key="intervals/buttonMode", default="limited") == "all" else "limited"
+    cfg.button_mode = "all" if text_value(saved, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
     try:
-        cfg.button_count = max(2, min(10, int_value(saved, key="intervals/buttonCount", default=6)))
+        cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/buttonCount", default=6)))
     except ValueError:
         cfg.button_count = defaults.button_count
-    keys = text_value(saved, key="intervals/staffKeys", default="0").split(",")
+    keys = text_value(saved, key=f"{prefix}/staffKeys", default="0").split(",")
     cfg.staff_keys = {key for key in range(-7, 8) if str(key) in keys} or {0}
-    signs = text_value(saved, key="intervals/accidentals", default="").split(",")
+    signs = text_value(saved, key=f"{prefix}/accidentals", default="").split(",")
     cfg.accidentals = {sign for sign in settings.INTERVAL_ACCIDENTALS if str(sign) in signs} or defaults.accidentals
-    names = text_value(saved, key="intervals/intervals", default=",".join(defaults.intervals))
+    names = text_value(saved, key=f"{prefix}/intervals", default=",".join(defaults.intervals))
     cfg.intervals = set(names.split(",")) & settings.WRITTEN_INTERVALS.keys()
     cfg.ranges = {}
     for clef, (minimum, maximum) in RANGE_LIMITS.items():
-        bounds = text_value(saved, key=f"intervals/range/{clef}", default="").split(",")
+        bounds = text_value(saved, key=f"{prefix}/range/{clef}", default="").split(",")
         if len(bounds) == 2 and all(value.isdecimal() for value in bounds):
             low, high = map(int, bounds)
             if minimum <= low <= high <= maximum:
@@ -3608,7 +3616,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
     10
     """
 
-    def __init__(self, cfg: settings.IntervalSettings) -> None:
+    def __init__(self, cfg: settings.IntervalSettings, *, prefix: str = "intervals") -> None:
         """
         Build the interval settings menu with direction choices under Melodic.
 
@@ -3616,6 +3624,8 @@ class IntervalSettingsPanel(_StaffRangePanel):
         ----------
         cfg : IntervalSettings
             The interval exercise settings.
+        prefix : str
+            Settings-store group for identification or construction.
 
         Examples
         --------
@@ -3623,6 +3633,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         'Interval and Quality'
         """
         super().__init__()
+        self.prefix = prefix
         self.cfg: settings.IntervalSettings = cfg
         self._persist = self._save
         self.stack = SlideStack()
@@ -3667,6 +3678,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         ):
             row.clicked.connect(lambda _checked=False, page=index: self._go(page))
             layout.addWidget(row)
+        self.buttons_row.setVisible(prefix == "intervals")
         layout.addStretch()
 
         self.boxes, clefs = _clefs_page(
@@ -3748,7 +3760,8 @@ class IntervalSettingsPanel(_StaffRangePanel):
         self.accidental_list.changed.connect(self._save_and_emit)
         self.stack.addWidget(_subpage("Accidentals", body=self.accidental_list, back=lambda: self._go(0)))
         self.stack.addWidget(self._values_page("Note Value"))
-        self.stack.addWidget(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
+        if prefix == "intervals":
+            self.stack.addWidget(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
         self._refresh_summaries()
 
     def _select_all(self, on: bool) -> None:
@@ -3863,19 +3876,21 @@ class IntervalSettingsPanel(_StaffRangePanel):
         cfg.quality_mode = next(mode for mode, radio in self.quality_modes.items() if radio.isChecked())
         cfg.intervals = self.interval_list.selected()
         saved = store()
-        saved.setValue("intervals/buttonMode", cfg.button_mode)
-        saved.setValue("intervals/buttonCount", cfg.button_count)
-        saved.setValue("intervals/clefs", ",".join(sorted(cfg.clefs)))
-        saved.setValue("intervals/staffKeys", ",".join(map(str, sorted(cfg.staff_keys))))
-        saved.setValue("intervals/values", ",".join(cfg.active_values()))
-        saved.setValue("intervals/display", ",".join(sorted(cfg.displays)))
-        saved.setValue("intervals/accidentals", ",".join(map(str, sorted(cfg.accidentals))))
-        saved.setValue("intervals/direction", ",".join(sorted(cfg.directions)))
-        saved.setValue("intervals/quality", cfg.quality_mode)
-        saved.setValue("intervals/intervals", ",".join(sorted(cfg.intervals)))
-        saved.remove("intervals/range")
+        prefix = self.prefix
+        if prefix == "intervals":
+            saved.setValue(f"{prefix}/buttonMode", cfg.button_mode)
+            saved.setValue(f"{prefix}/buttonCount", cfg.button_count)
+        saved.setValue(f"{prefix}/clefs", ",".join(sorted(cfg.clefs)))
+        saved.setValue(f"{prefix}/staffKeys", ",".join(map(str, sorted(cfg.staff_keys))))
+        saved.setValue(f"{prefix}/values", ",".join(cfg.active_values()))
+        saved.setValue(f"{prefix}/display", ",".join(sorted(cfg.displays)))
+        saved.setValue(f"{prefix}/accidentals", ",".join(map(str, sorted(cfg.accidentals))))
+        saved.setValue(f"{prefix}/direction", ",".join(sorted(cfg.directions)))
+        saved.setValue(f"{prefix}/quality", cfg.quality_mode)
+        saved.setValue(f"{prefix}/intervals", ",".join(sorted(cfg.intervals)))
+        saved.remove(f"{prefix}/range")
         for clef, (low, high) in cfg.ranges.items():
-            saved.setValue(f"intervals/range/{clef}", f"{low},{high}")
+            saved.setValue(f"{prefix}/range/{clef}", f"{low},{high}")
         self._refresh_summaries()
 
 
@@ -6150,6 +6165,7 @@ def load_exercise_settings() -> None:
     load_choice_buttons()
     load_note_names()
     load_intervals()
+    load_intervals(settings.interval_construction, prefix="intervalConstruction")
     load_keyboard()
     load_keyboard_intervals()
     load_construction()
@@ -6326,6 +6342,8 @@ def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
         return NotationSettingsPanel()
     if isinstance(exercise, NoteNames):
         return NoteNameSettingsPanel(settings.note_names)
+    if isinstance(exercise, IntervalConstruction):
+        return IntervalSettingsPanel(settings.interval_construction, prefix="intervalConstruction")
     if isinstance(exercise, IntervalNames):
         return IntervalSettingsPanel(settings.intervals)
     if isinstance(exercise, KeyboardIntervals):

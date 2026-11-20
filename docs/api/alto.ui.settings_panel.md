@@ -928,10 +928,19 @@ Return the checked choices.
 ## load_intervals
 
 ```python
-def load_intervals() -> None
+def load_intervals(
+    cfg: settings.IntervalSettings | None = None,
+    *,
+    prefix: str = 'intervals',
+) -> None
 ```
 
 Restore the saved staff interval options, keeping valid choices and per-clef ranges.
+
+**Parameters**
+
+- `cfg` (*IntervalSettings or None*): Settings to populate. Defaults to Interval Identification.
+- `prefix` (*str*): Independent settings-store group for the exercise.
 
 **Examples**
 
@@ -944,7 +953,11 @@ True
 ## IntervalSettingsPanel
 
 ```python
-IntervalSettingsPanel(cfg: settings.IntervalSettings)
+IntervalSettingsPanel(
+    cfg: settings.IntervalSettings,
+    *,
+    prefix: str = 'intervals',
+)
 ```
 
 Bases: `_StaffRangePanel`
@@ -965,6 +978,7 @@ Build the interval settings menu with direction choices under Melodic.
 **Parameters**
 
 - `cfg` (*IntervalSettings*): The interval exercise settings.
+- `prefix` (*str*): Settings-store group for identification or construction.
 
 **Constructor examples**
 

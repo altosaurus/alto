@@ -72,6 +72,7 @@ def reset(
     *,
     key: int = 0,
     caption: str = '',
+    placement: Question | None = None,
 ) -> None
 ```
 
@@ -82,6 +83,7 @@ Clear the staff for a new question, drawing a key signature.
 - `clef` (*str*): The clef to draw.
 - `key` (*int, default 0*): The key signature: that many sharps if positive, flats if negative. Keyword-only.
 - `caption` (*str, default ""*): Text to write under the staff. Keyword-only.
+- `placement` (*Question or None*): Written placement question with an optional fixed starting note.
 
 **Examples**
 

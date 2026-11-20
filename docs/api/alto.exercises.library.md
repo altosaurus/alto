@@ -287,6 +287,80 @@ Make two notes whose interval is to be named.
 True
 ```
 
+## IntervalConstruction
+
+```python
+class IntervalConstruction(Exercise)
+```
+
+Place a second written note at the requested interval from a given note.
+
+**Examples**
+
+```pycon
+>>> q = IntervalConstruction().generate(random.Random(2))
+>>> q.construct is not None and q.check_placed(q.construct)
+True
+```
+
+### IntervalConstruction.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain staff placement and spelling for interval construction.
+
+**Returns**
+
+- *str*: Instructions for mouse and keyboard input.
+
+**Examples**
+
+```pycon
+The reference describes the difference between melodic and harmonic placement.
+```
+
+### IntervalConstruction.settings_signature
+
+```python
+def settings_signature() -> str
+```
+
+Identify the construction settings used to generate a stored card.
+
+**Returns**
+
+- *str*: Stable signature of the exercise options.
+
+**Examples**
+
+```pycon
+A change in staff ranges changes which stored questions are eligible.
+```
+
+### IntervalConstruction.generate
+
+```python
+def generate(rng: random.Random) -> Question
+```
+
+Generate a staff, an interval prompt, and its eligible placements.
+
+**Parameters**
+
+- `rng` (*random.Random*): Generator for the presentation.
+
+**Returns**
+
+- *Question*: Written interval to construct.
+
+**Examples**
+
+```pycon
+A harmonic question asks for a note above its starting note.
+```
+
 ## KeyboardIntervals
 
 ```python

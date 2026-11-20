@@ -148,6 +148,30 @@ True
 False
 ```
 
+### Question.placement_columns
+
+```python
+def placement_columns(note: Note | None) -> list[list[Note]]
+```
+
+Return the given and placed notes grouped by onset, omitting the answer until it is placed.
+
+**Parameters**
+
+- `note` (*Note or None*): Pitch under the pointer or submitted by the learner.
+
+**Returns**
+
+- *list of list of Note*: Visible notes in playback order.
+
+**Examples**
+
+```pycon
+>>> q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
+>>> q.placement_columns(None) == [[Note.parse("C4")]]
+True
+```
+
 ### Question.check_scale
 
 ```python

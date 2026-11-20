@@ -42,6 +42,7 @@ from alto.exercises.library import (
     CLEF_FACTS,
     CircleOfFifths,
     ClefBasics,
+    IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
     KeyboardNotes,
@@ -649,6 +650,10 @@ _READING_HINTS = {
     KeySignatureConstruction: (
         "<p>D major needs F♯ and C♯, so choose two sharps. E♭ major needs B♭, E♭, and A♭, so choose three flats. "
         "A minor shares the signature of C major. Choose ♮ to leave the staff empty.</p>"
+    ),
+    IntervalConstruction: (
+        "<p>Count the starting note as one. For a major third above C, count C, D, E. "
+        "C to E spans four half steps. For a minor third, lower E to E♭ to make three half steps.</p>"
     ),
     IntervalNames: (
         "<p>Count letter names from the lower note to the higher, including both notes. "
