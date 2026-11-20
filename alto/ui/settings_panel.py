@@ -6139,6 +6139,31 @@ def load_choice_buttons() -> None:
             cfg.button_count = cls.default_limit or 6
 
 
+def load_exercise_settings() -> None:
+    """
+    Load the saved exercise options before creating a practice or export settings panel.
+
+    Examples
+    --------
+    >>> load_exercise_settings()
+    """
+    load_choice_buttons()
+    load_note_names()
+    load_intervals()
+    load_keyboard()
+    load_keyboard_intervals()
+    load_construction()
+    load_arpeggio()
+    load_key_signatures()
+    load_key_construction()
+    load_order_of_keys()
+    load_circle()
+    load_clef_basics()
+    load_notation_terms()
+    load_scale_construction()
+    load_scale_identification()
+
+
 def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) -> ExerciseSettingsPanel:
     """
     Return the settings panel for an exercise.

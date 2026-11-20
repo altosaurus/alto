@@ -138,6 +138,43 @@ class _FilterLabelDelegate(QStyledItemDelegate):
         option.rect.adjust(depth * FILTER_INDENT, 0, 0, 0)
 
 
+def category_tree(name: str) -> QTreeWidget:
+    """
+    Build a navigation tree with themed checkboxes and right-aligned expansion arrows.
+
+    Parameters
+    ----------
+    name : str
+        Accessible name of the tree.
+
+    Returns
+    -------
+    QTreeWidget
+        Empty tree ready for categories and exercises.
+
+    Examples
+    --------
+    >>> category_tree("Decks").columnCount()
+    2
+    """
+    tree = QTreeWidget()
+    tree.setObjectName("tileFilterTree")
+    tree.setAccessibleName(name)
+    tree.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
+    tree.setHeaderHidden(True)
+    tree.setColumnCount(2)
+    tree.setTreePosition(1)
+    tree.header().setStretchLastSection(False)
+    tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+    tree.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
+    tree.setColumnWidth(1, 2 * FILTER_INDENT)
+    tree.setItemDelegateForColumn(0, _FilterLabelDelegate(tree))
+    tree.setFrameShape(QFrame.Shape.NoFrame)
+    tree.setUniformRowHeights(True)
+    tree.setIndentation(FILTER_INDENT)
+    return tree
+
+
 class TileCard(QPushButton):
     """
     A big button: an icon on top, then a category, a name and a one-line description, and optionally a line of status.
@@ -455,21 +492,7 @@ class HomePage(QWidget):
         collapse.clicked.connect(lambda: self.category_filter.setChecked(False))
         header.addWidget(collapse)
         sidebar_layout.addLayout(header)
-        self.category_tree = QTreeWidget()
-        self.category_tree.setObjectName("tileFilterTree")
-        self.category_tree.setAccessibleName("Filter by category")
-        self.category_tree.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
-        self.category_tree.setHeaderHidden(True)
-        self.category_tree.setColumnCount(2)
-        self.category_tree.setTreePosition(1)
-        self.category_tree.header().setStretchLastSection(False)
-        self.category_tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        self.category_tree.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
-        self.category_tree.setColumnWidth(1, 2 * FILTER_INDENT)
-        self.category_tree.setItemDelegateForColumn(0, _FilterLabelDelegate(self.category_tree))
-        self.category_tree.setFrameShape(QFrame.Shape.NoFrame)
-        self.category_tree.setUniformRowHeights(True)
-        self.category_tree.setIndentation(FILTER_INDENT)
+        self.category_tree = category_tree("Filter by category")
         sidebar_layout.addWidget(self.category_tree, 1)
         self.category_tree.itemChanged.connect(self._selection_changed)
         self.category_filter.toggled.connect(self._toggle_filter_sidebar)

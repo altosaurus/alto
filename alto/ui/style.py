@@ -182,6 +182,8 @@ _PAPER_BUTTON = """
 
 
 _TEMPLATE = """
+QLabel#activityTitle {{ font-size: 14pt; font-weight: bold; }}
+
 QPushButton {{
     border: 1px solid {button_border};
     border-radius: {RADIUS}px;
@@ -226,7 +228,7 @@ QTabWidget#settingsTabs QTabBar::tab:selected {{
 QTabWidget#settingsTabs QTabBar::tab:focus {{ background: {nav_hover}; }}
 
 /* Fields have rounded corners and a heavier lower edge. */
-QLineEdit[field="true"], QComboBox[field="true"], QSpinBox {{
+QLineEdit[field="true"], QFileDialog QLineEdit#fileNameEdit, QComboBox[field="true"], QSpinBox {{
     border: 1px solid {edge};
     border-bottom-width: 2px;
     border-radius: {RADIUS}px;
@@ -236,7 +238,7 @@ QLineEdit[field="true"], QComboBox[field="true"], QSpinBox {{
     selection-color: palette(highlighted-text);
 }}
 QComboBox[field="true"] {{ combobox-popup: 0; }}  /* the list drops down below the box, and does not cover it and what is around it */
-QLineEdit[field="true"]:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on,
+QLineEdit[field="true"]:focus, QFileDialog QLineEdit#fileNameEdit:focus, QComboBox[field="true"]:focus, QComboBox[field="true"]:on,
 QSpinBox:hover, QSpinBox:focus {{ border-color: palette(highlight); }}
 QSpinBox {{ padding: 5px 22px 5px 5px; qproperty-alignment: AlignCenter; }}
 QSpinBox:disabled {{ background: palette(window); color: {button_disabled_text}; border-color: palette(midlight); }}
@@ -403,6 +405,7 @@ QFrame#helpCard, QFrame#keyGroup, QFrame#detailPane, QFrame#lessonExample {{
     border: 1px solid palette(mid);
     border-radius: {rp}px;
 }}
+QTreeWidget#detailPane {{ padding: 4px; }}
 /* Extend the white notation paper through the gutters and padding to the panel border. */
 QFrame#lessonExample[staffPaper="true"] {{ background: white; }}
 

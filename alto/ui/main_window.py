@@ -76,6 +76,7 @@ from alto.ui import (
     icons,
     update_flow,
 )
+from alto.ui.anki_exporter import ExporterSession
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.colors import blend_name
 from alto.ui.database_page import DatabasePage
@@ -99,23 +100,7 @@ from alto.ui.profile_dialog import (
     ProfileDialog,
     remember_profile,
 )
-from alto.ui.settings_panel import (
-    load_arpeggio,
-    load_choice_buttons,
-    load_circle,
-    load_clef_basics,
-    load_construction,
-    load_intervals,
-    load_key_construction,
-    load_key_signatures,
-    load_keyboard,
-    load_keyboard_intervals,
-    load_notation_terms,
-    load_note_names,
-    load_order_of_keys,
-    load_scale_construction,
-    load_scale_identification,
-)
+from alto.ui.settings_panel import load_exercise_settings
 from alto.ui.stats_dialog import StatsPage
 from alto.ui.store import (
     import_settings,
@@ -366,6 +351,7 @@ class MainWindow(QMainWindow):
         self._workspace_page: ExerciseView | LessonsPage | None = None
         self._lesson_return: tuple[QWidget | None, str] | None = None
         self._settings: AppSettingsDialog | None = None  # the settings, while they are open
+        self._exporter = ExporterSession()
         self.learner = learner  # who is practicing, and their history; None practices without recording
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
@@ -388,6 +374,7 @@ class MainWindow(QMainWindow):
         --------
         >>> closeEvent()  # doctest: +SKIP
         """
+        self._exporter.close()
         store().setValue("ui/windowGeometry", self.saveGeometry())
         super().closeEvent(event)
 
@@ -474,10 +461,13 @@ class MainWindow(QMainWindow):
         self.menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.menu_button.setStyleSheet("QToolButton { font-size: 16pt; } QToolButton::menu-indicator { image: none; }")
         menu = QMenu(self.menu_button)
-        menu.setObjectName("appMenu")
-        # A transparent, frameless popup lets the stylesheet's rounded corners show without a square backdrop.
-        menu.setWindowFlags(menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
-        menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        tools_menu = _AdjacentSubmenu("Tools", menu)
+        help_menu = _AdjacentSubmenu("Help", menu)
+        # Transparent, frameless popups let the stylesheet's rounded corners show.
+        for popup in (menu, tools_menu, help_menu):
+            popup.setObjectName("appMenu")
+            popup.setWindowFlags(popup.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
+            popup.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text color
         self.profile_action = menu.addAction(svg_icon(icons.PROFILE, color=glyph, size=18), "")
         self.profile_action.triggered.connect(self.switch_profile)
@@ -485,24 +475,36 @@ class MainWindow(QMainWindow):
         settings_action.setShortcut(QKeySequence("Ctrl+Alt+S"))
         settings_action.triggered.connect(self.open_settings)
         menu.addSeparator()
-        self.export_action = menu.addAction(svg_icon(icons.EXPORT, color=glyph, size=18), "Export backup…")
-        self.export_action.setToolTip("Save everything Alto keeps (profiles, history and settings) to one file")
-        self.export_action.triggered.connect(self.export_backup)
-        self.import_action = menu.addAction(svg_icon(icons.IMPORT, color=glyph, size=18), "Import backup…")
+        tools_menu.setIcon(svg_icon(icons.TOOLS, color=glyph, size=18))
+        menu.addMenu(tools_menu)
+        self.import_action = tools_menu.addAction(svg_icon(icons.IMPORT, color=glyph, size=18), "Import backup…")
         self.import_action.setToolTip("Replace everything with a backup made earlier")
         self.import_action.triggered.connect(self.import_backup)
+        self.export_action = tools_menu.addAction(svg_icon(icons.EXPORT, color=glyph, size=18), "Export backup…")
+        self.export_action.setToolTip("Save everything Alto keeps (profiles, history and settings) to one file")
+        self.export_action.triggered.connect(self.export_backup)
+        exporter_action = tools_menu.addAction("Anki Exporter")
+
+        def update_exporter_icon() -> None:
+            """
+            Match the Anki outline to the current menu background.
+
+            Examples
+            --------
+            A dark Tools menu shows the exporter with a white star outline.
+            """
+            ink = QColor("white" if tools_menu.palette().window().color().lightness() < 128 else "black")
+            exporter_action.setIcon(svg_icon(icons.ANKI, color=ink, size=18))
+
+        update_exporter_icon()
+        tools_menu.aboutToShow.connect(update_exporter_icon)
+        exporter_action.triggered.connect(self.open_anki_exporter)
         self._show_profile()  # shows or hides the three actions that need a profile
-        self.update_action = menu.addAction(svg_icon(icons.UPDATE, color=glyph, size=18), "Check for updates…")
+        self.update_action = tools_menu.addAction(svg_icon(icons.UPDATE, color=glyph, size=18), "Check for updates…")
         self.update_action.setToolTip("See whether a newer Alto is available, and install it")
         self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
-        help_menu = _AdjacentSubmenu("Help", menu)
         help_menu.setIcon(svg_icon(icons.HELP, color=glyph, size=18))
         menu.addMenu(help_menu)
-        help_menu.setObjectName("appMenu")
-        help_menu.setWindowFlags(
-            help_menu.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint,
-        )
-        help_menu.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         documentation = help_menu.addAction(svg_icon(icons.BOOK, color=glyph, size=18), "Documentation")
         documentation.triggered.connect(
             lambda: QDesktopServices.openUrl(QUrl("https://altosaurus.github.io/alto/getting-started/")),
@@ -525,21 +527,7 @@ class MainWindow(QMainWindow):
         self.addAction(restart)  # keep the shortcuts working while the menu is closed
         self.addAction(quit_action)
 
-        load_choice_buttons()
-        load_note_names()
-        load_intervals()
-        load_keyboard()
-        load_keyboard_intervals()
-        load_construction()
-        load_arpeggio()
-        load_key_signatures()
-        load_key_construction()
-        load_order_of_keys()
-        load_circle()
-        load_clef_basics()
-        load_notation_terms()
-        load_scale_construction()
-        load_scale_identification()
+        load_exercise_settings()
         load_instrument()
         load_notation_style()
         load_keyboard_style()
@@ -567,7 +555,7 @@ class MainWindow(QMainWindow):
         lay = QVBoxLayout(root)
         # Navigation on the left, data tools on the right, with the activity title centered.
         self.title_label = QLabel(self.APP_TITLE)
-        self.title_label.setStyleSheet("font-size: 14pt; font-weight: bold;")
+        self.title_label.setObjectName("activityTitle")
         buttons = QHBoxLayout()
         buttons.setContentsMargins(
             0,
@@ -1139,6 +1127,20 @@ class MainWindow(QMainWindow):
             "<p>Learn and practice music theory with interactive exercises and lessons.</p>",
         )
 
+    def open_anki_exporter(self) -> None:
+        """
+        Open the modeless exporter with a private copy of the current exercise settings.
+
+        Examples
+        --------
+        Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
+        """
+        selected = type(self._exercise_page.exercise).__name__ if self._exercise_page is not None else ""
+        try:
+            self._exporter.open(self.learner, selected=selected)
+        except OSError as error:
+            QMessageBox.warning(self, "Anki Exporter", f"Could not open the exporter. {error}")
+
     def open_settings(self) -> None:
         """
         Open the application settings without blocking the window, or bring them forward if they are already open.
@@ -1161,6 +1163,7 @@ class MainWindow(QMainWindow):
             self._settings.activateWindow()
             return
         dialog = AppSettingsDialog(self, learner=self.learner)
+        dialog.theme_selected.connect(self._exporter.sync_theme)
         dialog.scheduler_changed.connect(self.home.refresh_counts)
         dialog.scheduler_changed.connect(self._scheduler_changed)
         dialog.defaults_requested.connect(self._restore_defaults)
@@ -1222,6 +1225,7 @@ class MainWindow(QMainWindow):
         sounds.stop_all()
         sounds.enabled = True
         apply_theme("system")
+        self._exporter.sync_theme("system")
         if self._sidebar_anim is not None:
             self._sidebar_anim.stop()
         self._overlay = None
@@ -2001,6 +2005,7 @@ class MainWindow(QMainWindow):
         if accepted and chosen is not None and chosen != self.learner.profile:
             if self._settings is not None:
                 self._settings.close()
+            self._exporter.close()
             self.learner.set_profile(chosen)
             self.home.refresh_counts()
             # noinspection PyTypeChecker
@@ -2056,6 +2061,7 @@ class MainWindow(QMainWindow):
         """
         if not self.learner:
             return
+        self._exporter.close()
         db = self.learner.db
         profiles = db.profiles()
         self.learner.set_profile(db.profile(int_value(store(), key="profile/last", default=-1)) or profiles[0])

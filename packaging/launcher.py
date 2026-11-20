@@ -6,7 +6,10 @@ PyInstaller needs a script to start from, and `alto = alto.__main__:main` in pyp
 runs the same function, so a packaged build and `python -m alto` start the same way.
 """
 
-from alto.__main__ import main
+from multiprocessing import freeze_support
 
 if __name__ == "__main__":
+    freeze_support()  # dispatch a spawned exporter before starting the main application
+    from alto.__main__ import main
+
     raise SystemExit(main())

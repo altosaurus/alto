@@ -28,6 +28,11 @@ from PySide6.QtSvg import QSvgRenderer
 
 ACTIVITY_ICON_SIZE = 20
 
+CHECKED_BOX = (
+    '<rect x="2" y="2" width="20" height="20" rx="4" fill="COLOR"/>'
+    '<path d="m6 12 4 4 8-9" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+)
+
 GLOSSARY = '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 5 4l3 8M3.2 9h3.6M12 5h9M12 10h9M3 16h18M3 21h13"/></g>'
 
 _BODY = '<path d="M3 9h4l5-4v14l-5-4H3z" fill="COLOR"/>'
@@ -473,7 +478,17 @@ EXERCISE_CLEFS = f'<path transform="translate(6.07 3.00) scale(0.18)" d="{_CLEF_
 
 # Menu icons (24x24, outlined like the others): restart and the application's settings.
 _MENU = 'fill="none" stroke="COLOR" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
+TOOLS = (
+    f'<path d="M20.5 3.8 17 7.3l-2.4-2.4 3.5-3.5a6 6 0 0 0-7.3 7.8l-8 8a2.5 2.5 0 0 0 3.5 3.5l8-8a6 6 0 0 0 6.2-8.9Z" {_MENU}/>'
+)
 CODE = f'<path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16" {_MENU}/>'
+# Single outlined star from the Anki logo, scaled to the menu icon grid.
+ANKI = (
+    '<path d="M7.5 7.9 7.6 4.6C7.7 1.4 9.1 0.7 11.1 2.6L14.4 5.5 18.4 4.2'
+    "C21.8 3.2 22.6 4.7 21 7.8L19.2 10.9 21.6 14.3C23.6 17.3 22.5 18.7 19.4 18.3"
+    "L15.3 17.8 12.7 21.1C10.5 24 8.9 23.1 8.5 20L8 16.1 4.1 15"
+    f'C0.7 14 0.8 12 3.5 10.6L7.5 8.5Z" {_MENU}/>'
+)
 # Iconoir GitHub icon; MIT license and attribution in THIRD_PARTY_NOTICES.md.
 GITHUB = (
     '<g fill="none" stroke="COLOR" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
