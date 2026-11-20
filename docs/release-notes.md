@@ -13,6 +13,16 @@ All notable changes to Alto, newest first. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and Alto uses [semantic versioning](https://semver.org/).
 Each release's downloads are on its GitHub release.
 
+## Unreleased
+
+Changes that are in the development docs and not in a release yet.
+
+### Fixed
+{: .no-toc}
+
+- Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.
+- Light mode uses a gray window with white tiles and a pale gray search bar, including when following a light desktop.
+
 ## 0.0.2
 
 Released 2026-11-19. [GitHub release](https://github.com/altosaurus/alto/releases/tag/v0.0.2)

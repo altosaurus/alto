@@ -38,6 +38,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto.ui.theme import (
+    DEFAULT_LIGHT_WINDOW,
     USER_PREFIX,
     CustomTheme,
     custom_theme,
@@ -50,7 +51,7 @@ THUMB_W, THUMB_H = 116, 78  # the size of a clickable picture
 SLANT = 10  # how far the cut through the System picture leans, in pixels
 VERSIONS = (("light", "Light"), ("dark", "Dark"), ("system", "System"))  # the three pictures of a card, in order
 LIGHT = dict(
-    window="#efefef",
+    window=DEFAULT_LIGHT_WINDOW,
     panel="#ffffff",
     line="#c9c9c9",
     ink="#2a2a2a",

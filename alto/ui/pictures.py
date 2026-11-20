@@ -31,7 +31,7 @@ from PySide6.QtGui import (
     QPixmap,
     QRegion,
 )
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QAbstractButton, QWidget
 
 from alto import settings
 from alto.settings import SOLFEGE
@@ -45,6 +45,7 @@ from alto.ui.degree_text import (
     degree_tooltip,
     draw_degree_text,
 )
+from alto.ui.icons import set_palette_icon
 from alto.ui.notation import current as current_style
 from alto.ui.staff import (
     BOTTOM_LINE,
@@ -347,6 +348,48 @@ class _Picture(QWidget):
             ),
         )
         p.drawLine(QPointF(x, y0), QPointF(x, y1))
+
+    def label_button(self, button: QAbstractButton) -> None:
+        """
+        Use this picture as a button icon that follows the button's palette.
+
+        Parameters
+        ----------
+        button : QAbstractButton
+            The checkbox, radio button, or push button to label.
+
+        Examples
+        --------
+        >>> from PySide6.QtWidgets import QCheckBox
+        >>> button = QCheckBox()
+        >>> ClefPictures(["bass"]).label_button(button)
+        >>> button.icon().isNull()
+        False
+        """
+
+        def render(palette: QPalette) -> QIcon:
+            """
+            Draw the picture in the colors of its button.
+
+            Parameters
+            ----------
+            palette : QPalette
+                Button palette.
+
+            Returns
+            -------
+            QIcon
+                The rendered picture.
+
+            Examples
+            --------
+            A clef checkbox draws using the current text color.
+            """
+            self.setPalette(palette)
+            return self.to_icon()
+
+        set_palette_icon(button, render)
+        button.setIconSize(self.size())
 
     def to_icon(self) -> QIcon:
         """

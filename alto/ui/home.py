@@ -18,6 +18,7 @@ from collections.abc import (
     Iterable,
     Sequence,
 )
+from functools import partial
 
 from PySide6.QtCore import (
     QAbstractAnimation,
@@ -238,9 +239,8 @@ class TileCard(QPushButton):
             12,
         )
         lay.setSpacing(6)
-        picture = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
-        color = self.palette().color(QPalette.ColorRole.WindowText)
-        picture.setPixmap(icons.svg_icon(icon, color=color, size=56).pixmap(QSize(56, 56)))
+        self.picture = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
+        self._refresh_icon()
         heading = QLabel(category.upper(), alignment=Qt.AlignmentFlag.AlignCenter)
         heading.setStyleSheet("color: gray; font-size: 8pt; letter-spacing: 1px;")
         title = QLabel(f"<b>{name}</b>", alignment=Qt.AlignmentFlag.AlignCenter)
@@ -248,8 +248,8 @@ class TileCard(QPushButton):
         text = QLabel(about, alignment=Qt.AlignmentFlag.AlignCenter)
         text.setWordWrap(True)
         text.setStyleSheet("color: gray; font-size: 9pt;")
-        labels = [picture, heading, title, text]
-        lay.addWidget(picture)
+        labels = [self.picture, heading, title, text]
+        lay.addWidget(self.picture)
         lay.addWidget(heading)
         lay.addWidget(title)
         lay.addWidget(text, 1)
@@ -260,6 +260,38 @@ class TileCard(QPushButton):
             labels.append(line)
         for label in labels:
             label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+
+    def _refresh_icon(self) -> None:
+        """
+        Draw the tile icon in the current text color.
+
+        Examples
+        --------
+        >>> card = lesson_card(LESSONS[0])
+        >>> card._refresh_icon()
+        >>> card.picture.pixmap().isNull()
+        False
+        """
+        color = self.palette().color(QPalette.ColorRole.WindowText)
+        self.picture.setPixmap(icons.svg_icon(self.icon_svg, color=color, size=56).pixmap(QSize(56, 56)))
+
+    def changeEvent(self, event: QEvent) -> None:
+        """
+        Recolor the icon when the tile receives a new palette.
+
+        Parameters
+        ----------
+        event : QEvent
+            The widget change delivered by Qt.
+
+        Examples
+        --------
+        >>> card = lesson_card(LESSONS[0])
+        >>> card.changeEvent(QEvent(QEvent.Type.PaletteChange))
+        """
+        super().changeEvent(event)
+        if event.type() == QEvent.Type.PaletteChange:
+            self._refresh_icon()
 
 
 class ExerciseCard(TileCard):
@@ -644,7 +676,7 @@ class HomePage(QWidget):
         cards = self.lesson_cards if self.mode == "lessons" else self.cards
         selected = self.tile_filters.get(self.mode)
         heading_font, heading_ink = navigation_heading_style(self.window().palette())
-        icon_ink = tree.palette().text().color()
+        drawings = []
         with QSignalBlocker(tree):
             self._filter_leaves.clear()
             self._filter_groups.clear()
@@ -663,11 +695,12 @@ class HomePage(QWidget):
                 for card in cards:
                     if card.category == category:
                         leaf = QTreeWidgetItem(group, [card.title])
-                        leaf.setIcon(0, icons.svg_icon(card.icon_svg, color=icon_ink, size=tree.iconSize().width()))
+                        drawings.append((card.icon_svg, partial(leaf.setIcon, 0)))
                         leaf.setToolTip(0, card.title)
                         self._filter_leaves[card.title] = leaf
                         checked = selected is None or card.title in selected
                         leaf.setCheckState(0, Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked)
+            icons.set_item_icons(tree, drawings)
             tree.expandAll()
             tree.setCurrentItem(root)
         layout = self.filter_sidebar.layout()
@@ -805,7 +838,7 @@ class HomePage(QWidget):
         self.category_filter.setAccessibleName(f"{verb} filters")
         self.category_filter.setAccessibleDescription(label)
         role = QPalette.ColorRole.Highlight if count != total else QPalette.ColorRole.WindowText
-        self.category_filter.setIcon(icons.svg_icon(icons.FILTER, color=self.palette().color(role)))
+        icons.set_svg_icon(self.category_filter, icons.FILTER, role=role)
 
     def restore_tile_filters(self, selections: dict[str, frozenset[str]], *, expanded: bool | None = None) -> None:
         """

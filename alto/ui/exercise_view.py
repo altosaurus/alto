@@ -97,7 +97,8 @@ from alto.ui.icons import (
     SLIDERS,
     SPEAKER_MUTED,
     SPEAKER_ON,
-    svg_icon,
+    set_palette_icon,
+    set_svg_icon,
 )
 from alto.ui.key_fork import (
     MAX_ACCIDENTALS,
@@ -492,9 +493,7 @@ class ExerciseView(QWidget):
         self.symbol_buttons: dict[str, QPushButton] = {}
         for symbol in app_settings.CLEF_SYMBOLS:
             button = QPushButton()
-            button.setIcon(
-                symbol_icon(symbol, color=self.palette().color(QPalette.ColorRole.ButtonText)),
-            )  # the symbol, not a name
+            set_palette_icon(button, lambda palette, clef=symbol: symbol_icon(clef, color=palette.buttonText().color()))
             button.setIconSize(QSize(56, 56))
             button.setAccessibleName(app_settings.CLEF_SYMBOL_NAMES[symbol])
             button.setCheckable(True)
@@ -652,7 +651,7 @@ class ExerciseView(QWidget):
             reference is not None
         ):  # an experiment: a book beside the help that opens what there is to look up, in a pane on the right
             book = QToolButton()
-            book.setIcon(svg_icon(BOOK, color=self.palette().color(QPalette.ColorRole.WindowText)))
+            set_svg_icon(book, BOOK)
             book.setIconSize(QSize(24, 24))
             book.setCheckable(True)
             book.setAutoRaise(True)
@@ -670,7 +669,7 @@ class ExerciseView(QWidget):
         self.settings_panel = settings_panel_for(exercise, learner=self.learner)
         if self.settings_panel:
             self.gear = QToolButton()
-            self.gear.setIcon(svg_icon(SLIDERS, color=self.palette().color(QPalette.ColorRole.WindowText)))
+            set_svg_icon(self.gear, SLIDERS)
             self.gear.setIconSize(QSize(24, 24))
             self.gear.setCheckable(True)
             self.gear.setAutoRaise(True)
@@ -977,8 +976,7 @@ class ExerciseView(QWidget):
         >>> view.sound_btn.toolTip().startswith(("Sound on", "Muted"))
         True
         """
-        color = self.palette().color(QPalette.ColorRole.WindowText)
-        self.sound_btn.setIcon(svg_icon(SPEAKER_ON if sounds.enabled else SPEAKER_MUTED, color=color))
+        set_svg_icon(self.sound_btn, SPEAKER_ON if sounds.enabled else SPEAKER_MUTED)
         self.sound_btn.setToolTip("Sound on (click to mute)" if sounds.enabled else "Muted (click to unmute)")
         self.sound_btn.setAccessibleName("Sound on" if sounds.enabled else "Sound muted")
 

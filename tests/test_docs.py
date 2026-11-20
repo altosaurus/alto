@@ -44,7 +44,7 @@ def script() -> ModuleType:
 
 def developer_guide_screens() -> set[str]:
     """
-    Collect screenshots referenced by the Developer guide overview and its subpages.
+    Collect the Developer guide screenshots covered by the pre-release refresh.
 
     Returns
     -------
@@ -52,7 +52,8 @@ def developer_guide_screens() -> set[str]:
         The screen names passed to the component-shot include.
     """
     docs = ROOT / "docs"
-    pages = [docs / "developer-guide.md", *(docs / "developer-guide").glob("*.md")]
+    chapters = (page for page in (docs / "developer-guide").glob("*.md") if page.name != "ui-style-guide.md")
+    pages = [docs / "developer-guide.md", *chapters]
     return {name for page in pages for name in re.findall(r'component-shot\.html screen="([\w-]+)"', page.read_text())}
 
 

@@ -1511,8 +1511,7 @@ class AppSettingsDialog(QDialog):
         """
         for kind, radio in self.baritone_buttons.items():
             picture = ClefPictures([f"baritone_{kind}"], scale=1.4)
-            radio.setIcon(picture.to_icon())
-            radio.setIconSize(picture.size())
+            picture.label_button(radio)
 
     def _keyboard_tab(self) -> QWidget:
         """

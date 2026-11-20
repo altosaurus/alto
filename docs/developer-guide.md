@@ -80,3 +80,7 @@ Double-clicking an answer opens a separate `QuestionPreview` dialog. It recreate
 **Menu → Settings** opens `AppSettingsDialog`. Under **Appearance → Notation style**, each font sample is a `StyleCard`. The dialog manages the selection, and each card contains its own staff preview.
 
 {% include component-shot.html screen="settings" width=1000 height=640 alt="Application settings showing the category list and the notation font cards." %}
+
+## UI style guide
+
+Compare the colors of these screens and their controls across releases using the paired light and dark screenshots in the [UI style guide]({{ '/developer-guide/ui-style-guide/' | relative_url }}).

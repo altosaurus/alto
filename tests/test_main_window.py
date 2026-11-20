@@ -16,7 +16,7 @@ from PySide6.QtCore import (
     QSize,
     Qt,
 )
-from PySide6.QtGui import QHelpEvent, QKeySequence
+from PySide6.QtGui import QColor, QHelpEvent, QKeySequence, QPalette
 from PySide6.QtTest import (
     QSignalSpy,
     QTest,
@@ -46,7 +46,9 @@ from alto.learning import (
     Learner,
 )
 from alto.learning.backup import app_version
+from alto.ui import icons
 from alto.ui import main_window as mw
+from alto.ui.colors import blend_name
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
     CARD_W,
@@ -56,12 +58,13 @@ from alto.ui.home import (
 )
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
+from alto.ui.pictures import ClefPictures
 from alto.ui.settings_panel import (
     KeyboardIntervalSettingsPanel,
     save_keyboard_intervals,
 )
 from alto.ui.store import store
-from alto.ui.theme import apply_theme
+from alto.ui.theme import apply_theme, custom_theme, theme_palette
 
 if TYPE_CHECKING:
     from collections.abc import (
@@ -147,6 +150,190 @@ def test_home_tile_and_button_borders_follow_theme_changes(app: QApplication, re
         apply_theme(theme)
         app.processEvents()
         assert [widget.grab().toImage().pixelColor(20, 0).name() for widget in controls] == expected
+
+
+def test_lesson_tiles_follow_the_desktop_while_visible(app: QApplication) -> None:
+    """
+    Check rendered borders and icons when Qt announces the scheme before installing its new palette.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    apply_theme("system")
+    original = app.palette()
+    home = HomePage(REGISTRY)
+    home.set_mode("lessons", animate=False)
+    home.show()
+    app.processEvents()
+    cards = tuple(home.lesson_cards)
+    try:
+        for key, scheme, border in (
+            ("studio_dark", Qt.ColorScheme.Dark, "#505050"),
+            ("studio", Qt.ColorScheme.Light, "#b0b0b0"),
+            ("studio_dark", Qt.ColorScheme.Dark, "#505050"),
+        ):
+            colors = custom_theme(key)
+            assert colors is not None
+            palette = theme_palette(colors)
+            app.styleHints().colorSchemeChanged.emit(scheme)
+            app.setPalette(palette)
+            app.processEvents()
+            background = "#ffffff" if scheme == Qt.ColorScheme.Light else colors.panel
+            for card in cards:
+                assert card.isVisible()
+                tile = card.grab().toImage()
+                assert tile.pixelColor(20, 0).name() == border
+                assert tile.pixelColor(5, tile.height() // 2).name() == background
+                picture = next(label for label in card.findChildren(QLabel) if not label.pixmap().isNull())
+                size = QSize(56, 56)
+                expected = icons.svg_icon(card.icon_svg, color=palette.windowText().color(), size=56)
+                assert picture.pixmap().toImage() == expected.pixmap(size).toImage()
+    finally:
+        app.setPalette(original)
+        apply_theme("system")
+
+
+@pytest.mark.parametrize("key", ["light", "system"])
+def test_default_light_grid_matches_the_release_screenshot(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    key: str,
+) -> None:
+    """
+    Check the rendered grid, tile and search colors on a desktop with near-white window and base colors.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Provides a desktop scheme independently of the headless platform plugin.
+    key : str
+        The Light or System setting.
+    """
+    original = app.palette()
+    desktop = QPalette(QColor("#fcfcfc"))
+    desktop.setColor(QPalette.ColorRole.Base, QColor("#fcfcfc"))
+    desktop.setColor(QPalette.ColorRole.Highlight, QColor("#ae510a"))
+    try:
+        app.setPalette(desktop)
+        scheme = Qt.ColorScheme.Light if key == "system" else Qt.ColorScheme.Dark
+        with monkeypatch.context() as patch:
+            patch.setattr(type(app.styleHints()), "colorScheme", lambda self: scheme)
+            apply_theme(key)
+            window = MainWindow()
+            window.show()
+            app.processEvents()
+            grid = window.home.grab().toImage()
+            assert grid.pixelColor(2, grid.height() - 15).name() == "#efefef"
+            tile = window.home.cards[0].grab().toImage()
+            assert tile.pixelColor(5, tile.height() // 2).name() == "#ffffff"
+            search = window.search_row.grab().toImage()
+            assert search.pixelColor(search.width() - 18, 8).name() == "#e5e5e5"
+            assert app.palette().highlight().color() == desktop.highlight().color()
+    finally:
+        app.setPalette(original)
+        apply_theme("system")
+
+
+def test_tiles_and_search_follow_the_scheme_when_the_platform_keeps_its_palette(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Reproduce a GNOME scheme change that only updates the Qt style's standard palette.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Supplies the scheme and standard palette that a desktop platform plugin reports.
+    """
+    apply_theme("system")
+    light = app.palette()
+    colors = custom_theme("studio_dark")
+    assert colors is not None
+    dark = theme_palette(colors)
+    window = MainWindow()
+    window.home.mode_control.buttons[1].click()
+    window.show()
+    window.search_field.setText("clef")
+    window.search_field.setFocus()
+    app.processEvents()
+    tile = window.home.lesson_cards[1]
+    category_changes = QSignalSpy(window.home.category_tree.itemChanged)
+    search_action = next(action for action in window.search_field.actions() if action.text() == "Search")
+    try:
+        with monkeypatch.context() as patch:
+            scheme = Qt.ColorScheme.Light
+            patch.setattr(type(app.styleHints()), "colorScheme", lambda self: scheme)
+            patch.setattr(type(app.style()), "standardPalette", lambda self: dark if scheme == Qt.ColorScheme.Dark else light)
+            for scheme, expected in ((Qt.ColorScheme.Dark, dark), (Qt.ColorScheme.Light, light)):
+                app.styleHints().colorSchemeChanged.emit(scheme)
+                app.processEvents()
+                image = tile.grab().toImage()
+                assert image.pixelColor(5, image.height() // 2) == expected.base().color()
+                ink = expected.text().color()
+                fill = blend_name(expected.window().color(), b=ink, t=0.04)
+                edge = blend_name(expected.window().color(), b=ink, t=0.22)
+                search = window.search_row.grab().toImage()
+                assert search.pixelColor(search.width() // 2, search.height() // 2).name() == fill
+                assert search.pixelColor(20, 0) == expected.highlight().color()
+                assert window.search_field.text() == "clef" and window.search_field.hasFocus()
+                assert (
+                    search_action.icon().pixmap(16, 16).toImage()
+                    == icons.svg_icon(icons.SEARCH, color=ink).pixmap(16, 16).toImage()
+                )
+                for actual, glyph, role, size in (
+                    (window.glossary_button.icon(), icons.GLOSSARY, QPalette.ColorRole.WindowText, 24),
+                    (window.home.mode_control.buttons[1].icon(), icons.LESSONS, QPalette.ColorRole.Highlight, 18),
+                    (window.profile_action.icon(), icons.PROFILE, QPalette.ColorRole.WindowText, 18),
+                    (window.home.category_filter.icon(), icons.FILTER, QPalette.ColorRole.WindowText, 24),
+                ):
+                    reference = icons.svg_icon(glyph, color=app.palette().color(role), size=size)
+                    assert actual.pixmap(size, size).toImage() == reference.pixmap(size, size).toImage(), glyph
+                leaf = window.home._filter_leaves[tile.title]
+                size = window.home.category_tree.iconSize()
+                expected_icon = icons.svg_icon(tile.icon_svg, color=app.palette().text().color(), size=size.width())
+                assert leaf.icon(0).pixmap(size).toImage() == expected_icon.pixmap(size).toImage()
+                assert category_changes.count() == 0
+                window.view_button.setFocus()
+                assert window.search_row.grab().toImage().pixelColor(20, 0).name() == edge
+                window.search_field.setFocus()
+    finally:
+        apply_theme("system")
+
+
+def test_musical_icons_follow_the_theme_at_double_density(app: QApplication, request: pytest.FixtureRequest) -> None:
+    """
+    Check that a clef checkbox redraws in the current theme at double density.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    request : pytest.FixtureRequest
+        Restores the system theme.
+    """
+    request.addfinalizer(lambda: apply_theme("system"))
+    picture = ClefPictures(["bass"])
+    checkbox = QPushButton()
+    picture.label_button(checkbox)
+    for theme in ("studio_dark", "light"):
+        apply_theme(theme)
+        app.processEvents()
+        actual = checkbox.icon().pixmap(picture.size(), 2.0).toImage()
+        assert actual.devicePixelRatio() == 2
+        assert actual == ClefPictures(["bass"]).to_icon().pixmap(picture.size(), 2.0).toImage()
+        assert app.palette().text().color().name() in {
+            actual.pixelColor(x, y).name()
+            for x in range(actual.width())
+            for y in range(actual.height())
+            if actual.pixelColor(x, y).alpha() == 255
+        }
 
 
 def test_the_home_screen_has_a_card_for_each_exercise_and_reports_the_one_clicked(app: QApplication) -> None:
