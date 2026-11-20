@@ -10,7 +10,7 @@ import sqlite3
 import time
 from concurrent.futures import CancelledError
 from contextlib import closing
-from itertools import islice
+from itertools import islice, pairwise
 from pathlib import Path
 from unittest.mock import Mock
 from zipfile import ZipFile
@@ -19,7 +19,7 @@ import pytest
 from PySide6.QtCore import QCoreApplication, Qt, QTimer, QUrl
 from PySide6.QtGui import QImage, QTextDocument
 from PySide6.QtTest import QSignalSpy, QTest
-from PySide6.QtWidgets import QApplication, QComboBox, QFileDialog, QMenu, QMessageBox, QProgressBar, QPushButton
+from PySide6.QtWidgets import QApplication, QComboBox, QFileDialog, QMenu, QMessageBox, QProgressBar, QPushButton, QWidget
 
 from alto import settings
 from alto.anki_export import DeckSelection, ExportControl, Review, _schedule, export_deck, plan_deck, profile_reviews, write_decks
@@ -58,6 +58,52 @@ def wait_for_export(window: exporter._ExportDialog) -> None:
         QApplication.processEvents()
         time.sleep(0.001)
     assert window._job is None and window._counter is None, "The exporter did not finish."
+
+
+def test_export_worker_progress_and_errors(app: QApplication, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Verify worker results and progress signals directly, including failures before and during a write.
+
+    Parameters
+    ----------
+    app : QApplication
+        GUI thread for rendering the sample card.
+    tmp_path : Path
+        Destination for the finished package.
+    monkeypatch : pytest.MonkeyPatch
+        Simulate a failed render and a failed card count.
+    """
+    parent = QWidget()
+    exercise = ClefBasics()
+    sample = exercise.generate(random.Random(1))
+    monkeypatch.setattr(exercise, "daily_candidates", lambda rng: iter([sample]))
+    planner = exporter._PlanJob([DeckSelection(exercise, [])], parent=parent)
+    planner.run()
+    assert not planner.error and len(planner.plans[0].cards) == 1
+
+    path = tmp_path / "clefs.apkg"
+    job = exporter._ExportJob(path, plans=planner.plans, parent=parent)
+    # run() is called on the GUI thread here, so deliver its render request before it waits for the result.
+    job.render_requested.disconnect(job._paint_card)
+    job.render_requested.connect(job._paint_card, Qt.ConnectionType.DirectConnection)
+    decks = QSignalSpy(job.deck_progress)
+    progress = QSignalSpy(job.progress)
+    job.run()
+    assert job.count == 1 and not job.error
+    assert [decks.at(i) for i in range(decks.count())] == [[0, False], [0, True]]
+    stages = [progress.at(i) for i in range(progress.count())]
+    total = stages[-1][2]
+    assert any(message.startswith("Packing images") for message, _, _ in stages)
+    assert stages[-1] == [f"Saved {path.name}.", total, total]
+    assert all(completed <= following <= total for (_, completed, _), (_, following, _) in pairwise(stages))
+
+    saved = path.read_bytes()
+    monkeypatch.setattr(exporter, "card_fields", Mock(side_effect=OSError("render failed")))
+    job.run()
+    assert job.error == "Export failed. render failed" and path.read_bytes() == saved
+    monkeypatch.setattr(exercise, "daily_candidates", Mock(side_effect=ValueError("invalid settings")))
+    planner.run()
+    assert planner.error == "Could not count cards. invalid settings"
 
 
 def test_all_exercise_types_package_their_music(app: QApplication, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
