@@ -41,6 +41,7 @@ from alto.ui import (
     theme_editor,
 )
 from alto.ui.app_settings import AppSettingsDialog
+from alto.ui.store import store
 from alto.ui.theme_cards import ThemeCard
 from alto.ui.theme_editor import ThemeEditor
 from alto.ui.update_flow import (
@@ -863,6 +864,9 @@ def test_the_updates_page_shows_the_version_and_remembers_whether_to_follow_the_
     texts = [label.text() for label in page.findChildren(QLabel)]
     assert f"You have Alto {updates.installed_version()}." in texts
     assert any("a packaged copy always follows releases" in text for text in texts)
+    assert dialog.auto_updates.isChecked()
+    dialog.auto_updates.click()
+    assert not store().value("updates/automatic", True, type=bool)
     assert not dialog.main_channel.isChecked() and saved_channel() == "releases"
     dialog.main_channel.click()
     assert saved_channel() == "main"

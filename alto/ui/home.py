@@ -86,6 +86,7 @@ EXERCISE_ICONS = {
     "NoteNames": icons.EXERCISE_NOTE_NAMES,
     "KeyboardNotes": icons.EXERCISE_KEYBOARD,
     "NoteConstruction": icons.EXERCISE_CONSTRUCTION,
+    "IntervalConstruction": icons.EXERCISE_INTERVAL_CONSTRUCTION,
     "IntervalNames": icons.EXERCISE_INTERVALS,
     "KeyboardIntervals": icons.EXERCISE_KEYBOARD_INTERVALS,
     "OrderOfKeys": icons.EXERCISE_ORDER_OF_KEYS,

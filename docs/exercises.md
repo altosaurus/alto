@@ -184,6 +184,14 @@ is m3.
 
 {% include shot.html src="intervals.png" alt="Interval Identification showing two notes and the interval buttons" %}
 
+## Interval Construction
+
+Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.
+
+**Clefs**, **Range**, and **Staff Key** determine where the notes can appear. **Display Mode** stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under **Quality**, choose **Interval and Quality** for an exact spelling, **Interval Only** for a number, or **Quality Only** for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. **Intervals**, **Accidentals**, and **Note Value** control which spellings, written signs, and durations appear.
+
+{% include shot.html src="interval-construction.png" alt="Interval Construction showing the starting note, the requested interval, and the staff placement controls" %}
+
 ## Keyboard Interval Identification
 
 Two piano keys are highlighted together. Identify the interval from the lower key to the higher key. Choose from a configurable

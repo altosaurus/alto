@@ -610,7 +610,7 @@ caught by the tests, the pre-push hook and the pull request.
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) layout. A change a user would notice (a new exercise, a changed menu, a
 fixed bug) adds a line under **Unreleased** in the same pull request. Internal tidying does not need one.
 
-To make a release:
+### Pre-release checklist
 
 1. Choose the version. Alto uses [semantic versioning](https://semver.org/): a new feature raises the middle number, a fix
    raises the last.
@@ -619,7 +619,15 @@ To make a release:
    the Release notes page of the docs (`docs/release-notes.md`) from the changelog; `--check` says whether it is up to date, and a
    test fails when it is not, so a changelog line always arrives with its page.
 3. Set the same version in `pyproject.toml`. `tests/test_changelog.py` fails if the changelog has no notes for it.
-4. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
+4. Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
+   Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
+   feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.
+5. With the release candidate installed in `.venv`, run `.venv/bin/python scripts/screenshots.py` to refresh every
+   documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
+   In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+   Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
+   updated images and any caption or region corrections in the release PR.
+6. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing
    the tag starts the **Release** workflow (see below), which publishes the downloads.
 
 Publish a release as a normal release, not a pre-release: the update check asks GitHub for the latest release, which leaves

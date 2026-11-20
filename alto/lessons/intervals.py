@@ -40,7 +40,7 @@ INTERVALS = Lesson(
     about="Name the distance between two pitches by counting letter names and half steps.",
     summary="Read and hear intervals on the staff and keyboard.",
     exercise="IntervalNames",
-    related_exercises=("KeyboardIntervals",),
+    related_exercises=("KeyboardIntervals", "IntervalConstruction"),
     steps=(
         Step(
             title="Interval numbers",

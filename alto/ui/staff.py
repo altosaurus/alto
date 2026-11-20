@@ -492,6 +492,7 @@ class StaffWidget(QWidget):
         self.max_step = max_step
         self.clef = "treble"
         self.interval_voices = False
+        self.given_note: Note | None = None
         self.columns: list[list[Note]] = []
         self.playback_column: int | None = None
         self.note_color: QColor | None = None  # None draws notes in the style's ink
@@ -1232,9 +1233,10 @@ class StaffWidget(QWidget):
             col = self.columns[ci]
             column_x = row.centers[ci - row.first] if row else x0 + step * (ci + 0.5)
             acc_slot = 0
-            ncol = self.palette().highlight().color() if ci == self.playback_column else self.column_colors.get(ci, nfg)
-            p.setBrush(ncol)
+            column_color = self.palette().highlight().color() if ci == self.playback_column else self.column_colors.get(ci)
             for note, clef, steps, shift in self._positioned_notes(col):
+                ncol = column_color or (fg if note == self.given_note and ci == 0 else nfg)
+                p.setBrush(ncol)
                 x = column_x + shift
                 bottom = staves[clef]
                 y = bottom - steps * gap / 2

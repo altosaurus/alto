@@ -68,6 +68,7 @@ from alto.exercises.base import (
     Question,
 )
 from alto.exercises.library import (
+    IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
     NotationIdentification,
@@ -302,7 +303,7 @@ def note_words(
     if naming in app_settings.DEGREE_NAMINGS:
         naming = "letters"
     plain = spell(Note(note.octave, letter=note.letter), naming=naming)
-    sign = {-1: " flat", 1: " sharp", 0: ""}.get(note.accidental, "")
+    sign = {-2: " double flat", -1: " flat", 1: " sharp", 2: " double sharp", 0: ""}.get(note.accidental, "")
     return f"{plain}{sign} {note.octave}"
 
 
@@ -439,7 +440,7 @@ class ExerciseView(QWidget):
         self.prompt = DegreeLabel()
         self.prompt.setStyleSheet("font-size: 16pt;")
         self.staff = StaffWidget(max_step=MAX_STEP)
-        self.staff.interval_voices = isinstance(exercise, IntervalNames)
+        self.staff.interval_voices = isinstance(exercise, (IntervalNames, IntervalConstruction))
         self._answer_playback = StaffPlayback(self, highlight=self._light_answer_notes)
         self._immediate_playback = StaffPlayback(self)  # Continues across questions and stops when the view closes.
         self.keyboard = KeyboardWidget()
@@ -553,13 +554,21 @@ class ExerciseView(QWidget):
         self.accidental_group = QButtonGroup(self)
         self.accidental_group.setExclusive(False)
         self.accidental_buttons = {}
-        for acc, symbol in ((-1, "♭"), (0, "♮"), (1, "♯")):
+        signs = (-2, -1, 0, 1, 2) if isinstance(exercise, IntervalConstruction) else (-1, 0, 1)
+        for acc in signs:
+            symbol = ACCIDENTAL_SYMBOLS[acc] or "♮"
             b = QPushButton(symbol)
             b.setCheckable(True)
             b.setMinimumHeight(40)
             b.setStyleSheet("font-size: 15pt;")
             b.clicked.connect(lambda _=False, a=acc: self._pick_accidental(a))
-            key, word = {-1: ("-", "Flat"), 0: ("0", "Natural"), 1: ("+", "Sharp")}[acc]
+            key, word = {
+                -2: ("Ctrl+-", "Double flat"),
+                -1: ("-", "Flat"),
+                0: ("0", "Natural"),
+                1: ("+", "Sharp"),
+                2: ("Ctrl++", "Double sharp"),
+            }[acc]
             b.setShortcut(key)
             b.setToolTip(f"{word} (key {key}; the Left and Right arrows step through the signs)")
             b.setAccessibleName(word)
@@ -1252,7 +1261,12 @@ class ExerciseView(QWidget):
         if clef:
             self.clef_input.reset(list(app_settings.CLEF_SYMBOLS), caption=q.caption)
         if construct:
-            self.input_staff.reset(q.clef, key=q.key if q.staff_signature is None else q.staff_signature, caption=q.caption)
+            self.input_staff.reset(
+                q.clef,
+                key=q.key if q.staff_signature is None else q.staff_signature,
+                caption=q.caption,
+                placement=q,
+            )
         if q.construct_scale is not None:
             self.scale_input.reset_scale(
                 q.clef,
@@ -1288,7 +1302,8 @@ class ExerciseView(QWidget):
             locate_notation=q.notation_target is not None and not q.choices,
             caption=q.caption,
         )
-        self.prompt.setMaximumWidth(self.staff.maximumWidth() if not self.staff.isHidden() else self.CHOICE_MAX_WIDTH)
+        visible_staff = self.input_staff if construct else self.staff
+        self.prompt.setMaximumWidth(visible_staff.maximumWidth() if not visible_staff.isHidden() else self.CHOICE_MAX_WIDTH)
         for b in self.buttons:
             b.setShortcut(QKeySequence())  # a button waiting to be deleted must not share its key with the new one
             b.hide()
@@ -1659,6 +1674,8 @@ class ExerciseView(QWidget):
                 if q.key
                 else [None, 1, -1]
             )  # without a key a natural is the same as no sign
+            if isinstance(self.exercise, IntervalConstruction):
+                order.extend([2, -2])
             current = self._input().accidental
             self._set_accidental(order[(order.index(current) + direction) % len(order)] if current in order else None)
 
@@ -1717,8 +1734,9 @@ class ExerciseView(QWidget):
         ok = q.check_placed(note)
         self._record(ok, choice=note_name(note, key=None if q.notes_only else q.key, minor=q.minor))
         self.input_staff.locked = True
+        self.input_staff.show_note(note)
         if ok:
-            self._finish_answer(self.place_button, notes=[[note]])
+            self._finish_answer(self.place_button, notes=q.placement_columns(note))
         else:
             self._busy = True
             self._flash_note("#c62828")
@@ -1900,6 +1918,13 @@ class ExerciseView(QWidget):
         q = self.question
         if q is None or (q.construct is None and not q.places_sequence):
             return "", ""
+        if self._busy and q.construct and q.staff:
+            placed = self.input_staff.columns[-1][-1]
+            right_position = any(
+                q.check_placed(Note.from_diatonic(placed.diatonic, accidental=sign)) for sign in self.accidental_buttons
+            )
+            text = "Check the accidental." if right_position else "Check the staff position."
+            return text, text
         if self.answered and self.missed:
             return "", ""
         staff = self._input()

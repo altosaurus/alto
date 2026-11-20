@@ -613,51 +613,240 @@ class IntervalNames(Exercise):
         >>> q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
         True
         """
-        cfg = settings.intervals
-        selected = tuple(iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals)
-        smallest = min((iv.number for iv in selected), default=2)
-        clefs = [clef for clef in cfg.active_clefs() if cfg.staff_span(clef) >= smallest]
-        if not clefs:
-            return Question("Widen a clef’s Range or choose a smaller interval in Settings.", choices=[], answer="")
-        if not selected:
-            return Question("Select an interval in Settings to continue.", choices=[], answer="")
-        staves = [(clef, key) for clef in clefs for key in sorted(cfg.staff_keys)]
-        rng.shuffle(staves)
-        for clef, key in staves:
-            starts = _interval_starts(selected, bounds=cfg.range_for(clef), key=key, accidentals=frozenset(cfg.accidentals))
-            if starts:
-                break
-        else:
-            return Question("Change Accidentals, Intervals, Staff Key, or Range to fit an interval.", choices=[], answer="")
-        available = list(starts)
-        iv = rng.choice(available)
-        low = rng.choice(starts[iv])
-        high = low.transpose(iv)
-        display = rng.choice(sorted(cfg.displays))
-        descending = display == "Melodic" and rng.choice(sorted(cfg.directions)) == "descending"
-        first, second = (high, low) if descending else (low, high)
-        staff = [[first, second]] if display == "Harmonic" else [[first], [second]]
-        if cfg.quality_mode == "interval":
-            prompt, answer = "What is the interval number?", str(iv.number)
-            pool = list(dict.fromkeys(str(other.number) for other in available))
-        elif cfg.quality_mode == "quality":
-            prompt, answer = "What is the interval quality?", QUALITY_NAMES[iv.quality]
-            qualities = {other.quality for other in available}
-            pool = [QUALITY_NAMES[quality] for quality in settings.INTERVAL_QUALITY_ORDER if quality in qualities]
-        else:
-            prompt, answer = "", iv.short
-            pool = [other.short for other in available]
-        question = Question(
-            prompt,
-            choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
-            answer=answer,
-            staff=staff,
-            clef=clef,
-            key=key,
-            value=rng.choice(cfg.active_values()),
-            explanation=f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
+        return self.refresh(_written_interval_question(settings.intervals, rng=rng, construction=False))
+
+
+def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Random, construction: bool) -> Question:
+    """
+    Choose a playable written interval under the active clef, range, and spelling constraints.
+
+    Parameters
+    ----------
+    cfg : IntervalSettings
+        The settings belonging to this exercise.
+    rng : random.Random
+        Generator for the presentation and endpoints.
+    construction : bool
+        Ask for placement of the second note.
+
+    Returns
+    -------
+    Question
+        The playable interval or an instruction to change incompatible options.
+
+    Examples
+    --------
+    An ascending melodic presentation starts on the lower endpoint.
+    """
+    selected = tuple(iv for name, iv in settings.WRITTEN_INTERVALS.items() if name in cfg.intervals)
+    smallest = min((iv.number for iv in selected), default=2)
+    clefs = [clef for clef in cfg.active_clefs() if cfg.staff_span(clef) >= smallest]
+    if not clefs:
+        return Question("Widen a clef’s Range or choose a smaller interval in Settings.", choices=[], answer="")
+    if not selected:
+        return Question("Select an interval in Settings to continue.", choices=[], answer="")
+    staves = [(clef, key) for clef in clefs for key in sorted(cfg.staff_keys)]
+    rng.shuffle(staves)
+    for clef, key in staves:
+        starts = _interval_starts(selected, bounds=cfg.range_for(clef), key=key, accidentals=frozenset(cfg.accidentals))
+        if starts:
+            break
+    else:
+        return Question("Change Accidentals, Intervals, Staff Key, or Range to fit an interval.", choices=[], answer="")
+    available = list(starts)
+    iv = rng.choice(available)
+    low = rng.choice(starts[iv])
+    high = low.transpose(iv)
+    display = rng.choice(sorted(cfg.displays))
+    descending = display == "Melodic" and rng.choice(sorted(cfg.directions)) == "descending"
+    first, second = (high, low) if descending else (low, high)
+    staff = [[first, second]] if display == "Harmonic" else [[first], [second]]
+    if construction:
+        return _interval_placement(cfg, rng=rng, clef=clef, key=key, interval=iv, staff=staff, starts=starts)
+    if cfg.quality_mode == "interval":
+        prompt, answer = "What is the interval number?", str(iv.number)
+        pool = list(dict.fromkeys(str(other.number) for other in available))
+    elif cfg.quality_mode == "quality":
+        prompt, answer = "What is the interval quality?", QUALITY_NAMES[iv.quality]
+        qualities = {other.quality for other in available}
+        pool = [QUALITY_NAMES[quality] for quality in settings.INTERVAL_QUALITY_ORDER if quality in qualities]
+    else:
+        prompt, answer = "", iv.short
+        pool = [other.short for other in available]
+    return Question(
+        prompt,
+        choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
+        answer=answer,
+        staff=staff,
+        clef=clef,
+        key=key,
+        value=rng.choice(cfg.active_values()),
+        explanation=f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
+    )
+
+
+def _interval_placement(
+    cfg: settings.IntervalSettings,
+    *,
+    rng: random.Random,
+    clef: str,
+    key: int,
+    interval: Interval,
+    staff: list[list[Note]],
+    starts: dict[Interval, list[Note]],
+) -> Question:
+    """
+    Build a placement prompt and all eligible spellings that satisfy it from the given note.
+
+    Parameters
+    ----------
+    cfg : IntervalSettings
+        Construction options.
+    rng : random.Random
+        Selects the written duration.
+    clef : str
+        Staff clef.
+    key : int
+        Drawn key signature.
+    interval : Interval
+        Selected spelling.
+    staff : list of list of Note
+        Endpoints in playback order.
+    starts : dict
+        Playable lower notes for each interval on this staff.
+
+    Returns
+    -------
+    Question
+        A reproducible example solution and any other valid written endpoints.
+
+    Examples
+    --------
+    A third above C can accept both E and E♭ when major and minor thirds are selected.
+    """
+    first, target = staff[0][0], staff[-1][-1]
+    descending = first.diatonic > target.diatonic
+    direction = "below" if descending else "above"
+    sizes = (
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "seventh",
+        "octave",
+        "ninth",
+        "tenth",
+        "eleventh",
+        "twelfth",
+        "thirteenth",
+        "fourteenth",
+        "fifteenth",
+    )
+    size = sizes[interval.number - 2]
+    quality = QUALITY_NAMES[interval.quality]
+    description = f"{quality} {size}"
+    targets = [target]
+    if cfg.quality_mode != "combined":
+        by_number = cfg.quality_mode == "interval"
+        description = size if by_number else f"{quality} interval"
+        targets = []
+        for other, lower_notes in starts.items():
+            matches = other.number == interval.number if by_number else other.quality == interval.quality
+            if matches:
+                end = first.transpose(other, descending=descending)
+                if (end if descending else first) in lower_notes:
+                    targets.append(end)
+    # A number or quality can have several solutions. Keep its card identity independent of which one was drawn.
+    target, *alternatives = targets
+    solution = [[first, target]] if len(staff) == 1 else [[first], [target]]
+    return Question(
+        f"Place {'an' if description[0] in 'aeiou' else 'a'} {description} {direction} the given note.",
+        choices=[],
+        answer=str(target),
+        accept=tuple(map(str, alternatives)),
+        construct=target,
+        staff=solution,
+        clef=clef,
+        key=key,
+        notes_only=True,
+        accidentals=True,
+        value=rng.choice(cfg.active_values()),
+        explanation=f"{target} is one valid placement." if alternatives else f"The second note is {target}.",
+    )
+
+
+@register
+class IntervalConstruction(Exercise):
+    """
+    Place a second written note at the requested interval from a given note.
+
+    Examples
+    --------
+    >>> q = IntervalConstruction().generate(random.Random(2))
+    >>> q.construct is not None and q.check_placed(q.construct)
+    True
+    """
+
+    name = "Interval Construction"
+    category = "Intervals"
+    description = "Place a note above or below the given note to build an interval."
+    par_seconds = 8.0
+
+    def instructions(self) -> str:
+        """
+        Explain staff placement and spelling for interval construction.
+
+        Returns
+        -------
+        str
+            Instructions for mouse and keyboard input.
+
+        Examples
+        --------
+        The reference describes the difference between melodic and harmonic placement.
+        """
+        return (
+            "<b>Interval Construction</b><br>Count lines and spaces from the given note in the requested direction. "
+            "Choose an accidental if needed, then click to place the second note. You can also move with the arrow keys "
+            "and press Enter. A harmonic interval stacks both notes. A melodic interval places them in sequence. "
+            "For Interval Only or Quality Only, any selected interval that fits the prompt and settings counts."
         )
-        return self.refresh(question)
+
+    def settings_signature(self) -> str:
+        """
+        Identify the construction settings used to generate a stored card.
+
+        Returns
+        -------
+        str
+            Stable signature of the exercise options.
+
+        Examples
+        --------
+        A change in staff ranges changes which stored questions are eligible.
+        """
+        return signature(settings.interval_construction)
+
+    def generate(self, rng: random.Random) -> Question:
+        """
+        Generate a staff, an interval prompt, and its eligible placements.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Generator for the presentation.
+
+        Returns
+        -------
+        Question
+            Written interval to construct.
+
+        Examples
+        --------
+        A harmonic question asks for a note above its starting note.
+        """
+        return _written_interval_question(settings.interval_construction, rng=rng, construction=True)
 
 
 @register

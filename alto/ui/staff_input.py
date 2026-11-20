@@ -28,6 +28,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QWidget
 
+from alto.exercises.base import Question
 from alto.settings import (
     CLEF_SYMBOL_NAMES,
     RANGE_LIMITS,
@@ -112,6 +113,7 @@ class StaffInput(StaffWidget):
         True
         """
         super().__init__(parent, max_step=MAX_STEP)
+        self.placement: Question | None = None
         self.accidental: int | None = None  # the sign you chose (-1 flat, 0 natural, +1 sharp); None follows the key signature
         self.locked = False  # ignore the mouse (while feedback is showing)
         self.caret: int | None = None  # the staff step of the note that the keyboard would place
@@ -124,6 +126,7 @@ class StaffInput(StaffWidget):
         *,
         key: int = 0,
         caption: str = "",
+        placement: Question | None = None,
     ) -> None:
         """
         Clear the staff for a new question, drawing a key signature.
@@ -136,6 +139,8 @@ class StaffInput(StaffWidget):
             The key signature: that many sharps if positive, flats if negative. Keyword-only.
         caption : str, default ""
             Text to write under the staff. Keyword-only.
+        placement : Question or None
+            Written placement question with an optional fixed starting note.
 
         Examples
         --------
@@ -146,7 +151,12 @@ class StaffInput(StaffWidget):
         (True, False, -2)
         """
         self.accidental, self.locked, self.caret = None, False, None
-        self.show_notes([], clef=clef, key=key, caption=caption)
+        self.placement = placement
+        columns = placement.placement_columns(None) if placement else []
+        self.given_note = columns[0][0] if columns else None
+        self.interval_voices = self.given_note is not None
+        self.column_colors.clear()
+        self.show_notes(columns, clef=clef, key=key, caption=caption, value=placement.value if placement else "whole")
 
     def note_at(self, y: float) -> Note:
         """
@@ -370,7 +380,7 @@ class StaffInput(StaffWidget):
         >>> staff.columns
         []
         """
-        self.columns = [[note]] if note else []
+        self.columns = self.placement.placement_columns(note) if self.placement else [[note]] if note else []
         self.note_color = QColor(color) if color else None
         self.update()
 

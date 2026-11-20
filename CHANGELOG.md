@@ -7,6 +7,10 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ### Added
 
+- Alto checks for new releases daily and offers upgrades from the main grid. Learners can update, defer the reminder for 24 hours, or skip a release. Automatic checks can be turned off in Settings → Updates.
+
+- Interval Construction asks learners to place a second note above or below a given note on the staff.
+
 - Automatic SM-2 and FSRS grades use each learner’s recent response times for the exercise. After calibration, each card shows the Hard, Good, and Easy review intervals before the learner answers. Practice settings include adjustable percentiles and a chart of the times used.
 
 - The Anki Exporter in the Tools menu saves selected exercises as decks in one Anki package. You can preview cards,

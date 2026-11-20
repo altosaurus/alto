@@ -68,7 +68,15 @@ from alto.anki_export import (
     write_decks,
 )
 from alto.exercises import REGISTRY, Exercise, Question
-from alto.exercises.library import ChordQualities, IntervalNames, KeyboardIntervals, KeyboardNotes, NoteConstruction, NoteNames
+from alto.exercises.library import (
+    ChordQualities,
+    IntervalConstruction,
+    IntervalNames,
+    KeyboardIntervals,
+    KeyboardNotes,
+    NoteConstruction,
+    NoteNames,
+)
 from alto.learning import Database, Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.location import desktop_name
@@ -176,10 +184,10 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
     locate = q.notation_target is not None and not q.choices
     if q.staff or q.show_staff or q.construct or q.construct_scale or q.key_staff:
         staff = StaffWidget(max_step=MAX_STEP)
-        staff.interval_voices = isinstance(exercise, IntervalNames)
+        staff.interval_voices = isinstance(exercise, (IntervalNames, IntervalConstruction))
         staff.clef_hidden = bool(q.place_clef)
         staff.show_notes(
-            q.staff,
+            q.placement_columns(None) if q.construct else q.staff,
             clef=q.clef,
             key=0 if q.build_key or q.place_signature else key,
             value=q.value,
@@ -199,7 +207,7 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
         if q.construct or q.construct_scale or q.build_key or q.place_signature or q.place_clef or locate:
             staff.clef_hidden = False
             staff.wedges = q.construct_steps or []
-            solution = [[q.construct]] if q.construct else [[note] for note in q.construct_scale or []]
+            solution = q.placement_columns(q.construct) if q.construct else [[note] for note in q.construct_scale or []]
             staff.show_notes(
                 solution or q.staff,
                 clef=q.place_clef or q.clef,
@@ -226,7 +234,7 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
         circle.reveal(animate=False)
         back.append(_picture(circle, folder=folder, label="Completed circle of fifths"))
     solution_text = " and ".join(q.required) if q.required else q.answer
-    if q.keyboard is not None and q.accept:
+    if (q.keyboard is not None or isinstance(exercise, IntervalConstruction)) and q.accept:
         solution_text = " / ".join((q.answer, *q.accept))
     answer = "<br>".join([escape(solution_text), *back])
     explanation = escape(q.explanation)

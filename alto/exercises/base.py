@@ -207,7 +207,34 @@ class Question:
         """
         if self.any_octave and self.construct is not None:
             return note.name == self.construct.name
-        return note == self.construct
+        return note == self.construct or (self.construct is not None and str(note) in self.accept)
+
+    def placement_columns(self, note: Note | None) -> list[list[Note]]:
+        """
+        Return the given and placed notes grouped by onset, omitting the answer until it is placed.
+
+        Parameters
+        ----------
+        note : Note or None
+            Pitch under the pointer or submitted by the learner.
+
+        Returns
+        -------
+        list of list of Note
+            Visible notes in playback order.
+
+        Examples
+        --------
+        >>> q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
+        >>> q.placement_columns(None) == [[Note.parse("C4")]]
+        True
+        """
+        if not self.staff:
+            return [[note]] if note else []
+        first = self.staff[0][0]
+        if note is None:
+            return [[first]] if len(self.staff) == 1 else [[first], []]
+        return [[first, note]] if len(self.staff) == 1 else [[first], [note]]
 
     def check_scale(self, notes: list[Note]) -> bool:
         """

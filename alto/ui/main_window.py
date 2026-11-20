@@ -1207,6 +1207,7 @@ class MainWindow(QMainWindow):
         for name in (
             "note_names",
             "intervals",
+            "interval_construction",
             "keyboard",
             "keyboard_intervals",
             "construction",
