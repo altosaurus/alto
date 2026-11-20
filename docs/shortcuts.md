@@ -94,5 +94,6 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 
 ## The menu
 
-The ☰ button at the top left holds **Statistics**, **Browse database**, **Lessons**, **Profile**, **Settings…**,
-**Export backup…**, **Import backup…**, **Check for updates…**, **Restart** and **Quit**.
+Open the ☰ menu at the top left for **Profile**, **Settings…**, **Tools**, **Help**, **Restart**, or **Quit**.
+Under **Tools**, choose **Import backup…**, **Export backup…**, **Anki Exporter**, or **Check for updates…**.
+For deck selection, scheduling, and import instructions, see [Anki decks]({{ '/data/' | relative_url }}#anki-decks).

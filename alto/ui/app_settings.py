@@ -624,6 +624,7 @@ class AppSettingsDialog(QDialog):
     """
 
     defaults_requested = Signal()
+    theme_selected = Signal(str)
     scheduler_changed = Signal()
 
     def __init__(self, parent: QWidget | None = None, *, learner: Learner | None = None) -> None:
@@ -1713,7 +1714,7 @@ class AppSettingsDialog(QDialog):
         self._heading(
             lay,
             title="Updates",
-            about="Check for updates… in the menu looks for a newer Alto.",
+            about="Choose Tools → Check for updates… to look for a newer version of Alto.",
         )
         lay.addWidget(QLabel(f"You have Alto {updates.installed_version()}."))
         self.main_channel = QCheckBox("Follow the main branch (the latest changes, which may be unstable)")
@@ -1773,3 +1774,4 @@ class AppSettingsDialog(QDialog):
         save_theme(key)
         apply_theme(key)
         self.theme_changed = True
+        self.theme_selected.emit(key)

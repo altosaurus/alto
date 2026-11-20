@@ -15,6 +15,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 
 | Module | What it is |
 |---|---|
+| [alto.anki_export](alto.anki_export/) | Write portable Anki decks from Alto questions and optional calendar review dates. |
 | [alto.audio](alto.audio/) | Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes. |
 | [alto.circle_schemes](alto.circle_schemes/) | The color schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
@@ -79,6 +80,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 
 | Module | What it is |
 |---|---|
+| [alto.ui.anki_exporter](alto.ui.anki_exporter/) | Modeless Anki deck exporter using Alto's exercise controls and music engraving. |
 | [alto.ui.answer_bank](alto.ui.answer_bank/) | A responsive, scrollable grid for large banks of answer buttons. |
 | [alto.ui.app_settings](alto.ui.app_settings/) | The application-wide settings dialog. |
 | [alto.ui.backup_flow](alto.ui.backup_flow/) | Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced. |

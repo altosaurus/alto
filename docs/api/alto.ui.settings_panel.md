@@ -1475,6 +1475,20 @@ Restore the independent button preferences for each multiple-choice exercise.
 True
 ```
 
+## load_exercise_settings
+
+```python
+def load_exercise_settings() -> None
+```
+
+Load the saved exercise options before creating a practice or export settings panel.
+
+**Examples**
+
+```pycon
+>>> load_exercise_settings()
+```
+
 ## settings_panel_for
 
 ```python

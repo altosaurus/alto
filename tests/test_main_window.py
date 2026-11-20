@@ -831,9 +831,39 @@ def test_the_menu_has_no_home_entry_and_ends_with_restart_above_quit(window: Mai
     entries = window.menu_button.menu().actions()
     names = [a.text() for a in entries if not a.isSeparator()]
     assert "Home" not in names and not entries[0].isSeparator()
-    assert names[-2:] == ["Restart", "Quit"]
+    assert names[-4:] == ["Tools", "Help", "Restart", "Quit"]
+    tools = next(action for action in entries if action.text() == "Tools")
+    submenu = tools.menu()
+    assert isinstance(submenu, QMenu) and not tools.icon().isNull()
+    assert [a.text() for a in submenu.actions()] == ["Import backup…", "Export backup…", "Anki Exporter", "Check for updates…"]
+    assert all(action not in entries for action in submenu.actions())
     assert entries[-2].text() == "Restart" and entries[-1].text() == "Quit"  # no separator between them
-    assert entries[-3].isSeparator()  # but one above the pair, after Check for updates…
+    assert entries[-3].isSeparator()  # separate Restart and Quit from Help
+
+
+def test_anki_menu_icon_is_an_outline_in_both_themes(window: MainWindow, request: pytest.FixtureRequest) -> None:
+    """
+    Check the icon at menu size after switching between light and dark palettes.
+
+    Parameters
+    ----------
+    window : MainWindow
+        Window containing the Tools menu.
+    request : pytest.FixtureRequest
+        Restores the system theme after the comparison.
+    """
+    request.addfinalizer(lambda: apply_theme("system"))
+    menu = next(action.menu() for action in window.menu_button.menu().actions() if action.text() == "Tools")
+    assert isinstance(menu, QMenu)
+    action = next(action for action in menu.actions() if action.text() == "Anki Exporter")
+    for theme, ink in (("studio_dark", "#ffffff"), ("studio", "#000000")):
+        apply_theme(theme)
+        menu.popup(window.pos())
+        image = action.icon().pixmap(18, 18).toImage()
+        assert image.pixelColor(image.width() // 2, image.height() // 2).alpha() == 0
+        colors = [image.pixelColor(x, y) for x in range(image.width()) for y in range(image.height())]
+        assert {color.name() for color in colors if color.alpha() > 127} == {ink}
+        menu.hide()
 
 
 def test_help_report_an_issue_opens_the_github_issue_tracker(window: MainWindow, monkeypatch: pytest.MonkeyPatch) -> None:

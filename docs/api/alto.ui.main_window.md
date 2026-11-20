@@ -216,6 +216,20 @@ Show the installed version, development status, and purpose of Alto.
 >>> window.show_about()  # doctest: +SKIP
 ```
 
+### MainWindow.open_anki_exporter
+
+```python
+def open_anki_exporter() -> None
+```
+
+Open the modeless exporter with a private copy of the current exercise settings.
+
+**Examples**
+
+```pycon
+Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
+```
+
 ### MainWindow.open_settings
 
 ```python
