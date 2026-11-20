@@ -13,12 +13,18 @@ All notable changes to Alto, newest first. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and Alto uses [semantic versioning](https://semver.org/).
 Each release's downloads are on its GitHub release.
 
-## Unreleased
+## 0.0.2
 
-Changes that are in the development docs and not in a release yet.
+Released 2026-11-19. [GitHub release](https://github.com/altosaurus/alto/releases/tag/v0.0.2)
 
 ### Added
 {: .no-toc}
+
+- Profiles can use ASRS, ARTS, SM-2, or FSRS. With SM-2 and FSRS, set daily limits, see new, learning, and due counts,
+  and optionally grade correct answers Hard, Good, or Easy. Switching between the two carries over the card schedule.
+- Filter the exercise grid by category or turn on Shuffle to move between the selected exercises after an answer.
+- The database browser shows when a question is due. Statistics can group question counts by hour, day, week, or month.
+- The glossary covers enharmonic pitches, transposition, the circle of fifths, minor scales, and relative and parallel keys.
 
 - Alto checks for new releases daily and offers upgrades from the main grid. Learners can update, defer the reminder for 24 hours, or skip a release. Automatic checks can be turned off in Settings → Updates.
 
@@ -56,6 +62,9 @@ Changes that are in the development docs and not in a release yet.
 
 ### Changed
 {: .no-toc}
+
+- Alto upgrades the practice database the first time you open this version. Before upgrading, close Alto and copy
+  `alto.db` to a backup folder to keep a copy of your previous history.
 
 - Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
   exercise tile outlines are near black and other standard button outlines are graphite gray.
