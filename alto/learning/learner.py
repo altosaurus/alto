@@ -30,6 +30,7 @@ from alto.learning.database import (
     ItemRecord,
     Profile,
 )
+from alto.learning.response_times import WINDOW, ResponseTimes
 
 # The database identifier predates the ASRS name and is shared with older backups.
 _STORED_ASRS = "Alto"
@@ -174,6 +175,62 @@ class Learner:
         """
         return bool(self.db.conn.execute("SELECT self_grading FROM profiles WHERE id = ?", (self.profile.id,)).fetchone()[0])
 
+    def response_times(self, exercise: str) -> ResponseTimes:
+        """
+        Read the rolling sample for one exercise and the current profile's thresholds.
+
+        Parameters
+        ----------
+        exercise : str
+            Registered exercise class name.
+
+        Returns
+        -------
+        ResponseTimes
+            Up to 100 recent, uninterrupted, correct first answers across practice modes.
+
+        Examples
+        --------
+        >>> db = Database()
+        >>> Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
+        ()
+        """
+        easy, hard = self.db.conn.execute(
+            "SELECT easy_percent, hard_percent FROM profiles WHERE id=?",
+            (self.profile.id,),
+        ).fetchone()
+        rows = self.db.conn.execute(
+            "SELECT duration_ms FROM attempts WHERE profile_id=? AND exercise=? AND attempt_no=1 AND correct=1 "
+            "AND duration_ms>0 AND timing_valid=1 ORDER BY answered_at DESC, id DESC LIMIT ?",
+            (self.profile.id, exercise, WINDOW),
+        )
+        return ResponseTimes(tuple(sorted(row[0] for row in rows)), easy, hard)
+
+    def set_speed_thresholds(self, *, easy: int, hard: int) -> None:
+        """
+        Save the two tail percentages for this profile.
+
+        Parameters
+        ----------
+        easy : int
+            Percentage of fastest correct answers.
+        hard : int
+            Percentage of slowest correct answers.
+
+        Raises
+        ------
+        ValueError
+            If the bands overlap or a percentage is negative.
+
+        Examples
+        --------
+        Setting both tails to zero assigns Good to every correct first answer.
+        """
+        if min(easy, hard) < 0 or easy + hard > 100:
+            raise ValueError("The two percentages must be nonnegative and total at most 100.")
+        with self.db.write_transaction():
+            self.db.conn.execute("UPDATE profiles SET easy_percent=?, hard_percent=? WHERE id=?", (easy, hard, self.profile.id))
+
     def set_self_grading(self, enabled: bool) -> None:
         """
         Choose how this profile grades correct calendar reviews.
@@ -276,7 +333,7 @@ class Learner:
                 mode=mode,
                 now=now,
                 avoid=avoid,
-                wait_learning=self.self_grading,
+                wait_learning=self.self_grading or self.response_times(type(exercise).__name__).ready,
             )
             if card is None:
                 raise PracticeComplete(retry_at)
@@ -381,8 +438,10 @@ class Learner:
         seconds: float,
         now: float | None = None,
         preview: ReviewInterval | None = None,
+        passing_previews: dict[Rating, ReviewInterval] | None = None,
         self_grading: bool = False,
-    ) -> None:
+        timing_valid: bool = True,
+    ) -> ReviewInterval | None:
         """
         Log one answer and update what is known about the question.
 
@@ -404,8 +463,18 @@ class Learner:
             When it was answered, as a timestamp; the clock is used if None. Keyword-only.
         preview : ReviewInterval or None
             Correct-answer interval displayed for this question.
+        passing_previews : dict or None
+            Hard, Good, and Easy intervals shown during speed grading.
         self_grading : bool
             Defer scheduling a correct calendar answer until the learner rates it.
+
+        timing_valid : bool
+            Whether the presentation was uninterrupted. False excludes it from timing.
+
+        Returns
+        -------
+        ReviewInterval or None
+            The interval chosen by speed grading, once enough earlier answers exist.
 
         Examples
         --------
@@ -423,7 +492,26 @@ class Learner:
         """
         now = time.time() if now is None else now
         name, key = type(exercise).__name__, question.item_key()
+        assigned = None
         with self.db.write_transaction():
+            mode = self.mode
+            first = attempt_no == 1
+            duration = round(seconds * 1000)
+            rating = Rating.Again if self_grading else None
+            if first and mode in CALENDAR_SCHEDULERS and not self_grading:
+                sample = self.response_times(name)
+                if sample.ready:
+                    rating = sample.grade(duration if timing_valid else 0) if correct else Rating.Again
+                    if correct:
+                        assigned = self.calendar.passing_intervals(
+                            name,
+                            profile=self.profile.id,
+                            key=key,
+                            mode=mode,
+                            now=now,
+                            displayed=passing_previews,
+                        )[rating]
+                    preview = assigned
             self.db.add_attempt(
                 self.profile.id,
                 exercise=name,
@@ -431,7 +519,8 @@ class Learner:
                 attempt_no=attempt_no,
                 answer=answer,
                 correct=correct,
-                duration_ms=round(seconds * 1000),
+                duration_ms=duration,
+                timing_valid=timing_valid,
                 answered_at=now,
             )
             old = self.db.get_item(self.profile.id, exercise=name, item_key=key)
@@ -443,7 +532,6 @@ class Learner:
                 seconds=seconds,
                 par_seconds=exercise.par_seconds,
             )
-            first = attempt_no == 1
             self.db.save_item(
                 self.profile.id,
                 exercise=name,
@@ -459,7 +547,6 @@ class Learner:
                     payload=json.dumps(question.to_dict()),
                 ),
             )
-            mode = self.mode
             if first and mode in CALENDAR_SCHEDULERS:
                 self.calendar.introduce(exercise, profile=self.profile.id, question=question, now=now)
                 if not (correct and self_grading):
@@ -471,5 +558,6 @@ class Learner:
                         correct=correct,
                         now=now,
                         preview=preview,
-                        manual_rating=Rating.Again if self_grading else None,
+                        manual_rating=rating,
                     )
+        return assigned
