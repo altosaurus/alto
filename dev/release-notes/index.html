@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -602,13 +602,22 @@
 <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>, and Alto uses <a href="https://semver.org/">semantic versioning</a>.
 Each release’s downloads are on its GitHub release.</p>
 
-<h2 id="unreleased">Unreleased</h2>
+<h2 id="002">0.0.2</h2>
 
-<p>Changes that are in the development docs and not in a release yet.</p>
+<p>Released 2026-11-19. <a href="https://github.com/altosaurus/alto/releases/tag/v0.0.2">GitHub release</a></p>
 
 <h3 class="no-toc" id="added">Added</h3>
 
 <ul>
+  <li>Profiles can use ASRS, ARTS, SM-2, or FSRS. With SM-2 and FSRS, set daily limits, see new, learning, and due counts,
+and optionally grade correct answers Hard, Good, or Easy. Switching between the two carries over the card schedule.</li>
+  <li>Filter the exercise grid by category or turn on Shuffle to move between the selected exercises after an answer.</li>
+  <li>The database browser shows when a question is due. Statistics can group question counts by hour, day, week, or month.</li>
+  <li>The glossary covers enharmonic pitches, transposition, the circle of fifths, minor scales, and relative and parallel keys.</li>
+  <li>The <strong>Next Question</strong> setting lets each exercise advance immediately, advance after playback and animation, or wait for <strong>Next</strong>.</li>
+  <li>
+    <p><strong>Help → About</strong> shows Alto’s version and alpha status. <strong>Help → Report an issue</strong> opens the GitHub issue tracker.</p>
+  </li>
   <li>
     <p>Alto checks for new releases daily and offers upgrades from the main grid. Learners can update, defer the reminder for 24 hours, or skip a release. Automatic checks can be turned off in Settings → Updates.</p>
   </li>
@@ -633,7 +642,7 @@ filter each deck, and include review schedules from an SM-2 or FSRS profile.</p>
   </li>
   <li>A Key Signatures lesson teaches how to read and write major and minor key signatures and links to the key signature exercises.</li>
   <li>
-    <p>An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.</p>
+    <p>An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to staff and keyboard identification and staff construction.</p>
   </li>
   <li>Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.</li>
   <li>Double-clicking a row in <strong>Questions that need practice</strong> opens the saved question and its answer.</li>
@@ -660,6 +669,10 @@ Note-name previews have visible text labels.</li>
 <h3 class="no-toc" id="changed">Changed</h3>
 
 <ul>
+  <li>
+    <p>Alto upgrades the practice database the first time you open this version. Before upgrading, close Alto and copy
+<code class="language-plaintext highlighter-rouge">alto.db</code> to a backup folder to keep a copy of your previous history.</p>
+  </li>
   <li>
     <p>Push buttons have a rounded hairline border, a tinted hover state, and a keyboard focus ring. In dark mode,
 exercise tile outlines are near black and other standard button outlines are graphite gray.</p>
@@ -1137,8 +1150,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -758,11 +758,10 @@ and is <em>used</em> by the exercise. If your <code class="language-plaintext hi
 
 <h2 id="calibrating-par_seconds">Calibrating <code class="language-plaintext highlighter-rouge">par_seconds</code></h2>
 
-<p><code class="language-plaintext highlighter-rouge">par_seconds</code> is the time a fluent person takes to answer correctly the <em>first</em> time. The scheduler rewards answers at half par
-or faster and penalises answers over four times par. Too small and everything looks slow, so strain rises for everyone; too large
-and nothing is ever rewarded. A good method: answer fifty questions yourself in a row, at the speed you would call “fluent”, and
-take the median of your answer times (the statistics page shows the median per exercise). The existing exercises run from 3 seconds
-(naming a note) to 9 (naming an arpeggio’s type and inversion); scale spelling is 8. See <a href="/alto/dev/guide/spaced-repetition/">Spaced repetition</a>.</p>
+<p><code class="language-plaintext highlighter-rouge">par_seconds</code> estimates how long a fluent first answer takes. ASRS uses it to adjust a question’s strain. To estimate par
+for a new exercise, answer fifty questions at a fluent pace and check the median first-answer time in Statistics.
+Alto uses 3 seconds for Note Identification, 8 seconds for Interval Construction, and 25 seconds for Scale Construction.
+The full table appears under <a href="/alto/dev/practice/#response-time">Response time</a>.</p>
 
 <h2 id="adding-settings-to-an-exercise">Adding settings to an exercise</h2>
 
@@ -966,8 +965,8 @@ book on writing good questions and, above all, good distractors.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

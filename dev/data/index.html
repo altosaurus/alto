@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -602,6 +602,7 @@
 <ul>
   <li>Alto has no accounts, no sync and no analytics.</li>
   <li>Your name is only a label for a profile in a local file.</li>
+  <li>On supported installations Alto contacts GitHub to check for releases. You can turn off daily checks in <strong>Settings → Updates</strong>.</li>
 </ul>
 
 <h2 id="where-it-is">Where it is</h2>
@@ -650,7 +651,7 @@ your usual configuration location.</p>
   <tbody>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">profiles</code></td>
-      <td>Each profile’s name, creation time, and selected scheduler.</td>
+      <td>Each profile’s name, creation time, scheduler, self-grading preference, and response-time grading thresholds.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">attempts</code></td>
@@ -855,8 +856,8 @@ up to date as it is imported.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

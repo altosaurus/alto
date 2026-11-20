@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -604,7 +604,7 @@
 <p>Open them from the menu (☰) with <strong>Settings…</strong> or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. The dialog does not block the window: you can
 keep it open and use the exercises, and opening it again brings the same one forward. A new theme is applied to the window when you close
 the settings. Categories are listed on the left, and
-the selected one’s settings appear on the right.</p>
+the selected one’s settings appear on the right. <strong>Restore defaults…</strong> resets app and exercise preferences after confirmation. It removes custom themes and keyboard colors and keeps your profiles and practice history.</p>
 
 <figure class="shot">
   <img class="for-light" src="/alto/dev/assets/img/settings.png" alt="The settings dialog showing theme and notation style options" loading="lazy" />
@@ -614,7 +614,7 @@ the selected one’s settings appear on the right.</p>
 
 <h3 id="appearance">Appearance</h3>
 
-<p>The Appearance page has four sections, <strong>Theme</strong>, <strong>Notation style</strong>, <strong>Keyboard style</strong> and <strong>Transitions</strong>, which you switch between with the pill-shaped control at the top.</p>
+<p>Expand <strong>Appearance</strong> in the left sidebar to choose <strong>Theme</strong>, <strong>Notation style</strong>, <strong>Keyboard style</strong>, or <strong>Transitions</strong>.</p>
 
 <p><strong>Theme.</strong> The themes are in a list on the left. The right side is the theme’s card: its name, three pictures of the window one
 above another. Beside the Light and Dark pictures are squares of that version’s colors, and the window, accent and ink colors
@@ -859,8 +859,7 @@ only play as the synthesized piano.</p>
 
 <h2 id="exercise-settings">Exercise settings</h2>
 
-<p>Note Identification, Keyboard Note Identification and Note Construction have a sliders button at the top right of the
-exercise. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
+<p>Open the sliders button at the top right of an exercise to see its options. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
 that setting’s page. See <a href="/alto/dev/exercises/">Exercises</a> for what each option does.</p>
 
 <p>Changing a setting starts a new question right away, and the settings are remembered the next time you open Alto.</p>
@@ -952,8 +951,8 @@ practice history. See <a href="/alto/dev/data/">Your data</a>.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

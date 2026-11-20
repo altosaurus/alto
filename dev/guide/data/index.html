@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -700,7 +700,10 @@ load. <code class="language-plaintext highlighter-rouge">Learner.pick</code> han
 
 <p>A shipped database has users’ history in it, so the structure cannot just change. A <strong>migration</strong> is a script that takes a
 database from one version to the next. SQLite has a built-in integer for this, the <strong><code class="language-plaintext highlighter-rouge">user_version</code> pragma</strong>, which belongs to
-the application and which SQLite does not otherwise use. Version 2 adds the profile’s scheduler, practice cards and review schedules. Version 3 adds daily limits, completed review counts, and the status of unfinished introductions. Alto applies missing migrations in order within one transaction. Review counts start when the database is upgraded. The migration copies existing question identities into <code class="language-plaintext highlighter-rouge">practice_cards</code>, so learners can review questions they have already practiced.</p>
+the application and which SQLite does not otherwise use. Alto applies missing migrations in order within one transaction.
+When a 0.0.1 database is opened in 0.0.2, its profiles, answers, and question history are preserved. SM-2 and FSRS start
+with a fresh review queue. Eligible earlier answers can still contribute to response-time grading. Schema version 7 records
+each profile’s grading thresholds and whether an answer’s timing is usable.</p>
 
 <h2 id="what-each-database-method-is-for">What each <code class="language-plaintext highlighter-rouge">Database</code> method is for</h2>
 
@@ -782,10 +785,7 @@ into a clean install through the real window.</p>
 
 <h2 id="privacy">Privacy</h2>
 
-<p>A profile’s name is only a label, kept in the local database. A network call, analytics or an account is a decision to make
-deliberately, and to describe where users will look. The one network feature today is the menu’s <strong>Check for updates…</strong>
-(<code class="language-plaintext highlighter-rouge">alto/ui/update_flow.py</code>), which runs only when the user chooses it and is described in
-<a href="/alto/dev/getting-started/">Getting started</a>.</p>
+<p>Profiles and practice history stay in the local database. On supported installations, Alto checks GitHub for a published release up to once a day while the main grid is active. The request does not include profile names or practice records. Turn off automatic checks in <strong>Settings → Updates</strong>, or check manually with <strong>Tools → Check for updates…</strong>. <a href="/alto/dev/getting-started/#updating-alto">Updating Alto</a></p>
 
 <h2 id="words-to-search-for">Words to search for</h2>
 
@@ -921,8 +921,8 @@ the chapter on stream processing covers the log-and-derived-state idea.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -614,7 +614,7 @@ how to change it without breaking it.</p>
 
 <h3 id="calendar-practice">Calendar practice</h3>
 
-<p>Under <strong>Settings → Practice</strong>, <strong>New cards/day</strong> and <strong>Maximum reviews/day</strong> set the daily allowance for each exercise. The defaults are 10 new cards and 200 reviews. Both algorithms share these settings and the day’s usage. To change one exercise, open its gear menu and choose <strong>Daily Limits</strong>. Clear <strong>Use global</strong> for either limit to override it. Each limit has an <strong>Unlimited</strong> checkbox. For example, you can keep new cards at 10 per day and review every card that comes due. A zero pauses that kind of practice.</p>
+<p>Under <strong>Settings → Practice</strong>, <strong>New cards/day</strong> and <strong>Maximum reviews/day</strong> set the daily allowance for each exercise. The defaults are 10 new cards and 200 reviews. Both algorithms share these settings and the day’s usage. To change one exercise, open its settings with the sliders button and choose <strong>Daily Limits</strong>. Clear <strong>Use global</strong> for either limit to override it. Each limit has an <strong>Unlimited</strong> checkbox. For example, you can keep new cards at 10 per day and review every card that comes due. A zero pauses that kind of practice.</p>
 
 <p>Exercise tiles show new cards in blue, outstanding incorrect cards in red, and today’s available reviews in green. The red count includes missed cards under the current settings even when their retry time is in the future or the daily review limit has been reached. Showing a new card uses an introduction slot. An unanswered new card stays available in blue so you can finish it after leaving the exercise. Grading the first answer completes the introduction. Grading a subsequent review uses one review slot, including a miss. A miss ends that showing. While the missed card waits for its scheduled retry, Alto offers other eligible cards. If only the retry remains and a review slot is available, the open exercise waits for it and resumes automatically. The allowances reset at local midnight, and overdue cards keep their scheduled dates.</p>
 
@@ -1064,8 +1064,8 @@ multi-armed bandits, including softmax action selection (free from the authors a
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

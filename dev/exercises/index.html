@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -599,10 +599,7 @@
           <h1>Exercises</h1>
           <p>Each exercise has a <strong>?</strong> button with a short explanation. Open the sliders button to change an exercise’s settings.</p>
 
-<p><strong>Every exercise can be done with the keyboard alone, and without clicking on the staff.</strong> The answer buttons have keys,
-and where you place notes on a staff there are buttons and keys to move the note, choose its sign and place it, so the
-mouse is never needed. The keys are listed on the <a href="/alto/dev/shortcuts/">Shortcuts</a> page, and each button
-shows its key when you hover over it.</p>
+<p>Hover over an answer button to see its keyboard shortcut. In Note, Interval, and Scale Construction, use the arrow keys to move the note and Return to place it. For keyboard practice in Notation Identification, choose <strong>Answer Button</strong> under <strong>Question Type</strong>. <a href="/alto/dev/shortcuts/">Shortcuts</a></p>
 
 <p>Answer-choice exercises include <strong>Buttons</strong> in their settings. Choose <strong>All</strong> for the full answer bank or <strong>Limited</strong> to set a maximum. For questions with separate answer groups, such as a note name and an octave, the limit applies to each group. The exercise remembers its own selection.</p>
 
@@ -614,6 +611,8 @@ shows its key when you hover over it.</p>
   <li><strong>After Animation</strong> (default) advances automatically when the feedback finishes.</li>
 </ul>
 
+<p>With SM-2 or FSRS, a missed card returns later. If you grade correct answers yourself, choosing <strong>Hard</strong>, <strong>Good</strong>, or <strong>Easy</strong> schedules the card and advances to the next question. <a href="/alto/dev/practice/">Spaced repetition</a></p>
+
 <h2 id="note-identification">Note Identification</h2>
 
 <p>A note is drawn on a staff. Press the button with its name.</p>
@@ -624,7 +623,7 @@ shows its key when you hover over it.</p>
   <li><strong>Clefs:</strong> the grand staff, or any of the seven single-staff clefs, listed in three groups: treble, bass, alto and
 tenor; then soprano, mezzo-soprano and baritone (written as an F clef, or as a C clef if you choose that in
 <a href="/alto/dev/settings/">Settings</a>). Each clef is shown with its name beside it. The same list is used by every
-exercise that has a clef setting, apart from the grand staff, which only Note Identification and Note Construction use.</li>
+exercise with these single-staff clefs. The staff interval exercises also offer the grand staff.</li>
   <li><strong>Range:</strong> the lowest and highest note that can appear, per clef.</li>
   <li><strong>Key signatures:</strong> which keys appear. When a key is on, the note’s name has to agree with the signature.</li>
   <li><strong>Note values:</strong> whole notes up to thirty-second notes, and the double whole note.</li>
@@ -633,6 +632,7 @@ exercise that has a clef setting, apart from the grand staff, which only Note Id
 Degrees refer to the major key signature (C major without a signature). Caret labels use accidental prefixes,
 while function labels use words such as <strong>Raised Supertonic</strong> and <strong>Lowered Mediant</strong>.</li>
   <li><strong>Accidentals:</strong> whether notes with their own sharp, flat or natural sign appear.</li>
+  <li><strong>Octave:</strong> turn this on to answer with both the note name and its octave. Middle C is C4.</li>
 </ul>
 
 <p>The settings open in a pane on the right of the exercise. Each row names an option, and clicking it opens a page for
@@ -685,7 +685,7 @@ or C major when key signatures are off. When octaves are required, degree and oc
 <p>The reverse of note identification. A note name is shown, and you click the staff where that note belongs.
 It uses the <strong>Note names</strong> setting from Note Identification. With scale degrees selected, the question names the
 key, degree and octave. Under <strong>Question Type</strong>, choose <strong>Notes Only</strong> for note names or <strong>Scale and Degree</strong> to use selected keys. Switch between <strong>Major</strong> and <strong>Minor</strong> to choose signatures for each. To practice just one group, leave the other tab’s keys unchecked. Minor uses the natural minor scale.
-Select C major or A minor for a staff with no sharps or flats.</p>
+Under <strong>Degrees</strong>, check the scale degrees to practice. For example, choose D major and degree 3 to practice placing F♯.</p>
 
 <ul>
   <li><strong>Octave</strong> is on by default. Turn it off to place the note in any octave. Middle C is C4. On a grand staff, click the upper staff for notes from middle C up and the lower staff for the notes below.</li>
@@ -958,19 +958,33 @@ counts toward your score. Like Key Signature Identification, this exercise makes
 
 <p><strong>Starting Accidentals</strong> lets you choose how many sharps or flats are already on the staff. The default, <strong>0</strong>, starts with a blank signature. For example, with <strong>2 ♯</strong> selected, a question in A major shows two of its three sharps in their usual positions. Place the missing signs from left to right. You can enter up to seven signs in total, including those already shown. If the key needs six and you submit seven, the answer is marked wrong. <strong>Undo</strong> removes only signs you placed. When all the signs are already present, press <strong>Answer</strong>. Counts must fit one of your selected key signatures. If changing keys rules out every selected count, the setting returns to <strong>0</strong>.</p>
 
-<h2 id="scale-spelling">Scale Spelling</h2>
+<p><a id="scale-spelling"></a></p>
 
-<p>A question such as “In B♭ Dorian, what is scale degree 3?” Press the note’s name. Each scale uses every letter name
-once, so use a sharp or flat where the pattern needs one. Alto asks about:</p>
+<h2 id="scale-identification">Scale Identification</h2>
 
-<p>Major (Ionian), Dorian, Phrygian, Lydian, Mixolydian, natural minor (Aeolian), Locrian, harmonic minor and melodic minor.</p>
+<p>Read the eight notes on the staff. The first and last notes give the tonic. The pattern of whole and half steps gives the mode.
+For example, a scale from D to D with no sharps or flats is D Dorian. Under <strong>Question Type</strong>, check <strong>Key</strong> to answer D,
+<strong>Mode</strong> to answer Dorian, or both to identify the full scale.</p>
+
+<p>Open <strong>Clefs</strong> and <strong>Scales</strong> to choose the staves and modes to practice. <strong>Motion</strong> sets the direction of the written scale.
+<strong>Scale Key</strong> selects the signatures the scales may use, with separate Major and Minor tabs. <strong>Staff Key</strong> controls the signature
+drawn beside the clef. Read any accidentals beside the notes when the two signatures differ.</p>
+
+<p>Under <strong>Buttons</strong>, <strong>Limited</strong> offers complete answers up to the selected button count. With <strong>All</strong> and both question types
+enabled, choose a tonic and a mode from separate groups in either order.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/scales.png" alt="Scale Identification with an eight-note staff example and scale names on the answer buttons." loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/scales-dark.png" alt="Scale Identification with an eight-note staff example and scale names on the answer buttons." loading="lazy" />
+  
+</figure>
 
 <h2 id="scale-construction">Scale Construction</h2>
 
 <p>A blank staff is shown with the name of a scale under it, such as “D Major”, “E♭ minor” or “A Dorian”. Click the staff to
 place the scale’s notes from left to right in the requested direction, ending an octave from the first note: eight notes in
 all. In <strong>Motion</strong>, choose Ascending or Descending. The next note follows the pointer, snapped to a line or space, and each click puts it in the next place, so the notes
-do not move as you add more. Any octave will do, as long as the whole scale is in the same one.</p>
+do not move as you add more. With <strong>Octave</strong> off, choose any starting octave that leaves room for all eight notes.</p>
 
 <p>You never have to click the staff. <strong>Higher</strong>, <strong>Lower</strong>, <strong>Octave ↑</strong> and <strong>Octave ↓</strong> under it move the next note, the sign
 buttons choose its sign, and <strong>Place note</strong> puts it in the next place; the same things are on the keys (see
@@ -1014,7 +1028,7 @@ the scale’s own signature (below). By default only the blank staff, with no sh
 
 <h3 id="starting-in-the-right-octave">Starting in the right octave</h3>
 
-<p>By default any octave will do, as long as all eight notes are in the same one, and the scale is named without an octave,
+<p>By default the first and last notes must be an octave apart, and the scale is named without a starting octave,
 such as “G Major”. With <strong>Octave</strong> on, the name says which octave the first note is in, such as “G2 Major” or “B♭4 minor”,
 using the same numbers as note names everywhere in Alto (middle C is C4). The scale then has to be placed there: the right
 notes an octave higher or lower are wrong.</p>
@@ -1277,8 +1291,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

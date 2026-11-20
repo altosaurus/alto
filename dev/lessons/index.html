@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
   
 </head>
 <body>
@@ -612,10 +612,9 @@ their signatures relate.</p>
 
 <p>The home page has a switch at the top, <strong>Exercises</strong> and <strong>Lessons</strong>. Choose <strong>Lessons</strong> to see a tile for each lesson, with the
 icon of the exercise that practices the same topic: the Circle of Fifths lesson has the circle of fifths icon. Alto remembers which
-side you were on. The cards change with the transition chosen under <strong>Settings… › Appearance › Transitions</strong>. <strong>Lessons</strong> in the menu (☰) also goes straight to them.</p>
+side you were on. The cards change with the transition chosen under <strong>Settings… › Appearance › Transitions</strong>. Use <strong>Tiles</strong> to open the catalog for the selected section.</p>
 
-<p>The switch stays in the top bar inside an exercise or a lesson, as two icons without words. The one for the side you are on is
-chosen, and pressing either returns to the home page on that side.</p>
+<p>During an exercise or lesson, the two icons switch the navigation list. Your current activity stays open until you choose another one.</p>
 
 <p>A tile says <strong>Start</strong>, or <strong>Continue at step N</strong> if you have begun. Click it to open the lesson, and <strong>Leave lesson</strong> (or <kbd>Esc</kbd>)
 to return to where you were. <strong>Start over</strong> goes back to the first step.</p>
@@ -654,8 +653,7 @@ determine its quality. The staff and keyboard illustrations use the pitches play
 compares C–E with C–E♭, introduces perfect intervals, and shows why C–F♯ and C–G♭ use the same two piano keys.
 A final check asks you to name an unfamiliar pair.</p>
 
-<p>The last step opens <strong>Interval Identification</strong> for practice with written notes or <strong>Keyboard Interval Identification</strong>
-for practice with highlighted keys. The book button in either exercise has hints and a link to the lesson.</p>
+<p>The last step links to <strong>Interval Identification</strong> for reading two written notes, <strong>Keyboard Interval Identification</strong> for naming the interval between two piano keys, and <strong>Interval Construction</strong> for placing the second note on the staff. Each exercise has a book button with hints and a link to the lesson.</p>
 
 <h2 id="key-signatures">Key Signatures</h2>
 
@@ -663,8 +661,7 @@ for practice with highlighted keys. The book button in either exercise has hints
 the signature, then read sharp and flat signatures to find major keys and their relative minors. Choose the staff
 you would write for A♭ major and try a fresh signature in treble or bass clef.</p>
 
-<p>The closing step links to <strong>Key Signature Identification</strong> and <strong>Key Signature Construction</strong>. The book button in
-either exercise opens a hint and a link back to the lesson.</p>
+<p>The closing step links to <strong>Key Signature Identification</strong>, <strong>Key Signature Construction</strong>, and <strong>Order of Keys</strong>. Choose Order of Keys to place the individual sharps or flats in order. The book button in each exercise opens hints and a link back to the lesson.</p>
 
 <h2 id="the-circle-of-fifths-lesson">The Circle of Fifths lesson</h2>
 
@@ -778,8 +775,8 @@ either exercise opens a hint and a link back to the lesson.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
