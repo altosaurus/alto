@@ -4,7 +4,7 @@ parent: developer-guide
 order: 2
 permalink: /developer-guide/database/
 ---
-Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 6, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
+Alto keeps practice history for all local profiles in one SQLite file. At launch, `Database(database_path())` opens `alto.db` in the application data directory, or `$ALTO_HOME/data/alto.db` when a development directory is set. A new database uses schema version 7, recorded in SQLite’s `PRAGMA user_version`. [Application launch]({{ '/developer-guide/application-launch/' | relative_url }})
 
 A single question can produce several answers. Suppose Ada answers a note question incorrectly after three seconds, then correctly one second later. Alto appends **two** rows to `attempts`, with durations of 3,000 and 1,000 milliseconds. It maintains **one** row in `items` for Ada and that question. After this first showing, the row records one showing, one wrong attempt, zero first-try successes, and 3,000 milliseconds of first-answer time. The attempt log preserves the sequence. The item row gives the scheduler a summary it can use the next time Ada practices.
 
@@ -35,6 +35,8 @@ One row per local practice profile.
 | `created_at` | REAL | | Time the profile was created. |
 | `scheduler` | TEXT | Default `Alto` | The profile’s selected question scheduler. ASRS retains its original database identifier, `Alto`. |
 | `self_grading` | INTEGER | Default 0 | Whether this profile rates correct answers in SM-2 and FSRS. |
+| `easy_percent` | INTEGER | Default 15 | Fastest share of correct first answers graded Easy, in percent. |
+| `hard_percent` | INTEGER | Default 15 | Slowest share graded Hard, in percent. |
 
 ### Attempts
 
@@ -51,6 +53,7 @@ One row per submitted answer, including each retry. The `attempts_by_item` index
 | `correct` | INTEGER | | Alto writes 1 for a correct answer and 0 for an incorrect answer. |
 | `duration_ms` | INTEGER | | Elapsed time from presentation to the first answer, or from the preceding answer to a retry. |
 | `answered_at` | REAL | | Time the answer was submitted. |
+| `timing_valid` | INTEGER | Default 1 | Set to zero when the exercise was hidden or Alto lost focus during the question. Older attempts retain their recorded times. |
 
 ### Items
 

@@ -35,6 +35,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QColor,
+    QGuiApplication,
     QHideEvent,
     QKeySequence,
     QMouseEvent,
@@ -415,10 +416,15 @@ class ExerciseView(QWidget):
         self.missed = False
         self._attempts = 0  # answers given to the question on screen
         self._clock = time.monotonic()  # when the last answer was given, or the question appeared
+        self._timing_valid = True
+        app = QGuiApplication.instance()
+        assert isinstance(app, QGuiApplication)
+        app.applicationStateChanged.connect(self._application_state_changed)
         self._hidden_at: float | None = None
         self._advance_remaining = -1
 
         self.score = QLabel()
+        self._speed_previews: dict[Rating, ReviewInterval] | None = None
         self._review_preview: ReviewInterval | None = None
         self._self_grading = False
         self._rating_previews: dict[Rating, ReviewInterval] = {}
@@ -700,6 +706,7 @@ class ExerciseView(QWidget):
         self._keyboard_interval_row = QWidget()
         self._keyboard_interval_layout = QHBoxLayout(self._keyboard_interval_row)
         self._keyboard_interval_layout.setContentsMargins(0, 0, 0, 0)
+        self._keyboard_interval_row.installEventFilter(self)
         lay.addWidget(self._keyboard_interval_row)
         answers = QWidget()
         answers.setMaximumWidth(self.CHOICE_MAX_WIDTH)
@@ -819,6 +826,22 @@ class ExerciseView(QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)  # the screen can be given the keyboard when it opens
         self.next_question()
 
+    def _application_state_changed(self, state: Qt.ApplicationState) -> None:
+        """
+        Exclude the current presentation from speed grading if practice is interrupted.
+
+        Parameters
+        ----------
+        state : Qt.ApplicationState
+            New application activation state.
+
+        Examples
+        --------
+        Switching to another application while a question is visible invalidates its timing.
+        """
+        if state != Qt.ApplicationState.ApplicationActive:
+            self._timing_valid = False
+
     def hideEvent(self, event: QHideEvent) -> None:
         """
         Pause automatic advancement and answer timing while browsing another page.
@@ -839,6 +862,7 @@ class ExerciseView(QWidget):
         """
         self._count_timer.stop()
         if self._hidden_at is None:
+            self._timing_valid = False
             self._hidden_at = time.monotonic()
             self._advance_remaining = self._advance.remainingTime()
             self._advance.stop()
@@ -1186,7 +1210,7 @@ class ExerciseView(QWidget):
                 clock = time.strftime("%H:%M:%S", time.localtime(empty.retry_at))
                 message = (
                     f"Next review at {clock}."
-                    if self._self_grading
+                    if self._self_grading or (self.learner and self.learner.response_times(type(self.exercise).__name__).ready)
                     else f"Waiting for a missed card. Practice resumes at {clock}."
                 )
                 self._advance.start(max(1, math.ceil((empty.retry_at - time.time()) * 1000)))
@@ -1201,6 +1225,7 @@ class ExerciseView(QWidget):
         self.missed = False
         self._attempts = 0
         self._clock = time.monotonic()
+        self._timing_valid = True
         self._pair_token += 1  # cancels a pending 'try again' reset
         self._pending = {}  # 'name' / 'octave' -> (text, button), for two-part answers
         self._busy = False
@@ -1370,33 +1395,79 @@ class ExerciseView(QWidget):
         A new FSRS question shows 10 min before the learner submits an answer.
         """
         self._review_preview = None
+        self._speed_previews = None
         self.review_interval.hide()
         self._keyboard_interval_row.hide()
         self._music_layout.setAlignment(Qt.AlignmentFlag(0))
         if self._self_grading or self.question is None or self.learner is None or self._scheduler_mode not in CALENDAR_SCHEDULERS:
             return
+        exercise = type(self.exercise).__name__
+        if self.learner.response_times(exercise).ready:
+            self._speed_previews = self.learner.calendar.passing_intervals(
+                exercise,
+                profile=self.learner.profile.id,
+                key=self.question.item_key(),
+                mode=self._scheduler_mode,
+                now=time.time(),
+            )
+            self._display_interval(*(f"{grade.name}: {option.duration}" for grade, option in self._speed_previews.items()))
+            return
         self._review_preview = self.learner.calendar.correct_interval(
-            type(self.exercise).__name__,
+            exercise,
             profile=self.learner.profile.id,
             key=self.question.item_key(),
             mode=self._scheduler_mode,
             now=time.time(),
         )
-        text = self._review_preview.duration
-        self.review_interval.setAccessibleName(f"Next interval: {text}")
-        if self.keyboard.isHidden():
-            self.review_interval.setText(f"Next interval:\n{text}")
+        self._display_interval(self._review_preview.duration)
+
+    def _display_interval(self, *intervals: str) -> None:
+        """
+        Position the next interval beside the music or below the keyboard.
+
+        Parameters
+        ----------
+        intervals : str
+            One scheduled interval or the three labeled passing outcomes.
+
+        Examples
+        --------
+        A correct timed answer can display “Easy · 4 days”.
+        """
+        staff = self.keyboard.isHidden()
+        if len(intervals) == 1:
+            heading = "Next interval:"
+            text = ("\n" if staff else " ").join((heading, intervals[0]))
+        else:
+            heading = "Next intervals:"
+            if staff:
+                intervals = tuple(reversed(intervals))
+            text = ("\n" if staff else "    ").join(intervals)
+        self.review_interval.setAccessibleName(f"{heading} {', '.join(intervals)}")
+        self.review_interval.setText(text)
+        self.review_interval.setMaximumWidth(self.review_interval.sizeHint().width())
+        if staff:
             self.review_interval.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
-            self.review_interval.setMaximumWidth(self.review_interval.sizeHint().width())
             self._music_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
             self._music_layout.addWidget(self.review_interval, 0, 1, -1, 1, Qt.AlignmentFlag.AlignBottom)
         else:
-            self.review_interval.setText(f"Next interval: {text}")
             self.review_interval.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-            self.review_interval.setMaximumWidth(self.keyboard.full_width())
-            self._keyboard_interval_layout.addWidget(self.review_interval)
+            self._keyboard_interval_layout.addWidget(self.review_interval, alignment=Qt.AlignmentFlag.AlignRight)
+            self._align_keyboard_interval()
             self._keyboard_interval_row.show()
         self.review_interval.show()
+
+    def _align_keyboard_interval(self) -> None:
+        """
+        Align the grade row with the last key, allowing longer text to extend left.
+
+        Examples
+        --------
+        A short keyboard stays centered with the interval row ending beneath its right edge.
+        """
+        width = self._keyboard_interval_row.width()
+        margin = min((width - self.keyboard.full_width()) // 2, width - self.review_interval.sizeHint().width())
+        self._keyboard_interval_layout.setContentsMargins(0, 0, max(0, margin), 0)
 
     @staticmethod
     def _style(color: QColor) -> str:
@@ -2116,6 +2187,8 @@ class ExerciseView(QWidget):
         >>> view.fork.value
         1
         """
+        if event.type() == QEvent.Type.Resize and watched is self._keyboard_interval_row:
+            self._align_keyboard_interval()
         if (
             event.type() == QEvent.Type.MouseButtonPress
             and isinstance(event, QMouseEvent)
@@ -2355,7 +2428,7 @@ class ExerciseView(QWidget):
         now = time.monotonic()
         seconds, self._clock = now - self._clock, now  # the first answer is timed from the question appearing
         if self.learner and self.question:
-            self.learner.record(
+            assigned = self.learner.record(
                 self.exercise,
                 question=self.question,
                 answer=choice,
@@ -2363,8 +2436,12 @@ class ExerciseView(QWidget):
                 attempt_no=self._attempts,
                 seconds=seconds,
                 preview=self._review_preview,
+                passing_previews=self._speed_previews,
                 self_grading=self._self_grading,
+                timing_valid=self._timing_valid,
             )
+            if assigned is not None:
+                self._display_interval(f"{assigned.rating.name} · {assigned.duration}")
             if not ok:
                 self.review_interval.hide()
                 self._keyboard_interval_row.hide()

@@ -853,7 +853,16 @@ class CalendarPractice:
         seconds, _ = _next_review(key, mode=mode, previous=previous, rating=Rating.Good, now=now)
         return ReviewInterval(seconds, identity, previous)
 
-    def passing_intervals(self, exercise: str, *, profile: int, key: str, mode: str, now: float) -> dict[Rating, ReviewInterval]:
+    def passing_intervals(
+        self,
+        exercise: str,
+        *,
+        profile: int,
+        key: str,
+        mode: str,
+        now: float,
+        displayed: dict[Rating, ReviewInterval] | None = None,
+    ) -> dict[Rating, ReviewInterval]:
         """
         Preview the three passing outcomes from one snapshot of this card.
 
@@ -868,7 +877,9 @@ class CalendarPractice:
         mode : str
             Calendar scheduler.
         now : float
-            Time of the correct answer.
+            Presentation or answer timestamp.
+        displayed : dict or None
+            Previously displayed outcomes to reuse while this card's schedule is current.
 
         Returns
         -------
@@ -883,6 +894,11 @@ class CalendarPractice:
         """
         identity = (profile, exercise, key, mode)
         previous, due = self._review_schedule(identity)
+        if displayed and all(
+            (option.identity, option.previous_state, option.previous_due) == (identity, previous, due)
+            for option in displayed.values()
+        ):
+            return displayed
         outcomes = review_options(key, mode=mode, previous=previous, due=due if due is not None else now, now=now)
         return {
             grade: ReviewInterval(outcomes[grade][0], identity, previous, grade, outcomes[grade][1], due) for grade in PASSING
@@ -916,7 +932,7 @@ class CalendarPractice:
         correct : bool
             Whether the first submission was correct.
         manual_rating : Rating or None
-            Button grade or automatic Again in self-grading mode. None uses the automatic schedule.
+            Explicit grade from a button or response time. None uses the original automatic schedule.
         now : float
             Answer timestamp.
         preview : ReviewInterval or None
