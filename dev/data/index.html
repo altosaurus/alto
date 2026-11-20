@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
   
 </head>
 <body>
@@ -277,6 +277,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.anki_export/">anki_export</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
@@ -392,6 +395,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto.ui<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.anki_exporter/">anki_exporter</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
@@ -670,11 +676,68 @@ your usual configuration location.</p>
 <p>Because it is a normal SQLite file, you can open it with any SQLite tool if you want to run your own queries. Close Alto
 first. Alto’s own <a href="/alto/dev/statistics/">database browser</a> is read-only.</p>
 
+<h2 id="anki-decks">Anki decks</h2>
+
+<p>Open <strong>☰ → Tools → Anki Exporter</strong> to turn Alto exercises into flashcards you can study in Anki. You can keep
+practicing in Alto while the exporter is open.</p>
+
+<h3 id="deck-selection-and-preview">Deck selection and preview</h3>
+
+<p>Check the exercises you want to export. Checking a category selects every exercise in it. Choose <strong>All exercises</strong> to
+select the whole list. Clicking an exercise name displays a sample card, even if its box is unchecked. <strong>Front</strong>
+shows the question and its illustration, when there is one. <strong>Back</strong> adds the answer and explanation.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/anki-exporter.png" alt="Anki Exporter with Note Identification and Interval Identification checked and an interval card in the preview." loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/anki-exporter-dark.png" alt="Anki Exporter with Note Identification and Interval Identification checked and an interval card in the preview." loading="lazy" />
+  
+</figure>
+
+<p>The settings button in the upper right opens the highlighted exercise’s options. These start with your current
+practice settings. Changes you make here apply only to the export. For example, you can narrow an Interval
+Identification deck to thirds and sixths and keep practicing all intervals in Alto. Exercises with a fixed set of
+cards export every matching card. Exercises that generate a sample of questions export each distinct card in that sample.</p>
+
+<h3 id="review-scheduling">Review scheduling</h3>
+
+<p>By default, exported cards start as new in Anki. If your Alto profile uses SM-2 or FSRS, check <strong>Include scheduling</strong>
+to carry over due dates and intervals for matching cards you’ve already reviewed. The exporter uses the schedule
+from when you opened the window. Cards you haven’t studied start as new.</p>
+
+<h3 id="export-summary-and-file">Export summary and file</h3>
+
+<p>Choose <strong>Export…</strong> to see how many cards match. The table groups decks by exercise type. Each group starts expanded.
+A row marked <strong>No cards</strong> is skipped. The total below the table is the number of cards in the package.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/anki-export-summary.png" alt="Export summary with separate Notation and Intervals groups, a card count for each deck, and a total below the table." loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/anki-export-summary-dark.png" alt="Export summary with separate Notation and Intervals groups, a card count for each deck, and a total below the table." loading="lazy" />
+  
+</figure>
+
+<p>Use <strong>Browse…</strong> to choose a destination or enter a path in <strong>File name</strong>. A filename alone saves to your home
+directory. The suggested name is <code class="language-plaintext highlighter-rouge">alto.apkg</code> for multiple exercises or, for a single exercise, a name such as
+<code class="language-plaintext highlighter-rouge">alto - Interval Identification.apkg</code>.</p>
+
+<p>Click <strong>Export</strong> to save. A spinner marks the deck being prepared and a green check marks each finished deck.
+The progress bar tracks the whole package, including the final save. To stop, click <strong>Cancel</strong> and confirm.
+Canceling preserves any existing file at the destination. When the status reads <strong>Export successful</strong>, click
+<strong>Close</strong> to return to the exporter.</p>
+
+<h3 id="import-into-anki">Import into Anki</h3>
+
+<p>Open the saved <code class="language-plaintext highlighter-rouge">.apkg</code> file in Anki. If you exported schedules, enable <strong>Import any learning progress</strong> during
+import to keep the review dates and intervals. Anki schedules subsequent reviews independently of Alto.</p>
+
+<p>A package containing one nonempty deck places it directly under <strong>Alto</strong>. With several nonempty decks, Anki
+groups them by Alto’s exercise categories, for example <strong>Alto → Intervals → Interval Identification</strong> and
+<strong>Alto → Notation → Note Identification</strong>. Exporting the same question again preserves its card identity.</p>
+
 <h2 id="backing-up-and-restoring">Backing up and restoring</h2>
 
-<p>Open the menu (☰) and choose <strong>Export backup…</strong> to save everything Alto keeps to one file: all the profiles, every answer
+<p>Open the ☰ menu and choose <strong>Tools</strong> → <strong>Export backup…</strong> to save everything Alto keeps to one file: all the profiles, every answer
 and the record of each question, and every setting (the theme, the notation and keyboard styles, the instrument, each
-exercise’s options and the profile you used last). Choose <strong>Import backup…</strong> to read one back.</p>
+exercise’s options and the profile you used last). Choose <strong>Tools</strong> → <strong>Import backup…</strong> to read one back.</p>
 
 <p>Importing <strong>replaces everything</strong> with the backup, so on a clean install, or on another computer, Alto comes up exactly as it
 was when the backup was made: same profiles, same history, same settings, and the same profile open. Nothing is merged. What
@@ -786,8 +849,8 @@ up to date as it is imported.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

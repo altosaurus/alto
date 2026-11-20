@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
   
 </head>
 <body>
@@ -277,6 +277,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.anki_export/">anki_export</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
@@ -392,6 +395,9 @@
                 <li><details class="nav-pkg" open>
                   <summary>alto.ui<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.anki_exporter/">anki_exporter</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
@@ -644,37 +650,24 @@ False
 &gt;&gt;&gt; picker.hidePopup()
 </code></pre>
 
-<h3 id="fieldcomboboxeventfilter">FieldComboBox.eventFilter</h3>
+<h2 id="style_combo_popup">style_combo_popup</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
-    <span class="n">watched</span><span class="p">:</span> <span class="n">QObject</span><span class="p">,</span>
-    <span class="n">event</span><span class="p">:</span> <span class="n">QEvent</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">style_combo_popup</span><span class="p">(</span><span class="n">combo</span><span class="p">:</span> <span class="n">QComboBox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Keep popup clipping synchronized with layout and size changes.</p>
+<p>Apply the shared field and popup styling to a dropdown, including one created by Qt.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">watched</code> (<em>QObject</em>): The object receiving the event.</li>
-  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QEvent</em>): The event being filtered.</li>
+  <li><code class="language-plaintext highlighter-rouge">combo</code> (<em>QComboBox</em>): Field whose item view and outer popup should follow the application theme.</li>
 </ul>
 
-<p><strong>Returns</strong></p>
 
-<ul>
-  <li><em>bool</em>: Whether the superclass consumes the event.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = FieldComboBox()
-&gt;&gt;&gt; picker.eventFilter(picker, QEvent(QEvent.Type.None_))
-False
-</code></pre>
-
-
+          
+          
+          
+          
           
           
           
@@ -877,8 +870,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

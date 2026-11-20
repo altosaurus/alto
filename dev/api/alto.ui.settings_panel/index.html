@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
   
 </head>
 <body>
@@ -277,6 +277,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.anki_export/">anki_export</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
@@ -392,6 +395,9 @@
                 <li><details class="nav-pkg" open>
                   <summary>alto.ui<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.anki_exporter/">anki_exporter</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
@@ -2030,6 +2036,18 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 True
 </code></pre>
 
+<h2 id="load_exercise_settings">load_exercise_settings</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_exercise_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Load the saved exercise options before creating a practice or export settings panel.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_exercise_settings()
+</code></pre>
+
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span>
@@ -2064,6 +2082,10 @@ True
 </code></pre>
 
 
+          
+          
+          
+          
           
           
           
@@ -2314,8 +2336,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

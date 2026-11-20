@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795122363">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795140794">
   
 </head>
 <body>
@@ -277,6 +277,9 @@
                   <ul>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.anki_export/">anki_export</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.audio/">audio</a></li>
                 
                 
@@ -392,6 +395,9 @@
                 <li><details class="nav-pkg">
                   <summary>alto.ui<svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
                   <ul>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.anki_exporter/">anki_exporter</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.answer_bank/">answer_bank</a></li>
@@ -852,8 +858,9 @@ note or marks a step while there is something to place, and answers once there i
 
 <h2 id="the-menu">The menu</h2>
 
-<p>The ☰ button at the top left holds <strong>Statistics</strong>, <strong>Browse database</strong>, <strong>Lessons</strong>, <strong>Profile</strong>, <strong>Settings…</strong>,
-<strong>Export backup…</strong>, <strong>Import backup…</strong>, <strong>Check for updates…</strong>, <strong>Restart</strong> and <strong>Quit</strong>.</p>
+<p>Open the ☰ menu at the top left for <strong>Profile</strong>, <strong>Settings…</strong>, <strong>Tools</strong>, <strong>Help</strong>, <strong>Restart</strong>, or <strong>Quit</strong>.
+Under <strong>Tools</strong>, choose <strong>Import backup…</strong>, <strong>Export backup…</strong>, <strong>Anki Exporter</strong>, or <strong>Check for updates…</strong>.
+For deck selection, scheduling, and import instructions, see <a href="/alto/dev/data/#anki-decks">Anki decks</a>.</p>
 
           
           
@@ -939,8 +946,8 @@ note or marks a step while there is something to place, and answers once there i
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795122363" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795122363" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795140794" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795140794" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
