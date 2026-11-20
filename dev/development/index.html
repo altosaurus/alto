@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -1425,7 +1425,7 @@ caught by the tests, the pre-push hook and the pull request.</p>
 <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a> layout. A change a user would notice (a new exercise, a changed menu, a
 fixed bug) adds a line under <strong>Unreleased</strong> in the same pull request. Internal tidying does not need one.</p>
 
-<p>To make a release:</p>
+<h3 id="pre-release-checklist">Pre-release checklist</h3>
 
 <ol>
   <li>Choose the version. Alto uses <a href="https://semver.org/">semantic versioning</a>: a new feature raises the middle number, a fix
@@ -1435,6 +1435,14 @@ raises the last.</li>
 the Release notes page of the docs (<code class="language-plaintext highlighter-rouge">docs/release-notes.md</code>) from the changelog; <code class="language-plaintext highlighter-rouge">--check</code> says whether it is up to date, and a
 test fails when it is not, so a changelog line always arrives with its page.</li>
   <li>Set the same version in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>. <code class="language-plaintext highlighter-rouge">tests/test_changelog.py</code> fails if the changelog has no notes for it.</li>
+  <li>Check that every user-facing feature in the release has a guide entry explaining where to find it and how to use it.
+Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
+feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.</li>
+  <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py</code> to refresh every
+documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
+In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
+updated images and any caption or region corrections in the release PR.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
 the tag starts the <strong>Release</strong> workflow (see below), which publishes the downloads.</li>
 </ol>
@@ -1635,8 +1643,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -601,7 +601,7 @@
 
 <p>Alto is in alpha. <strong>Complete</strong> means the feature is available in the current development version. <strong>Planned</strong> marks the proposed development sequence. <strong>Under consideration</strong> marks a candidate for future work.</p>
 
-<p>Interval construction comes first, followed by chord construction and staff-to-keyboard practice. Ear training and rhythm come next. Both provide the groundwork for melodic dictation and harmonic analysis.</p>
+<p>Chord construction and staff-to-keyboard practice are next. Ear training and rhythm come next. Both provide the groundwork for melodic dictation and harmonic analysis.</p>
 
 <h3 id="notation-and-pitch">Notation and pitch</h3>
 
@@ -666,7 +666,7 @@
     <tr>
       <td>Interval construction</td>
       <td>Place the second note a named interval above or below the first. Feedback distinguishes an incorrect staff position from an incorrect accidental.</td>
-      <td>Planned</td>
+      <td><strong class="roadmap-complete">Complete</strong></td>
     </tr>
     <tr>
       <td>Staff-to-keyboard practice</td>
@@ -1326,8 +1326,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

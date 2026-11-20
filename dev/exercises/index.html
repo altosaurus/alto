@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -836,6 +836,18 @@ Choose <strong>All</strong> to show every eligible answer for the current staff 
   
 </figure>
 
+<h2 id="interval-construction">Interval Construction</h2>
+
+<p>Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.</p>
+
+<p><strong>Clefs</strong>, <strong>Range</strong>, and <strong>Staff Key</strong> determine where the notes can appear. <strong>Display Mode</strong> stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under <strong>Quality</strong>, choose <strong>Interval and Quality</strong> for an exact spelling, <strong>Interval Only</strong> for a number, or <strong>Quality Only</strong> for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. <strong>Intervals</strong>, <strong>Accidentals</strong>, and <strong>Note Value</strong> control which spellings, written signs, and durations appear.</p>
+
+<figure class="shot">
+  <img class="for-light" src="/alto/dev/assets/img/interval-construction.png" alt="Interval Construction showing the starting note, the requested interval, and the staff placement controls" loading="lazy" />
+  <img class="for-dark" src="/alto/dev/assets/img/interval-construction-dark.png" alt="Interval Construction showing the starting note, the requested interval, and the staff placement controls" loading="lazy" />
+  
+</figure>
+
 <h2 id="keyboard-interval-identification">Keyboard Interval Identification</h2>
 
 <p>Two piano keys are highlighted together. Identify the interval from the lower key to the higher key. Choose from a configurable
@@ -1265,8 +1277,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

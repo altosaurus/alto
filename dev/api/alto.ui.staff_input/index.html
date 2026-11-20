@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -664,6 +664,7 @@ True
     <span class="o">*</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">placement</span><span class="p">:</span> <span class="n">Question</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -675,6 +676,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): The clef to draw.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int, default 0</em>): The key signature: that many sharps if positive, flats if negative. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">caption</code> (<em>str, default ““</em>): Text to write under the staff. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">placement</code> (<em>Question or None</em>): Written placement question with an optional fixed starting note.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -2115,8 +2117,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -652,6 +652,8 @@ can check that yours arrived complete and unchanged. Download it from the same r
 
 <h2 id="updating-alto">Updating Alto</h2>
 
+<p>Alto checks for published releases in the background when the main grid is active, up to once every 24 hours. If a newer version is available, Alto asks whether you want to upgrade. Choose <strong>Yes</strong> to start the upgrade, <strong>No</strong> for a reminder after 24 hours, or <strong>Don’t remind me again</strong> to skip that release. You can turn off automatic checks in <strong>Settings → Updates</strong>.</p>
+
 <p>To update Alto, open the ☰ menu and choose <strong>Tools</strong> → <strong>Check for updates…</strong>. By default Alto asks GitHub for the
 newest <strong>release</strong> and compares it with the version you have (<strong>Settings → Updates</strong> shows it). If yours is the newest, it
 says so. If not, it asks whether to install the update, shows its progress, and tells you that Alto will restart when you press
@@ -851,8 +853,8 @@ explains it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

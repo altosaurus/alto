@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -884,6 +884,80 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(4))
 &gt;&gt;&gt; q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
 True
+</code></pre>
+
+<h2 id="intervalconstruction">IntervalConstruction</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">IntervalConstruction</span><span class="p">(</span><span class="n">Exercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Place a second written note at the requested interval from a given note.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalConstruction().generate(random.Random(2))
+&gt;&gt;&gt; q.construct is not None and q.check_placed(q.construct)
+True
+</code></pre>
+
+<h3 id="intervalconstructioninstructions">IntervalConstruction.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain staff placement and spelling for interval construction.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Instructions for mouse and keyboard input.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">The reference describes the difference between melodic and harmonic placement.
+</code></pre>
+
+<h3 id="intervalconstructionsettings_signature">IntervalConstruction.settings_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the construction settings used to generate a stored card.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Stable signature of the exercise options.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A change in staff ranges changes which stored questions are eligible.
+</code></pre>
+
+<h3 id="intervalconstructiongenerate">IntervalConstruction.generate</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Generate a staff, an interval prompt, and its eligible placements.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Generator for the presentation.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: Written interval to construct.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A harmonic question asks for a note above its starting note.
 </code></pre>
 
 <h2 id="keyboardintervals">KeyboardIntervals</h2>
@@ -2295,8 +2369,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

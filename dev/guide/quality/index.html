@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -791,7 +791,8 @@ MINOR.</li>
   <li><strong>Make sure the checks pass on a clean checkout</strong>, in CI, on all Python versions.</li>
   <li><strong>Migrations.</strong> If the database changed, confirm the migration works on a copy of a real older database, and say in the notes to
 copy <code class="language-plaintext highlighter-rouge">alto.db</code> first.</li>
-  <li><strong>Regenerate</strong> screenshots and the API pages, and check <a href="/alto/dev/data/">Your data</a> is still true.</li>
+  <li>Refresh and review the screenshots in both themes using the <a href="/alto/dev/development/#pre-release-checklist">pre-release checklist</a>.
+Regenerate the API pages and check that <a href="/alto/dev/data/">Your data</a> is current.</li>
   <li><strong>Update the license notices</strong> in <code class="language-plaintext highlighter-rouge">THIRD_PARTY_NOTICES.md</code> if you added fonts or recordings, and check their licenses allow
 redistribution.</li>
   <li><strong>Build</strong> the package: <code class="language-plaintext highlighter-rouge">python -m pip install build</code> then <code class="language-plaintext highlighter-rouge">python -m build</code> produces a source distribution and a wheel in <code class="language-plaintext highlighter-rouge">dist/</code>.
@@ -941,8 +942,8 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -1513,10 +1513,21 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <h2 id="load_intervals">load_intervals</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_intervals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_intervals</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
 <p>Restore the saved staff interval options, keeping valid choices and per-clef ranges.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>IntervalSettings or None</em>): Settings to populate. Defaults to Interval Identification.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): Independent settings-store group for the exercise.</li>
+</ul>
 
 <p><strong>Examples</strong></p>
 
@@ -1527,7 +1538,11 @@ True
 
 <h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div></div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
@@ -1548,6 +1563,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>IntervalSettings</em>): The interval exercise settings.</li>
+  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): Settings-store group for identification or construction.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
@@ -2346,8 +2362,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

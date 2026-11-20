@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -915,6 +915,35 @@ False
 
 <p>Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up.</p>
 
+<h2 id="dailyreleasecheck">DailyReleaseCheck</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DailyReleaseCheck</span><span class="p">(</span><span class="n">window</span><span class="p">:</span> <span class="n">MainWindow</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QTimer</code></p>
+
+<p>Check for published releases in the background and honor the learner’s reminder choice at the exercise grid.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">Reopening Alto on the same afternoon reuses the previous check time.
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Schedule the first check after the startup window has opened.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">window</code> (<em>MainWindow</em>): The window that owns the timer and presents upgrade offers.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">Source checkouts continue to use Git for updates.
+</code></pre>
+
 <h2 id="releasedialog">ReleaseDialog</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ReleaseDialog</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span>
@@ -1093,6 +1122,39 @@ or the main branch, and can install it.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; check_release  # doctest: +SKIP
 </code></pre>
 
+<h2 id="offer_release">offer_release</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">offer_release</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">release</span><span class="p">:</span> <span class="n">Release</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">InstallKind</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">installed</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+    <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Ask whether to upgrade using the installation’s supported update path.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): Window that owns the upgrade prompt.</li>
+  <li><code class="language-plaintext highlighter-rouge">release</code> (<em>Release</em>): Published release to offer.</li>
+  <li><code class="language-plaintext highlighter-rouge">kind</code> (<em>InstallKind</em>): Installation type.</li>
+  <li><code class="language-plaintext highlighter-rouge">source</code> (<em>Source or None</em>): Repository used by a script installation.</li>
+  <li><code class="language-plaintext highlighter-rouge">installed</code> (<em>str</em>): Current version.</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code> (<em>Callable</em>): Restart a script installation after upgrading.</li>
+  <li><code class="language-plaintext highlighter-rouge">quit_app</code> (<em>Callable</em>): Close a packaged copy after handing off to its installer.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A manual check can offer a version the learner previously declined.
+</code></pre>
+
 <h2 id="check_main">check_main</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_main</span><span class="p">(</span>
@@ -1152,12 +1214,11 @@ or the main branch, and can install it.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">release</span><span class="p">:</span> <span class="n">updates</span><span class="p">.</span><span class="n">Release</span><span class="p">,</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">selfupdate</span><span class="p">.</span><span class="n">Target</span><span class="p">,</span>
-    <span class="n">installed</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">quit_app</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Offer to replace a packaged copy with a release: download and check it, say that Alto will restart, and hand over.</p>
+<p>Replace a packaged copy after the user agrees: download and check it, say that Alto will restart, and hand over.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -1165,7 +1226,6 @@ or the main branch, and can install it.</p>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget</em>): The window the questions are asked over.</li>
   <li><code class="language-plaintext highlighter-rouge">release</code> (<em>updates.Release</em>): The newer release. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">target</code> (<em>selfupdate.Target</em>): The copy that will be replaced. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">installed</code> (<em>str</em>): The version that is running. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">quit_app</code> (<em>Callable</em>): What to do to close Alto once the update has been handed to the program that installs it. Keyword-only.</li>
 </ul>
 
@@ -1457,8 +1517,8 @@ or the main branch, and can install it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

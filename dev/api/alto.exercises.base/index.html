@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795150524">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795152214">
   
 </head>
 <body>
@@ -740,6 +740,32 @@ True
 True
 &gt;&gt;&gt; q.check_placed(Note.parse("B#3"))  # sounds the same, but is spelled differently
 False
+</code></pre>
+
+<h3 id="questionplacement_columns">Question.placement_columns</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">placement_columns</span><span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Note</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Return the given and placed notes grouped by onset, omitting the answer until it is placed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">note</code> (<em>Note or None</em>): Pitch under the pointer or submitted by the learner.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of list of Note</em>: Visible notes in playback order.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
+&gt;&gt;&gt; q.placement_columns(None) == [[Note.parse("C4")]]
+True
 </code></pre>
 
 <h3 id="questioncheck_scale">Question.check_scale</h3>
@@ -1665,8 +1691,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795150524" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795150524" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795152214" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795152214" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
