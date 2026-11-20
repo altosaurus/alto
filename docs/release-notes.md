@@ -25,6 +25,8 @@ Released 2026-11-19. [GitHub release](https://github.com/altosaurus/alto/release
 - Filter the exercise grid by category or turn on Shuffle to move between the selected exercises after an answer.
 - The database browser shows when a question is due. Statistics can group question counts by hour, day, week, or month.
 - The glossary covers enharmonic pitches, transposition, the circle of fifths, minor scales, and relative and parallel keys.
+- The **Next Question** setting lets each exercise advance immediately, advance after playback and animation, or wait for **Next**.
+- **Help → About** shows Alto’s version and alpha status. **Help → Report an issue** opens the GitHub issue tracker.
 
 - Alto checks for new releases daily and offers upgrades from the main grid. Learners can update, defer the reminder for 24 hours, or skip a release. Automatic checks can be turned off in Settings → Updates.
 
@@ -42,7 +44,7 @@ Released 2026-11-19. [GitHub release](https://github.com/altosaurus/alto/release
 - Interval Identification has per-clef pitch ranges, staff keys, display choices, an interval checklist, a Quality menu for practicing the interval number, quality, or both, and Limited or All answer buttons.
 
 - A Key Signatures lesson teaches how to read and write major and minor key signatures and links to the key signature exercises.
-- An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to both interval exercises.
+- An Intervals lesson uses staff and keyboard examples to teach interval numbers and qualities, with links to staff and keyboard identification and staff construction.
 
 - Answer cards opened from Database or Statistics show graphs of response time and cumulative first-try accuracy for the question.
 - Double-clicking a row in **Questions that need practice** opens the saved question and its answer.

@@ -8,6 +8,7 @@ Everything Alto stores is on your own computer.
 
 - Alto has no accounts, no sync and no analytics.
 - Your name is only a label for a profile in a local file.
+- On supported installations Alto contacts GitHub to check for releases. You can turn off daily checks in **Settings → Updates**.
 
 ## Where it is
 
@@ -30,7 +31,7 @@ your usual configuration location.
 
 | Table | Holds |
 |---|---|
-| `profiles` | Each profile's name, creation time, and selected scheduler. |
+| `profiles` | Each profile’s name, creation time, scheduler, self-grading preference, and response-time grading thresholds. |
 | `attempts` | One row for every answer: the profile, exercise, question, your answer, whether it was right, the attempt number, how long it took and when. |
 | `items` | What is known about each question: its strain, how often it was answered and missed, its typical time, when it was last seen, and the question itself so it can be asked again. |
 | `practice_cards` | Introduced card identities, the questions themselves, and the local date each was introduced in scheduled practice. |

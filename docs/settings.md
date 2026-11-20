@@ -11,13 +11,13 @@ There are two kinds of settings. **App settings** apply everywhere. **Exercise s
 Open them from the menu (☰) with **Settings…** or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>. The dialog does not block the window: you can
 keep it open and use the exercises, and opening it again brings the same one forward. A new theme is applied to the window when you close
 the settings. Categories are listed on the left, and
-the selected one's settings appear on the right.
+the selected one's settings appear on the right. **Restore defaults…** resets app and exercise preferences after confirmation. It removes custom themes and keyboard colors and keeps your profiles and practice history.
 
 {% include shot.html src="settings.png" alt="The settings dialog showing theme and notation style options" %}
 
 ### Appearance
 
-The Appearance page has four sections, **Theme**, **Notation style**, **Keyboard style** and **Transitions**, which you switch between with the pill-shaped control at the top.
+Expand **Appearance** in the left sidebar to choose **Theme**, **Notation style**, **Keyboard style**, or **Transitions**.
 
 **Theme.** The themes are in a list on the left. The right side is the theme's card: its name, three pictures of the window one
 above another. Beside the Light and Dark pictures are squares of that version's colors, and the window, accent and ink colors
@@ -157,8 +157,7 @@ Select a scheduler for the current profile. With **SM-2** or **FSRS**, you can s
 
 ## Exercise settings
 
-Note Identification, Keyboard Note Identification and Note Construction have a sliders button at the top right of the
-exercise. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
+Open the sliders button at the top right of an exercise to see its options. It opens a pane on the right. Each row summarizes its setting with a small picture, and clicking a row opens
 that setting's page. See [Exercises]({{ '/exercises/' | relative_url }}) for what each option does.
 
 Changing a setting starts a new question right away, and the settings are remembered the next time you open Alto.

@@ -19,10 +19,9 @@ When you open an exercise from a lesson, **Back to lesson** at the upper left of
 
 The home page has a switch at the top, **Exercises** and **Lessons**. Choose **Lessons** to see a tile for each lesson, with the
 icon of the exercise that practices the same topic: the Circle of Fifths lesson has the circle of fifths icon. Alto remembers which
-side you were on. The cards change with the transition chosen under **Settings… › Appearance › Transitions**. **Lessons** in the menu (☰) also goes straight to them.
+side you were on. The cards change with the transition chosen under **Settings… › Appearance › Transitions**. Use **Tiles** to open the catalog for the selected section.
 
-The switch stays in the top bar inside an exercise or a lesson, as two icons without words. The one for the side you are on is
-chosen, and pressing either returns to the home page on that side.
+During an exercise or lesson, the two icons switch the navigation list. Your current activity stays open until you choose another one.
 
 A tile says **Start**, or **Continue at step N** if you have begun. Click it to open the lesson, and **Leave lesson** (or <kbd>Esc</kbd>)
 to return to where you were. **Start over** goes back to the first step.
@@ -59,8 +58,7 @@ determine its quality. The staff and keyboard illustrations use the pitches play
 compares C–E with C–E♭, introduces perfect intervals, and shows why C–F♯ and C–G♭ use the same two piano keys.
 A final check asks you to name an unfamiliar pair.
 
-The last step opens **Interval Identification** for practice with written notes or **Keyboard Interval Identification**
-for practice with highlighted keys. The book button in either exercise has hints and a link to the lesson.
+The last step links to **Interval Identification** for reading two written notes, **Keyboard Interval Identification** for naming the interval between two piano keys, and **Interval Construction** for placing the second note on the staff. Each exercise has a book button with hints and a link to the lesson.
 
 ## Key Signatures
 
@@ -68,8 +66,7 @@ Allow about 10–15 minutes. Start with two ways to write the same F♯. Listen 
 the signature, then read sharp and flat signatures to find major keys and their relative minors. Choose the staff
 you would write for A♭ major and try a fresh signature in treble or bass clef.
 
-The closing step links to **Key Signature Identification** and **Key Signature Construction**. The book button in
-either exercise opens a hint and a link back to the lesson.
+The closing step links to **Key Signature Identification**, **Key Signature Construction**, and **Order of Keys**. Choose Order of Keys to place the individual sharps or flats in order. The book button in each exercise opens hints and a link back to the lesson.
 
 ## The Circle of Fifths lesson
 

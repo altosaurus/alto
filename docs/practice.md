@@ -77,7 +77,7 @@ For a correct first answer, ASRS compares the time you took with the exercise’
 | Key Signature Identification, Clef Basics, Notation Identification | 5 s |
 | Interval Identification, Keyboard Interval Identification, Chord Quality, Note Construction, Key Signature Construction | 6 s |
 | Circle of Fifths | 7 s |
-| Scale Identification | 8 s |
+| Scale Identification, Interval Construction | 8 s |
 | Arpeggio Identification | 9 s |
 | Order of Keys | 12 s |
 | Scale Construction | 25 s |
