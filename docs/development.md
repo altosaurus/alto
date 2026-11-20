@@ -567,7 +567,7 @@ and open `http://127.0.0.1:8000/alto/`. `tests/test_docs_site.py` checks the scr
 
 ## Keeping the docs and screenshots current
 
-Every picture in the docs comes as a light and a dark pair, and `scripts/screenshots.py` makes all of them:
+The current app screenshots in `docs/assets/img/` come in light and dark pairs. Regenerate them with `scripts/screenshots.py`:
 
 ```bash
 .venv/bin/python scripts/screenshots.py                    # every picture, both themes
@@ -623,8 +623,10 @@ fixed bug) adds a line under **Unreleased** in the same pull request. Internal t
    Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
    feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.
 5. With the release candidate installed in `.venv`, run `.venv/bin/python scripts/screenshots.py` to refresh every
-   documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
-   In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+   screenshot in `docs/assets/img/` in both themes. Review the light and dark images against their captions and alt text.
+   Exclude the [UI style guide]({{ '/developer-guide/ui-style-guide/' | relative_url }}) and its versioned screenshots in
+   `docs/assets/ui-reference/` from this check. Update that baseline only for an explicitly requested visual change.
+   For screenshots using `component-shot.html`, check that the image dimensions match the captures and each clickable region covers its component.
    Run `sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py` and include the
    updated images and any caption or region corrections in the release PR.
 6. Merge that as a pull request, then tag the merge commit and push the tag: `git tag v0.1.0 && git push origin v0.1.0`. Pushing

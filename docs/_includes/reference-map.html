@@ -1,0 +1,20 @@
+{% assign map_root = '/assets/ui-reference/' | append: page.baseline | append: '/' | relative_url %}
+<div class="reference-map" data-image-root="{{ map_root }}">
+  <p>Choose a screen, then select a numbered marker or its name below the image. Switch between Light and Dark to follow the same component.</p>
+  <div class="reference-map-controls" hidden>
+    <label>Screen <select>{% for screen in page.screens %}<option value="{{ screen[0] }}">{{ screen[1] }}</option>{% endfor %}</select></label>
+    <fieldset><legend>Screenshot theme</legend>
+      <label><input type="radio" name="reference-mode" value="light" checked> Light</label>
+      <label><input type="radio" name="reference-mode" value="dark"> Dark</label>
+    </fieldset>
+  </div>
+  <div class="reference-map-picture">
+    <img src="{{ map_root }}home.png" width="1100" height="720" alt="Exercise catalog in Default Light">
+    <div class="reference-map-markers"></div>
+  </div>
+  <div class="reference-map-detail" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="reference-map-key" role="group" aria-label="Components on this screen"></div>
+  <noscript>The component color table and full-size screenshots follow below.</noscript>
+  <script type="application/json">{{ page.palette | jsonify }}</script>
+</div>
+<script defer src="{{ '/assets/js/reference-map.js' | relative_url }}"></script>

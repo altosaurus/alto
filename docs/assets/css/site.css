@@ -119,6 +119,40 @@ blockquote p:last-child { margin-bottom: 0; }
 .shot { margin: 1.4em 0; }
 .shot img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
 .shot figcaption { font-size: .88rem; color: var(--muted); margin-top: 6px; }
+.reference-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr)); gap: 12px; margin: 1.4em 0; }
+.reference-pair .shot { margin: 0; }
+.reference-pair a { display: block; width: fit-content; max-width: 100%; }
+.reference-swatch { display: inline-block; width: 1em; height: 1em; border: 1px solid var(--line); margin-right: .35em; vertical-align: -.15em; }
+.reference-map { min-width: 0; }
+.reference-map-controls:not([hidden]), .reference-map-key, .reference-map-values { display: flex; flex-wrap: wrap; align-items: center; gap: .5em 1em; }
+.reference-map-controls { margin: 0 0 .7em; }
+.reference-map-controls select, .reference-map-key button {
+  font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: .3em .55em;
+}
+.reference-map-controls fieldset { display: flex; gap: .75em; margin: 0; padding: 0; border: 0; }
+.reference-map-controls legend { float: left; margin-right: .5em; }
+.reference-map-controls input { accent-color: var(--accent); }
+.reference-map-picture { position: relative; }
+.reference-map-picture img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.reference-map-pin {
+  position: absolute; transform: translate(-50%, calc(-100% - 6px)); width: 26px; height: 26px; padding: 0; border-radius: 50%;
+  color: white; background: #303640; border: 2px solid white; box-shadow: 0 0 0 1px #303640;
+  font: bold .8rem/1 system-ui, sans-serif; cursor: pointer;
+}
+.reference-map-pin::after {
+  content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 8px solid transparent; border-top-color: #303640; border-bottom: 0; filter: drop-shadow(0 1px 0 white);
+}
+.reference-map-pin.pin-below { transform: translate(-50%, 6px); }
+.reference-map-pin.pin-below::after { top: auto; bottom: 100%; rotate: 180deg; transform: translateX(50%); }
+.reference-map-pin[aria-pressed="true"] { background: var(--button); box-shadow: 0 0 0 2px var(--button); z-index: 1; }
+.reference-map-pin[aria-pressed="true"]::after { border-top-color: var(--button); }
+.reference-map-pin:focus-visible { outline: 3px solid white; outline-offset: 3px; z-index: 2; }
+.reference-map-detail:not(:empty) { padding: .8em 1em; margin: .7em 0; border-left: 3px solid var(--accent); background: var(--accent-soft); }
+.reference-map-detail p { margin: .15em 0 .4em; }
+.reference-map-key { gap: .4em; }
+.reference-map-key button { cursor: pointer; font-size: .88rem; text-align: left; }
+.reference-map-key button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 .db-schema { margin: 1.4em 0; }
 .db-schema svg { display: block; max-width: 100%; height: auto; }
 .db-schema rect { fill: var(--panel); stroke: var(--line); }

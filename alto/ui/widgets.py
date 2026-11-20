@@ -37,7 +37,7 @@ from alto.ui.icons import (
     HELP,
     SIDEBAR_CLOSED,
     SIDEBAR_OPEN,
-    svg_icon,
+    set_svg_icon,
 )
 
 
@@ -171,8 +171,7 @@ class SidebarToggle(QToolButton):
         >>> button.toolTip()
         'Show exercise list'
         """
-        color = self.palette().color(QPalette.ColorRole.WindowText)  # same color as the sound and settings icons
-        self.setIcon(svg_icon(SIDEBAR_OPEN if is_open else SIDEBAR_CLOSED, color=color))
+        set_svg_icon(self, SIDEBAR_OPEN if is_open else SIDEBAR_CLOSED)
         self.setToolTip(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
         self.setAccessibleName(f"Hide {self.noun}" if is_open else f"Show {self.noun}")
 
@@ -216,7 +215,7 @@ class HelpButton(QToolButton):
         super().__init__(parent)
         self._text = text_provider  # called each time, so the text can follow the current settings
         self.setAutoRaise(True)
-        self.setIcon(svg_icon(HELP, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        set_svg_icon(self, HELP)
         self.setIconSize(QSize(24, 24))
         self.setToolTip("How this exercise works")
         self.setAccessibleName("How this exercise works")
@@ -335,7 +334,7 @@ class SegmentedControl(QFrame):
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.setChecked(number == 0)
             if number < len(icons):
-                button.setIcon(svg_icon(icons[number], color=self.palette().color(QPalette.ColorRole.WindowText), size=18))
+                set_svg_icon(button, icons[number], size=18)
                 button.setIconSize(QSize(18, 18))
             self._group.addButton(button, number)
             button.clicked.connect(lambda _=False, n=number: self.chosen.emit(n))

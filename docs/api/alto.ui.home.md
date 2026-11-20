@@ -89,6 +89,25 @@ Build a card.
 'Get help.'
 ```
 
+### TileCard.changeEvent
+
+```python
+def changeEvent(event: QEvent) -> None
+```
+
+Recolor the icon when the tile receives a new palette.
+
+**Parameters**
+
+- `event` (*QEvent*): The widget change delivered by Qt.
+
+**Examples**
+
+```pycon
+>>> card = lesson_card(LESSONS[0])
+>>> card.changeEvent(QEvent(QEvent.Type.PaletteChange))
+```
+
 ## ExerciseCard
 
 ```python

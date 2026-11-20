@@ -13,18 +13,26 @@ False
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 
 from PySide6.QtCore import (
     QByteArray,
+    QObject,
+    QSignalBlocker,
     Qt,
+    Slot,
 )
 from PySide6.QtGui import (
+    QAction,
     QColor,
+    QGuiApplication,
     QIcon,
     QPainter,
+    QPalette,
     QPixmap,
 )
 from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtWidgets import QAbstractButton, QAbstractItemView, QMenu
 
 ACTIVITY_ICON_SIZE = 20
 
@@ -49,6 +57,187 @@ SLIDERS = (
     '<rect x="9" y="5.75" width="6" height="4.5" rx="2.25" fill="COLOR"/>'
     '<rect x="15" y="10.75" width="6" height="4.5" rx="2.25" fill="COLOR"/>'
 )
+
+
+class _PaletteBinding(QObject):
+    """
+    Refresh a control's artwork when Alto receives a new palette.
+
+    Examples
+    --------
+    An open menu redraws its actions when the desktop changes theme.
+    """
+
+    def __init__(self, target: QObject) -> None:
+        """
+        Listen for theme changes while the target exists.
+
+        Parameters
+        ----------
+        target : QObject
+            Control, action, or item view that owns this binding.
+
+        Examples
+        --------
+        Closing a menu disconnects its deleted actions automatically.
+        """
+        super().__init__(target)
+        self.setObjectName("altoIconPalette")
+        app = QGuiApplication.instance()
+        assert isinstance(app, QGuiApplication)
+        app.paletteChanged.connect(self.redraw)
+
+    refresh: Callable[[QObject | None, QPalette], None]
+
+    @Slot(QPalette)
+    def redraw(self, palette: QPalette) -> None:
+        """
+        Apply the drawing to the live Qt control.
+
+        Parameters
+        ----------
+        palette : QPalette
+            Application colors after the theme change.
+
+        Examples
+        --------
+        A toolbar button receives a fresh native icon when the desktop switches to light.
+        """
+        self.refresh(self.parent(), palette)
+
+
+def _bind_palette(target: QObject, refresh: Callable[[QObject | None, QPalette], None]) -> None:  # noqa: PLR0917
+    """
+    Draw now and replace the drawing callback for subsequent palette changes.
+
+    Parameters
+    ----------
+    target : QObject
+        Lifetime owner of the binding.
+    refresh : Callable
+        Updates the supplied control using the current palette.
+
+    Examples
+    --------
+    Changing a sound button from on to muted replaces its drawing.
+    """
+    binding = target.findChild(_PaletteBinding, "altoIconPalette", Qt.FindChildOption.FindDirectChildrenOnly)
+    if binding is None:
+        binding = _PaletteBinding(target)
+    binding.refresh = refresh
+    binding.redraw(QGuiApplication.palette())
+
+
+def set_palette_icon(target: QAbstractButton | QAction | QMenu, render: Callable[[QPalette], QIcon]) -> None:  # noqa: PLR0917
+    """
+    Assign a native Qt icon and refresh it whenever the application palette changes.
+
+    Parameters
+    ----------
+    target : QAbstractButton or QAction or QMenu
+        Button, menu, or action to update.
+    render : Callable
+        Draws the icon in the supplied palette.
+
+    Examples
+    --------
+    >>> from PySide6.QtWidgets import QPushButton
+    >>> button = QPushButton()
+    >>> set_palette_icon(button, lambda palette: svg_icon(HELP, color=palette.text().color()))
+    >>> button.icon().isNull()
+    False
+    """
+
+    def refresh(control: QObject | None, palette: QPalette) -> None:  # noqa: PLR0917 (palette callback)
+        """
+        Give the control a freshly rendered native icon.
+
+        Parameters
+        ----------
+        control : QObject
+            Live owner of the binding.
+        palette : QPalette
+            Current application palette.
+
+        Examples
+        --------
+        A menu action repaints its icon with the new foreground.
+        """
+        assert isinstance(control, (QAbstractButton, QAction, QMenu))
+        control.setIcon(render(palette))
+
+    _bind_palette(target, refresh)
+
+
+def set_svg_icon(  # noqa: PLR0917 (target and drawing)
+    target: QAbstractButton | QAction | QMenu,
+    inner: str,
+    *,
+    role: QPalette.ColorRole = QPalette.ColorRole.WindowText,
+    size: int = 24,
+) -> None:
+    """
+    Tint an SVG icon with the control's current foreground or accent color.
+
+    Parameters
+    ----------
+    target : QAbstractButton or QAction or QMenu
+        Control that displays the icon.
+    inner : str
+        SVG shapes using COLOR for the ink.
+    role : QPalette.ColorRole, default WindowText
+        Color to take from the application palette.
+    size : int, default 24
+        Logical size in pixels.
+
+    Examples
+    --------
+    >>> from PySide6.QtWidgets import QPushButton
+    >>> button = QPushButton()
+    >>> set_svg_icon(button, HELP)
+    >>> button.icon().isNull()
+    False
+    """
+    set_palette_icon(target, lambda palette: svg_icon(inner, color=palette.color(role), size=size))
+
+
+def set_item_icons(view: QAbstractItemView, items: list[tuple[str, Callable[[QIcon], None]]]) -> None:  # noqa: PLR0917
+    """
+    Recolor the current rows of a navigation list or tree without rebuilding it.
+
+    Parameters
+    ----------
+    view : QAbstractItemView
+        List or tree supplying the text color and icon size.
+    items : list of tuple
+        SVG drawing and icon setter for each row in the current model.
+
+    Examples
+    --------
+    A category tree keeps its checked and expanded items when the theme changes.
+    """
+
+    def refresh(control: QObject | None, palette: QPalette) -> None:  # noqa: PLR0917 (palette callback)
+        """
+        Render the icons for the rows currently in the view.
+
+        Parameters
+        ----------
+        control : QObject
+            The list or tree containing the rows.
+        palette : QPalette
+            Current application palette.
+
+        Examples
+        --------
+        Light navigation lists use the same ink as their text.
+        """
+        assert isinstance(control, QAbstractItemView)
+        with QSignalBlocker(control):
+            for glyph, assign in items:
+                assign(svg_icon(glyph, color=palette.text().color(), size=control.iconSize().width()))
+
+    _bind_palette(view, refresh)
 
 
 def svg_icon(

@@ -5,7 +5,7 @@ from itertools import pairwise
 from math import ceil
 
 from PySide6.QtCore import QSize, QSizeF, Qt, Signal
-from PySide6.QtGui import QHideEvent, QKeySequence, QPalette, QResizeEvent, QShortcut
+from PySide6.QtGui import QHideEvent, QIcon, QKeySequence, QResizeEvent, QShortcut
 from PySide6.QtWidgets import (
     QBoxLayout,
     QFrame,
@@ -27,7 +27,7 @@ from alto.exercises import REGISTRY
 from alto.lessons import LESSONS
 from alto.theory.pitch import Note
 from alto.ui.home import ExerciseCard, lesson_card
-from alto.ui.icons import SEARCH, svg_icon
+from alto.ui.icons import SEARCH, set_svg_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.reference import ExplorableCircle
 from alto.ui.staff import StaffWidget
@@ -428,10 +428,8 @@ class GlossaryPage(QWidget):
         self.search.setPlaceholderText("Search terms…")
         self.search.setAccessibleName("Search glossary terms")
         self.search.setClearButtonEnabled(True)
-        self.search.addAction(
-            svg_icon(SEARCH, color=self.palette().color(QPalette.ColorRole.WindowText)),
-            QLineEdit.ActionPosition.LeadingPosition,
-        )
+        search_action = self.search.addAction(QIcon(), QLineEdit.ActionPosition.LeadingPosition)
+        set_svg_icon(search_action, SEARCH)
         self.terms = QListWidget()
         self.terms.setObjectName("categories")
         self.terms.setProperty("glossaryBox", True)

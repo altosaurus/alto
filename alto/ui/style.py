@@ -139,6 +139,8 @@ def app_style(palette: QPalette, *, paper_palette: QPalette | None = None) -> st
         box_edge_off=blend_name(base_c, b=text_c, t=0.2),
         accent=accent_c.name(),
         accent_dim=blend_name(accent_c, b=base_c, t=0.55),
+        search_fill=blend_name(window_c, b=text_c, t=0.04),
+        navigation_edge=blend_name(window_c, b=text_c, t=0.22),
         nav_hover=blend_name(window_c, b=text_c, t=0.07),
         nav_selected=blend_name(window_c, b=accent_c, t=0.2),
         check=(ui_assets / "check.svg").as_posix(),
@@ -354,6 +356,24 @@ QListWidget#categories {{
     padding: 6px 0px;
 }}
 QListWidget#categories::item {{ padding: 4px 8px; margin: 1px 6px; border-radius: {r2}px; color: palette(text); }}
+QFrame#navigationSearchGroup {{
+    background: {search_fill}; border: 1px solid {navigation_edge}; border-radius: 8px;
+}}
+QFrame#navigationSearchGroup[focusWithin="true"] {{ border-color: palette(highlight); }}
+QLineEdit#navigationSearch {{
+    background: transparent; border: none; border-radius: 7px;
+    padding: 0 6px; selection-background-color: palette(highlight);
+}}
+QFrame#navigationGroup {{ background: transparent; border: none; }}
+QFrame#navigationDivider {{ background: {navigation_edge}; border: none; }}
+QToolButton#navigationView {{
+    background: transparent; border: none; border-radius: 6px; padding: 4px 6px;
+}}
+QToolButton#navigationView:hover {{ background: palette(midlight); }}
+QToolButton#navigationView:pressed {{ background: palette(mid); }}
+QToolButton#navigationView:focus {{ border: 1px solid palette(highlight); }}
+QToolButton#navigationPane:checked {{ background: transparent; }}
+
 QScrollArea#glossaryDefinition, QScrollArea#glossaryActivities {{
     background: palette(window);
     border: 1px solid palette(mid);

@@ -124,6 +124,7 @@ def main() -> int:
     """
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--theme", choices=THEMES, help="only this theme (default: both)")
+    ap.add_argument("--require-native-theme", action="store_true", help="stop if Qt cannot render the requested default theme")
     ap.add_argument(
         "--only",
         nargs="+",
@@ -141,7 +142,7 @@ def main() -> int:
     names = tuple(args.only or SHOTS)
     args.out.mkdir(parents=True, exist_ok=True)
     if args.theme:
-        capture(args.theme, names=names, out=args.out)
+        capture(args.theme, names=names, out=args.out, require_native_theme=args.require_native_theme)
         return 0
     # One process for each theme, each with its own throwaway settings and data folder.
     for theme in THEMES:
@@ -153,6 +154,7 @@ def main() -> int:
                 str(Path(__file__).resolve()),
                 "--theme",
                 theme,
+                *(["--require-native-theme"] if args.require_native_theme else []),
                 "--out",
                 str(args.out),
                 "--only",
@@ -169,6 +171,7 @@ def capture(
     *,
     names: tuple[str, ...],
     out: Path,
+    require_native_theme: bool = False,
 ) -> None:
     """
     Take the pictures of one theme, in this process, using a made-up profile.
@@ -181,6 +184,13 @@ def capture(
         The pictures to make, from `SHOTS`.
     out : Path
         The folder to write them to.
+    require_native_theme : bool, default False
+        Require the requested default palette for a UI style guide comparison.
+
+    Raises
+    ------
+    RuntimeError
+        If the platform cannot supply a required native palette.
 
     Examples
     --------
@@ -191,6 +201,8 @@ def capture(
     apply_theme(theme)
     app.processEvents()
     if (app.palette().window().color().lightness() < 128) != (theme == "dark"):
+        if require_native_theme:
+            raise RuntimeError(f"Qt's {app.platformName()} platform did not supply the default {theme} palette.")
         # Some platform plugins, including offscreen, ignore Qt's native color-scheme request.
         apply_theme("studio_dark" if theme == "dark" else "studio")
 

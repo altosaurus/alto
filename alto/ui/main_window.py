@@ -38,6 +38,7 @@ from PySide6.QtGui import (
     QColor,
     QDesktopServices,
     QGuiApplication,
+    QIcon,
     QKeySequence,
     QMoveEvent,
     QPalette,
@@ -78,7 +79,6 @@ from alto.ui import (
 )
 from alto.ui.anki_exporter import ExporterSession
 from alto.ui.app_settings import AppSettingsDialog
-from alto.ui.colors import blend_name
 from alto.ui.database_page import DatabasePage
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
@@ -86,7 +86,7 @@ from alto.ui.home import (
     EXERCISE_ICONS,
     HomePage,
 )
-from alto.ui.icons import svg_icon
+from alto.ui.icons import set_svg_icon, svg_icon
 from alto.ui.instrument_picker import load_instrument
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
 from alto.ui.lesson import LessonsPage
@@ -429,25 +429,21 @@ class MainWindow(QMainWindow):
         self._update_empty_page()
 
         self._items: dict[type[Exercise], QListWidgetItem] = {}
-        ink = self.palette().color(QPalette.ColorRole.Text)
         seen: set[str] = set()
         for cls in REGISTRY:
             if cls.category not in seen:
                 seen.add(cls.category)
                 self.nav.addItem(section_item(cls.category, palette=self.palette()))
-            item = QListWidgetItem(
-                svg_icon(
-                    EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES),
-                    color=ink,
-                    size=self.nav.iconSize().width(),
-                ),
-                cls.name,
-            )
+            item = QListWidgetItem(cls.name)
             item.setData(Qt.ItemDataRole.UserRole, cls)
             item.setToolTip(cls.description)
             item.setSizeHint(QSize(0, 38))
             self.nav.addItem(item)
             self._items[cls] = item
+        icons.set_item_icons(
+            self.nav,
+            [(EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES), item.setIcon) for cls, item in self._items.items()],
+        )
         widest_navigation = max(self.nav.sizeHintForColumn(0), self.lesson_nav.sizeHintForColumn(0))
         self.SIDEBAR_DEFAULT = max(self.SIDEBAR_MIN, widest_navigation + 28)
         # noinspection PyShadowingNames
@@ -468,58 +464,63 @@ class MainWindow(QMainWindow):
             popup.setObjectName("appMenu")
             popup.setWindowFlags(popup.windowFlags() | Qt.WindowType.FramelessWindowHint | Qt.WindowType.NoDropShadowWindowHint)
             popup.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        glyph = self.menu_button.palette().color(QPalette.ColorRole.WindowText)  # menu icons share the text color
-        self.profile_action = menu.addAction(svg_icon(icons.PROFILE, color=glyph, size=18), "")
+        self.profile_action = menu.addAction("")
+        set_svg_icon(self.profile_action, icons.PROFILE, size=18)
         self.profile_action.triggered.connect(self.switch_profile)
-        settings_action = menu.addAction(svg_icon(icons.GEAR, color=glyph, size=18), "Settings…")
+        settings_action = menu.addAction("Settings…")
+        set_svg_icon(settings_action, icons.GEAR, size=18)
         settings_action.setShortcut(QKeySequence("Ctrl+Alt+S"))
         settings_action.triggered.connect(self.open_settings)
         menu.addSeparator()
-        tools_menu.setIcon(svg_icon(icons.TOOLS, color=glyph, size=18))
+        set_svg_icon(tools_menu, icons.TOOLS, size=18)
         menu.addMenu(tools_menu)
-        self.import_action = tools_menu.addAction(svg_icon(icons.IMPORT, color=glyph, size=18), "Import backup…")
+        self.import_action = tools_menu.addAction("Import backup…")
+        set_svg_icon(self.import_action, icons.IMPORT, size=18)
         self.import_action.setToolTip("Replace everything with a backup made earlier")
         self.import_action.triggered.connect(self.import_backup)
-        self.export_action = tools_menu.addAction(svg_icon(icons.EXPORT, color=glyph, size=18), "Export backup…")
+        self.export_action = tools_menu.addAction("Export backup…")
+        set_svg_icon(self.export_action, icons.EXPORT, size=18)
         self.export_action.setToolTip("Save everything Alto keeps (profiles, history and settings) to one file")
         self.export_action.triggered.connect(self.export_backup)
         exporter_action = tools_menu.addAction("Anki Exporter")
 
-        def update_exporter_icon() -> None:
-            """
-            Match the Anki outline to the current menu background.
-
-            Examples
-            --------
-            A dark Tools menu shows the exporter with a white star outline.
-            """
-            ink = QColor("white" if tools_menu.palette().window().color().lightness() < 128 else "black")
-            exporter_action.setIcon(svg_icon(icons.ANKI, color=ink, size=18))
-
-        update_exporter_icon()
-        tools_menu.aboutToShow.connect(update_exporter_icon)
+        icons.set_palette_icon(
+            exporter_action,
+            lambda palette: svg_icon(
+                icons.ANKI,
+                color=QColor("white" if palette.window().color().lightness() < 128 else "black"),
+                size=18,
+            ),
+        )
         exporter_action.triggered.connect(self.open_anki_exporter)
         self._show_profile()  # shows or hides the three actions that need a profile
-        self.update_action = tools_menu.addAction(svg_icon(icons.UPDATE, color=glyph, size=18), "Check for updates…")
+        self.update_action = tools_menu.addAction("Check for updates…")
+        set_svg_icon(self.update_action, icons.UPDATE, size=18)
         self.update_action.setToolTip("See whether a newer Alto is available, and install it")
         self.update_action.triggered.connect(self.check_for_updates)  # needs no profile, so it is always there
-        help_menu.setIcon(svg_icon(icons.HELP, color=glyph, size=18))
+        set_svg_icon(help_menu, icons.HELP, size=18)
         menu.addMenu(help_menu)
-        documentation = help_menu.addAction(svg_icon(icons.BOOK, color=glyph, size=18), "Documentation")
+        documentation = help_menu.addAction("Documentation")
+        set_svg_icon(documentation, icons.BOOK, size=18)
         documentation.triggered.connect(
             lambda: QDesktopServices.openUrl(QUrl("https://altosaurus.github.io/alto/getting-started/")),
         )
-        report_issue = help_menu.addAction(svg_icon(icons.ISSUE, color=glyph, size=18), "Report an issue")
+        report_issue = help_menu.addAction("Report an issue")
+        set_svg_icon(report_issue, icons.ISSUE, size=18)
         report_issue.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto/issues")))
-        github = help_menu.addAction(svg_icon(icons.GITHUB, color=glyph, size=18), "GitHub")
+        github = help_menu.addAction("GitHub")
+        set_svg_icon(github, icons.GITHUB, size=18)
         github.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/altosaurus/alto")))
-        about = help_menu.addAction(svg_icon(icons.INFO, color=glyph, size=18), "About")
+        about = help_menu.addAction("About")
+        set_svg_icon(about, icons.INFO, size=18)
         about.triggered.connect(self.show_about)
         menu.addSeparator()
-        restart = menu.addAction(svg_icon(icons.RESTART, color=glyph, size=18), "Restart")
+        restart = menu.addAction("Restart")
+        set_svg_icon(restart, icons.RESTART, size=18)
         restart.setShortcut(QKeySequence("Ctrl+R"))
         restart.triggered.connect(self.restart_app)
-        quit_action = menu.addAction(svg_icon(icons.QUIT, color=glyph, size=18), "Quit")
+        quit_action = menu.addAction("Quit")
+        set_svg_icon(quit_action, icons.QUIT, size=18)
         quit_action.setShortcut(QKeySequence.StandardKey.Quit)
         quit_action.triggered.connect(QApplication.quit)
         self.menu_button.setMenu(menu)
@@ -575,7 +576,7 @@ class MainWindow(QMainWindow):
         self.pane_button.setCheckable(True)
         self.pane_button.setIconSize(QSize(18, 18))
         self.pane_button.set_open(False)
-        self.pane_button.setIcon(svg_icon(icons.NAVIGATION_OPEN, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        set_svg_icon(self.pane_button, icons.NAVIGATION_OPEN)
         self.pane_button.clicked.connect(self.toggle_navigation)
         self.search_field = QLineEdit()
         self.search_field.setObjectName("navigationSearch")
@@ -583,51 +584,21 @@ class MainWindow(QMainWindow):
         self.search_field.setMinimumWidth(0)
         self.search_field.setMinimumHeight(32)
         self.search_field.textChanged.connect(self.home.set_search)
-        search_action = self.search_field.addAction(
-            svg_icon(icons.SEARCH, color=self.palette().color(QPalette.ColorRole.WindowText)),
+        self.search_action = self.search_field.addAction(
+            QIcon(),
             QLineEdit.ActionPosition.LeadingPosition,
         )
-        search_action.setText("Search")
-        search_action.triggered.connect(lambda: self.search_field.setFocus())
+        set_svg_icon(self.search_action, icons.SEARCH, role=QPalette.ColorRole.Text)
+        self.search_action.setText("Search")
+        self.search_action.triggered.connect(lambda: self.search_field.setFocus())
         self.view_button.setObjectName("navigationView")
         self.view_button.setMinimumHeight(32)
         self.search_row = QFrame()
         self.search_row.setObjectName("navigationSearchGroup")
         self.search_row.setProperty("focusWithin", False)
         self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
-        fill = blend_name(
-            self.palette().color(QPalette.ColorRole.Window),
-            b=self.palette().color(QPalette.ColorRole.Text),
-            t=0.04,
-        )
-        edge = blend_name(
-            self.palette().color(QPalette.ColorRole.Window),
-            b=self.palette().color(QPalette.ColorRole.Text),
-            t=0.22,
-        )
-        self.search_row.setStyleSheet(f"""
-            QFrame#navigationSearchGroup {{
-                background: {fill}; border: 1px solid {edge}; border-radius: 8px;
-            }}
-            QFrame#navigationSearchGroup[focusWithin="true"] {{ border-color: palette(highlight); }}
-            QLineEdit#navigationSearch {{
-                background: transparent; border: none; border-radius: 7px;
-                padding: 0 6px; selection-background-color: palette(highlight);
-            }}
-        """)
         self.navigation_group = QFrame()
         self.navigation_group.setObjectName("navigationGroup")
-        self.navigation_group.setStyleSheet(f"""
-            QFrame#navigationGroup {{ background: transparent; border: none; }}
-            QFrame#navigationDivider {{ background: {edge}; border: none; }}
-            QToolButton#navigationView {{
-                background: transparent; border: none; border-radius: 6px; padding: 4px 6px;
-            }}
-            QToolButton#navigationView:hover {{ background: palette(midlight); }}
-            QToolButton#navigationView:pressed {{ background: palette(mid); }}
-            QToolButton#navigationView:focus {{ border: 1px solid palette(highlight); }}
-            QToolButton#navigationPane:checked {{ background: transparent; }}
-        """)
         self.home.mode_control.setStyleSheet("""
             QFrame#segments { background: transparent; border: none; }
             QFrame#segments QPushButton,
@@ -694,7 +665,7 @@ class MainWindow(QMainWindow):
         self.glossary_button.clicked.connect(self.open_glossary)
         tools.addWidget(self.glossary_button)
         self.stats_button = QToolButton()  # data tools stay separate from navigation
-        self.stats_button.setIcon(svg_icon(icons.CHART, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        set_svg_icon(self.stats_button, icons.CHART)
         self.stats_button.setIconSize(QSize(22, 22))
         self.stats_button.setAutoRaise(True)
         self.stats_button.setCheckable(True)
@@ -708,7 +679,7 @@ class MainWindow(QMainWindow):
         self.stats_button.clicked.connect(self.open_stats)
         tools.addWidget(self.stats_button)
         self.database_button = QToolButton()
-        self.database_button.setIcon(svg_icon(icons.DATABASE, color=self.palette().color(QPalette.ColorRole.WindowText)))
+        set_svg_icon(self.database_button, icons.DATABASE)
         self.database_button.setIconSize(QSize(22, 22))
         self.database_button.setAutoRaise(True)
         self.database_button.setCheckable(True)
@@ -863,15 +834,8 @@ class MainWindow(QMainWindow):
         if hasattr(self, "pane_button"):
             self.pane_button.setChecked(is_open)
             self.pane_button.set_open(is_open)
-            icon_color = self.palette().color(
-                QPalette.ColorRole.Highlight if is_open else QPalette.ColorRole.WindowText,
-            )
-            self.pane_button.setIcon(
-                svg_icon(
-                    icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN,
-                    color=icon_color,
-                ),
-            )
+            icon_color = QPalette.ColorRole.Highlight if is_open else QPalette.ColorRole.WindowText
+            set_svg_icon(self.pane_button, icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN, role=icon_color)
         if hasattr(self, "search_row"):
             self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
         for i in range(self.stack.count()):
@@ -1003,9 +967,16 @@ class MainWindow(QMainWindow):
         on_exercise_grid = current is self.home and self.home.mode == "exercises"
         self.shuffle_button.setVisible(on_exercise_grid or isinstance(current, ExerciseView))
         active = self.shuffle_button.isChecked()
-        palette = self.shuffle_button.palette()
-        blue = STUDIO[1].accent if palette.button().color().lightness() < 128 else STUDIO[0].accent
-        self.shuffle_button.setIcon(svg_icon(icons.SHUFFLE, color=QColor(blue) if active else palette.windowText().color()))
+        if active:
+            icons.set_palette_icon(
+                self.shuffle_button,
+                lambda palette: svg_icon(
+                    icons.SHUFFLE,
+                    color=QColor(STUDIO[1].accent if palette.button().color().lightness() < 128 else STUDIO[0].accent),
+                ),
+            )
+        else:
+            set_svg_icon(self.shuffle_button, icons.SHUFFLE)
         choices = self._shuffle_choices()
         self.shuffle_button.setEnabled(active or bool(choices))
         if self._exercise_page is not None:
@@ -1480,51 +1451,39 @@ class MainWindow(QMainWindow):
                 strict=True,
             ),
         ):
-            color = self.palette().color(
-                QPalette.ColorRole.Highlight if index == self.home.mode_control.current() else QPalette.ColorRole.WindowText,
-            )
-            button.setIcon(svg_icon(icon, color=color, size=18))
+            color = QPalette.ColorRole.Highlight if index == self.home.mode_control.current() else QPalette.ColorRole.WindowText
+            set_svg_icon(button, icon, role=color, size=18)
         section = "lessons" if self.home.mode == "lessons" else "exercises"
         self.search_field.setPlaceholderText(f"Search {section}…")
         self.search_field.setAccessibleName(f"Search {section}")
         self.view_button.setText("")
         self.view_button.setAccessibleName("Tiles")
         self.view_button.setToolTip("Return to tiles")
-        self.view_button.setIcon(
-            svg_icon(
-                icons.TILES,
-                color=self.palette().color(
-                    QPalette.ColorRole.Highlight if not self._pane_view else QPalette.ColorRole.WindowText,
-                ),
-            ),
+        set_svg_icon(
+            self.view_button,
+            icons.TILES,
+            role=QPalette.ColorRole.Highlight if not self._pane_view else QPalette.ColorRole.WindowText,
         )
         stats_active = isinstance(self._overlay, StatsPage)
         glossary_active = isinstance(self._overlay, GlossaryPage)
         self.glossary_button.setChecked(glossary_active)
-        self.glossary_button.setIcon(
-            svg_icon(
-                icons.GLOSSARY,
-                color=self.palette().color(QPalette.ColorRole.Highlight if glossary_active else QPalette.ColorRole.WindowText),
-            ),
+        set_svg_icon(
+            self.glossary_button,
+            icons.GLOSSARY,
+            role=QPalette.ColorRole.Highlight if glossary_active else QPalette.ColorRole.WindowText,
         )
         database_active = isinstance(self._overlay, DatabasePage)
         self.stats_button.setChecked(stats_active)
         self.database_button.setChecked(database_active)
-        self.stats_button.setIcon(
-            svg_icon(
-                icons.CHART,
-                color=self.palette().color(
-                    QPalette.ColorRole.Highlight if stats_active else QPalette.ColorRole.WindowText,
-                ),
-            ),
+        set_svg_icon(
+            self.stats_button,
+            icons.CHART,
+            role=QPalette.ColorRole.Highlight if stats_active else QPalette.ColorRole.WindowText,
         )
-        self.database_button.setIcon(
-            svg_icon(
-                icons.DATABASE,
-                color=self.palette().color(
-                    QPalette.ColorRole.Highlight if database_active else QPalette.ColorRole.WindowText,
-                ),
-            ),
+        set_svg_icon(
+            self.database_button,
+            icons.DATABASE,
+            role=QPalette.ColorRole.Highlight if database_active else QPalette.ColorRole.WindowText,
         )
         activity = self._workspace_page
         activity_section = "exercises" if isinstance(activity, ExerciseView) else "lessons" if activity else None

@@ -1,0 +1,11 @@
+<div class="reference-pair">
+  {% assign modes = 'Light,Dark' | split: ',' %}
+  {% for mode in modes %}
+    {% assign suffix = '.png' %}{% if mode == 'Dark' %}{% assign suffix = '-dark.png' %}{% endif %}
+    {% assign image = '/assets/ui-reference/' | append: page.baseline | append: '/' | append: include.screen | append: suffix | relative_url %}
+    <figure class="shot">
+      <a href="{{ image }}"><img src="{{ image }}" loading="lazy" alt="{{ mode }} mode. {{ include.alt | escape }}"></a>
+      <figcaption>{{ include.title | escape }} · {{ mode }}</figcaption>
+    </figure>
+  {% endfor %}
+</div>

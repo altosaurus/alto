@@ -101,7 +101,7 @@ class QuestionPreview(QDialog):
         header.addWidget(title, 1)
         if statistics is not None:
             stats_button = QToolButton()
-            stats_button.setIcon(icons.svg_icon(icons.BAR_CHART, color=self.palette().color(QPalette.ColorRole.ButtonText)))
+            icons.set_svg_icon(stats_button, icons.BAR_CHART, role=QPalette.ColorRole.ButtonText)
             stats_button.setIconSize(QSize(22, 22))
             stats_button.setAccessibleName("Question Statistics")
             stats_button.setToolTip("Question Statistics")

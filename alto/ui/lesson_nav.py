@@ -28,7 +28,6 @@ from PySide6.QtWidgets import (
 from alto.lessons import LESSONS
 from alto.ui import icons
 from alto.ui.home import EXERCISE_ICONS
-from alto.ui.icons import svg_icon
 from alto.ui.style import navigation_heading_style
 
 LESSON_ROLE = Qt.ItemDataRole.UserRole  # holds the lesson's key on a lesson's row
@@ -140,16 +139,14 @@ class LessonNav(QListWidget):
         """
         self.clear()
         self.step_items = []
-        ink = self.palette().color(QPalette.ColorRole.Text)
+        drawings = []
         seen: set[str] = set()
         for lesson in LESSONS:
             if lesson.category not in seen:
                 seen.add(lesson.category)
                 self.addItem(section_item(lesson.category, palette=self.palette()))
-            row = QListWidgetItem(
-                svg_icon(EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES), color=ink, size=self.iconSize().width()),
-                lesson.title,
-            )
+            row = QListWidgetItem(lesson.title)
+            drawings.append((EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES), row.setIcon))
             row.setData(LESSON_ROLE, lesson.key)
             row.setToolTip(lesson.summary)
             row.setSizeHint(QSize(0, 38))
@@ -166,6 +163,7 @@ class LessonNav(QListWidget):
                     item.setSizeHint(QSize(0, 30))
                     self.addItem(item)
                     self.step_items.append(item)
+        icons.set_item_icons(self, drawings)
 
     def select_step(self, number: int) -> None:
         """

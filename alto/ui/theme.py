@@ -252,6 +252,7 @@ STUDIO = (
     ),
 )
 CUSTOM_THEMES: tuple[CustomTheme, ...] = (*STUDIO, *(theme for seed in SEEDS for theme in seeded_themes(seed)))
+DEFAULT_LIGHT_WINDOW = "#efefef"
 AUTO = "_auto"  # added to a theme's key for its System version, which is light or dark as the desktop is
 FAMILIES: tuple[tuple[str, str, str], ...] = (
     ("default", "Default", "The desktop's own colors."),
@@ -760,9 +761,10 @@ def save_theme(key: str) -> None:
 
 
 _applying = False  # True while a theme is being applied
+_desktop_theme: str | None = None  # the theme to refresh when Qt reports a new desktop scheme
 _watching = False  # True once the app is listening for the desktop changing between light and dark
 _custom_palette = False  # True while the application is using the palette of a theme with colors of its own
-_custom_window = ""  # the window color of that palette
+_override_window = ""  # window color of the last palette Alto supplied explicitly
 
 
 def system_is_dark() -> bool:
@@ -795,19 +797,20 @@ def _watch_the_desktop() -> None:
     global _watching
     if not _watching:
         _watching = True
-        QGuiApplication.styleHints().colorSchemeChanged.connect(_desktop_changed)
+        # Qt announces the scheme before updating the palette used to build the stylesheet.
+        QGuiApplication.styleHints().colorSchemeChanged.connect(_desktop_changed, Qt.ConnectionType.QueuedConnection)
 
 
 def _desktop_changed() -> None:
     """
-    Apply the saved theme again when the desktop changes, if the theme is one that follows the desktop.
+    Refresh the active theme after Qt updates the desktop palette.
 
     Examples
     --------
     >>> _desktop_changed()
     """
-    if saved_theme().endswith(AUTO):
-        apply_theme(saved_theme())
+    if _desktop_theme is not None:
+        apply_theme(_desktop_theme)
 
 
 def _has_custom_palette() -> bool:
@@ -854,27 +857,51 @@ def apply_theme(key: str) -> None:
     >>> QApplication.palette().color(QPalette.ColorRole.Window).name() != "#eceef1"
     True
     """
-    global _applying, _custom_palette, _custom_window
+    global _applying, _custom_palette, _desktop_theme, _override_window
     if _applying:  # changing the color scheme announces itself, which must not start the change over
         return
     _applying = True
     collecting = gc.isenabled()
     gc.disable()  # Qt tells every widget about a new palette or style, and a widget freed while it does so would crash it
     try:
-        QGuiApplication.styleHints().setColorScheme(scheme_of(key) or Qt.ColorScheme.Unknown)
+        scheme = scheme_of(key) or Qt.ColorScheme.Unknown
+        QGuiApplication.styleHints().setColorScheme(scheme)
+        if scheme == Qt.ColorScheme.Unknown:
+            _desktop_theme = key if key.endswith(AUTO) else "system"
+            _watch_the_desktop()
+        else:
+            _desktop_theme = None
         app = QApplication.instance()
         assert isinstance(app, QApplication)
         theme = custom_theme(key)
         if key.endswith(AUTO):  # a theme that follows the desktop: its light or its dark version, as the desktop is now
             theme = custom_theme(key[: -len(AUTO)] + ("_dark" if system_is_dark() else ""))
-            _watch_the_desktop()
         if theme is not None:
             app.setPalette(theme_palette(theme))
-            _custom_palette, _custom_window = True, theme.window
-        elif _custom_palette:
-            app.setPalette(QPalette())  # back from a theme with colors of its own: the palette is the desktop's again
-            if app.palette().color(QPalette.ColorRole.Window).name() == _custom_window:
-                app.setPalette(app.style().standardPalette())  # the reset did not take, so use the style's own for the scheme
+            _custom_palette, _override_window = True, theme.window
+        else:
+            if app.palette().window().color().name() == _override_window:
+                app.setPalette(QPalette())
+            native = app.palette()
+            active_scheme = app.styleHints().colorScheme() if scheme == Qt.ColorScheme.Unknown else scheme
+            dark_surface = native.base().color().lightness() < 128
+            # On GNOME the desktop scheme and the Qt style can change while the platform palette keeps its old colors.
+            if native.window().color().name() == _override_window or (
+                active_scheme != Qt.ColorScheme.Unknown and dark_surface != (active_scheme == Qt.ColorScheme.Dark)
+            ):
+                native = app.style().standardPalette()
+            if active_scheme == Qt.ColorScheme.Light or (
+                active_scheme == Qt.ColorScheme.Unknown and native.base().color().lightness() >= 128
+            ):
+                # Keep the release's gray window and white cards while retaining the desktop's accent and selection colors.
+                native.setColor(QPalette.ColorRole.Window, QColor(DEFAULT_LIGHT_WINDOW))
+                for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive):
+                    native.setColor(group, QPalette.ColorRole.Base, Qt.GlobalColor.white)
+                    native.setColor(group, QPalette.ColorRole.Text, Qt.GlobalColor.black)
+            _override_window = ""
+            if native != app.palette():
+                app.setPalette(native)
+                _override_window = native.window().color().name()
             _custom_palette = False
         light = custom_theme(theme.family) if theme and theme.dark else None
         stylesheet = app_style(app.palette(), paper_palette=theme_palette(light) if light else None)

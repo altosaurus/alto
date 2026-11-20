@@ -648,8 +648,7 @@ def _label_with_picture(
     >>> box.toolTip(), box.accessibleName()
     ('Treble', 'Treble')
     """
-    button.setIcon(picture.to_icon())
-    button.setIconSize(picture.size())
+    picture.label_button(button)
     button.setToolTip(name)
     button.setAccessibleName(name)
 
@@ -1614,8 +1613,7 @@ class _StaffRangePanel(ExerciseSettingsPanel):
         vlay.addWidget(values_hint)
         for v, box in self.value_boxes.items():
             picture = ValuePictures([v], scale=1.25, center_stemless=True)
-            box.setIcon(picture.to_icon())
-            box.setIconSize(picture.size())
+            picture.label_button(box)
             box.setStyleSheet("QCheckBox { font-size: 11pt; }")
             box.setChecked(v in self.cfg.note_values)
             box.toggled.connect(self._values_edited)
