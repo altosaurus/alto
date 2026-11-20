@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
   
 </head>
 <body>
@@ -192,6 +192,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -609,6 +612,85 @@ into a <code class="language-plaintext highlighter-rouge">QIcon</code>.</p>
 False
 </code></pre>
 
+<h2 id="set_palette_icon">set_palette_icon</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_palette_icon</span><span class="p">(</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">QAbstractButton</span> <span class="o">|</span> <span class="n">QAction</span> <span class="o">|</span> <span class="n">QMenu</span><span class="p">,</span>
+    <span class="n">render</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">QPalette</span><span class="p">],</span> <span class="n">QIcon</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Assign a native Qt icon and refresh it whenever the application palette changes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">target</code> (<em>QAbstractButton or QAction or QMenu</em>): Button, menu, or action to update.</li>
+  <li><code class="language-plaintext highlighter-rouge">render</code> (<em>Callable</em>): Draws the icon in the supplied palette.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtWidgets import QPushButton
+&gt;&gt;&gt; button = QPushButton()
+&gt;&gt;&gt; set_palette_icon(button, lambda palette: svg_icon(HELP, color=palette.text().color()))
+&gt;&gt;&gt; button.icon().isNull()
+False
+</code></pre>
+
+<h2 id="set_svg_icon">set_svg_icon</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_svg_icon</span><span class="p">(</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">QAbstractButton</span> <span class="o">|</span> <span class="n">QAction</span> <span class="o">|</span> <span class="n">QMenu</span><span class="p">,</span>
+    <span class="n">inner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">role</span><span class="p">:</span> <span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span> <span class="o">=</span> <span class="n">QPalette</span><span class="p">.</span><span class="n">ColorRole</span><span class="p">.</span><span class="n">WindowText</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Tint an SVG icon with the control’s current foreground or accent color.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">target</code> (<em>QAbstractButton or QAction or QMenu</em>): Control that displays the icon.</li>
+  <li><code class="language-plaintext highlighter-rouge">inner</code> (<em>str</em>): SVG shapes using COLOR for the ink.</li>
+  <li><code class="language-plaintext highlighter-rouge">role</code> (<em>QPalette.ColorRole, default WindowText</em>): Color to take from the application palette.</li>
+  <li><code class="language-plaintext highlighter-rouge">size</code> (<em>int, default 24</em>): Logical size in pixels.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtWidgets import QPushButton
+&gt;&gt;&gt; button = QPushButton()
+&gt;&gt;&gt; set_svg_icon(button, HELP)
+&gt;&gt;&gt; button.icon().isNull()
+False
+</code></pre>
+
+<h2 id="set_item_icons">set_item_icons</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_item_icons</span><span class="p">(</span>
+    <span class="n">view</span><span class="p">:</span> <span class="n">QAbstractItemView</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">QIcon</span><span class="p">],</span> <span class="bp">None</span><span class="p">]]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Recolor the current rows of a navigation list or tree without rebuilding it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">view</code> (<em>QAbstractItemView</em>): List or tree supplying the text color and icon size.</li>
+  <li><code class="language-plaintext highlighter-rouge">items</code> (<em>list of tuple</em>): SVG drawing and icon setter for each row in the current model.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A category tree keeps its checked and expanded items when the theme changes.
+</code></pre>
+
 <h2 id="svg_icon">svg_icon</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">svg_icon</span><span class="p">(</span>
@@ -645,6 +727,8 @@ False
 </code></pre>
 
 
+          
+          
           
           
           
@@ -863,8 +947,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

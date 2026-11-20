@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795154073">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
   
 </head>
 <body>
@@ -192,6 +192,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/developer-guide/database/">Database</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/developer-guide/ui-style-guide/">UI style guide</a></li>
                 
                 
               </ul>
@@ -1384,7 +1387,7 @@ and open <code class="language-plaintext highlighter-rouge">http://127.0.0.1:800
 
 <h2 id="keeping-the-docs-and-screenshots-current">Keeping the docs and screenshots current</h2>
 
-<p>Every picture in the docs comes as a light and a dark pair, and <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code> makes all of them:</p>
+<p>The current app screenshots in <code class="language-plaintext highlighter-rouge">docs/assets/img/</code> come in light and dark pairs. Regenerate them with <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code>:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.venv/bin/python scripts/screenshots.py                    <span class="c"># every picture, both themes</span>
 .venv/bin/python scripts/screenshots.py <span class="nt">--only</span> home stats  <span class="c"># just these</span>
@@ -1439,8 +1442,10 @@ test fails when it is not, so a changelog line always arrives with its page.</li
 Compare the changes since the previous release tag with the changelog to catch any omissions. For each new or changed
 feature, follow the documented steps in the release candidate and add or correct instructions in the release PR.</li>
   <li>With the release candidate installed in <code class="language-plaintext highlighter-rouge">.venv</code>, run <code class="language-plaintext highlighter-rouge">.venv/bin/python scripts/screenshots.py</code> to refresh every
-documentation screenshot in both themes. Review the light and dark images against their captions and alt text.
-In the Developer Guide, check that image dimensions match the captures and each clickable region covers its component.
+screenshot in <code class="language-plaintext highlighter-rouge">docs/assets/img/</code> in both themes. Review the light and dark images against their captions and alt text.
+Exclude the <a href="/alto/dev/developer-guide/ui-style-guide/">UI style guide</a> and its versioned screenshots in
+<code class="language-plaintext highlighter-rouge">docs/assets/ui-reference/</code> from this check. Update that baseline only for an explicitly requested visual change.
+For screenshots using <code class="language-plaintext highlighter-rouge">component-shot.html</code>, check that the image dimensions match the captures and each clickable region covers its component.
 Run <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh tests/test_docs.py tests/test_docs_site.py tests/test_guide_docs.py</code> and include the
 updated images and any caption or region corrections in the release PR.</li>
   <li>Merge that as a pull request, then tag the merge commit and push the tag: <code class="language-plaintext highlighter-rouge">git tag v0.1.0 &amp;&amp; git push origin v0.1.0</code>. Pushing
@@ -1643,8 +1648,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795154073" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795154073" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
