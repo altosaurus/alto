@@ -89,7 +89,7 @@ One step of a lesson: its words, a sound to hear, the circle, and a task.
 - `task` (*Task or None*): The task now being asked, for a step that has them.
 - `feedback` (*QLabel*): What is said about the last answer.
 - `info` (*QLabel*): What is said about the key last picked on the circle.
-- `again` (*QPushButton*): Asks another task; it appears once the task has been answered.
+- `again` (*QPushButton*): Repeats a fixed question or draws another question after the answer is explained.
 - `practice` (*Signal*): Emitted by the Practice button on the last step.
 
 **Examples**

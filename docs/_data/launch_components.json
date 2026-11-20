@@ -25,7 +25,7 @@
     {"label": "Lesson outline", "type": "LessonNav", "href": "/api/alto.ui.lesson_nav/#lessonnav", "rect": [1,14.5,29,66]},
     {"label": "Leave lesson and Start over", "type": "LessonsPage", "href": "/api/alto.ui.lesson/#lessonspage", "rect": [32.5,13,66,5.5]},
     {"label": "Step title and progress", "type": "LessonView", "href": "/api/alto.ui.lesson/#lessonview", "rect": [33,19.5,65,6.5]},
-    {"label": "Example and knowledge check", "type": "StepView", "href": "/api/alto.ui.lesson/#stepview", "rect": [33,26.7,52,38]}
+    {"label": "Annotated keyboard example", "type": "KeyboardWidget", "href": "/api/alto.ui.keyboard/#keyboardwidget", "rect": [34.5,38,27.5,39]}
   ],
   "glossary": [
     {"label": "Term search and list", "type": "GlossaryPage", "href": "/api/alto.ui.glossary/#glossarypage", "rect": [2.5,14.5,19,82]},

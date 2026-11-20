@@ -43,13 +43,16 @@ step, and **Finish** on the last, leave the lesson.
 A step has some reading, and may have:
 
 - **A sound to hear.** A button plays the notes being described, in the instrument chosen in the settings.
-- **A keyboard.** In Pitches and Notes, a highlighted piano key shows where a pitch falls among its neighbors.
+- **A keyboard.** Pitches and Notes starts with a bracket over two black keys and a C on the white key just to their left.
+  The labels stay in place while the first two notes play and when you identify C’s neighbor. When you play a keyboard
+  example, follow the keys as each note sounds. Chord tones light together. The original highlights return when playback stops.
 - **Staves.** The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
   small exercise the staff changes with the question.
 - **The circle of fifths.** Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have **Down a
   fifth** and **Up a fifth** buttons that walk around the circle for you.
 - **A small exercise.** It cannot be failed. A wrong answer gets a hint, a second wrong answer shows the answer with its
-  explanation, and a right answer is explained. **Try another** asks a new one.
+  explanation, and a right answer is explained. **Try again** repeats a single question. In checks with multiple questions,
+  **Try another** draws a question for the next attempt.
 
 ## Intervals
 

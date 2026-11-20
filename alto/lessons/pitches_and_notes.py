@@ -15,12 +15,16 @@ PITCHES_AND_NOTES = Lesson(
             title="High and low pitches",
             text=(
                 "<p><b>Pitch</b> is how high or low a sound seems. Hum a comfortable sound, then hum a higher one. "
-                "You changed its pitch. Musicians give pitches names so someone else can sing or play them.</p>"
-                "<p>A <b>note</b> can mean a musical sound or the mark that tells you to play it. "
-                "Listen to these two notes in order.</p>"
+                "You changed its pitch. A <b>note</b> can mean a musical sound or the mark that tells you to play it.</p>"
+                "<p>Look at the two short black keys under the bracket. The white key just to the left of that pair "
+                "is labeled <b>C</b>. Listen to the two notes. Watch the C key light up first, then follow the sound "
+                "as another key lights up.</p>"
             ),
+            keyboard_note="C4",
+            label_middle_c=True,
             hear=(("C4",), ("G4",)),
             hear_label="Hear the two notes",
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="Which sound is higher?",
                 choices=("First", "Second"),
@@ -32,17 +36,21 @@ PITCHES_AND_NOTES = Lesson(
         Step(
             title="C on the piano keyboard",
             text=(
-                "<p>On a piano the white keys use seven letter names. Starting on C and moving right, they go "
-                "<b>C D E F G A B</b>, then begin again at C. The black keys form groups of two and three.</p>"
-                "<p>Find the group of two black keys. The white key immediately to its left is C. "
-                "Move one white key to the right of C. Which letter names the highlighted key?</p>"
+                "<p>Black keys form groups of two and three. Find the pair under the bracket again. "
+                "Trace down the white key just to its left until you see the letter <b>C</b>. "
+                "You can use this same pattern to find C elsewhere on a piano.</p>"
+                "<p>From C, the white keys to the right follow this order: <b>C D E F G A B</b>. "
+                "Then the names repeat. Start at the labeled C and move one white key to the right, "
+                "onto the highlighted key.</p>"
             ),
             keyboard_note="D4",
+            label_middle_c=True,
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="Name the highlighted white key.",
                 choices=("B", "C", "D"),
                 correct="D",
-                hint="Start at C and read the letters in order.",
+                hint="Put your finger on the C label. Move one white key to the right and say the next letter after C.",
                 explanation="D is the white key between the two black keys in this group.",
             ),
         ),
@@ -69,6 +77,7 @@ PITCHES_AND_NOTES = Lesson(
                 "Follow the two examples from that line to the space above it.</p>"
             ),
             staves=(Staff("treble", note="G4", caption="G4 on the second line"), Staff("treble", note="A4")),
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="Which letter goes in the space just above G?",
                 choices=("F", "G", "A"),

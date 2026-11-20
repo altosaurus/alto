@@ -5,8 +5,14 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Lesson keyboards highlight each note as it sounds and show chord tones together during playback.
+- The Pitches and Notes lesson labels C and brackets its neighboring pair of black keys before asking learners to name the next white key.
+
 ### Fixed
 
+- Single-question lesson knowledge checks say **Try again** after a wrong answer. Checks with multiple questions keep **Try another**.
 - Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.
 - Light mode uses a gray window with white tiles and a pale gray search bar, including when following a light desktop.
 
