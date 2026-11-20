@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
   
 </head>
 <body>
@@ -721,6 +721,8 @@ False
     <span class="n">scale_explore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
     <span class="n">keyboard_note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">hear_display</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s">''</span><span class="p">,</span> <span class="s">'staff'</span><span class="p">,</span> <span class="s">'keyboard'</span><span class="p">]</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">single_question</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">label_middle_c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -735,6 +737,7 @@ False
   <li><code class="language-plaintext highlighter-rouge">hear</code> (<em>tuple of tuple of str</em>): Notes to play from a Hear it button, as columns of note names such as “C4”; empty for no button.</li>
   <li><code class="language-plaintext highlighter-rouge">hear_label</code> (<em>str</em>): What the Hear it button says.</li>
   <li><code class="language-plaintext highlighter-rouge">make_task</code> (<em>callable or None</em>): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.</li>
+  <li><code class="language-plaintext highlighter-rouge">single_question</code> (<em>bool</em>): True when the knowledge check repeats the same question on every attempt.</li>
   <li><code class="language-plaintext highlighter-rouge">closing</code> (<em>bool</em>): True for the last step, which offers to practice.</li>
   <li><code class="language-plaintext highlighter-rouge">staves</code> (<em>tuple of Staff</em>): Captioned staves in reading order. Adjacent examples share a panel and wrap when space is limited.</li>
   <li><code class="language-plaintext highlighter-rouge">task_staff</code> (<em>bool</em>): Show one staff beside the words that follows the task: it draws the task’s clef and key signature.</li>
@@ -743,6 +746,7 @@ False
   <li><code class="language-plaintext highlighter-rouge">scale_explore</code> (<em>bool</em>): Allow changing the example. False hides the selectors for identification tasks.</li>
   <li><code class="language-plaintext highlighter-rouge">hear_display</code> (<em>str</em>): Show the playback pitches on a treble staff or keyboard (“staff” or “keyboard”). Empty hides this diagram.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_note</code> (<em>str</em>): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.</li>
+  <li><code class="language-plaintext highlighter-rouge">label_middle_c</code> (<em>bool</em>): Label middle C and bracket the pair of black keys beside it.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -965,8 +969,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

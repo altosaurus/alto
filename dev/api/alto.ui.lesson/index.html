@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
   
 </head>
 <body>
@@ -686,7 +686,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">task</code> (<em>Task or None</em>): The task now being asked, for a step that has them.</li>
   <li><code class="language-plaintext highlighter-rouge">feedback</code> (<em>QLabel</em>): What is said about the last answer.</li>
   <li><code class="language-plaintext highlighter-rouge">info</code> (<em>QLabel</em>): What is said about the key last picked on the circle.</li>
-  <li><code class="language-plaintext highlighter-rouge">again</code> (<em>QPushButton</em>): Asks another task; it appears once the task has been answered.</li>
+  <li><code class="language-plaintext highlighter-rouge">again</code> (<em>QPushButton</em>): Repeats a fixed question or draws another question after the answer is explained.</li>
   <li><code class="language-plaintext highlighter-rouge">practice</code> (<em>Signal</em>): Emitted by the Practice button on the last step.</li>
 </ul>
 
@@ -1145,8 +1145,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

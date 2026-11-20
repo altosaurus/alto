@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
   
 </head>
 <body>
@@ -929,8 +929,10 @@ lessons. For each musical term, find where its meaning was taught. If it is new,
 where the learner first needs it, before a diagram or question asks them to use it. A mention in a title or a
 glossary entry alone does not teach the term. For example, introduce the tonic as the note that feels like home,
 then ask the learner to find it. Repeat this check when reordering lessons.</li>
-  <li><strong>Build a short guided sequence.</strong> Introduce the idea with an example the learner can read or hear. Change one
-feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
+  <li><strong>Build a short guided sequence.</strong> Introduce the idea with an example the learner can read or hear. When the concept
+is visual, consider annotating the first example to show where to look. On a keyboard, bracket the pair of black
+keys and label the neighboring C. On a staff, an arrow from “notehead” to the oval shows which part of the note
+to read. Then change one feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
 Use the closing step to name the skills the learner can practice next. Choose the primary practice target with <code class="language-plaintext highlighter-rouge">Lesson.exercise</code> and list
 additional practice targets in <code class="language-plaintext highlighter-rouge">Lesson.related_exercises</code>.</li>
   <li><strong>Time a first pass.</strong> Aim for <strong>20 minutes or less</strong>, including reading, listening, guided questions, and time
@@ -1648,8 +1650,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

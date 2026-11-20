@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
   
 </head>
 <body>
@@ -640,13 +640,16 @@ step, and <strong>Finish</strong> on the last, leave the lesson.</p>
 
 <ul>
   <li><strong>A sound to hear.</strong> A button plays the notes being described, in the instrument chosen in the settings.</li>
-  <li><strong>A keyboard.</strong> In Pitches and Notes, a highlighted piano key shows where a pitch falls among its neighbors.</li>
+  <li><strong>A keyboard.</strong> Pitches and Notes starts with a bracket over two black keys and a C on the white key just to their left.
+The labels stay in place while the first two notes play and when you identify C’s neighbor. When you play a keyboard
+example, follow the keys as each note sounds. Chord tones light together. The original highlights return when playback stops.</li>
   <li><strong>Staves.</strong> The clef lesson shows staves beside the reading, each with a clef, sometimes a note, and a line under it. In a
 small exercise the staff changes with the question.</li>
   <li><strong>The circle of fifths.</strong> Click a key, or use the arrow keys, to see its key signature and its chords. Some steps have <strong>Down a
 fifth</strong> and <strong>Up a fifth</strong> buttons that walk around the circle for you.</li>
   <li><strong>A small exercise.</strong> It cannot be failed. A wrong answer gets a hint, a second wrong answer shows the answer with its
-explanation, and a right answer is explained. <strong>Try another</strong> asks a new one.</li>
+explanation, and a right answer is explained. <strong>Try again</strong> repeats a single question. In checks with multiple questions,
+<strong>Try another</strong> draws a question for the next attempt.</li>
 </ul>
 
 <h2 id="intervals">Intervals</h2>
@@ -778,8 +781,8 @@ you would write for A♭ major and try a fresh signature in treble or bass clef.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

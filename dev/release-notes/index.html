@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795197704">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
   
 </head>
 <body>
@@ -609,9 +609,17 @@ Each release’s downloads are on its GitHub release.</p>
 
 <p>Changes that are in the development docs and not in a release yet.</p>
 
+<h3 class="no-toc" id="added">Added</h3>
+
+<ul>
+  <li>Lesson keyboards highlight each note as it sounds and show chord tones together during playback.</li>
+  <li>The Pitches and Notes lesson labels C and brackets its neighboring pair of black keys before asking learners to name the next white key.</li>
+</ul>
+
 <h3 class="no-toc" id="fixed">Fixed</h3>
 
 <ul>
+  <li>Single-question lesson knowledge checks say <strong>Try again</strong> after a wrong answer. Checks with multiple questions keep <strong>Try another</strong>.</li>
   <li>Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.</li>
   <li>Light mode uses a gray window with white tiles and a pale gray search bar, including when following a light desktop.</li>
 </ul>
@@ -620,7 +628,7 @@ Each release’s downloads are on its GitHub release.</p>
 
 <p>Released 2026-11-19. <a href="https://github.com/altosaurus/alto/releases/tag/v0.0.2">GitHub release</a></p>
 
-<h3 class="no-toc" id="added">Added</h3>
+<h3 class="no-toc" id="added-1">Added</h3>
 
 <ul>
   <li>Profiles can use ASRS, ARTS, SM-2, or FSRS. With SM-2 and FSRS, set daily limits, see new, learning, and due counts,
@@ -736,7 +744,7 @@ for the scale to finish before advancing.</p>
 
 <p>Released 2026-11-15. <a href="https://github.com/altosaurus/alto/releases/tag/v0.0.1">GitHub release</a></p>
 
-<h3 class="no-toc" id="added-1">Added</h3>
+<h3 class="no-toc" id="added-2">Added</h3>
 
 <ul>
   <li>A new exercise, Clef Basics: a blank staff and the name of a clef. Choose the G, C or F clef symbol with three buttons, the mouse
@@ -786,7 +794,7 @@ from a dot. The window stays where it is, showing the exercise, lesson step or p
 
 <p>The first release.</p>
 
-<h3 class="no-toc" id="added-2">Added</h3>
+<h3 class="no-toc" id="added-3">Added</h3>
 
 <p><strong>Exercises</strong></p>
 
@@ -1166,8 +1174,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795197704" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795197704" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
