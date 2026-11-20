@@ -22,7 +22,11 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 ## KeyboardWidget
 
 ```python
-KeyboardWidget(parent: QWidget | None = None)
+KeyboardWidget(
+    parent: QWidget | None = None,
+    *,
+    label_middle_c: bool = False,
+)
 ```
 
 Bases: `QWidget`
@@ -55,6 +59,7 @@ Create a keyboard showing the default range, with no key highlighted.
 **Parameters**
 
 - `parent` (*QWidget or None, default None*): The widget that owns the keyboard.
+- `label_middle_c` (*bool, default False*): Mark middle C and its neighboring pair of black keys for an introductory lesson.
 
 **Constructor examples**
 

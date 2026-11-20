@@ -138,6 +138,8 @@ class Step:
         What the Hear it button says.
     make_task : callable or None
         Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
+    single_question : bool
+        True when the knowledge check repeats the same question on every attempt.
     closing : bool
         True for the last step, which offers to practice.
     staves : tuple of Staff
@@ -154,6 +156,8 @@ class Step:
         Show the playback pitches on a treble staff or keyboard ("staff" or "keyboard"). Empty hides this diagram.
     keyboard_note : str
         A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
+    label_middle_c : bool
+        Label middle C and bracket the pair of black keys beside it.
 
     Examples
     --------
@@ -175,6 +179,8 @@ class Step:
     scale_explore: bool = True  # false fixes the example and hides the scale's name for a question
     keyboard_note: str = ""
     hear_display: Literal["", "staff", "keyboard"] = ""
+    single_question: bool = False
+    label_middle_c: bool = False
 
 
 @dataclass(frozen=True)
