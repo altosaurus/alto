@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from scripts.check_plugin_registry import check_registry
 
 from alto import plugin_registry
-from alto.exercises.packs import installed_plugins, read_pack
+from alto.exercises.packs import InstalledPlugin, installed_plugins, read_pack
 from alto.ui.plugins_dialog import PluginsDialog
 from viola_pack import ZIP
 
@@ -265,3 +265,162 @@ def test_registration_edits_keep_ownership() -> None:
         check_registry([other | {"name": original["name"]}], history=[[original], [renamed]])
     with pytest.raises(ValueError, match="Invalid Pack ID"):
         check_registry([other | {"id": "Viola Practice"}])
+
+
+def serve(monkeypatch: pytest.MonkeyPatch, answers: dict[str, tuple[int, str]]) -> None:
+    """
+    Answer each metadata request with a status and a body.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replace the metadata transport.
+    answers : dict of str to tuple of int and str
+        The status and text for each address.
+    """
+
+    def fetch(url: str, *, seconds: int) -> tuple[int, str]:
+        """
+        Serve the planned answer.
+
+        Parameters
+        ----------
+        url : str
+            The requested address.
+        seconds : int
+            Request timeout.
+
+        Returns
+        -------
+        tuple of int and str
+            The status and the text.
+        """
+        return answers[url]
+
+    monkeypatch.setattr(plugin_registry.updates, "fetch_text", fetch)
+
+
+LATEST = f"https://api.github.com/repos/{REPO}/releases/latest"
+
+
+def asset(**changes: object) -> dict[str, object]:
+    """
+    Describe a release asset that passes every check, with some fields changed.
+
+    Parameters
+    ----------
+    **changes : object
+        Fields to set or replace.
+
+    Returns
+    -------
+    dict of str to object
+        The asset.
+    """
+    return {"name": "viola.zip", "browser_download_url": ASSET} | changes
+
+
+@pytest.mark.parametrize(
+    ("registry", "message"),
+    [
+        ((503, "down"), "Could not read the Alto plugin registry: down"),
+        ((200, "{"), "Invalid JSON"),
+        ((200, '{"a": 1}'), "unreadable"),
+        ((200, json.dumps([ENTRY, ENTRY])), "conflicting"),
+        ((200, json.dumps([ENTRY | {"repository": "not a repository"}])), "public GitHub repository"),
+    ],
+)
+def test_a_bad_registry_is_refused(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    registry: tuple[int, str],
+    message: str,
+) -> None:
+    """
+    Refuse an install code when the registry cannot be read or does not give a clear registration.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The plugins folder.
+    monkeypatch : pytest.MonkeyPatch
+        Supply the registry.
+    registry : tuple of int and str
+        The status and text the registry answers with.
+    message : str
+        Part of the expected diagnostic.
+    """
+    serve(monkeypatch, {plugin_registry.REGISTRY_URL: registry})
+    with pytest.raises(ValueError, match=message):
+        plugin_registry.install_registered("0042", folder=tmp_path / "plugins")
+
+
+def test_an_update_needs_an_installed_zip(tmp_path: Path) -> None:
+    """
+    Refuse to update an editable folder, which stays under its author's control.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The plugins folder.
+    """
+    folder = tmp_path / "viola"
+    folder.mkdir()
+    (folder / "pack.json").write_text("{}")
+    selected = InstalledPlugin(title="viola", path=folder, manifest=folder / "pack.json", snapshot=folder.lstat())
+    with pytest.raises(ValueError, match="installed plugin ZIP"):
+        plugin_registry.install_registered("", folder=tmp_path, selected=selected)
+
+
+def test_an_update_follows_the_registration_it_was_installed_from(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Refuse an update when the registration for the installed code now names another pack.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The plugins folder.
+    monkeypatch : pytest.MonkeyPatch
+        Supply the registry.
+    """
+    folder = tmp_path / "plugins"
+    folder.mkdir()
+    shutil.copyfile(VIOLA, folder / "registered-0042.zip")
+    selected = installed_plugins(folder)[0][0]
+    serve(monkeypatch, {plugin_registry.REGISTRY_URL: (200, json.dumps([ENTRY | {"id": "another"}]))})
+    with pytest.raises(ValueError, match="no longer matches"):
+        plugin_registry.install_registered("", folder=folder, selected=selected)
+
+
+@pytest.mark.parametrize(
+    ("latest", "message"),
+    [
+        ({"tag_name": ""}, "no published full release"),
+        ({"tag_name": "summer"}, "no attached plugin ZIP"),
+        ({"tag_name": "summer", "assets": [asset(browser_download_url="https://example.org/viola.zip")]}, "release asset in"),
+        ({"tag_name": "summer", "assets": [asset(digest="md5:abc")]}, "invalid SHA-256 digest"),
+    ],
+)
+def test_a_bad_release_is_refused(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    latest: dict,
+    message: str,
+) -> None:
+    """
+    Refuse a release that is not published, has no plugin ZIP, offers one from elsewhere, or has an invalid digest.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        The plugins folder.
+    monkeypatch : pytest.MonkeyPatch
+        Supply the registry and the release.
+    latest : dict
+        What the latest-release request returns.
+    message : str
+        Part of the expected diagnostic.
+    """
+    serve(monkeypatch, {plugin_registry.REGISTRY_URL: (200, json.dumps([ENTRY])), LATEST: (200, json.dumps(latest))})
+    with pytest.raises(ValueError, match=message):
+        plugin_registry.install_registered("0042", folder=tmp_path / "plugins")

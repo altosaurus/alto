@@ -1014,8 +1014,6 @@ def read_pack(path: Path) -> list[type[PackExercise]]:
         if instrument_id not in instruments:
             raise ValueError(f"Unknown instrument {instrument_id} in {key}.")
         model = instruments[instrument_id]
-        if "icon" in exercise and exercise["icon"] not in icons:
-            raise ValueError(f"Set the icon of {key} to an SVG file in the plugin.")
         keyboard = exercise["type"] == "keyboard-intervals"
         controls = read_controls(exercise.get("settings"), key=key, kinds=KEYBOARD_CONTROL_KINDS if keyboard else CONTROL_KINDS)
         span = (0, 0)
