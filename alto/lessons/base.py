@@ -21,6 +21,11 @@ from dataclasses import (
 )
 from typing import Literal
 
+from alto.exercises.base import (
+    FingerboardPosition,
+    PicturePosition,
+)
+
 
 @dataclass(frozen=True)
 class Task:
@@ -47,10 +52,15 @@ class Task:
         For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.
     key : int
         Sharps (positive) or flats (negative) on the task staff.
+    targets : tuple of tuple of (float, float, float)
+        For a question answered by clicking the step's instrument picture: each right place as the x and y of its centre and its
+        radius, in the picture's own pixels.
 
     Examples
     --------
     >>> Task(prompt="Which?", hint="Count.", explanation="Five.", choices=("A", "B"), correct="B").check("B")
+    True
+    >>> Task(prompt="Click it.", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(12.0, y=11.0)
     True
     """
 
@@ -62,6 +72,30 @@ class Task:
     correct: str = ""
     clef: str = ""
     key: int = 0
+    targets: tuple[tuple[float, float, float], ...] = ()
+
+    def hits(self, x: float, *, y: float) -> bool:
+        """
+        Say whether a click on the instrument picture is on one of the right places.
+
+        Parameters
+        ----------
+        x : float
+            The click's x in the picture's pixels.
+        y : float
+            The click's y in the picture's pixels. Keyword-only.
+
+        Returns
+        -------
+        bool
+            True if the click is within the radius of a target.
+
+        Examples
+        --------
+        >>> Task(prompt="?", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(30.0, y=10.0)
+        False
+        """
+        return any((x - cx) ** 2 + (y - cy) ** 2 <= radius**2 for cx, cy, radius in self.targets)
 
     def check(self, answer: tuple[str, int] | str) -> bool:
         """
@@ -154,6 +188,12 @@ class Step:
         Show the playback pitches on a treble staff or keyboard ("staff" or "keyboard"). Empty hides this diagram.
     keyboard_note : str
         A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
+    picture : PicturePosition or FingerboardPosition or None
+        An instrument picture to show beside the words, such as one supplied by a plugin. Alto draws it with the same
+        widget the exercises use. None for no picture.
+    hear_instrument : str
+        The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner's own
+        choice of sound.
 
     Examples
     --------
@@ -175,6 +215,8 @@ class Step:
     scale_explore: bool = True  # false fixes the example and hides the scale's name for a question
     keyboard_note: str = ""
     hear_display: Literal["", "staff", "keyboard"] = ""
+    picture: PicturePosition | FingerboardPosition | None = None
+    hear_instrument: str = ""
 
 
 @dataclass(frozen=True)
@@ -200,6 +242,9 @@ class Lesson:
         The primary exercise offered on the last page and used for the lesson icon.
     related_exercises : tuple of str
         Additional exercises offered on the last page, in display order.
+    icon : str
+        SVG shapes for the lesson's tile, in a 24 by 24 box with COLOR where the theme's ink goes. Empty uses the icon of the
+        primary exercise.
 
     Examples
     --------
@@ -225,3 +270,4 @@ class Lesson:
     steps: tuple[Step, ...]
     exercise: str
     related_exercises: tuple[str, ...] = ()
+    icon: str = ""

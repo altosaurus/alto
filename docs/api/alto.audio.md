@@ -67,6 +67,9 @@ Instrument(
     family: str = '',
     variant: str = '',
     damped: bool = False,
+    samples: tuple[tuple[int, Path], ...] = (),
+    pack_name: str = '',
+    kind: str = '',
 )
 ```
 
@@ -82,6 +85,9 @@ An instrument that notes can be played on, and where its recordings are.
 - `damped` (*bool, default False*): True for an instrument whose notes are stopped by a damper when the key is let go, played without the pedal: the piano. Each note ends as the next one begins, as it does when the fingers move from key to key, instead of ringing on over the following notes as if the pedal were down. Keyword-only.
 - `family` (*str, default ""*): Instruments that are ways of playing the same instrument share a family (the viola: arco and pizzicato). Keyword-only.
 - `variant` (*str, default ""*): Which way of playing it, within the family. Keyword-only.
+- `samples` (*tuple of (int, Path), default ()*): Pairs of MIDI pitches and local recording paths supplied by an installed instrument pack. Keyword-only.
+- `pack_name` (*str, default ""*): Display name of the plugin that supplies the recordings. Keyword-only.
+- `kind` (*str, default ""*): What sort of instrument it is, such as "harpsichord", so that other sounds of the same sort can be offered together. Built-in instruments use their family or name. Keyword-only.
 
 **Examples**
 
@@ -90,6 +96,46 @@ An instrument that notes can be played on, and where its recordings are.
 1.0
 >>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
 (True, False)
+```
+
+### Instrument.kind_name
+
+```python
+@property
+def kind_name() -> str
+```
+
+Name what sort of instrument this is, in lowercase.
+
+**Returns**
+
+- *str*: The plugin's ``kind``, or the built-in family, or the instrument's label.
+
+**Examples**
+
+```pycon
+>>> INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
+('viola', 'flute')
+```
+
+### Instrument.picker_group
+
+```python
+@property
+def picker_group() -> str
+```
+
+Identify the instrument's entry in the sound picker.
+
+**Returns**
+
+- *str*: The pack-qualified key for a plugin sound, or the built-in family or label.
+
+**Examples**
+
+```pycon
+>>> INSTRUMENT_BY_KEY["viola_bowed"].picker_group
+'Viola'
 ```
 
 ### Instrument.playback_volume
@@ -127,7 +173,7 @@ Ways of playing one instrument share a single entry.
 
 **Returns**
 
-- *list of tuple of (str, list of Instrument)*: Each entry's name (the family, or the instrument's own label) and its instruments, in the order listed.
+- *list of tuple of (str, list of Instrument)*: Each entry's picker group and its instruments, in the order listed.
 
 **Examples**
 
@@ -281,6 +327,33 @@ Return the notes an instrument has a recording for on disk.
 True
 ```
 
+### Sounds.note_duration_ms
+
+```python
+def note_duration_ms(
+    midi: int,
+    *,
+    instrument: str | None = None,
+) -> int
+```
+
+Read the playback length of a note for synchronized instrument animations.
+
+**Parameters**
+
+- `midi` (*int*): Sounding MIDI pitch.
+- `instrument` (*str or None*): Pack sound key, or None for the learner's selected sound.
+
+**Returns**
+
+- *int*: Duration in milliseconds, using the usual feedback interval if the WAV is unavailable.
+
+**Examples**
+
+```pycon
+A one-second sample has the same 1000 ms feedback interval when muted.
+```
+
 ### Sounds.play_midi
 
 ```python
@@ -369,6 +442,7 @@ def play_notes(
     gap_ms: int = DEFAULT_NOTE_GAP_MS,
     warmup: bool = False,
     force: bool = False,
+    instrument: str | None = None,
     on_step: Callable[[int | None], object] | None = None,
 ) -> None
 ```
@@ -379,6 +453,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 **Parameters**
 
+- `instrument` (*str or None*): Instrument key for this playback, or None for the learner’s selection.
 - `force` (*bool*): Play even when exercise audio is muted.
 - `warmup` (*bool*): Silently initialize audio streams before starting playback.
 - `columns` (*iterable of sequence of Note*): The columns of notes, as drawn on a staff.
@@ -420,6 +495,7 @@ def play_sample(
     gap_ms: int,
     on_step: Callable[[int | None], object],
     force: bool = False,
+    instrument: str | None = None,
     warmup: bool = False,
 ) -> None
 ```
@@ -431,6 +507,7 @@ Play a displayed sample and report the sounding column until it ends or is inter
 - `columns` (*sequence of sequence of Note*): Written notes in playback order, with simultaneous notes grouped together.
 - `gap_ms` (*int*): Time between column onsets in milliseconds.
 - `on_step` (*callable*): Receives each sounding column index and None to clear the display.
+- `instrument` (*str or None*): Instrument key for this playback, or None for the learner’s selection.
 - `force` (*bool*): Audition the sample even when exercise audio is muted.
 - `warmup` (*bool*): Prepare the audio streams before the first note.
 

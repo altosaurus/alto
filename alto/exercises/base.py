@@ -36,6 +36,75 @@ from typing import Any
 from alto.theory.pitch import Note
 
 
+@dataclass(frozen=True)
+class FingerboardPosition:
+    """
+    A written pitch on one string, with the tuning needed to redraw it.
+
+    Examples
+    --------
+    >>> FingerboardPosition(("C3", "G3", "D4", "A4"), 2, "E4").string
+    2
+    """
+
+    strings: tuple[str, ...]
+    string: int
+    note: str
+    instrument: str = ""  # Qualified pack id. Older stored cards can omit it.
+
+
+@dataclass(frozen=True)
+class PicturePosition:
+    """
+    A pack-owned image and a marked location in its original pixels.
+
+    Attributes
+    ----------
+    instrument : str
+        The pack-qualified instrument whose picture is shown.
+    point : tuple of float
+        The marked location, in the picture's own pixels.
+    note : str, default ""
+        A pitch to play when the answer is right, or an empty string for a silent question.
+    size : float, default 0.0
+        The marker's diameter in the picture's own pixels. Zero asks for Alto's default size, which suits a large part.
+    focus : tuple of float, default ()
+        The region to show, as left, top, width and height in the picture's own pixels, so a small part is easy to see.
+        Empty shows the whole picture.
+    marker : bool, default True
+        False shows the picture without a dot, for a lesson that introduces the whole instrument.
+    view : str, default ""
+        The instrument's extra picture to use, such as "back", with the point and focus in that picture's pixels. Empty uses
+        the instrument's main picture.
+    keys : tuple of tuple of str, default ()
+        Keys to highlight on the instrument's keyboards, which Alto draws instead of the picture. Each is the name of a
+        keyboard and the pitch of a key on it, such as ``("Lower manual", "C4")``.
+    notes : tuple of str, default ()
+        Pitches to play one after another when the answer is right, such as the two keys of an interval. They take the
+        place of `note`.
+    span : tuple of str, default ()
+        The lowest and highest key to draw on each keyboard, such as ``("C3", "C5")``. Empty draws each keyboard's whole range.
+
+    Examples
+    --------
+    >>> PicturePosition("pack.studio.drum", (80, 50)).point
+    (80, 50)
+    >>> PicturePosition("pack.studio.organ", (0, 0), keys=(("Great", "C4"), ("Swell", "E4"))).keys[1]
+    ('Swell', 'E4')
+    """
+
+    instrument: str
+    point: tuple[float, float]
+    note: str = ""
+    size: float = 0.0
+    focus: tuple[float, ...] = ()
+    marker: bool = True
+    view: str = ""
+    keys: tuple[tuple[str, str], ...] = ()
+    notes: tuple[str, ...] = ()
+    span: tuple[str, ...] = ()
+
+
 @dataclass
 class Question:
     """
@@ -65,6 +134,10 @@ class Question:
         Use the signature's relative minor for scale degree naming. Keyword-only.
     grid : dict of str to tuple of (int, int) or None
         Where to put each answer button, as (row, column). Without it the choices form one row. Keyword-only.
+    picture : PicturePosition or None
+        Pack image, marker coordinates and optional sounding pitch. Keyword-only.
+    fingerboard : FingerboardPosition or None
+        Tuning, string index, and marked pitch for a four-string identification question. Keyword-only.
     keyboard : Note or None
         A piano key to highlight, instead of drawing a staff. Keyword-only.
     keyboard_notes : list of Note
@@ -178,6 +251,8 @@ class Question:
     required: tuple[str, ...] = ()  # answers that must all be given, in any order, such as both names of an enharmonic key
     place_clef: str = ""  # the clef to put on a blank staff, as a G, C or F symbol in the right place
 
+    picture: PicturePosition | None = None
+    fingerboard: FingerboardPosition | None = None
     notation_target: tuple[str, int] | None = None
     notation_excerpt: str | None = None
 
@@ -443,6 +518,24 @@ class Question:
             spelled(self.keyboard),
             spelled(self.construct),
         ]
+        if self.picture is not None:
+            # A question that uses the defaults keeps the key it had before packs could size, zoom, or hide the marker.
+            picture = asdict(self.picture)
+            del picture["span"]  # how much of the keyboards is drawn does not change which question this is
+            for name, default in (
+                ("size", 0.0),
+                ("focus", ()),
+                ("marker", True),
+                ("view", ""),
+                ("keys", ()),
+                ("notes", ()),
+            ):
+                if picture[name] == default:
+                    del picture[name]
+            data.append(picture)
+        if self.fingerboard is not None:
+            # Exercise IDs namespace cards. Preserve the historical key when attaching pack assets.
+            data.append({k: v for k, v in asdict(self.fingerboard).items() if k != "instrument"})
         if self.notation_target is not None:
             data.append(self.notation_target)
         if self.notation_excerpt is not None:
@@ -502,6 +595,28 @@ class Question:
         True
         """
         d = dict(d)
+        if d.get("picture") is not None:
+            picture = d["picture"]
+            d["picture"] = PicturePosition(
+                picture["instrument"],
+                (picture["point"][0], picture["point"][1]),
+                picture.get("note", ""),
+                picture.get("size", 0.0),
+                tuple(picture.get("focus", ())),
+                picture.get("marker", True),
+                picture.get("view", ""),
+                tuple((name, pitch) for name, pitch in picture.get("keys", ())),
+                tuple(picture.get("notes", ())),
+                tuple(picture.get("span", ())),
+            )
+        if d.get("fingerboard") is not None:
+            position = d["fingerboard"]
+            d["fingerboard"] = FingerboardPosition(
+                tuple(position["strings"]),
+                position["string"],
+                position["note"],
+                position.get("instrument", ""),
+            )
         if d.get("notation_target") is not None:
             d["notation_target"] = tuple(d["notation_target"])
         if d.pop("staff_key_hidden", False):
@@ -613,6 +728,9 @@ class Exercise(ABC):
         One line saying what the exercise is for.
     par_seconds : float, default 5.0
         How long a good first answer takes; much quicker earns credit and much slower counts against the question.
+    icon : str, default ""
+        SVG shapes for the exercise's tile, in a 24 by 24 box with COLOR where the theme's ink goes. Plugins supply one;
+        empty uses Alto's own icon for the exercise.
     has_sound : bool, default True
         False for an exercise that makes no sound at all, whatever the sound button says.
 
@@ -631,6 +749,30 @@ class Exercise(ABC):
     description: str = ""
     par_seconds: float = 5.0  # how long a good first answer takes; much quicker earns credit, much slower counts against
     has_sound: bool = True  # False for an exercise that makes no sound at all, whatever the sound button says
+    icon: str = ""  # SVG shapes for the exercise's tile, such as one a plugin supplies; empty for the built-in icon
+
+    def sound_instrument(self, key: str | None) -> str | None:
+        """
+        Choose the instrument that plays this exercise's notes.
+
+        Parameters
+        ----------
+        key : str or None
+            The key of the instrument the question's picture asks for, or None when it asks for none.
+
+        Returns
+        -------
+        str or None
+            The key to play with, or None for the learner's own choice of sound. Exercises return the picture's instrument unless
+            a setting says otherwise.
+
+        Examples
+        --------
+        >>> from alto.exercises.library import NoteNames
+        >>> NoteNames().sound_instrument("pack.viola.bowed-viola")
+        'pack.viola.bowed-viola'
+        """
+        return key
 
     def settings_signature(self) -> str:
         """
