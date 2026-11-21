@@ -20,3 +20,18 @@ docs/_site/
 docs/.jekyll-cache/
 docs/.bundle/
 docs/vendor/
+
+# The plugin tutorials, brought into the docs from their own repositories by scripts/tutorial_docs.py (see "Building the docs")
+docs/plugins/viola.md
+docs/assets/plugins/viola/
+docs/assets/plugins/viola.zip
+docs/assets/plugins/viola-fingerboard.png
+docs/assets/plugins/viola-fingerboard-detail.png
+docs/assets/img/plugin-viola-*.png
+docs/plugins/harpsichord.md
+docs/assets/img/plugin-harpsichord-*.png
+
+# The recordings of the example plugins and the harpsichord's photographs that the plugin tests use are made when the tests run (see tests/pack_fixtures.py)
+tests/packs/*/sounds/
+tests/packs/*/images/
+tests/packs/*/icons/

@@ -68,8 +68,15 @@ def shown() -> set[str]:
     """
     found = set()
     docs = ROOT / "docs"
-    for page in (*docs.glob("*.md"), *(docs / "guide").glob("*.md")):
-        found |= set(re.findall(r'shot\.html src="([^"]+)\.png"', page.read_text()))
+    spec = importlib.util.spec_from_file_location("tutorial_docs", ROOT / "scripts" / "tutorial_docs.py")
+    assert spec is not None and spec.loader is not None
+    tutorials = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tutorials)
+    # A tutorial brought in from its own repository takes its own pictures, in that repository.
+    brought_in = {docs / page for page, _ in tutorials.TUTORIALS.values()}
+    for page in (*docs.glob("*.md"), *(docs / "guide").glob("*.md"), *(docs / "plugins").glob("*.md")):
+        if page not in brought_in:
+            found |= set(re.findall(r'shot\.html src="([^"]+)\.png"', page.read_text()))
     home = (ROOT / "docs" / "index.md").read_text()
     front_matter = home.split("---", 2)[1]
     found.update(re.findall(r"^    image: ([\w-]+)\.png$", front_matter, re.MULTILINE))

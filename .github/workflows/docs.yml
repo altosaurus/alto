@@ -49,7 +49,7 @@ jobs:
           build=true
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
             if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(docs/|scripts/docs_site\.py$|\.github/workflows/docs\.yml$)'; then
+              | grep -qE '^(docs/|scripts/(docs_site|check_plugin_registry|tutorial_docs)\.py$|\.github/workflows/docs\.yml$)'; then
               build=false
             fi
           fi
@@ -93,6 +93,16 @@ jobs:
         with:
           ref: main
           path: tooling
+          fetch-depth: 0
+
+      - name: Check plugin registrations before publication
+        working-directory: tooling
+        run: python3 scripts/check_plugin_registry.py
+
+      # The plugin tutorials live in repositories of their own. Only the page and the files it shows are copied in, and every build
+      # takes the tutorial as it is on its default branch, so a release's docs get a fixed copy only if they are built again.
+      - name: Bring in the plugin tutorials
+        run: python3 tooling/scripts/tutorial_docs.py all --docs source/docs
 
       - name: Lay the current layout over a release made before it had a dropdown
         if: steps.what.outputs.overlay == 'true'

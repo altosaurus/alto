@@ -7,6 +7,8 @@ on:
     paths:
       - "docs/**"
       - "CHANGELOG.md"
+      - "scripts/check_plugin_registry.py"
+      - "scripts/tutorial_docs.py"
       - ".github/workflows/docs-check.yml"
 
 permissions:
@@ -23,6 +25,17 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check plugin registrations
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: python3 scripts/check_plugin_registry.py --base "$BASE"
+
+      # The plugin tutorials live in repositories of their own; the pages that link to them need them to build.
+      - name: Bring in the plugin tutorials
+        run: python3 scripts/tutorial_docs.py all
 
       - uses: ruby/setup-ruby@v1
         with:
