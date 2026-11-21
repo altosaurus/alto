@@ -20,6 +20,8 @@ Changes that are in the development docs and not in a release yet.
 ### Added
 {: .no-toc}
 
+- Third-party instrument packs can supply artwork, recordings, correct-answer animations, and exercises in one ZIP. Tools → Plugins lists the installed plugins and installs one from a downloaded ZIP or uninstalls it while keeping practice history. Packs can also add their own lessons, extra views of an instrument such as its back, settings for a note exercise (a sound override, a range, accidentals, and the octave), tile icons, glossary entries, links between exercises and lessons, and knowledge checks answered by clicking the picture. The viola plugin tutorial includes a downloadable example with fingerboard and instrument anatomy exercises and two lessons. Instruments can also declare keyboards, which Alto draws in a look the plugin chooses, and a keyboard interval exercise highlights two keys on them, with a range selector, a choice of intervals, and a choice of manuals. A plugin exercise's sound setting opens a list of instruments to sound instead of switching the plugin's sound on or off. It lists the plugin's own instruments first, then other instruments of the same kind, then the rest. The harpsichord example pack, with a Flemish harpsichord sound, shows a double harpsichord, asks the interval between two highlighted keys, names its parts, and adds two lessons and glossary entries.
+
 - Interval Identification has an **Inversions** switch for naming the inversion of a written interval.
 
 ### Fixed

@@ -502,3 +502,7 @@ inversion. In the exercise settings you can choose:
   from the signature, so a natural sign appears where the chord needs one.
 
 {% include shot.html src="arpeggios.png" alt="Arpeggio Identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" %}
+
+## Instrument pack exercises
+
+Installed packs add exercises to the **Instruments** category. The example viola pack includes **Viola Note Identification** and **Parts of the Viola**. The example harpsichord pack adds **Harpsichord Interval Identification** and **Parts of the Harpsichord**. Download an example and follow its tutorial to create exercises with your own artwork and recordings. [Viola plugin tutorial]({{ '/plugins/viola/' | relative_url }}) · [Harpsichord plugin tutorial]({{ '/plugins/harpsichord/' | relative_url }})
