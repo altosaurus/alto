@@ -270,6 +270,28 @@ A simple or compound interval between two spelled notes.
 'P5'
 ```
 
+### Interval.inversion
+
+```python
+@property
+def inversion() -> Interval
+```
+
+Invert the spelled interval within an octave.
+
+**Returns**
+
+- *Interval*: The complementary number and quality. Reduce compounds first, keeping octaves as octaves.
+
+**Examples**
+
+```pycon
+>>> Interval.parse("M3").inversion.short, Interval.parse("A4").inversion.short
+('m6', 'd5')
+>>> Interval.parse("m10").inversion.short, Interval.parse("P15").inversion.short
+('M6', 'P1')
+```
+
 ### Interval.is_perfect_type
 
 ```python

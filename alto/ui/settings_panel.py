@@ -3584,6 +3584,8 @@ def load_intervals(cfg: settings.IntervalSettings | None = None, *, prefix: str 
     if quality == "false":  # Older versions saved the Quality switch as "true" or "false".
         quality = "interval"
     cfg.quality_mode = quality if quality in settings.INTERVAL_QUALITY_MODES else defaults.quality_mode
+    if prefix == "intervals":
+        cfg.inversions = text_value(saved, key=f"{prefix}/inversions", default="false").lower() == "true"
     cfg.button_mode = "all" if text_value(saved, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
     try:
         cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/buttonCount", default=6)))
@@ -3677,6 +3679,12 @@ class IntervalSettingsPanel(_StaffRangePanel):
             row.clicked.connect(lambda _checked=False, page=index: self._go(page))
             layout.addWidget(row)
         self.buttons_row.setVisible(prefix == "intervals")
+        if prefix == "intervals":
+            self.inversions_row = _ToggleRow("Inversions")
+            self.inversions_row.setToolTip("Identify the inversion of the interval shown on the staff")
+            self.inversions_row.setOn(cfg.inversions)
+            self.inversions_row.switched.connect(self._save_and_emit)
+            layout.insertWidget(layout.indexOf(self.quality_row) + 1, self.inversions_row)
         layout.addStretch()
 
         self.boxes, clefs = _clefs_page(
@@ -3876,6 +3884,8 @@ class IntervalSettingsPanel(_StaffRangePanel):
         saved = store()
         prefix = self.prefix
         if prefix == "intervals":
+            cfg.inversions = self.inversions_row.isOn()
+            saved.setValue(f"{prefix}/inversions", "true" if cfg.inversions else "false")
             saved.setValue(f"{prefix}/buttonMode", cfg.button_mode)
             saved.setValue(f"{prefix}/buttonCount", cfg.button_count)
         saved.setValue(f"{prefix}/clefs", ",".join(sorted(cfg.clefs)))

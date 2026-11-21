@@ -69,6 +69,7 @@ from alto.anki_export import (
 )
 from alto.exercises import REGISTRY, Exercise, Question
 from alto.exercises.library import (
+    INTERVAL_INVERSION_PROMPTS,
     ChordQualities,
     IntervalConstruction,
     IntervalNames,
@@ -153,6 +154,8 @@ def _card_prompt(q: Question, *, exercise: Exercise) -> str:
         target = (q.prompt or q.answer).removeprefix("Place ").removesuffix(".").removesuffix(" on the staff")
         return f"Place {target} on the staff."
     if isinstance(exercise, IntervalNames):
+        if q.prompt in INTERVAL_INVERSION_PROMPTS.values():
+            return q.prompt
         if q.answer.isdecimal():
             return "Identify the numeric interval."
         if q.answer in QUALITY_NAMES.values():

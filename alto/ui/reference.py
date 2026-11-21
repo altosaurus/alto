@@ -659,6 +659,9 @@ _READING_HINTS = {
         "<p>Count letter names from the lower note to the higher, including both notes. "
         "C to E and C to E♭ are both thirds. Count half steps to find the quality. "
         "A major third (M3) spans four half steps, and a minor third (m3) spans three.</p>"
+        "<p>With <b>Inversions</b> on, read the written interval first. For C up to E, move C up an octave. "
+        "E up to C is a minor sixth. Simple interval numbers add up to nine with their inversions. "
+        "Major and minor swap, augmented and diminished swap, and perfect stays perfect.</p>"
     ),
     KeyboardIntervals: (
         "<p>Start at zero on the lower highlighted key. Count each move to the next key, black or white. "

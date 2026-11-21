@@ -84,6 +84,89 @@ def test_only_possible_intervals_are_asked() -> None:
     assert "Range" in exercise.generate(rng).prompt
 
 
+@pytest.mark.parametrize(
+    ("display", "direction"),
+    [("Harmonic", "ascending"), ("Melodic", "ascending"), ("Melodic", "descending")],
+)
+def test_inverted_answers_follow_the_written_spelling(display: str, direction: str) -> None:
+    """
+    Grade the inversion while keeping the selected interval on the staff.
+
+    Parameters
+    ----------
+    display : str
+        Simultaneous or successive notes.
+    direction : str
+        Order for melodic notes.
+    """
+    cfg = settings.intervals
+    cfg.inversions, cfg.button_mode = True, "all"
+    cfg.displays, cfg.directions = {display}, {direction}
+    cfg.clefs, cfg.ranges = {"treble"}, {"treble": (28, 42)}
+    cfg.accidentals = set(settings.INTERVAL_ACCIDENTALS)
+    spellings = {"M3": "m6", "m3": "M6", "A4": "d5", "d5": "A4", "P8": "P1", "M10": "m6", "P15": "P1"}
+    cfg.intervals = set(spellings)
+    exercise = IntervalNames()
+    rng = random.Random(4)
+    for mode in ("combined", "interval", "quality"):
+        cfg.quality_mode = mode
+        seen = set()
+        for _ in range(90):
+            q = exercise.generate(rng)
+            low, high = sorted((note for chord in q.staff for note in chord), key=lambda note: note.diatonic)
+            written = Interval.between(low, high=high).short
+            seen.add(written)
+            inverse = spellings[written]
+            expected = {"combined": inverse, "interval": inverse[1:], "quality": QUALITY_NAMES[inverse[0]]}[mode]
+            assert q.check(expected) and ("invert" in q.prompt or "inversion" in q.prompt)
+            assert q.explanation.endswith(f"The inversion of {written} is {inverse}.")
+            assert len(q.choices) == len(set(q.choices)) and expected in q.choices
+        assert seen == cfg.intervals
+
+
+def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
+    """
+    Toggle the setting from the gear, answer the new question, and restore the original review pool.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.intervals
+    cfg.intervals = {"M3", "P5", "A4"}
+    cfg.button_count = 2
+    view = ExerciseView(IntervalNames(), rng=random.Random(3))
+    view.setStyleSheet(app_style(view.palette()))
+    view.show()
+    panel = view.settings_panel
+    assert isinstance(panel, IntervalSettingsPanel) and view.gear is not None
+    view.gear.click()
+    view._pane_anim.setCurrentTime(view._pane_anim.duration())
+    row = panel.inversions_row
+    assert not row.isOn()
+    for width, height in ((900, 480), (1300, 900)):
+        view.resize(width, height)
+        app.processEvents()
+        assert row.isVisible() and row.switch.isVisibleTo(panel) and row.width() >= row.minimumSizeHint().width()
+    original = view.exercise.settings_signature()
+    assert "inversions" not in original
+    row.click()
+    assert cfg.inversions and view.exercise.settings_signature() != original
+    q = view.question
+    assert q is not None and len(q.choices) == 2 and set(q.choices) <= {"m6", "P4", "d5"}
+    assert view.prompt.text() == q.prompt
+    view.buttons[q.choices.index(q.answer)].click()
+    assert view.answered
+    cfg.inversions = False
+    load_intervals()
+    assert cfg.inversions and Question.from_dict(q.to_dict()).check(q.answer)
+    row.click()
+    assert not cfg.inversions and view.exercise.settings_signature() == original
+    assert set(view.question.choices) <= cfg.intervals
+    view.close()
+
+
 @pytest.mark.parametrize(("display", "gap_ms"), [("Melodic", 500), ("Harmonic", 450)])
 def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int) -> None:
     """

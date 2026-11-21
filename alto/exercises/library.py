@@ -486,6 +486,13 @@ def _interval_starts(
     return starts
 
 
+INTERVAL_INVERSION_PROMPTS = {
+    "interval": "What is the number of the inverted interval?",
+    "quality": "What is the quality of the inverted interval?",
+    "combined": "What is the inversion of this interval?",
+}
+
+
 @register
 class IntervalNames(Exercise):
     """
@@ -522,6 +529,8 @@ class IntervalNames(Exercise):
             "<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
             "d (diminished). In Quality, choose whether to answer with the number, the full interval, or the quality alone. "
+            "Turn on Inversions to name the inverted interval. For example, C up to E is a major third. "
+            "Move C up an octave. From E up to C, the interval is a minor sixth. Reduce compound intervals first. "
             "Use Display Mode to choose how the two notes appear. Under Melodic, check Ascending, Descending, or both. "
             "Note Value sets the written duration of both notes. You can click an answer or use the shortcut "
             "shown on its button."
@@ -546,6 +555,8 @@ class IntervalNames(Exercise):
             # The original melodic questions were stored with an empty signature.
             return ""
         parts = vars(cfg).copy()
+        if not cfg.inversions:
+            del parts["inversions"]  # Keep earlier identification questions eligible for review.
         if cfg.quality_mode != "quality":
             # Keep reviews saved under the original on/off Quality switch.
             del parts["quality_mode"]
@@ -663,6 +674,12 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
     staff = [[first, second]] if display == "Harmonic" else [[first], [second]]
     if construction:
         return _interval_placement(cfg, rng=rng, clef=clef, key=key, interval=iv, staff=staff, starts=starts)
+    explanation = f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones."
+    if cfg.inversions:
+        inverted = iv.inversion
+        explanation += f" The inversion of {iv.short} is {inverted.short}."
+        iv = inverted
+        available = sorted(dict.fromkeys(other.inversion for other in available), key=lambda other: other.number)
     if cfg.quality_mode == "interval":
         prompt, answer = "What is the interval number?", str(iv.number)
         pool = list(dict.fromkeys(str(other.number) for other in available))
@@ -674,14 +691,14 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
         prompt, answer = "", iv.short
         pool = [other.short for other in available]
     return Question(
-        prompt,
+        INTERVAL_INVERSION_PROMPTS[cfg.quality_mode] if cfg.inversions else prompt,
         choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
         answer=answer,
         staff=staff,
         clef=clef,
         key=key,
         value=rng.choice(cfg.active_values()),
-        explanation=f"{first} to {second}: {QUALITY_NAMES[iv.quality]} {iv.number}, {iv.semitones} semitones.",
+        explanation=explanation,
     )
 
 
@@ -826,7 +843,7 @@ class IntervalConstruction(Exercise):
         --------
         A change in staff ranges changes which stored questions are eligible.
         """
-        return signature(settings.interval_construction)
+        return signature({key: value for key, value in vars(settings.interval_construction).items() if key != "inversions"})
 
     def generate(self, rng: random.Random) -> Question:
         """

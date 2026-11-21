@@ -5,6 +5,10 @@ Alto uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Interval Identification has an **Inversions** switch for naming the inversion of a written interval.
+
 ### Fixed
 
 - Lesson tiles, search, navigation, menus, and exercise controls now update their icons and colors when the desktop switches between light and dark mode while Alto is set to System.

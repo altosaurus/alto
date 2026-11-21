@@ -240,6 +240,7 @@ IntervalSettings(
     button_count: int = 6,
     accidentals: set[int] = field(default_factory=lambda: set(DEFAULT_INTERVAL_ACCIDENTALS)),
     quality_mode: str = 'combined',
+    inversions: bool = False,
     intervals: set[str] = field(default_factory=lambda: {name for name, iv in WRITTEN_INTERVALS.items() if 2 <= iv.number <= 7 or name == 'P8'}),
 )
 ```

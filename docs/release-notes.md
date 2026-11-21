@@ -17,6 +17,11 @@ Each release's downloads are on its GitHub release.
 
 Changes that are in the development docs and not in a release yet.
 
+### Added
+{: .no-toc}
+
+- Interval Identification has an **Inversions** switch for naming the inversion of a written interval.
+
 ### Fixed
 {: .no-toc}
 

@@ -168,6 +168,10 @@ def test_card_instructions_follow_the_expected_answer_format() -> None:
     for mode, target in (("interval", "numeric interval"), ("quality", "quality"), ("combined", "interval and quality")):
         settings.intervals.quality_mode = mode
         assert exporter._card_prompt(intervals.generate(rng), exercise=intervals) == f"Identify the {target}."
+        settings.intervals.inversions = True
+        inversion = intervals.generate(rng)
+        settings.intervals.inversions = False
+        assert exporter._card_prompt(inversion, exercise=intervals) == inversion.prompt
 
     keyboard = KeyboardNotes()
     settings.keyboard.require_octave = True
