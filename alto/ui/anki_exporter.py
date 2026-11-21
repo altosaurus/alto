@@ -78,16 +78,18 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
 )
+from alto.exercises.packs import load_packs
 from alto.learning import Database, Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS
-from alto.location import desktop_name
+from alto.location import database_path, desktop_name
 from alto.notation_excerpts import excerpts
 from alto.theory.pitch import MAJOR_KEYS, QUALITY_NAMES
 from alto.ui import icons
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.dropdown import style_combo_popup
-from alto.ui.home import EXERCISE_ICONS, category_tree
+from alto.ui.fingerboard import FingerboardWidget
+from alto.ui.home import category_tree, exercise_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
 from alto.ui.notation import load_style as load_notation_style
@@ -221,6 +223,13 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
             )
             staff.resize(staff.sizeHint())
             back.append(_picture(staff, folder=folder, label="Completed staff"))
+    position = q.fingerboard or q.picture
+    if position is not None:
+        board = FingerboardWidget()
+        board.show_position(position)
+        board.resize(board.sizeHint())
+        label = "Marked fingerboard position" if q.fingerboard else "Marked instrument picture"
+        front.append(_picture(board, folder=folder, label=label))
     if q.keyboard is not None or q.keyboard_notes:
         keyboard = KeyboardWidget()
         keyboard.resize(720, keyboard.height())
@@ -750,7 +759,7 @@ class AnkiExporter(QDialog):
         self.gear.setIcon(icons.svg_icon(icons.SLIDERS, color=ink))
         with QSignalBlocker(self.tree):
             for cls, leaf in self.items.items():
-                leaf.setIcon(0, icons.svg_icon(EXERCISE_ICONS[cls.__name__], color=ink, size=icons.ACTIVITY_ICON_SIZE))
+                leaf.setIcon(0, icons.svg_icon(exercise_icon(cls.__name__), color=ink, size=icons.ACTIVITY_ICON_SIZE))
             font, muted = navigation_heading_style(palette)
             for group in self.group_items:
                 group.setFont(0, font)
@@ -911,6 +920,7 @@ class ExporterSession:
             target=_run_exporter,
             args=(receiver,),
             kwargs={
+                "plugins": database_path().parent / "plugins",
                 "desktop_id": QApplication.desktopFileName() or desktop_name(),
                 "preferences": export_settings(),
                 "selected": selected,
@@ -957,6 +967,7 @@ def _run_exporter(
     limits: list[tuple[str, int | None, int | None]],
     reviews: dict[str, list[Review]],
     selected: str,
+    plugins: Path,
 ) -> None:
     """Run the exercise controls in isolation from the practice window's mutable settings."""
     with commands, TemporaryDirectory(prefix="alto-export-") as folder, closing(Database()) as db:
@@ -967,6 +978,7 @@ def _run_exporter(
         app.setDesktopFileName(desktop_id)
         import_settings(preferences)
         apply_theme(saved_theme())
+        load_packs(plugins)
         load_exercise_settings()
         load_notation_style()
         load_keyboard_style()

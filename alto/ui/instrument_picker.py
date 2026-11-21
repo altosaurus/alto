@@ -45,8 +45,10 @@ from alto.audio import (
 from alto.instrument_info import (
     FAMILY_SUMMARY,
     INFO,
+    InstrumentInfo,
     coverage,
 )
+from alto.instrument_packs import INSTALLED
 from alto.ui.colors import blend_name
 from alto.ui.store import (
     store,
@@ -224,6 +226,7 @@ class InstrumentPicker(QWidget):
 
         # The summary page.
         self.title = QLabel()
+        self.title.setTextFormat(Qt.TextFormat.PlainText)
         title_font = QFont(self.font())
         title_font.setPointSizeF(title_font.pointSizeF() * 1.5)
         title_font.setBold(True)
@@ -326,8 +329,7 @@ class InstrumentPicker(QWidget):
         >>> InstrumentPicker._group_of("viola_bowed"), InstrumentPicker._group_of("flute")
         ('Viola', 'Flute')
         """
-        inst = INSTRUMENT_BY_KEY[key]
-        return inst.family or inst.label
+        return INSTRUMENT_BY_KEY[key].picker_group
 
     def _default_key(self, group: str) -> str:
         """
@@ -395,11 +397,12 @@ class InstrumentPicker(QWidget):
             item = self.list.item(row)
             group = item.data(Qt.ItemDataRole.UserRole)
             members = self.groups[group]
+            label = members[0].label if members[0].pack_name else group
             active = next((i for i in members if i.key == sounds.instrument), None)
             if active is None:
-                text = group
+                text = label
             else:
-                text = f"{group} ({active.variant})  ✓" if active.variant else f"{group}  ✓"
+                text = f"{label} ({active.variant})  ✓" if active.variant else f"{label}  ✓"
             item.setText(text)
             installed = any(coverage(sounds.recordings(i)).installed for i in members)
             font = item.font()
@@ -591,6 +594,39 @@ class InstrumentPicker(QWidget):
             return shown[0][1]
         return "\n".join(f"{m.variant}: {v}" for m, v in shown)
 
+    # noinspection PyMethodMayBeStatic
+    def _info(self, member: Instrument) -> InstrumentInfo:
+        """
+        Find what is known about an instrument's recordings, from Alto's own list or from its plugin.
+
+        Parameters
+        ----------
+        member : Instrument
+            An instrument in the list.
+
+        Returns
+        -------
+        InstrumentInfo
+            The facts the plugin supplied, a plain statement when it supplied none, or Alto's own entry.
+
+        Examples
+        --------
+        >>> picker = InstrumentPicker()
+        >>> picker._info(INSTRUMENT_BY_KEY["flute"]).source.startswith("University of Iowa")
+        True
+        """
+        if not member.pack_name:
+            return INFO[member.key]
+        model = INSTALLED.get(member.key)
+        if model is not None and model.sound_info is not None:
+            return model.sound_info
+        return InstrumentInfo(
+            "Recordings supplied by an installed instrument pack.",
+            source=member.pack_name,
+            source_url="",
+            terms="",
+        )
+
     def show_group(self, group: str) -> None:
         """
         Fill the summary page for an entry from what is known about it and what is on disk.
@@ -610,11 +646,11 @@ class InstrumentPicker(QWidget):
         self.shown = group
         members = self.groups[group]
         many = len(members) > 1
-        infos = [INFO[m.key] for m in members]
+        infos = [self._info(m) for m in members]
         have = [coverage(sounds.recordings(m)) for m in members]
         files = [sounds.recordings(m) for m in members]
         t = tokens(self)
-        self.title.setText(group)
+        self.title.setText(members[0].label if members[0].pack_name else group)
         self.card.setStyleSheet(f"QFrame#helpCard {{ background: {t['panel']}; border: 1px solid {t['line']}; }}")
         self.list.setStyleSheet(f"QListWidget#categories {{ background: {t['well']}; }}")  # a shade apart from the card
         self.divider.setStyleSheet(f"background: {t['line']};")
@@ -647,14 +683,18 @@ class InstrumentPicker(QWidget):
 
         # The facts. What all the ways of playing share is shown once; what differs is shown for each.
         self._clear(self.facts)
-        urls = {i.source_url for i in infos}
-        source = (
-            self._link(infos[0].source_url, text=infos[0].source)
-            if len(urls) == 1
-            else "<br>".join(f"{m.variant}: {self._link(i.source_url, text=i.source)}" for m, i in zip(members, infos))
-        )
+        source = infos[0].source
+        if infos[0].source_url:
+            urls = {i.source_url for i in infos}
+            source = (
+                self._link(infos[0].source_url, text=source)
+                if len(urls) == 1
+                else "<br>".join(f"{m.variant}: {self._link(i.source_url, text=i.source)}" for m, i in zip(members, infos))
+            )
+        plugin = members[0].pack_name if all(m.pack_name == members[0].pack_name for m in members) else ""
         rows = [
-            ("Source", source, True),
+            ("Plugin", plugin, False),
+            ("Source", source, bool(infos[0].source_url)),
             ("Performer", self._per_way(members, values=[i.performer for i in infos]), False),
             ("Recorded", self._per_way(members, values=[i.recorded for i in infos]), False),
             ("Includes", self._per_way(members, values=[i.includes for i in infos]), False),

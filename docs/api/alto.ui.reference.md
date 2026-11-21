@@ -406,10 +406,41 @@ Show the hints for the current note exercise.
 'New to this? Take the full lesson  →'
 ```
 
+## PluginReferencePanel
+
+```python
+PluginReferencePanel(
+    exercise: Exercise,
+    *,
+    lessons: list[Lesson],
+)
+```
+
+Bases: `QWidget`
+
+What a plugin's exercise offers to look up: what it asks, and a button for each lesson that teaches it.
+
+**Constructor**
+
+Show the exercise's description and a button for each lesson that goes with it.
+
+**Parameters**
+
+- `exercise` (*Exercise*): The plugin's exercise whose reference was opened.
+- `lessons` (*list of Lesson*): At least one lesson that names the exercise as practice, or that the exercise names. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> demo = Lesson(key="pack.d.l", title="Parts", about="", summary="", category="D", steps=(), exercise="x")
+>>> PluginReferencePanel(NoteNames(), lessons=[demo]).lesson_buttons[0].text()
+'New to this? Take the lesson: Parts  →'
+```
+
 ## reference_panel_for
 
 ```python
-def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | None
+def reference_panel_for(exercise: Exercise) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | PluginReferencePanel | None
 ```
 
 Return the reference pane for an exercise.

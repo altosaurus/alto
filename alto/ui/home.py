@@ -58,7 +58,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto.exercises.base import Exercise
+from alto.exercises.base import REGISTRY, Exercise
 from alto.learning import Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER
 from alto.lessons import (
@@ -294,6 +294,53 @@ class TileCard(QPushButton):
             self._refresh_icon()
 
 
+def exercise_icon(name: str) -> str:
+    """
+    Find the icon for an exercise: the one its plugin supplies, or Alto's own.
+
+    Parameters
+    ----------
+    name : str
+        The exercise's class name.
+
+    Returns
+    -------
+    str
+        SVG shapes with COLOR where the theme's ink goes.
+
+    Examples
+    --------
+    >>> exercise_icon("NoteNames") == icons.EXERCISE_NOTE_NAMES
+    True
+    >>> exercise_icon("pack.nothing.here") == icons.EXERCISE_NOTE_NAMES
+    True
+    """
+    found = next((cls for cls in REGISTRY if cls.__name__ == name), None)
+    return (found.icon if found else "") or EXERCISE_ICONS.get(name, icons.EXERCISE_NOTE_NAMES)
+
+
+def lesson_icon(lesson: Lesson) -> str:
+    """
+    Find the icon for a lesson's tile: its own if a plugin gave it one, otherwise its primary exercise's.
+
+    Parameters
+    ----------
+    lesson : Lesson
+        The lesson.
+
+    Returns
+    -------
+    str
+        SVG shapes with COLOR where the theme's ink goes.
+
+    Examples
+    --------
+    >>> lesson_icon(LESSONS[0]) == exercise_icon(LESSONS[0].exercise)
+    True
+    """
+    return lesson.icon or exercise_icon(lesson.exercise)
+
+
 class ExerciseCard(TileCard):
     """
     The card of an exercise: its icon on top, then its category, name and a one-line description.
@@ -331,7 +378,7 @@ class ExerciseCard(TileCard):
         'Name the interval between two notes.'
         """
         super().__init__(
-            icon=EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES),
+            icon=exercise_icon(cls.__name__),
             category=cls.category,
             name=cls.name,
             about=cls.description,
@@ -403,7 +450,7 @@ def lesson_card(
     """
     where = saved_step(lesson)
     return TileCard(
-        icon=EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES),
+        icon=lesson_icon(lesson),
         category=lesson.category,
         name=lesson.title,
         about=lesson.summary,

@@ -39,6 +39,7 @@ A piano keyboard drawn to real proportions that can highlight one or more keys.
 - `pad` (*float*): The frame padding, in pixels.
 - `max_key_width` (*float*): The widest a key may be, in pixels. Smaller when something else (the key signature) shares the page.
 - `highlight_color` (*QColor*): The color of the highlighted key.
+- `key_length` (*float*): How long a natural key is drawn, in key widths. A piano's is 6.2, and a harpsichord's keys can be shorter.
 
 **Examples**
 
@@ -265,6 +266,7 @@ changes.
 - `dragged` (*Signal*): Emitted with the lowest and highest key (MIDI numbers) as the span is dragged.
 - `lo` (*int*): The lowest key shaded.
 - `hi` (*int*): The highest key shaded.
+- `full` (*tuple of int*): The lowest and highest key the miniature draws. All 88 keys, unless a plugin's keyboard has fewer.
 
 **Examples**
 

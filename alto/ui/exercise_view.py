@@ -19,6 +19,7 @@ import math
 import random
 import re
 import time
+from dataclasses import replace
 from typing import TYPE_CHECKING
 
 from fsrs import Rating
@@ -65,6 +66,7 @@ from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
 from alto.exercises.base import (
     ChoiceExercise,
     Exercise,
+    PicturePosition,
     Question,
 )
 from alto.exercises.library import (
@@ -75,6 +77,7 @@ from alto.exercises.library import (
     OrderOfKeys,
     ScaleIdentification,
 )
+from alto.exercises.packs import PackExercise
 from alto.learning import Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER, ReviewInterval
 from alto.learning.learner import PracticeComplete
@@ -92,6 +95,7 @@ from alto.ui.degree_text import (
     DegreeButton,
     DegreeLabel,
 )
+from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.icons import (
     BOOK,
     SLIDERS,
@@ -445,6 +449,7 @@ class ExerciseView(QWidget):
         self._answer_playback = StaffPlayback(self, highlight=self._light_answer_notes)
         self._immediate_playback = StaffPlayback(self)  # Continues across questions and stops when the view closes.
         self.keyboard = KeyboardWidget()
+        self.fingerboard = FingerboardWidget()
         self.circle = FifthsCircle()  # for questions on the circle of fifths
         self.fork = KeyFork()  # for 'build this key signature' questions
         self.fork.changed.connect(self._fork_changed)
@@ -711,6 +716,7 @@ class ExerciseView(QWidget):
         placement_layout.addWidget(self.step_row)
         placement_layout.addWidget(self.answer_row)
         lay.addWidget(self.keyboard)
+        lay.addWidget(self.fingerboard)
         self._keyboard_interval_row = QWidget()
         self._keyboard_interval_layout = QHBoxLayout(self._keyboard_interval_row)
         self._keyboard_interval_layout.setContentsMargins(0, 0, 0, 0)
@@ -787,6 +793,7 @@ class ExerciseView(QWidget):
             self.gear.toggled.connect(self._toggle_pane)
             self.settings_panel.changed.connect(self.next_question)  # apply new settings right away
             self.settings_panel.restyled.connect(self.circle.update)  # a new look keeps the question
+            self.settings_panel.restyled.connect(self._redraw_keyboards)
         if reference is not None and self.book_btn is not None:
             ref_pane = QFrame()
             ref_pane.setObjectName("settingsPane")
@@ -1282,6 +1289,9 @@ class ExerciseView(QWidget):
             self._set_accidental(-1 if q.starting_slots and q.key < 0 else 1)
         self._show_placement_rows()
         self.keyboard.setVisible(q.keyboard is not None or bool(q.keyboard_notes))
+        position = q.fingerboard or q.picture
+        self.fingerboard.show_position(position)
+        self.fingerboard.setVisible(position is not None)
         self.key_staff.setVisible(q.key_staff)
         self.key_staff.show_notes([], clef="treble", key=q.key)
         self.keyboard.max_key_width = 30.0 if q.key_staff else 38.0  # leave room for the staff above
@@ -2627,6 +2637,11 @@ class ExerciseView(QWidget):
             if button is None:
                 self.prompt.setText(q.prompt)
             notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
+            position = q.fingerboard or q.picture
+            if isinstance(position, PicturePosition) and position.notes:
+                notes = [[Note.parse(name) for name in position.notes]]  # the keys of an interval, sounded together as a chord
+            elif position and position.note:
+                notes = [[Note.parse(position.note)]]
             self._finish_answer(button, notes=notes)
         else:
             if q.circle is not None:
@@ -2639,6 +2654,18 @@ class ExerciseView(QWidget):
                 self._flash(button, target="#c62828")
             self._after_miss()
         self._update_score()
+
+    def _redraw_keyboards(self) -> None:
+        """
+        Draw a plugin's keyboards over the range the learner is choosing, keeping the question.
+
+        Examples
+        --------
+        Dragging the range selector shortens or lengthens the manuals on screen at once.
+        """
+        picture = self.question.picture if self.question else None
+        if isinstance(self.exercise, PackExercise) and self.exercise.is_keyboard and picture is not None and picture.keys:
+            self.fingerboard.show_position(replace(picture, span=self.exercise.chosen_span()))
 
     def _after_miss(self, retry: Callable[[], None] | None = None, *, delay: int = 450) -> None:
         """
@@ -2723,19 +2750,29 @@ class ExerciseView(QWidget):
             gap = DEFAULT_NOTE_GAP_MS
             if scale:
                 gap = SCALE_GAP_MS
+            elif not immediate and (q.fingerboard or q.picture):
+                gap = self.fingerboard.feedback_gap_ms()
             elif self.staff.interval_voices and len(notes) == 2:
                 gap = MELODIC_INTERVAL_GAP_MS
+            instrument = self.exercise.sound_instrument(self.fingerboard.sound_key)  # the choice made a moment ago counts
             if immediate and self.shuffle_answers:
-                sounds.play_notes(notes, gap_ms=gap, warmup=scale)  # The sequence can outlast this exercise view.
+                sounds.play_notes(
+                    notes,
+                    gap_ms=gap,
+                    warmup=scale,
+                    instrument=instrument,
+                )  # The sequence can outlast this exercise view.
             else:
                 playback = self._immediate_playback if immediate else self._answer_playback
-                playback.play(notes, gap_ms=gap, warmup=scale)
+                playback.play(notes, gap_ms=gap, warmup=scale, instrument=instrument)
             return
-        if self.exercise.has_sound:
+        if self.exercise.has_sound and q.picture is None:
             sounds.play_correct(self.streak)
         if immediate:
             return
-        if q.place_clef:
+        if q.picture is not None:
+            self.fingerboard.animate_silent_answer(600)
+        elif q.place_clef:
             self._flash_clef()
         elif q.build_key:
             self._flash_fork()
@@ -2817,7 +2854,9 @@ class ExerciseView(QWidget):
         if q is None or not self.answered:
             return
         green = QColor(CORRECT_ANSWER_COLOR)
-        if q.keyboard_notes or q.keyboard is not None:
+        if q.fingerboard or q.picture:
+            self.fingerboard.set_sounding(index is not None)
+        elif q.keyboard_notes or q.keyboard is not None:
             self.keyboard.set_highlight_color(green if index is not None else self.palette().color(QPalette.ColorRole.Highlight))
         else:
             staff = self._input() if q.construct is not None or q.construct_scale is not None else self.staff

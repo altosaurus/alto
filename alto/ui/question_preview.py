@@ -30,8 +30,10 @@ from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
 from alto.exercises.base import Question
 from alto.exercises.library import IntervalConstruction, IntervalNames
 from alto.settings import spell
+from alto.theory.pitch import Note
 from alto.ui import icons
 from alto.ui.circle import FifthsCircle
+from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.staff import (
     MAX_STEP,
@@ -140,6 +142,11 @@ class QuestionPreview(QDialog):
             circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
             circle.reveal(animate=False)
             lay.addWidget(circle, alignment=Qt.AlignmentFlag.AlignHCenter)
+        position = q.fingerboard or q.picture
+        board = FingerboardWidget() if position is not None else None
+        if board is not None:
+            board.show_position(position)
+            lay.addWidget(board)
         if q.keyboard is not None or q.keyboard_notes:
             if q.key_staff:
                 key_staff = StaffWidget(
@@ -183,6 +190,8 @@ class QuestionPreview(QDialog):
             if q.construct is not None
             else scale
         )
+        if position and position.note and board and board.model:
+            notes = [[Note.parse(position.note)]]
         # The simple pitch player cannot perform the rhythmic, microtonal, or instrumental markings in these questions.
         if notes and (q.notation_target is None or q.notation_target[0] in ("Notehead", "Stem", "Clef", "Staff line")):
             play = QPushButton("Play")
@@ -190,6 +199,9 @@ class QuestionPreview(QDialog):
                 playback = StaffPlayback(self, highlight=staff.highlight_column)
                 gap_ms = MELODIC_INTERVAL_GAP_MS if staff.interval_voices and len(notes) == 2 else DEFAULT_NOTE_GAP_MS
                 play.clicked.connect(lambda: playback.play(notes, gap_ms=gap_ms))
+            elif board is not None:
+                playback = StaffPlayback(self, highlight=lambda step: board.set_sounding(step is not None))
+                play.clicked.connect(lambda: playback.play(notes, gap_ms=board.feedback_gap_ms(), instrument=board.sound_key))
             else:
                 play.clicked.connect(lambda: sounds.play_notes(notes))
             buttons.addButton(play, QDialogButtonBox.ButtonRole.ActionRole)

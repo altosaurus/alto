@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 
 from alto.lessons import LESSONS
 from alto.ui import icons
-from alto.ui.home import EXERCISE_ICONS
+from alto.ui.home import lesson_icon
 from alto.ui.style import navigation_heading_style
 
 LESSON_ROLE = Qt.ItemDataRole.UserRole  # holds the lesson's key on a lesson's row
@@ -146,7 +146,7 @@ class LessonNav(QListWidget):
                 seen.add(lesson.category)
                 self.addItem(section_item(lesson.category, palette=self.palette()))
             row = QListWidgetItem(lesson.title)
-            drawings.append((EXERCISE_ICONS.get(lesson.exercise, icons.EXERCISE_NOTE_NAMES), row.setIcon))
+            drawings.append((lesson_icon(lesson), row.setIcon))
             row.setData(LESSON_ROLE, lesson.key)
             row.setToolTip(lesson.summary)
             row.setSizeHint(QSize(0, 38))

@@ -74,6 +74,7 @@ RangeEditor(
     *,
     low: int,
     high: int,
+    limits: tuple[int, int] | None = None,
     parent: QWidget | None = None,
 )
 ```
@@ -110,6 +111,7 @@ Build the editor for a clef's range.
 - `key` (*str*): The clef, a key of `RANGE_LIMITS`.
 - `low` (*int*): The lowest note asked, as a staff step. Keyword-only.
 - `high` (*int*): The highest note asked. Keyword-only.
+- `limits` (*tuple of (int, int) or None, default None*): The furthest the bounds may go, as staff steps; None for the clef's usual limits. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the editor. Keyword-only.
 
 **Constructor examples**
@@ -117,6 +119,8 @@ Build the editor for a clef's range.
 ```pycon
 >>> RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
 True
+>>> RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
+(21, 30)
 ```
 
 ## KeyDiagram
@@ -1471,6 +1475,209 @@ Build the panel for a set of settings.
 ```pycon
 >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
+```
+
+## load_pack_options
+
+```python
+def load_pack_options() -> None
+```
+
+Restore the options learners chose for each plugin exercise that offers settings.
+
+Anything in the saved data that is not valid is ignored.
+
+**Examples**
+
+```pycon
+>>> load_pack_options()
+```
+
+## save_pack_options
+
+```python
+def save_pack_options(name: str) -> None
+```
+
+Save the options chosen for one plugin exercise.
+
+**Parameters**
+
+- `name` (*str*): The exercise's class name.
+
+**Examples**
+
+```pycon
+>>> save_pack_options("pack.nothing.here")
+```
+
+## PackSettingsPanel
+
+```python
+PackSettingsPanel(
+    exercise: type[PackExercise],
+    *,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `_StaffRangePanel`
+
+The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.
+
+The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
+accidentals and for the octave. Edits are live: each changes the options, saves them and emits `changed`.
+
+**Attributes**
+
+- `exercise` (*type of PackExercise*): The exercise whose options are edited.
+- `cfg` (*PackExerciseSettings*): The options being edited.
+- `range_row` (*_Row*): The Range row, present only if the plugin declared a range.
+- `sound_row` (*_ToggleRow or None*): The plugin sound switch, if declared.
+- `accidentals_row` (*_ToggleRow or None*): The accidentals switch, if declared.
+- `octave_row` (*_ToggleRow or None*): The octave switch, if declared.
+
+**Examples**
+
+```pycon
+>>> class Demo(PackExercise):
+...     controls = {"octave": True}
+>>> panel = PackSettingsPanel(Demo)
+>>> panel.octave_row is not None and not hasattr(panel, "range_row")
+True
+>>> _ = settings.pack_exercises.pop("Demo")
+```
+
+**Constructor**
+
+Build the menu and, if the plugin offers a range, its page.
+
+**Parameters**
+
+- `exercise` (*type of PackExercise*): The exercise to edit.
+- `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> class Sounds(PackExercise):
+...     controls = {"sound": "Demo sound"}
+>>> panel = PackSettingsPanel(Sounds)
+>>> panel.stack.count()
+2
+>>> _ = settings.pack_exercises.pop("Sounds")
+```
+
+## PackKeyboardSettingsPanel
+
+```python
+PackKeyboardSettingsPanel(
+    exercise: type[PackExercise],
+    *,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `ExerciseSettingsPanel`
+
+The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.
+
+The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits `changed`.
+
+**Attributes**
+
+- `exercise` (*type of PackExercise*): The exercise whose options are edited.
+- `cfg` (*PackExerciseSettings*): The options being edited.
+- `stack` (*SlideStack*): The settings menu, then the range page and the intervals page, as the plugin offers them.
+- `sound_row` (*_ToggleRow or None*): The plugin sound switch, if declared.
+- `range_row` (*_Row or None*): The Range row, if declared.
+- `span` (*KeyboardSpan or None*): The draggable range selector, if a range is declared.
+- `interval_page` (*ChoiceChecklist or None*): The interval checkboxes, keyed by interval name, if a choice of intervals is declared.
+- `manual_page` (*ChoiceChecklist or None*): The keyboard checkboxes, keyed by keyboard name, if a choice of manuals is declared.
+
+**Examples**
+
+```pycon
+>>> class Demo(PackExercise):
+...     controls = {"range": True, "intervals": True, "manuals": True}
+...     spec = {"type": "keyboard-intervals"}
+...     key_span, key_default = (28, 89), (48, 72)
+...     interval_names = ("m2", "M2", "m3")
+...     manual_names = ("Upper manual", "Lower manual")
+>>> panel = PackKeyboardSettingsPanel(Demo)
+>>> panel.stack.count(), panel.low_label.text(), panel.high_label.text()
+(4, 'C3', 'C5')
+>>> _ = settings.pack_exercises.pop("Demo")
+```
+
+**Constructor**
+
+Build the menu and the pages the plugin offers.
+
+**Parameters**
+
+- `exercise` (*type of PackExercise*): The exercise to edit.
+- `parent` (*QWidget or None, default None*): The widget that owns the panel. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> class Sounds(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+>>> panel = PackKeyboardSettingsPanel(Sounds)
+>>> panel.stack.count()
+2
+>>> _ = settings.pack_exercises.pop("Sounds")
+```
+
+### PackKeyboardSettingsPanel.flush
+
+```python
+def flush() -> None
+```
+
+Save the options and ask a new question now, if an edit is waiting.
+
+**Examples**
+
+```pycon
+>>> class Demo(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+>>> panel = PackKeyboardSettingsPanel(Demo)
+>>> panel._sound_chosen("piano")
+>>> panel.flush()
+>>> panel._commit_timer.isActive()
+False
+>>> _ = settings.pack_exercises.pop("Demo")
+```
+
+### PackKeyboardSettingsPanel.hideEvent
+
+```python
+def hideEvent(event: QHideEvent) -> None
+```
+
+Keep an edit that is still waiting when the panel closes.
+
+**Parameters**
+
+- `event` (*QHideEvent*): The event.
+
+**Examples**
+
+```pycon
+>>> class Demo(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+>>> panel = PackKeyboardSettingsPanel(Demo)
+>>> panel._sound_chosen("piano")
+>>> panel.show()
+>>> panel.hide()
+>>> panel._commit_timer.isActive()
+False
+>>> _ = settings.pack_exercises.pop("Demo")
 ```
 
 ## load_choice_buttons

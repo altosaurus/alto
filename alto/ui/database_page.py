@@ -477,6 +477,10 @@ def open_preview(
         question = Question.from_dict(json.loads(extra["payload"]))
     except (ValueError, KeyError, TypeError):
         return
+    if question.fingerboard and not question.fingerboard.instrument:
+        exercise = next((cls for cls in REGISTRY if cls.__name__ == extra["exercise"]), None)
+        if exercise:
+            question = exercise().refresh(question)
     name = str(names.get(extra["exercise"], extra["exercise"]))
     statistics = None
     if learner is not None and "item_key" in extra:
