@@ -438,3 +438,61 @@ def test_the_keyboard_settings_step_and_slide(tmp_path: Path, app: QApplication)
     bare._manuals_edited()  # noqa: SLF001
     bare._intervals_edited()  # noqa: SLF001
     assert bare.manual_page is None and bare.interval_page is None
+
+
+def test_the_release_worker_reports_each_outcome(tmp_path: Path, app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Report an installed release, an up-to-date plugin and a failure through the dialog's signal, from the thread that ran it.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        Isolated plugins folder.
+    app : QApplication
+        Shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Supply the outcomes.
+    """
+    del app
+    monkeypatch.setattr(plugins_dialog.QMessageBox, "question", lambda *args: plugins_dialog.QMessageBox.StandardButton.No)
+    dialog = PluginsDialog(tmp_path / "plugins")
+    heard: list[tuple[str | None, str]] = []
+    dialog._release_finished.connect(lambda result, error: heard.append((result, error)))  # noqa: SLF001
+    outcomes: list[str | None | Exception] = [
+        "Viola Instrument Pack (summer)",
+        None,
+        ValueError("No registered plugin has code 9."),
+    ]
+
+    def answer(code: str, *, folder: Path, selected: InstalledPlugin | None = None) -> str | None:
+        """
+        Give the next planned outcome.
+
+        Parameters
+        ----------
+        code : str
+            The registration code.
+        folder : Path
+            The plugins folder.
+        selected : InstalledPlugin or None
+            The plugin to update.
+
+        Returns
+        -------
+        str or None
+            The installed plugin, or None if it was up to date.
+
+        Raises
+        ------
+        ValueError
+            When the planned outcome is a failure.
+        """
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    monkeypatch.setattr(plugins_dialog, "install_registered", answer)
+    for _ in range(3):
+        dialog._run_release("9", selected=None)  # noqa: SLF001
+    assert heard == [("Viola Instrument Pack (summer)", ""), (None, ""), (None, "No registered plugin has code 9.")]

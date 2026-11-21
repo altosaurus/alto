@@ -266,16 +266,25 @@ class PluginsDialog(QDialog):
         self.status.setText("Checking the plugin registry and downloading the latest release…")
         self.status.show()
 
-        def work() -> None:
-            """Report all worker outcomes through a signal on the dialog's thread."""
-            try:
-                result = install_registered(code, folder=self.folder, selected=selected)
-            except Exception as error:
-                self._release_finished.emit(None, str(error))
-            else:
-                self._release_finished.emit(result, "")
+        QThreadPool.globalInstance().start(lambda: self._run_release(code, selected=selected))
 
-        QThreadPool.globalInstance().start(work)
+    def _run_release(self, code: str, *, selected: InstalledPlugin | None) -> None:
+        """
+        Install the release and report every outcome through a signal on the dialog's thread.
+
+        Parameters
+        ----------
+        code : str
+            The registration code, or an empty string to update the selected plugin.
+        selected : InstalledPlugin or None
+            The plugin to update, if any. Keyword-only.
+        """
+        try:
+            result = install_registered(code, folder=self.folder, selected=selected)
+        except Exception as error:
+            self._release_finished.emit(None, str(error))
+        else:
+            self._release_finished.emit(result, "")
 
     def _finish_release(self, result: str | None, error: str) -> None:  # noqa: PLR0917 (Qt signal arguments)
         """Show the result, refresh the installed list, and offer a restart after a change."""
