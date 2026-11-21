@@ -1,0 +1,55 @@
+name: Register an Alto plugin
+description: Request a listing in Alto’s plugin registry.
+title: "Register plugin: "
+body:
+  - type: markdown
+    attributes:
+      value: "After approval and publication, this issue’s number is your plugin’s install code."
+  - type: input
+    id: name
+    attributes:
+      label: Plugin name
+      description: Choose a unique name. Capitalization and extra spaces count as the same name.
+      placeholder: Viola Studio
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does the plugin help learners do? This description appears in the registry.
+      placeholder: Practice identifying notes on the viola fingerboard and hear each note played on a bowed viola.
+    validations:
+      required: true
+  - type: input
+    id: repository
+    attributes:
+      label: GitHub repository
+      description: Link to the public repository where you publish the plugin’s releases.
+      placeholder: https://github.com/example/viola-studio
+    validations:
+      required: true
+  - type: input
+    id: pack-id
+    attributes:
+      label: Pack ID
+      description: Copy the top-level id from pack.json. Each Pack ID belongs to one registered plugin.
+      placeholder: viola-studio
+    validations:
+      required: true
+  - type: input
+    id: metadata
+    attributes:
+      label: Metadata URL
+      description: Optional. Link to the raw JSON file that keeps your plugin’s details current in Alto’s docs.
+      placeholder: https://raw.githubusercontent.com/example/viola-studio/main/alto-plugin.json
+  - type: checkboxes
+    id: rights-and-licenses
+    attributes:
+      label: Rights and licenses
+      options:
+        - label: >-
+            I have the right to distribute this plugin and everything it contains, including code, recordings, sheet music,
+            images, and text. I have complied with all applicable license terms and included any required credits,
+            copyright notices, and license texts.
+          required: true
