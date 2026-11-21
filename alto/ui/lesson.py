@@ -48,6 +48,7 @@ from alto.lessons import (
 )
 from alto.lessons.circle_of_fifths import summary
 from alto.theory.pitch import Note
+from alto.ui.colors import blend
 from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.reference import ExplorableCircle
@@ -318,7 +319,7 @@ class StepView(QWidget):
     info : QLabel
         What is said about the key last picked on the circle.
     again : QPushButton
-        Asks another task; it appears once the task has been answered.
+        Repeats a fixed question or draws another question after the answer is explained.
     practice : Signal
         Emitted by the Practice button on the last step.
 
@@ -402,19 +403,17 @@ class StepView(QWidget):
             staff = StaffWidget(gap=8.0, side=8.0, lesson_layout=True)
             staff.show_notes([[Note.parse(name) for name in chord] for chord in step.hear], clef="treble")
             self.staves.append(staff)
-        keyboard = None
+        self.keyboard: KeyboardWidget | None = None
         if step.keyboard_note or step.hear_display == "keyboard":
-            keyboard = KeyboardWidget()
-            keys = [step.keyboard_note] if step.keyboard_note else [name for chord in step.hear for name in chord]
-            keyboard.show_keys([Note.parse(name).midi for name in keys], span=(60, 72))
-            keyboard.setAccessibleName(f"Keyboard with {' and '.join(keys)} highlighted")
+            self.keyboard = KeyboardWidget(label_middle_c=step.label_middle_c)
+            self._highlight_sample(None)
         self.illustration: _IllustratedStep | None = None
-        if self.staves or keyboard is not None or (step.hear and step.circle == "none" and not step.scale):
+        if self.staves or self.keyboard is not None or (step.hear and step.circle == "none" and not step.scale):
             comparisons = [staff for staff in self.staves if len(staff.columns) == 1]
             for staff in comparisons:
                 staff.lesson_peers.update(peer for peer in comparisons if peer is not staff)
                 staff._fit_width()
-            self.illustration = _IllustratedStep(text, staves=self.staves, keyboard=keyboard, playback=self.hear_button)
+            self.illustration = _IllustratedStep(text, staves=self.staves, keyboard=self.keyboard, playback=self.hear_button)
             left.addWidget(self.illustration)
         else:
             left.addWidget(text)
@@ -427,7 +426,7 @@ class StepView(QWidget):
         self.feedback = QLabel()
         self.feedback.setTextFormat(Qt.TextFormat.RichText)
         self.feedback.setWordWrap(True)
-        self.again = QPushButton("Try another")
+        self.again = QPushButton("Try again" if step.single_question else "Try another")
         self.again.clicked.connect(self.ask)
         self.again.hide()
         if step.circle != "none":
@@ -571,21 +570,22 @@ class StepView(QWidget):
         columns = [[Note.parse(name) for name in column] for column in self.step.hear]
         gap_ms = 330 if len(columns) > 4 else 650
         instrument = self.step.hear_instrument or None
-        if self.staves:
+        if self.staves or self.keyboard is not None:
             self.playback.play(columns, gap_ms=gap_ms, instrument=instrument)
         else:
             sounds.play_notes(columns, gap_ms=gap_ms, instrument=instrument)
 
     def _highlight_sample(self, index: int | None) -> None:
         """
-        Follow the phrase on its staff and light matching notes in comparison diagrams.
+        Follow each onset on the staff and keyboard, restoring the illustration when playback stops.
 
         Parameters
         ----------
         index : int or None
             Playback onset, or None when the sample ends.
         """
-        sounding = {Note.parse(name).midi for name in self.step.hear[index]} if index is not None else set()
+        notes = self.step.hear[index] if index is not None else ()
+        sounding = [Note.parse(name).midi for name in notes]
         for staff in self.staves:
             if self.step.hear_display == "staff" and staff is self.staves[-1]:
                 staff.highlight_column(index)
@@ -593,6 +593,20 @@ class StepView(QWidget):
                 # Each comparison diagram shows a single written note, sometimes in two equivalent spellings.
                 matches = bool(staff.columns and staff.columns[0][0].midi in sounding)
                 staff.highlight_column(0 if matches else None)
+        if self.keyboard is not None:
+            if index is None:
+                notes = (
+                    (self.step.keyboard_note,)
+                    if self.step.keyboard_note
+                    else tuple(name for chord in self.step.hear for name in chord)
+                )
+                sounding = [Note.parse(name).midi for name in notes]
+            self.keyboard.show_keys(sounding, span=(60, 72))
+            if index is not None:
+                # A sounding key should look pressed even when the lesson already marks that pitch.
+                ink = self.keyboard.palette().highlightedText().color()
+                self.keyboard.set_highlight_color(blend(self.keyboard.highlight_color, b=ink, t=0.3))
+            self.keyboard.setAccessibleName(f"Keyboard with {' and '.join(notes)} highlighted" if notes else "Keyboard")
 
     def walk(self, step: int) -> None:
         """
@@ -842,7 +856,8 @@ class StepView(QWidget):
             if self.picture is not None and task.targets:
                 self.picture.show_target((task.targets[0][0], task.targets[0][1]))
         else:
-            self.feedback.setText(f"<b>Not quite.</b> {task.hint}")
+            prompt = "Try again." if self.step.single_question else "Not quite."
+            self.feedback.setText(f"<b>{prompt}</b> {task.hint}")
 
     def _lock(self) -> None:
         """

@@ -159,6 +159,8 @@ Step(
     hear_display: Literal['', 'staff', 'keyboard'] = '',
     picture: PicturePosition | FingerboardPosition | None = None,
     hear_instrument: str = '',
+    single_question: bool = False,
+    label_middle_c: bool = False,
 )
 ```
 
@@ -172,6 +174,7 @@ One page of a lesson.
 - `hear` (*tuple of tuple of str*): Notes to play from a Hear it button, as columns of note names such as "C4"; empty for no button.
 - `hear_label` (*str*): What the Hear it button says.
 - `make_task` (*callable or None*): Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
+- `single_question` (*bool*): True when the knowledge check repeats the same question on every attempt.
 - `closing` (*bool*): True for the last step, which offers to practice.
 - `staves` (*tuple of Staff*): Captioned staves in reading order. Adjacent examples share a panel and wrap when space is limited.
 - `task_staff` (*bool*): Show one staff beside the words that follows the task: it draws the task’s clef and key signature.
@@ -182,6 +185,7 @@ One page of a lesson.
 - `keyboard_note` (*str*): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.
 - `picture` (*PicturePosition or FingerboardPosition or None*): An instrument picture to show beside the words, such as one supplied by a plugin. Alto draws it with the same widget the exercises use. None for no picture.
 - `hear_instrument` (*str*): The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner's own choice of sound.
+- `label_middle_c` (*bool*): Label middle C and bracket the pair of black keys beside it.
 
 **Examples**
 

@@ -170,7 +170,7 @@ class KeyboardWidget(QWidget):
     (48, 72)
     """
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(self, parent: QWidget | None = None, *, label_middle_c: bool = False) -> None:
         """
         Create a keyboard showing the default range, with no key highlighted.
 
@@ -178,6 +178,8 @@ class KeyboardWidget(QWidget):
         ----------
         parent : QWidget or None, default None
             The widget that owns the keyboard.
+        label_middle_c : bool, default False
+            Mark middle C and its neighboring pair of black keys for an introductory lesson.
 
         Examples
         --------
@@ -186,6 +188,11 @@ class KeyboardWidget(QWidget):
         """
         super().__init__(parent)
         self.lo, self.hi = KEYBOARD_DEFAULT
+        self._label_middle_c = label_middle_c
+        if label_middle_c:
+            self.setAccessibleDescription(
+                "The bracket marks two black keys. The white key immediately to their left is labeled C.",
+            )
         self.highlight: int | None = None
         self.additional_highlights: set[int] = set()
         self.style_override: KeyboardStyle | None = None  # a fixed style, for the preview cards in the settings
@@ -283,6 +290,22 @@ class KeyboardWidget(QWidget):
             return self.max_key_width
         return min((self.width() - 2 * self.pad) / max(len(self._whites()), 1), self.max_key_width)
 
+    def _annotation_height(self) -> int:
+        """
+        Measure the space for the bracket above the keys.
+
+        Returns
+        -------
+        int
+            Height in pixels, or zero when the label is hidden or its keys are out of view.
+
+        Examples
+        --------
+        >>> KeyboardWidget(label_middle_c=True)._annotation_height() > 0
+        True
+        """
+        return self.fontMetrics().height() + 12 if self._label_middle_c and self.lo <= 60 and self.hi >= 63 else 0
+
     def _fit_height(self) -> None:
         """
         Set the height that the keys, the strip above them and the padding need.
@@ -294,7 +317,7 @@ class KeyboardWidget(QWidget):
         >>> keyboard.height()
         263
         """
-        height = int(2 * self.pad + self.style.rail + self._key_width() * self.key_length)
+        height = int(2 * self.pad + self.style.rail + self._key_width() * self.key_length) + self._annotation_height()
         if height != self.height() or self.minimumHeight() != height:
             self.setFixedHeight(height)
 
@@ -431,6 +454,23 @@ class KeyboardWidget(QWidget):
         top = pad + style.rail
         kh = kw * self.key_length
         first = 7 * (whites[0] // 12) + WHITE_INDEX[whites[0] % 12]  # absolute white-key number of the leftmost key
+        annotation_height = self._annotation_height()
+        if annotation_height:
+            c_left = left + whites.index(60) * kw
+            pair_left = c_left + BLACK_CENTER[1] * kw
+            pair_right = c_left + BLACK_CENTER[3] * kw
+            label = "Two black keys"
+            width = p.fontMetrics().horizontalAdvance(label) + 4
+            x = max(0.0, min((pair_left + pair_right - width) / 2, self.width() - width))
+            p.setPen(self.palette().windowText().color())
+            p.drawText(QRectF(x, 0, width, annotation_height - 12), Qt.AlignmentFlag.AlignCenter, label)
+            bracket = QPainterPath(QPointF(pair_left, annotation_height - 1))
+            bracket.lineTo(pair_left, annotation_height - 8)
+            bracket.lineTo(pair_right, annotation_height - 8)
+            bracket.lineTo(pair_right, annotation_height - 1)
+            p.setPen(QPen(self.palette().windowText().color(), 1.5))
+            p.drawPath(bracket)
+            p.translate(0, annotation_height)
 
         # the body behind the keys, with its felt strip and stop knobs
         p.setPen(Qt.PenStyle.NoPen)
@@ -556,6 +596,17 @@ class KeyboardWidget(QWidget):
                 p.setPen(QPen(QColor(style.white[0]), 0.8))
                 for step in range(3):
                     p.drawLine(QPointF(x + 2, top + 8 + step * 5), QPointF(x + bw - 2, top + 8 + step * 5))
+
+        if annotation_height:
+            # Keep the letter legible on every key material and during playback.
+            diameter = min(kw - 2, p.fontMetrics().height() + 6)
+            center = QPointF(left + (whites.index(60) + 0.5) * kw, top + kh - kw * 0.55)
+            p.setBrush(self.palette().base())
+            p.setPen(QPen(self.palette().text().color(), 1))
+            p.drawEllipse(center, diameter / 2, diameter / 2)
+            label_box = QRectF(0, 0, diameter, diameter)
+            label_box.moveCenter(center)
+            p.drawText(label_box, Qt.AlignmentFlag.AlignCenter, "C")
 
     @staticmethod
     def _outline(

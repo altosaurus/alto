@@ -30,7 +30,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
 )
-from alto.lessons import LESSONS
+from alto.lessons import LESSONS, Step
 from alto.lessons.circle_of_fifths import (
     CIRCLE_OF_FIFTHS,
     summary,
@@ -489,6 +489,69 @@ def test_staff_sample_highlights_follow_playback(app: QApplication, monkeypatch:
         assert staff.playback_column is None
 
 
+@pytest.mark.parametrize("audible", [True, False])
+@pytest.mark.parametrize(
+    "step",
+    [
+        PITCHES_AND_NOTES.steps[0],
+        PITCHES_AND_NOTES.steps[4],
+        INTERVALS.steps[1],
+        Step(title="Chord and melody", text="", hear=(("C4", "E4", "G4"), ("F#4",)), hear_display="keyboard"),
+    ],
+)
+def test_lesson_keyboard_follows_sample_onsets(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    step: Step,
+    audible: bool,
+) -> None:
+    """
+    Follow each audio onset and restore the lesson's keys on completion, replay, or leaving the step.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Captures the playback clock and audio output.
+    step : Step
+        A keyboard example with a target pitch, an interval, or a chord.
+    audible : bool
+        Whether notes are sent to the audio output.
+    """
+    pending = []
+    output = Mock()
+    monkeypatch.setattr(sounds, "enabled", audible)
+    monkeypatch.setattr(sounds, "_effect", Mock())
+    monkeypatch.setattr(sounds, "_play_column", output)
+    view = StepView(step)
+    view.show()
+    keys = view.keyboard
+    assert keys is not None and view.hear_button is not None
+    idle = (keys.highlight, keys.additional_highlights.copy(), keys.highlight_color, keys.accessibleName())
+    monkeypatch.setattr("alto.audio.QTimer.singleShot", lambda delay, callback: pending.append(callback))
+
+    view.hear_button.click()
+    for column in step.hear:
+        midis = [Note.parse(name).midi for name in column]
+        assert (keys.highlight, keys.additional_highlights) == (midis[0], set(midis[1:]))
+        assert keys.highlight_color != idle[2]
+        assert keys.accessibleName() == f"Keyboard with {' and '.join(column)} highlighted"
+        if audible:
+            assert output.call_args.args[0] == midis
+        pending.pop(0)()
+    assert output.call_count == (len(step.hear) if audible else 0)
+    assert (keys.highlight, keys.additional_highlights, keys.highlight_color, keys.accessibleName()) == idle
+
+    view.hear_button.click()
+    view.hear_button.click()
+    pending.pop(0)()  # stale callback from the first play
+    assert keys.highlight == Note.parse(step.hear[0][0]).midi
+    view.hide()
+    pending.pop(0)()
+    assert (keys.highlight, keys.additional_highlights, keys.highlight_color, keys.accessibleName()) == idle
+
+
 def test_interval_examples_match_their_playback_and_feedback(app: QApplication) -> None:
     """
     Check the written notes, highlighted keys, and answers across the lesson.
@@ -575,11 +638,18 @@ def test_the_first_lesson_illustrates_its_keyboard_examples(app: QApplication) -
     """
     assert LESSONS[0] is PITCHES_AND_NOTES
     examples = [step for step in PITCHES_AND_NOTES.steps if step.keyboard_note]
-    for step, midi, pitches in zip(examples, (62, 72, 61), ((), (("C4",), ("C5",)), (("C4",), ("C#4",))), strict=True):
+    expected = (
+        (60, (("C4",), ("G4",)), True),
+        (62, (), True),
+        (72, (("C4",), ("C5",)), False),
+        (61, (("C4",), ("C#4",)), False),
+    )
+    for step, (midi, pitches, labeled) in zip(examples, expected, strict=True):
         view = StepView(step)
         keyboard = view.findChild(KeyboardWidget)
         assert keyboard is not None and (keyboard.lo, keyboard.hi, keyboard.highlight) == (60, 72, midi)
         assert step.hear == pitches
+        assert bool(keyboard.accessibleDescription()) == labeled
 
 
 def test_pitch_lesson_questions_match_their_examples(app: QApplication) -> None:
@@ -617,6 +687,29 @@ def test_every_step_of_the_lesson_builds_and_has_something_to_read(app: QApplica
         assert (view.task is not None) == (step.make_task is not None)
 
 
+def test_try_again_repeats_a_single_knowledge_check_question(app: QApplication) -> None:
+    """
+    Follow the hint, reveal the answer, and retry the same keyboard question.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    view = StepView(PITCHES_AND_NOTES.steps[1])
+    task = view.task
+    assert task is not None
+    wrong = [button for button in view.choice_buttons if button.text() != task.correct]
+    wrong[0].click()
+    assert "Try again." in view.feedback.text() and task.hint in view.feedback.text()
+    wrong[1].click()
+    assert task.explanation in view.feedback.text()
+    assert view.again.text() == "Try again" and not view.again.isHidden()
+    view.again.click()
+    assert view.task == task and view.prompt.text() == task.prompt
+    assert view.feedback.text() == "" and all(button.isEnabled() for button in view.choice_buttons)
+
+
 def test_a_task_can_be_answered_wrong_twice_and_is_then_given(app: QApplication) -> None:
     """
     Check that a wrong answer gets a hint, and a second one gets the answer, and that nothing can be failed.
@@ -636,6 +729,7 @@ def test_a_task_can_be_answered_wrong_twice_and_is_then_given(app: QApplication)
     for _ in range(GIVE_UP_AFTER - 1):
         view.circle.select(wrong[0], place=wrong[1])
     assert "Here it is" in view.feedback.text() and not view.again.isHidden()
+    assert view.again.text() == "Try another"
     assert view.circle.cell == right
 
 

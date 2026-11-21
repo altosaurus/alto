@@ -85,6 +85,8 @@
   lessons that use it.
 - Define each new musical term in plain language at its first use unless an earlier lesson in the sequence already
   taught it. Check captions, controls, questions, and hints as well as the lesson text.
+- When introducing an unfamiliar instrument or staff symbol, consider annotating the first illustration. Place a label
+  on the feature or point to it with an arrow or bracket so learners can find it before a question asks them to use it.
 - Scope each exercise to a specific technique the learner can practice repeatedly. Map exercises to lessons by the
   skills they reinforce. Several exercises can share a lesson, and an exercise can draw on several lessons.
 - When designing or revising either, follow the [lesson and exercise authoring procedure](docs/development.md#designing-lessons-and-exercises).

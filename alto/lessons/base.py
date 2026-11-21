@@ -172,6 +172,8 @@ class Step:
         What the Hear it button says.
     make_task : callable or None
         Makes a fresh task from a random generator each time one is wanted; None for a step with no task.
+    single_question : bool
+        True when the knowledge check repeats the same question on every attempt.
     closing : bool
         True for the last step, which offers to practice.
     staves : tuple of Staff
@@ -194,6 +196,8 @@ class Step:
     hear_instrument : str
         The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner's own
         choice of sound.
+    label_middle_c : bool
+        Label middle C and bracket the pair of black keys beside it.
 
     Examples
     --------
@@ -217,6 +221,8 @@ class Step:
     hear_display: Literal["", "staff", "keyboard"] = ""
     picture: PicturePosition | FingerboardPosition | None = None
     hear_instrument: str = ""
+    single_question: bool = False
+    label_middle_c: bool = False
 
 
 @dataclass(frozen=True)

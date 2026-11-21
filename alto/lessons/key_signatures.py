@@ -75,6 +75,7 @@ KEY_SIGNATURES = Lesson(
             staves=(Staff("treble", "F#4", "First staff", 1), Staff("treble", "F4", "Second staff", 1)),
             hear=(("F#4",), ("F4",)),
             hear_label="Hear the two notes",
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="After the barline, how would you play an F with no sign beside it?",
                 choices=("F♭", "F", "F♯"),
@@ -115,6 +116,7 @@ KEY_SIGNATURES = Lesson(
                 "For its relative minor, count six notes from C, counting C as one.</p>"
             ),
             staves=(Staff("bass", caption="No sharps or flats"),),
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="What is the tonic if the music is in minor?",
                 choices=("C", "E", "A"),
@@ -138,6 +140,7 @@ KEY_SIGNATURES = Lesson(
                 Staff("treble", key=-4, caption="B"),
                 Staff("treble", key=4, caption="C"),
             ),
+            single_question=True,
             make_task=lambda _rng: Task(
                 prompt="Which staff has the signature you would write for A♭ major?",
                 choices=("A", "B", "C"),

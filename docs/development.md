@@ -278,8 +278,10 @@ knowledge. When adding a lesson, place it after the ideas it uses and before les
    where the learner first needs it, before a diagram or question asks them to use it. A mention in a title or a
    glossary entry alone does not teach the term. For example, introduce the tonic as the note that feels like home,
    then ask the learner to find it. Repeat this check when reordering lessons.
-4. **Build a short guided sequence.** Introduce the idea with an example the learner can read or hear. Change one
-   feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
+4. **Build a short guided sequence.** Introduce the idea with an example the learner can read or hear. When the concept
+   is visual, consider annotating the first example to show where to look. On a keyboard, bracket the pair of black
+   keys and label the neighboring C. On a staff, an arrow from “notehead” to the oval shows which part of the note
+   to read. Then change one feature and ask the learner to predict or explain the result. Give feedback that points back to the example.
    Use the closing step to name the skills the learner can practice next. Choose the primary practice target with `Lesson.exercise` and list
    additional practice targets in `Lesson.related_exercises`.
 5. **Time a first pass.** Aim for **20 minutes or less**, including reading, listening, guided questions, and time
