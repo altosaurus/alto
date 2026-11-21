@@ -868,6 +868,7 @@ def test_isolated_export_window_reads_practice_settings_and_uses_private_edits(
         exporter._run_exporter(
             reader,
             desktop_id=desktop_id,
+            plugins=tmp_path / "plugins",
             preferences=snapshot,
             mode="FSRS",
             self_grading=True,

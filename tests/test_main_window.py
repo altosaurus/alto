@@ -973,14 +973,17 @@ def test_restarting_starts_a_new_copy_then_quits(
         Replaces settings, functions or attributes for the length of the test.
     """
     started, quit_calls = [], []
-    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: started.append((program, args)) or True)
+    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: started.append((program, args)) or (True, 42))
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(mw.QApplication, "quit", lambda: quit_calls.append(1))
     window.restart_app()
     assert started and started[0][1] == ["-m", "alto"] and quit_calls == [1]
-    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: False)
+    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: (False, -1))
+    monkeypatch.setattr(mw.QMessageBox, "warning", lambda *args: None)
     window.restart_app()
     assert quit_calls == [1]  # if the new copy could not start, this one stays open
+    window.restart_app(quit_on_failure=True)
+    assert quit_calls == [1, 1]
 
 
 def test_a_packaged_build_restarts_by_starting_itself_with_no_arguments(
@@ -998,7 +1001,7 @@ def test_a_packaged_build_restarts_by_starting_itself_with_no_arguments(
         Replaces settings, functions or attributes for the length of the test.
     """
     started: list[tuple[str, list[str]]] = []
-    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: started.append((program, args)) or True)
+    monkeypatch.setattr(mw.QProcess, "startDetached", lambda program, args: started.append((program, args)) or (True, 42))
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(mw.QApplication, "quit", lambda: None)
     monkeypatch.setattr(mw.updates, "is_frozen", lambda: True)
@@ -1022,8 +1025,16 @@ def test_the_menu_has_no_home_entry_and_ends_with_restart_above_quit(window: Mai
     tools = next(action for action in entries if action.text() == "Tools")
     submenu = tools.menu()
     assert isinstance(submenu, QMenu) and not tools.icon().isNull()
-    assert [a.text() for a in submenu.actions()] == ["Import backup…", "Export backup…", "Anki Exporter", "Check for updates…"]
+    assert [a.text() for a in submenu.actions()] == [
+        "Import backup…",
+        "Export backup…",
+        "Plugins…",
+        "Anki Exporter",
+        "Check for updates…",
+    ]
     assert all(action not in entries for action in submenu.actions())
+    plugins = next(action for action in submenu.actions() if action.text() == "Plugins…")
+    assert not plugins.icon().isNull()
     assert entries[-2].text() == "Restart" and entries[-1].text() == "Quit"  # no separator between them
     assert entries[-3].isSeparator()  # separate Restart and Quit from Help
 
@@ -1209,6 +1220,11 @@ def test_the_app_opens_a_window_for_the_chosen_profile(
     tmp_path : Path
         A scratch folder unique to this test.
     """
+    broken = tmp_path / "plugins" / "mistyped"
+    broken.mkdir(parents=True)
+    (broken / "pack.json").write_text("{")
+    warnings = []
+    monkeypatch.setattr(entry.QMessageBox, "warning", lambda parent, title, message: warnings.append(message))
     path = tmp_path / "alto.db"
     db = Database(path)
     db_profile = db.add_profile("Ada")
@@ -1222,6 +1238,7 @@ def test_the_app_opens_a_window_for_the_chosen_profile(
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(entry.MainWindow, "show", lambda self: shown.append(self))
     assert entry.main() == 0
+    assert len(warnings) == 1 and "mistyped/pack.json" in warnings[0]
     assert len(shown) == 1 and isinstance(shown[0].learner, Learner) and shown[0].learner.profile == db_profile
     shown[0].close()
 
