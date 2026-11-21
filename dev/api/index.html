@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -631,6 +680,10 @@
       <td>What is known about each instrument’s recordings, for the summary shown in the instrument settings.</td>
     </tr>
     <tr>
+      <td><a href="alto.instrument_packs/">alto.instrument_packs</a></td>
+      <td>Media and fingerboard geometry supplied by third-party instrument packs.</td>
+    </tr>
+    <tr>
       <td><a href="alto.location/">alto.location</a></td>
       <td>Where Alto keeps its practice history and its settings, and how to keep them somewhere else with <code class="language-plaintext highlighter-rouge">ALTO_HOME</code>.</td>
     </tr>
@@ -643,12 +696,20 @@
       <td>Notation Identification terms, grouped by subject with their score placement and SMuFL code points.</td>
     </tr>
     <tr>
+      <td><a href="alto.plugin_registry/">alto.plugin_registry</a></td>
+      <td>Install registered instrument packs from the latest release in their public GitHub repositories.</td>
+    </tr>
+    <tr>
       <td><a href="alto.selfupdate/">alto.selfupdate</a></td>
       <td>Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over.</td>
     </tr>
     <tr>
       <td><a href="alto.settings/">alto.settings</a></td>
       <td>User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.terms/">alto.terms</a></td>
+      <td>Glossary entries that an installed plugin supplies, kept apart from the built-in ones.</td>
     </tr>
     <tr>
       <td><a href="alto.updates/">alto.updates</a></td>
@@ -676,6 +737,10 @@
     <tr>
       <td><a href="alto.exercises.library/">alto.exercises.library</a></td>
       <td>The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.exercises.packs/">alto.exercises.packs</a></td>
+      <td>Load third-party instrument packs from ZIP archives and authoring folders.</td>
     </tr>
   </tbody>
 </table>
@@ -758,6 +823,10 @@
     <tr>
       <td><a href="alto.lessons.key_signatures/">alto.lessons.key_signatures</a></td>
       <td>A guided lesson on reading and writing key signatures.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.lessons.packs/">alto.lessons.packs</a></td>
+      <td>Turn the lessons that an instrument plugin declares into <code class="language-plaintext highlighter-rouge">Lesson</code>s that Alto lists and shows.</td>
     </tr>
     <tr>
       <td><a href="alto.lessons.pitches_and_notes/">alto.lessons.pitches_and_notes</a></td>
@@ -866,6 +935,10 @@
       <td>The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.fingerboard/">alto.ui.fingerboard</a></td>
+      <td>Render a pack’s instrument portrait using its calibrated string endpoints.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.glossary/">alto.ui.glossary</a></td>
       <td>A searchable glossary of the notation terms used in Alto.</td>
     </tr>
@@ -924,6 +997,10 @@
     <tr>
       <td><a href="alto.ui.pictures/">alto.ui.pictures</a></td>
       <td>Small pictures of musical things (clefs, note values, key signatures, note ranges …) for the settings panes.</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.plugins_dialog/">alto.ui.plugins_dialog</a></td>
+      <td>The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.practice_limits/">alto.ui.practice_limits</a></td>
@@ -1074,6 +1151,14 @@
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/guide/reading/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Glossary and further reading</span></a>
             <a class="next" href="/alto/dev/api/alto.anki_export/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.anki_export<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1138,8 +1223,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
   <script defer src="/alto/dev/assets/vendor/temml-0.14.0/temml.min.js"
           onload="temml.renderMathInElement(document.querySelector('article'), {fences: '(', annotate: true})"></script>
@@ -166,6 +166,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -295,6 +323,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -304,10 +335,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -323,6 +360,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -374,6 +414,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -445,6 +488,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -488,6 +534,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -1327,8 +1376,8 @@ The scheduler uses the same intervals as the corresponding grade buttons.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

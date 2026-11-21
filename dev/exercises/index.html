@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -822,6 +871,9 @@ is m3.</p>
   <li><strong>Staff Key</strong> selects the signatures drawn on the staff. Choose zero for a blank signature.</li>
   <li><strong>Display Mode</strong> defaults to <strong>Harmonic</strong>, which shows and plays both notes together. <strong>Melodic</strong> shows and plays them one at a time. Under Melodic, check <strong>Ascending</strong> (lower note first, the default), <strong>Descending</strong> (higher note first), or both to practice them in random order. You can also check both Harmonic and Melodic to mix presentations.</li>
   <li><strong>Quality</strong> sets what you identify. For C up to E♭, choose <strong>3</strong> in <strong>Interval Only</strong>, <strong>m3</strong> in <strong>Interval and Quality</strong> (default), or <strong>m</strong> in <strong>Quality Only</strong>.</li>
+  <li><strong>Inversions</strong> asks you to name the inversion of the interval on the staff. For C4 up to E4, imagine moving C4 up an octave.
+E4 up to C5 is a minor sixth. Choose <strong>6</strong>, <strong>m6</strong>, or <strong>m</strong> according to your <strong>Quality</strong> setting.
+Reduce compound intervals first. A major tenth inverts like a major third, and a perfect octave inverts to a perfect unison.</li>
   <li><strong>Intervals</strong> selects the spellings you want to practice, including compound intervals through a fifteenth.
 Each row shows one interval number. From left to right, the columns are augmented, major or perfect, minor, and diminished.
 The checklist and slider offer intervals that fit at least one selected clef’s range. For example, a staff range from C4 to E4 offers seconds and thirds.
@@ -1219,6 +1271,9 @@ from the signature, so a natural sign appears where the chord needs one.</li>
   
 </figure>
 
+<h2 id="instrument-pack-exercises">Instrument pack exercises</h2>
+
+<p>Installed packs add exercises to the <strong>Instruments</strong> category. The example viola pack includes <strong>Viola Note Identification</strong> and <strong>Parts of the Viola</strong>. The example harpsichord pack adds <strong>Harpsichord Interval Identification</strong> and <strong>Parts of the Harpsichord</strong>. Download an example and follow its tutorial to create exercises with your own artwork and recordings. <a href="/alto/dev/plugins/viola/">Viola plugin tutorial</a> · <a href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></p>
 
           
           
@@ -1294,8 +1349,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

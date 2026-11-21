@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -621,7 +670,7 @@ the program works and the ideas underneath it (audio, notation, spaced repetitio
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">alto/exercises/</code></td>
-      <td>The exercises and the <code class="language-plaintext highlighter-rouge">Question</code> and <code class="language-plaintext highlighter-rouge">Exercise</code> base classes. No Qt.</td>
+      <td>The exercises, the <code class="language-plaintext highlighter-rouge">Question</code> and <code class="language-plaintext highlighter-rouge">Exercise</code> base classes, and registration of installed instrument packs.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">alto/learning/</code></td>
@@ -642,7 +691,7 @@ the program works and the ideas underneath it (audio, notation, spaced repetitio
   </tbody>
 </table>
 
-<p>Keeping the theory, exercises and learning code free of Qt means they can be tested without a display.</p>
+<p>The theory, exercise generation, and learning code can be tested without a display. The pack loader uses Qt’s image reader to check each supplied picture against its original dimensions. <a href="/alto/dev/plugins/api/">Plugin API</a></p>
 
 <h2 id="running-the-tests">Running the tests</h2>
 
@@ -916,7 +965,7 @@ that satisfy it.</p>
 reinforce ideas introduced in several lessons. Reuse an existing lesson when it already explains the idea a new
 exercise depends on.</p>
 
-<p>Order the lesson tiles by prerequisite in <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with a lesson that assumes no music theory
+<p>An instrument plugin follows the same guidance for the lessons in its manifest, which Alto appends to <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code> with <code class="language-plaintext highlighter-rouge">register_lesson</code> when the plugin loads. Order the lesson tiles by prerequisite in <code class="language-plaintext highlighter-rouge">alto.lessons.LESSONS</code>. Start with a lesson that assumes no music theory
 knowledge. When adding a lesson, place it after the ideas it uses and before lessons that build on it.</p>
 
 <ol>
@@ -1204,6 +1253,11 @@ request calls for a shared preference or the exercises already share it.</p>
       <td><strong>Interval Identification</strong> uses a submenu with three radio buttons.</td>
     </tr>
     <tr>
+      <td><strong>Inversions</strong> (written intervals)</td>
+      <td>Show the selected interval and ask for its inversion in the chosen answer format.</td>
+      <td><strong>Interval Identification</strong> uses an inline switch, off by default.</td>
+    </tr>
+    <tr>
       <td><strong>Question Type</strong></td>
       <td>Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts.</td>
       <td><strong>Notation Identification</strong> has <strong>Click on Staff</strong> and <strong>Answer Button</strong> radios. <strong>Scale Identification</strong> has independent <strong>Key</strong> and <strong>Mode</strong> boxes. <strong>Note Construction</strong> shows its keys and degrees when <strong>Scale and Degree</strong> is selected.</td>
@@ -1374,6 +1428,25 @@ home page, says <code class="language-plaintext highlighter-rouge">toc: false</c
 <p>The previous and next links at the bottom of each page follow the sidebar’s reading order.</p>
 
 <h3 id="building-the-docs">Building the docs</h3>
+
+<p>The plugin tutorials are not stored in Alto. They live in
+<a href="https://github.com/altosaurus/viola-plugin-tutorial"><code class="language-plaintext highlighter-rouge">altosaurus/viola-plugin-tutorial</code></a> and
+<a href="https://github.com/altosaurus/harpsichord-plugin-tutorial"><code class="language-plaintext highlighter-rouge">altosaurus/harpsichord-plugin-tutorial</code></a>, which mirror the paths
+of <code class="language-plaintext highlighter-rouge">docs/</code>. The Docs and Docs check workflows run <code class="language-plaintext highlighter-rouge">scripts/tutorial_docs.py</code> before Jekyll. It copies in each tutorial page and
+only the files that page refers to: the artwork it links, and both themes of each screenshot. The download is a release asset
+of the tutorial repository, which its Release workflow builds when a tag is pushed, so the site links to it and does not host
+it. Nothing else in a tutorial repository is published. Run it once before a local build to see the pages. It clones both
+from GitHub, or takes one from a checkout of your own with <code class="language-plaintext highlighter-rouge">--from</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python scripts/tutorial_docs.py all
+python scripts/tutorial_docs.py harpsichord <span class="nt">--from</span> ../harpsichord-plugin-tutorial
+</code></pre></div></div>
+
+<p>The files it writes are listed in <code class="language-plaintext highlighter-rouge">.gitignore</code>. A merge into Alto’s <code class="language-plaintext highlighter-rouge">main</code> rebuilds the docs, and a change to a tutorial
+reaches the site at the next build, so run the Docs workflow by hand after you push a tutorial. The pictures in each tutorial
+are made by that repository’s <code class="language-plaintext highlighter-rouge">scripts/screenshots.py</code>. The plugin tests keep only the manifest of each example pack in <code class="language-plaintext highlighter-rouge">tests/packs/</code> (and the viola’s animation), and make its recordings,
+photographs and icons when they run (<code class="language-plaintext highlighter-rouge">tests/pack_fixtures.py</code>), because the plugin’s author provides the real ones. They also read
+the tutorial pages when they have been brought in.</p>
 
 <p>You need Ruby and Bundler. In <code class="language-plaintext highlighter-rouge">docs/</code>, <code class="language-plaintext highlighter-rouge">bundle install</code> once, then build one version the way the workflow does:</p>
 
@@ -1586,8 +1659,16 @@ original directory so older answers can still be opened.</p>
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/dev/data/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Your data</span></a>
+            <a class="prev" href="/alto/dev/plugins/harpsichord/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>Harpsichord plugin tutorial</span></a>
             <a class="next" href="/alto/dev/developer-guide/" rel="next"><span class="np-label">Next</span><span class="np-title">Developer guide<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -1650,8 +1731,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

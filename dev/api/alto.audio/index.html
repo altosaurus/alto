@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -663,6 +712,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
     <span class="n">family</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">variant</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">damped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">pack_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -679,6 +731,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
   <li><code class="language-plaintext highlighter-rouge">damped</code> (<em>bool, default False</em>): True for an instrument whose notes are stopped by a damper when the key is let go, played without the pedal: the piano. Each note ends as the next one begins, as it does when the fingers move from key to key, instead of ringing on over the following notes as if the pedal were down. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">family</code> (<em>str, default ““</em>): Instruments that are ways of playing the same instrument share a family (the viola: arco and pizzicato). Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">variant</code> (<em>str, default ““</em>): Which way of playing it, within the family. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">samples</code> (<em>tuple of (int, Path), default ()</em>): Pairs of MIDI pitches and local recording paths supplied by an installed instrument pack. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">pack_name</code> (<em>str, default ““</em>): Display name of the plugin that supplies the recordings. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">kind</code> (<em>str, default ““</em>): What sort of instrument it is, such as “harpsichord”, so that other sounds of the same sort can be offered together. Built-in instruments use their family or name. Keyword-only.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -687,6 +742,46 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 1.0
 &gt;&gt;&gt; INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
 (True, False)
+</code></pre>
+
+<h3 id="instrumentkind_name">Instrument.kind_name</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">kind_name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Name what sort of instrument this is, in lowercase.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The plugin’s <code class="language-plaintext highlighter-rouge">kind</code>, or the built-in family, or the instrument’s label.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
+('viola', 'flute')
+</code></pre>
+
+<h3 id="instrumentpicker_group">Instrument.picker_group</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
+<span class="k">def</span> <span class="nf">picker_group</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Identify the instrument’s entry in the sound picker.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The pack-qualified key for a plugin sound, or the built-in family or label.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["viola_bowed"].picker_group
+'Viola'
 </code></pre>
 
 <h3 id="instrumentplayback_volume">Instrument.playback_volume</h3>
@@ -726,7 +821,7 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>list of tuple of (str, list of Instrument)</em>: Each entry’s name (the family, or the instrument’s own label) and its instruments, in the order listed.</li>
+  <li><em>list of tuple of (str, list of Instrument)</em>: Each entry’s picker group and its instruments, in the order listed.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -887,6 +982,35 @@ b'RIFF'
 True
 </code></pre>
 
+<h3 id="soundsnote_duration_ms">Sounds.note_duration_ms</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">note_duration_ms</span><span class="p">(</span>
+    <span class="n">midi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div></div>
+
+<p>Read the playback length of a note for synchronized instrument animations.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">midi</code> (<em>int</em>): Sounding MIDI pitch.</li>
+  <li><code class="language-plaintext highlighter-rouge">instrument</code> (<em>str or None</em>): Pack sound key, or None for the learner’s selected sound.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>int</em>: Duration in milliseconds, using the usual feedback interval if the WAV is unavailable.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">A one-second sample has the same 1000 ms feedback interval when muted.
+</code></pre>
+
 <h3 id="soundsplay_midi">Sounds.play_midi</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">play_midi</span><span class="p">(</span>
@@ -972,6 +1096,7 @@ Starting a preview silences the one before it.</p>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_NOTE_GAP_MS</span><span class="p">,</span>
     <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
@@ -983,6 +1108,7 @@ Starting a preview silences the one before it.</p>
 <p><strong>Parameters</strong></p>
 
 <ul>
+  <li><code class="language-plaintext highlighter-rouge">instrument</code> (<em>str or None</em>): Instrument key for this playback, or None for the learner’s selection.</li>
   <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Play even when exercise audio is muted.</li>
   <li><code class="language-plaintext highlighter-rouge">warmup</code> (<em>bool</em>): Silently initialize audio streams before starting playback.</li>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>iterable of sequence of Note</em>): The columns of notes, as drawn on a staff.</li>
@@ -1023,6 +1149,7 @@ Starting a preview silences the one before it.</p>
     <span class="n">gap_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">on_step</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span> <span class="o">|</span> <span class="bp">None</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">warmup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
@@ -1035,6 +1162,7 @@ Starting a preview silences the one before it.</p>
   <li><code class="language-plaintext highlighter-rouge">columns</code> (<em>sequence of sequence of Note</em>): Written notes in playback order, with simultaneous notes grouped together.</li>
   <li><code class="language-plaintext highlighter-rouge">gap_ms</code> (<em>int</em>): Time between column onsets in milliseconds.</li>
   <li><code class="language-plaintext highlighter-rouge">on_step</code> (<em>callable</em>): Receives each sounding column index and None to clear the display.</li>
+  <li><code class="language-plaintext highlighter-rouge">instrument</code> (<em>str or None</em>): Instrument key for this playback, or None for the learner’s selection.</li>
   <li><code class="language-plaintext highlighter-rouge">force</code> (<em>bool</em>): Audition the sample even when exercise audio is muted.</li>
   <li><code class="language-plaintext highlighter-rouge">warmup</code> (<em>bool</em>): Prepare the audio streams before the first note.</li>
 </ul>
@@ -1171,6 +1299,14 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
           
           
           
+          
+          
+          
+          
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.anki_export/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.anki_export</span></a>
             <a class="next" href="/alto/dev/api/alto.circle_schemes/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.circle_schemes<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
@@ -1235,8 +1371,8 @@ still walks the visual steps. The last note sustains for an extra 200 ms. A newe
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -664,6 +713,7 @@ in the saved data that is not valid is ignored.</p>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">low</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">high</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">limits</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -702,6 +752,7 @@ in the saved data that is not valid is ignored.</p>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The clef, a key of <code class="language-plaintext highlighter-rouge">RANGE_LIMITS</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest note asked, as a staff step. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest note asked. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">limits</code> (<em>tuple of (int, int) or None, default None</em>): The furthest the bounds may go, as staff steps; None for the clef’s usual limits. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the editor. Keyword-only.</li>
 </ul>
 
@@ -709,6 +760,8 @@ in the saved data that is not valid is ignored.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
 True
+&gt;&gt;&gt; RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
+(21, 30)
 </code></pre>
 
 <h2 id="keydiagram">KeyDiagram</h2>
@@ -2047,6 +2100,207 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 4
 </code></pre>
 
+<h2 id="load_pack_options">load_pack_options</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_pack_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Restore the options learners chose for each plugin exercise that offers settings.</p>
+
+<p>Anything in the saved data that is not valid is ignored.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; load_pack_options()
+</code></pre>
+
+<h2 id="save_pack_options">save_pack_options</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_pack_options</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the options chosen for one plugin exercise.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The exercise’s class name.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_pack_options("pack.nothing.here")
+</code></pre>
+
+<h2 id="packsettingspanel">PackSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PackSettingsPanel</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
+
+<p>The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.</p>
+
+<p>The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
+accidentals and for the octave. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise whose options are edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>PackExerciseSettings</em>): The options being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">range_row</code> (<em>_Row</em>): The Range row, present only if the plugin declared a range.</li>
+  <li><code class="language-plaintext highlighter-rouge">sound_row</code> (<em>_ToggleRow or None</em>): The plugin sound switch, if declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">accidentals_row</code> (<em>_ToggleRow or None</em>): The accidentals switch, if declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>_ToggleRow or None</em>): The octave switch, if declared.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
+...     controls = {"octave": True}
+&gt;&gt;&gt; panel = PackSettingsPanel(Demo)
+&gt;&gt;&gt; panel.octave_row is not None and not hasattr(panel, "range_row")
+True
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the menu and, if the plugin offers a range, its page.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
+...     controls = {"sound": "Demo sound"}
+&gt;&gt;&gt; panel = PackSettingsPanel(Sounds)
+&gt;&gt;&gt; panel.stack.count()
+2
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
+</code></pre>
+
+<h2 id="packkeyboardsettingspanel">PackKeyboardSettingsPanel</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+
+<p>The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.</p>
+
+<p>The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise whose options are edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>PackExerciseSettings</em>): The options being edited.</li>
+  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The settings menu, then the range page and the intervals page, as the plugin offers them.</li>
+  <li><code class="language-plaintext highlighter-rouge">sound_row</code> (<em>_ToggleRow or None</em>): The plugin sound switch, if declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">range_row</code> (<em>_Row or None</em>): The Range row, if declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">span</code> (<em>KeyboardSpan or None</em>): The draggable range selector, if a range is declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_page</code> (<em>ChoiceChecklist or None</em>): The interval checkboxes, keyed by interval name, if a choice of intervals is declared.</li>
+  <li><code class="language-plaintext highlighter-rouge">manual_page</code> (<em>ChoiceChecklist or None</em>): The keyboard checkboxes, keyed by keyboard name, if a choice of manuals is declared.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
+...     controls = {"range": True, "intervals": True, "manuals": True}
+...     spec = {"type": "keyboard-intervals"}
+...     key_span, key_default = (28, 89), (48, 72)
+...     interval_names = ("m2", "M2", "m3")
+...     manual_names = ("Upper manual", "Lower manual")
+&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
+&gt;&gt;&gt; panel.stack.count(), panel.low_label.text(), panel.high_label.text()
+(4, 'C3', 'C5')
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the menu and the pages the plugin offers.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise to edit.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Sounds)
+&gt;&gt;&gt; panel.stack.count()
+2
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
+</code></pre>
+
+<h3 id="packkeyboardsettingspanelflush">PackKeyboardSettingsPanel.flush</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flush</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save the options and ask a new question now, if an edit is waiting.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
+&gt;&gt;&gt; panel._sound_chosen("piano")
+&gt;&gt;&gt; panel.flush()
+&gt;&gt;&gt; panel._commit_timer.isActive()
+False
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
+</code></pre>
+
+<h3 id="packkeyboardsettingspanelhideevent">PackKeyboardSettingsPanel.hideEvent</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hideEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QHideEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Keep an edit that is still waiting when the panel closes.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QHideEvent</em>): The event.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
+...     controls = {"sound": "Demo sound"}
+...     spec = {"type": "keyboard-intervals"}
+&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
+&gt;&gt;&gt; panel._sound_chosen("piano")
+&gt;&gt;&gt; panel.show()
+&gt;&gt;&gt; panel.hide()
+&gt;&gt;&gt; panel._commit_timer.isActive()
+False
+&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
+</code></pre>
+
 <h2 id="load_choice_buttons">load_choice_buttons</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_choice_buttons</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -2107,6 +2361,28 @@ True
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -2367,8 +2643,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

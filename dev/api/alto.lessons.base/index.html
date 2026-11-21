@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795205349">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795305431">
   
 </head>
 <body>
@@ -163,6 +163,34 @@
             
             
             
+            
+            
+            <li><details class="nav-section">
+              <summary class="nav-row"><a class="row grow" href="/alto/dev/plugins/">Plugins</a><svg class="i chev" width="14" height="14" aria-hidden="true"><use href="#i-chev-r"/></svg></summary>
+              
+              
+              
+              
+              <ul class="kids">
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/api/">Plugin API</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/viola/">Viola plugin tutorial</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/plugins/harpsichord/">Harpsichord plugin tutorial</a></li>
+                
+                
+              </ul>
+            </details></li>
+            
+            
+            
+            
+            
+            
             </ul></details></li>
             
             
@@ -292,6 +320,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.instrument_info/">instrument_info</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.instrument_packs/">instrument_packs</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.location/">location</a></li>
                 
                 
@@ -301,10 +332,16 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.notation_terms/">notation_terms</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.plugin_registry/">plugin_registry</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.selfupdate/">selfupdate</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.settings/">settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.terms/">terms</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.updates/">updates</a></li>
@@ -320,6 +357,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.exercises.library/">library</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.exercises.packs/">packs</a></li>
                 
                 
                 </ul></details></li>
@@ -371,6 +411,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.key_signatures/">key_signatures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.lessons.packs/">packs</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.lessons.pitches_and_notes/">pitches_and_notes</a></li>
@@ -442,6 +485,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.fingerboard/">fingerboard</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.glossary/">glossary</a></li>
                 
                 
@@ -485,6 +531,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.pictures/">pictures</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.plugins_dialog/">plugins_dialog</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.practice_limits/">practice_limits</a></li>
@@ -624,6 +673,7 @@ scored or recorded.</p>
     <span class="n">correct</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">clef</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -642,12 +692,45 @@ scored or recorded.</p>
   <li><code class="language-plaintext highlighter-rouge">correct</code> (<em>str</em>): The right button, if there are choices.</li>
   <li><code class="language-plaintext highlighter-rouge">clef</code> (<em>str</em>): For a step that shows a staff beside a task, the clef to draw on it; empty for a blank staff.</li>
   <li><code class="language-plaintext highlighter-rouge">key</code> (<em>int</em>): Sharps (positive) or flats (negative) on the task staff.</li>
+  <li><code class="language-plaintext highlighter-rouge">targets</code> (<em>tuple of tuple of (float, float, float)</em>): For a question answered by clicking the step’s instrument picture: each right place as the x and y of its centre and its radius, in the picture’s own pixels.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; Task(prompt="Which?", hint="Count.", explanation="Five.", choices=("A", "B"), correct="B").check("B")
 True
+&gt;&gt;&gt; Task(prompt="Click it.", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(12.0, y=11.0)
+True
+</code></pre>
+
+<h3 id="taskhits">Task.hits</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hits</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Say whether a click on the instrument picture is on one of the right places.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">x</code> (<em>float</em>): The click’s x in the picture’s pixels.</li>
+  <li><code class="language-plaintext highlighter-rouge">y</code> (<em>float</em>): The click’s y in the picture’s pixels. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: True if the click is within the radius of a target.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; Task(prompt="?", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(30.0, y=10.0)
+False
 </code></pre>
 
 <h3 id="taskcheck">Task.check</h3>
@@ -721,6 +804,8 @@ False
     <span class="n">scale_explore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
     <span class="n">keyboard_note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">hear_display</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s">''</span><span class="p">,</span> <span class="s">'staff'</span><span class="p">,</span> <span class="s">'keyboard'</span><span class="p">]</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">picture</span><span class="p">:</span> <span class="n">PicturePosition</span> <span class="o">|</span> <span class="n">FingerboardPosition</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">hear_instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
     <span class="n">single_question</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">label_middle_c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
@@ -746,6 +831,8 @@ False
   <li><code class="language-plaintext highlighter-rouge">scale_explore</code> (<em>bool</em>): Allow changing the example. False hides the selectors for identification tasks.</li>
   <li><code class="language-plaintext highlighter-rouge">hear_display</code> (<em>str</em>): Show the playback pitches on a treble staff or keyboard (“staff” or “keyboard”). Empty hides this diagram.</li>
   <li><code class="language-plaintext highlighter-rouge">keyboard_note</code> (<em>str</em>): A named pitch to highlight on the lesson keyboard, which spans middle C to the C above it.</li>
+  <li><code class="language-plaintext highlighter-rouge">picture</code> (<em>PicturePosition or FingerboardPosition or None</em>): An instrument picture to show beside the words, such as one supplied by a plugin. Alto draws it with the same widget the exercises use. None for no picture.</li>
+  <li><code class="language-plaintext highlighter-rouge">hear_instrument</code> (<em>str</em>): The key of the instrument that plays the Hear it notes, such as one supplied by a plugin. Empty for the learner’s own choice of sound.</li>
   <li><code class="language-plaintext highlighter-rouge">label_middle_c</code> (<em>bool</em>): Label middle C and bracket the pair of black keys beside it.</li>
 </ul>
 
@@ -766,6 +853,7 @@ False
     <span class="n">steps</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Step</span><span class="p">,</span> <span class="p">...],</span>
     <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">related_exercises</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -782,6 +870,7 @@ False
   <li><code class="language-plaintext highlighter-rouge">steps</code> (<em>tuple of Step</em>): The pages, in order.</li>
   <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str</em>): The primary exercise offered on the last page and used for the lesson icon.</li>
   <li><code class="language-plaintext highlighter-rouge">related_exercises</code> (<em>tuple of str</em>): Additional exercises offered on the last page, in display order.</li>
+  <li><code class="language-plaintext highlighter-rouge">icon</code> (<em>str</em>): SVG shapes for the lesson’s tile, in a 24 by 24 box with COLOR where the theme’s ink goes. Empty uses the icon of the primary exercise.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -801,6 +890,22 @@ False
 </code></pre>
 
 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           
           
@@ -969,8 +1074,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795205349" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795205349" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795305431" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795305431" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -367,3 +367,5 @@ h2, h3 { scroll-margin-top: 76px; }
 .np-title svg.i { color: var(--accent); stroke-width: 2; }
 @media (max-width: 520px) { .page-nav { flex-direction: column; } .page-nav a { max-width: 100%; } .page-nav a.next { margin-left: 0; } }
 .hero h1 .hl { color: var(--accent); }
+
+.viola-example img { display: block; max-width: 100%; height: auto; }

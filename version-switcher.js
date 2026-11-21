@@ -16,7 +16,7 @@
   function pageInVersion(version) {
     var prefix = root + "/" + current + "/";
     var rest = location.pathname.indexOf(prefix) === 0 ? location.pathname.slice(prefix.length) : "";
-    return root + "/" + version + "/" + rest;
+    return root + "/" + version + "/" + rest + location.search;
   }
 
   function go(version) {
