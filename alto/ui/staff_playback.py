@@ -39,6 +39,7 @@ class StaffPlayback(QObject):
         gap_ms: int = DEFAULT_NOTE_GAP_MS,
         force: bool = False,
         warmup: bool = False,
+        instrument: str | None = None,
     ) -> None:
         """
         Play the displayed notes in order.
@@ -51,10 +52,12 @@ class StaffPlayback(QObject):
             Time between onsets in milliseconds.
         force : bool
             Allow explicit auditions even when exercise sounds are muted.
+        instrument : str or None
+            Sound registered by the active pack, or the learner’s default.
         warmup : bool
             Prepare the audio streams before the first note.
         """
-        sounds.play_sample(columns, gap_ms=gap_ms, force=force, on_step=self._notify, warmup=warmup)
+        sounds.play_sample(columns, gap_ms=gap_ms, force=force, on_step=self._notify, warmup=warmup, instrument=instrument)
 
     def stop(self) -> None:
         """Clear this view's sounding note and cancel its pending audio."""

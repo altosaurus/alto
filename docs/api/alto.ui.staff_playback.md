@@ -39,6 +39,7 @@ def play(
     gap_ms: int = DEFAULT_NOTE_GAP_MS,
     force: bool = False,
     warmup: bool = False,
+    instrument: str | None = None,
 ) -> None
 ```
 
@@ -49,6 +50,7 @@ Play the displayed notes in order.
 - `columns` (*sequence of sequence of Note*): Notes grouped by onset.
 - `gap_ms` (*int*): Time between onsets in milliseconds.
 - `force` (*bool*): Allow explicit auditions even when exercise sounds are muted.
+- `instrument` (*str or None*): Sound registered by the active pack, or the learner’s default.
 - `warmup` (*bool*): Prepare the audio streams before the first note.
 
 ### StaffPlayback.stop

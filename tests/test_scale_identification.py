@@ -232,6 +232,7 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
         gap_ms: int,
         warmup: bool,
         force: bool,
+        instrument: str | None,
         on_step: Callable[[int | None], object],
     ) -> None:
         """
@@ -239,6 +240,8 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
 
         Parameters
         ----------
+        instrument : str or None
+            Optional pack-specific sound.
         force : bool
             Whether to override the mute setting.
         warmup : bool
@@ -251,6 +254,7 @@ def test_correct_answer_tracks_playback_and_waits_for_completion(
             The visual callback.
 
         """
+        assert instrument is None
         assert warmup and not force
         assert gap_ms == 280
         played.extend(note.midi for column in midis for note in column)

@@ -142,6 +142,13 @@ class Instrument:
         Keyword-only.
     variant : str, default ""
         Which way of playing it, within the family. Keyword-only.
+    samples : tuple of (int, Path), default ()
+        Pairs of MIDI pitches and local recording paths supplied by an installed instrument pack. Keyword-only.
+    pack_name : str, default ""
+        Display name of the plugin that supplies the recordings. Keyword-only.
+    kind : str, default ""
+        What sort of instrument it is, such as "harpsichord", so that other sounds of the same sort can be offered together.
+        Built-in instruments use their family or name. Keyword-only.
 
     Examples
     --------
@@ -160,6 +167,43 @@ class Instrument:
     family: str = ""  # instruments that are ways of playing the same instrument share a family (the viola: arco, pizzicato)
     variant: str = ""  # which way of playing it, within the family
     damped: bool = False  # a damper stops each note as the next begins, as on a piano played without the pedal
+    samples: tuple[tuple[int, Path], ...] = ()  # Explicit pitch-to-file map supplied by a pack.
+    pack_name: str = ""
+    kind: str = ""  # what sort of instrument it is, so sounds of the same sort can be offered together
+
+    @property
+    def kind_name(self) -> str:
+        """
+        Name what sort of instrument this is, in lowercase.
+
+        Returns
+        -------
+        str
+            The plugin's ``kind``, or the built-in family, or the instrument's label.
+
+        Examples
+        --------
+        >>> INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
+        ('viola', 'flute')
+        """
+        return (self.kind or self.family or self.label).lower()
+
+    @property
+    def picker_group(self) -> str:
+        """
+        Identify the instrument's entry in the sound picker.
+
+        Returns
+        -------
+        str
+            The pack-qualified key for a plugin sound, or the built-in family or label.
+
+        Examples
+        --------
+        >>> INSTRUMENT_BY_KEY["viola_bowed"].picker_group
+        'Viola'
+        """
+        return self.key if self.pack_name else self.family or self.label
 
     def playback_volume(self, level: float = 1.0) -> float:
         """
@@ -246,7 +290,7 @@ def instrument_groups() -> list[tuple[str, list[Instrument]]]:
     Returns
     -------
     list of tuple of (str, list of Instrument)
-        Each entry's name (the family, or the instrument's own label) and its instruments, in the order listed.
+        Each entry's picker group and its instruments, in the order listed.
 
     Examples
     --------
@@ -256,8 +300,8 @@ def instrument_groups() -> list[tuple[str, list[Instrument]]]:
     ['Arco', 'Pizzicato']
     """
     groups: dict[str, list[Instrument]] = {}
-    for inst in INSTRUMENTS:
-        groups.setdefault(inst.family or inst.label, []).append(inst)
+    for inst in INSTRUMENT_BY_KEY.values():
+        groups.setdefault(inst.picker_group, []).append(inst)
     return list(groups.items())
 
 
@@ -422,6 +466,8 @@ class Sounds:
         >>> 60 in piano and piano[60].suffix
         '.wav'
         """
+        if inst.samples:
+            return dict(inst.samples)
         found = self._sample_files.get(inst.key)
         if found is None:
             folder = ASSETS / inst.folder
@@ -491,6 +537,33 @@ class Sounds:
         else:  # the piano outside its sampled range
             path.write_bytes(to_wav_bytes(synth_piano(midi)))
         return path
+
+    def note_duration_ms(self, midi: int, *, instrument: str | None = None) -> int:
+        """
+        Read the playback length of a note for synchronized instrument animations.
+
+        Parameters
+        ----------
+        midi : int
+            Sounding MIDI pitch.
+        instrument : str or None
+            Pack sound key, or None for the learner's selected sound.
+
+        Returns
+        -------
+        int
+            Duration in milliseconds, using the usual feedback interval if the WAV is unavailable.
+
+        Examples
+        --------
+        A one-second sample has the same 1000 ms feedback interval when muted.
+        """
+        inst = INSTRUMENT_BY_KEY.get(instrument or self.instrument, INSTRUMENTS[0])
+        try:
+            with wave.open(str(self._note_file(inst, midi=midi)), "rb") as recording:
+                return max(1, round(1000 * recording.getnframes() / recording.getframerate()))
+        except (OSError, EOFError, wave.Error, ValueError, ZeroDivisionError):
+            return DEFAULT_NOTE_GAP_MS
 
     FADE_MS = 70  # how quickly a sustained note dies away when the next one begins
 
@@ -688,7 +761,7 @@ class Sounds:
             ),
         ).encode()
         path = self._dir / f"preview_{hashlib.sha256(identity).hexdigest()}.wav"
-        if path.exists():
+        if not inst.samples and path.exists():
             return path
         gap = max(1, round(SAMPLE_RATE * step_ms / 1000))
         fade = max(1, round(SAMPLE_RATE * self.FADE_MS / 1000))
@@ -711,7 +784,12 @@ class Sounds:
             start = i * gap
             phrase[start : start + len(audio)] += audio
         self._dir.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(to_wav_bytes(np.clip(phrase, -1.0, 1.0)))
+        wav = to_wav_bytes(np.clip(phrase, -1.0, 1.0))
+        if inst.samples:
+            # A pack update can replace the recordings under the same instrument key.
+            path = self._dir / f"preview_{hashlib.sha256(wav).hexdigest()}.wav"
+        if not path.exists():
+            path.write_bytes(wav)
         return path
 
     def preview(
@@ -1008,6 +1086,7 @@ class Sounds:
         gap_ms: int = DEFAULT_NOTE_GAP_MS,
         warmup: bool = False,
         force: bool = False,
+        instrument: str | None = None,
         on_step: Callable[[int | None], object] | None = None,
     ) -> None:
         """
@@ -1017,6 +1096,8 @@ class Sounds:
 
         Parameters
         ----------
+        instrument : str or None
+            Instrument key for this playback, or None for the learner’s selection.
         force : bool
             Play even when exercise audio is muted.
         warmup : bool
@@ -1037,7 +1118,7 @@ class Sounds:
 
         """
         self._play_sequence(
-            self.instrument,
+            instrument or self.instrument,
             steps=[([n.midi for n in col], min(1.0, 1.4 / max(1, len(col)) ** 0.5)) for col in columns],
             gap_ms=gap_ms,
             warmup=warmup,
@@ -1084,6 +1165,7 @@ class Sounds:
         gap_ms: int,
         on_step: Callable[[int | None], object],
         force: bool = False,
+        instrument: str | None = None,
         warmup: bool = False,
     ) -> None:
         """
@@ -1097,6 +1179,8 @@ class Sounds:
             Time between column onsets in milliseconds.
         on_step : callable
             Receives each sounding column index and None to clear the display.
+        instrument : str or None
+            Instrument key for this playback, or None for the learner’s selection.
         force : bool
             Audition the sample even when exercise audio is muted.
         warmup : bool
@@ -1132,7 +1216,7 @@ class Sounds:
             on_step(index)
 
         self.stop_all()
-        self.play_notes(columns, gap_ms=gap_ms, on_step=show, force=force, warmup=warmup)
+        self.play_notes(columns, gap_ms=gap_ms, on_step=show, force=force, warmup=warmup, instrument=instrument)
         self._sample_step = on_step
 
     def play_melody(

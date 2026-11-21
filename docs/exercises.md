@@ -172,6 +172,9 @@ is m3.
 - **Staff Key** selects the signatures drawn on the staff. Choose zero for a blank signature.
 - **Display Mode** defaults to **Harmonic**, which shows and plays both notes together. **Melodic** shows and plays them one at a time. Under Melodic, check **Ascending** (lower note first, the default), **Descending** (higher note first), or both to practice them in random order. You can also check both Harmonic and Melodic to mix presentations.
 - **Quality** sets what you identify. For C up to E♭, choose **3** in **Interval Only**, **m3** in **Interval and Quality** (default), or **m** in **Quality Only**.
+- **Inversions** asks you to name the inversion of the interval on the staff. For C4 up to E4, imagine moving C4 up an octave.
+  E4 up to C5 is a minor sixth. Choose **6**, **m6**, or **m** according to your **Quality** setting.
+  Reduce compound intervals first. A major tenth inverts like a major third, and a perfect octave inverts to a perfect unison.
 - **Intervals** selects the spellings you want to practice, including compound intervals through a fifteenth.
   Each row shows one interval number. From left to right, the columns are augmented, major or perfect, minor, and diminished.
   The checklist and slider offer intervals that fit at least one selected clef's range. For example, a staff range from C4 to E4 offers seconds and thirds.
@@ -499,3 +502,7 @@ inversion. In the exercise settings you can choose:
   from the signature, so a natural sign appears where the chord needs one.
 
 {% include shot.html src="arpeggios.png" alt="Arpeggio Identification showing four notes rising on a staff, with a row of type buttons and a row of inversion buttons" %}
+
+## Instrument pack exercises
+
+Installed packs add exercises to the **Instruments** category. The example viola pack includes **Viola Note Identification** and **Parts of the Viola**. The example harpsichord pack adds **Harpsichord Interval Identification** and **Parts of the Harpsichord**. Download an example and follow its tutorial to create exercises with your own artwork and recordings. [Viola plugin tutorial]({{ '/plugins/viola/' | relative_url }}) · [Harpsichord plugin tutorial]({{ '/plugins/harpsichord/' | relative_url }})

@@ -10,8 +10,9 @@ import sys
 from pathlib import Path
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMessageBox
 
+from alto.exercises.packs import load_packs
 from alto.learning import (
     Database,
     Learner,
@@ -74,12 +75,15 @@ def main() -> int:
     if profile is None:
         return 0
     learner = Learner(db, profile=profile)
+    problems = load_packs(database_path().parent / "plugins")
     window = MainWindow(learner)
     # noinspection PyUnresolvedReferences
     app.learner = learner  # pyright: ignore[reportAttributeAccessIssue]  (kept on the app so a theme change can swap in a fresh window)
     # noinspection PyUnresolvedReferences
     app.main_window = window  # pyright: ignore[reportAttributeAccessIssue]
     window.show()
+    if problems:
+        QMessageBox.warning(window, "Plugin loading", "Alto skipped these packs.\n\n" + "\n".join(problems))
     DailyReleaseCheck(window)
     return app.exec()
 

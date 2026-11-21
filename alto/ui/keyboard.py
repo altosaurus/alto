@@ -160,6 +160,8 @@ class KeyboardWidget(QWidget):
         The widest a key may be, in pixels. Smaller when something else (the key signature) shares the page.
     highlight_color : QColor
         The color of the highlighted key.
+    key_length : float
+        How long a natural key is drawn, in key widths. A piano's is 6.2, and a harpsichord's keys can be shorter.
 
     Examples
     --------
@@ -197,6 +199,7 @@ class KeyboardWidget(QWidget):
         self.pad = PAD
         self.max_key_width = MAX_KEY_WIDTH  # smaller when something else (the key signature) shares the page
         self.highlight_color = QColor(self.palette().color(QPalette.ColorRole.Highlight))
+        self.key_length = KEY_LENGTH
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self._fit_height()
 
@@ -314,7 +317,7 @@ class KeyboardWidget(QWidget):
         >>> keyboard.height()
         263
         """
-        height = int(2 * self.pad + self.style.rail + self._key_width() * KEY_LENGTH) + self._annotation_height()
+        height = int(2 * self.pad + self.style.rail + self._key_width() * self.key_length) + self._annotation_height()
         if height != self.height() or self.minimumHeight() != height:
             self.setFixedHeight(height)
 
@@ -449,7 +452,7 @@ class KeyboardWidget(QWidget):
         n = len(whites)
         left = (self.width() - n * kw) / 2  # center the keys
         top = pad + style.rail
-        kh = kw * KEY_LENGTH
+        kh = kw * self.key_length
         first = 7 * (whites[0] // 12) + WHITE_INDEX[whites[0] % 12]  # absolute white-key number of the leftmost key
         annotation_height = self._annotation_height()
         if annotation_height:
@@ -578,7 +581,7 @@ class KeyboardWidget(QWidget):
             p.drawPath(path)
             if style.cap:  # a bone cap over the darker wood
                 p.setPen(Qt.PenStyle.NoPen)
-                p.setBrush(QColor(style.cap))
+                p.setBrush(self.highlight_color if on else QColor(style.cap))
                 p.drawRoundedRect(
                     QRectF(
                         x + 2,
@@ -672,6 +675,8 @@ class KeyboardSpan(QWidget):
         The lowest key shaded.
     hi : int
         The highest key shaded.
+    full : tuple of int
+        The lowest and highest key the miniature draws. All 88 keys, unless a plugin's keyboard has fewer.
 
     Examples
     --------
@@ -709,6 +714,7 @@ class KeyboardSpan(QWidget):
         """
         super().__init__(parent)
         self.lo, self.hi = KEYBOARD_DEFAULT
+        self.full: tuple[int, int] = KEYBOARD_FULL
         self._compact = compact
         if compact:
             self.setFixedSize(*size)
@@ -744,7 +750,7 @@ class KeyboardSpan(QWidget):
         >>> span.key_at(QPointF(250, 50))
         64
         """
-        first, last = KEYBOARD_FULL
+        first, last = self.full
         whites = [m for m in range(first, last + 1) if m % 12 in WHITE_PITCH_CLASSES]
         w, h = self.width(), self.height()
         kw = (w - 8) / len(whites)
@@ -772,7 +778,7 @@ class KeyboardSpan(QWidget):
         >>> tuple(round(x) for x in span._edges())
         (155, 297)
         """
-        first, last = KEYBOARD_FULL
+        first, last = self.full
         whites = [m for m in range(first, last + 1) if m % 12 in WHITE_PITCH_CLASSES]
         kw = (self.width() - 8) / len(whites)
 
@@ -893,7 +899,7 @@ class KeyboardSpan(QWidget):
             self.setCursor(cursor[self._grab(event.position().x())])
             return
         here = self.key_at(event.position())
-        first, last = KEYBOARD_FULL
+        first, last = self.full
         if self._mode == "new":
             self.dragged.emit(min(self._anchor, here), max(self._anchor, here))
         elif self._mode == "lo":
@@ -971,7 +977,7 @@ class KeyboardSpan(QWidget):
         """
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        first, last = KEYBOARD_FULL
+        first, last = self.full
         whites = [m for m in range(first, last + 1) if m % 12 in WHITE_PITCH_CLASSES]
         w, h = self.width(), self.height()
         accent = self.palette().color(QPalette.ColorRole.Highlight)

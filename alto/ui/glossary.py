@@ -25,7 +25,12 @@ from PySide6.QtWidgets import (
 from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.lessons import LESSONS
+from alto.terms import (
+    PLUGIN_TERMS,
+    PluginTerm,
+)
 from alto.theory.pitch import Note
+from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.home import ExerciseCard, lesson_card
 from alto.ui.icons import SEARCH, set_svg_icon
 from alto.ui.keyboard import KeyboardWidget
@@ -35,6 +40,7 @@ from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import SegmentedControl
 
 _STEP_LABELS = {1: "H", 2: "W", 3: "3H"}
+PLUGIN_ROLE = Qt.ItemDataRole.UserRole  # the name of a plugin's entry, on its row in the list
 
 
 @dataclass(frozen=True)
@@ -434,9 +440,13 @@ class GlossaryPage(QWidget):
         self.terms.setObjectName("categories")
         self.terms.setProperty("glossaryBox", True)
         self.terms.setSpacing(2)
-        for term in sorted(TERMS):
-            row = QListWidgetItem(term)
+        listed = [(name, "") for name in TERMS] + [(name, entry.pack) for name, entry in PLUGIN_TERMS.items()]
+        for name, pack in sorted(listed, key=lambda pair: (pair[0].casefold(), pair[1])):
+            clash = bool(pack) and name in TERMS  # a plugin's term that a built-in one already uses carries its plugin's name
+            row = QListWidgetItem(f"{name} ({pack})" if clash else name)
             row.setSizeHint(QSize(0, 40))
+            if pack:
+                row.setData(PLUGIN_ROLE, name)
             self.terms.addItem(row)
         sidebar_layout.addWidget(self.search)
         sidebar_layout.addWidget(self.terms)
@@ -457,6 +467,10 @@ class GlossaryPage(QWidget):
         self.example_keyboard.max_key_width = 26
         demo.addWidget(self.example_staff)
         demo.addWidget(self.example_keyboard)
+        self.example_board = FingerboardWidget()  # a plugin's term shows its instrument here instead of notation
+        self.example_board.setFixedHeight(190)
+        self.example_board.hide()
+        demo.addWidget(self.example_board)
         self.playback = StaffPlayback(self, highlight=self.example_staff.highlight_column)
         self._preview_played = False
         demo_controls = QVBoxLayout()
@@ -512,11 +526,14 @@ class GlossaryPage(QWidget):
         if item is None:
             self._show_activities(self.activity_switch.current())
             return
-        term = TERMS[item.text()]
-        self.definition.setHtml(f"<h2>{item.text()}</h2><p>{term.definition}</p><p>{term.guide}</p>")
+        entry = self._entry(item)
+        if isinstance(entry, PluginTerm):
+            guide = f"<p>{entry.guide}</p>" if entry.guide else ""
+            self.definition.setHtml(f"<h2>{entry.name}</h2><p>{entry.definition}</p>{guide}")
+        else:
+            self.definition.setHtml(f"<h2>{item.text()}</h2><p>{entry.definition}</p><p>{entry.guide}</p>")
         self._example_index = 0
         self._update_example()
-        self.demo.show()
         self.definition_area.verticalScrollBar().setValue(0)
         self._show_activities(self.activity_switch.current())
 
@@ -532,17 +549,43 @@ class GlossaryPage(QWidget):
         if item is None:
             # noinspection PyUnreachableCode
             return
+        entry = self._entry(item)
         if mode == 0:
-            keys = TERMS[item.text()].exercises
-            for column, exercise in enumerate(cls for cls in REGISTRY if cls.__name__ in keys):
+            keys = entry.exercises
+            cards = [cls for cls in REGISTRY if cls.__name__ in keys]
+            for column, exercise in enumerate(cards):
                 card = ExerciseCard(exercise)
                 card.clicked.connect(lambda _checked=False, key=exercise.__name__: self.exercise_requested.emit(key))
                 self.activity_tiles.addWidget(card, 0, column)
+            if not cards:
+                self.activity_tiles.addWidget(QLabel("No exercises go with this term yet."), 0, 0)
         else:
-            lesson = next(lesson for lesson in LESSONS if lesson.key == TERMS[item.text()].lesson)
-            card = lesson_card(lesson)
-            card.clicked.connect(lambda: self.lesson_requested.emit(lesson.key))
-            self.activity_tiles.addWidget(card, 0, 0)
+            keys = entry.lessons if isinstance(entry, PluginTerm) else (entry.lesson,)
+            found = [lesson for lesson in LESSONS if lesson.key in keys]
+            for column, lesson in enumerate(found):
+                card = lesson_card(lesson)
+                card.clicked.connect(lambda _checked=False, key=lesson.key: self.lesson_requested.emit(key))
+                self.activity_tiles.addWidget(card, 0, column)
+            if not found:
+                self.activity_tiles.addWidget(QLabel("No lessons go with this term yet."), 0, 0)
+
+    @staticmethod
+    def _entry(item: QListWidgetItem) -> _Term | PluginTerm:
+        """
+        Find the entry a row of the list stands for.
+
+        Parameters
+        ----------
+        item : QListWidgetItem
+            A row of the term list.
+
+        Returns
+        -------
+        _Term or PluginTerm
+            The built-in term, or the plugin's entry.
+        """
+        name = item.data(PLUGIN_ROLE)
+        return PLUGIN_TERMS[name] if name else TERMS[item.text()]
 
     def _next_example(self) -> None:
         """Cycle through the selected term's notation examples."""
@@ -555,7 +598,15 @@ class GlossaryPage(QWidget):
         if item is None:
             return
         self._stop_preview()
-        term = TERMS[item.text()]
+        entry = self._entry(item)
+        if isinstance(entry, PluginTerm):
+            self._show_plugin_example(entry)
+            return
+        self.demo.show()
+        self.next_example.show()
+        self.hear.show()
+        self.example_board.hide()
+        term = entry
         example = term.examples[self._example_index % len(term.examples)]
         notes = [Note.parse(name) for name in example.pitches.split()]
         self._example_midis = [note.midi for note in notes]
@@ -573,6 +624,22 @@ class GlossaryPage(QWidget):
             self.example_staff.show_notes([[note] for note in notes], clef=example.clef, key=example.signature)
         self.example_label.setText(example.caption)
         self.hear.setText("▶  Hear note" if len(notes) == 1 else "▶  Hear example")
+
+    def _show_plugin_example(self, entry: PluginTerm) -> None:
+        """
+        Show a plugin term's picture with its caption, or nothing if the entry has none.
+
+        Parameters
+        ----------
+        entry : PluginTerm
+            The entry being shown.
+        """
+        for widget in (self.example_circle, self.example_staff, self.example_keyboard, self.next_example, self.hear):
+            widget.hide()
+        self.example_label.setText(entry.caption)
+        self.example_board.show_position(entry.picture)
+        self.example_board.setVisible(entry.picture is not None)
+        self.demo.setVisible(entry.picture is not None or bool(entry.caption))
 
     def _hear_example(self) -> None:
         """Audition the pitches in the displayed order."""

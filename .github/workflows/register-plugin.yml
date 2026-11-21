@@ -1,0 +1,79 @@
+name: Register plugin
+run-name: "Register plugin from issue #${{ github.event.issue.number }}"
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: register-plugin-${{ github.event.issue.number }}-${{ github.event.label.name }}
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    if: github.event.label.name == 'plugin-approved' && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Read the approved form and check the registry
+        run: |
+          python -m pip install PyYAML==6.0.3
+          python -m scripts.register_plugin "$GITHUB_EVENT_PATH"
+
+      - name: Prepare the registration branch
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        shell: bash
+        run: |
+          registry=docs/site-root/plugins.json
+          branch="register-plugin/issue-$ISSUE_NUMBER"
+          git add -- "$registry"
+          if git diff --cached --quiet; then
+            echo "Plugin code $ISSUE_NUMBER is already registered on main." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          bot_email='41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.email "$bot_email"
+          tree=$(git write-tree)
+          previous="refs/remotes/origin/$branch"
+          parents=(-p HEAD)
+          publish=true
+          if git show-ref --verify --quiet "$previous"; then
+            if ! git diff --quiet "HEAD...$previous" -- . ":(exclude)$registry" ||
+               [[ "$(git log --format=%ce "HEAD..$previous" | sort -u)" != "$bot_email" ]]; then
+              echo "::error::The registration branch contains other edits. Review them before retrying."
+              exit 1
+            fi
+            # Keep earlier approvals in the branch history so every push is a fast-forward.
+            if git diff --quiet "$previous" "$tree" && git merge-base --is-ancestor HEAD "$previous"; then
+              publish=false
+            else
+              parents=(-p "$previous")
+              if ! git merge-base --is-ancestor HEAD "$previous"; then
+                parents+=(-p HEAD)
+              fi
+            fi
+          fi
+
+          if [[ $publish == true ]]; then
+            commit=$(git commit-tree "$tree" "${parents[@]}" -m "Register plugin from issue #$ISSUE_NUMBER")
+            git push origin "$commit:refs/heads/$branch"
+          fi
+          compare="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/main...$branch"
+          echo "[Open registration pull request]($compare?expand=1&title=Register+plugin+from+issue+%23$ISSUE_NUMBER&body=Closes+%23$ISSUE_NUMBER)" >> "$GITHUB_STEP_SUMMARY"

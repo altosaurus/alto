@@ -14,6 +14,7 @@ Examples
 
 from __future__ import annotations
 
+import html
 import math
 from typing import TYPE_CHECKING
 
@@ -54,7 +55,11 @@ from alto.exercises.library import (
     OrderOfKeys,
     ScaleIdentification,
 )
-from alto.lessons import LESSONS
+from alto.exercises.packs import PackExercise
+from alto.lessons import (
+    LESSONS,
+    Lesson,
+)
 from alto.theory.fifths import (
     INTRO,
     MAJORS,
@@ -659,6 +664,9 @@ _READING_HINTS = {
         "<p>Count letter names from the lower note to the higher, including both notes. "
         "C to E and C to E♭ are both thirds. Count half steps to find the quality. "
         "A major third (M3) spans four half steps, and a minor third (m3) spans three.</p>"
+        "<p>With <b>Inversions</b> on, read the written interval first. For C up to E, move C up an octave. "
+        "E up to C is a minor sixth. Simple interval numbers add up to nine with their inversions. "
+        "Major and minor swap, augmented and diminished swap, and perfect stays perfect.</p>"
     ),
     KeyboardIntervals: (
         "<p>Start at zero on the lower highlighted key. Count each move to the next key, black or white. "
@@ -735,9 +743,52 @@ class NoteReferencePanel(QWidget):
         layout.addWidget(scroll, 1)
 
 
+class PluginReferencePanel(QWidget):
+    """What a plugin's exercise offers to look up: what it asks, and a button for each lesson that teaches it."""
+
+    lesson_requested = Signal(str)
+
+    def __init__(self, exercise: Exercise, *, lessons: list[Lesson]) -> None:
+        """
+        Show the exercise's description and a button for each lesson that goes with it.
+
+        Parameters
+        ----------
+        exercise : Exercise
+            The plugin's exercise whose reference was opened.
+        lessons : list of Lesson
+            At least one lesson that names the exercise as practice, or that the exercise names. Keyword-only.
+
+        Examples
+        --------
+        >>> demo = Lesson(key="pack.d.l", title="Parts", about="", summary="", category="D", steps=(), exercise="x")
+        >>> PluginReferencePanel(NoteNames(), lessons=[demo]).lesson_buttons[0].text()
+        'New to this? Take the lesson: Parts  →'
+        """
+        super().__init__()
+        layout = QVBoxLayout(self)
+        self.lesson_buttons: list[QPushButton] = []
+        for lesson in lessons:
+            button = QPushButton(f"New to this? Take the lesson: {lesson.title}  →")
+            button.setToolTip(f"Open {lesson.title}")
+            button.clicked.connect(lambda _=False, key=lesson.key: self.lesson_requested.emit(key))
+            layout.addWidget(button)
+            self.lesson_buttons.append(button)
+        self.lesson_button = self.lesson_buttons[0]  # the first lesson, as the built-in panels' one button
+        about = QLabel(f"<h3>{html.escape(exercise.name)}</h3><p>{html.escape(exercise.description)}</p>")
+        about.setWordWrap(True)
+        about.setAlignment(Qt.AlignmentFlag.AlignTop)
+        about.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        scroll = QScrollArea()
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(about)
+        layout.addWidget(scroll, 1)
+
+
 def reference_panel_for(
     exercise: Exercise,
-) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | None:
+) -> ReferencePanel | ClefReferencePanel | ScaleReferencePanel | NoteReferencePanel | PluginReferencePanel | None:
     """
     Return the reference pane for an exercise.
 
@@ -759,6 +810,10 @@ def reference_panel_for(
     >>> type(reference_panel_for(ClefBasics())).__name__
     'ClefReferencePanel'
     """
+    if isinstance(exercise, PackExercise):
+        name = type(exercise).__name__
+        taught = [lesson for lesson in LESSONS if name in (lesson.exercise, *lesson.related_exercises)]
+        return PluginReferencePanel(exercise, lessons=taught) if taught else None
     if type(exercise) in _READING_HINTS:
         return NoteReferencePanel(exercise)
     if isinstance(exercise, CircleOfFifths):

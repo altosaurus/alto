@@ -79,6 +79,11 @@ jobs:
       - name: Install Alto and its test tools
         run: python -m pip install -e ".[dev]"
 
+      # The tests of the manifests printed in the plugin tutorials read their pages. They are skipped if they cannot be fetched.
+      - name: Bring in the plugin tutorials
+        continue-on-error: true
+        run: python scripts/tutorial_docs.py all
+
       - name: Run the tests
         env:
           ALTO_COVERAGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}

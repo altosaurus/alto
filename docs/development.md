@@ -14,13 +14,13 @@ the program works and the ideas underneath it (audio, notation, spaced repetitio
 | Folder | What is in it |
 |---|---|
 | `alto/theory/` | The music theory engine: spelled notes, intervals, scales and chords. Pure Python, no Qt. |
-| `alto/exercises/` | The exercises and the `Question` and `Exercise` base classes. No Qt. |
+| `alto/exercises/` | The exercises, the `Question` and `Exercise` base classes, and registration of installed instrument packs. |
 | `alto/learning/` | Profiles, the SQLite database, the scheduler and the statistics calculations. No Qt. |
 | `alto/ui/` | The Qt widgets: main window, staff drawing, exercise screen, charts, settings and the database page. |
 | `alto/assets/` | Bundled music fonts and instrument recordings. |
 | `tests/` | The test suite. |
 
-Keeping the theory, exercises and learning code free of Qt means they can be tested without a display.
+The theory, exercise generation, and learning code can be tested without a display. The pack loader uses Qt’s image reader to check each supplied picture against its original dimensions. [Plugin API]({{ '/plugins/api/' | relative_url }})
 
 ## Running the tests
 
@@ -266,7 +266,7 @@ Plan the relationship by learning goal. One lesson can prepare a learner for sev
 reinforce ideas introduced in several lessons. Reuse an existing lesson when it already explains the idea a new
 exercise depends on.
 
-Order the lesson tiles by prerequisite in `alto.lessons.LESSONS`. Start with a lesson that assumes no music theory
+An instrument plugin follows the same guidance for the lessons in its manifest, which Alto appends to `alto.lessons.LESSONS` with `register_lesson` when the plugin loads. Order the lesson tiles by prerequisite in `alto.lessons.LESSONS`. Start with a lesson that assumes no music theory
 knowledge. When adding a lesson, place it after the ideas it uses and before lessons that build on it.
 
 1. **Choose the lesson outcome.** Write one sentence describing what a first-time learner should understand by the
@@ -434,6 +434,7 @@ The template exercise gives you a place to try the option in Alto. Its panel and
 | **Motion** | Choose **Ascending** or **Descending** with radio buttons. | **Scale Identification** and **Scale Construction** share this page in `KeySignatureSettingsPanel`. |
 | **Display Mode** | Choose how the notes appear on the staff. Checked presentations can be mixed. | **Interval Identification** displays Ascending and Descending as indented checkboxes directly below Melodic when it is selected. At least one direction stays checked. |
 | **Quality** | Choose **Interval Only**, **Interval and Quality** (default), or **Quality Only**. | **Interval Identification** uses a submenu with three radio buttons. |
+| **Inversions** (written intervals) | Show the selected interval and ask for its inversion in the chosen answer format. | **Interval Identification** uses an inline switch, off by default. |
 | **Question Type** | Choose what the learner is asked to do. Use radios for one format, or checkboxes when the question can combine parts. | **Notation Identification** has **Click on Staff** and **Answer Button** radios. **Scale Identification** has independent **Key** and **Mode** boxes. **Note Construction** shows its keys and degrees when **Scale and Degree** is selected. |
 | **Buttons** | One submenu for answer layouts. **Limited** caps the number offered, with **Button count** directly below it. **All** shows the full answer set. | **Scale Identification** and **Interval Identification** share the Limited and All submenu. **Keyboard Interval Identification** adds **Compact**, where the learner picks a quality and an interval number in either order. |
 | **Next Question** | Choose **Immediately**, **Wait**, or **After Animation** (default). Each exercise remembers its own pace. | The shared settings panel adds this row to every exercise. Route completed answers through `ExerciseView._finish_answer`. |
@@ -553,6 +554,26 @@ home page, says `toc: false` in its front matter. `docs/api/index.md` is written
 The previous and next links at the bottom of each page follow the sidebar’s reading order.
 
 ### Building the docs
+
+The plugin tutorials are not stored in Alto. They live in
+[`altosaurus/viola-plugin-tutorial`](https://github.com/altosaurus/viola-plugin-tutorial) and
+[`altosaurus/harpsichord-plugin-tutorial`](https://github.com/altosaurus/harpsichord-plugin-tutorial), which mirror the paths
+of `docs/`. The Docs and Docs check workflows run `scripts/tutorial_docs.py` before Jekyll. It copies in each tutorial page and
+only the files that page refers to: the artwork it links, and both themes of each screenshot. The download is a release asset
+of the tutorial repository, which its Release workflow builds when a tag is pushed, so the site links to it and does not host
+it. Nothing else in a tutorial repository is published. Run it once before a local build to see the pages. It clones both
+from GitHub, or takes one from a checkout of your own with `--from`:
+
+```bash
+python scripts/tutorial_docs.py all
+python scripts/tutorial_docs.py harpsichord --from ../harpsichord-plugin-tutorial
+```
+
+The files it writes are listed in `.gitignore`. A merge into Alto's `main` rebuilds the docs, and a change to a tutorial
+reaches the site at the next build, so run the Docs workflow by hand after you push a tutorial. The pictures in each tutorial
+are made by that repository's `scripts/screenshots.py`. The plugin tests keep only the manifest of each example pack in `tests/packs/` (and the viola's animation), and make its recordings,
+photographs and icons when they run (`tests/pack_fixtures.py`), because the plugin's author provides the real ones. They also read
+the tutorial pages when they have been brought in.
 
 You need Ruby and Bundler. In `docs/`, `bundle install` once, then build one version the way the workflow does:
 

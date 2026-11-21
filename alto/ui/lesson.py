@@ -49,6 +49,7 @@ from alto.lessons import (
 from alto.lessons.circle_of_fifths import summary
 from alto.theory.pitch import Note
 from alto.ui.colors import blend
+from alto.ui.fingerboard import FingerboardWidget
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.reference import ExplorableCircle
 from alto.ui.scale_explorer import ScaleExplorer
@@ -366,6 +367,7 @@ class StepView(QWidget):
         self.playback = StaffPlayback(self, highlight=self._highlight_sample)
         self.choice_buttons: list[QPushButton] = []
         self._wrong = 0  # wrong answers to the task now being asked
+        self._done = False  # the task now being asked has been answered or given away
         self._setting = False  # True while the program, not the learner, is picking a cell
         lay = QHBoxLayout(self)  # the words and the controls on the left, the circle beside them
         lay.setContentsMargins(
@@ -482,6 +484,13 @@ class StepView(QWidget):
         lay.addWidget(scroll, 2)
         if self.circle is not None:
             lay.addWidget(self.circle, 3)  # it takes the height that is left, and is drawn as the biggest square that fits
+        self.picture: FingerboardWidget | None = None
+        if step.picture is not None:
+            picture = FingerboardWidget()
+            picture.show_position(step.picture)
+            picture.picked.connect(self._clicked)
+            self.picture = picture
+            lay.addWidget(picture, 3)  # an instrument picture sits beside the words, as the circle does
         self.scale_explorer: ScaleExplorer | None = None
         if step.scale:
             explorer = ScaleExplorer(scale=step.scale, tonic=step.scale_tonic, editable=step.scale_explore, lesson_layout=True)
@@ -560,10 +569,11 @@ class StepView(QWidget):
             return
         columns = [[Note.parse(name) for name in column] for column in self.step.hear]
         gap_ms = 330 if len(columns) > 4 else 650
+        instrument = self.step.hear_instrument or None
         if self.staves or self.keyboard is not None:
-            self.playback.play(columns, gap_ms=gap_ms)
+            self.playback.play(columns, gap_ms=gap_ms, instrument=instrument)
         else:
-            sounds.play_notes(columns, gap_ms=gap_ms)
+            sounds.play_notes(columns, gap_ms=gap_ms, instrument=instrument)
 
     def _highlight_sample(self, index: int | None) -> None:
         """
@@ -680,6 +690,10 @@ class StepView(QWidget):
         task = self.task = self.step.make_task(self.rng)
         self._wrong = 0
         self.prompt.setText(task.prompt)
+        self._done = False
+        if self.picture is not None:
+            self.picture.show_target(None)
+            self.picture.set_pickable(bool(task.targets))  # a click question is answered on the picture itself
         self.feedback.clear()
         self.again.hide()
         self.feedback.hide()
@@ -767,13 +781,67 @@ class StepView(QWidget):
         task = self.task
         if task is None:
             return
+        self._respond(task.check(answer), answer=answer, button=button, spot=None)
+
+    def _clicked(self, x: float, y: float) -> None:  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
+        """
+        Handle a click on the instrument picture: it answers a question that asks for a place on it.
+
+        Parameters
+        ----------
+        x : float
+            The click's x in the picture's own pixels.
+        y : float
+            The click's y in the picture's own pixels.
+
+        Examples
+        --------
+        A click on the scroll answers "Click the scroll." and a click on a peg gets a hint.
+        """
+        task = self.task
+        if task is None or not task.targets or self._done:
+            return
+        hit = next((t for t in task.targets if (x - t[0]) ** 2 + (y - t[1]) ** 2 <= t[2] ** 2), None)
+        self._respond(hit is not None, answer=None, button=None, spot=None if hit is None else (hit[0], hit[1]))
+
+    def _respond(
+        self,
+        correct: bool,
+        *,
+        answer: tuple[str, int] | str | None,
+        button: QPushButton | None,
+        spot: tuple[float, float] | None,
+    ) -> None:
+        """
+        Say whether an answer was right, and what to do next.
+
+        Parameters
+        ----------
+        correct : bool
+            Whether the answer was right.
+        answer : tuple of (str, int) or str or None
+            The cell or button, or None for a click on the picture. Keyword-only.
+        button : QPushButton or None
+            The button that was pressed, if it was a button. Keyword-only.
+        spot : tuple of float or None
+            For a right click on the picture, the target that was hit. Keyword-only.
+
+        Examples
+        --------
+        A second wrong answer gives the answer away and shows it.
+        """
+        task = self.task
+        if task is None:
+            return
         self.feedback.show()
-        if task.check(answer):
+        if correct:
             self.feedback.setText(f"<b>Right.</b> {task.explanation}")
             self.again.show()
             self._lock()
             if self.circle is not None and task.cells and isinstance(answer, tuple):
                 self._show(self.circle, ring=answer[0], place=answer[1])
+            if self.picture is not None and spot is not None:
+                self.picture.show_target(spot)
             return
         self._wrong += 1
         if button is not None:
@@ -785,6 +853,8 @@ class StepView(QWidget):
             if self.circle is not None and task.cells:
                 ring, place = min(task.cells)
                 self._show(self.circle, ring=ring, place=place)
+            if self.picture is not None and task.targets:
+                self.picture.show_target((task.targets[0][0], task.targets[0][1]))
         else:
             prompt = "Try again." if self.step.single_question else "Not quite."
             self.feedback.setText(f"<b>{prompt}</b> {task.hint}")
@@ -801,6 +871,9 @@ class StepView(QWidget):
         >>> any(choice.isEnabled() for choice in view.choice_buttons)
         False
         """
+        self._done = True
+        if self.picture is not None:
+            self.picture.set_pickable(False)
         for button in self.choice_buttons:
             button.setEnabled(False)
 

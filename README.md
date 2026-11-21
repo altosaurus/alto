@@ -133,6 +133,8 @@ The first time it opens, Alto asks you to create a profile. There is no password
 Guides for every exercise, how the practice scheduling works, the statistics, settings and shortcuts are in
 [`docs/`](docs/) and published at https://altosaurus.github.io/alto/, with a version for each release and one for the development docs.
 
+Package instrument artwork, recordings, and exercises with the [Plugins](docs/plugins.md) and the [viola plugin tutorial](docs/plugins/viola.md).
+
 ## Development
 
 ```bash

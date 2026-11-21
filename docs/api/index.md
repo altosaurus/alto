@@ -19,11 +19,14 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.audio](alto.audio/) | Note playback: recorded instrument samples (University of Iowa), with pitch-shifting for missing notes. |
 | [alto.circle_schemes](alto.circle_schemes/) | The color schemes of the circle of fifths: the presets, and the schemes a user makes. |
 | [alto.instrument_info](alto.instrument_info/) | What is known about each instrument's recordings, for the summary shown in the instrument settings. |
+| [alto.instrument_packs](alto.instrument_packs/) | Media and fingerboard geometry supplied by third-party instrument packs. |
 | [alto.location](alto.location/) | Where Alto keeps its practice history and its settings, and how to keep them somewhere else with `ALTO_HOME`. |
 | [alto.notation_excerpts](alto.notation_excerpts/) | Public-domain piano excerpts available for offline notation practice. |
 | [alto.notation_terms](alto.notation_terms/) | Notation Identification terms, grouped by subject with their score placement and SMuFL code points. |
+| [alto.plugin_registry](alto.plugin_registry/) | Install registered instrument packs from the latest release in their public GitHub repositories. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
 | [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
+| [alto.terms](alto.terms/) | Glossary entries that an installed plugin supplies, kept apart from the built-in ones. |
 | [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
 
 ## alto.exercises
@@ -34,6 +37,7 @@ The exercises and the framework they are built on.
 |---|---|
 | [alto.exercises.base](alto.exercises.base/) | Exercise framework. Register a ChoiceExercise for button answers or an Exercise for construction tasks. |
 | [alto.exercises.library](alto.exercises.library/) | The exercises: note names, intervals, key signatures, scales, chords, arpeggios, keyboard keys and note construction. |
+| [alto.exercises.packs](alto.exercises.packs/) | Load third-party instrument packs from ZIP archives and authoring folders. |
 
 ## alto.learning
 
@@ -61,6 +65,7 @@ The lessons: guided walks through a topic, with small exercises along the way.
 | [alto.lessons.clef_basics](alto.lessons.clef_basics/) | The lesson on clefs, taught from nothing. |
 | [alto.lessons.intervals](alto.lessons.intervals/) | A guided introduction to naming intervals on the staff and keyboard. |
 | [alto.lessons.key_signatures](alto.lessons.key_signatures/) | A guided lesson on reading and writing key signatures. |
+| [alto.lessons.packs](alto.lessons.packs/) | Turn the lessons that an instrument plugin declares into `Lesson`s that Alto lists and shows. |
 | [alto.lessons.pitches_and_notes](alto.lessons.pitches_and_notes/) | A first lesson connecting a sound, a piano key, and a written note. |
 | [alto.lessons.scale_identification](alto.lessons.scale_identification/) | Reading scales and recognizing their interval patterns. |
 
@@ -94,6 +99,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.dropdown](alto.ui.dropdown/) | Shared dropdown fields with rounded popup windows. |
 | [alto.ui.engraving](alto.ui.engraving/) | Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others). |
 | [alto.ui.exercise_view](alto.ui.exercise_view/) | The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right. |
+| [alto.ui.fingerboard](alto.ui.fingerboard/) | Render a pack's instrument portrait using its calibrated string endpoints. |
 | [alto.ui.glossary](alto.ui.glossary/) | A searchable glossary of the notation terms used in Alto. |
 | [alto.ui.home](alto.ui.home/) | The start screen: a card for every exercise, or for every lesson, in rows. |
 | [alto.ui.icons](alto.ui.icons/) | Small monochrome icons drawn from SVG, tinted with the current theme's text color. |
@@ -109,6 +115,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.notes](alto.ui.notes/) | Engraved notes built from the Noto Music font's glyphs, the way notation software draws them. |
 | [alto.ui.package_update](alto.ui.package_update/) | The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next. |
 | [alto.ui.pictures](alto.ui.pictures/) | Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes. |
+| [alto.ui.plugins_dialog](alto.ui.plugins_dialog/) | The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right. |
 | [alto.ui.practice_limits](alto.ui.practice_limits/) | Daily card allowances in profile and exercise settings. |
 | [alto.ui.profile_dialog](alto.ui.profile_dialog/) | Choosing who is practicing. There is no password: a profile is just a name that keeps its own history. |
 | [alto.ui.question_preview](alto.ui.question_preview/) | A popup showing a stored question the way the exercise showed it, with its answer. |

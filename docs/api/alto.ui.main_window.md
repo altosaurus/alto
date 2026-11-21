@@ -483,13 +483,78 @@ Go back to the start screen, closing the statistics or database and hiding the e
 'Alto - Music Theory'
 ```
 
+### MainWindow.open_plugins
+
+```python
+def open_plugins() -> None
+```
+
+Manage installed plugins, install by code or ZIP, and update from registered releases.
+
+**Examples**
+
+```pycon
+Choose Plugins in Tools to see the installed viola pack.
+```
+
+### MainWindow.install_plugin
+
+```python
+def install_plugin(
+    *,
+    parent: QWidget | None = None,
+) -> None
+```
+
+Install a downloaded instrument pack and offer to restart Alto.
+
+**Parameters**
+
+- `parent` (*QWidget or None, default None*): The window that owns the file chooser and messages. Defaults to this window. Keyword-only.
+
+**Examples**
+
+```pycon
+Press Install plugin from file in the Plugins dialog and open viola.zip.
+```
+
+### MainWindow.uninstall_plugin
+
+```python
+def uninstall_plugin(
+    plugin: InstalledPlugin,
+    *,
+    parent: QWidget | None = None,
+) -> None
+```
+
+Move a plugin to the system trash after confirming, then restart Alto.
+
+**Parameters**
+
+- `plugin` (*InstalledPlugin*): The plugin selected in the Plugins dialog.
+- `parent` (*QWidget or None, default None*): The window that owns the confirmation and messages. Defaults to this window. Keyword-only.
+
+**Examples**
+
+```pycon
+Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
+```
+
 ### MainWindow.restart_app
 
 ```python
-def restart_app() -> None
+def restart_app(
+    *,
+    quit_on_failure: bool = False,
+) -> None
 ```
 
 Launch a fresh copy of the app, then close this one.
+
+**Parameters**
+
+- `quit_on_failure` (*bool*): Close after a failed relaunch if an uninstalled pack's assets are already gone.
 
 **Examples**
 

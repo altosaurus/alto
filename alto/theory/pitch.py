@@ -340,6 +340,29 @@ class Interval:
         return (self.number - 1) % 7
 
     @property
+    def inversion(self) -> Interval:
+        """
+        Invert the spelled interval within an octave.
+
+        Returns
+        -------
+        Interval
+            The complementary number and quality. Reduce compounds first, keeping octaves as octaves.
+
+        Examples
+        --------
+        >>> Interval.parse("M3").inversion.short, Interval.parse("A4").inversion.short
+        ('m6', 'd5')
+        >>> Interval.parse("m10").inversion.short, Interval.parse("P15").inversion.short
+        ('M6', 'P1')
+        """
+        number = self.number
+        if number > 8:
+            number = 2 + (number - 2) % 7
+        quality = {"P": "P", "M": "m", "m": "M", "A": "d", "d": "A", "AA": "dd", "dd": "AA"}[self.quality]
+        return Interval(9 - number, quality=quality)
+
+    @property
     def is_perfect_type(self) -> bool:
         """
         Report whether this size of interval is "perfect type" (unison, fourth, fifth, octave) rather than major or minor type.

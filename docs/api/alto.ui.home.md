@@ -108,6 +108,54 @@ Recolor the icon when the tile receives a new palette.
 >>> card.changeEvent(QEvent(QEvent.Type.PaletteChange))
 ```
 
+## exercise_icon
+
+```python
+def exercise_icon(name: str) -> str
+```
+
+Find the icon for an exercise: the one its plugin supplies, or Alto's own.
+
+**Parameters**
+
+- `name` (*str*): The exercise's class name.
+
+**Returns**
+
+- *str*: SVG shapes with COLOR where the theme's ink goes.
+
+**Examples**
+
+```pycon
+>>> exercise_icon("NoteNames") == icons.EXERCISE_NOTE_NAMES
+True
+>>> exercise_icon("pack.nothing.here") == icons.EXERCISE_NOTE_NAMES
+True
+```
+
+## lesson_icon
+
+```python
+def lesson_icon(lesson: Lesson) -> str
+```
+
+Find the icon for a lesson's tile: its own if a plugin gave it one, otherwise its primary exercise's.
+
+**Parameters**
+
+- `lesson` (*Lesson*): The lesson.
+
+**Returns**
+
+- *str*: SVG shapes with COLOR where the theme's ink goes.
+
+**Examples**
+
+```pycon
+>>> lesson_icon(LESSONS[0]) == exercise_icon(LESSONS[0].exercise)
+True
+```
+
 ## ExerciseCard
 
 ```python
