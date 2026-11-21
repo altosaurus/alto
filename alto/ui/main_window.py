@@ -16,18 +16,24 @@ import random
 import sys
 import time
 from dataclasses import dataclass, field
+from html import escape
 from importlib import metadata
+from os.path import samestat
+from pathlib import Path
 
 from PySide6.QtCore import (
     QAbstractAnimation,
     QByteArray,
     QEasingCurve,
     QEvent,
+    QFile,
+    QLockFile,
     QObject,
     QPoint,
     QProcess,
     QPropertyAnimation,
     QSize,
+    QStandardPaths,
     Qt,
     QTimer,
     QUrl,
@@ -48,6 +54,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
+    QFileDialog,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -70,8 +77,13 @@ from alto import settings, updates
 from alto.audio import sounds
 from alto.exercises import REGISTRY
 from alto.exercises.base import Exercise
+from alto.exercises.packs import (
+    InstalledPlugin,
+    install_pack,
+)
 from alto.learning import Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS, DEFAULT_SCHEDULER
+from alto.location import database_path
 from alto.ui import (
     backup_flow,
     icons,
@@ -96,6 +108,7 @@ from alto.ui.lesson_nav import (
     section_item,
 )
 from alto.ui.notation import load_style as load_notation_style
+from alto.ui.plugins_dialog import PluginsDialog
 from alto.ui.profile_dialog import (
     ProfileDialog,
     remember_profile,
@@ -482,6 +495,10 @@ class MainWindow(QMainWindow):
         set_svg_icon(self.export_action, icons.EXPORT, size=18)
         self.export_action.setToolTip("Save everything Alto keeps (profiles, history and settings) to one file")
         self.export_action.triggered.connect(self.export_backup)
+        plugins_action = tools_menu.addAction("Plugins…")
+        set_svg_icon(plugins_action, icons.PLUGIN, size=18)
+        plugins_action.setToolTip("Install, update, or uninstall instrument plugins")
+        plugins_action.triggered.connect(self.open_plugins)
         exporter_action = tools_menu.addAction("Anki Exporter")
 
         icons.set_palette_icon(
@@ -2083,15 +2100,121 @@ class MainWindow(QMainWindow):
         # noinspection PyUnresolvedReferences
         old.deleteLater()
 
-    # noinspection PyMethodMayBeStatic
-    def restart_app(self) -> None:
+    def open_plugins(self) -> None:
+        """
+        Manage installed plugins, install by code or ZIP, and update from registered releases.
+
+        Examples
+        --------
+        Choose Plugins in Tools to see the installed viola pack.
+        """
+        dialog = PluginsDialog(database_path().parent / "plugins", parent=self)
+        dialog.restart_requested.connect(self.restart_app)
+        dialog.install_requested.connect(lambda: self.install_plugin(parent=dialog))
+        dialog.uninstall_requested.connect(lambda plugin: self.uninstall_plugin(plugin, parent=dialog))
+        dialog.finished.connect(dialog.deleteLater)
+        dialog.exec()
+
+    def install_plugin(self, *, parent: QWidget | None = None) -> None:
+        """
+        Install a downloaded instrument pack and offer to restart Alto.
+
+        Parameters
+        ----------
+        parent : QWidget or None, default None
+            The window that owns the file chooser and messages. Defaults to this window. Keyword-only.
+
+        Examples
+        --------
+        Press Install plugin from file in the Plugins dialog and open viola.zip.
+        """
+        parent = parent or self
+        title = "Install plugin from file"
+        name, _ = QFileDialog.getOpenFileName(
+            parent,
+            title,
+            QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DownloadLocation),
+            "Alto instrument packs (*.zip *.ZIP)",
+        )
+        if not name:
+            return
+        source = Path(name)
+        try:
+            pack_name = install_pack(source, folder=database_path().parent / "plugins")
+        except (ValueError, OSError) as error:
+            QMessageBox.warning(parent, title, str(error))
+            return
+        message = f"<p>Installed {escape(pack_name)}. Restart Alto now to use its exercises?</p>"
+        if QMessageBox.question(parent, "Plugin installed", message) == QMessageBox.StandardButton.Yes:
+            self.restart_app()
+
+    def uninstall_plugin(self, plugin: InstalledPlugin, *, parent: QWidget | None = None) -> None:
+        """
+        Move a plugin to the system trash after confirming, then restart Alto.
+
+        Parameters
+        ----------
+        plugin : InstalledPlugin
+            The plugin selected in the Plugins dialog.
+        parent : QWidget or None, default None
+            The window that owns the confirmation and messages. Defaults to this window. Keyword-only.
+
+        Examples
+        --------
+        Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
+        """
+        parent = parent or self
+        title = "Uninstall plugin"
+        message = (
+            f"<p>Move <b>{escape(plugin.title)}</b> ({escape(plugin.path.name)}) to the system trash?</p>"
+            "<p>Selecting a folder moves all its contents. Alto will restart. Your practice history is kept.</p>"
+        )
+        if QMessageBox.question(parent, title, message) != QMessageBox.StandardButton.Yes:
+            return
+        lock = QLockFile(str(plugin.path.parent / ".install.lock"))
+        if not lock.tryLock(0):
+            QMessageBox.warning(parent, title, "Another plugin change is in progress. Try again.")
+            return
+        try:
+            if not plugin.manifest.is_file() or not samestat(plugin.snapshot, plugin.path.lstat()):
+                QMessageBox.warning(
+                    parent,
+                    title,
+                    "The installation changed. The list has been refreshed; choose the plugin again.",
+                )
+                return
+            pack = QFile(str(plugin.path))
+            if not pack.moveToTrash():
+                QMessageBox.warning(
+                    parent,
+                    title,
+                    f"Could not move {plugin.path.name} to the system trash.\n\n{pack.errorString()}",
+                )
+                return
+        except OSError as error:
+            QMessageBox.warning(parent, title, str(error))
+            return
+        finally:
+            lock.unlock()
+        self.restart_app(quit_on_failure=True)
+
+    def restart_app(self, *, quit_on_failure: bool = False) -> None:
         """
         Launch a fresh copy of the app, then close this one.
+
+        Parameters
+        ----------
+        quit_on_failure : bool
+            Close after a failed relaunch if an uninstalled pack's assets are already gone.
 
         Examples
         --------
         >>> MainWindow().restart_app()  # doctest: +SKIP
         """
         arguments = [] if updates.is_frozen() else ["-m", "alto"]  # a packaged build is Alto itself, not Python
-        if QProcess.startDetached(sys.executable, arguments):
+        started, _ = QProcess.startDetached(sys.executable, arguments)
+        if not started:
+            message = "Open Alto again to finish uninstalling the plugin." if quit_on_failure else "Please restart Alto manually."
+            QMessageBox.warning(self, "Could not restart Alto", message)
+        if started or quit_on_failure:
             QApplication.quit()

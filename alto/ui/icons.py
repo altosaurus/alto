@@ -704,6 +704,8 @@ QUIT = f'<path d="M12 3.5v8M7.2 6.6a7.2 7.2 0 1 0 9.6 0" {_MENU}/>'
 _TRAY = f'<path d="M4.5 15v4.5h15V15" {_MENU}/>'
 EXPORT = _TRAY + f'<path d="M12 15V4.2M7.8 8.2L12 4l4.2 4.2" {_MENU}/>'
 IMPORT = _TRAY + f'<path d="M12 4v10.8M7.8 10.8L12 15l4.2-4.2" {_MENU}/>'
+# Plugins: an electrical plug, two prongs over a rounded body with its cord.
+PLUGIN = f'<path d="M9 3v4M15 3v4M6 7h12v3a6 6 0 0 1-12 0zM12 16v5" {_MENU}/>'
 # Check for updates: an arrow going up inside a circle.
 UPDATE = f'<circle cx="12" cy="12" r="8.2" {_MENU}/><path d="M12 16.2V8M8.6 11.4L12 8l3.4 3.4" {_MENU}/>'
 # Profile: a head and shoulders.
