@@ -16,7 +16,6 @@ from pathlib import Path
 from PySide6.QtCore import (
     QSize,
     Qt,
-    QThreadPool,
     Signal,
 )
 from PySide6.QtWidgets import (
@@ -38,6 +37,7 @@ from alto.exercises.packs import (
     installed_plugins,
 )
 from alto.plugin_registry import install_registered
+from alto.ui.background import run_in_background
 from alto.ui.zoom import px
 
 ROW_HEIGHT = 32  # pixels: one line of text with the list style's padding
@@ -77,7 +77,6 @@ class PluginsDialog(QDialog):
     """
 
     restart_requested = Signal()
-    _release_finished = Signal(object, str)
     install_requested = Signal()
     uninstall_requested = Signal(object)
 
@@ -101,7 +100,6 @@ class PluginsDialog(QDialog):
         super().__init__(parent)
         self.folder = folder
         self._busy = False
-        self._release_finished.connect(self._finish_release)
         self.setWindowTitle("Plugins")
         self.setModal(True)
         self.setMinimumSize(px(560), px(340))
@@ -267,25 +265,12 @@ class PluginsDialog(QDialog):
         self.status.setText("Checking the plugin registry and downloading the latest release…")
         self.status.show()
 
-        QThreadPool.globalInstance().start(lambda: self._run_release(code, selected=selected))
-
-    def _run_release(self, code: str, *, selected: InstalledPlugin | None) -> None:
-        """
-        Install the release and report every outcome through a signal on the dialog's thread.
-
-        Parameters
-        ----------
-        code : str
-            The registration code, or an empty string to update the selected plugin.
-        selected : InstalledPlugin or None
-            The plugin to update, if any. Keyword-only.
-        """
-        try:
-            result = install_registered(code, folder=self.folder, selected=selected)
-        except Exception as error:
-            self._release_finished.emit(None, str(error))
-        else:
-            self._release_finished.emit(result, "")
+        run_in_background(
+            lambda: install_registered(code, folder=self.folder, selected=selected),
+            owner=self,
+            done=lambda result: self._finish_release(result, ""),
+            failed=lambda error: self._finish_release(None, str(error)),
+        )
 
     def _finish_release(self, result: str | None, error: str) -> None:  # noqa: PLR0917 (Qt signal arguments)
         """Show the result, refresh the installed list, and offer a restart after a change."""

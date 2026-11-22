@@ -185,7 +185,80 @@ class _LazyPages(QStackedWidget):
         placeholder.deleteLater()
 
 
-class StyleCard(QPushButton):
+class PreviewCard(QPushButton):
+    """
+    A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.
+
+    Attributes
+    ----------
+    style_key : str
+        The key of the style the card stands for.
+
+    Examples
+    --------
+    >>> card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
+    >>> card.style_key, card.isCheckable(), card.height()
+    ('demo', True, 120)
+    """
+
+    def __init__(
+        self,
+        preview: QWidget,
+        *,
+        key: str,
+        title: str,
+        blurb: str,
+        height: int,
+        parent: QWidget | None = None,
+    ) -> None:
+        """
+        Build the card around its preview.
+
+        Parameters
+        ----------
+        preview : QWidget
+            The picture of the style. Clicks pass through it to the card.
+        key : str
+            The key of the style. Keyword-only.
+        title : str
+            The style's name, shown in bold. Keyword-only.
+        blurb : str
+            A few words about the style, shown in small gray type. Keyword-only.
+        height : int
+            The card's height before zooming; every card is 232 wide. Keyword-only.
+        parent : QWidget or None, default None
+            The widget that owns the card. Keyword-only.
+
+        Examples
+        --------
+        >>> label = QLabel("♪")
+        >>> card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
+        >>> label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        True
+        """
+        super().__init__(parent)
+        self.style_key = key
+        self.setCheckable(True)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setFixedSize(px(232), px(height))
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(
+            8,
+            8,
+            8,
+            6,
+        )
+        lay.setSpacing(4)
+        name = QLabel(f"<b>{title}</b>")
+        about = QLabel(blurb)
+        about.setStyleSheet(css("color: gray; font-size: 9pt;"))
+        about.setWordWrap(True)
+        for widget in (preview, name, about):
+            widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+            lay.addWidget(widget)
+
+
+class StyleCard(PreviewCard):
     """
     A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.
 
@@ -224,30 +297,16 @@ class StyleCard(QPushButton):
         >>> StyleCard(notation.BY_KEY["bravura"]).width()
         232
         """
-        super().__init__(parent)
-        self.style_key = style.key
-        self.setCheckable(True)
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedSize(px(232), px(150))
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            8,
-            8,
-            8,
-            6,
-        )
-        lay.setSpacing(4)
-        self.staff = StaffWidget(
+        staff = StaffWidget(
             gap=6.5,
             side=8.0,
             note_offset=44.0,
             margin=3.2,
             compact=True,
         )
-        self.staff.notation_style = style
-        self.staff.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.staff.setFixedWidth(px(214))
-        self.staff.show_notes(
+        staff.notation_style = style
+        staff.setFixedWidth(px(214))
+        staff.show_notes(
             [
                 [Note(5, letter=1)],
                 [Note(5, letter=2, accidental=-1)],
@@ -258,21 +317,14 @@ class StyleCard(QPushButton):
             key=0,
             value="quarter",
         )
-        name = QLabel(f"<b>{style.label}</b>")
-        name.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        blurb = QLabel(style.note)
-        blurb.setStyleSheet(css("color: gray; font-size: 9pt;"))
-        blurb.setWordWrap(True)
-        blurb.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        lay.addWidget(self.staff)
-        lay.addWidget(name)
-        lay.addWidget(blurb)
+        super().__init__(staff, key=style.key, title=style.label, blurb=style.note, height=150, parent=parent)
+        self.staff = staff
 
 
 RIM = "rgba(136, 136, 136, 0.5)"  # the faint outline of the builder's swatches and chips
 
 
-class KeyboardCard(QPushButton):
+class KeyboardCard(PreviewCard):
     """
     A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.
 
@@ -312,29 +364,15 @@ class KeyboardCard(QPushButton):
         >>> KeyboardCard(keyboard_styles.BY_KEY["classic"]).keys.style_override.key
         'classic'
         """
-        super().__init__(parent)
-        self.style_key = style.key
-        self.setCheckable(True)
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedSize(px(232), px(222))
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            8,
-            8,
-            8,
-            6,
-        )
-        lay.setSpacing(4)
-        self.keys = KeyboardWidget()
-        self.keys.style_override = style
-        self.keys.pad = px(6.0)
-        self.keys.max_key_width = px(16.0)
-        self.keys.setFixedWidth(px(2 * 6 + 10 * 16))  # ten white keys, C4 to E5
-        self.keys.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.keys.show_key(None, span=(60, 76))
+        keys = KeyboardWidget()
+        keys.style_override = style
+        keys.pad = px(6.0)
+        keys.max_key_width = px(16.0)
+        keys.setFixedWidth(px(2 * 6 + 10 * 16))  # ten white keys, C4 to E5
+        keys.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        keys.show_key(None, span=(60, 76))
         holder = QWidget()
         holder.setFixedHeight(px(int(2 * 6 + 30 + 16 * 6.2)))  # room for the tallest strip above the keys
-        holder.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         holder_lay = QVBoxLayout(holder)
         holder_lay.setContentsMargins(
             0,
@@ -342,17 +380,12 @@ class KeyboardCard(QPushButton):
             0,
             0,
         )
-        holder_lay.addWidget(self.keys, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        name = QLabel(f"<b>{style.label}</b>")
-        name.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        blurb = QLabel(style.note)
-        blurb.setStyleSheet(css("color: gray; font-size: 9pt;"))
-        blurb.setWordWrap(True)
-        blurb.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        lay.addWidget(holder)
-        lay.addWidget(name)
-        lay.addWidget(blurb)
-        lay.addStretch(1)
+        holder_lay.addWidget(keys, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        super().__init__(holder, key=style.key, title=style.label, blurb=style.note, height=222, parent=parent)
+        self.keys = keys
+        layout = self.layout()
+        if isinstance(layout, QVBoxLayout):
+            layout.addStretch(1)  # the text sits under the keys, with the room to spare below it
 
     def show_style(self, style: keyboard_styles.KeyboardStyle) -> None:
         """
