@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
   
 </head>
 <body>
@@ -706,6 +706,31 @@ the exercises to the home screen.</p>
 True
 </code></pre>
 
+<h3 id="notenamescard_prompt">NoteNames.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say what to name on a flashcard, and in which form: letters, solfège or a scale degree, with the octave if it counts.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().card_prompt(Question("", choices=[], answer="C"))
+'Identify the note.'
+</code></pre>
+
 <h3 id="notenamespractice_signature">NoteNames.practice_signature</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
@@ -858,6 +883,33 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(3))
 &gt;&gt;&gt; [len(chord) for chord in q.staff], q.answer in q.choices
 ([2], True)
+</code></pre>
+
+<h3 id="intervalnamescard_prompt">IntervalNames.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say whether to name the interval’s number, its quality, both, or its inversion.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; IntervalNames().card_prompt(Question("", choices=[], answer="3"))
+'Identify the numeric interval.'
+&gt;&gt;&gt; IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
+'Identify the interval and quality.'
 </code></pre>
 
 <h3 id="intervalnamesinstructions">IntervalNames.instructions</h3>
@@ -1042,6 +1094,31 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardIntervals().generate(random.Random(5))
 &gt;&gt;&gt; len(q.keyboard_notes), q.answer in q.choices, q.staff
 (2, True, [])
+</code></pre>
+
+<h3 id="keyboardintervalscard_prompt">KeyboardIntervals.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say what to name on a flashcard.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
+'Identify the interval.'
 </code></pre>
 
 <h3 id="keyboardintervalssettings_signature">KeyboardIntervals.settings_signature</h3>
@@ -1622,6 +1699,31 @@ True
 True
 </code></pre>
 
+<h3 id="chordqualitiescard_prompt">ChordQualities.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say what to name on a flashcard.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
+'Identify the Chord Quality.'
+</code></pre>
+
 <h3 id="chordqualitiesinstructions">ChordQualities.instructions</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
@@ -1765,6 +1867,31 @@ True
 True
 </code></pre>
 
+<h3 id="keyboardnotescard_prompt">KeyboardNotes.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say what to name on a flashcard. Letter names give the octave if it counts, and follow the key signature if one is shown.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+'Identify the note by letter and octave.'
+</code></pre>
+
 <h3 id="keyboardnotespractice_signature">KeyboardNotes.practice_signature</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
@@ -1842,6 +1969,33 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; q = NoteConstruction().generate(random.Random(15))
 &gt;&gt;&gt; q.construct is not None and q.prompt.startswith("Place ")
 True
+</code></pre>
+
+<h3 id="noteconstructioncard_prompt">NoteConstruction.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say which note to place, whichever way the on-screen prompt words it.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
+'Place F♯4 on the staff.'
+&gt;&gt;&gt; NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
+'Place B♭3 on the staff.'
 </code></pre>
 
 <h3 id="noteconstructionsettings_signature">NoteConstruction.settings_signature</h3>
@@ -2449,8 +2603,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
   
 </head>
 <body>
@@ -693,6 +693,14 @@ settings, with a staff, a keyboard, a second row of buttons, or a note to place.
       <td><code class="language-plaintext highlighter-rouge">settings_signature()</code></td>
       <td>Only for exercises with settings (see below).</td>
     </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">card_prompt(question)</code></td>
+      <td>Optional. The instruction on an Anki card, where no buttons or staff explain the task. The default uses the question’s prompt.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">interval_voices</code></td>
+      <td>Optional. True when two notes on the staff are an interval, so they are drawn as two voices.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -837,7 +845,7 @@ The full table appears under <a href="/alto/dev/practice/#response-time">Respons
   <li><strong>The exercise reads it</strong> when it generates a question: <code class="language-plaintext highlighter-rouge">settings.note_names.active_clefs()</code>. Because the instance is shared,
 a change takes effect on the next question.</li>
   <li><strong>A signature.</strong> For a <code class="language-plaintext highlighter-rouge">ChoiceExercise</code>, return <code class="language-plaintext highlighter-rouge">signature(...)</code> from <code class="language-plaintext highlighter-rouge">practice_signature()</code>. The framework includes the button layout when matching stored questions. Other exercises return their signature from <code class="language-plaintext highlighter-rouge">settings_signature()</code>.</li>
-  <li><strong>A panel and persistence.</strong> In <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>, a panel class and a branch in <code class="language-plaintext highlighter-rouge">_exercise_panel</code>. The panel
+  <li><strong>A panel and persistence.</strong> In <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>, a panel class and an entry in <code class="language-plaintext highlighter-rouge">PANELS</code>. The panel
 subclasses <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code> from <code class="language-plaintext highlighter-rouge">alto/ui/settings_menu.py</code> (or <code class="language-plaintext highlighter-rouge">ClefsPanel</code> if it has a Clefs page), builds its
 pages from that module’s rows and pages, and overrides <code class="language-plaintext highlighter-rouge">_persist</code> to save; <code class="language-plaintext highlighter-rouge">_save_and_emit</code> then saves and emits <code class="language-plaintext highlighter-rouge">changed</code>. In <code class="language-plaintext highlighter-rouge">alto/ui/exercise_settings.py</code>, <code class="language-plaintext highlighter-rouge">load_*</code>
 and <code class="language-plaintext highlighter-rouge">save_*</code> functions that read and write <code class="language-plaintext highlighter-rouge">QSettings</code> through <code class="language-plaintext highlighter-rouge">store()</code> with the readers in <code class="language-plaintext highlighter-rouge">alto/ui/store.py</code>, and a
@@ -1040,8 +1048,8 @@ book on writing good questions and, above all, good distractors.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

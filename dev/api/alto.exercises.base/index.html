@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
   
 </head>
 <body>
@@ -1208,6 +1208,7 @@ True
   <li><code class="language-plaintext highlighter-rouge">par_seconds</code> (<em>float, default 5.0</em>): How long a good first answer takes; much quicker earns credit and much slower counts against the question.</li>
   <li><code class="language-plaintext highlighter-rouge">icon</code> (<em>str, default ““</em>): SVG shapes for the exercise’s tile, in a 24 by 24 box with COLOR where the theme’s ink goes. Plugins supply one; empty uses Alto’s own icon for the exercise.</li>
   <li><code class="language-plaintext highlighter-rouge">has_sound</code> (<em>bool, default True</em>): False for an exercise that makes no sound at all, whatever the sound button says.</li>
+  <li><code class="language-plaintext highlighter-rouge">interval_voices</code> (<em>bool, default False</em>): True when two notes on the staff are an interval: they keep the question’s note value, with the stems apart, and are played one after the other when they are melodic.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1268,6 +1269,39 @@ True
 ...         return Question("?", choices=["A"], answer="A")
 &gt;&gt;&gt; Demo().settings_signature()
 ''
+</code></pre>
+
+<h3 id="exercisecard_prompt">Exercise.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Say what to do on a flashcard made from a question, where nothing on screen explains the task.</p>
+
+<p>Exercises whose on-screen prompt depends on the screen (buttons to press, a staff to click) override this.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The question on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction, shown above the card’s picture.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(Exercise):
+...     name = "Demo"
+...     def generate(self, rng):
+...         return Question("Pick A.", choices=["A"], answer="A")
+&gt;&gt;&gt; Demo().card_prompt(Question("", choices=["A"], answer="A"))
+'Demo'
+&gt;&gt;&gt; Demo().card_prompt(Question("Click the fermata.", choices=[], answer="fermata", notation_target=("fermata", 0)))
+'Locate the fermata.'
 </code></pre>
 
 <h3 id="exercisecard_groups">Exercise.card_groups</h3>
@@ -1861,8 +1895,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
