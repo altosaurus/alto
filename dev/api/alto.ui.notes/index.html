@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795372208">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795375597">
   
 </head>
 <body>
@@ -732,7 +732,10 @@ False
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Draw a note with its head centered on a point.</p>
+<p>Draw a note with its head centered on a point, in Noto Music.</p>
+
+<p>The note is drawn from the Noto Music font, so it is only drawn as it should be where that font is installed. The staff
+draws with Bravura, which comes with Alto, wherever Noto Music is missing.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -755,7 +758,8 @@ False
 &gt;&gt;&gt; draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
 &gt;&gt;&gt; painter.end()
 True
-&gt;&gt;&gt; image.pixelColor(50, 50).lightness() &lt; 128  # the head is drawn at the point
+&gt;&gt;&gt; from PySide6.QtGui import QFontDatabase
+&gt;&gt;&gt; not QFontDatabase.hasFamily("Noto Music") or image.pixelColor(50, 50).lightness() &lt; 128  # the head is at the point
 True
 </code></pre>
 
@@ -1026,8 +1030,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795372208" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795372208" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795375597" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795375597" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
