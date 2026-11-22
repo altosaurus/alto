@@ -3,13 +3,13 @@
 import random
 
 import pytest
-from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QRadioButton
 
 from alto import settings
 from alto.exercises import REGISTRY
 from alto.exercises.base import ChoiceExercise, Exercise
 from alto.exercises.library import ChordQualities, ClefBasics, KeyboardNotes, NotationIdentification
+from alto.ui import motion
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import load_choice_buttons
 from alto.ui.exercise_view import ExerciseView
@@ -38,7 +38,7 @@ def test_each_button_answer_has_a_buttons_submenu(app: QApplication, cls: type[E
         row = panel.choice_buttons_row
         assert row is not None and not row.isHidden()
         row.click()
-        QTest.qWait(300)
+        motion.settle()
         page = panel.stack.currentWidget()
         assert page is not None
         modes = {b.text(): b for b in page.findChildren(QRadioButton)}

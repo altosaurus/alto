@@ -76,7 +76,10 @@ from alto.theory.scales import (
     format_key_signature,
     mode_tonic,
 )
-from alto.ui import zoom
+from alto.ui import (
+    motion,
+    zoom,
+)
 from alto.ui.colors import blend
 from alto.ui.degree_text import DegreeCheckBox
 from alto.ui.dropdown import FieldComboBox
@@ -1365,7 +1368,7 @@ class SlideStack(QStackedWidget):
 
         group.finished.connect(done)
         self._slide = group
-        group.start()
+        motion.play(group)
 
 
 class ExerciseSettingsPanel(QWidget):

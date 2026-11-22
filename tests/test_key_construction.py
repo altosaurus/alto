@@ -37,6 +37,7 @@ from alto.learning import (
 )
 from alto.theory.scales import format_key_signature
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -621,7 +622,7 @@ def test_a_wrong_signature_counts_against_the_first_try_and_the_fork_resets_to_t
     view.answer_button.click()
     assert view.missed and not view.answered and view.total == 1 and view.correct == 0 and view.streak == 0
     assert view.fork.locked
-    QTest.qWait(1200)
+    motion.settle()
     assert not view.fork.locked and view.fork.value == 0 and view.staff.key == 0
     view.fork.set_value(q.key)
     view.answer_button.click()
@@ -646,7 +647,7 @@ def test_every_try_is_recorded_with_the_signature_that_was_built(app: QApplicati
     wrong = q.key + 1 if q.key < 7 else q.key - 1
     view.fork.set_value(wrong)
     view.answer_button.click()
-    QTest.qWait(1200)
+    motion.settle()
     view.fork.set_value(q.key)
     view.answer_button.click()
     view._advance.stop()

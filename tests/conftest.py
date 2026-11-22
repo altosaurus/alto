@@ -44,7 +44,11 @@ from alto.learning import (  # noqa: E402
     Database,
     Learner,
 )
-from alto.ui import keyboard_styles, zoom  # noqa: E402
+from alto.ui import (  # noqa: E402
+    keyboard_styles,
+    motion,
+    zoom,
+)
 
 
 @pytest.fixture(scope="session")
@@ -89,6 +93,28 @@ def _zoom_at_100() -> Iterator[None]:
     zoom._percent, zoom._base_font = zoom.DEFAULT, None
     if isinstance(app, QApplication) and font is not None:
         app.setFont(font)
+
+
+@pytest.fixture(autouse=True)
+def _instant_motion(request: pytest.FixtureRequest) -> Iterator[None]:
+    """
+    Run animations and feedback delays instantly, so a test checks what the interface does, not how long it takes.
+
+    A test marked `motion` keeps the real durations: it is about the animation or the timing itself.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The running test, whose markers say whether it is about motion.
+
+    Yields
+    ------
+    None
+        Control, while the test runs.
+    """
+    motion.set_instant("motion" not in request.keywords)
+    yield
+    motion.set_instant(False)
 
 
 SHARED_SETTINGS = (

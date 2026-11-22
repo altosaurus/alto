@@ -6,7 +6,6 @@ from unittest.mock import patch
 
 import pytest
 from PySide6.QtGui import QColor
-from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QPushButton, QRadioButton, QScrollArea, QToolButton
 
 from alto import settings
@@ -14,6 +13,7 @@ from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.exercises.library import IntervalNames
 from alto.theory.pitch import QUALITY_NAMES, Interval, key_accidental
+from alto.ui import motion
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import load_intervals
 from alto.ui.exercise_view import ExerciseView
@@ -440,7 +440,7 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     assert isinstance(panel, IntervalSettingsPanel)
     assert view.gear is not None
     view.gear.click()
-    QTest.qWait(300)
+    motion.settle()
     rows = (
         panel.clefs_row,
         panel.range_row,
@@ -460,16 +460,16 @@ def test_settings_menu_and_saved_interval_question(app: QApplication) -> None:
     question = view.question
     original = exercise.settings_signature()
     panel.clefs_row.click()
-    QTest.qWait(300)
+    motion.settle()
     assert view.question is question
     panel.boxes["treble"].click()
     assert view.question.clef == "bass" and not panel.boxes["bass"].isEnabled()
     page = panel.stack.currentWidget()
     assert page is not None
     next(b for b in page.findChildren(QToolButton) if "Back" in b.text()).click()
-    QTest.qWait(300)
+    motion.settle()
     panel.range_row.click()
-    QTest.qWait(300)
+    motion.settle()
     editor = panel.range_editors["bass"]
     editor.low_up.click()
     panel.staff_keys.boxes[-2].click()
@@ -672,10 +672,10 @@ def test_buttons_switch_between_a_limit_and_all_eligible_answers(app: QApplicati
     panel = view.settings_panel
     assert isinstance(panel, IntervalSettingsPanel) and view.gear is not None
     view.gear.click()
-    QTest.qWait(300)
+    motion.settle()
     original = view.question
     panel.buttons_row.click()
-    QTest.qWait(300)
+    motion.settle()
     assert view.question is original and len(view.buttons) == 6
     page = panel.stack.currentWidget()
     assert page is not None

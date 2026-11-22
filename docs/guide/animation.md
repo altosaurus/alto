@@ -75,7 +75,7 @@ def slide_to(self, index):
         anim.setEndValue(QPoint(end, 0))
         group.addAnimation(anim)
     group.finished.connect(done)  # setCurrentIndex(index) and put both pages at (0, 0)
-    group.start()
+    motion.play(group)  # group.start(), held still in tests until they settle it
 ```
 
 Points to copy: the new page is positioned off-screen *before* it is shown (otherwise it flashes in place for one frame); the two
@@ -143,12 +143,38 @@ Not visual, but the same idea: `Sounds._release` fades a `QSoundEffect`'s `volum
 
 ## Testing animations
 
-Tests run the event loop long enough for an animation to finish: `QTest.qWait(300)` after triggering a 220 ms slide, then
-assert the end state. A shorter wait asserts the middle. `tests/test_settings_panels.py` has a `slide()` helper that waits
-300 ms for a page to finish sliding, and `SlideStack.sliding` reports whether a slide is underway. To test that your code ignores a request
-during a slide, call it twice in a row and assert one slide happened.
+A test checks one thing. A test of whether an answer is right should not depend on how long the feedback takes to fade,
+and a test of a fade should not depend on what was answered. Alto's tests come in three kinds:
 
-Because tests wait in real time, keep durations short. There is no virtual clock in Qt's animation framework.
+| Kind | Tests | Motion |
+|---|---|---|
+| Logic | Questions, answers, scheduling: `exercise.generate`, `question.check`, the learner | None: no widgets |
+| Screen | What the interface shows and does: a click answers, a wrong answer clears the staff to try again | Held until the test settles it |
+| Motion | The animation or the timing itself: a flash fades, notes light up as they sound | Real durations, marked `@pytest.mark.motion` |
+
+Animations and feedback delays go through `alto/ui/motion.py`:
+- `motion.play(animation)` starts an animation, in place of `animation.start()`.
+- `motion.later(delay, owner=..., step=...)` runs a step after a delay, in place of `QTimer.singleShot`.
+- `motion.start_timer(timer, delay=...)` starts a single-shot timer.
+
+In the app these take their real time. In tests, `tests/conftest.py` turns on instant motion for every test not marked
+`motion`. Then nothing moves on by itself: an animation holds at its start, and a delayed step or timer waits, however long
+the test takes, until the test calls `motion.settle()`. That runs everything waiting, in order, at once. So a screen test
+looks like this:
+
+```python
+view.answer_button.click()
+assert view.missed and view.scale_input.locked  # the wrong-answer feedback is showing
+motion.settle()  # the feedback ends
+assert not view.scale_input.locked  # cleared to try again
+```
+
+There is no wait to guess at, so the test is as fast on a slow machine as on a fast one, and it cannot fail because a
+machine was busy. Use `QTest.qWait` only in a motion test.
+
+New animations and delays should go through `alto/ui/motion.py` so their tests can settle them. `SlideStack.sliding`
+reports whether a slide is underway; to test that a request during a slide is ignored, call it twice in a row and assert
+one slide happened.
 
 ## Deciding how it should move
 

@@ -905,6 +905,7 @@ def test_viola_playback_highlight(width: int, height: int, app: QApplication, tm
 
 
 @pytest.mark.parametrize("mode", ["Immediately", "Wait", "After Animation"])
+@pytest.mark.motion  # about the answer animation's timing in each answer mode
 def test_animation_follows_answer_mode(tmp_path: Path, app: QApplication, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
     """
     Drive the installed animation through an actual correct answer and the muted playback clock.

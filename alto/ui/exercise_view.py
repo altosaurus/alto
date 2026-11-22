@@ -88,6 +88,7 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import format_key_signature
+from alto.ui import motion
 from alto.ui.answer_bank import AnswerBank
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
@@ -907,7 +908,7 @@ class ExerciseView(QWidget):
             self._clock += time.monotonic() - self._hidden_at
             self._hidden_at = None
             if self._advance_remaining >= 0:
-                self._advance.start(max(1, self._advance_remaining))
+                motion.start_timer(self._advance, delay=max(1, self._advance_remaining))
             self._advance_remaining = -1
         if self.learner and (self._scheduler_mode != self.learner.mode or self.question is None):
             self.next_question()
@@ -2696,7 +2697,7 @@ class ExerciseView(QWidget):
             immediate = self._self_grading or self.settings_panel.next_question_mode == "Immediately"
             self._advance_after_feedback(90 if immediate else delay)
         elif retry is not None:
-            QTimer.singleShot(delay, self, retry)
+            motion.later(delay, owner=self, step=retry)
 
     def _finish_answer(self, button: QPushButton | None, *, notes: list[list[Note]] | None = None) -> None:
         """
@@ -2736,7 +2737,8 @@ class ExerciseView(QWidget):
         if immediate:
             for choice in buttons:
                 choice.setStyleSheet(self._style(QColor(CORRECT_ANSWER_COLOR)))
-            self._advance.start(90 if buttons else 0)  # Allow one visible flash before replacing the controls.
+            # Allow one visible flash before replacing the controls.
+            motion.start_timer(self._advance, delay=90 if buttons else 0)
         else:
             self.next_button.setVisible(mode == "Wait" and not self._self_grading)
             if mode == "Wait":
@@ -2832,7 +2834,7 @@ class ExerciseView(QWidget):
         if self._hidden_at is not None:
             self._advance_remaining = delay
         else:
-            self._advance.start(delay)
+            motion.start_timer(self._advance, delay=delay)
 
     def _light_answer_notes(self, index: int | None) -> None:
         """

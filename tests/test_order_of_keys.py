@@ -12,6 +12,7 @@ from alto.exercises.base import Question
 from alto.exercises.library import OrderOfKeys
 from alto.theory import key_signatures
 from alto.theory.pitch import Note
+from alto.ui import motion
 from alto.ui.exercise_settings import load_order_of_keys
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.main_window import MainWindow
@@ -217,7 +218,7 @@ def test_settings_filter_and_restore_questions(app: QApplication, monkeypatch: p
         assert row.accessibleName() == title
         previous = view.question
         row.click()
-        QTest.qWait(300)
+        motion.settle()
         assert pane.stack.currentIndex() == index and view.question is previous
         wanted.setChecked(True)
         for box in boxes:
@@ -228,7 +229,7 @@ def test_settings_filter_and_restore_questions(app: QApplication, monkeypatch: p
         back = next(button for button in page.findChildren(QToolButton) if button.text() == "‹ Back")
         previous = view.question
         back.click()
-        QTest.qWait(300)
+        motion.settle()
         assert pane.stack.currentIndex() == 0 and view.question is previous
     assert pane.clef_pictures.clefs == ["alto"] and pane.modes_row.value.text() == "1 of 7"
     assert view.question and (view.question.clef, view.question.caption, view.question.answer) == ("alto", "C Dorian", "B♭3 E♭4")

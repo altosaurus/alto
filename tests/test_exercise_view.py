@@ -26,6 +26,7 @@ from alto.exercises.library import (
     NoteNames,
 )
 from alto.theory.pitch import Note
+from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.store import store
@@ -169,7 +170,7 @@ def test_next_question_paces_interval_feedback(app: QApplication, mode: str) -> 
         view.next_button.click()
     else:
         assert view.next_button.isHidden() and view._advance.isActive()
-        assert QSignalSpy(view._advance.timeout).wait(2000)
+        motion.settle()  # the next question comes
     assert asked(view) is not before and view.next_button.isHidden() and not view.answered
 
 
@@ -191,7 +192,7 @@ def test_immediate_melody_continues_across_questions(app: QApplication) -> None:
     with patch.object(sounds, "_effect", return_value=object()), patch.object(sounds, "_play_column") as play:
         view.buttons[question.choices.index(question.answer)].click()
         assert play.call_count == 1 and not view.staff.column_colors
-        assert QSignalSpy(view._advance.timeout).wait(2000)
+        motion.settle()  # the next question comes
         assert asked(view) is not question
         assert QSignalSpy(view._immediate_playback.step).wait(2000)
         assert [call.args[0] for call in play.call_args_list] == [[n.midi for n in column] for column in question.staff]
@@ -518,7 +519,7 @@ def test_a_wrong_note_is_shown_then_cleared_for_another_try(construction: Exerci
     assert construction.missed and not construction.answered and construction._busy and construction.total == 1
     construction._place(q.construct)  # while the miss is showing, clicks are ignored
     assert not construction.answered
-    QTest.qWait(1000)
+    motion.settle()
     assert not construction._busy and not construction.input_staff.locked and construction.input_staff.columns == []
     construction._place(q.construct)
     assert construction.answered and (construction.correct, construction.total) == (0, 1)  # still a miss overall
@@ -579,7 +580,7 @@ def test_choices_are_ignored_once_the_question_is_answered_or_while_a_miss_shows
     assert view._busy
     names[kind].click()
     assert view._pending.get("name") is not None and view._pending["name"][0] == wrong  # ignored while busy
-    QTest.qWait(800)
+    motion.settle()
     names[kind].click()
     names[inversion].click()
     assert view.answered

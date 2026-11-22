@@ -11,7 +11,6 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
 from PySide6.QtCore import QEvent, QPoint
-from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -32,6 +31,7 @@ from alto.theory.scales import (
 )
 from alto.ui import (
     exercise_settings,
+    motion,
     settings_panel,
 )
 from alto.ui.exercise_view import ExerciseView
@@ -417,7 +417,7 @@ def test_a_wrong_pair_is_a_miss_and_the_buttons_reset(view: ExerciseView) -> Non
     press(view, text=inversion)
     press(view, text=wrong)
     assert view.missed and not view.answered and view.total == 1 and view.correct == 0
-    QTest.qWait(900)
+    motion.settle()  # the wrong-answer feedback ends
     assert view._pending == {} and not view._busy
     press(view, text=kind)
     press(view, text=inversion)  # trying again works, but it still counts as missed

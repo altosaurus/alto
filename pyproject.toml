@@ -97,6 +97,7 @@ testpaths = [
 ]
 markers = [
     "perf: checks of how fast the app is, which fail when an operation is far slower than its budget",
+    "motion: checks of animation or timing, which run with real durations instead of instant motion",
 ]
 addopts = "--doctest-modules"  # the Examples in docstrings run as tests, so they cannot go out of date
 doctest_optionflags = [

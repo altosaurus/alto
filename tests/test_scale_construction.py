@@ -48,6 +48,7 @@ from alto.theory.pitch import (
     key_accidental,
 )
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -573,6 +574,7 @@ def test_a_right_scale_is_scored_plays_the_scale_and_moves_on(
     assert view.question is not first and view.scale_input.notes == [] and not view.scale_input.locked
 
 
+@pytest.mark.motion  # about the timing of the notes as the scale plays
 def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
@@ -598,6 +600,7 @@ def test_the_notes_turn_green_one_by_one_as_the_scale_plays(
     view._advance.stop()
 
 
+@pytest.mark.motion  # about the timing of the notes as the scale plays
 def test_the_notes_turn_green_on_time_even_with_the_sound_off(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
@@ -620,6 +623,7 @@ def test_the_notes_turn_green_on_time_even_with_the_sound_off(
     assert view.question is not first and view.scale_input.column_colors == {}
 
 
+@pytest.mark.motion  # about the timing of the notes as the scale plays
 def test_a_scale_that_was_playing_does_not_color_the_next_questions_staff(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
@@ -690,7 +694,7 @@ def test_a_wrong_scale_counts_against_the_first_try_and_the_staff_is_cleared_to_
     view.answer_button.click()
     assert view.missed and not view.answered and (view.total, view.correct, view.streak) == (1, 0, 0)
     assert view.scale_input.locked and not view.answer_button.isEnabled()
-    QTest.qWait(1200)
+    motion.settle()
     assert not view.scale_input.locked and view.scale_input.notes == [] and view.scale_input.caption == q.caption
     place_scale(view, notes=q.construct_scale)
     view.answer_button.click()
@@ -716,7 +720,7 @@ def test_every_try_is_recorded_with_the_notes_that_were_placed(app: QApplication
     wrong = [Note.from_diatonic(n.diatonic, accidental=0) for n in q.construct_scale]
     place_scale(view, notes=wrong)
     view.answer_button.click()
-    QTest.qWait(1200)
+    motion.settle()
     place_scale(view, notes=q.construct_scale)
     view.answer_button.click()
     view._advance.stop()
@@ -1349,7 +1353,7 @@ def test_wrong_steps_make_the_scale_wrong_even_with_the_right_notes(app: QApplic
     mark(view.scale_input, ["H" if s == "W" else "W" for s in q.construct_steps])
     view.answer_button.click()
     assert view.missed and not view.answered and (view.total, view.correct) == (1, 0)
-    QTest.qWait(1200)
+    motion.settle()
     staff = view.scale_input
     assert staff.notes == [] and staff.steps == [] and staff.with_steps and not staff.locked
     assert view.accidental_row.isVisibleTo(view) and not view.step_row.isVisibleTo(view)  # back to placing notes
@@ -1375,7 +1379,7 @@ def test_wrong_notes_make_the_scale_wrong_even_with_the_right_steps(app: QApplic
     mark(view.scale_input, q.construct_steps)
     view.answer_button.click()
     assert view.missed and not view.answered
-    QTest.qWait(1200)
+    motion.settle()
     view._advance.stop()
 
 
@@ -1397,6 +1401,7 @@ def test_a_scale_on_another_octave_with_its_steps_is_right(app: QApplication) ->
     view._advance.stop()
 
 
+@pytest.mark.motion  # about the timing of the notes as the scale plays
 def test_the_wedges_turn_green_with_the_notes_as_the_scale_plays(
     app: QApplication,
     monkeypatch: pytest.MonkeyPatch,
@@ -1623,7 +1628,7 @@ def test_leaving_out_the_naturals_gives_a_different_scale(app: QApplication) -> 
     assert [n.name for n in view.scale_input.notes] == ["C", "D", "E♭", "F", "G", "A", "B♭", "C"]
     view.answer_button.click()
     assert view.missed and not view.answered
-    QTest.qWait(1200)
+    motion.settle()
     assert view.scale_input.notes == [] and view.scale_input.key == -2  # cleared, with the signature still on the staff
     view._advance.stop()
 
@@ -1701,10 +1706,10 @@ def test_the_settings_have_a_staff_key_signature_apart_from_the_scales(app: QApp
     assert pane.stack.count() == 7  # menu, clefs, scales, staff keys, scale keys, motion, and Next Question
     for row, index in ((pane.clefs_row, 1), (pane.modes_row, 2), (pane.staff_keys_row, 3), (pane.keys_row, 4)):
         row.click()
-        QTest.qWait(300)
+        motion.settle()
         assert pane.stack.currentIndex() == index
         pane._go(0)
-        QTest.qWait(300)
+        motion.settle()
     pane.staff_key_list.boxes[-2].setChecked(True)
     assert settings.scale_construction.staff_keys == {0, -2} and settings.scale_construction.keys == set(range(-7, 8))
     assert store().value("scaleConstruction/staffKeys") == "-2,0"
@@ -1941,7 +1946,7 @@ def test_the_octave_is_scored_on_the_screen(app: QApplication) -> None:
     place_scale(view, notes=[Note.from_diatonic(n.diatonic + 7, accidental=n.accidental) for n in q.construct_scale])
     view.answer_button.click()
     assert view.missed and not view.answered  # right notes, wrong octave
-    QTest.qWait(1200)
+    motion.settle()
     place_scale(view, notes=q.construct_scale)
     view.answer_button.click()
     assert view.answered and view.correct == 0  # only the first try counts toward the score

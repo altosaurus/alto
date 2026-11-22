@@ -21,6 +21,7 @@ from alto.exercises.library import NotationIdentification
 from alto.learning.stats import describe
 from alto.notation_excerpts import excerpts
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
+from alto.ui import motion
 from alto.ui.engraving import notation_glyph
 from alto.ui.exercise_settings import load_notation_terms
 from alto.ui.exercise_view import ExerciseView
@@ -133,15 +134,18 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     page_changed = QSignalSpy(panel.stack.currentChanged)
     question = view.question
     panel.type_row.click()
-    assert page_changed.wait(2000) and panel.types["staff"].isVisible() and view.question is question
+    motion.settle()
+    assert page_changed.count() and panel.types["staff"].isVisible() and view.question is question
     panel.types["staff"].click()
     assert panel.type_row.value.text() == "Click on Staff"
     panel.types["button"].click()
     question = view.question
     next(b for b in panel.findChildren(QToolButton) if b.isVisible() and b.text() == "‹ Back").click()
-    assert page_changed.wait(2000) and panel.type_row.isVisible() and view.question is question
+    motion.settle()
+    assert page_changed.count() and panel.type_row.isVisible() and view.question is question
     panel.terms_row.click()
-    assert page_changed.wait(2000) and panel.group_picker.isVisible()
+    motion.settle()
+    assert page_changed.count() and panel.group_picker.isVisible()
     assert exercise.settings_signature() == ""
     panel.group_picker.textActivated.emit("Staff and rhythm")
     for term in panel.terms.selected() - {"Notehead", "Clef"}:
@@ -161,7 +165,8 @@ def test_selecting_notation_terms_filters_questions_and_restores_the_selection(a
     panel.group_picker.textActivated.emit("All terms")
     assert exercise.settings_signature() == ""
     next(b for b in panel.findChildren(QToolButton) if b.isVisible() and b.text() == "‹ Back").click()
-    assert page_changed.wait(2000) and panel.terms_row.isVisible() and panel.terms_row.value.text() == "All"
+    motion.settle()
+    assert page_changed.count() and panel.terms_row.isVisible() and panel.terms_row.value.text() == "All"
 
 
 @pytest.mark.parametrize("mode", ["button", "staff"])

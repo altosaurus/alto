@@ -158,8 +158,9 @@ milliseconds.
 
 Use `QTest` (in `PySide6.QtTest`) to act like a user: `QTest.mouseClick(widget, Qt.MouseButton.LeftButton)`, `button.click()`,
 `QTest.keyClick(widget, Qt.Key.Key_1)`. `QTest.qWait(300)` runs the event loop for 300 ms, which lets animations and timers
-progress. A widget that has not been shown gets no resize or paint events, so `show()` it (the offscreen platform makes this
-safe) before testing anything about its size.
+progress, but Alto's own animations and delays wait for `motion.settle()` in tests (see the
+[Animation]({{ '/guide/animation/' | relative_url }}#testing-animations) guide). A widget that has not been shown gets no
+resize or paint events, so `show()` it (the offscreen platform makes this safe) before testing anything about its size.
 
 ## Enums, the full form
 

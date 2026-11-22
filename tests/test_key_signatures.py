@@ -12,7 +12,6 @@ import random
 from typing import TYPE_CHECKING
 
 import pytest
-from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QPushButton,
     QToolButton,
@@ -37,6 +36,7 @@ from alto.theory.scales import (
     mode_tonic,
 )
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import (
     ExerciseView,
@@ -340,7 +340,7 @@ def back(panel: QWidget) -> None:
         The panel.
     """
     next(b for b in panel.findChildren(QToolButton) if b.text() == "‹ Back").click()
-    QTest.qWait(300)
+    motion.settle()
 
 
 def test_the_pane_opens_each_page_and_back_returns(pane: KeySignatureSettingsPanel) -> None:
@@ -358,12 +358,12 @@ def test_the_pane_opens_each_page_and_back_returns(pane: KeySignatureSettingsPan
         (pane.keys_row, 3),
     ):
         row.click()
-        QTest.qWait(300)
+        motion.settle()
         assert pane.stack.currentIndex() == index
         back(pane)
     pane.clefs_row.click()
     pane.clefs_row.click()  # ignored mid-slide
-    QTest.qWait(300)
+    motion.settle()
     pane._go(1)  # already there
     assert pane.stack.currentIndex() == 1
 
