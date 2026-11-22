@@ -47,6 +47,7 @@ from alto.theory.pitch import (
     Note,
     key_accidental,
 )
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -812,7 +813,7 @@ def test_the_settings_pane_saves_under_its_own_name(app: QApplication) -> None:
     assert "Lydian" in str(store().value("scaleConstruction/modes")).split("|")
     assert store().value("keySignatures/modes") is None and store().value("keyConstruction/modes") is None
     settings.scale_construction.modes, settings.scale_construction.keys = {"Major (Ionian)"}, set(range(-7, 8))
-    sp.load_scale_construction()
+    es.load_scale_construction()
     assert "Lydian" in settings.scale_construction.modes and 5 not in settings.scale_construction.keys
     assert "Lydian" not in settings.key_construction.modes and 5 in settings.key_signatures.keys
 
@@ -1441,7 +1442,7 @@ def test_the_switch_for_steps_is_in_the_settings_and_is_saved(app: QApplication)
     assert settings.scale_construction.steps is True and store().value("scaleConstruction/steps") == "true"
     assert view.question is not None and view.question.construct_steps is not None  # a new question asks for them
     settings.scale_construction.steps = False
-    sp.load_scale_construction()
+    es.load_scale_construction()
     assert settings.scale_construction.steps is True
     pane.steps_row.click()
     assert settings.scale_construction.steps is False
@@ -1711,7 +1712,7 @@ def test_the_settings_have_a_staff_key_signature_apart_from_the_scales(app: QApp
     assert 5 not in settings.scale_construction.keys and settings.scale_construction.staff_keys == {0, -2}
     assert view.question is not None and view.question.key in {0, -2}
     settings.scale_construction.staff_keys, settings.scale_construction.keys = {0}, set(range(-7, 8))
-    sp.load_scale_construction()
+    es.load_scale_construction()
     assert settings.scale_construction.staff_keys == {0, -2} and 5 not in settings.scale_construction.keys
     assert ScaleConstruction().settings_signature().count("-2") >= 1
 
@@ -1985,7 +1986,7 @@ def test_the_octave_switch_is_in_the_settings_for_scale_construction_only(app: Q
     assert view.question is not None and view.question.exact_octave and view.question.caption[1:].lstrip("♯♭")[0].isdigit()
     assert settings.scale_construction.steps is False  # separate from the steps
     settings.scale_construction.octave = False
-    sp.load_scale_construction()
+    es.load_scale_construction()
     assert settings.scale_construction.octave is True
     pane.octave_row.click()
     assert settings.scale_construction.octave is False and view.question is not None and not view.question.exact_octave

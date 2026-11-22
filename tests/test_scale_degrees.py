@@ -25,6 +25,7 @@ from alto.theory.scales import (
     build,
 )
 from alto.ui.degree_text import DegreeCheckBox
+from alto.ui.exercise_settings import load_note_names
 from alto.ui.exercise_view import (
     ExerciseView,
     choice_keys,
@@ -33,10 +34,7 @@ from alto.ui.exercise_view import (
     second_row_keys,
 )
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import (
-    NoteNameSettingsPanel,
-    load_note_names,
-)
+from alto.ui.settings_panel import NoteNameSettingsPanel
 from keys import (
     opened,
     press,

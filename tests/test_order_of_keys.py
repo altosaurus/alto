@@ -12,10 +12,11 @@ from alto.exercises.base import Question
 from alto.exercises.library import OrderOfKeys
 from alto.theory import key_signatures
 from alto.theory.pitch import Note
+from alto.ui.exercise_settings import load_order_of_keys
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.main_window import MainWindow
 from alto.ui.notation import STYLES
-from alto.ui.settings_panel import KeySignatureSettingsPanel, load_order_of_keys
+from alto.ui.settings_panel import KeySignatureSettingsPanel
 from alto.ui.staff import BOTTOM_LINE, KEY_OFFSET, KEY_STEP, StaffWidget
 from alto.ui.staff_input import SignatureInput
 

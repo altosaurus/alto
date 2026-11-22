@@ -13,7 +13,7 @@ database structure without losing anyone's practice history.
 | Kind | Where | Written by | Contains |
 |---|---|---|---|
 | **History** | one SQLite file, `alto.db`, in the user's data folder | `alto/learning/database.py` | profiles, every answer, what is known about each question |
-| **Preferences** | `QSettings("alto", "alto")`, in the user's configuration folder | `alto/ui/store.py` and the `save_*` functions in `alto/ui/settings_panel.py` and the theme, notation, keyboard and instrument modules | theme, notation font, keyboard style, instrument, each exercise's settings, sidebar width, the profile used last |
+| **Preferences** | `QSettings("alto", "alto")`, in the user's configuration folder | `alto/ui/store.py` and the `save_*` functions in `alto/ui/exercise_settings.py` and the theme, notation, keyboard and instrument modules | theme, notation font, keyboard style, instrument, each exercise's settings, sidebar width, the profile used last |
 
 The split is by *nature*: history is a large and growing table of facts you can query, so it belongs in a database.
 Preferences are a few dozen small values, so they belong in the platform's settings mechanism. [Your data]({{ '/data/' | relative_url }})

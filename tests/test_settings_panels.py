@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.store import store
 
@@ -59,9 +60,9 @@ def test_the_note_name_settings_are_saved_and_read_back() -> None:
     cfg.clefs, cfg.key_signatures = {"grand", "alto", "baritone"}, {-2, 0, 5}
     cfg.note_values, cfg.naming, cfg.accidentals = {"half", "eighth"}, "solfege", True
     cfg.ranges = {"treble": (30, 40), "bass": (15, 25)}
-    sp.save_note_names()
+    es.save_note_names()
     cfg.__init__()  # back to the defaults
-    sp.load_note_names()
+    es.load_note_names()
     assert (cfg.clefs, cfg.key_signatures) == ({"grand", "alto", "baritone"}, {-2, 0, 5})
     assert cfg.note_values == {"half", "eighth"} and cfg.naming == "solfege" and cfg.accidentals
     assert cfg.ranges == {"treble": (30, 40), "bass": (15, 25)}
@@ -78,7 +79,7 @@ def test_bad_saved_note_name_settings_fall_back_to_sensible_ones() -> None:
     s.setValue("noteNames/naming", "klingon")
     s.setValue("noteNames/ranges", "treble:5-3,bass:oops,nonsense:20-30,alto:20-30,tenor:20,grand:1-2000000")
     settings.note_names.__init__()
-    sp.load_note_names()
+    es.load_note_names()
     cfg = settings.note_names
     assert cfg.clefs == {"treble", "tenor"}
     assert cfg.key_signatures == {0} and cfg.note_values == {"whole"} and cfg.naming == "letters"
@@ -92,9 +93,9 @@ def test_the_keyboard_settings_are_saved_and_read_back_and_bad_ones_ignored() ->
     cfg = settings.keyboard
     cfg.black_keys, cfg.require_octave, cfg.low, cfg.high = False, True, 40, 80
     cfg.key_signature, cfg.keys = True, {-1, 2}
-    sp.save_keyboard()
+    es.save_keyboard()
     cfg.__init__()
-    sp.load_keyboard()
+    es.load_keyboard()
     assert (
         cfg.black_keys,
         cfg.require_octave,
@@ -110,11 +111,11 @@ def test_the_keyboard_settings_are_saved_and_read_back_and_bad_ones_ignored() ->
     store().setValue("keyboard/low", 90)
     store().setValue("keyboard/high", 50)  # backwards: not used
     cfg.__init__()
-    sp.load_keyboard()
+    es.load_keyboard()
     assert (cfg.low, cfg.high) == (settings.KEYBOARD_DEFAULT[0], settings.KEYBOARD_DEFAULT[1])
     store().setValue("keyboard/low", "not a number")
     cfg.__init__()
-    sp.load_keyboard()  # unreadable: loading stops quietly and keeps the defaults
+    es.load_keyboard()  # unreadable: loading stops quietly and keeps the defaults
     assert cfg.low == settings.KEYBOARD_DEFAULT[0] and cfg.key_signature is False
 
 
@@ -128,13 +129,13 @@ def test_the_construction_settings_are_read_back_and_bad_ones_ignored() -> None:
     s.setValue("construction/keySignature", "true")
     s.setValue("construction/keys", "-3,0,40")
     settings.construction.__init__()
-    sp.load_construction()
+    es.load_construction()
     cfg = settings.construction
     assert cfg.clefs == {"bass", "grand"} and not cfg.accidentals and cfg.key_signature and cfg.keys == {-3, 0}
     s.setValue("construction/clefs", "nonsense")
     s.setValue("construction/keys", "99")
     cfg.__init__()
-    sp.load_construction()
+    es.load_construction()
     assert cfg.clefs == {"treble", "bass"} and cfg.keys == {
         -3,
         -2,
@@ -405,11 +406,11 @@ def test_a_grand_staff_saved_by_an_older_version_becomes_the_grand_staff_clef() 
     s.setValue("noteNames/mode", "grand")
     s.setValue("noteNames/clefs", "treble,bass")  # the clefs an older version kept for when "single clef" was chosen
     settings.note_names.__init__()
-    sp.load_note_names()
+    es.load_note_names()
     assert settings.note_names.clefs == {"grand"} and s.value("noteNames/mode") is None
-    sp.save_note_names()  # saved the new way, the old key is not written again
+    es.save_note_names()  # saved the new way, the old key is not written again
     settings.note_names.__init__()
-    sp.load_note_names()
+    es.load_note_names()
     assert settings.note_names.clefs == {"grand"} and s.value("noteNames/mode") is None
 
 

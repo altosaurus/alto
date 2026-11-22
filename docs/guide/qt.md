@@ -138,9 +138,10 @@ never write another model.
 
 `QSettings` stores values by key in the operating system's usual place (an INI file on Linux, the registry on Windows, a
 property list on macOS). Alto wraps it in `alto/ui/store.py`: `store()` returns the one `QSettings("alto", "alto")`, and
-`int_value` and `text_value` read a value as the right type, because `QSettings` may hand back a string where you stored a
-number. Exercise settings are saved by the `save_*` functions in `settings_panel.py`. Nothing saves the plain settings
-objects in `alto/settings.py`.
+`int_value`, `text_value`, `bool_value`, `list_value`, `choices_value` and `keys_value` read a value as the right type,
+because `QSettings` may hand back a string where you stored a number, or a list where you stored text with commas. Exercise
+settings are loaded and saved by the functions in `exercise_settings.py`. Nothing saves the plain settings objects in
+`alto/settings.py`.
 
 Tests point the settings at a throwaway folder (the `XDG_CONFIG_HOME` variable on Linux), so no test can change your real
 settings.

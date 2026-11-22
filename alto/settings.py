@@ -1,5 +1,5 @@
 """
-User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.
+User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.
 
 Each exercise with settings has a small dataclass here (`NoteNameSettings`, `KeyboardSettings` and so on) and one shared
 instance of it (`note_names`, `keyboard` ...) that the exercise and its settings panel both read and write.
@@ -19,6 +19,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+from typing import ClassVar
 
 from alto.circle_schemes import (
     DEFAULT_SCHEME,
@@ -240,8 +241,86 @@ def diatonic_name(d: int) -> str:
     return f"{n.name}{n.octave}"
 
 
+class ClefChoice:
+    """
+    Settings with a set of chosen clefs, which are always used in the same order.
+
+    Attributes
+    ----------
+    CLEF_ORDER : tuple of str
+        Every clef the settings may hold, in the order they are offered and used. Each subclass sets it.
+    clefs : set of str
+        The chosen clefs. The dataclass that uses this mixin declares the field and its default.
+
+    Examples
+    --------
+    >>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
+    ['alto', 'tenor']
+    """
+
+    CLEF_ORDER: ClassVar[tuple[str, ...]] = CLEFS
+    clefs: set[str]
+
+    def active_clefs(self) -> list[str]:
+        """
+        Return the clefs to use, in canonical order.
+
+        Returns
+        -------
+        list of str
+            The chosen clefs in the order of `CLEF_ORDER`, or the treble clef if none are chosen.
+
+        Examples
+        --------
+        >>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+        ['tenor', 'grand']
+        >>> ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
+        ['treble', 'subbass']
+        >>> NoteNameSettings(clefs=set()).active_clefs()
+        ['treble']
+        """
+        return [c for c in self.CLEF_ORDER if c in self.clefs] or ["treble"]
+
+
+class KeyChoice:
+    """
+    Settings with a set of chosen key signatures.
+
+    Attributes
+    ----------
+    keys : set of int
+        The chosen key signatures, as sharps (positive) or flats (negative). The dataclass that uses this mixin declares the
+        field and its default.
+
+    Examples
+    --------
+    >>> KeyboardSettings(keys={3, -2}).active_keys()
+    [-2, 3]
+    """
+
+    keys: set[int]
+
+    def active_keys(self) -> list[int]:
+        """
+        Return the key signatures to draw from, lowest first.
+
+        Returns
+        -------
+        list of int
+            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
+
+        Examples
+        --------
+        >>> ConstructionSettings(keys={2, -1}).active_keys()
+        [-1, 2]
+        >>> KeySignatureSettings(keys=set()).active_keys()
+        [0]
+        """
+        return sorted(self.keys) or [0]
+
+
 @dataclass
-class StaffRangeSettings:
+class StaffRangeSettings(ClefChoice):
     """
     Selected clefs and inclusive pitch limits for each staff.
 
@@ -250,6 +329,8 @@ class StaffRangeSettings:
     >>> StaffRangeSettings().active_clefs()
     ['treble', 'bass']
     """
+
+    CLEF_ORDER: ClassVar[tuple[str, ...]] = RANGE_KEYS
 
     clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of RANGE_KEYS, so "grand" is allowed
     _: KW_ONLY
@@ -272,24 +353,6 @@ class StaffRangeSettings:
         ['whole', 'half']
         """
         return [v for v in NOTE_VALUES if v in self.note_values] or ["whole"]
-
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to draw from, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-        ['tenor', 'grand']
-        >>> NoteNameSettings(clefs=set()).active_clefs()
-        ['treble']
-        """
-        return [c for c in RANGE_KEYS if c in self.clefs] or ["treble"]
 
     def range_for(self, clef: str) -> tuple[int, int]:
         """
@@ -354,6 +417,9 @@ class NoteNameSettings(StaffRangeSettings):
     def active_keys(self) -> list[int]:
         """
         Return the key signatures to draw from, lowest first.
+
+        The field is named `key_signatures` rather than `keys`, as in `KeyChoice`, because the name is part of the practice
+        signature that stored questions are matched by; renaming it would orphan every learner's saved questions.
 
         Returns
         -------
@@ -525,7 +591,7 @@ def key_name(midi: int) -> str:
 
 
 @dataclass
-class KeyboardSettings:
+class KeyboardSettings(KeyChoice):
     """
     The settings of the keyboard identification exercise.
 
@@ -568,22 +634,6 @@ class KeyboardSettings:
             3,
         },
     )  # sharps (+) / flats (-) to draw from
-
-    def active_keys(self) -> list[int]:
-        """
-        Return the key signatures to draw from, lowest first.
-
-        Returns
-        -------
-        list of int
-            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-        Examples
-        --------
-        >>> KeyboardSettings().active_keys()
-        [-3, -2, -1, 0, 1, 2, 3]
-        """
-        return sorted(self.keys) or [0]
 
 
 keyboard = KeyboardSettings()
@@ -743,7 +793,7 @@ keyboard_intervals = KeyboardIntervalSettings()
 
 
 @dataclass
-class ConstructionSettings:
+class ConstructionSettings(ClefChoice, KeyChoice):
     """
     The settings of the note construction exercise.
 
@@ -779,6 +829,8 @@ class ConstructionSettings:
     ['grand']
     """
 
+    CLEF_ORDER: ClassVar[tuple[str, ...]] = RANGE_KEYS
+
     clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of RANGE_KEYS, so "grand" is allowed
     _: KW_ONLY
     accidentals: bool = False  # also ask for sharps and flats, which the answer then has to include
@@ -802,38 +854,6 @@ class ConstructionSettings:
     )  # sharps (+) / flats (-) to draw from
 
     minor_keys: set[int] | None = None
-
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to draw from, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> ConstructionSettings().active_clefs()
-        ['treble', 'bass']
-        """
-        return [c for c in RANGE_KEYS if c in self.clefs] or ["treble"]
-
-    def active_keys(self) -> list[int]:
-        """
-        Return the key signatures to draw from, lowest first.
-
-        Returns
-        -------
-        list of int
-            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-        Examples
-        --------
-        >>> ConstructionSettings(keys={3, -2}).active_keys()
-        [-2, 3]
-        """
-        return sorted(self.keys) or [0]
 
 
 construction = ConstructionSettings()
@@ -863,7 +883,7 @@ INVERSIONS = (
 
 
 @dataclass
-class ArpeggioSettings:
+class ArpeggioSettings(ClefChoice, KeyChoice):
     """
     The settings of the arpeggio identification exercise.
 
@@ -909,22 +929,6 @@ class ArpeggioSettings:
             3,
         },
     )  # sharps (+) / flats (-) to draw from
-
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to draw from, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
-        ['alto', 'tenor']
-        """
-        return [c for c in CLEFS if c in self.clefs] or ["treble"]
 
     def active_types(self) -> list[str]:
         """
@@ -986,22 +990,6 @@ class ArpeggioSettings:
         allowed = [i for i in self.active_inversions() if i < (3 if chord_type in ARPEGGIO_TRIADS else 4)]
         return allowed or [0]
 
-    def active_keys(self) -> list[int]:
-        """
-        Return the key signatures to draw from, lowest first.
-
-        Returns
-        -------
-        list of int
-            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-        Examples
-        --------
-        >>> ArpeggioSettings(keys={1}).active_keys()
-        [1]
-        """
-        return sorted(self.keys) or [0]
-
 
 arpeggio = ArpeggioSettings()
 
@@ -1028,7 +1016,7 @@ MODE_LABELS = {
 
 
 @dataclass
-class KeySignatureSettings:
+class KeySignatureSettings(ClefChoice, KeyChoice):
     """
     The settings of the key signature identification exercise.
 
@@ -1053,22 +1041,6 @@ class KeySignatureSettings:
     modes: set[str] = field(default_factory=lambda: {"Major (Ionian)", "Natural minor (Aeolian)"})  # of KEY_MODES
     keys: set[int] = field(default_factory=lambda: set(range(-7, 8)))  # the key signatures asked: sharps (+) / flats (-)
 
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to draw signatures on, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> KeySignatureSettings().active_clefs()
-        ['treble', 'bass']
-        """
-        return [c for c in CLEFS if c in self.clefs] or ["treble"]
-
     def active_modes(self) -> list[str]:
         """
         Return the scales to ask about, in the order of `KEY_MODES`.
@@ -1084,22 +1056,6 @@ class KeySignatureSettings:
         ['Major (Ionian)', 'Natural minor (Aeolian)']
         """
         return [m for m in KEY_MODES if m in self.modes] or ["Major (Ionian)"]
-
-    def active_keys(self) -> list[int]:
-        """
-        Return the key signatures to ask about, lowest first.
-
-        Returns
-        -------
-        list of int
-            Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-        Examples
-        --------
-        >>> KeySignatureSettings(keys={3, -4}).active_keys()
-        [-4, 3]
-        """
-        return sorted(self.keys) or [0]
 
 
 key_signatures = KeySignatureSettings()
@@ -1309,7 +1265,7 @@ CLEF_QUESTION_TYPES = {
 
 
 @dataclass
-class ClefBasicsSettings:
+class ClefBasicsSettings(ClefChoice):
     """
     The settings of the clef basics exercise: what kind of question is asked, and which clefs.
 
@@ -1332,27 +1288,11 @@ class ClefBasicsSettings:
     'construction'
     """
 
+    CLEF_ORDER: ClassVar[tuple[str, ...]] = CLEF_BASICS_CLEFS
+
     _: KW_ONLY
     clefs: set[str] = field(default_factory=lambda: {"treble", "bass"})  # any of CLEF_BASICS_CLEFS: the clefs that are asked for
     question_type: str = "construction"  # a key of CLEF_QUESTION_TYPES
-
-    def active_clefs(self) -> list[str]:
-        """
-        Return the clefs to ask for, in canonical order.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, or the treble clef if none are chosen.
-
-        Examples
-        --------
-        >>> ClefBasicsSettings().active_clefs()
-        ['treble', 'bass']
-        >>> ClefBasicsSettings(clefs=set()).active_clefs()
-        ['treble']
-        """
-        return [c for c in CLEF_BASICS_CLEFS if c in self.clefs] or ["treble"]
 
     def active_type(self) -> str:
         """

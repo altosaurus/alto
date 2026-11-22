@@ -63,6 +63,7 @@ from alto.theory.pitch import (
 )
 from alto.theory.scales import mode_tonic
 from alto.ui import circle as circle_module
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
     GLOW_MS,
@@ -1059,13 +1060,13 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(app: QApplication)
     pane._refresh_summaries()
     assert pane.questions_row.value.text() == "1 of 3"
     settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
-    sp.load_circle()
+    es.load_circle()
     assert settings.circle.questions == {"numeral"}
     store().setValue("circle/questions", "minor,nonsense")
-    sp.load_circle()
+    es.load_circle()
     assert settings.circle.questions == {"minor"}
     store().setValue("circle/questions", "nonsense")
-    sp.load_circle()
+    es.load_circle()
     assert settings.circle.questions == {"minor"}  # nothing usable: what was there stays
     pane.questions_row.click()
     QTest.qWait(300)

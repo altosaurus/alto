@@ -11,8 +11,8 @@ from alto.exercises import REGISTRY
 from alto.exercises.base import ChoiceExercise, Exercise
 from alto.exercises.library import ChordQualities, ClefBasics, KeyboardNotes, NotationIdentification
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_settings import load_choice_buttons
 from alto.ui.exercise_view import ExerciseView
-from alto.ui.settings_panel import load_choice_buttons
 from alto.ui.store import store
 
 

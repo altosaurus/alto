@@ -3,7 +3,7 @@ The settings panels that slide in beside an exercise, and the small widgets they
 
 Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures ...) that each lead to a page. Edits
 are live: they change the shared settings object, are saved, and a `changed` signal tells the exercise to ask a new
-question. This module also loads and saves each exercise's settings.
+question. Loading and saving the settings is in `alto.ui.exercise_settings`.
 
 Examples
 --------
@@ -69,12 +69,9 @@ from alto import settings
 from alto.audio import INSTRUMENT_BY_KEY
 from alto.circle_schemes import (
     DEFAULT_SCHEME,
-    PRESETS,
     CustomRecord,
-    dump_customs,
-    load_customs,
 )
-from alto.exercises.base import REGISTRY, ButtonSettings, ChoiceExercise, Exercise
+from alto.exercises.base import ButtonSettings, ChoiceExercise, Exercise
 from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
@@ -98,9 +95,6 @@ from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.notation_terms import CATALOG
 from alto.settings import (
     CLEFS,
-    DEFAULT_RANGES,
-    MAX_DIATONIC,
-    MIN_DIATONIC,
     NAMINGS,
     NOTE_VALUES,
     RANGE_LIMITS,
@@ -122,6 +116,17 @@ from alto.ui.circle_colors import (
 from alto.ui.colors import blend
 from alto.ui.degree_text import DegreeCheckBox, degree_tooltip
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_settings import (
+    save_arpeggio,
+    save_circle,
+    save_construction,
+    save_key_settings,
+    save_keyboard,
+    save_keyboard_intervals,
+    save_note_names,
+    save_pack_options,
+    saved_notation_terms,
+)
 from alto.ui.interval_range import IntervalRangeSlider
 from alto.ui.keyboard import KeyboardSpan
 from alto.ui.pictures import (
@@ -137,85 +142,10 @@ from alto.ui.pictures import (
 from alto.ui.practice_limits import DailyLimitsEditor
 from alto.ui.staff import StaffWidget
 from alto.ui.store import (
-    int_value,
     store,
     text_value,
 )
 from alto.ui.zoom import css, px
-
-
-def load_note_names() -> None:
-    """
-    Load the saved note identification settings into the shared settings object.
-
-    Settings saved by an older version, which had a switch between the grand staff and single clefs, are converted. Anything
-    in the saved data that is not valid is ignored.
-
-    Examples
-    --------
-    >>> cfg_ = settings.note_names
-    >>> cfg_.clefs = {"alto"}
-    >>> save_note_names()
-    >>> cfg_.clefs = {"treble"}
-    >>> load_note_names()
-    >>> cfg_.clefs
-    {'alto'}
-    >>> cfg_.clefs = {"treble", "bass"}
-    >>> save_note_names()
-    """
-    s = store()
-    cfg = settings.note_names
-    saved = s.value("noteNames/clefs")
-    if saved is not None:
-        text = saved if isinstance(saved, str) else ",".join(saved)
-        cfg.clefs = {c for c in text.split(",") if c in settings.RANGE_KEYS}
-    if s.value("noteNames/mode") == "grand":  # an older version had a switch between the grand staff and single clefs
-        cfg.clefs = {"grand"}
-    s.remove("noteNames/mode")
-    keys = text_value(s, key="noteNames/keys", default="")
-    if keys:
-        cfg.key_signatures = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or {0}
-    values = text_value(s, key="noteNames/values", default="")
-    if values:
-        cfg.note_values = {v for v in values.split(",") if v in NOTE_VALUES} or {"whole"}
-    naming = text_value(s, key="noteNames/naming", default=cfg.naming)
-    cfg.naming = naming if naming in NAMINGS else "letters"
-    cfg.accidentals = text_value(s, key="noteNames/accidentals", default="false").lower() == "true"
-    cfg.require_octave = text_value(s, key="noteNames/requireOctave", default="false").lower() == "true"
-    cfg.ranges = {}
-    for item in text_value(s, key="noteNames/ranges", default="").split(","):  # e.g. "treble:31-33,bass:14-28"
-        try:
-            key, span = item.split(":")
-            lo, hi = (int(x) for x in span.split("-"))
-        except ValueError:
-            continue
-        if key in DEFAULT_RANGES and MIN_DIATONIC <= lo <= hi <= MAX_DIATONIC:
-            cfg.ranges[key] = (lo, hi)
-
-
-def save_note_names() -> None:
-    """
-    Save the note identification settings.
-
-    Examples
-    --------
-    >>> cfg_ = settings.note_names
-    >>> cfg_.naming = "solfege"
-    >>> save_note_names()
-    >>> str(store().value("noteNames/naming"))
-    'solfege'
-    >>> cfg_.naming = "letters"
-    >>> save_note_names()
-    """
-    s = store()
-    cfg = settings.note_names
-    s.setValue("noteNames/clefs", ",".join(c for c in settings.RANGE_KEYS if c in cfg.clefs))
-    s.setValue("noteNames/keys", ",".join(str(k) for k in cfg.active_keys()))
-    s.setValue("noteNames/values", ",".join(cfg.active_values()))
-    s.setValue("noteNames/naming", cfg.naming)
-    s.setValue("noteNames/accidentals", "true" if cfg.accidentals else "false")
-    s.setValue("noteNames/requireOctave", "true" if cfg.require_octave else "false")
-    s.setValue("noteNames/ranges", ",".join(f"{k}:{lo}-{hi}" for k, (lo, hi) in cfg.ranges.items()))
 
 
 def _guard_last(
@@ -2113,122 +2043,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         self._save_and_emit()
 
 
-def load_keyboard() -> None:
-    """
-    Load the saved keyboard exercise settings into the shared settings object.
-
-    A saved range that is not a valid span of keys, or a key list with nothing usable in it, is ignored.
-
-    Examples
-    --------
-    >>> cfg_ = settings.keyboard
-    >>> cfg_.require_octave = True
-    >>> save_keyboard()
-    >>> cfg_.require_octave = False
-    >>> load_keyboard()
-    >>> cfg_.require_octave
-    True
-    >>> cfg_.require_octave = False
-    >>> save_keyboard()
-    """
-    saved_settings = store()
-    cfg = settings.keyboard
-    cfg.black_keys = text_value(saved_settings, key="keyboard/blackKeys", default="true").lower() != "false"
-    cfg.require_octave = text_value(saved_settings, key="keyboard/requireOctave", default="false").lower() == "true"
-    try:
-        low = int_value(saved_settings, key="keyboard/low", default=cfg.low)
-        high = int_value(saved_settings, key="keyboard/high", default=cfg.high)
-    except (TypeError, ValueError):
-        return
-    first, last = settings.KEYBOARD_FULL
-    if first <= low <= high <= last:
-        cfg.low, cfg.high = low, high
-    cfg.key_signature = text_value(saved_settings, key="keyboard/keySignature", default="false").lower() == "true"
-    keys = text_value(saved_settings, key="keyboard/keys", default="")
-    if keys:
-        cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
-
-
-def save_keyboard() -> None:
-    """
-    Save the keyboard exercise settings.
-
-    Examples
-    --------
-    >>> cfg_ = settings.keyboard
-    >>> save_keyboard()
-    >>> int(store().value("keyboard/low")) == cfg_.low
-    True
-    """
-    saved_settings = store()
-    cfg = settings.keyboard
-    saved_settings.setValue("keyboard/blackKeys", "true" if cfg.black_keys else "false")
-    saved_settings.setValue("keyboard/requireOctave", "true" if cfg.require_octave else "false")
-    saved_settings.setValue("keyboard/low", cfg.low)
-    saved_settings.setValue("keyboard/high", cfg.high)
-    saved_settings.setValue("keyboard/keySignature", "true" if cfg.key_signature else "false")
-    saved_settings.setValue("keyboard/keys", ",".join(str(k) for k in cfg.active_keys()))
-
-
-def load_keyboard_intervals() -> None:
-    """
-    Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.
-
-    Examples
-    --------
-    >>> load_keyboard_intervals()
-    >>> settings.keyboard_intervals.bounds()[0] < settings.keyboard_intervals.bounds()[1]
-    True
-    """
-    saved = store()
-    cfg = settings.keyboard_intervals
-    defaults = settings.KeyboardIntervalSettings()
-    try:
-        low = int_value(saved, key="keyboardIntervals/low", default=defaults.low)
-        high = int_value(saved, key="keyboardIntervals/high", default=defaults.high)
-    except (TypeError, ValueError):
-        low, high = defaults.bounds()
-    first, last = settings.KEYBOARD_FULL
-    cfg.low, cfg.high = (low, high) if first <= low < high <= last else defaults.bounds()
-    selected = text_value(saved, key="keyboardIntervals/intervals", default=",".join(str(n) for n in range(1, 13)))
-    cfg.intervals = {int(value) for value in selected.split(",") if value.isdecimal() and 1 <= int(value) <= last - first}
-    if not cfg.intervals and selected.strip():
-        cfg.intervals = {1}
-    cfg.intervals = set(cfg.active_intervals())
-    cfg.compact_buttons = text_value(saved, key="keyboardIntervals/compactButtons", default="false").lower() == "true"
-    cfg.all_interval_buttons = text_value(saved, key="keyboardIntervals/allButtons", default="false").lower() == "true"
-    try:
-        cfg.button_count = int_value(saved, key="keyboardIntervals/buttonCount", default=6)
-    except (TypeError, ValueError):
-        cfg.button_count = 6
-    cfg.button_count = cfg.answer_button_limit()
-
-
-def save_keyboard_intervals(cfg: settings.KeyboardIntervalSettings) -> None:
-    """
-    Save the keyboard interval range and selected distances.
-
-    Parameters
-    ----------
-    cfg : KeyboardIntervalSettings
-        The settings to save.
-
-    Examples
-    --------
-    >>> save_keyboard_intervals(settings.KeyboardIntervalSettings())
-    >>> int(store().value("keyboardIntervals/low"))
-    48
-    """
-    saved = store()
-    low, high = cfg.bounds()
-    saved.setValue("keyboardIntervals/low", low)
-    saved.setValue("keyboardIntervals/high", high)
-    saved.setValue("keyboardIntervals/intervals", ",".join(str(n) for n in cfg.active_intervals()))
-    saved.setValue("keyboardIntervals/compactButtons", "true" if cfg.compact_buttons else "false")
-    saved.setValue("keyboardIntervals/allButtons", "true" if cfg.all_interval_buttons else "false")
-    saved.setValue("keyboardIntervals/buttonCount", cfg.answer_button_limit())
-
-
 class _LabeledKeyCheckBox(QCheckBox):
     """
     Keep the signature and its separate label in the same click target.
@@ -2887,47 +2701,6 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         self.changed.emit()
 
 
-def load_construction() -> None:
-    """
-    Load the saved note construction settings into the shared settings object.
-
-    Examples
-    --------
-    >>> store().setValue("construction/accidentals", "true")
-    >>> load_construction()
-    >>> settings.construction.accidentals
-    False
-    """
-    saved_settings = store()
-    cfg = settings.construction
-    saved = saved_settings.value("construction/clefs")
-    if saved is not None:
-        text = saved if isinstance(saved, str) else ",".join(saved)
-        cfg.clefs = {c for c in text.split(",") if c in settings.RANGE_KEYS} or cfg.clefs
-    cfg.question_type = (
-        "notes" if text_value(saved_settings, key="construction/questionType", default="scale") == "notes" else "scale"
-    )
-    degrees = text_value(saved_settings, key="construction/degrees", default="")
-    cfg.degrees = {n for n in range(1, 8) if str(n) in degrees.split(",")} or set(range(1, 8))
-    cfg.octave = text_value(saved_settings, key="construction/octave", default="true").lower() == "true"
-    cfg.accidentals = False  # ignore the retired setting in existing profiles
-    mode = text_value(saved_settings, key="construction/keyMode", default="major")
-    cfg.major = mode != "minor"
-    cfg.minor = mode in {"minor", "both"}
-    staff_keys = text_value(saved_settings, key="construction/staffKeys", default="0")
-    cfg.staff_keys = {int(k) for k in staff_keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or {0}
-    cfg.key_signature = True
-    used_signatures = text_value(saved_settings, key="construction/keySignature", default="false").lower() == "true"
-    keys = text_value(saved_settings, key="construction/keys", default="")
-    if keys:
-        cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
-    minor_keys = text_value(saved_settings, key="construction/minorKeys", default="")
-    cfg.minor_keys = {int(k) for k in minor_keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or None
-    if not used_signatures:
-        cfg.keys = {0}
-        cfg.minor_keys = {0}
-
-
 class _ScaleKeyPicker(QTabWidget):
     """
     Select major and minor keys independently.
@@ -3168,17 +2941,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
         >>> panel._save_and_emit()
         """
-        saved_settings = store()
-        cfg = self.cfg
-        saved_settings.setValue("construction/clefs", ",".join(c for c in settings.RANGE_KEYS if c in cfg.clefs))
-        saved_settings.setValue("construction/keySignature", "true")
-        saved_settings.setValue("construction/questionType", cfg.question_type)
-        saved_settings.setValue("construction/degrees", ",".join(str(n) for n in sorted(cfg.degrees)))
-        saved_settings.setValue("construction/octave", "true" if cfg.octave else "false")
-        saved_settings.setValue("construction/staffKeys", ",".join(str(k) for k in sorted(cfg.staff_keys or {0})))
-        saved_settings.setValue("construction/keyMode", ("both" if cfg.major else "minor") if cfg.minor else "major")
-        saved_settings.setValue("construction/keys", ",".join(str(k) for k in cfg.active_keys()))
-        saved_settings.setValue("construction/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys or cfg.keys)))
+        save_construction(self.cfg)
         self.changed.emit()
 
     def _degrees_edited(self) -> None:
@@ -3301,39 +3064,6 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
             self.cfg.minor_keys = minor_keys
         self._show_keys()
         self._save_and_emit()
-
-
-def load_arpeggio() -> None:
-    """
-    Load the saved arpeggio settings into the shared settings object.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
-
-    Examples
-    --------
-    >>> store().setValue("arpeggio/types", "major")
-    >>> load_arpeggio()
-    >>> settings.arpeggio.types
-    {'major'}
-    >>> settings.arpeggio.types = {"major", "minor", "dominant 7th", "diminished 7th"}
-    >>> store().setValue("arpeggio/types", ",".join(settings.arpeggio.active_types()))
-    """
-    saved_settings = store()
-    cfg = settings.arpeggio
-    clefs = text_value(saved_settings, key="arpeggio/clefs", default="")
-    if clefs:
-        cfg.clefs = {c for c in clefs.split(",") if c in CLEFS} or cfg.clefs
-    types = text_value(saved_settings, key="arpeggio/types", default="")
-    if types:
-        cfg.types = {t for t in types.split(",") if t in settings.ARPEGGIO_TYPES} or cfg.types
-    inversions = text_value(saved_settings, key="arpeggio/inversions", default="")
-    if inversions:
-        found = {int(i) for i in inversions.split(",") if i.isdigit() and int(i) in settings.INVERSIONS}
-        cfg.inversions = found or cfg.inversions
-    cfg.key_signature = text_value(saved_settings, key="arpeggio/keySignature", default="false").lower() == "true"
-    keys = text_value(saved_settings, key="arpeggio/keys", default="")
-    if keys:
-        cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
 
 
 class ChoiceChecklist(QWidget):
@@ -3587,64 +3317,6 @@ def _direction_choices(
         radio.toggled.connect(lambda checked, value=direction: select(value) if checked else None)
 
     return body
-
-
-def load_intervals(cfg: settings.IntervalSettings | None = None, *, prefix: str = "intervals") -> None:
-    """
-    Restore the saved staff interval options, keeping valid choices and per-clef ranges.
-
-    Parameters
-    ----------
-    cfg : IntervalSettings or None
-        Settings to populate. Defaults to Interval Identification.
-    prefix : str
-        Independent settings-store group for the exercise.
-
-    Examples
-    --------
-    >>> load_intervals()
-    >>> bool(settings.intervals.active_clefs())
-    True
-    """
-    saved = store()
-    cfg = settings.intervals if cfg is None else cfg
-    defaults = settings.IntervalSettings()
-    cfg.clefs = (
-        set(text_value(saved, key=f"{prefix}/clefs", default="treble,bass").split(",")) & set(settings.RANGE_KEYS)
-        or defaults.clefs
-    )
-    values = text_value(saved, key=f"{prefix}/values", default="whole")
-    cfg.note_values = set(values.split(",")) & set(NOTE_VALUES) or {"whole"}
-    cfg.displays = (
-        set(text_value(saved, key=f"{prefix}/display", default="").split(",")) & set(settings.INTERVAL_DISPLAYS)
-        or defaults.displays
-    )
-    directions = text_value(saved, key=f"{prefix}/direction", default="").split(",")
-    cfg.directions = set(directions).intersection(settings.MELODIC_DIRECTIONS) or defaults.directions
-    quality = text_value(saved, key=f"{prefix}/quality", default=defaults.quality_mode)
-    if quality == "false":  # Older versions saved the Quality switch as "true" or "false".
-        quality = "interval"
-    cfg.quality_mode = quality if quality in settings.INTERVAL_QUALITY_MODES else defaults.quality_mode
-    if prefix == "intervals":
-        cfg.inversions = text_value(saved, key=f"{prefix}/inversions", default="false").lower() == "true"
-    cfg.button_mode = "all" if text_value(saved, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
-    try:
-        cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/buttonCount", default=6)))
-    except ValueError:
-        cfg.button_count = defaults.button_count
-    keys = text_value(saved, key=f"{prefix}/staffKeys", default="0").split(",")
-    cfg.staff_keys = {key for key in range(-7, 8) if str(key) in keys} or {0}
-    signs = text_value(saved, key=f"{prefix}/accidentals", default="").split(",")
-    cfg.accidentals = {sign for sign in settings.INTERVAL_ACCIDENTALS if str(sign) in signs} or defaults.accidentals
-    names = text_value(saved, key=f"{prefix}/intervals", default=",".join(defaults.intervals))
-    cfg.intervals = set(names.split(",")) & settings.WRITTEN_INTERVALS.keys()
-    cfg.ranges = {}
-    for clef, (minimum, maximum) in RANGE_LIMITS.items():
-        bounds = text_value(saved, key=f"{prefix}/range/{clef}", default="").split(",")
-        if len(bounds) == 2 and all(value.isdecimal() for value in bounds):
-            low, high = map(int, bounds)
-            if minimum <= low <= high <= maximum:
-                cfg.ranges[clef] = (low, high)
 
 
 class IntervalSettingsPanel(_StaffRangePanel):
@@ -4685,13 +4357,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         'tenor'
         >>> store().setValue("arpeggio/clefs", "treble,bass")
         """
-        saved_settings = store()
-        cfg = self.cfg
-        saved_settings.setValue("arpeggio/clefs", ",".join(cfg.active_clefs()))
-        saved_settings.setValue("arpeggio/types", ",".join(cfg.active_types()))
-        saved_settings.setValue("arpeggio/inversions", ",".join(str(i) for i in cfg.active_inversions()))
-        saved_settings.setValue("arpeggio/keySignature", "true" if cfg.key_signature else "false")
-        saved_settings.setValue("arpeggio/keys", ",".join(str(k) for k in cfg.active_keys()))
+        save_arpeggio(self.cfg)
         self.changed.emit()
 
     def _clefs_edited(self) -> None:
@@ -4764,158 +4430,6 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
             keys=set(self.cfg.active_keys()),
         )
         self._save_and_emit()
-
-
-def _load_key_settings(
-    cfg: settings.KeySignatureSettings,
-    *,
-    prefix: str,
-) -> None:
-    """
-    Load the saved clefs, scales and key signatures of a key exercise into its settings.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
-
-    Parameters
-    ----------
-    cfg : KeySignatureSettings
-        The settings to fill.
-    prefix : str
-        What the exercise's saved settings are filed under, such as "keySignatures". Keyword-only.
-
-    Examples
-    --------
-    >>> loaded = settings.KeySignatureSettings()
-    >>> store().setValue("doctestKeys/keys", "-2,5,99")
-    >>> _load_key_settings(loaded, prefix="doctestKeys")
-    >>> sorted(loaded.keys)
-    [-2, 5]
-    >>> store().remove("doctestKeys")
-    """
-    saved_settings = store()
-    clefs = text_value(saved_settings, key=f"{prefix}/clefs", default="")
-    if clefs:
-        cfg.clefs = {c for c in clefs.split(",") if c in CLEFS} or cfg.clefs
-    modes = text_value(saved_settings, key=f"{prefix}/modes", default="")
-    if modes:
-        cfg.modes = {m for m in modes.split("|") if m in settings.KEY_MODES} or cfg.modes
-    keys = text_value(saved_settings, key=f"{prefix}/keys", default="")
-    if keys:
-        cfg.keys = {int(k) for k in keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7} or cfg.keys
-    if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
-        minor_key = f"{prefix}/minorKeys"
-        if saved_settings.contains(minor_key):
-            cfg.minor_keys = {
-                int(k)
-                for k in text_value(saved_settings, key=minor_key, default="").split(",")
-                if k.lstrip("-").isdigit() and abs(int(k)) <= 7
-            }
-            if saved_settings.contains(f"{prefix}/keys") and not keys and cfg.minor_keys:
-                cfg.keys = set()
-        else:
-            cfg.minor_keys = None
-    if isinstance(cfg, settings.ScaleConstructionSettings):
-        cfg.steps = text_value(saved_settings, key=f"{prefix}/steps", default="false").lower() == "true"
-        cfg.octave = text_value(saved_settings, key=f"{prefix}/octave", default="false").lower() == "true"
-    if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
-        if isinstance(cfg, settings.ScaleIdentificationSettings):
-            question_type = text_value(saved_settings, key=f"{prefix}/questionType", default="combined")
-            cfg.question_type = question_type if question_type in {"mode", "key"} else "combined"
-            cfg.button_mode = (
-                "all" if text_value(saved_settings, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
-            )
-            cfg.button_count = max(2, min(10, int_value(saved_settings, key=f"{prefix}/buttonCount", default=6)))
-        motion = text_value(saved_settings, key=f"{prefix}/motion", default="ascending")
-        cfg.motion = motion if motion in {"ascending", "descending"} else "ascending"
-        staff_keys = text_value(saved_settings, key=f"{prefix}/staffKeys", default="")
-        if staff_keys:
-            cfg.staff_keys = {
-                int(k) for k in staff_keys.split(",") if k.lstrip("-").isdigit() and abs(int(k)) <= 7
-            } or cfg.staff_keys
-
-
-def load_key_signatures() -> None:
-    """
-    Load the saved key signature identification settings into the shared settings object.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
-
-    Examples
-    --------
-    >>> store().setValue("keySignatures/clefs", "alto")
-    >>> load_key_signatures()
-    >>> settings.key_signatures.clefs
-    {'alto'}
-    >>> settings.key_signatures.clefs = {"treble", "bass"}
-    >>> store().setValue("keySignatures/clefs", "treble,bass")
-    """
-    _load_key_settings(settings.key_signatures, prefix="keySignatures")
-
-
-def load_key_construction() -> None:
-    """
-    Load the saved key signature construction settings into the shared settings object.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
-
-    Examples
-    --------
-    >>> store().setValue("keyConstruction/keys", "-3,4")
-    >>> load_key_construction()
-    >>> settings.key_construction.active_keys()
-    [-3, 4]
-    >>> settings.key_construction.keys = set(range(-7, 8))
-    >>> store().remove("keyConstruction")
-    """
-    _load_key_settings(settings.key_construction, prefix="keyConstruction")
-
-
-def load_order_of_keys() -> None:
-    """
-    Restore the clefs, scales, and key signatures selected for Order of Keys.
-
-    Examples
-    --------
-    >>> load_order_of_keys()
-    """
-    cfg = settings.order_of_keys
-    _load_key_settings(cfg, prefix="orderOfKeys")
-    saved = text_value(store(), key="orderOfKeys/startingAccidentals", default="0").split(",")
-    cfg.starting_accidentals = {n for n in cfg.available_starts() if str(n) in saved} or {0}
-
-
-def load_scale_identification() -> None:
-    """
-    Load the saved scale identification options independently of scale construction.
-
-    Examples
-    --------
-    >>> load_scale_identification()
-    >>> settings.scale_identification.active_staff_keys()
-    [0]
-    """
-    _load_key_settings(settings.scale_identification, prefix="scaleIdentification")
-
-
-def load_scale_construction() -> None:
-    """
-    Load the saved scale construction settings into the shared settings object.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.
-
-    Examples
-    --------
-    >>> store().setValue("scaleConstruction/keys", "1,-1")
-    >>> store().setValue("scaleConstruction/steps", "true")
-    >>> store().setValue("scaleConstruction/octave", "true")
-    >>> load_scale_construction()
-    >>> settings.scale_construction.active_keys(), settings.scale_construction.steps, settings.scale_construction.octave
-    ([-1, 1], True, True)
-    >>> settings.scale_construction.keys, settings.scale_construction.steps = set(range(-7, 8)), False
-    >>> settings.scale_construction.octave = False
-    >>> store().remove("scaleConstruction")
-    """
-    _load_key_settings(settings.scale_construction, prefix="scaleConstruction")
 
 
 class KeySignatureSettingsPanel(ExerciseSettingsPanel):
@@ -5246,30 +4760,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         'alto'
         >>> store().setValue("keySignatures/clefs", "treble,bass")
         """
-        saved_settings = store()
-        cfg = self.cfg
-        saved_settings.setValue(f"{self.prefix}/clefs", ",".join(cfg.active_clefs()))
-        saved_settings.setValue(f"{self.prefix}/modes", "|".join(cfg.active_modes()))
-        keys = cfg.active_keys()
-        if (
-            isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings))
-            and cfg.minor_keys is not None
-        ):
-            keys = sorted(cfg.keys)
-            saved_settings.setValue(f"{self.prefix}/minorKeys", ",".join(str(k) for k in sorted(cfg.minor_keys)))
-        saved_settings.setValue(f"{self.prefix}/keys", ",".join(str(k) for k in keys))
-        if isinstance(cfg, settings.OrderOfKeysSettings):
-            saved_settings.setValue(f"{self.prefix}/startingAccidentals", ",".join(map(str, sorted(cfg.starting_accidentals))))
-        if isinstance(cfg, settings.ScaleConstructionSettings):
-            saved_settings.setValue(f"{self.prefix}/steps", "true" if cfg.steps else "false")
-            saved_settings.setValue(f"{self.prefix}/octave", "true" if cfg.octave else "false")
-        if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
-            saved_settings.setValue(f"{self.prefix}/motion", cfg.motion)
-            saved_settings.setValue(f"{self.prefix}/staffKeys", ",".join(str(k) for k in cfg.active_staff_keys()))
-        if isinstance(cfg, settings.ScaleIdentificationSettings):
-            saved_settings.setValue(f"{self.prefix}/questionType", cfg.question_type)
-            saved_settings.setValue(f"{self.prefix}/buttonMode", cfg.button_mode)
-            saved_settings.setValue(f"{self.prefix}/buttonCount", cfg.button_count)
+        save_key_settings(self.cfg, prefix=self.prefix)
         self.changed.emit()
 
     def _clefs_edited(self) -> None:
@@ -5389,39 +4880,6 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
-def _saved_notation_terms() -> set[str]:
-    """
-    Read the last nonempty selection of notation terms.
-
-    Returns
-    -------
-    set of str
-        The saved terms that still exist, or all terms for a new profile.
-
-    Examples
-    --------
-    Switching Select none off restores these checkboxes.
-    """
-    saved = text_value(store(), key="notationIdentification/terms", default="")
-    return set(settings.NOTATION_TERMS).intersection(saved.split(",")) or set(settings.NOTATION_TERMS)
-
-
-def load_notation_terms() -> None:
-    """
-    Restore the question type and term selection, defaulting to Answer Button and all terms.
-
-    Examples
-    --------
-    >>> load_notation_terms()
-    >>> bool(settings.notation.terms)
-    True
-    """
-    kind = text_value(store(), key="notationIdentification/questionType", default="button")
-    settings.notation.question_type = kind if kind in settings.NOTATION_QUESTION_TYPES else "button"
-    none = text_value(store(), key="notationIdentification/selectNone", default="false").lower() == "true"
-    settings.notation.terms = set() if none else _saved_notation_terms()
-
-
 class NotationSettingsPanel(ExerciseSettingsPanel):
     """
     Choose the question type and the notation terms to practice.
@@ -5475,7 +4933,7 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         terms_layout = QVBoxLayout(terms_body)
         terms_layout.setContentsMargins(0, 0, 0, 0)
         self.select_none = _ToggleRow("Select none")
-        self.select_none.switched.connect(lambda on: self._set_terms(set() if on else _saved_notation_terms()))
+        self.select_none.switched.connect(lambda on: self._set_terms(set() if on else saved_notation_terms()))
         terms_layout.addWidget(self.select_none)
         self.group_picker = FieldComboBox()
         self.group_picker.setAccessibleName("Notation term group")
@@ -5564,33 +5022,6 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         settings.notation.terms = selected
         self._refresh_summaries()
         self.changed.emit()
-
-
-def load_clef_basics() -> None:
-    """
-    Load the saved clef basics settings into the shared settings object.
-
-    Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
-    setting as it was.
-
-    Examples
-    --------
-    >>> store().setValue("clefBasics/clefs", "alto,subbass,flute")
-    >>> store().setValue("clefBasics/type", "identification")
-    >>> load_clef_basics()
-    >>> settings.clef_basics.active_clefs(), settings.clef_basics.question_type
-    (['alto', 'subbass'], 'identification')
-    >>> settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
-    >>> store().remove("clefBasics")
-    """
-    clefs = text_value(store(), key="clefBasics/clefs", default="")
-    if clefs:
-        settings.clef_basics.clefs = {
-            c for c in clefs.split(",") if c in settings.CLEF_BASICS_CLEFS
-        } or settings.clef_basics.clefs
-    kind = text_value(store(), key="clefBasics/type", default="")
-    if kind in settings.CLEF_QUESTION_TYPES:
-        settings.clef_basics.question_type = kind
 
 
 class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
@@ -5797,40 +5228,6 @@ def settings_inversion_names() -> tuple[str, ...]:
     return tuple(n.capitalize() for n in INVERSION_NAMES)
 
 
-def load_circle() -> None:
-    """
-    Load the saved circle of fifths settings into the shared settings object.
-
-    Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-    saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.
-
-    Examples
-    --------
-    >>> store().setValue("circle/questions", "numeral,nonsense")
-    >>> store().setValue("circle/scheme", "midnight")
-    >>> load_circle()
-    >>> settings.circle.questions, settings.circle.scheme
-    ({'numeral'}, 'midnight')
-    >>> settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
-    >>> settings.circle.scheme = DEFAULT_SCHEME
-    >>> store().remove("circle")
-    """
-    saved_settings = store()
-    questions = text_value(saved_settings, key="circle/questions", default="")
-    if questions:
-        settings.circle.questions = {
-            q for q in questions.split(",") if q in settings.CIRCLE_QUESTIONS
-        } or settings.circle.questions
-    settings.circle.customs = load_customs(text_value(saved_settings, key="circle/customSchemes", default="[]"))
-    wanted = text_value(saved_settings, key="circle/scheme", default=DEFAULT_SCHEME)
-    if wanted == "colour-blind":  # Migrate the preset key saved by earlier versions.
-        wanted = "color-blind"
-    elif wanted == "chequer":
-        wanted = "checker"
-    known = set(PRESETS) | {record["id"] for record in settings.circle.customs}
-    settings.circle.scheme = wanted if wanted in known else DEFAULT_SCHEME
-
-
 def _scrolling(body: QWidget) -> QScrollArea:
     """
     Put a page's body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.
@@ -5862,28 +5259,6 @@ def _scrolling(body: QWidget) -> QScrollArea:
     scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
     scroll.setMinimumHeight(0)
     return scroll
-
-
-def save_circle(cfg: settings.CircleSettings) -> None:
-    """
-    Save the circle of fifths settings.
-
-    Parameters
-    ----------
-    cfg : CircleSettings
-        The settings to save.
-
-    Examples
-    --------
-    >>> save_circle(settings.CircleSettings(scheme="ink"))
-    >>> store().value("circle/scheme")
-    'ink'
-    >>> store().remove("circle")
-    """
-    saved_settings = store()
-    saved_settings.setValue("circle/questions", ",".join(cfg.active_questions()))
-    saved_settings.setValue("circle/scheme", cfg.scheme)
-    saved_settings.setValue("circle/customSchemes", dump_customs(cfg.customs))
 
 
 class CircleSettingsPanel(ExerciseSettingsPanel):
@@ -6179,77 +5554,6 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
 
 
 COMMIT_DELAY_MS = 150  # how long a drag must pause before its range is saved and a new question is asked
-
-
-def load_pack_options() -> None:
-    """
-    Restore the options learners chose for each plugin exercise that offers settings.
-
-    Anything in the saved data that is not valid is ignored.
-
-    Examples
-    --------
-    >>> load_pack_options()
-    """
-    saved = store()
-    for cls in REGISTRY:
-        if not issubclass(cls, PackExercise) or not cls.controls:
-            continue
-        chosen = cls.options()
-        prefix = f"packExercises/{cls.__name__}"
-        picked = text_value(saved, key=f"{prefix}/sound", default="")
-        # An old "true" or "false", or a sound that is no longer installed, means the plugin's own.
-        chosen.sound = picked if picked in INSTRUMENT_BY_KEY else None
-        chosen.accidentals = text_value(saved, key=f"{prefix}/accidentals", default="false").lower() == "true"
-        chosen.require_octave = text_value(saved, key=f"{prefix}/octave", default="false").lower() == "true"
-        if cls.range_clef:
-            low, high = cls.span
-            try:
-                first, last = (int(part) for part in text_value(saved, key=f"{prefix}/range", default="").split("-"))
-            except ValueError:
-                first, last = low, high
-            chosen.ranges[cls.range_clef] = (first, last) if low <= first <= last <= high else (low, high)
-        if cls.spec.get("type") == "keyboard-intervals":
-            chosen.keys = None
-            try:
-                first, last = (int(part) for part in text_value(saved, key=f"{prefix}/keys", default="").split("-"))
-            except ValueError:
-                pass
-            else:
-                if cls.key_span[0] <= first < last <= cls.key_span[1]:
-                    chosen.keys = (first, last)
-            names = frozenset(text_value(saved, key=f"{prefix}/intervals", default="").split(",")) & set(cls.interval_names)
-            chosen.intervals = names or None
-            boards = frozenset(text_value(saved, key=f"{prefix}/manuals", default="").split("|")) & set(cls.manual_names)
-            chosen.manuals = boards or None
-
-
-def save_pack_options(name: str) -> None:
-    """
-    Save the options chosen for one plugin exercise.
-
-    Parameters
-    ----------
-    name : str
-        The exercise's class name.
-
-    Examples
-    --------
-    >>> save_pack_options("pack.nothing.here")
-    """
-    chosen = settings.pack_exercises.get(name)
-    if chosen is None:
-        return
-    saved = store()
-    prefix = f"packExercises/{name}"
-    saved.setValue(f"{prefix}/sound", chosen.sound or "")
-    saved.setValue(f"{prefix}/accidentals", "true" if chosen.accidentals else "false")
-    saved.setValue(f"{prefix}/octave", "true" if chosen.require_octave else "false")
-    for low, high in chosen.ranges.values():
-        saved.setValue(f"{prefix}/range", f"{low}-{high}")
-    saved.setValue(f"{prefix}/keys", "" if chosen.keys is None else f"{chosen.keys[0]}-{chosen.keys[1]}")
-    saved.setValue(f"{prefix}/intervals", "" if chosen.intervals is None else ",".join(sorted(chosen.intervals)))
-    saved.setValue(f"{prefix}/manuals", "" if chosen.manuals is None else "|".join(sorted(chosen.manuals)))
 
 
 def _pack_sound_page(
@@ -7142,58 +6446,6 @@ class PackKeyboardSettingsPanel(ExerciseSettingsPanel):
         """
         self.flush()
         super().hideEvent(event)
-
-
-def load_choice_buttons() -> None:
-    """
-    Restore the independent button preferences for each multiple-choice exercise.
-
-    Examples
-    --------
-    >>> load_choice_buttons()
-    >>> NoteNames.button_settings().button_mode in {"all", "limited"}
-    True
-    """
-    saved = store()
-    for cls in REGISTRY:
-        if not issubclass(cls, ChoiceExercise):
-            continue
-        cfg = cls.button_settings()
-        prefix = f"answerButtons/{cls.__name__}"
-        mode = "limited" if cls.default_limit else "all"
-        value = text_value(saved, key=f"{prefix}/mode", default=mode)
-        cfg.button_mode = value if value in ("all", "limited") else mode
-        try:
-            cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/count", default=cls.default_limit or 6)))
-        except ValueError:
-            cfg.button_count = cls.default_limit or 6
-
-
-def load_exercise_settings() -> None:
-    """
-    Load the saved exercise options before creating a practice or export settings panel.
-
-    Examples
-    --------
-    >>> load_exercise_settings()
-    """
-    load_choice_buttons()
-    load_note_names()
-    load_intervals()
-    load_intervals(settings.interval_construction, prefix="intervalConstruction")
-    load_keyboard()
-    load_keyboard_intervals()
-    load_construction()
-    load_arpeggio()
-    load_key_signatures()
-    load_key_construction()
-    load_order_of_keys()
-    load_circle()
-    load_clef_basics()
-    load_notation_terms()
-    load_pack_options()
-    load_scale_construction()
-    load_scale_identification()
 
 
 def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) -> ExerciseSettingsPanel:

@@ -22,11 +22,12 @@ from alto.learning.stats import describe
 from alto.notation_excerpts import excerpts
 from alto.notation_terms import CATALOG, MARKS, SIMILAR_MARKS
 from alto.ui.engraving import notation_glyph
+from alto.ui.exercise_settings import load_notation_terms
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.notation import BY_KEY, STYLES
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.score_excerpt import score_artwork
-from alto.ui.settings_panel import NotationSettingsPanel, load_notation_terms
+from alto.ui.settings_panel import NotationSettingsPanel
 from alto.ui.staff import StaffWidget
 
 if TYPE_CHECKING:

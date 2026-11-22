@@ -25,7 +25,7 @@ Alto: a music theory trainer that learns what you find hard and asks it more oft
 | [alto.notation_terms](alto.notation_terms/) | Notation Identification terms, grouped by subject with their score placement and SMuFL code points. |
 | [alto.plugin_registry](alto.plugin_registry/) | Install registered instrument packs from the latest release in their public GitHub repositories. |
 | [alto.selfupdate](alto.selfupdate/) | Replacing a packaged copy of Alto with a newer release: whether it can, getting the update, checking it, and handing over. |
-| [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py. |
+| [alto.settings](alto.settings/) | User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py. |
 | [alto.terms](alto.terms/) | Glossary entries that an installed plugin supplies, kept apart from the built-in ones. |
 | [alto.updates](alto.updates/) | What kind of copy of Alto is running, how it can be updated, and the commands and answers that checking involves. |
 
@@ -98,6 +98,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.degree_text](alto.ui.degree_text/) | Draw scale-degree carets above their digits without relying on font-specific combining accents. |
 | [alto.ui.dropdown](alto.ui.dropdown/) | Shared dropdown fields with rounded popup windows. |
 | [alto.ui.engraving](alto.ui.engraving/) | Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others). |
+| [alto.ui.exercise_settings](alto.ui.exercise_settings/) | Load and save each exercise's settings. |
 | [alto.ui.exercise_view](alto.ui.exercise_view/) | The exercise screen: a question, its answer buttons, the score, and a pane of settings that slides in from the right. |
 | [alto.ui.fingerboard](alto.ui.fingerboard/) | Render a pack's instrument portrait using its calibrated string endpoints. |
 | [alto.ui.glossary](alto.ui.glossary/) | A searchable glossary of the notation terms used in Alto. |

@@ -36,6 +36,7 @@ from alto.theory.scales import (
     build,
     mode_tonic,
 )
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import (
     ExerciseView,
@@ -401,7 +402,7 @@ def test_the_saved_settings_are_read_back_and_bad_ones_ignored() -> None:
     s.setValue("keySignatures/clefs", "tenor,bass,nonsense")
     s.setValue("keySignatures/modes", "Lydian|Locrian|Made up")
     s.setValue("keySignatures/keys", "-4,3,99")
-    sp.load_key_signatures()
+    es.load_key_signatures()
     cfg = settings.key_signatures
     assert cfg.clefs == {"tenor", "bass"}
     assert cfg.modes == {"Lydian", "Locrian"} and cfg.keys == {-4, 3}
@@ -412,7 +413,7 @@ def test_the_saved_settings_are_read_back_and_bad_ones_ignored() -> None:
     ):
         s.setValue(f"keySignatures/{name}", "nonsense")
     s.setValue("keySignatures/keys", "99")
-    sp.load_key_signatures()
+    es.load_key_signatures()
     assert cfg.clefs == {"tenor", "bass"} and cfg.keys == {-4, 3}  # nothing usable: what was there stays
 
 

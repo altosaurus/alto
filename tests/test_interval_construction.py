@@ -17,9 +17,10 @@ from alto.exercises.library import IntervalConstruction, IntervalNames
 from alto.theory.pitch import Interval, Note
 from alto.ui.anki_exporter import card_fields
 from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_settings import load_exercise_settings
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import IntervalSettingsPanel, load_exercise_settings
+from alto.ui.settings_panel import IntervalSettingsPanel
 from alto.ui.staff import BOTTOM_LINE
 
 

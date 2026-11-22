@@ -36,6 +36,7 @@ from alto.learning import (
     Learner,
 )
 from alto.theory.scales import format_key_signature
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
@@ -703,6 +704,6 @@ def test_the_settings_pane_saves_under_its_own_name(app: QApplication) -> None:
     assert "Dorian" in str(store().value("keyConstruction/modes")).split("|")
     assert store().value("keySignatures/modes") is None and "Dorian" not in settings.key_signatures.modes
     settings.key_construction.modes, settings.key_construction.keys = {"Major (Ionian)"}, set(range(-7, 8))
-    sp.load_key_construction()
+    es.load_key_construction()
     assert "Dorian" in settings.key_construction.modes and -6 not in settings.key_construction.keys
     assert settings.key_signatures.keys == set(range(-7, 8))
