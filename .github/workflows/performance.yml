@@ -3,22 +3,17 @@ name: Performance
 # Measures how fast Alto's operations are (benchmarks/, with ASV) and keeps the results from release to release, so that a slow
 # creep between versions shows even when no single budget test in the test suite fails.
 #
-# It runs when a version is tagged, when a change to the app or the benchmarks is merged into main, once a month (to notice a new
-# PySide6 or Qt that is slower, which no change of ours causes), and by hand. By hand it can measure an older tag or commit with the
-# benchmarks of main (for the version before the benchmarks existed), so that there is something to compare a release with.
+# The daily run measures main. A manual run can measure a release tag or commit with the benchmarks
+# from main, including versions that predate the benchmark suite.
 # The results are kept on the branch asv-results.
 #
 # A change of more than 30% against the previous release is written in the run's summary and opens an issue (or updates the one
-# that is open). The budgets in tests/test_performance.py run here too, and a missed budget opens an issue of its own. Neither
-# fails the run: a shared build machine is too noisy for a strict gate, so an issue is a reason to look and to run it again, not
-# proof.
+# that is open). The run itself does not fail: a shared build machine is too noisy for a strict gate, so an issue is a reason to look
+# and to run it again, not proof. The budgets in tests/test_performance.py, which catch a large slowdown right after a merge, are in
+# budgets.yml.
 on:
-  push:
-    branches: [main]
-    tags:
-      - "v*"
   schedule:
-    - cron: "17 4 1 * *"
+    - cron: "37 9 * * *" # 09:37 UTC daily
   workflow_dispatch:
     inputs:
       ref:
@@ -30,41 +25,13 @@ permissions:
   contents: write # to save the results on the branch asv-results
   issues: write # to open an issue when something got slower
 
-# One run at a time, so that two quick merges do not both push to asv-results.
+# Serialize scheduled and manual updates to asv-results.
 concurrency:
   group: performance
   cancel-in-progress: false
 
 jobs:
-  # A merge into main is measured only if it touched the app, the benchmarks or the dependencies; a tag, the monthly run and a run
-  # by hand always are. (This is checked here and not with a `paths` filter, which does not mix with tags.)
-  changed:
-    runs-on: ubuntu-latest
-    outputs:
-      measure: ${{ steps.decide.outputs.measure }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - id: decide
-        env:
-          BEFORE: ${{ github.event.before }}
-        run: |
-          measure=true
-          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF_TYPE}" = "branch" ]; then
-            # The first push of a branch has no earlier commit; measure it.
-            if git cat-file -e "${BEFORE}^{commit}" 2> /dev/null && ! git diff --name-only "${BEFORE}" "${GITHUB_SHA}" \
-              | grep -qE '^(alto/|benchmarks/|tests/test_performance\.py$|pyproject\.toml$|uv\.lock$|\.github/workflows/performance\.yml$)'; then
-              measure=false
-            fi
-          fi
-          echo "measure=${measure}" >> "$GITHUB_OUTPUT"
-          echo "Measure: ${measure}"
-
   benchmark:
-    needs: changed
-    if: needs.changed.outputs.measure == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -200,77 +167,3 @@ jobs:
         with:
           name: speed-graphs
           path: .asv/html
-
-  # The budgets in tests/test_performance.py: each operation must stay within a few times what it took when its budget was set.
-  # They time real operations, so they run here, on a machine of their own, and not in the pull request's tests, where three other
-  # processes share the cores. A missed budget opens an issue (or updates the one that is open) and does not fail the run: one
-  # slow moment on a shared machine is a reason to run it again, and a real slowdown misses its budget every time.
-  budgets:
-    needs: changed
-    if: needs.changed.outputs.measure == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      QT_QPA_PLATFORM: offscreen
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref || github.ref }}
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-          cache-dependency-path: pyproject.toml
-
-      - name: Install Qt's system libraries
-        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon0 libdbus-1-3 libfontconfig1 libpulse0 libpulse-mainloop-glib0
-
-      - name: Install Alto and its test tools
-        run: python -m pip install -e ".[dev]"
-
-      - name: Check the budgets
-        id: budgets
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          python -m pytest -q -m perf -o faulthandler_timeout=120 -p no:cacheprovider 2>&1 | tee budgets.txt
-
-      - name: Open an issue if a budget was missed
-        if: steps.budgets.outcome == 'failure'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          title="Performance: a budget was missed"
-          {
-            echo "An operation took longer than its budget in \`tests/test_performance.py\`, measured at $(git rev-parse --short HEAD)."
-            echo
-            echo "A shared build machine is sometimes slow for a moment, so run the Performance workflow again by hand before acting on"
-            echo "this. A real slowdown misses its budget every time. If an operation was made slower on purpose, change its budget in"
-            echo "\`benchmarks/budgets.py\` in the same change."
-            echo
-            echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-            echo
-            echo "#### What failed"
-            echo
-            echo '```'
-            grep -E "^(FAILED|ERROR)|over its budget" budgets.txt | head -40 || true
-            tail -n 3 budgets.txt
-            echo '```'
-            echo
-            echo "#### To see it yourself"
-            echo
-            echo '```'
-            echo "pytest -m perf                                       # the budgets"
-            echo "python -m benchmarks.survey                          # every operation, slowest first"
-            echo "python -m benchmarks.operations page:lesson --profile   # where the time goes in one operation"
-            echo '```'
-          } > issue.md
-          gh label create performance --color FBCA04 --description "Alto got slower" --force
-          existing=$(gh issue list --label performance --state open --search "\"${title}\" in:title" --json number --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body-file issue.md
-          else
-            gh issue create --title "$title" --label performance --body-file issue.md
-          fi

@@ -3,7 +3,7 @@
 # GitHub can pass explicit test targets for a documentation-only change.
 #
 # The tests run on every core at once (pytest-xdist). ALTO_TEST_WORKERS sets the number of processes (default: one per core).
-# The performance budgets (marked perf) are left out: they time real operations, so the Performance workflow runs them on a
+# The performance budgets (marked perf) are left out: they time real operations, so the Budgets workflow runs them on a
 # machine of their own after each merge, and opens an issue if one is missed. Run them here with `pytest -m perf`.
 cd "$(dirname "$0")/.." || exit 1
 py=.venv/bin/python

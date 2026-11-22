@@ -186,8 +186,10 @@ def test_codecov_reads_the_report_produced_by_one_pytest_matrix_job() -> None:
 
 
 def test_the_budgets_run_after_a_merge_and_a_missed_one_opens_an_issue() -> None:
-    """Check the budgets for themselves in the Performance workflow, where a miss opens or adds to an issue instead of failing."""
-    workflow = yaml.safe_load((WORKFLOWS / "performance.yml").read_text(encoding="utf-8"))
+    """Check the budgets after each merge, in a workflow of their own, where a miss opens or adds to an issue, not a failure."""
+    workflow = yaml.safe_load((WORKFLOWS / "budgets.yml").read_text(encoding="utf-8"))
+    push = workflow[True]["push"]  # YAML reads the key `on` as True
+    assert push["branches"] == ["main"] and "alto/**" in push["paths"]
     steps = {step.get("name"): step for step in workflow["jobs"]["budgets"]["steps"]}
     check = steps["Check the budgets"]
     assert "-m perf" in check["run"] and check["continue-on-error"] is True
