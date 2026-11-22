@@ -287,6 +287,7 @@ def test_display_choices_stay_together_as_the_exercise_grows(app: QApplication) 
     panel.intervals_row.click()
     assert panel.stack._slide is not None
     panel.stack._slide.setCurrentTime(panel.stack._slide.duration())
+    app.processEvents()  # lay out the page that slid in, so its scroll bar knows how far the list goes
     page = panel.stack.currentWidget()
     assert page is not None
     area = page.findChild(QScrollArea)
