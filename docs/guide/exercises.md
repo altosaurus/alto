@@ -18,6 +18,8 @@ An `Exercise` is a small class with four attributes and one method that matter. 
 | `par_seconds` | How long a good *first* answer takes. The scheduler judges speed against it. |
 | `generate(rng)` | Returns one `Question`. This is the whole of the exercise. |
 | `settings_signature()` | Only for exercises with settings (see below). |
+| `card_prompt(question)` | Optional. The instruction on an Anki card, where no buttons or staff explain the task. The default uses the question's prompt. |
+| `interval_voices` | Optional. True when two notes on the staff are an interval, so they are drawn as two voices. |
 
 A `Question` says everything about one question. Its fields are the whole vocabulary of what the screen can show:
 
@@ -122,7 +124,7 @@ If users should be able to change what is asked, there are four more places to t
 2. **The exercise reads it** when it generates a question: `settings.note_names.active_clefs()`. Because the instance is shared,
    a change takes effect on the next question.
 3. **A signature.** For a `ChoiceExercise`, return `signature(...)` from `practice_signature()`. The framework includes the button layout when matching stored questions. Other exercises return their signature from `settings_signature()`.
-4. **A panel and persistence.** In `alto/ui/settings_panel.py`, a panel class and a branch in `_exercise_panel`. The panel
+4. **A panel and persistence.** In `alto/ui/settings_panel.py`, a panel class and an entry in `PANELS`. The panel
    subclasses `ExerciseSettingsPanel` from `alto/ui/settings_menu.py` (or `ClefsPanel` if it has a Clefs page), builds its
    pages from that module's rows and pages, and overrides `_persist` to save; `_save_and_emit` then saves and emits `changed`. In `alto/ui/exercise_settings.py`, `load_*`
    and `save_*` functions that read and write `QSettings` through `store()` with the readers in `alto/ui/store.py`, and a

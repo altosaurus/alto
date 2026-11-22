@@ -733,6 +733,9 @@ class Exercise(ABC):
         empty uses Alto's own icon for the exercise.
     has_sound : bool, default True
         False for an exercise that makes no sound at all, whatever the sound button says.
+    interval_voices : bool, default False
+        True when two notes on the staff are an interval: they keep the question's note value, with the stems apart, and are
+        played one after the other when they are melodic.
 
     Examples
     --------
@@ -750,6 +753,7 @@ class Exercise(ABC):
     par_seconds: float = 5.0  # how long a good first answer takes; much quicker earns credit, much slower counts against
     has_sound: bool = True  # False for an exercise that makes no sound at all, whatever the sound button says
     icon: str = ""  # SVG shapes for the exercise's tile, such as one a plugin supplies; empty for the built-in icon
+    interval_voices: bool = False  # two notes on the staff are an interval, drawn as two voices
 
     def sound_instrument(self, key: str | None) -> str | None:
         """
@@ -794,6 +798,40 @@ class Exercise(ABC):
         ''
         """
         return ""
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say what to do on a flashcard made from a question, where nothing on screen explains the task.
+
+        Exercises whose on-screen prompt depends on the screen (buttons to press, a staff to click) override this.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction, shown above the card's picture.
+
+        Examples
+        --------
+        >>> class Demo(Exercise):
+        ...     name = "Demo"
+        ...     def generate(self, rng):
+        ...         return Question("Pick A.", choices=["A"], answer="A")
+        >>> Demo().card_prompt(Question("", choices=["A"], answer="A"))
+        'Demo'
+        >>> Demo().card_prompt(Question("Click the fermata.", choices=[], answer="fermata", notation_target=("fermata", 0)))
+        'Locate the fermata.'
+        """
+        q = question
+        if q.circle is not None and q.required:
+            return q.prompt.removesuffix(" Press both of its names.") + " Name both enharmonic spellings."
+        if q.notation_target is not None and not q.choices:
+            return q.prompt.replace("Click ", "Locate ", 1)
+        return q.prompt or q.caption or self.name
 
     def card_groups(self) -> dict[str, str] | None:
         """

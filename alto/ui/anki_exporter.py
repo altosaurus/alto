@@ -56,7 +56,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from alto import settings
 from alto.anki_export import (
     DeckSelection,
     ExportControl,
@@ -69,21 +68,13 @@ from alto.anki_export import (
 )
 from alto.exercises import REGISTRY, Exercise, Question
 from alto.exercises.library import (
-    INTERVAL_INVERSION_PROMPTS,
-    ChordQualities,
     IntervalConstruction,
-    IntervalNames,
-    KeyboardIntervals,
-    KeyboardNotes,
-    NoteConstruction,
-    NoteNames,
 )
 from alto.exercises.packs import load_packs
 from alto.learning import Database, Learner
 from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.location import database_path, desktop_name
 from alto.notation_excerpts import excerpts
-from alto.theory.pitch import MAJOR_KEYS, QUALITY_NAMES
 from alto.ui import icons
 from alto.ui.circle import FifthsCircle
 from alto.ui.colors import CORRECT_ANSWER_COLOR
@@ -130,53 +121,6 @@ def _picture(widget: QWidget, *, folder: Path, label: str) -> str:
     return f'<img src="{name}" alt="{escape(label, quote=True)}">'
 
 
-def _card_prompt(q: Question, *, exercise: Exercise) -> str:
-    """
-    Describe the task on a standalone card, including any required answer format.
-
-    Returns
-    -------
-    str
-        Instruction displayed above the illustration in the preview and the exported deck.
-    """
-    if isinstance(exercise, (NoteNames, KeyboardNotes)):
-        naming = settings.note_names.naming
-        if isinstance(exercise, KeyboardNotes) and naming == "letters":
-            prompt = "Identify the note by letter and octave." if q.octaves else "Identify the note by letter."
-            if q.key_staff:
-                prompt += " Use the spelling for the displayed key signature."
-            return prompt
-        prompt = "Identify the note."
-        if naming == "solfege":
-            prompt += " Use solfège."
-        elif naming in settings.DEGREE_NAMINGS:
-            term = "scale degree" if naming == "degrees" else "scale-degree function"
-            prompt += f" Give its {term} in {MAJOR_KEYS[q.key]} major."
-        if q.octaves:
-            prompt += " Include the octave."
-        return prompt
-    if isinstance(exercise, NoteConstruction):
-        target = (q.prompt or q.answer).removeprefix("Place ").removesuffix(".").removesuffix(" on the staff")
-        return f"Place {target} on the staff."
-    if isinstance(exercise, IntervalNames):
-        if q.prompt in INTERVAL_INVERSION_PROMPTS.values():
-            return q.prompt
-        if q.answer.isdecimal():
-            return "Identify the numeric interval."
-        if q.answer in QUALITY_NAMES.values():
-            return "Identify the quality."
-        return "Identify the interval and quality."
-    if isinstance(exercise, KeyboardIntervals):
-        return "Identify the interval."
-    if isinstance(exercise, ChordQualities):
-        return "Identify the Chord Quality."
-    if q.circle is not None and q.required:
-        return q.prompt.removesuffix(" Press both of its names.") + " Name both enharmonic spellings."
-    if q.notation_target is not None and not q.choices:
-        return q.prompt.replace("Click ", "Locate ", 1)
-    return q.prompt or q.caption or exercise.name
-
-
 def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list[str]:
     """
     Render an exercise as a reveal-and-grade card.
@@ -192,7 +136,7 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
     locate = q.notation_target is not None and not q.choices
     if q.staff or q.show_staff or q.construct or q.construct_scale or q.key_staff:
         staff = StaffWidget(max_step=MAX_STEP)
-        staff.interval_voices = isinstance(exercise, (IntervalNames, IntervalConstruction))
+        staff.interval_voices = exercise.interval_voices
         staff.clef_hidden = bool(q.place_clef)
         staff.show_notes(
             q.placement_columns(None) if q.construct else q.staff,
@@ -255,7 +199,7 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
     explanation = escape(q.explanation)
     if q.notation_excerpt:
         explanation += "<br>" + escape(excerpts()[q.notation_excerpt].credit)
-    return [escape(_card_prompt(q, exercise=exercise)), "<br>".join(front), answer, explanation]
+    return [escape(exercise.card_prompt(q)), "<br>".join(front), answer, explanation]
 
 
 class _PlanJob(QThread):

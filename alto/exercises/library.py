@@ -141,6 +141,37 @@ def _degree_choices(
     return choices, grid
 
 
+def _note_card_prompt(q: Question) -> str:
+    """
+    Say how to name a note on a flashcard in the chosen naming: letters, solfège or a scale degree, with the octave if it counts.
+
+    Parameters
+    ----------
+    q : Question
+        The question on the card.
+
+    Returns
+    -------
+    str
+        The instruction.
+
+    Examples
+    --------
+    >>> _note_card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+    'Identify the note. Include the octave.'
+    """
+    naming = settings.note_names.naming
+    prompt = "Identify the note."
+    if naming == "solfege":
+        prompt += " Use solfège."
+    elif naming in settings.DEGREE_NAMINGS:
+        term = "scale degree" if naming == "degrees" else "scale-degree function"
+        prompt += f" Give its {term} in {MAJOR_KEYS[q.key]} major."
+    if q.octaves:
+        prompt += " Include the octave."
+    return prompt
+
+
 @register
 class NoteNames(ChoiceExercise):
     """
@@ -157,6 +188,27 @@ class NoteNames(ChoiceExercise):
     category = "Notation"
     description = "Identify notes on the staff."
     par_seconds = 3.0
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say what to name on a flashcard, and in which form: letters, solfège or a scale degree, with the octave if it counts.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> NoteNames().card_prompt(Question("", choices=[], answer="C"))
+        'Identify the note.'
+        """
+        return _note_card_prompt(question)
 
     def practice_signature(self) -> str:
         """
@@ -506,9 +558,40 @@ class IntervalNames(Exercise):
     """
 
     name = "Interval Identification"
+    interval_voices = True
     category = "Intervals"
     description = "Name the interval between two notes."
     par_seconds = 6.0
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say whether to name the interval's number, its quality, both, or its inversion.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> IntervalNames().card_prompt(Question("", choices=[], answer="3"))
+        'Identify the numeric interval.'
+        >>> IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
+        'Identify the interval and quality.'
+        """
+        q = question
+        if q.prompt in INTERVAL_INVERSION_PROMPTS.values():
+            return q.prompt
+        if q.answer.isdecimal():
+            return "Identify the numeric interval."
+        if q.answer in QUALITY_NAMES.values():
+            return "Identify the quality."
+        return "Identify the interval and quality."
 
     def instructions(self) -> str:
         """
@@ -806,6 +889,7 @@ class IntervalConstruction(Exercise):
     """
 
     name = "Interval Construction"
+    interval_voices = True
     category = "Intervals"
     description = "Place a note above or below the given note to build an interval."
     par_seconds = 8.0
@@ -888,6 +972,28 @@ class KeyboardIntervals(Exercise):
     description = "Name the interval between two highlighted piano keys."
     par_seconds = 6.0
     INTERVALS = settings.KEYBOARD_INTERVAL_NAMES
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say what to name on a flashcard.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
+        'Identify the interval.'
+        """
+        del question
+        return "Identify the interval."
 
     def settings_signature(self) -> str:
         """
@@ -2149,6 +2255,28 @@ class ChordQualities(ChoiceExercise):
     default_limit = 5
     par_seconds = 6.0
 
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say what to name on a flashcard.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
+        'Identify the Chord Quality.'
+        """
+        del question
+        return "Identify the Chord Quality."
+
     def instructions(self) -> str:
         """
         Return the help text for the exercise.
@@ -2546,6 +2674,33 @@ class KeyboardNotes(ChoiceExercise):
     description = "Name the highlighted key on a piano keyboard."
     par_seconds = 3.0
 
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say what to name on a flashcard. Letter names give the octave if it counts, and follow the key signature if one is shown.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+        'Identify the note by letter and octave.'
+        """
+        q = question
+        if settings.note_names.naming != "letters":
+            return _note_card_prompt(q)
+        prompt = "Identify the note by letter and octave." if q.octaves else "Identify the note by letter."
+        if q.key_staff:
+            prompt += " Use the spelling for the displayed key signature."
+        return prompt
+
     def practice_signature(self) -> str:
         """
         Return what identifies the settings that shape these questions.
@@ -2735,6 +2890,31 @@ class NoteConstruction(Exercise):
     category = "Notation"
     description = "Place the named note on the staff."
     par_seconds = 6.0
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Say which note to place, whichever way the on-screen prompt words it.
+
+        Parameters
+        ----------
+        question : Question
+            The question on the card.
+
+        Returns
+        -------
+        str
+            The instruction.
+
+        Examples
+        --------
+        >>> NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
+        'Place F♯4 on the staff.'
+        >>> NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
+        'Place B♭3 on the staff.'
+        """
+        q = question
+        target = (q.prompt or q.answer).removeprefix("Place ").removesuffix(".").removesuffix(" on the staff")
+        return f"Place {target} on the staff."
 
     def settings_signature(self) -> str:
         """
