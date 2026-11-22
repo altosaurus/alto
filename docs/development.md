@@ -33,7 +33,7 @@ pytest tests/test_audio.py   # one file, in one process
 `-n auto` (from pytest-xdist) runs the tests in one process per core, which takes the suite from minutes to under a minute.
 Leave it out when running a few tests, where starting the processes would take longer than the tests.
 `sh scripts/run-tests.sh` runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets, on
-every core. The budgets time real operations, so they run in the Performance workflow instead (see below). Set `ALTO_TEST_WORKERS`
+every core. The budgets time real operations, so they run in the Budgets workflow instead (see below). Set `ALTO_TEST_WORKERS`
 to use a different number of processes.
 
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
@@ -82,9 +82,10 @@ behind it.
   machine does not fail a test but a change that makes something many times slower does. The first use of something in a new process
   (starting the app, the first look at a page, the circle at sizes not used before) is measured in a process of its own, because Qt
   makes fonts and layouts on first use and later runs hide that cost. The budgets time real operations, so they are left out of the
-  pull request's tests, where other test processes share the cores. The Performance workflow runs them on a machine of their own
-  after each merge into `main` that touches the app, when a version is tagged and once a month. A missed budget opens an issue labeled
-  `performance`, or adds the run to the one that is open, and does not fail the run. Run them yourself with `pytest -m perf`.
+  pull request's tests, where other test processes share the cores. The Budgets workflow (`.github/workflows/budgets.yml`) runs them
+  on a machine of their own after each merge into `main` that touches the app, the benchmarks or the budgets, and by hand. A missed
+  budget opens an issue labeled `performance`, or adds the run to the one that is open, and does not fail the run. Run them yourself
+  with `pytest -m perf`.
 - **A history, from release to release.** `benchmarks/suite.py` is an [ASV](https://asv.readthedocs.io/) suite, and the Performance
   workflow (`.github/workflows/performance.yml`) measures main daily at 09:37 UTC and keeps the results on the
   branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
