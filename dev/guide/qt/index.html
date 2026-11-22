@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -788,9 +791,10 @@ never write another model.</p>
 
 <p><code class="language-plaintext highlighter-rouge">QSettings</code> stores values by key in the operating system’s usual place (an INI file on Linux, the registry on Windows, a
 property list on macOS). Alto wraps it in <code class="language-plaintext highlighter-rouge">alto/ui/store.py</code>: <code class="language-plaintext highlighter-rouge">store()</code> returns the one <code class="language-plaintext highlighter-rouge">QSettings("alto", "alto")</code>, and
-<code class="language-plaintext highlighter-rouge">int_value</code> and <code class="language-plaintext highlighter-rouge">text_value</code> read a value as the right type, because <code class="language-plaintext highlighter-rouge">QSettings</code> may hand back a string where you stored a
-number. Exercise settings are saved by the <code class="language-plaintext highlighter-rouge">save_*</code> functions in <code class="language-plaintext highlighter-rouge">settings_panel.py</code>. Nothing saves the plain settings
-objects in <code class="language-plaintext highlighter-rouge">alto/settings.py</code>.</p>
+<code class="language-plaintext highlighter-rouge">int_value</code>, <code class="language-plaintext highlighter-rouge">text_value</code>, <code class="language-plaintext highlighter-rouge">bool_value</code>, <code class="language-plaintext highlighter-rouge">list_value</code>, <code class="language-plaintext highlighter-rouge">choices_value</code> and <code class="language-plaintext highlighter-rouge">keys_value</code> read a value as the right type,
+because <code class="language-plaintext highlighter-rouge">QSettings</code> may hand back a string where you stored a number, or a list where you stored text with commas. Exercise
+settings are loaded and saved by the functions in <code class="language-plaintext highlighter-rouge">exercise_settings.py</code>. Nothing saves the plain settings objects in
+<code class="language-plaintext highlighter-rouge">alto/settings.py</code>.</p>
 
 <p>Tests point the settings at a throwaway folder (the <code class="language-plaintext highlighter-rouge">XDG_CONFIG_HOME</code> variable on Linux), so no test can change your real
 settings.</p>
@@ -952,8 +956,8 @@ is what signals and slots are, and MVC’s origins are described there.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

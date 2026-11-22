@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -653,7 +656,7 @@
         <article>
           <h1>alto.settings</h1>
           
-<p>User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.</p>
+<p>User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.</p>
 
 <p>Each exercise with settings has a small dataclass here (<code class="language-plaintext highlighter-rouge">NoteNameSettings</code>, <code class="language-plaintext highlighter-rouge">KeyboardSettings</code> and so on) and one shared
 instance of it (<code class="language-plaintext highlighter-rouge">note_names</code>, <code class="language-plaintext highlighter-rouge">keyboard</code> …) that the exercise and its settings panel both read and write.</p>
@@ -741,6 +744,89 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 'E4'
 </code></pre>
 
+<h2 id="clefchoice">ClefChoice</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClefChoice</span>
+</code></pre></div></div>
+
+<p>Settings with a set of chosen clefs, which are always used in the same order.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CLEF_ORDER</code> (<em>tuple of str</em>): Every clef the settings may hold, in the order they are offered and used. Each subclass sets it.</li>
+  <li><code class="language-plaintext highlighter-rouge">clefs</code> (<em>set of str</em>): The chosen clefs. The dataclass that uses this mixin declares the field and its default.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
+['alto', 'tenor']
+</code></pre>
+
+<h3 id="clefchoiceactive_clefs">ClefChoice.active_clefs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the clefs to use, in canonical order.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The chosen clefs in the order of <code class="language-plaintext highlighter-rouge">CLEF_ORDER</code>, or the treble clef if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+['tenor', 'grand']
+&gt;&gt;&gt; ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
+['treble', 'subbass']
+&gt;&gt;&gt; NoteNameSettings(clefs=set()).active_clefs()
+['treble']
+</code></pre>
+
+<h2 id="keychoice">KeyChoice</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">KeyChoice</span>
+</code></pre></div></div>
+
+<p>Settings with a set of chosen key signatures.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The chosen key signatures, as sharps (positive) or flats (negative). The dataclass that uses this mixin declares the field and its default.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettings(keys={3, -2}).active_keys()
+[-2, 3]
+</code></pre>
+
+<h3 id="keychoiceactive_keys">KeyChoice.active_keys</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Return the key signatures to draw from, lowest first.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(keys={2, -1}).active_keys()
+[-1, 2]
+&gt;&gt;&gt; KeySignatureSettings(keys=set()).active_keys()
+[0]
+</code></pre>
+
 <h2 id="staffrangesettings">StaffRangeSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StaffRangeSettings</span><span class="p">(</span>
@@ -750,6 +836,8 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="n">note_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">'whole'</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice</code></p>
 
 <p>Selected clefs and inclusive pitch limits for each staff.</p>
 
@@ -776,27 +864,6 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
 ['whole', 'half']
-</code></pre>
-
-<h3 id="staffrangesettingsactive_clefs">StaffRangeSettings.active_clefs</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the clefs to draw from, in canonical order.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-['tenor', 'grand']
-&gt;&gt;&gt; NoteNameSettings(clefs=set()).active_clefs()
-['treble']
 </code></pre>
 
 <h3 id="staffrangesettingsrange_for">StaffRangeSettings.range_for</h3>
@@ -866,6 +933,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 </code></pre></div></div>
 
 <p>Return the key signatures to draw from, lowest first.</p>
+
+<p>The field is named <code class="language-plaintext highlighter-rouge">key_signatures</code> rather than <code class="language-plaintext highlighter-rouge">keys</code>, as in <code class="language-plaintext highlighter-rouge">KeyChoice</code>, because the name is part of the practice
+signature that stored questions are matched by; renaming it would orphan every learner’s saved questions.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -1008,6 +1078,8 @@ True
 <span class="p">)</span>
 </code></pre></div></div>
 
+<p>Bases: <code class="language-plaintext highlighter-rouge">KeyChoice</code></p>
+
 <p>The settings of the keyboard identification exercise.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1026,25 +1098,6 @@ True
 <pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeyboardSettings()
 &gt;&gt;&gt; key_name(cfg.low), key_name(cfg.high)
 ('C3', 'C5')
-</code></pre>
-
-<h3 id="keyboardsettingsactive_keys">KeyboardSettings.active_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the key signatures to draw from, lowest first.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettings().active_keys()
-[-3, -2, -1, 0, 1, 2, 3]
 </code></pre>
 
 <h2 id="keyboard_interval_name">keyboard_interval_name</h2>
@@ -1190,6 +1243,8 @@ True
 <span class="p">)</span>
 </code></pre></div></div>
 
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice, KeyChoice</code></p>
+
 <p>The settings of the note construction exercise.</p>
 
 <p><strong>Attributes</strong></p>
@@ -1214,44 +1269,6 @@ True
 ['grand']
 </code></pre>
 
-<h3 id="constructionsettingsactive_clefs">ConstructionSettings.active_clefs</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the clefs to draw from, in canonical order.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings().active_clefs()
-['treble', 'bass']
-</code></pre>
-
-<h3 id="constructionsettingsactive_keys">ConstructionSettings.active_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the key signatures to draw from, lowest first.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(keys={3, -2}).active_keys()
-[-2, 3]
-</code></pre>
-
 <h2 id="arpeggiosettings">ArpeggioSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArpeggioSettings</span><span class="p">(</span>
@@ -1263,6 +1280,8 @@ True
     <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice, KeyChoice</code></p>
 
 <p>The settings of the arpeggio identification exercise.</p>
 
@@ -1280,25 +1299,6 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings().active_types()
 ['major', 'minor', 'dominant 7th', 'diminished 7th']
-</code></pre>
-
-<h3 id="arpeggiosettingsactive_clefs">ArpeggioSettings.active_clefs</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the clefs to draw from, in canonical order.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
-['alto', 'tenor']
 </code></pre>
 
 <h3 id="arpeggiosettingsactive_types">ArpeggioSettings.active_types</h3>
@@ -1370,25 +1370,6 @@ used.</p>
 [0]
 </code></pre>
 
-<h3 id="arpeggiosettingsactive_keys">ArpeggioSettings.active_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the key signatures to draw from, lowest first.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(keys={1}).active_keys()
-[1]
-</code></pre>
-
 <h2 id="keysignaturesettings">KeySignatureSettings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettings</span><span class="p">(</span>
@@ -1398,6 +1379,8 @@ used.</p>
     <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">))),</span>
 <span class="p">)</span>
 </code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice, KeyChoice</code></p>
 
 <p>The settings of the key signature identification exercise.</p>
 
@@ -1414,25 +1397,6 @@ used.</p>
 <pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeySignatureSettings()
 &gt;&gt;&gt; cfg.active_clefs(), len(cfg.active_keys())
 (['treble', 'bass'], 15)
-</code></pre>
-
-<h3 id="keysignaturesettingsactive_clefs">KeySignatureSettings.active_clefs</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the clefs to draw signatures on, in canonical order.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings().active_clefs()
-['treble', 'bass']
 </code></pre>
 
 <h3 id="keysignaturesettingsactive_modes">KeySignatureSettings.active_modes</h3>
@@ -1452,25 +1416,6 @@ used.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings().active_modes()
 ['Major (Ionian)', 'Natural minor (Aeolian)']
-</code></pre>
-
-<h3 id="keysignaturesettingsactive_keys">KeySignatureSettings.active_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the key signatures to ask about, lowest first.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of int</em>: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings(keys={3, -4}).active_keys()
-[-4, 3]
 </code></pre>
 
 <h2 id="orderofkeyssettings">OrderOfKeysSettings</h2>
@@ -1664,6 +1609,8 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 <span class="p">)</span>
 </code></pre></div></div>
 
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefChoice</code></p>
+
 <p>The settings of the clef basics exercise: what kind of question is asked, and which clefs.</p>
 
 <p>Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
@@ -1682,27 +1629,6 @@ on the second line. The three symbols can always be chosen from.</p>
 ['alto', 'subbass']
 &gt;&gt;&gt; ClefBasicsSettings().question_type
 'construction'
-</code></pre>
-
-<h3 id="clefbasicssettingsactive_clefs">ClefBasicsSettings.active_clefs</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">active_clefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the clefs to ask for, in canonical order.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>list of str</em>: The chosen clefs, or the treble clef if none are chosen.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings().active_clefs()
-['treble', 'bass']
-&gt;&gt;&gt; ClefBasicsSettings(clefs=set()).active_clefs()
-['treble']
 </code></pre>
 
 <h3 id="clefbasicssettingsactive_type">ClefBasicsSettings.active_type</h3>
@@ -1991,8 +1917,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

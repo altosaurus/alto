@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -657,7 +660,7 @@
 
 <p>Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures …) that each lead to a page. Edits
 are live: they change the shared settings object, are saved, and a <code class="language-plaintext highlighter-rouge">changed</code> signal tells the exercise to ask a new
-question. This module also loads and saves each exercise’s settings.</p>
+question. Loading and saving the settings is in <code class="language-plaintext highlighter-rouge">alto.ui.exercise_settings</code>.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -666,47 +669,6 @@ question. This module also loads and saves each exercise’s settings.</p>
 &gt;&gt;&gt; row = _Row("Clefs")
 &gt;&gt;&gt; row.title.text()
 '&lt;b&gt;Clefs&lt;/b&gt;'
-</code></pre>
-
-<h2 id="load_note_names">load_note_names</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_note_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved note identification settings into the shared settings object.</p>
-
-<p>Settings saved by an older version, which had a switch between the grand staff and single clefs, are converted. Anything
-in the saved data that is not valid is ignored.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.note_names
-&gt;&gt;&gt; cfg_.clefs = {"alto"}
-&gt;&gt;&gt; save_note_names()
-&gt;&gt;&gt; cfg_.clefs = {"treble"}
-&gt;&gt;&gt; load_note_names()
-&gt;&gt;&gt; cfg_.clefs
-{'alto'}
-&gt;&gt;&gt; cfg_.clefs = {"treble", "bass"}
-&gt;&gt;&gt; save_note_names()
-</code></pre>
-
-<h2 id="save_note_names">save_note_names</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_note_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the note identification settings.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.note_names
-&gt;&gt;&gt; cfg_.naming = "solfege"
-&gt;&gt;&gt; save_note_names()
-&gt;&gt;&gt; str(store().value("noteNames/naming"))
-'solfege'
-&gt;&gt;&gt; cfg_.naming = "letters"
-&gt;&gt;&gt; save_note_names()
 </code></pre>
 
 <h2 id="rangeeditor">RangeEditor</h2>
@@ -1133,77 +1095,6 @@ each. Edits are live: each changes the settings, saves them and emits <code clas
 6
 </code></pre>
 
-<h2 id="load_keyboard">load_keyboard</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_keyboard</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved keyboard exercise settings into the shared settings object.</p>
-
-<p>A saved range that is not a valid span of keys, or a key list with nothing usable in it, is ignored.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.keyboard
-&gt;&gt;&gt; cfg_.require_octave = True
-&gt;&gt;&gt; save_keyboard()
-&gt;&gt;&gt; cfg_.require_octave = False
-&gt;&gt;&gt; load_keyboard()
-&gt;&gt;&gt; cfg_.require_octave
-True
-&gt;&gt;&gt; cfg_.require_octave = False
-&gt;&gt;&gt; save_keyboard()
-</code></pre>
-
-<h2 id="save_keyboard">save_keyboard</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_keyboard</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the keyboard exercise settings.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg_ = settings.keyboard
-&gt;&gt;&gt; save_keyboard()
-&gt;&gt;&gt; int(store().value("keyboard/low")) == cfg_.low
-True
-</code></pre>
-
-<h2 id="load_keyboard_intervals">load_keyboard_intervals</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_keyboard_intervals</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load keyboard interval settings, ignoring invalid values and intervals that cannot fit.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_keyboard_intervals()
-&gt;&gt;&gt; settings.keyboard_intervals.bounds()[0] &lt; settings.keyboard_intervals.bounds()[1]
-True
-</code></pre>
-
-<h2 id="save_keyboard_intervals">save_keyboard_intervals</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_keyboard_intervals</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the keyboard interval range and selected distances.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>KeyboardIntervalSettings</em>): The settings to save.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; save_keyboard_intervals(settings.KeyboardIntervalSettings())
-&gt;&gt;&gt; int(store().value("keyboardIntervals/low"))
-48
-</code></pre>
-
 <h2 id="keychecklist">KeyChecklist</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyChecklist</span><span class="p">(</span>
@@ -1414,21 +1305,6 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 3
 </code></pre>
 
-<h2 id="load_construction">load_construction</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved note construction settings into the shared settings object.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("construction/accidentals", "true")
-&gt;&gt;&gt; load_construction()
-&gt;&gt;&gt; settings.construction.accidentals
-False
-</code></pre>
-
 <h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span>
@@ -1476,25 +1352,6 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
 4
-</code></pre>
-
-<h2 id="load_arpeggio">load_arpeggio</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_arpeggio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved arpeggio settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("arpeggio/types", "major")
-&gt;&gt;&gt; load_arpeggio()
-&gt;&gt;&gt; settings.arpeggio.types
-{'major'}
-&gt;&gt;&gt; settings.arpeggio.types = {"major", "minor", "dominant 7th", "diminished 7th"}
-&gt;&gt;&gt; store().setValue("arpeggio/types", ",".join(settings.arpeggio.active_types()))
 </code></pre>
 
 <h2 id="choicechecklist">ChoiceChecklist</h2>
@@ -1568,31 +1425,6 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
 {0, 1}
-</code></pre>
-
-<h2 id="load_intervals">load_intervals</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_intervals</span><span class="p">(</span>
-    <span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'intervals'</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Restore the saved staff interval options, keeping valid choices and per-clef ranges.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>IntervalSettings or None</em>): Settings to populate. Defaults to Interval Identification.</li>
-  <li><code class="language-plaintext highlighter-rouge">prefix</code> (<em>str</em>): Independent settings-store group for the exercise.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_intervals()
-&gt;&gt;&gt; bool(settings.intervals.active_clefs())
-True
 </code></pre>
 
 <h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
@@ -1732,92 +1564,6 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 5
 </code></pre>
 
-<h2 id="load_key_signatures">load_key_signatures</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_key_signatures</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved key signature identification settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("keySignatures/clefs", "alto")
-&gt;&gt;&gt; load_key_signatures()
-&gt;&gt;&gt; settings.key_signatures.clefs
-{'alto'}
-&gt;&gt;&gt; settings.key_signatures.clefs = {"treble", "bass"}
-&gt;&gt;&gt; store().setValue("keySignatures/clefs", "treble,bass")
-</code></pre>
-
-<h2 id="load_key_construction">load_key_construction</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_key_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved key signature construction settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("keyConstruction/keys", "-3,4")
-&gt;&gt;&gt; load_key_construction()
-&gt;&gt;&gt; settings.key_construction.active_keys()
-[-3, 4]
-&gt;&gt;&gt; settings.key_construction.keys = set(range(-7, 8))
-&gt;&gt;&gt; store().remove("keyConstruction")
-</code></pre>
-
-<h2 id="load_order_of_keys">load_order_of_keys</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_order_of_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Restore the clefs, scales, and key signatures selected for Order of Keys.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_order_of_keys()
-</code></pre>
-
-<h2 id="load_scale_identification">load_scale_identification</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_identification</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved scale identification options independently of scale construction.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_scale_identification()
-&gt;&gt;&gt; settings.scale_identification.active_staff_keys()
-[0]
-</code></pre>
-
-<h2 id="load_scale_construction">load_scale_construction</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_scale_construction</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved scale construction settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("scaleConstruction/keys", "1,-1")
-&gt;&gt;&gt; store().setValue("scaleConstruction/steps", "true")
-&gt;&gt;&gt; store().setValue("scaleConstruction/octave", "true")
-&gt;&gt;&gt; load_scale_construction()
-&gt;&gt;&gt; settings.scale_construction.active_keys(), settings.scale_construction.steps, settings.scale_construction.octave
-([-1, 1], True, True)
-&gt;&gt;&gt; settings.scale_construction.keys, settings.scale_construction.steps = set(range(-7, 8)), False
-&gt;&gt;&gt; settings.scale_construction.octave = False
-&gt;&gt;&gt; store().remove("scaleConstruction")
-</code></pre>
-
 <h2 id="keysignaturesettingspanel">KeySignatureSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignatureSettingsPanel</span><span class="p">(</span>
@@ -1877,20 +1623,6 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 4
 </code></pre>
 
-<h2 id="load_notation_terms">load_notation_terms</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_notation_terms</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Restore the question type and term selection, defaulting to Answer Button and all terms.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_notation_terms()
-&gt;&gt;&gt; bool(settings.notation.terms)
-True
-</code></pre>
-
 <h2 id="notationsettingspanel">NotationSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">NotationSettingsPanel</span><span class="p">()</span>
@@ -1914,27 +1646,6 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
 True
-</code></pre>
-
-<h2 id="load_clef_basics">load_clef_basics</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_clef_basics</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved clef basics settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not a clef or a kind of question is ignored, and a list with no clef in it leaves the
-setting as it was.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("clefBasics/clefs", "alto,subbass,flute")
-&gt;&gt;&gt; store().setValue("clefBasics/type", "identification")
-&gt;&gt;&gt; load_clef_basics()
-&gt;&gt;&gt; settings.clef_basics.active_clefs(), settings.clef_basics.question_type
-(['alto', 'subbass'], 'identification')
-&gt;&gt;&gt; settings.clef_basics.clefs, settings.clef_basics.question_type = {"treble", "bass"}, "construction"
-&gt;&gt;&gt; store().remove("clefBasics")
 </code></pre>
 
 <h2 id="clefbasicssettingspanel">ClefBasicsSettingsPanel</h2>
@@ -2007,49 +1718,6 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 ('Root position', '1st inversion', '2nd inversion', '3rd inversion')
 </code></pre>
 
-<h2 id="load_circle">load_circle</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_circle</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved circle of fifths settings into the shared settings object.</p>
-
-<p>Anything in the saved data that is not valid is ignored, and a list with nothing valid in it leaves the setting as it was. A
-saved color scheme that no longer exists (it was deleted, or comes from a newer Alto) leaves the default.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("circle/questions", "numeral,nonsense")
-&gt;&gt;&gt; store().setValue("circle/scheme", "midnight")
-&gt;&gt;&gt; load_circle()
-&gt;&gt;&gt; settings.circle.questions, settings.circle.scheme
-({'numeral'}, 'midnight')
-&gt;&gt;&gt; settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
-&gt;&gt;&gt; settings.circle.scheme = DEFAULT_SCHEME
-&gt;&gt;&gt; store().remove("circle")
-</code></pre>
-
-<h2 id="save_circle">save_circle</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_circle</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the circle of fifths settings.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings to save.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; save_circle(settings.CircleSettings(scheme="ink"))
-&gt;&gt;&gt; store().value("circle/scheme")
-'ink'
-&gt;&gt;&gt; store().remove("circle")
-</code></pre>
-
 <h2 id="circlesettingspanel">CircleSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CircleSettingsPanel</span><span class="p">(</span>
@@ -2101,38 +1769,6 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
-</code></pre>
-
-<h2 id="load_pack_options">load_pack_options</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_pack_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Restore the options learners chose for each plugin exercise that offers settings.</p>
-
-<p>Anything in the saved data that is not valid is ignored.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_pack_options()
-</code></pre>
-
-<h2 id="save_pack_options">save_pack_options</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_pack_options</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the options chosen for one plugin exercise.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The exercise’s class name.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; save_pack_options("pack.nothing.here")
 </code></pre>
 
 <h2 id="packsettingspanel">PackSettingsPanel</h2>
@@ -2304,32 +1940,6 @@ False
 &gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
 </code></pre>
 
-<h2 id="load_choice_buttons">load_choice_buttons</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_choice_buttons</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Restore the independent button preferences for each multiple-choice exercise.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_choice_buttons()
-&gt;&gt;&gt; NoteNames.button_settings().button_mode in {"all", "limited"}
-True
-</code></pre>
-
-<h2 id="load_exercise_settings">load_exercise_settings</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_exercise_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Load the saved exercise options before creating a practice or export settings panel.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; load_exercise_settings()
-</code></pre>
-
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">settings_panel_for</span><span class="p">(</span>
@@ -2364,6 +1974,8 @@ True
 </code></pre>
 
 
+          
+          
           
           
           
@@ -2646,8 +2258,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -777,6 +780,213 @@ ValueError: invalid literal for int() with base 10: 'many'
 &gt;&gt;&gt; settings_.remove("demo")
 </code></pre>
 
+<h2 id="bool_value">bool_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bool_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Read a switch saved as the text “true” or “false”.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">default</code> (<em>bool</em>): What to return if nothing is saved, or if the saved text is neither “true” nor “false”. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>bool</em>: The saved switch.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; save_bool(settings_, key="demo/on", value=True)
+&gt;&gt;&gt; bool_value(settings_, key="demo/on", default=False), bool_value(settings_, key="demo/missing", default=True)
+(True, True)
+&gt;&gt;&gt; settings_.setValue("demo/on", "FALSE")
+&gt;&gt;&gt; bool_value(settings_, key="demo/on", default=True)
+False
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="save_bool">save_bool</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_bool</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save a switch as the text “true” or “false”, the form <code class="language-plaintext highlighter-rouge">bool_value</code> reads.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to write.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>bool</em>): The switch. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; save_bool(settings_, key="demo/on", value=False)
+&gt;&gt;&gt; settings_.value("demo/on")
+'false'
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="list_value">list_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">list_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">','</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Read a saved list of words, such as “treble,bass”.</p>
+
+<p><code class="language-plaintext highlighter-rouge">QSettings</code> may hand back text that contains commas as a list of its parts, so both forms are read.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">separator</code> (<em>str, default “,”</em>): What separates the words in the saved text. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>list of str</em>: The words in their saved order, without empty ones; empty if nothing is saved.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/clefs", "treble,,bass")
+&gt;&gt;&gt; list_value(settings_, key="demo/clefs"), list_value(settings_, key="demo/missing")
+(['treble', 'bass'], [])
+&gt;&gt;&gt; settings_.setValue("demo/modes", ["major|minor"])
+&gt;&gt;&gt; list_value(settings_, key="demo/modes", separator="|")
+['major', 'minor']
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="choices_value">choices_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">choices_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">allowed</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">','</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Read a saved set of choices, keeping only the ones that are still offered.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">allowed</code> (<em>iterable of str</em>): The choices that exist now. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">separator</code> (<em>str, default “,”</em>): What separates the choices in the saved text. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set of str</em>: The saved choices that are allowed; empty if nothing is saved or none of them exists any more.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/clefs", "treble,gone,bass")
+&gt;&gt;&gt; sorted(choices_value(settings_, key="demo/clefs", allowed=("treble", "bass", "alto")))
+['bass', 'treble']
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="keys_value">keys_value</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">keys_value</span><span class="p">(</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="n">QSettings</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Read a saved set of key signatures, each a number of sharps (positive) or flats (negative) up to seven.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">settings</code> (<em>QSettings</em>): The settings to read.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The setting’s name. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>set of int</em>: The saved key signatures that exist; empty if nothing usable is saved.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; settings_ = store()
+&gt;&gt;&gt; settings_.setValue("demo/keys", "-2,0,9,x,3")
+&gt;&gt;&gt; sorted(keys_value(settings_, key="demo/keys"))
+[-2, 0, 3]
+&gt;&gt;&gt; settings_.remove("demo")
+</code></pre>
+
+<h2 id="joined">joined</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">joined</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">object</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">','</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Write values as the text that <code class="language-plaintext highlighter-rouge">list_value</code>, <code class="language-plaintext highlighter-rouge">choices_value</code> and <code class="language-plaintext highlighter-rouge">keys_value</code> read back.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">values</code> (<em>iterable of object</em>): The values, in the order to save them.</li>
+  <li><code class="language-plaintext highlighter-rouge">separator</code> (<em>str, default “,”</em>): What to put between them. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The values as text, joined by the separator.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; joined([-1, 0, 2]), joined(["major", "minor"], separator="|")
+('-1,0,2', 'major|minor')
+</code></pre>
+
 <h2 id="export_settings">export_settings</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">export_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span>
@@ -825,6 +1035,8 @@ brought across again is kept, so an old installation’s leftovers cannot leak b
 </code></pre>
 
 
+          
+          
           
           
           
@@ -1117,8 +1329,8 @@ brought across again is kept, so an old installation’s leftovers cannot leak b
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -708,7 +711,7 @@
     </tr>
     <tr>
       <td><a href="alto.settings/">alto.settings</a></td>
-      <td>User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.</td>
+      <td>User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.</td>
     </tr>
     <tr>
       <td><a href="alto.terms/">alto.terms</a></td>
@@ -932,6 +935,10 @@
     <tr>
       <td><a href="alto.ui.engraving/">alto.ui.engraving</a></td>
       <td>Drawing notation with SMuFL music fonts (Bravura, Leland, Petaluma, MuseJazz and others).</td>
+    </tr>
+    <tr>
+      <td><a href="alto.ui.exercise_settings/">alto.ui.exercise_settings</a></td>
+      <td>Load and save each exercise’s settings.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.exercise_view/">alto.ui.exercise_view</a></td>
@@ -1230,8 +1237,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

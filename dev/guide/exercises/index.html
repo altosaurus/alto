@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
   
 </head>
 <body>
@@ -482,6 +482,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.engraving/">engraving</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_settings/">exercise_settings</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.exercise_view/">exercise_view</a></li>
                 
                 
@@ -828,11 +831,11 @@ The full table appears under <a href="/alto/dev/practice/#response-time">Respons
   <li><strong>The exercise reads it</strong> when it generates a question: <code class="language-plaintext highlighter-rouge">settings.note_names.active_clefs()</code>. Because the instance is shared,
 a change takes effect on the next question.</li>
   <li><strong>A signature.</strong> For a <code class="language-plaintext highlighter-rouge">ChoiceExercise</code>, return <code class="language-plaintext highlighter-rouge">signature(...)</code> from <code class="language-plaintext highlighter-rouge">practice_signature()</code>. The framework includes the button layout when matching stored questions. Other exercises return their signature from <code class="language-plaintext highlighter-rouge">settings_signature()</code>.</li>
-  <li><strong>A panel and persistence</strong> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>: a panel class (a subclass of <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code> that emits
-<code class="language-plaintext highlighter-rouge">changed</code> when something is edited), <code class="language-plaintext highlighter-rouge">load_*</code> and <code class="language-plaintext highlighter-rouge">save_*</code> functions that read and write <code class="language-plaintext highlighter-rouge">QSettings</code> through
-<code class="language-plaintext highlighter-rouge">store()</code> with <code class="language-plaintext highlighter-rouge">text_value</code> and <code class="language-plaintext highlighter-rouge">int_value</code>, a branch in <code class="language-plaintext highlighter-rouge">_exercise_panel</code>, and a call to your <code class="language-plaintext highlighter-rouge">load_*</code> in
-<code class="language-plaintext highlighter-rouge">MainWindow.__init__</code> so settings are restored at start. The screen connects <code class="language-plaintext highlighter-rouge">changed</code> to <code class="language-plaintext highlighter-rouge">next_question</code>, so edits apply
-at once.</li>
+  <li><strong>A panel and persistence.</strong> In <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>, a panel class (a subclass of <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code> that
+emits <code class="language-plaintext highlighter-rouge">changed</code> when something is edited) and a branch in <code class="language-plaintext highlighter-rouge">_exercise_panel</code>. In <code class="language-plaintext highlighter-rouge">alto/ui/exercise_settings.py</code>, <code class="language-plaintext highlighter-rouge">load_*</code>
+and <code class="language-plaintext highlighter-rouge">save_*</code> functions that read and write <code class="language-plaintext highlighter-rouge">QSettings</code> through <code class="language-plaintext highlighter-rouge">store()</code> with the readers in <code class="language-plaintext highlighter-rouge">alto/ui/store.py</code>, and a
+call to your <code class="language-plaintext highlighter-rouge">load_*</code> in <code class="language-plaintext highlighter-rouge">load_exercise_settings</code> so settings are restored at start. The screen connects <code class="language-plaintext highlighter-rouge">changed</code> to
+<code class="language-plaintext highlighter-rouge">next_question</code>, so edits apply at once.</li>
 </ol>
 
 <p>The panel is the largest piece of code in the program, and that is mostly widgets: copy a panel with a similar shape (for
@@ -1030,8 +1033,8 @@ book on writing good questions and, above all, good distractors.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
