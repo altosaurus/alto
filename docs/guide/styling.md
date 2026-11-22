@@ -27,7 +27,7 @@ Alto uses all four, each where it fits:
 |---|---|---|
 | Light, dark or follow-the-system | Palette (through the color scheme) | `alto/ui/theme.py` |
 | Rounded buttons, check boxes, lists, menus, scroll bars | Style sheet | `alto/ui/style.py` |
-| Switches, theme cards, charts, the staff, the keyboard | Custom painting | `settings_panel.py`, `app_settings.py`, `charts.py`, `staff.py`, `keyboard.py` |
+| Switches, theme cards, charts, the staff, the keyboard | Custom painting | `settings_menu.py`, `app_settings.py`, `charts.py`, `staff.py`, `keyboard.py` |
 | Monochrome icons that match the text color | SVG, tinted and rendered | `alto/ui/icons.py` |
 
 ## Themes: the color scheme and the palette
@@ -99,7 +99,7 @@ Place the label above the field, associate it with the field using `label.setBud
 
 ## Painting your own widgets
 
-When no sheet can do it, draw it. The `Switch` in `settings_panel.py` is a good small example: about thirty lines of
+When no sheet can do it, draw it. The `Switch` in `settings_menu.py` is a good small example: about thirty lines of
 `paintEvent` give a pill-shaped track whose color is a blend between the "off" and "on" palette colors, and a white knob
 that slides.
 

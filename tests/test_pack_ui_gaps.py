@@ -29,8 +29,8 @@ from alto.ui.fingerboard import FingerboardWidget, ruler_base
 from alto.ui.glossary import GlossaryPage
 from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.lesson import LessonsPage
+from alto.ui.pack_settings_panel import PackKeyboardSettingsPanel
 from alto.ui.plugins_dialog import PluginsDialog
-from alto.ui.settings_panel import PackKeyboardSettingsPanel
 from alto.ui.store import store
 from test_harpsichord_pack import _install as install_harpsichord
 from test_harpsichord_pack import _intervals

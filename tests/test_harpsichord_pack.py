@@ -25,7 +25,7 @@ from alto.ui.exercise_settings import (
 )
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import FingerboardWidget
-from alto.ui.settings_panel import PackKeyboardSettingsPanel
+from alto.ui.pack_settings_panel import PackKeyboardSettingsPanel
 from alto.ui.store import store
 from pack_fixtures import ensure_icons, ensure_pictures, ensure_sounds
 

@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 
 from alto import settings
 from alto.ui import exercise_settings as es
+from alto.ui import settings_menu as sm
 from alto.ui import settings_panel as sp
 from alto.ui.store import store
 
@@ -159,7 +160,7 @@ def test_the_key_diagram_shows_which_keys_are_chosen(app: QApplication) -> None:
     app : QApplication
         The shared Qt application.
     """
-    diagram = sp.KeyDiagram({0, 2, -3})
+    diagram = sm.KeyDiagram({0, 2, -3})
     assert diagram.toolTip() == "C, D, E♭" or set(diagram.toolTip().split(", ")) == {"C", "D", "E♭"}
     diagram.set_keys({7, -7})
     assert set(diagram.toolTip().split(", ")) == {"C♯", "C♭"}
@@ -175,7 +176,7 @@ def test_the_switch_slides_when_clicked_and_jumps_when_set(app: QApplication) ->
     app : QApplication
         The shared Qt application.
     """
-    switch = sp.Switch()
+    switch = sm.Switch()
     switch.setChecked(True)
     assert switch._pos == 1.0 and switch.isChecked()
     switch.setChecked(False)
@@ -198,10 +199,10 @@ def test_a_menu_row_can_hold_a_picture_inline_or_on_its_own_line(app: QApplicati
     app : QApplication
         The shared Qt application.
     """
-    plain = sp._Row("Plain")
+    plain = sm.MenuRow("Plain")
     plain.attach(QLabel("inline"))
     plain.fit()  # only a tall row needs to be fitted
-    tall = sp._Row("Tall", tall=True)
+    tall = sm.MenuRow("Tall", tall=True)
     tall.attach(QLabel("below"))
     assert tall.minimumHeight() > 0 and plain._contents.count() >= 3
     plain.show()
@@ -217,7 +218,7 @@ def test_a_page_slides_in_and_ignores_requests_while_sliding(app: QApplication) 
     app : QApplication
         The shared Qt application.
     """
-    stack = sp.SlideStack()
+    stack = sm.SlideStack()
     stack.resize(200, 100)
     for text in ("one", "two", "three"):
         stack.addWidget(QLabel(text))
@@ -244,7 +245,7 @@ def test_the_range_editor_moves_either_end_within_its_limits(app: QApplication) 
         The shared Qt application.
     """
     low_limit, high_limit = settings.RANGE_LIMITS["treble"]
-    editor = sp.RangeEditor("treble", low=low_limit + 2, high=low_limit + 4)
+    editor = sm.RangeEditor("treble", low=low_limit + 2, high=low_limit + 4)
     seen = []
     editor.edited.connect(lambda *args: seen.append(args))
     editor.low_up.click()
@@ -273,7 +274,7 @@ def test_the_choice_checklist_always_keeps_one_choice(app: QApplication) -> None
     app : QApplication
         The shared Qt application.
     """
-    checklist = sp.ChoiceChecklist([("Heading", [("a", "A"), ("b", "B")]), ("", [("c", "C")])], selected={"a"})
+    checklist = sm.ChoiceChecklist([("Heading", [("a", "A"), ("b", "B")]), ("", [("c", "C")])], selected={"a"})
     changed = []
     checklist.changed.connect(lambda: changed.append(1))
     assert checklist.selected() == {"a"} and not checklist.boxes["a"].isEnabled()  # the only one cannot be unchecked
@@ -290,7 +291,7 @@ def test_the_key_signature_page_grays_out_the_keys_until_it_is_switched_on(app: 
     app : QApplication
         The shared Qt application.
     """
-    page = sp.KeySignaturePage(False, selected={0, 1})
+    page = sm.KeySignaturePage(False, selected={0, 1})
     changed = []
     page.changed.connect(lambda: changed.append(1))
     assert not page.enabled() and not page.checklist.isEnabled() and page.selected() == {0, 1}
@@ -306,7 +307,7 @@ def test_the_key_signature_page_grays_out_the_keys_until_it_is_switched_on(app: 
 # -- the note names pane --------------------------------------------------------------------------------------------
 
 
-def watch(panel: sp.ExerciseSettingsPanel) -> list[int]:
+def watch(panel: sm.ExerciseSettingsPanel) -> list[int]:
     """
     Return a list that gets an entry each time the pane announces a change.
 

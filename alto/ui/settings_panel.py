@@ -1,54 +1,28 @@
 """
-The settings panels that slide in beside an exercise, and the small widgets they are built from.
+The settings panels of the built-in exercises, and `settings_panel_for`, which picks the panel for any exercise.
 
 Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures ...) that each lead to a page. Edits
 are live: they change the shared settings object, are saved, and a `changed` signal tells the exercise to ask a new
-question. Loading and saving the settings is in `alto.ui.exercise_settings`.
+question. The widgets the panels are built from are in `alto.ui.settings_menu`, plugin exercises' panels are in
+`alto.ui.pack_settings_panel`, and loading and saving the settings is in `alto.ui.exercise_settings`.
 
 Examples
 --------
->>> _key_label(2)
-'D  ·  2♯'
->>> row = _Row("Clefs")
->>> row.title.text()
-'<b>Clefs</b>'
+>>> panel = settings_panel_for(ClefBasics())
+>>> type(panel).__name__
+'ClefBasicsSettingsPanel'
 """
 
 from __future__ import annotations
 
-from collections.abc import (
-    Callable,
-    Iterable,
-    Mapping,
-)
-
 from PySide6.QtCore import (
-    QEasingCurve,
-    QParallelAnimationGroup,
-    QPoint,
-    QPointF,
-    QPropertyAnimation,
-    QSize,
     Qt,
-    QTimer,
-    QVariantAnimation,
-    Signal,
 )
 from PySide6.QtGui import (
-    QColor,
-    QHideEvent,
     QIntValidator,
-    QPainter,
-    QPaintEvent,
-    QPalette,
-    QPen,
 )
 from PySide6.QtWidgets import (
-    QAbstractButton,
-    QBoxLayout,
     QButtonGroup,
-    QCheckBox,
-    QFrame,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -56,22 +30,20 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QRadioButton,
-    QScrollArea,
-    QSizePolicy,
-    QStackedWidget,
-    QTabWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
 from alto import settings
-from alto.audio import INSTRUMENT_BY_KEY
 from alto.circle_schemes import (
     DEFAULT_SCHEME,
     CustomRecord,
 )
-from alto.exercises.base import ButtonSettings, ChoiceExercise, Exercise
+from alto.exercises.base import (
+    ChoiceExercise,
+    Exercise,
+)
 from alto.exercises.library import (
     ArpeggioNames,
     CircleOfFifths,
@@ -96,1671 +68,81 @@ from alto.notation_terms import CATALOG
 from alto.settings import (
     CLEFS,
     NAMINGS,
-    NOTE_VALUES,
-    RANGE_LIMITS,
     NoteNameSettings,
-    diatonic_name,
     key_name,
 )
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
-    MAJOR_KEYS,
-    Note,
 )
-from alto.theory.scales import INVERSION_NAMES, format_key_signature, mode_tonic
-from alto.ui import zoom
+from alto.theory.scales import (
+    INVERSION_NAMES,
+)
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
 )
-from alto.ui.colors import blend
-from alto.ui.degree_text import DegreeCheckBox, degree_tooltip
+from alto.ui.degree_text import (
+    degree_tooltip,
+)
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import (
     save_arpeggio,
     save_circle,
+    save_clef_basics,
     save_construction,
     save_key_settings,
     save_keyboard,
     save_keyboard_intervals,
     save_note_names,
-    save_pack_options,
     saved_notation_terms,
 )
 from alto.ui.interval_range import IntervalRangeSlider
 from alto.ui.keyboard import KeyboardSpan
+from alto.ui.pack_settings_panel import (
+    PackKeyboardSettingsPanel,
+    PackSettingsPanel,
+)
 from alto.ui.pictures import (
-    CLEF_NAMES,
-    VALUE_NAMES,
     ClefPictures,
-    KeySignaturePicture,
     NamePicture,
     RangePictures,
     ValuePictures,
-    _Picture,
 )
 from alto.ui.practice_limits import DailyLimitsEditor
-from alto.ui.staff import StaffWidget
+from alto.ui.settings_menu import (
+    ROW_PICTURE_WIDTH,
+    ChoiceChecklist,
+    ClefsPanel,
+    ExerciseSettingsPanel,
+    KeyChecklist,
+    KeyDiagram,
+    KeySignaturePage,
+    MenuRow,
+    ScaleKeyPicker,
+    SlideStack,
+    StaffRangePanel,
+    ToggleRow,
+    arrow_button,
+    buttons_page,
+    clef_choice_page,
+    direction_choices,
+    guard_last,
+    label_with_picture,
+    scrolling,
+    show_keys,
+    subpage,
+)
 from alto.ui.store import (
     store,
     text_value,
 )
-from alto.ui.zoom import css, px
+from alto.ui.zoom import (
+    css,
+    px,
+)
 
 
-def _guard_last(
-    boxes: Iterable[QAbstractButton],
-    *,
-    enabled: bool = True,
-) -> None:
-    """
-    Disable the only checked box, so that at least one choice always stays selected.
-
-    Parameters
-    ----------
-    boxes : iterable of QAbstractButton
-        The checkboxes of one choice.
-    enabled : bool, default True
-        False disables them all (for when the whole choice is switched off). Keyword-only.
-
-    Examples
-    --------
-    >>> first, second = QCheckBox(), QCheckBox()
-    >>> first.setChecked(True)
-    >>> _guard_last([first, second])
-    >>> first.isEnabled(), second.isEnabled()
-    (False, True)
-    >>> second.setChecked(True)
-    >>> _guard_last([first, second])
-    >>> first.isEnabled()
-    True
-    """
-    checked = [b for b in boxes if b.isChecked()]
-    for box in boxes:
-        box.setEnabled(enabled and not (len(checked) == 1 and box.isChecked()))
-
-
-def _key_label(count: int) -> str:
-    """
-    Label a key signature with its key and its accidentals.
-
-    Parameters
-    ----------
-    count : int
-        Sharps if positive, flats if negative.
-
-    Returns
-    -------
-    str
-        For example 'D  ·  2♯', 'E♭  ·  3♭' or 'C  ·  none'.
-
-    Examples
-    --------
-    >>> _key_label(0), _key_label(2), _key_label(-3)
-    ('C  ·  none', 'D  ·  2♯', 'E♭  ·  3♭')
-    """
-    return f"{MAJOR_KEYS[count]}  ·  " + ("none" if count == 0 else f"{abs(count)}{'♯' if count > 0 else '♭'}")
-
-
-def _arrow(
-    kind: Qt.ArrowType,
-    *,
-    tip: str,
-) -> QToolButton:
-    """
-    Make a small arrow button that repeats while it is held.
-
-    Parameters
-    ----------
-    kind : Qt.ArrowType
-        Which way the arrow points.
-    tip : str
-        The tooltip. Keyword-only.
-
-    Returns
-    -------
-    QToolButton
-        The button.
-
-    Examples
-    --------
-    >>> button = _arrow(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
-    >>> button.toolTip(), button.autoRepeat()
-    ('Raise the lowest note', True)
-    """
-    btn = QToolButton()
-    btn.setArrowType(kind)
-    btn.setProperty("arrowButton", True)  # styled with a visible border (see style.py)
-    btn.setToolTip(tip)
-    btn.setAccessibleName(tip)
-    btn.setAutoRepeat(True)
-    btn.setAutoRepeatDelay(350)
-    btn.setAutoRepeatInterval(90)
-    return btn
-
-
-class RangeEditor(QWidget):
-    """
-    A staff showing the lowest and highest note asked for a clef.
-
-    Arrows on the left move the lower bound, arrows on the right move the upper bound.
-
-    Attributes
-    ----------
-    edited : Signal
-        Emitted with the clef key, the lowest note and the highest note (as staff steps) after a change.
-    key : str
-        The clef.
-    low : int
-        The lowest note asked, as a staff step (`Note.diatonic`).
-    high : int
-        The highest note asked.
-    limits : tuple of (int, int)
-        The furthest the bounds may go.
-    staff : StaffWidget
-        Shows the two notes.
-
-    Examples
-    --------
-    >>> editor = RangeEditor("treble", low=28, high=34)
-    >>> editor.caption_text.text()
-    '<b>C4 – B4</b>'
-    """
-
-    edited = Signal(str, int, int)  # clef key, low, high (diatonic)
-
-    def __init__(
-        self,
-        key: str,
-        *,
-        low: int,
-        high: int,
-        limits: tuple[int, int] | None = None,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the editor for a clef's range.
-
-        Parameters
-        ----------
-        key : str
-            The clef, a key of `RANGE_LIMITS`.
-        low : int
-            The lowest note asked, as a staff step. Keyword-only.
-        high : int
-            The highest note asked. Keyword-only.
-        limits : tuple of (int, int) or None, default None
-            The furthest the bounds may go, as staff steps; None for the clef's usual limits. Keyword-only.
-        parent : QWidget or None, default None
-            The widget that owns the editor. Keyword-only.
-
-        Examples
-        --------
-        >>> RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
-        True
-        >>> RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
-        (21, 30)
-        """
-        super().__init__(parent)
-        self.key, self.low, self.high = key, low, high
-        self.limits = limits or RANGE_LIMITS[key]
-        self.caption_text = QLabel()
-        self.caption_text.setStyleSheet(css("font-size: 12pt;"))
-        self.caption = QWidget()  # the clef as a picture, then the lowest and highest note
-        caption_row = QHBoxLayout(self.caption)
-        caption_row.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        caption_row.addWidget(ClefPictures([key], scale=0.9))
-        caption_row.addWidget(self.caption_text)
-        caption_row.addStretch()
-        self.staff = StaffWidget(
-            gap=9.0,
-            side=18.0,
-            note_offset=62.0,
-            margin=8.0,
-            compact=True,
-        )
-        self.staff.setFixedWidth(px(168))
-        self.low_up = _arrow(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
-        self.low_down = _arrow(Qt.ArrowType.DownArrow, tip="Lower the lowest note")
-        self.high_up = _arrow(Qt.ArrowType.UpArrow, tip="Raise the highest note")
-        self.high_down = _arrow(Qt.ArrowType.DownArrow, tip="Lower the highest note")
-        self.low_up.clicked.connect(lambda: self._move(low=1))
-        self.low_down.clicked.connect(lambda: self._move(low=-1))
-        self.high_up.clicked.connect(lambda: self._move(high=1))
-        self.high_down.clicked.connect(lambda: self._move(high=-1))
-
-        row = QHBoxLayout()
-        row.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        row.addStretch()  # keep the staff and its arrows together, centered in the pane
-        for column, buttons in ((0, (self.low_up, self.low_down)), (2, (self.high_up, self.high_down))):
-            col = QVBoxLayout()
-            col.setSpacing(2)
-            col.addStretch()  # center the pair on the staff's midline
-            col.addWidget(buttons[0])
-            col.addWidget(buttons[1])
-            col.addStretch()
-            if column == 0:
-                row.addLayout(col)
-                row.addWidget(self.staff)
-            else:
-                row.addLayout(col)
-        row.addStretch()
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            8,
-            0,
-            16,
-        )  # space between one clef's block and the next
-        lay.setSpacing(8)
-        lay.addWidget(self.caption)
-        lay.addLayout(row)
-        self._refresh()
-
-    def _move(
-        self,
-        low: int = 0,
-        *,
-        high: int = 0,
-    ) -> None:
-        """
-        Move the bounds by steps, keeping the lower below the upper and both within the limits.
-
-        Parameters
-        ----------
-        low : int, default 0
-            How many staff steps to move the lower bound; positive is higher.
-        high : int, default 0
-            How many steps to move the upper bound. Keyword-only.
-
-        Examples
-        --------
-        >>> editor = RangeEditor("treble", low=28, high=34)
-        >>> got = []
-        >>> _ = editor.edited.connect(lambda key, lo, hi: got.append((key, lo, hi)))
-        >>> editor._move(low=1)
-        >>> got
-        [('treble', 29, 34)]
-        >>> editor._move(low=100)  # the lower bound cannot pass the upper
-        >>> editor.low
-        34
-        """
-        self.low = min(max(self.low + low, self.limits[0]), self.high)  # the lower bound can't pass the upper
-        self.high = max(min(self.high + high, self.limits[1]), self.low)
-        self._refresh()
-        self.edited.emit(self.key, self.low, self.high)
-
-    def _refresh(self) -> None:
-        """
-        Show the bounds on the staff and in the caption, and enable only the arrows that can still move.
-
-        Examples
-        --------
-        >>> editor = RangeEditor("treble", low=22, high=30)  # 22 is the lowest the treble range goes
-        >>> editor._refresh()
-        >>> editor.low_down.isEnabled(), editor.low_up.isEnabled()
-        (False, True)
-        """
-        self.caption_text.setText(f"<b>{diatonic_name(self.low)} – {diatonic_name(self.high)}</b>")
-        self.staff.show_notes([[Note.from_diatonic(self.low)], [Note.from_diatonic(self.high)]], clef=self.key)
-        self.low_up.setEnabled(self.low < self.high)
-        self.low_down.setEnabled(self.low > self.limits[0])
-        self.high_up.setEnabled(self.high < self.limits[1])
-        self.high_down.setEnabled(self.high > self.low)
-
-
-class KeyDiagram(QWidget):
-    """
-    A small fork showing which key signatures are selected.
-
-    C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
-    Selected keys are filled, the rest are hollow.
-
-    Attributes
-    ----------
-    DOT, PITCH, ROW_GAP, PAD : float
-        The dot radius and the spacing, in pixels.
-    keys : set of int
-        The selected key signatures: sharps if positive, flats if negative.
-
-    Examples
-    --------
-    >>> KeyDiagram({0, 2}).toolTip()
-    'C, D'
-    """
-
-    DOT, PITCH, ROW_GAP, PAD = 4.4, 12.6, 13.0, 1.5  # dot radius and spacing, in pixels
-
-    def __init__(
-        self,
-        keys: set[int] | None = None,
-        *,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Create the diagram.
-
-        Parameters
-        ----------
-        keys : set of int or None, default None
-            The key signatures to show as selected.
-        parent : QWidget or None, default None
-            The widget that owns it. Keyword-only.
-
-        Examples
-        --------
-        >>> KeyDiagram().keys
-        set()
-        """
-        super().__init__(parent)
-        self.keys: set[int] = set(keys or ())
-        zoomed = zoom.factor()  # the dots and their spacing follow the zoom
-        self.DOT, self.PITCH, self.ROW_GAP, self.PAD = (
-            value * zoomed for value in (type(self).DOT, type(self).PITCH, type(self).ROW_GAP, type(self).PAD)
-        )
-        self.first_column = self.PAD + 2 * self.DOT + px(7) + self.DOT  # x of the 1-sharp / 1-flat dots
-        self.setFixedSize(
-            int(self.first_column + 6 * self.PITCH + self.DOT + self.PAD) + px(1),
-            int(self.ROW_GAP + 2 * self.DOT + 2 * self.PAD) + px(3),
-        )
-        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row underneath is the click target
-        self._update_tip()
-
-    def set_keys(self, keys: set[int]) -> None:
-        """
-        Choose which key signatures are shown as selected.
-
-        Parameters
-        ----------
-        keys : set of int
-            Sharps if positive, flats if negative.
-
-        Examples
-        --------
-        >>> diagram = KeyDiagram()
-        >>> diagram.set_keys({2, -1, 0})
-        >>> diagram.toolTip()
-        'C, D, F'
-        """
-        self.keys = set(keys)
-        self._update_tip()
-        self.update()
-
-    def _update_tip(self) -> None:
-        """
-        Set the tooltip to the names of the selected keys, sharp keys first.
-
-        Examples
-        --------
-        >>> diagram = KeyDiagram({3, 1})
-        >>> diagram._update_tip()
-        >>> diagram.toolTip()
-        'G, A'
-        """
-        names = [MAJOR_KEYS[k] for k in sorted(self.keys, key=lambda k: (k < 0, abs(k)))]
-        self.setToolTip(", ".join(names))
-
-    def paintEvent(self, _: QPaintEvent) -> None:
-        """
-        Draw a dot for each key signature, filled when selected.
-
-        Parameters
-        ----------
-        _ : QPaintEvent
-            The paint request; the whole widget is always redrawn.
-
-        Examples
-        --------
-        >>> KeyDiagram({0, 1, -1}).grab().isNull()
-        False
-        """
-        p = QPainter(self)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        pal = self.palette()
-        text = pal.color(QPalette.ColorRole.Text)
-        base = pal.color(QPalette.ColorRole.Base)  # the row is filled with the base color
-
-        def shade(t: float) -> QColor:  # t of the way from the row's background to the text color
-            """
-            Return a color a fraction of the way from the row's background to the text color.
-
-            Parameters
-            ----------
-            t : float
-                0 for the background, 1 for the text color.
-
-            Returns
-            -------
-            QColor
-                The blended color.
-
-            Examples
-            --------
-            >>> shade(0.5)  # doctest: +SKIP
-            """
-            return blend(base, b=text, t=t)
-
-        filled, outline = shade(0.85), shade(0.5)  # both stand out from the background, in a light or a dark theme
-        mid, top = self.height() / 2, self.height() / 2 - self.ROW_GAP / 2
-        spots = [(0, self.PAD + self.DOT, mid)]  # C major, between the two rows
-        for n in range(1, 8):
-            x = self.first_column + (n - 1) * self.PITCH
-            spots += [(n, x, top), (-n, x, top + self.ROW_GAP)]
-        for count, x, y in spots:
-            selected = count in self.keys
-            p.setPen(QPen(filled if selected else outline, 1.2))
-            p.setBrush(filled if selected else base)
-            p.drawEllipse(QPointF(x, y), self.DOT, self.DOT)
-
-
-ROW_PICTURE_WIDTH = 238  # room for a picture on its own line in a menu row (pane width less margins)
-
-
-def _label_with_picture(
-    button: QAbstractButton,
-    *,
-    picture: _Picture,
-    name: str,
-) -> None:
-    """
-    Label a checkbox or radio button with a picture instead of text.
-
-    The name stays as the tooltip and the accessible name.
-
-    Parameters
-    ----------
-    button : QAbstractButton
-        The button to label.
-    picture : _Picture
-        The picture (a clef, a note value ...). Keyword-only.
-    name : str
-        What it is called. Keyword-only.
-
-    Examples
-    --------
-    >>> box = QCheckBox()
-    >>> _label_with_picture(box, picture=ClefPictures(["treble"]), name="Treble")
-    >>> box.toolTip(), box.accessibleName()
-    ('Treble', 'Treble')
-    """
-    picture.label_button(button)
-    button.setToolTip(name)
-    button.setAccessibleName(name)
-
-
-def _label_with_clef(
-    button: QAbstractButton,
-    *,
-    clef: str,
-    scale: float = 1.4,
-) -> None:
-    """
-    Label a button with a clef's picture and its name beside it.
-
-    Parameters
-    ----------
-    button : QAbstractButton
-        The button to label.
-    clef : str
-        A key of `CLEF_NAMES`. Keyword-only.
-    scale : float, default 1.4
-        How much to enlarge the picture. Keyword-only.
-
-    Examples
-    --------
-    >>> box = QCheckBox()
-    >>> _label_with_clef(box, clef="mezzo")
-    >>> box.text()
-    'Mezzo-soprano'
-    """
-    _label_with_picture(button, picture=ClefPictures([clef], scale=scale), name=CLEF_NAMES[clef])
-    button.setText(CLEF_NAMES[clef])
-
-
-def _clef_box(
-    clef: str,
-    *,
-    scale: float = 1.4,
-) -> QCheckBox:
-    """
-    Make a checkbox for a clef, with its picture and name.
-
-    Parameters
-    ----------
-    clef : str
-        A key of `CLEF_NAMES`.
-    scale : float, default 1.4
-        How much to enlarge the picture. Keyword-only.
-
-    Returns
-    -------
-    QCheckBox
-        The checkbox.
-
-    Examples
-    --------
-    >>> _clef_box("alto").text()
-    'Alto'
-    """
-    box = QCheckBox()
-    _label_with_clef(box, clef=clef, scale=scale)
-    return box
-
-
-def _clef_list(boxes: dict[str, QCheckBox]) -> QWidget:
-    """
-    Lay the clef checkboxes out one under another, in three groups divided by a line.
-
-    The groups are the grand staff; the treble, bass, alto and tenor clefs; and the soprano, mezzo-soprano and baritone
-    clefs. A group none of the boxes belong to is left out. The list is indented under its heading.
-
-    Parameters
-    ----------
-    boxes : dict of str to QCheckBox
-        The checkbox of each clef.
-
-    Returns
-    -------
-    QWidget
-        The list.
-
-    Examples
-    --------
-    >>> boxes_ = {clef: _clef_box(clef) for clef in ("treble", "bass", "soprano")}
-    >>> widget_ = _clef_list(boxes_)
-    >>> # noinspection PyUnresolvedReferences
-    >>> widget_.layout().count()  # two boxes_, a dividing line, and one box
-    4
-    """
-    widget = QWidget()
-    lay = QVBoxLayout(widget)
-    lay.setContentsMargins(
-        24,
-        0,
-        0,
-        0,
-    )
-    lay.setSpacing(8)
-    groups = [[boxes[c] for c in group if c in boxes] for group in settings.CLEF_GROUPS]
-    for i, group in enumerate([g for g in groups if g]):
-        if i:
-            rule = QFrame()
-            rule.setFrameShape(QFrame.Shape.HLine)
-            rule.setFrameShadow(QFrame.Shadow.Plain)
-            rule.setStyleSheet("color: palette(mid);")
-            lay.addWidget(rule)
-        for box in group:
-            lay.addWidget(box, 0, Qt.AlignmentFlag.AlignLeft)
-    return widget
-
-
-def _clefs_page(
-    choices: Iterable[str],
-    *,
-    selected: set[str],
-    edited: Callable[[], object],
-    back: Callable[[], object],
-    title: str = "Clefs",
-    hint: str = "One of the checked clefs is picked at random.",
-) -> tuple[dict[str, QCheckBox], QWidget]:
-    """
-    Build the "Clefs" page that every exercise with a choice of clefs shares.
-
-    Parameters
-    ----------
-    choices : iterable of str
-        The clefs to offer, from `settings.RANGE_KEYS`; "grand" is left out of exercises that cannot use the grand staff.
-    selected : set of str
-        The clefs that start checked. Keyword-only.
-    edited : callable
-        Called whenever a box is checked or unchecked. Keyword-only.
-    back : callable
-        Called when the Back button is clicked. Keyword-only.
-    title : str, default "Clefs"
-        The page's title. Keyword-only.
-    hint : str, default "One of the checked clefs is picked at random."
-        The gray line above the list. Keyword-only.
-
-    Returns
-    -------
-    dict of str to QCheckBox
-        The checkbox of each clef offered.
-    QWidget
-        The page, with its title. The last checked clef cannot be unchecked.
-
-    Examples
-    --------
-    >>> checked = []
-    >>> boxes_, page_ = _clefs_page(("treble", "bass"), selected={"bass"}, edited=lambda: checked.append(1), back=lambda: None)
-    >>> boxes_["bass"].isEnabled()  # it is the only one checked, so it stays checked
-    False
-    >>> boxes_["treble"].setChecked(True)
-    >>> sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), checked
-    (['bass', 'treble'], [1])
-    """
-    boxes = {c: _clef_box(c) for c in choices}
-    body = QWidget()
-    lay = QVBoxLayout(body)
-    lay.setContentsMargins(
-        0,
-        0,
-        0,
-        0,
-    )
-    note = QLabel(hint)
-    note.setWordWrap(True)
-    note.setStyleSheet("color: gray;")
-    lay.addWidget(note)
-    for c, box in boxes.items():
-        box.setChecked(c in selected)
-    lay.addWidget(_clef_list(boxes))
-    _guard_last(list(boxes.values()))  # the last checked clef can't be unchecked
-    for box in boxes.values():
-        box.toggled.connect(edited)
-    return boxes, _subpage(title, body=body, back=back)
-
-
-def _show_keys(
-    row: _Row,
-    *,
-    diagram: KeyDiagram,
-    enabled: bool,
-    keys: set[int],
-) -> None:
-    """
-    Show the selected keys as a diagram in a menu row, or "Off" when key signatures are switched off.
-
-    Parameters
-    ----------
-    row : _Row
-        The menu row.
-    diagram : KeyDiagram
-        The diagram to update. Keyword-only.
-    enabled : bool
-        Whether key signatures are on. Keyword-only.
-    keys : set of int
-        The selected key signatures. Keyword-only.
-
-    Examples
-    --------
-    >>> row_, diagram_ = _Row("Key signatures"), KeyDiagram()
-    >>> _show_keys(row_, diagram=diagram_, enabled=False, keys={0})
-    >>> row_.value.text(), diagram_.isHidden()
-    ('Off', True)
-    """
-    diagram.set_keys(keys)
-    diagram.setVisible(enabled)
-    row.value.setText("" if enabled else "Off")
-
-
-class _ValueLabel(QLabel):
-    """
-    The value shown on the right of a menu row, which a screen reader is also given as the row's description.
-
-    Examples
-    --------
-    >>> row = QPushButton()
-    >>> label = _ValueLabel(row)
-    >>> label.setText("2 of 7")
-    >>> row.accessibleDescription()
-    '2 of 7'
-    """
-
-    def __init__(self, row: QPushButton) -> None:
-        """
-        Make the label for a row.
-
-        Parameters
-        ----------
-        row : QPushButton
-            The row that this is the value of.
-
-        Examples
-        --------
-        >>> _ValueLabel(QPushButton()).text()
-        ''
-        """
-        super().__init__()
-        self._row = row
-
-    def setText(self, text: str) -> None:
-        """
-        Show a value, and describe the row with it.
-
-        Parameters
-        ----------
-        text : str
-            The value.
-
-        Examples
-        --------
-        >>> row = QPushButton()
-        >>> _ValueLabel(row).setText("On")
-        >>> row.accessibleDescription()
-        'On'
-        """
-        super().setText(text)
-        self._row.setAccessibleDescription(text)
-
-
-class _Row(QPushButton):
-    """
-    A menu row: title on the left, current value and a chevron on the right.
-
-    A `tall` row puts a picture on a second line of its own, using the full width, for summaries that need room to be
-    readable.
-
-    Attributes
-    ----------
-    tall : bool
-        Whether the row has a second line.
-    title : QLabel
-        The title.
-    value : QLabel
-        The current value, shown on the right.
-
-    Examples
-    --------
-    >>> row = _Row("Range", tall=True)
-    >>> row.tall, row.title.text()
-    (True, '<b>Range</b>')
-    """
-
-    def __init__(
-        self,
-        title: str,
-        *,
-        chevron: bool = True,
-        tall: bool = False,
-    ) -> None:
-        """
-        Build the row.
-
-        Parameters
-        ----------
-        title : str
-            The row's title.
-        chevron : bool, default True
-            Show a chevron on the right, to say it opens a page. Keyword-only.
-        tall : bool, default False
-            Give the row a second line for a picture. Keyword-only.
-
-        Examples
-        --------
-        >>> _Row("Clefs").minimumHeight()
-        48
-        """
-        super().__init__()
-        self.tall = tall
-        self._contents: QBoxLayout  # the layout inside the row
-        self.title = QLabel(f"<b>{title}</b>")
-        self.setAccessibleName(title)  # the text is in labels on the button, which a screen reader would not read as its name
-        self.value = _ValueLabel(self)
-        self.value.setStyleSheet("color: gray;")
-        self.value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        for label in (self.title, self.value):
-            label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        arrow = QLabel("›")
-        arrow.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        if tall:
-            outer = QVBoxLayout(self)
-            outer.setContentsMargins(
-                11,
-                8,
-                11,
-                8,
-            )
-            outer.setSpacing(4)
-            top = QHBoxLayout()
-            top.addWidget(self.title)
-            top.addWidget(self.value, 1)
-            if chevron:
-                top.addWidget(arrow)
-            outer.addLayout(top)
-            self._below = QHBoxLayout()
-            outer.addLayout(self._below)
-            self._contents = outer
-            return
-        self.setMinimumHeight(px(48))
-        lay = QHBoxLayout(self)
-        self._contents = lay
-        lay.setContentsMargins(
-            11,
-            4,
-            11,
-            4,
-        )  # leaves room for a small diagram in the row
-        lay.addWidget(self.title)
-        lay.addWidget(self.value, 1)
-        if chevron:
-            lay.addWidget(arrow)
-
-    def attach(self, widget: QWidget) -> None:
-        """
-        Put a widget in the row.
-
-        Just after the value text, or (in a tall row) centered on its own line below.
-
-        Parameters
-        ----------
-        widget : QWidget
-            The widget, usually a small picture of the current choice.
-
-        Examples
-        --------
-        >>> row = _Row("Clefs")
-        >>> picture = ClefPictures(["treble"])
-        >>> row.attach(picture)
-        >>> # noinspection PyUnresolvedReferences
-        >>> row.layout().indexOf(picture)
-        2
-        """
-        if self.tall:
-            self._below.addStretch()
-            self._below.addWidget(widget)
-            self._below.addStretch()
-            self.fit()
-        else:
-            self._contents.insertWidget(2, widget)
-
-    def fit(self) -> None:
-        """
-        Make a tall row as high as its contents need.
-
-        A button does not size itself to a layout inside it.
-
-        Examples
-        --------
-        >>> row = _Row("Range", tall=True)
-        >>> row.attach(QLabel("a picture"))
-        >>> row.minimumHeight() > 0
-        True
-        """
-        if self.tall:
-            self.setMinimumHeight(self._contents.minimumSize().height())
-
-
-class Switch(QAbstractButton):
-    """
-    A pill-shaped on/off switch whose knob slides across when toggled.
-
-    Attributes
-    ----------
-    W, H : int
-        The switch's size, in pixels.
-
-    Examples
-    --------
-    >>> switch = Switch()
-    >>> switch.setChecked(True)
-    >>> switch.isChecked()
-    True
-    """
-
-    W, H = 42, 24
-
-    def __init__(self, parent: QWidget | None = None) -> None:
-        """
-        Create a switch that is off.
-
-        Parameters
-        ----------
-        parent : QWidget or None, default None
-            The widget that owns it.
-
-        Examples
-        --------
-        >>> Switch().isChecked()
-        False
-        """
-        super().__init__(parent)
-        self.setCheckable(True)
-        self.setFixedSize(px(self.W), px(self.H))
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self._pos = 0.0  # knob position, 0 (off) .. 1 (on)
-        self._anim = QVariantAnimation(self)
-        self._anim.setDuration(140)
-        self._anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self._anim.valueChanged.connect(self._set_pos)
-        self.toggled.connect(self._slide)
-
-    def _set_pos(self, value: float) -> None:
-        """
-        Move the knob.
-
-        Parameters
-        ----------
-        value : float
-            0 for off up to 1 for on, with values between while it slides.
-
-        Examples
-        --------
-        >>> switch = Switch()
-        >>> switch._set_pos(0.5)
-        >>> switch._pos
-        0.5
-        """
-        self._pos = float(value)
-        self.update()
-
-    def _slide(self, on: bool) -> None:
-        """
-        Slide the knob to on or off.
-
-        Parameters
-        ----------
-        on : bool
-            Where the knob is going.
-
-        Examples
-        --------
-        >>> switch = Switch()
-        >>> switch._slide(True)
-        >>> switch._anim.endValue()
-        1.0
-        """
-        self._anim.stop()
-        self._anim.setStartValue(self._pos)
-        self._anim.setEndValue(1.0 if on else 0.0)
-        self._anim.start()
-
-    def setChecked(self, on: bool) -> None:  # no animation when set programmatically
-        """
-        Turn the switch on or off without animating, as when a setting is loaded.
-
-        Parameters
-        ----------
-        on : bool
-            The new state.
-
-        Examples
-        --------
-        >>> switch = Switch()
-        >>> switch.setChecked(True)
-        >>> switch._pos
-        1.0
-        """
-        super().setChecked(on)
-        self._anim.stop()
-        self._set_pos(1.0 if on else 0.0)
-
-    def paintEvent(self, _: QPaintEvent) -> None:
-        """
-        Draw the track, tinted between off and on, and the knob.
-
-        Parameters
-        ----------
-        _ : QPaintEvent
-            The paint request; the whole widget is always redrawn.
-
-        Examples
-        --------
-        >>> Switch().grab().isNull()
-        False
-        """
-        p = QPainter(self)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        pal = self.palette()
-        off, on = pal.color(QPalette.ColorRole.Mid), pal.color(QPalette.ColorRole.Highlight)
-        track = blend(off, b=on, t=self._pos)
-        if not self.isEnabled():
-            track.setAlpha(110)
-        p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(track)
-        p.drawRoundedRect(self.rect(), self.H / 2, self.H / 2)
-        r, margin = self.H / 2 - 3, 3
-        x = margin + r + self._pos * (self.W - 2 * (margin + r))
-        p.setBrush(QColor("white"))
-        p.drawEllipse(QPointF(x, self.H / 2), r, r)
-
-    def sizeHint(self) -> QSize:
-        """
-        Return the switch's fixed size.
-
-        Returns
-        -------
-        QSize
-            `W` by `H`.
-
-        Examples
-        --------
-        >>> Switch().sizeHint()
-        PySide6.QtCore.QSize(42, 24)
-        """
-        return QSize(self.W, self.H)
-
-
-class _ToggleRow(_Row):
-    """
-    A menu row with a switch that changes a setting in place instead of opening a page.
-
-    Attributes
-    ----------
-    switched : Signal
-        Emitted with the new state when the row is clicked.
-    switch : Switch
-        The switch.
-
-    Examples
-    --------
-    >>> row = _ToggleRow("Accidentals")
-    >>> changes = []
-    >>> _ = row.switched.connect(changes.append)
-    >>> row.click()
-    >>> changes, row.isOn()
-    ([True], True)
-    """
-
-    switched = Signal(bool)
-
-    def __init__(self, title: str) -> None:
-        """
-        Build the row with its switch off.
-
-        Parameters
-        ----------
-        title : str
-            The row's title.
-
-        Examples
-        --------
-        >>> _ToggleRow("Accidentals").isOn()
-        False
-        """
-        super().__init__(title, chevron=False)
-        self.value.hide()
-        self.switch = Switch()
-        self.switch.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the whole row is the click target
-        self.switch.setFocusPolicy(Qt.FocusPolicy.NoFocus)  # the row is what the keyboard reaches, not its picture of a switch
-        self.switch.setAccessibleName(title)
-        self._contents.addWidget(self.switch)
-        self.clicked.connect(lambda: self._set(not self.switch.isChecked()))
-
-    def _set(self, on: bool) -> None:
-        """
-        Set the switch and tell whoever is listening.
-
-        Parameters
-        ----------
-        on : bool
-            The new state.
-
-        Examples
-        --------
-        >>> row = _ToggleRow("Accidentals")
-        >>> changes = []
-        >>> _ = row.switched.connect(changes.append)
-        >>> row._set(True)
-        >>> changes
-        [True]
-        """
-        self.switch.setChecked(on)
-        self.switch.update()
-        self.switched.emit(on)
-
-    # noinspection PyPep8Naming
-    def isOn(self) -> bool:
-        """
-        Report whether the switch is on.
-
-        Returns
-        -------
-        bool
-            True if on.
-
-        Examples
-        --------
-        >>> _ToggleRow("Accidentals").isOn()
-        False
-        """
-        return self.switch.isChecked()
-
-    # noinspection PyPep8Naming
-    def setOn(self, on: bool) -> None:
-        """
-        Set the switch without announcing it, as when a setting is loaded.
-
-        Parameters
-        ----------
-        on : bool
-            The new state.
-
-        Examples
-        --------
-        >>> row = _ToggleRow("Accidentals")
-        >>> row.setOn(True)
-        >>> row.isOn()
-        True
-        """
-        self.switch.setChecked(on)
-
-
-def _subpage(
-    title: str,
-    *,
-    body: QWidget,
-    back: Callable[[], object],
-    fill: bool = False,
-) -> QWidget:
-    """
-    Build a second-layer page: a Back button and title above a body.
-
-    Parameters
-    ----------
-    title : str
-        The page's title.
-    body : QWidget
-        What the page shows. Keyword-only.
-    back : callable
-        Called when Back is clicked. Keyword-only.
-    fill : bool, default False
-        Let the body take all the room (so a long page can scroll) instead of leaving space below it. Keyword-only.
-
-    Returns
-    -------
-    QWidget
-        The page.
-
-    Examples
-    --------
-    >>> calls = []
-    >>> page_ = _subpage("Clefs", body=QWidget(), back=lambda: calls.append("back"))
-    >>> next(b for b in page_.findChildren(QToolButton) if b.text() == "‹ Back").click()
-    >>> calls
-    ['back']
-    """
-    page = QWidget()
-    lay = QVBoxLayout(page)
-    lay.setContentsMargins(
-        0,
-        0,
-        0,
-        0,
-    )
-    head = QHBoxLayout()
-    btn = QToolButton()
-    btn.setText("‹ Back")
-    btn.setAutoRaise(True)
-    btn.clicked.connect(back)
-    head.addWidget(btn)
-    head.addWidget(QLabel(f"<b>{title}</b>"))
-    head.addStretch()
-    lay.addLayout(head)
-    lay.addWidget(body, 1 if fill else 0)
-    if not fill:
-        lay.addStretch()
-    return page
-
-
-class SlideStack(QStackedWidget):
-    """
-    A stacked widget whose pages slide in from the right (going deeper) or the left (going back).
-
-    Examples
-    --------
-    >>> stack = SlideStack()
-    >>> _ = stack.addWidget(QWidget())
-    >>> _ = stack.addWidget(QWidget())
-    >>> stack.sliding
-    False
-    """
-
-    def __init__(self, parent: QWidget | None = None) -> None:
-        """
-        Create an empty stack.
-
-        Parameters
-        ----------
-        parent : QWidget or None, default None
-            The widget that owns it.
-
-        Examples
-        --------
-        >>> SlideStack().count()
-        0
-        """
-        super().__init__(parent)
-        self._slide: QParallelAnimationGroup | None = None
-
-    @property
-    def sliding(self) -> bool:
-        """
-        Report whether a page is sliding in.
-
-        Returns
-        -------
-        bool
-            True from the start of a slide until it finishes.
-
-        Examples
-        --------
-        >>> SlideStack().sliding
-        False
-        """
-        return self._slide is not None
-
-    def slide_to(self, index: int) -> None:
-        """
-        Slide to another page.
-
-        Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
-        slide, or for the page already showing, is ignored.
-
-        Parameters
-        ----------
-        index : int
-            The page to go to.
-
-        Examples
-        --------
-        >>> stack = SlideStack()
-        >>> _ = stack.addWidget(QWidget())
-        >>> _ = stack.addWidget(QWidget())
-        >>> stack.slide_to(1)
-        >>> stack.sliding
-        True
-        """
-        if self.sliding or index == self.currentIndex():
-            return  # ignore requests mid-transition
-        old, new = self.currentWidget(), self.widget(index)
-        assert old is not None and new is not None
-        w = self.width()
-        sign = 1 if index > self.currentIndex() else -1
-        new.setGeometry(
-            0,
-            0,
-            w,
-            self.height(),
-        )
-        new.move(sign * w, 0)
-        new.show()
-        new.raise_()
-        group = QParallelAnimationGroup(self)
-        for widget, start, end in ((old, 0, -sign * w), (new, sign * w, 0)):
-            anim = QPropertyAnimation(widget, b"pos", group)
-            anim.setDuration(220)
-            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-            anim.setStartValue(QPoint(start, 0))
-            anim.setEndValue(QPoint(end, 0))
-            group.addAnimation(anim)
-
-        def done() -> None:
-            """
-            Finish the slide: show the new page and put both pages back in place.
-
-            Examples
-            --------
-            >>> done()  # doctest: +SKIP
-            """
-            self.setCurrentIndex(index)
-            # noinspection PyUnresolvedReferences
-            old.move(0, 0)
-            # noinspection PyUnresolvedReferences
-            new.move(0, 0)
-            self._slide = None
-
-        group.finished.connect(done)
-        self._slide = group
-        group.start()
-
-
-class ExerciseSettingsPanel(QWidget):
-    """
-    What every exercise's settings pane has in common: it says when a setting has been edited.
-
-    Attributes
-    ----------
-    changed : Signal
-        Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.
-    restyled : Signal
-        Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is
-        drawn again.
-
-    Examples
-    --------
-    >>> panel = ExerciseSettingsPanel()
-    >>> got = []
-    >>> _ = panel.changed.connect(lambda: got.append(1))
-    >>> panel.changed.emit()
-    True
-    >>> got
-    [1]
-    """
-
-    stack: SlideStack
-    next_question_choices: QWidget
-    next_question_row: _Row
-    next_question_mode = "After Animation"
-    choice_buttons_row: _Row | None = None
-    changed = Signal()
-    restyled = Signal()
-
-    limits_row: _Row | None = None
-    limits_editor: DailyLimitsEditor
-    limits_page: int
-
-    def refresh_limits(self, mode: str, *, self_grading: bool = False) -> None:
-        """
-        Update scheduling controls for the active scheduler and profile.
-
-        Parameters
-        ----------
-        mode : str
-            Selected question scheduler.
-        self_grading : bool
-            Disable Next Question when a passing grade advances the exercise.
-
-        Examples
-        --------
-        Switching to ASRS hides the row and leaves its submenu.
-        """
-        self.next_question_row.setEnabled(not self_grading)
-        self.next_question_choices.setEnabled(not self_grading)
-        if self.limits_row is None:
-            return
-        enabled = mode in CALENDAR_SCHEDULERS
-        self.limits_row.setVisible(enabled)
-        if enabled:
-            self.limits_editor.reload()
-            editor = self.limits_editor
-            new, reviews = (
-                "∞" if box.isChecked() else field.value() for box, field in zip(editor.unlimited, editor.fields, strict=True)
-            )
-            self.limits_row.value.setText(f"{new} new · {reviews} reviews")
-        elif self.stack.currentIndex() == self.limits_page:
-            self.stack.setCurrentIndex(0)
-
-
-class _StaffRangePanel(ExerciseSettingsPanel):
-    """
-    Shared navigation and per-clef pitch range editors.
-
-    Examples
-    --------
-    Note and interval identification both open Range on page two.
-    """
-
-    cfg: settings.StaffRangeSettings
-    value_pictures: ValuePictures
-    stack: SlideStack
-
-    _persist: Callable[[], None]
-    clef_pictures: ClefPictures
-    range_pictures: RangePictures
-    range_row: _Row
-    range_index = 2  # where the Range page sits in the stack
-
-    def _limits(self, key: str) -> tuple[int, int] | None:
-        """
-        Say how far a clef's range may be moved.
-
-        Parameters
-        ----------
-        key : str
-            The clef.
-
-        Returns
-        -------
-        tuple of (int, int) or None
-            The lowest and highest staff step, or None for the clef's usual limits.
-
-        Examples
-        --------
-        >>> NoteNameSettingsPanel(NoteNameSettings())._limits("treble") is None
-        True
-        """
-        del key
-        return None
-
-    def _refresh_summaries(self) -> None:
-        """
-        Refresh the exercise-specific main menu previews.
-
-        Examples
-        --------
-        Returning from Range refreshes its staff preview.
-        """
-        clefs = self.cfg.active_clefs()
-        self.clef_pictures.set_clefs(clefs)
-        self.range_pictures.set_items([(c, *self.cfg.range_for(c)) for c in clefs])
-        self.range_row.fit()
-        self.value_pictures.set_values(self.cfg.active_values())
-
-    def _save_and_emit(self) -> None:
-        """
-        Persist changes for this exercise and request a new question.
-
-        Examples
-        --------
-        Editing the bass range saves it under the current exercise.
-        """
-        self._persist()
-        self.changed.emit()
-
-    def _values_page(self, title: str) -> QWidget:
-        """
-        Build the shared note-value checklist with an engraved preview of each option.
-
-        Parameters
-        ----------
-        title : str
-            The settings row label.
-
-        Returns
-        -------
-        QWidget
-            The scrollable submenu.
-
-        Examples
-        --------
-        >>> NoteNameSettingsPanel(NoteNameSettings()).value_boxes["whole"].isChecked()
-        True
-        """
-        self.value_boxes = {v: QCheckBox(VALUE_NAMES[v]) for v in NOTE_VALUES}
-        values_body = QWidget()
-        vlay = QVBoxLayout(values_body)
-        vlay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        vlay.setSpacing(2)
-        values_hint = QLabel("One of the checked values is picked at random.")
-        values_hint.setWordWrap(True)
-        vlay.addWidget(values_hint)
-        for v, box in self.value_boxes.items():
-            picture = ValuePictures([v], scale=1.25, center_stemless=True)
-            picture.label_button(box)
-            box.setStyleSheet(css("QCheckBox { font-size: 11pt; }"))
-            box.setChecked(v in self.cfg.note_values)
-            box.toggled.connect(self._values_edited)
-            vlay.addWidget(box)
-        vlay.addStretch()
-        _guard_last(list(self.value_boxes.values()))
-        return _subpage(title, body=_scrolling(values_body), back=lambda: self._go(0), fill=True)
-
-    def _values_edited(self) -> None:
-        """
-        Take the checked note values into the settings, save them and say so.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel.value_boxes["half"].setChecked(True)
-        >>> "half" in panel.cfg.note_values
-        True
-        """
-        self.cfg.note_values = {v for v, b in self.value_boxes.items() if b.isChecked()}
-        _guard_last(list(self.value_boxes.values()))
-        self._save_and_emit()
-
-    def _range_page(self) -> QWidget:
-        """
-        Build the scrollable page used to edit pitch limits.
-
-        Returns
-        -------
-        QWidget
-            The titled Range submenu.
-
-        Examples
-        --------
-        Each checked clef gets its own range editor when the page opens.
-        """
-        self.range_body = QWidget()
-        self.range_lay = QVBoxLayout(self.range_body)
-        self.range_lay.setContentsMargins(
-            6,
-            4,
-            10,
-            8,
-        )
-        self.range_editors: dict[str, RangeEditor] = {}
-        # Restoring a pane after a theme change selects its page directly.
-        self.stack.currentChanged.connect(
-            lambda index: self._build_range_rows() if index == self.range_index and not self.range_editors else None,
-        )
-        scroll = QScrollArea()
-        scroll.setWidget(self.range_body)
-        scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        return _subpage(
-            "Range",
-            body=scroll,
-            back=lambda: self._go(0),
-            fill=True,
-        )
-
-    # navigation
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing it first.
-
-        Going back to the menu refreshes its summaries; going to the Range page builds its rows. A request made during a slide is
-        ignored.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for Clefs, 2 for Range, or an exercise-specific page.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel._go(2)
-        >>> sorted(panel.range_editors), panel.stack.sliding
-        (['bass', 'treble'], True)
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return  # ignore clicks mid-transition
-        if index == 0:
-            self._refresh_summaries()
-        elif index == self.range_index:
-            self._build_range_rows()
-        self.stack.slide_to(index)
-
-    def _active_keys(self) -> list[str]:
-        """
-        Return the clefs in use.
-
-        Returns
-        -------
-        list of str
-            The chosen clefs, which the range editors and summaries are for.
-
-        Examples
-        --------
-        >>> NoteNameSettingsPanel(NoteNameSettings(clefs={"alto"}))._active_keys()
-        ['alto']
-        """
-        return self.cfg.active_clefs()
-
-    # range page
-    def _build_range_rows(self) -> None:
-        """
-        Build a range editor for each clef in use, and a button to reset them to the defaults.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(clefs={"treble"}))
-        >>> panel._build_range_rows()
-        >>> list(panel.range_editors)
-        ['treble']
-        """
-        while self.range_lay.count():
-            item = self.range_lay.takeAt(0)
-            widget = item.widget() if item is not None else None
-            if widget is not None:
-                widget.deleteLater()
-        self.range_editors = {}
-        for key in self._active_keys():
-            low, high = self.cfg.range_for(key)
-            editor = RangeEditor(key, low=low, high=high, limits=self._limits(key))
-            editor.edited.connect(self._range_edited)
-            self.range_editors[key] = editor
-            self.range_lay.addWidget(editor)
-        reset = QPushButton("Reset to defaults")
-        reset.clicked.connect(self._reset_ranges)
-        self.range_lay.addWidget(reset)
-        self.range_lay.addStretch()
-
-    def _range_edited(  # noqa: PLR0917  (a Qt slot: the signal passes positional arguments)
-        self,
-        key: str,
-        low: int,
-        high: int,
-    ) -> None:
-        """
-        Take a changed range into the settings, save it and say so.
-
-        Parameters
-        ----------
-        key : str
-            The clef.
-        low : int
-            The lowest note, as a staff step.
-        high : int
-            The highest note.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> panel._range_edited("treble", 30, 40)
-        >>> panel.cfg.ranges
-        {'treble': (30, 40)}
-        """
-        self.cfg.ranges[key] = (low, high)
-        self._save_and_emit()
-
-    def _reset_ranges(self) -> None:
-        """
-        Go back to the default ranges and show them.
-
-        Examples
-        --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings(ranges={"treble": (30, 40)}))
-        >>> panel._reset_ranges()
-        >>> panel.cfg.ranges
-        {}
-        """
-        self.cfg.ranges.clear()
-        self._build_range_rows()
-        self._save_and_emit()
-
-
-class NoteNameSettingsPanel(_StaffRangePanel):
+class NoteNameSettingsPanel(StaffRangePanel):
     """
     The settings of the note identification exercise: a menu leading to a page for each group of settings.
 
@@ -1781,7 +163,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         The note value checkboxes.
     naming_radios : dict of str to QRadioButton
         The letters and solfège choices, plus caret and function notation in the Scale degrees group.
-    octave_row : _ToggleRow
+    octave_row : ToggleRow
         Whether the answer must include the written octave.
     range_editors : dict of str to RangeEditor
         The range editor of each clef in use, built when the Range page opens.
@@ -1816,7 +198,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         6
         """
         super().__init__(parent)
-        self._persist = save_note_names
         self.cfg: NoteNameSettings = cfg
         self.stack = SlideStack()
         outer = QVBoxLayout(self)
@@ -1838,8 +219,8 @@ class NoteNameSettingsPanel(_StaffRangePanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.clefs_row, self.range_row = _Row("Clefs"), _Row("Range", tall=True)
-        self.keys_row, self.values_row, self.names_row = _Row("Key signatures"), _Row("Note values"), _Row("Note names")
+        self.clefs_row, self.range_row = MenuRow("Clefs"), MenuRow("Range", tall=True)
+        self.keys_row, self.values_row, self.names_row = MenuRow("Key signatures"), MenuRow("Note values"), MenuRow("Note names")
         self.keys_diagram = KeyDiagram()
         self.keys_row.attach(self.keys_diagram)
         self.clef_pictures = ClefPictures()
@@ -1862,12 +243,12 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         ):
             row.clicked.connect(lambda _=False, i=index: self._go(i))
             mlay.addWidget(row)
-        self.accidentals_row = _ToggleRow("Accidentals")
+        self.accidentals_row = ToggleRow("Accidentals")
         self.accidentals_row.setToolTip("Also ask notes with sharps, flats and naturals")
         self.accidentals_row.setOn(cfg.accidentals)
         self.accidentals_row.switched.connect(self._accidentals_toggled)
         mlay.addWidget(self.accidentals_row)
-        self.octave_row = _ToggleRow("Octave")
+        self.octave_row = ToggleRow("Octave")
         self.octave_row.setToolTip("Also ask which octave the note is in")
         self.octave_row.setOn(cfg.require_octave)
         self.octave_row.switched.connect(self._octave_toggled)
@@ -1875,7 +256,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         mlay.addStretch()
 
         # layer 2: clefs
-        self.boxes, clefs_page = _clefs_page(
+        self.boxes, clefs_page = clef_choice_page(
             settings.RANGE_KEYS,
             selected=cfg.clefs,
             edited=self._clefs_edited,
@@ -1889,14 +270,14 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         self.key_list = KeyChecklist(cfg.key_signatures)
         self.key_list.changed.connect(self._keys_edited)
         self.key_boxes = self.key_list.boxes
-        keys_page = _subpage("Key signatures", body=self.key_list, back=lambda: self._go(0))
+        keys_page = subpage("Key signatures", body=self.key_list, back=lambda: self._go(0))
 
         values_page = self._values_page("Note values")
 
         # layer 2: note names
         self.naming_radios = {k: QRadioButton() for k in NAMINGS}
         for k, radio in self.naming_radios.items():
-            _label_with_picture(radio, picture=NamePicture(k, scale=1.6), name=NAMINGS[k])
+            label_with_picture(radio, picture=NamePicture(k, scale=1.6), name=NAMINGS[k])
             radio.setText(NAMINGS[k].split(" (")[0])
             radio.setToolTip(degree_tooltip(NAMINGS[k]))
         names_body = QWidget()
@@ -1919,7 +300,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
             else:
                 nlay.addWidget(radio)
         nlay.addWidget(degree_group)
-        names_page = _subpage("Note names", body=names_body, back=lambda: self._go(0))
+        names_page = subpage("Note names", body=names_body, back=lambda: self._go(0))
 
         for page in (
             menu,
@@ -1930,7 +311,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
             names_page,
         ):
             self.stack.addWidget(page)
-        _guard_last(list(self.key_boxes.values()))
+        guard_last(list(self.key_boxes.values()))
         self._refresh_summaries()
 
     def _refresh_summaries(self) -> None:
@@ -1945,7 +326,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         'Bass, Tenor'
         """
         super()._refresh_summaries()
-        _show_keys(
+        show_keys(
             self.keys_row,
             diagram=self.keys_diagram,
             enabled=True,
@@ -1953,28 +334,21 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         )
         self.name_picture.set_naming(self.cfg.naming)
 
-    # clefs page
-    def _clefs_edited(self) -> None:
-        """
-        Take the checked clefs into the settings, save them and say so.
+    # key signatures / note values / note names pages
 
-        The last checked clef cannot be unchecked.
+    def _persist(self) -> None:
+        """
+        Save the note identification settings.
 
         Examples
         --------
-        >>> panel = NoteNameSettingsPanel(NoteNameSettings())
-        >>> got = []
-        >>> _ = panel.changed.connect(lambda: got.append(1))
-        >>> panel.boxes["alto"].setChecked(True)
-        >>> "alto" in panel.cfg.clefs, got
-        (True, [1])
+        >>> panel = NoteNameSettingsPanel(settings.note_names)
+        >>> panel._persist()
+        >>> store().contains("noteNames/clefs")
+        True
         """
-        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
-        _guard_last(list(self.boxes.values()))  # the last checked clef can't be unchecked
         save_note_names()
-        self.changed.emit()
 
-    # key signatures / note values / note names pages
     def _keys_edited(self) -> None:
         """
         Take the checked key signatures into the settings, save them and say so.
@@ -1987,7 +361,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         True
         """
         self.cfg.key_signatures = {k for k, b in self.key_boxes.items() if b.isChecked()}
-        _guard_last(list(self.key_boxes.values()))
+        guard_last(list(self.key_boxes.values()))
         self._save_and_emit()
 
     def _names_edited(self) -> None:
@@ -2041,314 +415,6 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         """
         self.cfg.require_octave = on
         self._save_and_emit()
-
-
-class _LabeledKeyCheckBox(QCheckBox):
-    """
-    Keep the signature and its separate label in the same click target.
-
-    Examples
-    --------
-    >>> _LabeledKeyCheckBox().isCheckable()
-    True
-    """
-
-    def hitButton(self, pos: QPoint) -> bool:
-        """
-        Accept clicks anywhere inside the labeled checkbox.
-
-        Parameters
-        ----------
-        pos : QPoint
-            The click position in widget coordinates.
-
-        Returns
-        -------
-        bool
-            Whether the click is inside the widget.
-
-        Examples
-        --------
-        >>> _LabeledKeyCheckBox().hitButton(QPoint(-1, -1))
-        False
-        """
-        return self.rect().contains(pos)
-
-
-class KeyChecklist(QWidget):
-    """
-    Checkboxes for the 15 major keys, flats on the left and sharps on the right.
-
-    At least one stays checked. Each is labeled with a picture of its signature.
-
-    Attributes
-    ----------
-    changed : Signal
-        Emitted after a box is checked or unchecked.
-    boxes : dict of int to QCheckBox
-        The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).
-
-    Examples
-    --------
-    >>> KeyChecklist({0, 2}).selected() == {0, 2}
-    True
-    """
-
-    changed = Signal()
-
-    def __init__(
-        self,
-        selected: set[int],
-        *,
-        allow_empty: bool = False,
-        counts_only: bool = False,
-        key_names: dict[int, str] | None = None,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the checklist.
-
-        Parameters
-        ----------
-        selected : set of int
-            The key signatures to check initially.
-        allow_empty : bool, default False
-            Allow every key to be unchecked. Keyword-only.
-        counts_only : bool, default False
-            Label each box with its accidental count instead of drawing a signature. Keyword-only.
-        key_names : dict of int to str or None, default None
-            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
-        parent : QWidget or None, default None
-            The widget that owns it. Keyword-only.
-
-        Examples
-        --------
-        >>> len(KeyChecklist({0}).boxes)
-        15
-        """
-        super().__init__(parent)
-        self.allow_empty = allow_empty
-        checkbox = _LabeledKeyCheckBox if key_names is not None else QCheckBox
-        self.boxes = {k: checkbox() for k in range(-7, 8)}
-        if key_names is not None:
-            grid = QGridLayout(self)
-            grid.setContentsMargins(0, 0, 0, 0)
-            grid.setHorizontalSpacing(6)
-            for count, box in self.boxes.items():
-                name = key_names[count]
-                signature = _key_label(count).split("·")[1].strip()
-                description = f"{name}, {signature}" if count else f"{name}, no sharps or flats"
-                box.setText(name)
-                box.setToolTip(description)
-                box.setAccessibleName(description)
-                picture = KeySignaturePicture(count, scale=0.9)
-                picture.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-                label_width = box.sizeHint().width()
-                contents = QHBoxLayout(box)
-                contents.setContentsMargins(label_width + 4, 0, 0, 0)
-                contents.addWidget(picture, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-                box.setMinimumWidth(label_width + 4 + picture.width())
-                box.setMinimumHeight(picture.height())
-                if count:
-                    grid.addWidget(box, abs(count), int(count > 0))
-                else:
-                    grid.addWidget(box, 0, 0, 1, 2)
-            for column in range(2):
-                grid.setColumnStretch(column, 1)
-        else:
-            for k, box in self.boxes.items():  # each key is labeled with its signature, as written after a treble clef
-                if counts_only:
-                    box.setText(f"{abs(k)} {'♭' if k < 0 else '♯'}" if k else "0")
-                    box.setAccessibleName(format_key_signature(k))
-                else:
-                    description = f"{MAJOR_KEYS[k]} major, {_key_label(k).split('·')[1].strip()}"
-                    _label_with_picture(box, picture=KeySignaturePicture(k, scale=1.15), name=description)
-            # Two framed groups: C major on its own, and the keys with sharps or flats (flats left, sharps right).
-            outer = QVBoxLayout(self)
-            outer.setContentsMargins(
-                0,
-                0,
-                0,
-                0,
-            )
-            outer.setSpacing(10)
-            natural = QFrame()
-            natural.setObjectName("keyGroup")  # styled in style.py
-            natural_lay = QVBoxLayout(natural)
-            natural_lay.addWidget(self.boxes[0])
-            outer.addWidget(natural)
-            marked = QFrame()
-            marked.setObjectName("keyGroup")
-            grid = QGridLayout(marked)
-            for n in range(1, 8):
-                grid.addWidget(self.boxes[-n], n - 1, 0)
-                grid.addWidget(self.boxes[n], n - 1, 1)
-            outer.addWidget(marked)
-        for k, box in self.boxes.items():
-            box.setChecked(k in selected)
-            box.toggled.connect(self._toggled)
-        if not self.allow_empty:
-            _guard_last(list(self.boxes.values()))
-
-    def selected(self) -> set[int]:
-        """
-        Return the checked key signatures.
-
-        Returns
-        -------
-        set of int
-            Sharps if positive, flats if negative.
-
-        Examples
-        --------
-        >>> KeyChecklist({-3, 1}).selected() == {-3, 1}
-        True
-        """
-        return {k for k, box in self.boxes.items() if box.isChecked()}
-
-    def _toggled(self) -> None:
-        """
-        Keep one box checked, and say that something changed.
-
-        Examples
-        --------
-        >>> checklist = KeyChecklist({0})
-        >>> got = []
-        >>> _ = checklist.changed.connect(lambda: got.append(1))
-        >>> checklist.boxes[3].setChecked(True)
-        >>> got
-        [1]
-        """
-        if not self.allow_empty:
-            _guard_last(list(self.boxes.values()))
-        self.changed.emit()
-
-
-class KeySignaturePage(QWidget):
-    """
-    The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.
-
-    Attributes
-    ----------
-    changed : Signal
-        Emitted after the switch or a key is changed.
-    switch_row : _ToggleRow
-        The "Use key signatures" switch.
-    checklist : KeyChecklist
-        The keys; only enabled while the switch is on.
-
-    Examples
-    --------
-    >>> page = KeySignaturePage(True, selected={0, 1})
-    >>> page.enabled(), page.selected() == {0, 1}
-    (True, True)
-    """
-
-    changed = Signal()
-
-    def __init__(
-        self,
-        enabled: bool,
-        *,
-        selected: set[int],
-        allow_empty: bool = False,
-        key_names: dict[int, str] | None = None,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the page.
-
-        Parameters
-        ----------
-        enabled : bool
-            Whether key signatures are on.
-        selected : set of int
-            The key signatures to check initially. Keyword-only.
-        allow_empty : bool, default False
-            Allow every key to be unchecked. Keyword-only.
-        key_names : dict of int to str or None, default None
-            Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.
-        parent : QWidget or None, default None
-            The widget that owns it. Keyword-only.
-
-        Examples
-        --------
-        >>> page = KeySignaturePage(False, selected={0})
-        >>> page.checklist.isEnabled()
-        False
-        """
-        super().__init__(parent)
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        lay.setSpacing(10)
-        self.switch_row = _ToggleRow("Use key signatures")
-        self.switch_row.setOn(enabled)
-        self.switch_row.switched.connect(self._switched)
-        self.checklist = KeyChecklist(selected, allow_empty=allow_empty, key_names=key_names)
-        self.checklist.changed.connect(self.changed)
-        self.checklist.setEnabled(enabled)  # the keys only matter while key signatures are on
-        lay.addWidget(self.switch_row)
-        self.keys_label = QLabel("Draw from these keys:")
-        lay.addWidget(self.keys_label)
-        lay.addWidget(self.checklist)
-
-    def enabled(self) -> bool:
-        """
-        Report whether key signatures are switched on.
-
-        Returns
-        -------
-        bool
-            True if the switch is on.
-
-        Examples
-        --------
-        >>> KeySignaturePage(True, selected={0}).enabled()
-        True
-        """
-        return self.switch_row.isOn()
-
-    def selected(self) -> set[int]:
-        """
-        Return the checked key signatures.
-
-        Returns
-        -------
-        set of int
-            Sharps if positive, flats if negative.
-
-        Examples
-        --------
-        >>> KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
-        True
-        """
-        return self.checklist.selected()
-
-    def _switched(self, on: bool) -> None:
-        """
-        Enable the keys only while key signatures are on, and say that something changed.
-
-        Parameters
-        ----------
-        on : bool
-            The switch's new state.
-
-        Examples
-        --------
-        >>> page = KeySignaturePage(True, selected={0})
-        >>> got = []
-        >>> _ = page.changed.connect(lambda: got.append(1))
-        >>> page._switched(False)
-        >>> page.checklist.isEnabled(), got
-        (False, [1])
-        """
-        self.checklist.setEnabled(on)
-        self.changed.emit()
 
 
 class KeyboardSettingsPanel(ExerciseSettingsPanel):
@@ -2421,22 +487,22 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.range_row = _Row("Range", tall=True)
+        self.range_row = MenuRow("Range", tall=True)
         self.range_row.clicked.connect(lambda: self._go(1))
         self.range_keyboard = KeyboardSpan(
             compact=True,
             size=(px(ROW_PICTURE_WIDTH), px(36)),
         )  # the asked span, lit on a miniature piano
         self.range_row.attach(self.range_keyboard)
-        self.black_keys_row = _ToggleRow("Black keys")
+        self.black_keys_row = ToggleRow("Black keys")
         self.black_keys_row.setToolTip("Also ask the black keys, answered by either of their names")
         self.black_keys_row.setOn(cfg.black_keys)
         self.black_keys_row.switched.connect(self._black_keys_toggled)
-        self.octave_row = _ToggleRow("Octave number")
+        self.octave_row = ToggleRow("Octave number")
         self.octave_row.setToolTip("Answer with the octave as well, for example C4")
         self.octave_row.setOn(cfg.require_octave)
         self.octave_row.switched.connect(self._octave_toggled)
-        self.keys_row = _Row("Key signatures")  # opens a page: use them or not, and which keys
+        self.keys_row = MenuRow("Key signatures")  # opens a page: use them or not, and which keys
         self.keys_row.setToolTip("Show a key signature above the keyboard and require the name that fits it")
         self.keys_row.clicked.connect(lambda: self._go(2))
         self.keys_diagram = KeyDiagram()
@@ -2469,8 +535,8 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         for title, label, which in (("Lowest key", self.low_label, "low"), ("Highest key", self.high_label, "high")):
             row = QHBoxLayout()
             row.addWidget(QLabel(f"<b>{title}</b>"), 1)
-            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
-            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
+            down = arrow_button(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
+            up = arrow_button(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
             down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -2486,38 +552,18 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         self.default.clicked.connect(lambda: self._set_range(*settings.KEYBOARD_DEFAULT))
         blay.addWidget(self.entire)
         blay.addWidget(self.default)
-        range_page = _subpage("Range", body=body, back=lambda: self._go(0))
+        range_page = subpage("Range", body=body, back=lambda: self._go(0))
 
         # layer 2: key signatures
         self.key_page = KeySignaturePage(cfg.key_signature, selected=cfg.keys)
         self.key_page.changed.connect(self._keys_edited)
-        keys_page = _subpage("Key signatures", body=self.key_page, back=lambda: self._go(0))
+        keys_page = subpage("Key signatures", body=self.key_page, back=lambda: self._go(0))
 
         self.stack.addWidget(menu)
         self.stack.addWidget(range_page)
         self.stack.addWidget(keys_page)
         self._refresh_range()
         self._show_keys()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summaries when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for the Range page, 2 for the key signatures.
-
-        Examples
-        --------
-        >>> panel = KeyboardSettingsPanel(settings.KeyboardSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        self.stack.slide_to(index)
 
     def _refresh_range(self) -> None:
         """
@@ -2659,7 +705,7 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         >>> panel.keys_row.value.text()  # key signatures are off
         'Off'
         """
-        _show_keys(
+        show_keys(
             self.keys_row,
             diagram=self.keys_diagram,
             enabled=self.cfg.key_signature,
@@ -2684,73 +730,22 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         self._show_keys()
         self._save_and_emit()
 
-    def _save_and_emit(self) -> None:
+    def _persist(self) -> None:
         """
-        Save the keyboard settings and emit `changed`.
+        Save the keyboard settings.
 
         Examples
         --------
-        >>> panel = KeyboardSettingsPanel(settings.KeyboardSettings())
-        >>> got = []
-        >>> _ = panel.changed.connect(lambda: got.append(1))
-        >>> panel._save_and_emit()
-        >>> got
-        [1]
+        >>> panel = KeyboardSettingsPanel(settings.keyboard)
+        >>> panel._persist()
+        >>> store().contains("keyboard/keys")
+        True
+        >>> store().remove("keyboard")
         """
         save_keyboard()
-        self.changed.emit()
 
 
-class _ScaleKeyPicker(QTabWidget):
-    """
-    Select major and minor keys independently.
-
-    Examples
-    --------
-    >>> _ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
-    2
-    """
-
-    def __init__(self, *, major_keys: set[int], minor_keys: set[int]) -> None:
-        """
-        Build one checklist per mode.
-
-        Parameters
-        ----------
-        major_keys : set of int
-            Selected major signatures. Keyword-only.
-        minor_keys : set of int
-            Selected minor signatures. Keyword-only.
-
-        Examples
-        --------
-        >>> _ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
-        1
-        """
-        super().__init__()
-        major_names = {count: f"{name}M" for count, name in MAJOR_KEYS.items()}
-        self.major_keys = KeyChecklist(major_keys, allow_empty=True, key_names=major_names)
-        minor_names = {count: f"{mode_tonic(count, mode='Natural minor (Aeolian)').name}m" for count in range(-7, 8)}
-        self.minor_keys = KeyChecklist(
-            minor_keys,
-            allow_empty=True,
-            key_names=minor_names,
-        )
-        self.setObjectName("settingsTabs")
-        self.setAccessibleName("Key lists")
-        for label, checklist in (
-            ("Major", self.major_keys),
-            ("Minor", self.minor_keys),
-        ):
-            tab = QWidget()
-            tab_layout = QVBoxLayout(tab)
-            tab_layout.addWidget(checklist)
-            tab_layout.addStretch()
-            self.addTab(tab, label)
-        self.setCurrentIndex(0 if major_keys else 1)
-
-
-class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
+class NoteConstructionSettingsPanel(ClefsPanel):
     """
     The settings of the note construction exercise: a menu with a page for the staff and one for the keys.
 
@@ -2774,6 +769,8 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
     >>> sorted(panel.boxes)[:3]
     ['alto', 'baritone', 'bass']
     """
+
+    cfg: settings.ConstructionSettings
 
     def __init__(
         self,
@@ -2818,18 +815,18 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.clefs_row = _Row("Clefs")
+        self.clefs_row = MenuRow("Clefs")
         self.clefs_row.clicked.connect(lambda: self._go(1))
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
-        self.staff_key_row = _Row("Staff Key")
+        self.staff_key_row = MenuRow("Staff Key")
         self.staff_key_row.clicked.connect(lambda: self._go(3))
         self.staff_keys_diagram = KeyDiagram()
         self.staff_key_row.attach(self.staff_keys_diagram)
-        self.keys_row = _Row("Question Type")
+        self.keys_row = MenuRow("Question Type")
         self.keys_row.setToolTip("Choose note name or scale key questions")
         self.keys_row.clicked.connect(lambda: self._go(2))
-        self.octave_row = _ToggleRow("Octave")
+        self.octave_row = ToggleRow("Octave")
         self.octave_row.setToolTip("Show and require a specific octave")
         self.octave_row.setOn(cfg.octave)
         self.octave_row.switched.connect(self._octave_toggled)
@@ -2838,7 +835,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         mlay.addStretch()
 
         # layer 2: clefs
-        self.boxes, clefs_page = _clefs_page(
+        self.boxes, clefs_page = clef_choice_page(
             settings.RANGE_KEYS,
             selected=cfg.clefs,
             edited=self._clefs_edited,
@@ -2850,7 +847,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
             cfg.key_signature = True
             cfg.keys = {0}
             cfg.minor_keys = {0}
-        self.key_tabs = _ScaleKeyPicker(
+        self.key_tabs = ScaleKeyPicker(
             major_keys=cfg.keys if cfg.major else set(),
             minor_keys=(cfg.minor_keys or cfg.keys) if cfg.minor else set(),
         )
@@ -2881,42 +878,20 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self.degree_choices.changed.connect(self._degrees_edited)
         scale_layout.addWidget(self.degree_choices)
         scale_layout.addStretch()
-        self.scale_key_scroll = _scrolling(scale_options)
+        self.scale_key_scroll = scrolling(scale_options)
         question_layout.addWidget(self.scale_key_scroll, 1)
         self.scale_key_scroll.setVisible(self.scale_key_choice.isChecked())
         question_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scale_key_choice.toggled.connect(self._question_type_changed)
-        keys_page = _subpage("Question Type", body=question_body, back=lambda: self._go(0), fill=True)
+        keys_page = subpage("Question Type", body=question_body, back=lambda: self._go(0), fill=True)
 
         self.staff_keys = KeyChecklist(cfg.staff_keys or {0})
         self.staff_keys.changed.connect(self._staff_keys_edited)
-        staff_page = _subpage("Staff Key", body=_scrolling(self.staff_keys), back=lambda: self._go(0), fill=True)
+        staff_page = subpage("Staff Key", body=scrolling(self.staff_keys), back=lambda: self._go(0), fill=True)
 
         for page in (menu, clefs_page, keys_page, staff_page):
             self.stack.addWidget(page)
         self._refresh_summaries()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summaries when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for the Staff page, 2 for Question Type, and 3 for Staff Key.
-
-        Examples
-        --------
-        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        if index == 0:
-            self._refresh_summaries()
-        self.stack.slide_to(index)
 
     def _refresh_summaries(self) -> None:
         """
@@ -2932,17 +907,19 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self.clef_pictures.set_clefs(self.cfg.active_clefs())
         self._show_keys()
 
-    def _save_and_emit(self) -> None:
+    def _persist(self) -> None:
         """
-        Save the note construction settings and emit `changed`.
+        Save the note construction settings.
 
         Examples
         --------
-        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
-        >>> panel._save_and_emit()
+        >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings(clefs={"alto"}))
+        >>> panel._persist()
+        >>> str(store().value("construction/clefs"))
+        'alto'
+        >>> store().remove("construction")
         """
         save_construction(self.cfg)
-        self.changed.emit()
 
     def _degrees_edited(self) -> None:
         """
@@ -3009,24 +986,6 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self.staff_keys_diagram.set_keys(self.cfg.staff_keys)
         self._save_and_emit()
 
-    def _clefs_edited(self) -> None:
-        """
-        Take the checked clefs into the settings, save them and say so.
-
-        The last checked clef cannot be unchecked.
-
-        Examples
-        --------
-        >>> cfg = settings.ConstructionSettings()
-        >>> panel = NoteConstructionSettingsPanel(cfg)
-        >>> panel.boxes["grand"].setChecked(True)
-        >>> "grand" in cfg.clefs
-        True
-        """
-        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
-        _guard_last(list(self.boxes.values()))  # the last checked choice can't be unchecked
-        self._save_and_emit()
-
     def _show_keys(self) -> None:
         """
         Update the menu's key signature summary.
@@ -3039,7 +998,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         'Scale and Degree'
         """
         self.staff_keys_diagram.set_keys(self.cfg.staff_keys or {0})
-        _guard_last([*self.major_keys.boxes.values(), *self.minor_keys.boxes.values()])
+        guard_last([*self.major_keys.boxes.values(), *self.minor_keys.boxes.values()])
         self.keys_row.value.setText("Notes Only" if self.cfg.question_type == "notes" else "Scale and Degree")
 
     def _keys_edited(self) -> None:
@@ -3066,260 +1025,7 @@ class NoteConstructionSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
-class ChoiceChecklist(QWidget):
-    """
-    Checkboxes for a list of choices, optionally under headings and allowing an empty selection.
-
-    Attributes
-    ----------
-    changed : Signal
-        Emitted after a box is checked or unchecked.
-    allow_empty : bool
-        Whether all choices may be unchecked.
-    boxes : dict
-        The checkbox of each choice, by its key.
-
-    Examples
-    --------
-    >>> groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
-    >>> checklist = ChoiceChecklist(groups, selected={"major"})
-    >>> checklist.selected()
-    {'major'}
-    """
-
-    changed = Signal()
-
-    def __init__(
-        self,
-        groups: list[tuple[str, list[tuple[object, str]]]],
-        *,
-        selected: set,
-        allow_empty: bool = False,
-        positions: Mapping[object, tuple[int, int]] | None = None,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the checklist.
-
-        Parameters
-        ----------
-        groups : list of tuple of (str, list of tuple of (object, str))
-            The headings and, under each, the choices as (key, label); an empty heading shows none.
-        selected : set
-            The keys to check initially. Keyword-only.
-        allow_empty : bool, default False
-            Allow all choices to be unchecked. Keyword-only.
-        positions : mapping or None, default None
-            Optional (row, column) for each key within its group. Keyword-only.
-        parent : QWidget or None, default None
-            The widget that owns it. Keyword-only.
-
-        Examples
-        --------
-        >>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
-        >>> # noinspection PyTypeChecker
-        >>> sorted(checklist.boxes)
-        [0, 1]
-        """
-        super().__init__(parent)
-        self.allow_empty = allow_empty
-        self.boxes: dict[object, QCheckBox] = {}
-        self.headings: dict[str, QLabel] = {}
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-        lay.setSpacing(6)
-        for title, items in groups:
-            if title:
-                heading = QLabel(title)
-                heading.setStyleSheet("color: gray;")
-                self.headings[title] = heading
-                lay.addWidget(heading)
-            grid = None
-            if positions is not None:
-                grid = QGridLayout()
-                grid.setSpacing(lay.spacing())
-                lay.addLayout(grid)
-                items = sorted(items, key=lambda item: positions[item[0]])
-            for key, label in items:
-                box = DegreeCheckBox(label) if "̂" in label else QCheckBox(label)
-                box.setChecked(key in selected)
-                box.toggled.connect(self._toggled)
-                self.boxes[key] = box
-                if grid is not None and positions is not None:
-                    row, column = positions[key]
-                    grid.setColumnStretch(column, 1)
-                    grid.addWidget(box, row, column)
-                else:
-                    lay.addWidget(box)
-        if not self.allow_empty:
-            _guard_last(list(self.boxes.values()))
-
-    def selected(self) -> set:
-        """
-        Return the checked choices.
-
-        Returns
-        -------
-        set
-            The keys of the checked boxes.
-
-        Examples
-        --------
-        >>> ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
-        {0, 1}
-        """
-        return {k for k, box in self.boxes.items() if box.isChecked()}
-
-    def _toggled(self) -> None:
-        """
-        Keep one box checked, and say that something changed.
-
-        Examples
-        --------
-        >>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
-        >>> got = []
-        >>> _ = checklist.changed.connect(lambda: got.append(1))
-        >>> checklist.boxes[1].setChecked(True)
-        >>> got
-        [1]
-        """
-        if not self.allow_empty:
-            _guard_last(list(self.boxes.values()))
-        self.changed.emit()
-
-
-def _buttons_page(
-    cfg: ButtonSettings | settings.IntervalSettings | settings.ScaleIdentificationSettings,
-    *,
-    changed: Callable[[], None],
-    back: Callable[[], None],
-) -> QWidget:
-    """
-    Build the shared Limited and All answer-button submenu.
-
-    Parameters
-    ----------
-    cfg : ButtonSettings or IntervalSettings or ScaleIdentificationSettings
-        The exercise that owns the button mode and count.
-    changed : callable
-        Save and apply an edit.
-    back : callable
-        Return to the exercise settings menu.
-
-    Returns
-    -------
-    QWidget
-        The Buttons page with the count picker below Limited.
-
-    Examples
-    --------
-    Choosing All hides the count picker and retains its last value.
-    """
-    body = QWidget()
-    layout = QVBoxLayout(body)
-    layout.setContentsMargins(0, 0, 0, 0)
-    limited = QRadioButton("Limited")
-    all_buttons = QRadioButton("All")
-    layout.addWidget(limited)
-    count_row = QWidget()
-    count_layout = QHBoxLayout(count_row)
-    count_layout.setContentsMargins(0, 0, 0, 0)
-    count_label = QLabel("Button count")
-    count = FieldComboBox()
-    count.setAccessibleName("Button count")
-    count_label.setBuddy(count)
-    for value in range(2, 11):
-        count.addItem(str(value), value)
-    count.setCurrentIndex(count.findData(cfg.button_count))
-    count_layout.addWidget(count_label)
-    count_layout.addWidget(count, 1)
-    layout.addWidget(count_row)
-    layout.addWidget(all_buttons)
-    limited.setChecked(cfg.button_mode == "limited")
-    all_buttons.setChecked(cfg.button_mode == "all")
-    count_row.setVisible(limited.isChecked())
-
-    def save_buttons() -> None:
-        """
-        Save the button mode and count when their controls change.
-
-        Examples
-        --------
-        Open the Buttons page and choose All to save that mode.
-        """
-        cfg.button_mode = "limited" if limited.isChecked() else "all"
-        cfg.button_count = count.currentData()
-        count_row.setVisible(limited.isChecked())
-        changed()
-
-    limited.toggled.connect(save_buttons)
-    count.currentIndexChanged.connect(save_buttons)
-    return _subpage("Buttons", body=body, back=back)
-
-
-def _direction_choices(
-    cfg: settings.ScaleIdentificationSettings | settings.ScaleConstructionSettings,
-    *,
-    edited: Callable[[], None],
-) -> QWidget:
-    """
-    Choose the direction of a scale.
-
-    Parameters
-    ----------
-    cfg : ScaleIdentificationSettings or ScaleConstructionSettings
-        The exercise settings that store the selected motion.
-    edited : callable
-        Save the edit and refresh the exercise.
-
-    Returns
-    -------
-    QWidget
-        A pair of mutually exclusive Ascending and Descending radio buttons.
-
-    Examples
-    --------
-    >>> cfg = settings.ScaleIdentificationSettings()
-    >>> choices = _direction_choices(cfg, edited=lambda: None)
-    >>> next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
-    >>> cfg.motion
-    'descending'
-    """
-
-    def select(direction: str) -> None:
-        """
-        Save the direction when its radio button becomes checked.
-
-        Parameters
-        ----------
-        direction : str
-            The selected motion.
-
-        Examples
-        --------
-        Selecting Descending saves the edit immediately.
-        """
-        cfg.motion = direction
-        edited()
-
-    body = QWidget()
-    layout = QVBoxLayout(body)
-    layout.setContentsMargins(0, 0, 0, 0)
-    for direction in ("ascending", "descending"):
-        radio = QRadioButton(direction.title())
-        layout.addWidget(radio)
-        radio.setChecked(cfg.motion == direction)
-        radio.toggled.connect(lambda checked, value=direction: select(value) if checked else None)
-
-    return body
-
-
-class IntervalSettingsPanel(_StaffRangePanel):
+class IntervalSettingsPanel(StaffRangePanel):
     """
     Choose the notation and answer format for written intervals.
 
@@ -3348,7 +1054,6 @@ class IntervalSettingsPanel(_StaffRangePanel):
         super().__init__()
         self.prefix = prefix
         self.cfg: settings.IntervalSettings = cfg
-        self._persist = self._save
         self.stack = SlideStack()
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
@@ -3358,23 +1063,23 @@ class IntervalSettingsPanel(_StaffRangePanel):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(QLabel("<h3>Settings</h3>"))
         self.stack.addWidget(menu)
-        self.clefs_row = _Row("Clefs")
+        self.clefs_row = MenuRow("Clefs")
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
-        self.range_row = _Row("Range", tall=True)
+        self.range_row = MenuRow("Range", tall=True)
         self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
         self.range_row.attach(self.range_pictures)
-        self.staff_key_row = _Row("Staff Key")
+        self.staff_key_row = MenuRow("Staff Key")
         self.key_diagram = KeyDiagram()
         self.staff_key_row.attach(self.key_diagram)
-        self.values_row = _Row("Note Value")
+        self.values_row = MenuRow("Note Value")
         self.value_pictures = ValuePictures()
         self.values_row.attach(self.value_pictures)
-        self.display_row = _Row("Display Mode")
-        self.quality_row = _Row("Quality")
-        self.accidentals_row = _Row("Accidentals")
-        self.intervals_row = _Row("Intervals")
-        self.buttons_row = _Row("Buttons")
+        self.display_row = MenuRow("Display Mode")
+        self.quality_row = MenuRow("Quality")
+        self.accidentals_row = MenuRow("Accidentals")
+        self.intervals_row = MenuRow("Intervals")
+        self.buttons_row = MenuRow("Buttons")
         for index, row in enumerate(
             (
                 self.clefs_row,
@@ -3393,14 +1098,14 @@ class IntervalSettingsPanel(_StaffRangePanel):
             layout.addWidget(row)
         self.buttons_row.setVisible(prefix == "intervals")
         if prefix == "intervals":
-            self.inversions_row = _ToggleRow("Inversions")
+            self.inversions_row = ToggleRow("Inversions")
             self.inversions_row.setToolTip("Identify the inversion of the interval shown on the staff")
             self.inversions_row.setOn(cfg.inversions)
             self.inversions_row.switched.connect(self._save_and_emit)
             layout.insertWidget(layout.indexOf(self.quality_row) + 1, self.inversions_row)
         layout.addStretch()
 
-        self.boxes, clefs = _clefs_page(
+        self.boxes, clefs = clef_choice_page(
             settings.RANGE_KEYS,
             selected=cfg.clefs,
             edited=self._save_and_emit,
@@ -3432,9 +1137,9 @@ class IntervalSettingsPanel(_StaffRangePanel):
                 for name, iv in settings.WRITTEN_INTERVALS.items()
             },
         )
-        self.stack.addWidget(_subpage("Staff Key", body=_scrolling(self.staff_keys), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(subpage("Staff Key", body=scrolling(self.staff_keys), back=lambda: self._go(0), fill=True))
         self.stack.addWidget(
-            _subpage("Display Mode", body=_scrolling(self.display), back=lambda: self._go(0), fill=True),
+            subpage("Display Mode", body=scrolling(self.display), back=lambda: self._go(0), fill=True),
         )
         self.staff_keys.changed.connect(self._save_and_emit)
         self.display.changed.connect(self._save_and_emit)
@@ -3449,12 +1154,12 @@ class IntervalSettingsPanel(_StaffRangePanel):
             radio.setChecked(mode == cfg.quality_mode)
             radio.toggled.connect(lambda checked: checked and self._save_and_emit())
             self.quality_modes[mode] = radio
-        self.stack.addWidget(_subpage("Quality", body=quality_page, back=lambda: self._go(0)))
+        self.stack.addWidget(subpage("Quality", body=quality_page, back=lambda: self._go(0)))
 
         intervals = QWidget()
         interval_layout = QVBoxLayout(intervals)
         interval_layout.setContentsMargins(0, 0, 0, 0)
-        self.select_all = _ToggleRow("Select all")
+        self.select_all = ToggleRow("Select all")
         self._previous_intervals = set(cfg.intervals)
         self.select_all.switched.connect(self._select_all)
         interval_layout.addWidget(self.select_all)
@@ -3465,7 +1170,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         interval_layout.addWidget(self.slider)
         interval_layout.addWidget(self.interval_list)
         self.interval_list.changed.connect(self._save_and_emit)
-        self.stack.addWidget(_subpage("Intervals", body=_scrolling(intervals), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(subpage("Intervals", body=scrolling(intervals), back=lambda: self._go(0), fill=True))
         self.accidental_list = ChoiceChecklist(
             [("", [(sign, ACCIDENTAL_SYMBOLS[sign] or "♮") for sign in settings.INTERVAL_ACCIDENTALS])],
             selected=cfg.accidentals,
@@ -3477,10 +1182,10 @@ class IntervalSettingsPanel(_StaffRangePanel):
             box.setAccessibleName(name)
             box.setToolTip(name)
         self.accidental_list.changed.connect(self._save_and_emit)
-        self.stack.addWidget(_subpage("Accidentals", body=self.accidental_list, back=lambda: self._go(0)))
+        self.stack.addWidget(subpage("Accidentals", body=self.accidental_list, back=lambda: self._go(0)))
         self.stack.addWidget(self._values_page("Note Value"))
         if prefix == "intervals":
-            self.stack.addWidget(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
+            self.stack.addWidget(buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
         self._refresh_summaries()
 
     def _select_all(self, on: bool) -> None:
@@ -3548,7 +1253,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         'Harmonic'
         """
         super()._refresh_summaries()
-        _show_keys(self.staff_key_row, diagram=self.key_diagram, enabled=True, keys=self.cfg.staff_keys)
+        show_keys(self.staff_key_row, diagram=self.key_diagram, enabled=True, keys=self.cfg.staff_keys)
         self.display_row.value.setText(", ".join(d for d in settings.INTERVAL_DISPLAYS if d in self.cfg.displays))
         self.direction_choices.setVisible("Melodic" in self.cfg.displays)
         self.quality_row.value.setText(settings.INTERVAL_QUALITY_MODES[self.cfg.quality_mode])
@@ -3577,17 +1282,21 @@ class IntervalSettingsPanel(_StaffRangePanel):
         count = len(selected)
         self.intervals_row.value.setText(f"{count} selected" if count else "None")
 
-    def _save(self) -> None:
+    def _persist(self) -> None:
         """
-        Save the current selection and update its menu previews.
+        Take every control's choices into the settings, save them and show them in the menu.
 
         Examples
         --------
-        Editing a pitch limit saves it for its own clef.
+        >>> panel = IntervalSettingsPanel(settings.IntervalSettings(), prefix="intervals")
+        >>> panel.boxes["alto"].setChecked(True)
+        >>> panel.cfg.active_clefs(), str(store().value("intervals/clefs"))
+        (['treble', 'bass', 'alto'], 'alto,bass,treble')
+        >>> store().remove("intervals")
         """
         cfg = self.cfg
         cfg.clefs = {c for c, box in self.boxes.items() if box.isChecked()}
-        _guard_last(self.boxes.values())
+        guard_last(self.boxes.values())
         cfg.staff_keys = self.staff_keys.selected()
         cfg.displays = self.display.selected()
         cfg.directions = self.direction_choices.selected()
@@ -3679,15 +1388,15 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         menu_layout = QVBoxLayout(menu)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.addWidget(QLabel("<h3>Settings</h3>"))
-        self.range_row = _Row("Range", tall=True)
+        self.range_row = MenuRow("Range", tall=True)
         self.range_row.clicked.connect(lambda: self._go(1))
         self.range_keyboard = KeyboardSpan(compact=True, size=(px(ROW_PICTURE_WIDTH), px(36)))
         self.range_row.attach(self.range_keyboard)
-        self.intervals_row = _Row("Intervals")
+        self.intervals_row = MenuRow("Intervals")
         self.intervals_row.clicked.connect(lambda: self._go(2))
         menu_layout.addWidget(self.range_row)
         menu_layout.addWidget(self.intervals_row)
-        self.buttons_row = _Row("Buttons")
+        self.buttons_row = MenuRow("Buttons")
         self.buttons_row.clicked.connect(lambda: self._go(3))
         menu_layout.addWidget(self.buttons_row)
         menu_layout.addStretch()
@@ -3711,8 +1420,8 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         count_layout = QHBoxLayout(self.button_count_row)
         count_layout.setContentsMargins(0, 0, 0, 0)
         count_layout.addWidget(QLabel("Button count"), 1)
-        self.button_count_down = _arrow(Qt.ArrowType.LeftArrow, tip="Fewer answer buttons")
-        self.button_count_up = _arrow(Qt.ArrowType.RightArrow, tip="More answer buttons")
+        self.button_count_down = arrow_button(Qt.ArrowType.LeftArrow, tip="Fewer answer buttons")
+        self.button_count_up = arrow_button(Qt.ArrowType.RightArrow, tip="More answer buttons")
         self.button_count_down.clicked.connect(lambda: self._step_button_count(-1))
         self.button_count_up.clicked.connect(lambda: self._step_button_count(1))
         self.button_count = QLineEdit()
@@ -3743,8 +1452,8 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         for title, label, which in (("Lowest key", self.low_label, "low"), ("Highest key", self.high_label, "high")):
             row = QHBoxLayout()
             row.addWidget(QLabel(f"<b>{title}</b>"), 1)
-            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
-            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
+            down = arrow_button(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
+            up = arrow_button(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
             down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -3764,7 +1473,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         intervals = QWidget()
         intervals_layout = QVBoxLayout(intervals)
         intervals_layout.setContentsMargins(0, 0, 0, 0)
-        self.select_all = _ToggleRow("Select all")
+        self.select_all = ToggleRow("Select all")
         self.select_all.switched.connect(self._select_all_toggled)
         intervals_layout.addWidget(self.select_all)
         self.interval_range = QWidget()
@@ -3781,8 +1490,8 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
             (("From", self.interval_low_label, "low"), ("To", self.interval_high_label, "high")),
         ):
             endpoints.addWidget(QLabel(title), row, 0)
-            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: smaller interval")
-            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: larger interval")
+            down = arrow_button(Qt.ArrowType.LeftArrow, tip=f"{title}: smaller interval")
+            up = arrow_button(Qt.ArrowType.RightArrow, tip=f"{title}: larger interval")
             down.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=1))
             label.setProperty("field", True)
@@ -3818,29 +1527,10 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         self.interval_page.changed.connect(self._intervals_edited)
         intervals_layout.addWidget(self.interval_page)
         self.stack.addWidget(menu)
-        self.stack.addWidget(_subpage("Range", body=body, back=lambda: self._go(0)))
-        self.stack.addWidget(_subpage("Intervals", body=_scrolling(intervals), back=lambda: self._go(0), fill=True))
-        self.stack.addWidget(_subpage("Buttons", body=buttons_body, back=lambda: self._go(0)))
+        self.stack.addWidget(subpage("Range", body=body, back=lambda: self._go(0)))
+        self.stack.addWidget(subpage("Intervals", body=scrolling(intervals), back=lambda: self._go(0), fill=True))
+        self.stack.addWidget(subpage("Buttons", body=buttons_body, back=lambda: self._go(0)))
         self._refresh()
-
-    def _go(self, index: int) -> None:
-        """
-        Open a settings page.
-
-        Parameters
-        ----------
-        index : int
-            The menu at 0, range at 1, intervals at 2, or answer buttons at 3.
-
-        Examples
-        --------
-        >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if not self.stack.sliding and index != self.stack.currentIndex():
-            self.stack.slide_to(index)
 
     def _refresh(self) -> None:
         """
@@ -3919,6 +1609,9 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         >>> panel._step("low", delta=1)
         >>> panel.cfg.low
         49
+        >>> panel._step("high", delta=-1)
+        >>> panel.cfg.high == settings.KeyboardIntervalSettings().high - 1
+        True
         """
         low, high = self.cfg.low, self.cfg.high
         first, last = settings.KEYBOARD_FULL
@@ -4046,6 +1739,10 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         >>> panel._button_count_edited()
         >>> panel.cfg.button_count
         8
+        >>> panel.button_count.setText("")  # not a number: the field shows the saved count again
+        >>> panel._button_count_edited()
+        >>> panel.button_count.text(), panel.cfg.button_count
+        ('8', 8)
         """
         try:
             count = int(self.button_count.text())
@@ -4127,20 +1824,19 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         self.cfg.intervals = set(self.cfg.active_intervals())
         self._save_and_emit()
 
-    def _save_and_emit(self) -> None:
+    def _persist(self) -> None:
         """
-        Refresh the controls, persist the settings, and notify the exercise.
+        Bring the controls up to date with the settings, and save them.
 
         Examples
         --------
         >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
-        >>> panel._save_and_emit()
+        >>> panel._persist()
         >>> int(store().value("keyboardIntervals/low")) == panel.cfg.low
         True
         """
         self._refresh()
         save_keyboard_intervals(self.cfg)
-        self.changed.emit()
 
 
 _INVERSION_SHORT = (
@@ -4151,7 +1847,7 @@ _INVERSION_SHORT = (
 )
 
 
-class ArpeggioSettingsPanel(ExerciseSettingsPanel):
+class ArpeggioSettingsPanel(ClefsPanel):
     """
     The settings of the arpeggio exercise: a menu with a page for each group of settings.
 
@@ -4179,6 +1875,8 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
     >>> panel.types_row.value.text()
     '4 of 9'
     """
+
+    cfg: settings.ArpeggioSettings
 
     def __init__(
         self,
@@ -4223,15 +1921,15 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.clefs_row = _Row("Clefs")
+        self.clefs_row = MenuRow("Clefs")
         self.clefs_row.clicked.connect(lambda: self._go(1))
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
-        self.types_row = _Row("Arpeggio types")
+        self.types_row = MenuRow("Arpeggio types")
         self.types_row.clicked.connect(lambda: self._go(2))
-        self.inversions_row = _Row("Inversions")
+        self.inversions_row = MenuRow("Inversions")
         self.inversions_row.clicked.connect(lambda: self._go(3))
-        self.keys_row = _Row("Key signatures")
+        self.keys_row = MenuRow("Key signatures")
         self.keys_row.setToolTip("Draw a key signature; the arpeggio then only gets signs where it differs from it")
         self.keys_row.clicked.connect(lambda: self._go(4))
         self.keys_diagram = KeyDiagram()
@@ -4246,7 +1944,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         mlay.addStretch()
 
         # layer 2: clefs (the ones with a single staff)
-        self.boxes, clefs_page = _clefs_page(
+        self.boxes, clefs_page = clef_choice_page(
             CLEFS,
             selected=cfg.clefs,
             edited=self._clefs_edited,
@@ -4262,7 +1960,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
             selected=cfg.types,
         )
         self.types.changed.connect(self._types_edited)
-        types_page = _subpage("Arpeggio types", body=self.types, back=lambda: self._go(0))
+        types_page = subpage("Arpeggio types", body=self.types, back=lambda: self._go(0))
         names = settings_inversion_names()
         self.inversions = ChoiceChecklist([("", [(i, names[i]) for i in settings.INVERSIONS])], selected=cfg.inversions)
         self.inversions.changed.connect(self._inversions_edited)
@@ -4279,12 +1977,12 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         )
         inv_lay.addWidget(self.inversions)
         inv_lay.addWidget(note)
-        inversions_page = _subpage("Inversions", body=inv_body, back=lambda: self._go(0))
+        inversions_page = subpage("Inversions", body=inv_body, back=lambda: self._go(0))
 
         # layer 2: key signatures
         self.key_page = KeySignaturePage(cfg.key_signature, selected=cfg.keys)
         self.key_page.changed.connect(self._keys_edited)
-        keys_page = _subpage("Key signatures", body=self.key_page, back=lambda: self._go(0))
+        keys_page = subpage("Key signatures", body=self.key_page, back=lambda: self._go(0))
 
         for page in (
             menu,
@@ -4295,28 +1993,6 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         ):
             self.stack.addWidget(page)
         self._refresh_summaries()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summaries when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, then the pages in the order of the menu.
-
-        Examples
-        --------
-        >>> panel = ArpeggioSettingsPanel(settings.ArpeggioSettings())
-        >>> panel._go(2)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        if index == 0:
-            self._refresh_summaries()
-        self.stack.slide_to(index)
 
     def _refresh_summaries(self) -> None:
         """
@@ -4337,46 +2013,27 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         self.inversions_row.value.setText(
             "All" if len(inversions) == len(settings.INVERSIONS) else ", ".join(_INVERSION_SHORT[i] for i in inversions),
         )
-        _show_keys(
+        show_keys(
             self.keys_row,
             diagram=self.keys_diagram,
             enabled=cfg.key_signature,
             keys=set(cfg.active_keys()),
         )
 
-    def _save_and_emit(self) -> None:
+    def _persist(self) -> None:
         """
-        Save the arpeggio settings and emit `changed`.
+        Save the arpeggio settings.
 
         Examples
         --------
         >>> cfg_ = settings.ArpeggioSettings(clefs={"tenor"})
         >>> panel = ArpeggioSettingsPanel(cfg_)
-        >>> panel._save_and_emit()
+        >>> panel._persist()
         >>> str(store().value("arpeggio/clefs"))
         'tenor'
         >>> store().setValue("arpeggio/clefs", "treble,bass")
         """
         save_arpeggio(self.cfg)
-        self.changed.emit()
-
-    def _clefs_edited(self) -> None:
-        """
-        Take the checked clefs into the settings, save them and say so.
-
-        The last checked clef cannot be unchecked.
-
-        Examples
-        --------
-        >>> cfg = settings.ArpeggioSettings()
-        >>> panel = ArpeggioSettingsPanel(cfg)
-        >>> panel.boxes["alto"].setChecked(True)
-        >>> "alto" in cfg.clefs
-        True
-        """
-        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
-        _guard_last(list(self.boxes.values()))
-        self._save_and_emit()
 
     def _types_edited(self) -> None:
         """
@@ -4423,7 +2080,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         """
         self.cfg.key_signature = self.key_page.enabled()
         self.cfg.keys = self.key_page.selected()
-        _show_keys(
+        show_keys(
             self.keys_row,
             diagram=self.keys_diagram,
             enabled=self.cfg.key_signature,
@@ -4432,7 +2089,7 @@ class ArpeggioSettingsPanel(ExerciseSettingsPanel):
         self._save_and_emit()
 
 
-class KeySignatureSettingsPanel(ExerciseSettingsPanel):
+class KeySignatureSettingsPanel(ClefsPanel):
     """
     The settings of a key signature exercise: a menu with a page for each group of settings.
 
@@ -4465,6 +2122,8 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
     >>> panel.modes_row.value.text()
     '2 of 7'
     """
+
+    cfg: settings.KeySignatureSettings
 
     def __init__(
         self,
@@ -4520,10 +2179,10 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             cfg,
             (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
         )  # these have a signature for the staff and one for the scale
-        self.clefs_row = _Row("Clefs")
-        self.modes_row = _Row("Scales")
-        self.keys_row = _Row("Scale Key" if scales else keys_title)
-        self.staff_keys_row: _Row | None = _Row("Staff Key") if scales else None
+        self.clefs_row = MenuRow("Clefs")
+        self.modes_row = MenuRow("Scales")
+        self.keys_row = MenuRow("Scale Key" if scales else keys_title)
+        self.staff_keys_row: MenuRow | None = MenuRow("Staff Key") if scales else None
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.keys_diagram = KeyDiagram()
@@ -4537,29 +2196,29 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             menu_rows.append(self.staff_keys_row)  # the staff's key and the scale's are next to each other
         menu_rows.append(self.keys_row)
         if isinstance(cfg, settings.OrderOfKeysSettings):
-            self.starts_row = _Row("Starting Accidentals")
+            self.starts_row = MenuRow("Starting Accidentals")
             menu_rows.append(self.starts_row)
         if scales:
-            self.motion_row = _Row("Motion")
+            self.motion_row = MenuRow("Motion")
             menu_rows.append(self.motion_row)
         if isinstance(cfg, settings.ScaleIdentificationSettings):
-            self.buttons_row = _Row("Buttons")
+            self.buttons_row = MenuRow("Buttons")
             menu_rows.append(self.buttons_row)
-            self.question_type_row = _Row("Question Type")
+            self.question_type_row = MenuRow("Question Type")
             menu_rows.append(self.question_type_row)
         for index, row in enumerate(menu_rows, 1):
             row.clicked.connect(lambda _=False, i=index: self._go(i))
             mlay.addWidget(row)
-        self.steps_row: _ToggleRow | None = None  # only scale construction has steps to mark, and an octave to start in
-        self.octave_row: _ToggleRow | None = None
+        self.steps_row: ToggleRow | None = None  # only scale construction has steps to mark, and an octave to start in
+        self.octave_row: ToggleRow | None = None
         if isinstance(cfg, settings.ScaleConstructionSettings):
-            octave_row = _ToggleRow("Octave")
+            octave_row = ToggleRow("Octave")
             octave_row.setToolTip("Name the octave of the first note, such as G2 Major, and require the scale to start there")
             octave_row.setOn(cfg.octave)
             octave_row.switched.connect(self._octave_toggled)
             mlay.addWidget(octave_row)
             self.octave_row = octave_row
-            steps_row = _ToggleRow("Steps")
+            steps_row = ToggleRow("Steps")
             steps_row.setToolTip("Also mark the whole and half steps between the notes, once they are placed")
             steps_row.setOn(cfg.steps)
             steps_row.switched.connect(self._steps_toggled)
@@ -4568,7 +2227,7 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         mlay.addStretch()
 
         # layer 2: the clefs the signature is drawn on
-        self.boxes, clefs_page = _clefs_page(
+        self.boxes, clefs_page = clef_choice_page(
             CLEFS,
             selected=cfg.clefs,
             edited=self._clefs_edited,
@@ -4594,11 +2253,11 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         )
         mlay2.addWidget(self.modes)
         mlay2.addWidget(modes_note)
-        modes_page = _subpage("Scales", body=modes_body, back=lambda: self._go(0))
+        modes_page = subpage("Scales", body=modes_body, back=lambda: self._go(0))
 
         # layer 2: the key signatures asked
         if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
-            self.scale_keys = _ScaleKeyPicker(
+            self.scale_keys = ScaleKeyPicker(
                 major_keys=set(cfg.active_keys()) if cfg.minor_keys is None else cfg.keys,
                 minor_keys=set(cfg.active_keys()) if cfg.minor_keys is None else cfg.minor_keys,
             )
@@ -4630,11 +2289,11 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             )
             staff_lay.addWidget(staff_key_list)
             staff_lay.addWidget(staff_note)
-            pages.append(_subpage("Staff Key", body=staff_body, back=lambda: self._go(0)))
-            pages.append(_subpage("Scale Key", body=_scrolling(self.scale_keys), back=lambda: self._go(0), fill=True))
-            pages.append(_subpage("Motion", body=_direction_choices(cfg, edited=self._save_and_emit), back=lambda: self._go(0)))
+            pages.append(subpage("Staff Key", body=staff_body, back=lambda: self._go(0)))
+            pages.append(subpage("Scale Key", body=scrolling(self.scale_keys), back=lambda: self._go(0), fill=True))
+            pages.append(subpage("Motion", body=direction_choices(cfg, edited=self._save_and_emit), back=lambda: self._go(0)))
         else:
-            pages.append(_subpage(keys_title, body=self.key_list, back=lambda: self._go(0)))
+            pages.append(subpage(keys_title, body=self.key_list, back=lambda: self._go(0)))
 
         if isinstance(cfg, settings.OrderOfKeysSettings):
             self.starts_list = KeyChecklist(cfg.starting_accidentals, counts_only=True)
@@ -4652,10 +2311,10 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
                 self._save_and_emit()
 
             self.starts_list.changed.connect(save_starts)
-            pages.append(_subpage("Starting Accidentals", body=_scrolling(self.starts_list), back=lambda: self._go(0), fill=True))
+            pages.append(subpage("Starting Accidentals", body=scrolling(self.starts_list), back=lambda: self._go(0), fill=True))
 
         if isinstance(cfg, settings.ScaleIdentificationSettings):
-            pages.append(_buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
+            pages.append(buttons_page(cfg, changed=self._save_and_emit, back=lambda: self._go(0)))
 
             question_types = ChoiceChecklist(
                 [("", [("key", "Key"), ("mode", "Mode")])],
@@ -4675,33 +2334,11 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
                 self._save_and_emit()
 
             question_types.changed.connect(save_question_type)
-            pages.append(_subpage("Question Type", body=question_types, back=lambda: self._go(0)))
+            pages.append(subpage("Question Type", body=question_types, back=lambda: self._go(0)))
 
         for page in pages:
             self.stack.addWidget(page)
         self._refresh_summaries()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summaries when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, then the pages in the order of the menu.
-
-        Examples
-        --------
-        >>> panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        if index == 0:
-            self._refresh_summaries()
-        self.stack.slide_to(index)
 
     def _refresh_summaries(self) -> None:
         """
@@ -4722,10 +2359,10 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
         self.modes_row.value.setText(f"{len(modes)} of {len(settings.KEY_MODES)}")
         if isinstance(cfg, (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings)):
             minor_keys = self.scale_keys.minor_keys
-            _guard_last([*self.key_list.boxes.values(), *minor_keys.boxes.values()])
+            guard_last([*self.key_list.boxes.values(), *minor_keys.boxes.values()])
             self.keys_row.value.setText(f"{len(self.key_list.selected())} major · {len(minor_keys.selected())} minor")
         else:
-            _show_keys(self.keys_row, diagram=self.keys_diagram, enabled=True, keys=set(cfg.active_keys()))
+            show_keys(self.keys_row, diagram=self.keys_diagram, enabled=True, keys=set(cfg.active_keys()))
         if isinstance(cfg, settings.OrderOfKeysSettings):
             allowed = cfg.available_starts()
             selected = cfg.starting_accidentals.intersection(allowed) or {0}
@@ -4741,45 +2378,26 @@ class KeySignatureSettingsPanel(ExerciseSettingsPanel):
             cfg,
             (settings.ScaleConstructionSettings, settings.ScaleIdentificationSettings),
         ):
-            _show_keys(
+            show_keys(
                 self.staff_keys_row,
                 diagram=self.staff_keys_diagram,
                 enabled=True,
                 keys=set(cfg.active_staff_keys()),
             )
 
-    def _save_and_emit(self) -> None:
+    def _persist(self) -> None:
         """
-        Save the key signature settings and emit `changed`.
+        Save the key signature settings, under the exercise's own name.
 
         Examples
         --------
         >>> panel = KeySignatureSettingsPanel(settings.KeySignatureSettings(clefs={"alto"}))
-        >>> panel._save_and_emit()
+        >>> panel._persist()
         >>> str(store().value("keySignatures/clefs"))
         'alto'
         >>> store().setValue("keySignatures/clefs", "treble,bass")
         """
         save_key_settings(self.cfg, prefix=self.prefix)
-        self.changed.emit()
-
-    def _clefs_edited(self) -> None:
-        """
-        Take the checked clefs into the settings, save them and say so.
-
-        The last checked clef cannot be unchecked.
-
-        Examples
-        --------
-        >>> cfg = settings.KeySignatureSettings()
-        >>> panel = KeySignatureSettingsPanel(cfg)
-        >>> panel.boxes["alto"].setChecked(True)
-        >>> "alto" in cfg.clefs
-        True
-        """
-        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
-        _guard_last(list(self.boxes.values()))
-        self._save_and_emit()
 
     def _modes_edited(self) -> None:
         """
@@ -4908,10 +2526,10 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         menu_layout = QVBoxLayout(menu)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.addWidget(QLabel("<h3>Settings</h3>"))
-        self.type_row = _Row("Question Type")
+        self.type_row = MenuRow("Question Type")
         self.type_row.clicked.connect(lambda: self.stack.slide_to(1))
         menu_layout.addWidget(self.type_row)
-        self.terms_row = _Row("Terms")
+        self.terms_row = MenuRow("Terms")
         self.terms_row.clicked.connect(lambda: self.stack.slide_to(2))
         menu_layout.addWidget(self.terms_row)
         menu_layout.addStretch()
@@ -4927,12 +2545,12 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
             radio.setChecked(key == settings.notation.question_type)
             radio.toggled.connect(lambda checked: checked and self._save())
             self.types[key] = radio
-        self.stack.addWidget(_subpage("Question Type", body=question_types, back=lambda: self.stack.slide_to(0)))
+        self.stack.addWidget(subpage("Question Type", body=question_types, back=lambda: self.stack.slide_to(0)))
 
         terms_body = QWidget()
         terms_layout = QVBoxLayout(terms_body)
         terms_layout.setContentsMargins(0, 0, 0, 0)
-        self.select_none = _ToggleRow("Select none")
+        self.select_none = ToggleRow("Select none")
         self.select_none.switched.connect(lambda on: self._set_terms(set() if on else saved_notation_terms()))
         terms_layout.addWidget(self.select_none)
         self.group_picker = FieldComboBox()
@@ -4946,8 +2564,8 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
             selected=settings.notation.terms,
             allow_empty=True,
         )
-        terms_layout.addWidget(_scrolling(self.terms), 1)
-        self.stack.addWidget(_subpage("Terms", body=terms_body, back=lambda: self.stack.slide_to(0), fill=True))
+        terms_layout.addWidget(scrolling(self.terms), 1)
+        self.stack.addWidget(subpage("Terms", body=terms_body, back=lambda: self.stack.slide_to(0), fill=True))
         self.terms.changed.connect(self._save)
         self.group_picker.textActivated.connect(self._select_group)
         self._refresh_summaries()
@@ -5024,7 +2642,7 @@ class NotationSettingsPanel(ExerciseSettingsPanel):
         self.changed.emit()
 
 
-class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
+class ClefBasicsSettingsPanel(ClefsPanel):
     """
     The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.
 
@@ -5049,6 +2667,8 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
     >>> panel.stack.count()  # the menu and two pages
     3
     """
+
+    cfg: settings.ClefBasicsSettings
 
     def __init__(
         self,
@@ -5092,10 +2712,10 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.type_row = _Row("Question Type")
+        self.type_row = MenuRow("Question Type")
         self.type_row.clicked.connect(lambda _=False: self._go(1))
         mlay.addWidget(self.type_row)
-        self.clefs_row = _Row("Clefs")
+        self.clefs_row = MenuRow("Clefs")
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.clefs_row.clicked.connect(lambda _=False: self._go(2))
@@ -5118,8 +2738,8 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
             type_group.addButton(radio)
             type_lay.addWidget(radio)
             self.types[key] = radio
-        type_page = _subpage("Question Type", body=type_body, back=lambda: self._go(0))
-        self.boxes, clefs_page = _clefs_page(
+        type_page = subpage("Question Type", body=type_body, back=lambda: self._go(0))
+        self.boxes, clefs_page = clef_choice_page(
             settings.CLEF_BASICS_CLEFS,
             selected=cfg.clefs,
             edited=self._clefs_edited,
@@ -5128,28 +2748,6 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
         for page in (menu, type_page, clefs_page):
             self.stack.addWidget(page)
         self._refresh_summaries()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summary when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for Question Type, 2 for Clefs.
-
-        Examples
-        --------
-        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        if index == 0:
-            self._refresh_summaries()
-        self.stack.slide_to(index)
 
     def _refresh_summaries(self) -> None:
         """
@@ -5187,28 +2785,21 @@ class ClefBasicsSettingsPanel(ExerciseSettingsPanel):
         if not on:
             return
         self.cfg.question_type = key
-        store().setValue("clefBasics/type", key)
-        self.changed.emit()
+        self._save_and_emit()
 
-    def _clefs_edited(self) -> None:
+    def _persist(self) -> None:
         """
-        Take the checked clefs into the settings, save them and say so.
-
-        The last checked clef cannot be unchecked.
+        Save the clef basics settings.
 
         Examples
         --------
-        >>> cfg = settings.ClefBasicsSettings()
-        >>> panel = ClefBasicsSettingsPanel(cfg)
-        >>> panel.boxes["french"].setChecked(True)
-        >>> "french" in cfg.clefs, str(store().value("clefBasics/clefs"))
-        (True, 'treble,bass,french')
+        >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"alto"}))
+        >>> panel._persist()
+        >>> str(store().value("clefBasics/clefs"))
+        'alto'
         >>> store().remove("clefBasics")
         """
-        self.cfg.clefs = {c for c, b in self.boxes.items() if b.isChecked()}
-        _guard_last(list(self.boxes.values()))
-        store().setValue("clefBasics/clefs", ",".join(self.cfg.active_clefs()))
-        self.changed.emit()
+        save_clef_basics(self.cfg)
 
 
 def settings_inversion_names() -> tuple[str, ...]:
@@ -5228,39 +2819,6 @@ def settings_inversion_names() -> tuple[str, ...]:
     return tuple(n.capitalize() for n in INVERSION_NAMES)
 
 
-def _scrolling(body: QWidget) -> QScrollArea:
-    """
-    Put a page's body in a scroll area, so a long page scrolls inside the pane and never makes the window taller.
-
-    Parameters
-    ----------
-    body : QWidget
-        What the page shows.
-
-    Returns
-    -------
-    QScrollArea
-        The scroll area that holds it, with no frame and no sideways scrolling.
-
-    Examples
-    --------
-    >>> page = QWidget()
-    >>> _scrolling(page).widget() is page
-    True
-    """
-    # Short option lists keep their natural height as the viewport grows.
-    policy = body.sizePolicy()
-    policy.setVerticalPolicy(QSizePolicy.Policy.Maximum)
-    body.setSizePolicy(policy)
-    scroll = QScrollArea()
-    scroll.setWidget(body)
-    scroll.setWidgetResizable(True)
-    scroll.setFrameShape(QFrame.Shape.NoFrame)
-    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-    scroll.setMinimumHeight(0)
-    return scroll
-
-
 class CircleSettingsPanel(ExerciseSettingsPanel):
     """
     The settings of the circle of fifths exercise: which kinds of question to ask, and the colors of the circle.
@@ -5275,9 +2833,9 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         The settings being edited.
     stack : SlideStack
         The menu and its pages: the menu, the questions, the color schemes and the editor of a scheme.
-    questions_row : _Row
+    questions_row : MenuRow
         The menu row for the questions.
-    colors_row : _Row
+    colors_row : MenuRow
         The menu row for the colors; its value is the name of the chosen scheme.
     questions : ChoiceChecklist
         The kinds of question: relative major, relative minor and Roman numerals.
@@ -5334,10 +2892,10 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
             0,
         )
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
-        self.questions_row = _Row("Questions")
+        self.questions_row = MenuRow("Questions")
         self.questions_row.clicked.connect(lambda: self._go(1))
         mlay.addWidget(self.questions_row)
-        self.colors_row = _Row("Colors")
+        self.colors_row = MenuRow("Colors")
         self.colors_row.clicked.connect(lambda: self._go(2))
         mlay.addWidget(self.colors_row)
         mlay.addStretch()
@@ -5370,36 +2928,14 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self.editor.canceled.connect(lambda: self._go(2))
         pages = (
             menu,
-            _subpage("Questions", body=body, back=lambda: self._go(0)),
-            _subpage("Colors", body=_scrolling(self.schemes), back=lambda: self._go(0), fill=True),
-            _subpage("Your colors", body=_scrolling(self.editor), back=lambda: self._go(2), fill=True),
+            subpage("Questions", body=body, back=lambda: self._go(0)),
+            subpage("Colors", body=scrolling(self.schemes), back=lambda: self._go(0), fill=True),
+            subpage("Your colors", body=scrolling(self.editor), back=lambda: self._go(2), fill=True),
         )
         for page in pages:
             self.stack.addWidget(page)
         self.schemes.load(current=cfg.scheme, customs=cfg.customs)
         self._refresh_summaries()
-
-    def _go(self, index: int) -> None:
-        """
-        Slide to a page, refreshing the menu's summaries when going back to it.
-
-        Parameters
-        ----------
-        index : int
-            0 for the menu, 1 for the questions, 2 for the color schemes and 3 for the editor of a scheme.
-
-        Examples
-        --------
-        >>> panel = CircleSettingsPanel(settings.CircleSettings())
-        >>> panel._go(1)
-        >>> panel.stack.sliding
-        True
-        """
-        if self.stack.sliding or index == self.stack.currentIndex():
-            return
-        if index == 0:
-            self._refresh_summaries()
-        self.stack.slide_to(index)
 
     def _refresh_summaries(self) -> None:
         """
@@ -5553,901 +3089,6 @@ class CircleSettingsPanel(ExerciseSettingsPanel):
         self._go(2)
 
 
-COMMIT_DELAY_MS = 150  # how long a drag must pause before its range is saved and a new question is asked
-
-
-def _pack_sound_page(
-    exercise: type[PackExercise],
-    *,
-    title: str,
-    chosen: Callable[[str], None],
-    back: Callable[[], object],
-) -> tuple[QWidget, Callable[[str], str]]:
-    """
-    Build the page where a learner picks the instrument that sounds in a plugin's exercise.
-
-    The plugin's own instruments are listed first, then other instruments of the same kind, then every other installed
-    instrument, each group under its own heading.
-
-    Parameters
-    ----------
-    exercise : type of PackExercise
-        The exercise, which says which instruments to offer and in what order.
-    title : str
-        The page's title, the plugin's label for the sound setting. Keyword-only.
-    chosen : callable
-        Called with the key of the instrument the learner picks. Keyword-only.
-    back : callable
-        Called when the Back button is pressed. Keyword-only.
-
-    Returns
-    -------
-    tuple of QWidget and callable
-        The page, and a function that marks an instrument key as the current choice and returns its label.
-
-    Examples
-    --------
-    >>> class Demo(PackExercise):
-    ...     pack_name = "Demo"
-    ...     instruments = {}
-    >>> page, show = _pack_sound_page(Demo, title="Sound", chosen=print, back=print)
-    >>> show("piano")
-    'Piano'
-    """
-    body = QWidget()
-    layout = QVBoxLayout(body)
-    layout.setContentsMargins(0, 0, 0, 0)
-    group = QButtonGroup(body)
-    radios: dict[str, QRadioButton] = {}
-    labels: dict[str, str] = {}
-    for heading, items in exercise.sound_options():
-        layout.addWidget(QLabel(f"<b>{heading}</b>"))
-        for key, label in items:
-            radio = QRadioButton(label)
-            group.addButton(radio)
-            radio.toggled.connect(lambda on, picked=key: chosen(picked) if on else None)
-            layout.addWidget(radio)
-            radios[key], labels[key] = radio, label
-    layout.addStretch()
-
-    def show(key: str) -> str:
-        """
-        Mark an instrument as the one chosen.
-
-        Parameters
-        ----------
-        key : str
-            The instrument's key.
-
-        Returns
-        -------
-        str
-            The instrument's label, or its key when it is not listed.
-
-        Examples
-        --------
-        Showing the plugin's own sound checks its radio button.
-        """
-        for name, radio in radios.items():
-            radio.blockSignals(True)
-            radio.setChecked(name == key)
-            radio.blockSignals(False)
-        return labels.get(key) or (INSTRUMENT_BY_KEY[key].label if key in INSTRUMENT_BY_KEY else key)
-
-    return _subpage(title, body=_scrolling(body), back=back, fill=True), show
-
-
-class PackSettingsPanel(_StaffRangePanel):
-    """
-    The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.
-
-    The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
-    accidentals and for the octave. Edits are live: each changes the options, saves them and emits `changed`.
-
-    Attributes
-    ----------
-    exercise : type of PackExercise
-        The exercise whose options are edited.
-    cfg : PackExerciseSettings
-        The options being edited.
-    range_row : _Row
-        The Range row, present only if the plugin declared a range.
-    sound_row : _ToggleRow or None
-        The plugin sound switch, if declared.
-    accidentals_row : _ToggleRow or None
-        The accidentals switch, if declared.
-    octave_row : _ToggleRow or None
-        The octave switch, if declared.
-
-    Examples
-    --------
-    >>> class Demo(PackExercise):
-    ...     controls = {"octave": True}
-    >>> panel = PackSettingsPanel(Demo)
-    >>> panel.octave_row is not None and not hasattr(panel, "range_row")
-    True
-    >>> _ = settings.pack_exercises.pop("Demo")
-    """
-
-    range_index = 1
-
-    def __init__(
-        self,
-        exercise: type[PackExercise],
-        *,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the menu and, if the plugin offers a range, its page.
-
-        Parameters
-        ----------
-        exercise : type of PackExercise
-            The exercise to edit.
-        parent : QWidget or None, default None
-            The widget that owns the panel. Keyword-only.
-
-        Examples
-        --------
-        >>> class Sounds(PackExercise):
-        ...     controls = {"sound": "Demo sound"}
-        >>> panel = PackSettingsPanel(Sounds)
-        >>> panel.stack.count()
-        2
-        >>> _ = settings.pack_exercises.pop("Sounds")
-        """
-        super().__init__(parent)
-        self.exercise = exercise
-        self.cfg: settings.PackExerciseSettings = exercise.options()
-        name = exercise.__name__
-        self._persist = lambda: save_pack_options(name)
-        self.stack = SlideStack()
-        outer = QVBoxLayout(self)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.addWidget(self.stack)
-        menu = QWidget()
-        layout = QVBoxLayout(menu)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(QLabel("<h3>Settings</h3>"))
-        controls = exercise.controls
-        self.sound_row: _Row | None = None
-        self.accidentals_row: _ToggleRow | None = None
-        self.octave_row: _ToggleRow | None = None
-        if "sound" in controls:
-            self.sound_row = _Row(str(controls["sound"]))
-            self.sound_row.setToolTip("Choose which instrument sounds in this exercise")
-            layout.addWidget(self.sound_row)
-        pages = [menu]
-        if "range" in controls:
-            row = self.range_row = _Row("Range", tall=True)
-            self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
-            row.attach(self.range_pictures)
-            row.clicked.connect(lambda _=False: self._go(self.range_index))
-            layout.addWidget(row)
-            pages.append(self._range_page())
-        if "accidentals" in controls:
-            self.accidentals_row = self._switch(
-                layout,
-                title="Accidentals",
-                tip="Also ask the notes between the natural ones, with sharps and flats",
-                on=self.cfg.accidentals,
-                edit=self._accidentals_toggled,
-            )
-        if "octave" in controls:
-            self.octave_row = self._switch(
-                layout,
-                title="Octave",
-                tip="Also ask which octave the note is in",
-                on=self.cfg.require_octave,
-                edit=self._octave_toggled,
-            )
-        if self.sound_row is not None:
-            sound_page = len(pages)
-            self.sound_row.clicked.connect(lambda _=False, target=sound_page: self._go(target))
-            page, self._show_sound = _pack_sound_page(
-                exercise,
-                title=str(controls["sound"]),
-                chosen=self._sound_chosen,
-                back=lambda: self._go(0),
-            )
-            pages.append(page)
-        layout.addStretch()
-        for page in pages:
-            self.stack.addWidget(page)
-        self._refresh_summaries()
-
-    @staticmethod
-    def _switch(
-        layout: QVBoxLayout,
-        *,
-        title: str,
-        tip: str,
-        on: bool,
-        edit: Callable[[bool], None],
-    ) -> _ToggleRow:
-        """
-        Add a switch row to the menu.
-
-        Parameters
-        ----------
-        layout : QVBoxLayout
-            The menu's layout. The row goes at the end.
-        title : str
-            The row's label. Keyword-only.
-        tip : str
-            What the switch does, as its tooltip. Keyword-only.
-        on : bool
-            The switch's starting state. Keyword-only.
-        edit : callable
-            Called with the new state when the switch is clicked. Keyword-only.
-
-        Returns
-        -------
-        _ToggleRow
-            The new row.
-
-        Examples
-        --------
-        >>> layout = QVBoxLayout()
-        >>> PackSettingsPanel._switch(layout, title="Octave", tip="", on=True, edit=print).isOn()
-        True
-        """
-        row = _ToggleRow(title)
-        row.setToolTip(tip)
-        row.setOn(on)
-        row.switched.connect(edit)
-        layout.addWidget(row)
-        return row
-
-    def _limits(self, key: str) -> tuple[int, int] | None:
-        """
-        Keep the range within the notes the plugin lists.
-
-        Parameters
-        ----------
-        key : str
-            The clef.
-
-        Returns
-        -------
-        tuple of (int, int)
-            The lowest and highest staff step among the plugin's notes.
-
-        Examples
-        --------
-        >>> class Ranged(PackExercise):
-        ...     controls = {"range": "alto"}
-        ...     span = (21, 30)
-        ...     range_clef = "alto"
-        >>> PackSettingsPanel(Ranged)._limits("alto")
-        (21, 30)
-        >>> _ = settings.pack_exercises.pop("Ranged")
-        """
-        del key
-        return self.exercise.span
-
-    def _refresh_summaries(self) -> None:
-        """
-        Draw the chosen range in the menu row.
-
-        Examples
-        --------
-        Returning from the Range page refreshes its staff preview.
-        """
-        if self.sound_row is not None:
-            self.sound_row.value.setText(self._show_sound(self.cfg.sound or self._own_sound()))
-        if "range" in self.exercise.controls:
-            clef = self.exercise.range_clef
-            self.range_pictures.set_items([(clef, *self.cfg.range_for(clef))])
-            self.range_row.fit()
-
-    def _reset_ranges(self) -> None:
-        """
-        Go back to every note the plugin lists and show them.
-
-        Examples
-        --------
-        Reset to defaults on the viola's Range page selects C3 to E5.
-        """
-        self.cfg.ranges[self.exercise.range_clef] = self.exercise.span
-        self._build_range_rows()
-        self._save_and_emit()
-
-    def _own_sound(self) -> str:
-        """
-        Find the key of the instrument the plugin plays by default.
-
-        Returns
-        -------
-        str
-            The key of the exercise's own instrument, or an empty string when it has no recordings.
-
-        Examples
-        --------
-        The viola exercise's own sound is the plugin's bowed viola.
-        """
-        model = getattr(self.exercise, "pack_instrument", None)
-        own = model.sound if model is not None else None
-        return own.key if own is not None else ""
-
-    def _sound_chosen(self, key: str) -> None:
-        """
-        Take the chosen instrument into the options, save it and say so.
-
-        Parameters
-        ----------
-        key : str
-            The key of the instrument that now sounds in this exercise.
-
-        Examples
-        --------
-        Choosing the piano makes the viola exercise play the piano.
-        """
-        self.cfg.sound = None if key == self._own_sound() else key
-        self._refresh_summaries()
-        self._save_and_emit()
-
-    def _accidentals_toggled(self, on: bool) -> None:
-        """
-        Take the Accidentals switch into the options, save it and say so.
-
-        Parameters
-        ----------
-        on : bool
-            Whether sharps and flats are asked.
-
-        Examples
-        --------
-        Switching on adds C sharp to the viola's cards.
-        """
-        self.cfg.accidentals = on
-        self._save_and_emit()
-
-    def _octave_toggled(self, on: bool) -> None:
-        """
-        Take the Octave switch into the options, save it and say so.
-
-        Parameters
-        ----------
-        on : bool
-            Whether the answer must include the octave.
-
-        Examples
-        --------
-        Switching on asks for D4 instead of D.
-        """
-        self.cfg.require_octave = on
-        self._save_and_emit()
-
-
-class PackKeyboardSettingsPanel(ExerciseSettingsPanel):
-    """
-    The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.
-
-    The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits `changed`.
-
-    Attributes
-    ----------
-    exercise : type of PackExercise
-        The exercise whose options are edited.
-    cfg : PackExerciseSettings
-        The options being edited.
-    stack : SlideStack
-        The settings menu, then the range page and the intervals page, as the plugin offers them.
-    sound_row : _ToggleRow or None
-        The plugin sound switch, if declared.
-    range_row : _Row or None
-        The Range row, if declared.
-    span : KeyboardSpan or None
-        The draggable range selector, if a range is declared.
-    interval_page : ChoiceChecklist or None
-        The interval checkboxes, keyed by interval name, if a choice of intervals is declared.
-    manual_page : ChoiceChecklist or None
-        The keyboard checkboxes, keyed by keyboard name, if a choice of manuals is declared.
-
-    Examples
-    --------
-    >>> class Demo(PackExercise):
-    ...     controls = {"range": True, "intervals": True, "manuals": True}
-    ...     spec = {"type": "keyboard-intervals"}
-    ...     key_span, key_default = (28, 89), (48, 72)
-    ...     interval_names = ("m2", "M2", "m3")
-    ...     manual_names = ("Upper manual", "Lower manual")
-    >>> panel = PackKeyboardSettingsPanel(Demo)
-    >>> panel.stack.count(), panel.low_label.text(), panel.high_label.text()
-    (4, 'C3', 'C5')
-    >>> _ = settings.pack_exercises.pop("Demo")
-    """
-
-    def __init__(
-        self,
-        exercise: type[PackExercise],
-        *,
-        parent: QWidget | None = None,
-    ) -> None:
-        """
-        Build the menu and the pages the plugin offers.
-
-        Parameters
-        ----------
-        exercise : type of PackExercise
-            The exercise to edit.
-        parent : QWidget or None, default None
-            The widget that owns the panel. Keyword-only.
-
-        Examples
-        --------
-        >>> class Sounds(PackExercise):
-        ...     controls = {"sound": "Demo sound"}
-        ...     spec = {"type": "keyboard-intervals"}
-        >>> panel = PackKeyboardSettingsPanel(Sounds)
-        >>> panel.stack.count()
-        2
-        >>> _ = settings.pack_exercises.pop("Sounds")
-        """
-        super().__init__(parent)
-        self.exercise = exercise
-        self.cfg: settings.PackExerciseSettings = exercise.options()
-        name = exercise.__name__
-        self._persist = lambda: save_pack_options(name)
-        self._commit_timer = QTimer(self)  # saves and asks a new question once a drag pauses, not at every mouse movement
-        self._commit_timer.setSingleShot(True)
-        self._commit_timer.setInterval(COMMIT_DELAY_MS)
-        self._commit_timer.timeout.connect(self.flush)
-        self.stack = SlideStack()
-        outer = QVBoxLayout(self)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.addWidget(self.stack)
-        menu = QWidget()
-        layout = QVBoxLayout(menu)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(QLabel("<h3>Settings</h3>"))
-        controls = exercise.controls
-        self.sound_row: _Row | None = None
-        self.range_row: _Row | None = None
-        self.span: KeyboardSpan | None = None
-        self.interval_page: ChoiceChecklist | None = None
-        self.manual_page: ChoiceChecklist | None = None
-        pages = [menu]
-        if "sound" in controls:
-            sound = _Row(str(controls["sound"]))
-            sound.setToolTip("Choose which instrument sounds in this exercise")
-            layout.addWidget(sound)
-            self.sound_row = sound
-        if "range" in controls:
-            row = _Row("Range", tall=True)
-            self.range_keyboard = KeyboardSpan(compact=True, size=(px(ROW_PICTURE_WIDTH), px(36)))
-            self.range_keyboard.full = exercise.key_span
-            row.attach(self.range_keyboard)
-            range_page = len(pages)
-            row.clicked.connect(lambda _=False, target=range_page: self._go(target))
-            layout.addWidget(row)
-            self.range_row = row
-            pages.append(self._range_page())
-        if "intervals" in controls:
-            self.intervals_row = _Row("Intervals")
-            intervals_page = len(pages)
-            self.intervals_row.clicked.connect(lambda _=False, target=intervals_page: self._go(target))
-            layout.addWidget(self.intervals_row)
-            pages.append(self._intervals_page())
-        if "manuals" in controls:
-            self.manuals_row = _Row("Manuals")
-            manuals_page = len(pages)
-            self.manuals_row.clicked.connect(lambda _=False, target=manuals_page: self._go(target))
-            layout.addWidget(self.manuals_row)
-            pages.append(self._manuals_page())
-        if self.sound_row is not None:
-            sound_page = len(pages)
-            self.sound_row.clicked.connect(lambda _=False, target=sound_page: self._go(target))
-            page, self._show_sound = _pack_sound_page(
-                exercise,
-                title=str(controls["sound"]),
-                chosen=self._sound_chosen,
-                back=lambda: self._go(0),
-            )
-            pages.append(page)
-        layout.addStretch()
-        for page in pages:
-            self.stack.addWidget(page)
-        self._refresh()
-
-    def _range_page(self) -> QWidget:
-        """
-        Build the page where the keys to practice are chosen.
-
-        Returns
-        -------
-        QWidget
-            The page, with a draggable miniature of the keyboard, steppers for the lowest and highest key, and a reset.
-
-        Examples
-        --------
-        The harpsichord's page lets the range run from E1 to F6, and starts at C3 to C5.
-        """
-        body = QWidget()
-        layout = QVBoxLayout(body)
-        layout.setContentsMargins(0, 0, 0, 0)
-        hint = QLabel("Drag to choose the keys to practice. Both highlighted notes must fit within this range.")
-        hint.setWordWrap(True)
-        layout.addWidget(hint)
-        span = KeyboardSpan()
-        span.full = self.exercise.key_span
-        span.dragged.connect(self._set_keys)
-        layout.addWidget(span)
-        self.span = span
-        self.low_label, self.high_label = QLabel(), QLabel()
-        self.arrows: dict[str, tuple[QToolButton, QToolButton]] = {}
-        for title, label, which in (("Lowest key", self.low_label, "low"), ("Highest key", self.high_label, "high")):
-            row = QHBoxLayout()
-            row.addWidget(QLabel(f"<b>{title}</b>"), 1)
-            down = _arrow(Qt.ArrowType.LeftArrow, tip=f"{title}: one key down")
-            up = _arrow(Qt.ArrowType.RightArrow, tip=f"{title}: one key up")
-            down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
-            up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
-            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setMinimumWidth(px(48))
-            row.addWidget(down)
-            row.addWidget(label)
-            row.addWidget(up)
-            layout.addLayout(row)
-            self.arrows[which] = (down, up)
-        self.entire = QPushButton("Entire keyboard")
-        self.entire.clicked.connect(lambda: self._set_keys(*self.exercise.key_span))
-        self.default = QPushButton("Reset to default")
-        self.default.clicked.connect(lambda: self._set_keys(*self.exercise.key_default))
-        layout.addWidget(self.entire)
-        layout.addWidget(self.default)
-        return _subpage("Range", body=body, back=lambda: self._go(0))
-
-    def _intervals_page(self) -> QWidget:
-        """
-        Build the page where the intervals to ask are chosen.
-
-        Returns
-        -------
-        QWidget
-            The page, with a Select all switch and a checkbox for each interval the plugin lists.
-
-        Examples
-        --------
-        An interval too wide for the chosen range is shown but cannot be checked.
-        """
-        body = QWidget()
-        layout = QVBoxLayout(body)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self.select_all = _ToggleRow("Select all")
-        self.select_all.switched.connect(self._select_all_toggled)
-        layout.addWidget(self.select_all)
-        names = self.exercise.interval_names
-        checklist = ChoiceChecklist(
-            [("", [(name, name) for name in names])],
-            selected=set(self.exercise.chosen_intervals()),
-        )
-        checklist.changed.connect(self._intervals_edited)
-        layout.addWidget(checklist)
-        self.interval_page = checklist
-        return _subpage("Intervals", body=_scrolling(body), back=lambda: self._go(0), fill=True)
-
-    def _go(self, index: int) -> None:
-        """
-        Open a settings page.
-
-        Parameters
-        ----------
-        index : int
-            The menu at 0, then the range page and the intervals page, in the order the plugin offers them.
-
-        Examples
-        --------
-        Choosing Range slides the menu away and shows the keyboard.
-        """
-        if not self.stack.sliding and index != self.stack.currentIndex():
-            self.stack.slide_to(index)
-
-    def _manuals_page(self) -> QWidget:
-        """
-        Build the page where the keyboards the highlighted keys sit on are chosen.
-
-        Returns
-        -------
-        QWidget
-            The page, with a checkbox for each keyboard the exercise uses. At least one stays checked.
-
-        Examples
-        --------
-        Checking only the upper manual highlights both keys of every question on it.
-        """
-        body = QWidget()
-        layout = QVBoxLayout(body)
-        layout.setContentsMargins(0, 0, 0, 0)
-        hint = QLabel("Both highlighted keys sit on the checked manuals. Check both to include keys on each.")
-        hint.setWordWrap(True)
-        layout.addWidget(hint)
-        checklist = ChoiceChecklist(
-            [("", [(name, name) for name in self.exercise.manual_names])],
-            selected=set(self.exercise.chosen_manuals()),
-        )
-        checklist.changed.connect(self._manuals_edited)
-        layout.addWidget(checklist)
-        layout.addStretch()
-        self.manual_page = checklist
-        return _subpage("Manuals", body=_scrolling(body), back=lambda: self._go(0), fill=True)
-
-    def _manuals_edited(self) -> None:
-        """
-        Take the checked manuals into the options, save them and say so.
-
-        Examples
-        --------
-        Unchecking the lower manual leaves only questions on the upper manual.
-        """
-        if self.manual_page is None:
-            return
-        picked = {str(name) for name in self.manual_page.selected()}
-        every = set(self.exercise.manual_names)
-        self.cfg.manuals = None if picked >= every or not picked else frozenset(picked)
-        self._save_and_emit()
-
-    @staticmethod
-    def _distance(name: str) -> int:
-        """
-        Count the half steps in one of the plugin's intervals.
-
-        Parameters
-        ----------
-        name : str
-            The interval's name, such as ``P5``.
-
-        Returns
-        -------
-        int
-            The number of half steps.
-
-        Examples
-        --------
-        The distance of a perfect fifth is 7.
-        """
-        return settings.KEYBOARD_INTERVAL_NAMES.index(name) + 1
-
-    def _refresh(self) -> None:
-        """
-        Show the chosen range and intervals, and disable the intervals that are too wide for the range.
-
-        Examples
-        --------
-        Narrowing the range to a fifth disables the sixths and sevenths.
-        """
-        low, high = self.exercise.chosen_keys()
-        names = set(self.exercise.chosen_intervals())
-        if self.sound_row is not None:
-            self.sound_row.value.setText(self._show_sound(self.cfg.sound or self._own_sound()))
-        if self.range_row is not None:
-            self.range_keyboard.set_span(low, hi=high)
-            self.range_keyboard.setToolTip(f"{key_name(low)} to {key_name(high)}")
-            self.range_row.value.setText(f"{key_name(low)} to {key_name(high)}")
-            self.range_row.fit()
-        if self.span is not None:
-            self.low_label.setText(key_name(low))
-            self.high_label.setText(key_name(high))
-            self.span.set_span(low, hi=high)
-            first, last = self.exercise.key_span
-            self.arrows["low"][0].setEnabled(low > first)
-            self.arrows["low"][1].setEnabled(low < high - 1)
-            self.arrows["high"][0].setEnabled(high > low + 1)
-            self.arrows["high"][1].setEnabled(high < last)
-        if self.manual_page is not None:
-            chosen_boards = self.exercise.chosen_manuals()
-            self.manual_page.blockSignals(True)
-            for name, box in self.manual_page.boxes.items():
-                box.setChecked(name in chosen_boards)
-            self.manual_page.blockSignals(False)
-            every_board = len(chosen_boards) == len(self.exercise.manual_names)
-            shown = "Both" if every_board else ", ".join(name.removesuffix(" manual") for name in chosen_boards)
-            self.manuals_row.value.setText(shown)
-        if self.interval_page is not None:
-            self.interval_page.blockSignals(True)
-            fitting = {name: self._distance(str(name)) <= high - low for name in self.interval_page.boxes}
-            for name, box in self.interval_page.boxes.items():
-                box.setChecked(name in names and fitting[name])
-            for name, box in self.interval_page.boxes.items():
-                box.setEnabled(fitting[name])  # after checking, which can re-enable the last checked box
-            self.interval_page.blockSignals(False)
-            self.select_all.blockSignals(True)
-            self.select_all.setOn(all(box.isChecked() for box in self.interval_page.boxes.values() if box.isEnabled()))
-            self.select_all.blockSignals(False)
-            self.intervals_row.value.setText(f"{len(names)} of {len(self.exercise.interval_names)}")
-
-    def _step(self, which: str, *, delta: int) -> None:
-        """
-        Move one end of the range by a key, without letting the two ends meet.
-
-        Parameters
-        ----------
-        which : str
-            The end, ``low`` or ``high``.
-        delta : int
-            The number of keys to move. Keyword-only.
-
-        Examples
-        --------
-        Stepping the lowest key up from C3 gives C#3.
-        """
-        low, high = self.exercise.chosen_keys()
-        first, last = self.exercise.key_span
-        if which == "low":
-            low = min(max(low + delta, first), high - 1)
-        else:
-            high = max(min(high + delta, last), low + 1)
-        self._set_keys(low, high)
-
-    def _set_keys(  # noqa: PLR0917 (a Qt slot: the signal passes positional arguments)
-        self,
-        low: int,
-        high: int,
-    ) -> None:
-        """
-        Take a new range into the options, keep only the intervals that still fit, save it and say so.
-
-        Parameters
-        ----------
-        low : int
-            The lowest key, as a MIDI number.
-        high : int
-            The highest key. Both are kept inside the keys the plugin has cards for.
-
-        Examples
-        --------
-        Dragging the range to C4 to G4 leaves intervals up to a perfect fifth.
-        """
-        first, last = self.exercise.key_span
-        low, high = max(low, first), min(high, last)
-        if high - low < 1:
-            return
-        self.cfg.keys = None if (low, high) == self.exercise.key_default else (low, high)
-        fitting = {name for name in self.exercise.chosen_intervals() if self._distance(name) <= high - low}
-        self._keep(fitting or {name for name in self.exercise.interval_names if self._distance(name) <= high - low})
-        self._save_and_emit()
-
-    def _keep(self, names: set[str]) -> None:
-        """
-        Record the chosen intervals, or none at all when every interval is chosen.
-
-        Parameters
-        ----------
-        names : set of str
-            The names of the intervals to ask.
-
-        Examples
-        --------
-        Choosing every interval the plugin lists stores no choice.
-        """
-        every = set(self.exercise.interval_names)
-        self.cfg.intervals = None if names >= every else frozenset(names)
-
-    def _select_all_toggled(self, on: bool) -> None:
-        """
-        Choose every interval that fits the range, or only the smallest one.
-
-        Parameters
-        ----------
-        on : bool
-            True to choose all of them. False keeps the smallest interval, since at least one must be asked.
-
-        Examples
-        --------
-        Switching Select all off leaves a minor second.
-        """
-        low, high = self.exercise.chosen_keys()
-        fitting = [name for name in self.exercise.interval_names if self._distance(name) <= high - low]
-        self._keep(set(fitting) if on else set(fitting[:1]))
-        self._save_and_emit()
-
-    def _intervals_edited(self) -> None:
-        """
-        Take the checked intervals into the options, save them and say so.
-
-        Examples
-        --------
-        Unchecking the tritone stops it being asked.
-        """
-        if self.interval_page is None:
-            return
-        picked = {str(name) for name in self.interval_page.selected()}
-        self._keep(picked or set(self.exercise.chosen_intervals()))
-        self._save_and_emit()
-
-    def _own_sound(self) -> str:
-        """
-        Find the key of the instrument the plugin plays by default.
-
-        Returns
-        -------
-        str
-            The key of the exercise's own instrument, or an empty string when it has no recordings.
-
-        Examples
-        --------
-        The harpsichord exercise's own sound is the plugin's Flemish harpsichord.
-        """
-        model = getattr(self.exercise, "pack_instrument", None)
-        own = model.sound if model is not None else None
-        return own.key if own is not None else ""
-
-    def _sound_chosen(self, key: str) -> None:
-        """
-        Take the chosen instrument into the options, save it and say so.
-
-        Parameters
-        ----------
-        key : str
-            The key of the instrument that now sounds in this exercise.
-
-        Examples
-        --------
-        Choosing the piano makes the harpsichord exercise play the piano.
-        """
-        self.cfg.sound = None if key == self._own_sound() else key
-        self._save_and_emit()
-
-    def _save_and_emit(self) -> None:
-        """
-        Show the options as they now are at once, and save them and ask a new question when the edits pause.
-
-        Examples
-        --------
-        Dragging the range redraws the keyboard at every movement but asks one new question when the drag stops.
-        """
-        self._refresh()
-        self.restyled.emit()  # the keyboards on screen follow the range while it is dragged
-        self._commit_timer.start()
-
-    def flush(self) -> None:
-        """
-        Save the options and ask a new question now, if an edit is waiting.
-
-        Examples
-        --------
-        >>> class Demo(PackExercise):
-        ...     controls = {"sound": "Demo sound"}
-        ...     spec = {"type": "keyboard-intervals"}
-        >>> panel = PackKeyboardSettingsPanel(Demo)
-        >>> panel._sound_chosen("piano")
-        >>> panel.flush()
-        >>> panel._commit_timer.isActive()
-        False
-        >>> _ = settings.pack_exercises.pop("Demo")
-        """
-        if self._commit_timer.isActive():
-            self._commit_timer.stop()
-            self._persist()
-            self.changed.emit()
-
-    def hideEvent(self, event: QHideEvent) -> None:
-        """
-        Keep an edit that is still waiting when the panel closes.
-
-        Parameters
-        ----------
-        event : QHideEvent
-            The event.
-
-        Examples
-        --------
-        >>> class Demo(PackExercise):
-        ...     controls = {"sound": "Demo sound"}
-        ...     spec = {"type": "keyboard-intervals"}
-        >>> panel = PackKeyboardSettingsPanel(Demo)
-        >>> panel._sound_chosen("piano")
-        >>> panel.show()
-        >>> panel.hide()
-        >>> panel._commit_timer.isActive()
-        False
-        >>> _ = settings.pack_exercises.pop("Demo")
-        """
-        self.flush()
-        super().hideEvent(event)
-
-
 def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) -> ExerciseSettingsPanel:
     """
     Return the settings panel for an exercise.
@@ -6495,7 +3136,7 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
     if isinstance(exercise, ChoiceExercise):
         _add_choice_buttons(panel, exercise=exercise, layout=layout)
 
-    row = panel.next_question_row = _Row("Next Question")
+    row = panel.next_question_row = MenuRow("Next Question")
     layout.insertWidget(layout.count() - 1, row)
     body = panel.next_question_choices = QWidget()
     choices = QVBoxLayout(body)
@@ -6529,18 +3170,18 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
         choices.addWidget(radio)
         radio.setChecked(mode == panel.next_question_mode)
         radio.clicked.connect(lambda _checked=False, value=mode: select(value))
-    page = stack.addWidget(_subpage("Next Question", body=body, back=lambda: stack.slide_to(0)))
+    page = stack.addWidget(subpage("Next Question", body=body, back=lambda: stack.slide_to(0)))
     row.clicked.connect(lambda: stack.slide_to(page))
     if learner is not None:
         panel.limits_editor = DailyLimitsEditor(learner, exercise=type(exercise).__name__)
-        panel.limits_row = _Row("Daily Limits")
+        panel.limits_row = MenuRow("Daily Limits")
         layout.insertWidget(layout.count() - 1, panel.limits_row)
-        panel.limits_page = stack.addWidget(_subpage("Daily Limits", body=panel.limits_editor, back=lambda: stack.slide_to(0)))
+        panel.limits_page = stack.addWidget(subpage("Daily Limits", body=panel.limits_editor, back=lambda: stack.slide_to(0)))
         panel.limits_row.clicked.connect(lambda: stack.slide_to(panel.limits_page))
         panel.limits_editor.changed.connect(panel.changed)
         panel.refresh_limits(learner.mode, self_grading=learner.mode in CALENDAR_SCHEDULERS and learner.self_grading)
     stack.removeWidget(menu)
-    stack.insertWidget(0, _scrolling(menu))
+    stack.insertWidget(0, scrolling(menu))
     stack.setCurrentIndex(0)
     return panel
 
@@ -6564,7 +3205,7 @@ def _add_choice_buttons(panel: ExerciseSettingsPanel, *, exercise: ChoiceExercis
     """
     stack = panel.stack
     cfg = exercise.button_settings()
-    row = panel.choice_buttons_row = _Row("Buttons")
+    row = panel.choice_buttons_row = MenuRow("Buttons")
     row.value.setText(cfg.button_mode.title())
     layout.insertWidget(layout.count() - 1, row)
 
@@ -6583,7 +3224,7 @@ def _add_choice_buttons(panel: ExerciseSettingsPanel, *, exercise: ChoiceExercis
         row.value.setText(cfg.button_mode.title())
         panel.changed.emit()
 
-    page = stack.addWidget(_buttons_page(cfg, changed=save, back=lambda: stack.slide_to(0)))
+    page = stack.addWidget(buttons_page(cfg, changed=save, back=lambda: stack.slide_to(0)))
     row.clicked.connect(lambda: stack.slide_to(page))
 
 

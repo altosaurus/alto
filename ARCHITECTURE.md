@@ -170,7 +170,9 @@ offered the release's download page.
    lets you try again.
 
 The settings panel for the exercise is built by `settings_panel_for(exercise)`. Its `changed` signal is connected to
-`next_question`, so an edit applies immediately.
+`next_question`, so an edit applies immediately. The built-in exercises' panels are in `settings_panel.py` and plugin
+exercises' in `pack_settings_panel.py`. Both are built from `settings_menu.py`, which has the rows, pages and checklists, and
+the base classes that handle moving between pages and saving.
 
 ### Drawing
 
