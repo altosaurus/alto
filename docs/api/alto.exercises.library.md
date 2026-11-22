@@ -51,6 +51,29 @@ Create the exercise.
 True
 ```
 
+### NoteNames.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say what to name on a flashcard, and in which form: letters, solfège or a scale degree, with the octave if it counts.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> NoteNames().card_prompt(Question("", choices=[], answer="C"))
+'Identify the note.'
+```
+
 ### NoteNames.practice_signature
 
 ```python
@@ -199,6 +222,31 @@ Name the interval between two written notes.
 >>> q = IntervalNames().generate(random.Random(3))
 >>> [len(chord) for chord in q.staff], q.answer in q.choices
 ([2], True)
+```
+
+### IntervalNames.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say whether to name the interval's number, its quality, both, or its inversion.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> IntervalNames().card_prompt(Question("", choices=[], answer="3"))
+'Identify the numeric interval.'
+>>> IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
+'Identify the interval and quality.'
 ```
 
 ### IntervalNames.instructions
@@ -379,6 +427,29 @@ Identify the ascending interval between two highlighted piano keys.
 >>> q = KeyboardIntervals().generate(random.Random(5))
 >>> len(q.keyboard_notes), q.answer in q.choices, q.staff
 (2, True, [])
+```
+
+### KeyboardIntervals.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say what to name on a flashcard.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
+'Identify the interval.'
 ```
 
 ### KeyboardIntervals.settings_signature
@@ -957,6 +1028,29 @@ Identify the quality of a triad or seventh chord in root position.
 True
 ```
 
+### ChordQualities.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say what to name on a flashcard.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
+'Identify the Chord Quality.'
+```
+
 ### ChordQualities.instructions
 
 ```python
@@ -1098,6 +1192,29 @@ Name the highlighted key on a piano keyboard.
 True
 ```
 
+### KeyboardNotes.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say what to name on a flashcard. Letter names give the octave if it counts, and follow the key signature if one is shown.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
+'Identify the note by letter and octave.'
+```
+
 ### KeyboardNotes.practice_signature
 
 ```python
@@ -1175,6 +1292,31 @@ Place a named note on the staff.
 >>> q = NoteConstruction().generate(random.Random(15))
 >>> q.construct is not None and q.prompt.startswith("Place ")
 True
+```
+
+### NoteConstruction.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say which note to place, whichever way the on-screen prompt words it.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction.
+
+**Examples**
+
+```pycon
+>>> NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
+'Place F♯4 on the staff.'
+>>> NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
+'Place B♭3 on the staff.'
 ```
 
 ### NoteConstruction.settings_signature

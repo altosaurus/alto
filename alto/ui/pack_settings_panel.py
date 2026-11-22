@@ -12,17 +12,13 @@ Examples
 
 from __future__ import annotations
 
-from collections.abc import (
-    Callable,
-)
+from collections.abc import Callable
 
 from PySide6.QtCore import (
     Qt,
     QTimer,
 )
-from PySide6.QtGui import (
-    QHideEvent,
-)
+from PySide6.QtGui import QHideEvent
 from PySide6.QtWidgets import (
     QButtonGroup,
     QHBoxLayout,
@@ -37,16 +33,10 @@ from PySide6.QtWidgets import (
 from alto import settings
 from alto.audio import INSTRUMENT_BY_KEY
 from alto.exercises.packs import PackExercise
-from alto.settings import (
-    key_name,
-)
-from alto.ui.exercise_settings import (
-    save_pack_options,
-)
+from alto.settings import key_name
+from alto.ui.exercise_settings import save_pack_options
 from alto.ui.keyboard import KeyboardSpan
-from alto.ui.pictures import (
-    RangePictures,
-)
+from alto.ui.pictures import RangePictures
 from alto.ui.settings_menu import (
     ROW_PICTURE_WIDTH,
     ChoiceChecklist,
@@ -59,9 +49,7 @@ from alto.ui.settings_menu import (
     scrolling,
     subpage,
 )
-from alto.ui.zoom import (
-    px,
-)
+from alto.ui.zoom import px
 
 COMMIT_DELAY_MS = 150  # how long a drag must pause before its range is saved and a new question is asked
 

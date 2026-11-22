@@ -167,18 +167,18 @@ def test_card_instructions_follow_the_expected_answer_format() -> None:
     intervals = IntervalNames()
     for mode, target in (("interval", "numeric interval"), ("quality", "quality"), ("combined", "interval and quality")):
         settings.intervals.quality_mode = mode
-        assert exporter._card_prompt(intervals.generate(rng), exercise=intervals) == f"Identify the {target}."
+        assert intervals.card_prompt(intervals.generate(rng)) == f"Identify the {target}."
         settings.intervals.inversions = True
         inversion = intervals.generate(rng)
         settings.intervals.inversions = False
-        assert exporter._card_prompt(inversion, exercise=intervals) == inversion.prompt
+        assert intervals.card_prompt(inversion) == inversion.prompt
 
     keyboard = KeyboardNotes()
     settings.keyboard.require_octave = True
-    assert exporter._card_prompt(keyboard.generate(rng), exercise=keyboard) == "Identify the note by letter and octave."
+    assert keyboard.card_prompt(keyboard.generate(rng)) == "Identify the note by letter and octave."
     settings.keyboard.key_signature = True
     settings.keyboard.keys = {1}
-    assert exporter._card_prompt(keyboard.generate(rng), exercise=keyboard) == (
+    assert keyboard.card_prompt(keyboard.generate(rng)) == (
         "Identify the note by letter and octave. Use the spelling for the displayed key signature."
     )
     for naming, instruction in (
@@ -186,32 +186,29 @@ def test_card_instructions_follow_the_expected_answer_format() -> None:
         ("functions", "Give its scale-degree function in G major."),
     ):
         settings.note_names.naming = naming
-        assert (
-            exporter._card_prompt(keyboard.generate(rng), exercise=keyboard)
-            == f"Identify the note. {instruction} Include the octave."
-        )
+        assert keyboard.card_prompt(keyboard.generate(rng)) == f"Identify the note. {instruction} Include the octave."
     settings.note_names.naming = "solfege"
-    assert exporter._card_prompt(NoteNames().generate(rng), exercise=NoteNames()).startswith("Identify the note. Use solfège.")
+    assert NoteNames().card_prompt(NoteNames().generate(rng)).startswith("Identify the note. Use solfège.")
 
     circle = CircleOfFifths()
     for kind in ("major", "minor"):
         settings.circle.questions = {kind}
         question = next(q for q in circle.daily_candidates(rng) if q.required)
-        prompt = exporter._card_prompt(question, exercise=circle)
+        prompt = circle.card_prompt(question)
         assert prompt == question.prompt.split("?")[0] + "? Name both enharmonic spellings."
     single = next(q for q in circle.daily_candidates(rng) if not q.required)
-    assert exporter._card_prompt(single, exercise=circle) == single.prompt
+    assert circle.card_prompt(single) == single.prompt
 
     settings.notation.question_type = "staff"
     notation = NotationIdentification()
-    assert exporter._card_prompt(notation.generate(rng), exercise=notation).startswith("Locate ")
+    assert notation.card_prompt(notation.generate(rng)).startswith("Locate ")
 
     construction = NoteConstruction()
     settings.note_names.naming = "degrees"
     for kind in ("notes", "scale"):
         settings.construction.question_type = kind
         question = construction.generate(rng)
-        assert exporter._card_prompt(question, exercise=construction) == f"Place {question.prompt} on the staff."
+        assert construction.card_prompt(question) == f"Place {question.prompt} on the staff."
 
 
 @pytest.mark.parametrize("mode", ["SM-2", "FSRS"])

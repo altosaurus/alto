@@ -534,6 +534,7 @@ What every exercise provides: its name, how it makes questions and how long a go
 - `par_seconds` (*float, default 5.0*): How long a good first answer takes; much quicker earns credit and much slower counts against the question.
 - `icon` (*str, default ""*): SVG shapes for the exercise's tile, in a 24 by 24 box with COLOR where the theme's ink goes. Plugins supply one; empty uses Alto's own icon for the exercise.
 - `has_sound` (*bool, default True*): False for an exercise that makes no sound at all, whatever the sound button says.
+- `interval_voices` (*bool, default False*): True when two notes on the staff are an interval: they keep the question's note value, with the stems apart, and are played one after the other when they are melodic.
 
 **Examples**
 
@@ -592,6 +593,37 @@ A stored question is only asked again while this is unchanged. Exercises with se
 ...         return Question("?", choices=["A"], answer="A")
 >>> Demo().settings_signature()
 ''
+```
+
+### Exercise.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Say what to do on a flashcard made from a question, where nothing on screen explains the task.
+
+Exercises whose on-screen prompt depends on the screen (buttons to press, a staff to click) override this.
+
+**Parameters**
+
+- `question` (*Question*): The question on the card.
+
+**Returns**
+
+- *str*: The instruction, shown above the card's picture.
+
+**Examples**
+
+```pycon
+>>> class Demo(Exercise):
+...     name = "Demo"
+...     def generate(self, rng):
+...         return Question("Pick A.", choices=["A"], answer="A")
+>>> Demo().card_prompt(Question("", choices=["A"], answer="A"))
+'Demo'
+>>> Demo().card_prompt(Question("Click the fermata.", choices=[], answer="fermata", notation_target=("fermata", 0)))
+'Locate the fermata.'
 ```
 
 ### Exercise.card_groups

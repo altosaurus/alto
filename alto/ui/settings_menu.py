@@ -61,9 +61,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto import settings
-from alto.exercises.base import (
-    ButtonSettings,
-)
+from alto.exercises.base import ButtonSettings
 from alto.learning.calendar import CALENDAR_SCHEDULERS
 from alto.settings import (
     NOTE_VALUES,
@@ -80,9 +78,7 @@ from alto.theory.scales import (
 )
 from alto.ui import zoom
 from alto.ui.colors import blend
-from alto.ui.degree_text import (
-    DegreeCheckBox,
-)
+from alto.ui.degree_text import DegreeCheckBox
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.pictures import (
     CLEF_NAMES,

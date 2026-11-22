@@ -15,12 +15,10 @@ Examples
 
 from __future__ import annotations
 
-from PySide6.QtCore import (
-    Qt,
-)
-from PySide6.QtGui import (
-    QIntValidator,
-)
+from collections.abc import Callable
+
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import (
     QButtonGroup,
     QGridLayout,
@@ -71,19 +69,13 @@ from alto.settings import (
     NoteNameSettings,
     key_name,
 )
-from alto.theory.pitch import (
-    ACCIDENTAL_SYMBOLS,
-)
-from alto.theory.scales import (
-    INVERSION_NAMES,
-)
+from alto.theory.pitch import ACCIDENTAL_SYMBOLS
+from alto.theory.scales import INVERSION_NAMES
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
 )
-from alto.ui.degree_text import (
-    degree_tooltip,
-)
+from alto.ui.degree_text import degree_tooltip
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.exercise_settings import (
     save_arpeggio,
@@ -3228,9 +3220,32 @@ def _add_choice_buttons(panel: ExerciseSettingsPanel, *, exercise: ChoiceExercis
     row.clicked.connect(lambda: stack.slide_to(page))
 
 
+# The panel of each built-in exercise, by its class. A subclass of one of these gets the same panel.
+PANELS: dict[type[Exercise], Callable[[], ExerciseSettingsPanel]] = {
+    NotationIdentification: NotationSettingsPanel,
+    NoteNames: lambda: NoteNameSettingsPanel(settings.note_names),
+    IntervalConstruction: lambda: IntervalSettingsPanel(settings.interval_construction, prefix="intervalConstruction"),
+    IntervalNames: lambda: IntervalSettingsPanel(settings.intervals),
+    KeyboardIntervals: lambda: KeyboardIntervalSettingsPanel(settings.keyboard_intervals),
+    KeyboardNotes: lambda: KeyboardSettingsPanel(settings.keyboard),
+    NoteConstruction: lambda: NoteConstructionSettingsPanel(settings.construction),
+    ArpeggioNames: lambda: ArpeggioSettingsPanel(settings.arpeggio),
+    KeySignatures: lambda: KeySignatureSettingsPanel(settings.key_signatures),
+    OrderOfKeys: lambda: KeySignatureSettingsPanel(settings.order_of_keys, prefix="orderOfKeys", keys_title="Key Signatures"),
+    KeySignatureConstruction: lambda: KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction"),
+    ScaleIdentification: lambda: KeySignatureSettingsPanel(settings.scale_identification, prefix="scaleIdentification"),
+    ScaleConstruction: lambda: KeySignatureSettingsPanel(settings.scale_construction, prefix="scaleConstruction"),
+    ClefBasics: lambda: ClefBasicsSettingsPanel(settings.clef_basics),
+    CircleOfFifths: lambda: CircleSettingsPanel(settings.circle),
+}
+
+
 def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
     """
     Build the exercise-specific settings pages.
+
+    A plugin exercise gets a panel made from the controls it declares; a built-in one gets its entry in `PANELS`, or the entry of
+    the nearest class it is a subclass of.
 
     Parameters
     ----------
@@ -3246,37 +3261,15 @@ def _exercise_panel(exercise: Exercise) -> ExerciseSettingsPanel | None:
     --------
     >>> type(_exercise_panel(NoteNames())).__name__
     'NoteNameSettingsPanel'
+    >>> class Drill(KeyboardNotes):
+    ...     name = "Drill"
+    >>> type(_exercise_panel(Drill())).__name__
+    'KeyboardSettingsPanel'
+    >>> from alto.exercises.library import ChordQualities
+    >>> _exercise_panel(ChordQualities()) is None
+    True
     """
     if isinstance(exercise, PackExercise) and exercise.controls:
         return PackKeyboardSettingsPanel(type(exercise)) if exercise.is_keyboard else PackSettingsPanel(type(exercise))
-    if isinstance(exercise, NotationIdentification):
-        return NotationSettingsPanel()
-    if isinstance(exercise, NoteNames):
-        return NoteNameSettingsPanel(settings.note_names)
-    if isinstance(exercise, IntervalConstruction):
-        return IntervalSettingsPanel(settings.interval_construction, prefix="intervalConstruction")
-    if isinstance(exercise, IntervalNames):
-        return IntervalSettingsPanel(settings.intervals)
-    if isinstance(exercise, KeyboardIntervals):
-        return KeyboardIntervalSettingsPanel(settings.keyboard_intervals)
-    if isinstance(exercise, KeyboardNotes):
-        return KeyboardSettingsPanel(settings.keyboard)
-    if isinstance(exercise, NoteConstruction):
-        return NoteConstructionSettingsPanel(settings.construction)
-    if isinstance(exercise, ArpeggioNames):
-        return ArpeggioSettingsPanel(settings.arpeggio)
-    if isinstance(exercise, KeySignatures):
-        return KeySignatureSettingsPanel(settings.key_signatures)
-    if isinstance(exercise, OrderOfKeys):
-        return KeySignatureSettingsPanel(settings.order_of_keys, prefix="orderOfKeys", keys_title="Key Signatures")
-    if isinstance(exercise, KeySignatureConstruction):
-        return KeySignatureSettingsPanel(settings.key_construction, prefix="keyConstruction")
-    if isinstance(exercise, ScaleIdentification):
-        return KeySignatureSettingsPanel(settings.scale_identification, prefix="scaleIdentification")
-    if isinstance(exercise, ScaleConstruction):
-        return KeySignatureSettingsPanel(settings.scale_construction, prefix="scaleConstruction")
-    if isinstance(exercise, ClefBasics):
-        return ClefBasicsSettingsPanel(settings.clef_basics)
-    if isinstance(exercise, CircleOfFifths):
-        return CircleSettingsPanel(settings.circle)
-    return None
+    build = next((PANELS[cls] for cls in type(exercise).__mro__ if cls in PANELS), None)
+    return None if build is None else build()

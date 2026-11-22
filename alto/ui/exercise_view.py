@@ -446,7 +446,7 @@ class ExerciseView(QWidget):
         self.prompt = DegreeLabel()
         self.prompt.setStyleSheet(css("font-size: 16pt;"))
         self.staff = StaffWidget(max_step=MAX_STEP)
-        self.staff.interval_voices = isinstance(exercise, (IntervalNames, IntervalConstruction))
+        self.staff.interval_voices = exercise.interval_voices
         self._answer_playback = StaffPlayback(self, highlight=self._light_answer_notes)
         self._immediate_playback = StaffPlayback(self)  # Continues across questions and stops when the view closes.
         self.keyboard = KeyboardWidget()

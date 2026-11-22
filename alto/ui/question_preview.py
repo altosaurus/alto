@@ -27,8 +27,10 @@ from PySide6.QtWidgets import (
 
 from alto import settings as app_settings
 from alto.audio import DEFAULT_NOTE_GAP_MS, MELODIC_INTERVAL_GAP_MS, sounds
-from alto.exercises.base import Question
-from alto.exercises.library import IntervalConstruction, IntervalNames
+from alto.exercises import (
+    REGISTRY,
+    Question,
+)
 from alto.settings import spell
 from alto.theory.pitch import Note
 from alto.ui import icons
@@ -122,7 +124,7 @@ class QuestionPreview(QDialog):
         staff = None
         if q.staff or q.show_staff or q.construct is not None or scale:
             staff = StaffWidget(max_step=MAX_STEP)
-            staff.interval_voices = exercise_name in (IntervalNames.name, IntervalConstruction.name)
+            staff.interval_voices = any(cls.interval_voices for cls in REGISTRY if cls.name == exercise_name)
             if q.construct_steps:  # a scale with its steps shows them above the notes
                 staff.wedges = list(q.construct_steps)
             # a "place this note" or "place this scale" question shows the notes that were the answer
