@@ -1095,6 +1095,11 @@ class IntervalSettingsPanel(StaffRangePanel):
             self.inversions_row.setOn(cfg.inversions)
             self.inversions_row.switched.connect(self._save_and_emit)
             layout.insertWidget(layout.indexOf(self.quality_row) + 1, self.inversions_row)
+            self.consonance_row = ToggleRow("Consonance")
+            self.consonance_row.setToolTip("Identify whether the interval is consonant or dissonant")
+            self.consonance_row.setOn(cfg.consonance)
+            self.consonance_row.switched.connect(self._save_and_emit)
+            layout.insertWidget(layout.indexOf(self.inversions_row) + 1, self.consonance_row)
         layout.addStretch()
 
         self.boxes, clefs = clef_choice_page(
@@ -1249,6 +1254,8 @@ class IntervalSettingsPanel(StaffRangePanel):
         self.display_row.value.setText(", ".join(d for d in settings.INTERVAL_DISPLAYS if d in self.cfg.displays))
         self.direction_choices.setVisible("Melodic" in self.cfg.displays)
         self.quality_row.value.setText(settings.INTERVAL_QUALITY_MODES[self.cfg.quality_mode])
+        if self.prefix == "intervals":
+            self.quality_row.setEnabled(not self.cfg.consonance)
         self.accidentals_row.value.setText(
             " ".join(ACCIDENTAL_SYMBOLS[sign] or "♮" for sign in settings.INTERVAL_ACCIDENTALS if sign in self.cfg.accidentals),
         )
@@ -1299,6 +1306,8 @@ class IntervalSettingsPanel(StaffRangePanel):
         prefix = self.prefix
         if prefix == "intervals":
             cfg.inversions = self.inversions_row.isOn()
+            cfg.consonance = self.consonance_row.isOn()
+            saved.setValue(f"{prefix}/consonance", "true" if cfg.consonance else "false")
             saved.setValue(f"{prefix}/inversions", "true" if cfg.inversions else "false")
             saved.setValue(f"{prefix}/buttonMode", cfg.button_mode)
             saved.setValue(f"{prefix}/buttonCount", cfg.button_count)

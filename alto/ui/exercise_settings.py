@@ -372,6 +372,7 @@ def load_intervals(cfg: settings.IntervalSettings | None = None, *, prefix: str 
     cfg.quality_mode = quality if quality in settings.INTERVAL_QUALITY_MODES else defaults.quality_mode
     if prefix == "intervals":
         cfg.inversions = bool_value(saved, key=f"{prefix}/inversions", default=False)
+        cfg.consonance = bool_value(saved, key=f"{prefix}/consonance", default=False)
     cfg.button_mode = "all" if text_value(saved, key=f"{prefix}/buttonMode", default="limited") == "all" else "limited"
     try:
         cfg.button_count = max(2, min(10, int_value(saved, key=f"{prefix}/buttonCount", default=6)))

@@ -70,6 +70,7 @@ from alto.exercises.base import (
     Question,
 )
 from alto.exercises.library import (
+    INTERVAL_INVERSION_PROMPTS,
     IntervalConstruction,
     IntervalNames,
     KeyboardIntervals,
@@ -85,6 +86,7 @@ from alto.settings import spell
 from alto.theory.pitch import (
     ACCIDENTAL_SYMBOLS,
     QUALITY_NAMES,
+    Interval,
     Note,
 )
 from alto.theory.scales import format_key_signature
@@ -2639,6 +2641,15 @@ class ExerciseView(QWidget):
             if button is None:
                 self.prompt.setText(q.prompt)
             notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
+            if isinstance(self.exercise, IntervalNames) and q.prompt in INTERVAL_INVERSION_PROMPTS.values():
+                first, second = (note for column in q.staff for note in column)
+                low, high = sorted((first, second), key=lambda note: (note.diatonic, note.midi))
+                raised = high.transpose(Interval.between(low, high=high).inversion)
+                if len(q.staff) == 1:
+                    notes = [[high] if high == raised else [high, raised]]
+                else:
+                    notes = [[raised], [high]] if first == high and first != second else [[high], [raised]]
+                self.staff.show_notes(notes, clef=q.clef, key=q.key, value=q.value)
             position = q.fingerboard or q.picture
             if isinstance(position, PicturePosition) and position.notes:
                 notes = [[Note.parse(name) for name in position.notes]]  # the keys of an interval, sounded together as a chord

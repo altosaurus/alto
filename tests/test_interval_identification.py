@@ -168,8 +168,9 @@ def test_inversions_switch_and_saved_reviews(app: QApplication) -> None:
     view.close()
 
 
+@pytest.mark.parametrize("inversions", [False, True])
 @pytest.mark.parametrize(("display", "gap_ms"), [("Melodic", 500), ("Harmonic", 450)])
-def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int) -> None:
+def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int, inversions: bool) -> None:
     """
     Check note onsets for the correct answer and the saved question's Play button.
 
@@ -181,18 +182,28 @@ def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int)
         The selected interval presentation.
     gap_ms : int
         Expected spacing between successive staff columns.
+    inversions : bool
+        Whether a correct answer reveals and plays the inversion.
     """
+    settings.intervals.inversions = inversions
+    settings.intervals.intervals = {"M3"}
     settings.intervals.displays = {display}
     settings.intervals.directions = {"descending"}
     view = ExerciseView(IntervalNames())
     q = view.question
     assert q is not None
+    feedback = q.staff
+    if inversions:
+        high = max((note for column in q.staff for note in column), key=lambda note: note.midi)
+        raised = high.transpose(Interval.parse("m6"))
+        feedback = [[high, raised]] if display == "Harmonic" else [[raised], [high]]
+    assert view.staff.columns == q.staff
     preview = QuestionPreview(IntervalNames.name, question=Question.from_dict(q.to_dict()))
     with patch.object(sounds, "_play_sequence") as play:
         next(button for button in view.buttons if button.text() == q.answer).click()
         on_step = play.call_args.kwargs["on_step"]
         assert not view.staff.column_colors and not view._advance.isActive()
-        for index, notes in enumerate(q.staff):
+        for index, notes in enumerate(feedback):
             on_step(index)
             assert view.staff.column_colors == {index: QColor("#2e7d32")} and view.staff.columns[index] == notes
             assert view.staff.note_color is None and not view._advance.isActive()
@@ -200,9 +211,9 @@ def test_interval_playback_spacing(app: QApplication, display: str, gap_ms: int)
         assert not view.staff.column_colors and view._advance.isActive()
         next(button for button in preview.findChildren(QPushButton) if button.text() == "Play").click()
     assert play.call_count == 2
-    for call in play.call_args_list:
+    for call, columns in zip(play.call_args_list, (feedback, q.staff), strict=True):
         assert call.kwargs["gap_ms"] == gap_ms
-        assert [midis for midis, _ in call.kwargs["steps"]] == [[note.midi for note in column] for column in q.staff]
+        assert [midis for midis, _ in call.kwargs["steps"]] == [[note.midi for note in column] for column in columns]
     view.close()
     preview.close()
 
@@ -759,3 +770,39 @@ def test_note_value_picker_and_saved_interval_staff(app: QApplication, display: 
     cfg.note_values.clear()
     load_intervals()
     assert cfg.note_values == {"eighth"} and settings.note_names.note_values == {"whole"}
+
+
+def test_consonance_switch_grades_both_choices_and_saves(app: QApplication) -> None:
+    """
+    Classify written intervals with the Consonance switch and restore the mode from storage.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    """
+    cfg = settings.intervals
+    cfg.intervals = {"M3", "A4"}
+    view = ExerciseView(IntervalNames(), rng=random.Random(1))
+    panel = view.settings_panel
+    assert isinstance(panel, IntervalSettingsPanel)
+    signature = view.exercise.settings_signature()
+    panel.consonance_row.click()
+    assert cfg.consonance and not panel.quality_row.isEnabled()
+    assert view.exercise.settings_signature() != signature
+    rng = random.Random(5)
+    seen = set()
+    for _ in range(20):
+        q = view.exercise.generate(rng)
+        low, high = q.staff[0]
+        expected = "Consonant" if Interval.between(low, high=high).short == "M3" else "Dissonant"
+        assert q.choices == ["Consonant", "Dissonant"] and q.check(expected)
+        seen.add(expected)
+    assert seen == {"Consonant", "Dissonant"}
+    cfg.consonance = False
+    load_intervals()
+    assert cfg.consonance
+    panel.consonance_row.click()
+    assert not cfg.consonance and panel.quality_row.isEnabled()
+    assert view.exercise.settings_signature() == signature
+    view.close()
