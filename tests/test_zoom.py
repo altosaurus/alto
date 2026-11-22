@@ -380,3 +380,16 @@ def test_an_open_exercise_still_works_at_any_zoom(app: QApplication, percent: in
         view.resize(900, 600)
         view.show()
         assert view.question is not None and not view.grab().isNull()
+
+
+def test_the_font_is_left_alone_without_an_application(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that applying the zoom to the font does nothing, and does not fail, when there is no application yet.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the application lookup for this test.
+    """
+    monkeypatch.setattr(QApplication, "instance", staticmethod(lambda: None))
+    assert zoom.apply_font() is None
