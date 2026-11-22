@@ -43,6 +43,7 @@ from alto.theory.fifths import (
     SIGNATURES,
 )
 from alto.theory.pitch import Note
+from alto.ui import motion
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import HomePage
@@ -144,6 +145,7 @@ def jump_to_the_end(page: HomePage) -> None:
     wait_until_still(page)
 
 
+@pytest.mark.motion  # about how the transition plays
 def test_every_transition_plays_to_the_end_and_leaves_the_new_cards_showing(app: QApplication, clean_lessons: None) -> None:
     """
     Check that each transition covers the cards while it plays, finishes, and leaves the new cards in place.
@@ -181,6 +183,7 @@ def test_every_transition_plays_to_the_end_and_leaves_the_new_cards_showing(app:
         store().remove("ui/homeTransition")
 
 
+@pytest.mark.motion  # about how the transition plays
 def test_a_second_flip_during_a_transition_ends_the_first(app: QApplication, clean_lessons: None) -> None:
     """
     Check that flipping the switch again while a transition plays settles on the side that was last asked for.
@@ -953,13 +956,13 @@ def test_the_lesson_list_can_be_hidden_and_shown_with_its_button(app: QApplicati
     window.open_lessons("circle-of-fifths")
     page = window.stack.currentWidget()
     assert isinstance(page, LessonsPage)
-    QTest.qWait(600)
+    motion.settle()
     assert window.sidebar_width() > 0
     window.pane_button.click()
-    QTest.qWait(600)
+    motion.settle()
     assert window.sidebar_width() == 0
     window.toggle_sidebar()  # leave it as it was found
-    QTest.qWait(600)
+    motion.settle()
 
 
 def test_leaving_a_lesson_brings_back_the_right_list(app: QApplication, clean_lessons: None) -> None:
@@ -976,7 +979,7 @@ def test_leaving_a_lesson_brings_back_the_right_list(app: QApplication, clean_le
     window = MainWindow()
     window.show()
     window.open_exercise(CircleOfFifths)
-    QTest.qWait(600)
+    motion.settle()
     window.open_lessons("circle-of-fifths")
     page = window.stack.currentWidget()
     assert isinstance(page, LessonsPage)
@@ -984,11 +987,11 @@ def test_leaving_a_lesson_brings_back_the_right_list(app: QApplication, clean_le
     assert window.stack.currentWidget() is not window.home and window.nav_stack.currentWidget() is window.nav
     window.show_lessons()
     window.home.lesson_cards[0].click()
-    QTest.qWait(600)
+    motion.settle()
     page = window.stack.currentWidget()
     assert isinstance(page, LessonsPage)
     page.back_button.click()
-    QTest.qWait(600)
+    motion.settle()
     assert window.stack.currentWidget() is window.home and window.sidebar_width() == 0
     window.home.set_mode("exercises")
 
@@ -1013,7 +1016,7 @@ def test_the_circle_of_a_lesson_is_never_cut_off(app: QApplication, clean_lesson
         assert isinstance(page, LessonsPage)
         for number in range(len(CIRCLE_OF_FIFTHS.steps)):
             page.view.go(to=number)
-            QTest.qWait(40)
+            motion.settle()
             step = page.view.pages.currentWidget()
             assert isinstance(step, StepView)
             if step.circle is not None:
@@ -1023,6 +1026,7 @@ def test_the_circle_of_a_lesson_is_never_cut_off(app: QApplication, clean_lesson
         window.close()
 
 
+@pytest.mark.motion  # about how the transition plays
 def test_the_transition_settings_have_a_list_on_the_left_and_a_preview_that_plays_once(app: QApplication) -> None:
     """
     Check the layout of the Transitions section, and that a transition is played once in the preview, and not again.
@@ -1065,6 +1069,7 @@ def test_the_transition_settings_have_a_list_on_the_left_and_a_preview_that_play
         store().remove("ui/homeTransition")
 
 
+@pytest.mark.motion  # about how the transition plays
 def test_the_switch_in_the_preview_works(app: QApplication) -> None:
     """
     Check that pressing a side of the switch in the preview plays the transition to it, and back, as often as wanted.

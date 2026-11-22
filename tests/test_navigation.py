@@ -243,7 +243,7 @@ def test_empty_workspace_prompt_follows_the_selected_section(window: MainWindow)
     assert window.stack.currentWidget() is window.home and window.home.mode == "lessons"
     assert window.sidebar_width() == 0
     window.pane_button.click()
-    QTest.qWait(220)
+    motion.settle()
     assert [button.text() for button in window.home.mode_control.buttons] == ["", ""]
     assert [button.toolTip() for button in window.home.mode_control.buttons] == ["Exercises", "Lessons"]
     assert window.view_button.accessibleName() == "Tiles"
@@ -257,7 +257,7 @@ def test_empty_workspace_prompt_follows_the_selected_section(window: MainWindow)
     assert window.empty_page.text() == "Select an exercise to begin."
     assert window.nav_stack.currentWidget() is window.nav
     window.view_button.click()
-    QTest.qWait(220)
+    motion.settle()
     assert window.stack.currentWidget() is window.home
     assert window.pane_button.accessibleName() == "Show navigation pane" and window.sidebar_width() == 0
     assert [button.text() for button in window.home.mode_control.buttons] == ["", ""]
@@ -482,13 +482,13 @@ def test_sidebar_tooltip_describes_the_selected_list(window: MainWindow) -> None
     window.open_exercise(NoteNames)
     view = window.stack.currentWidget()
     assert isinstance(view, ExerciseView)
-    QTest.qWait(220)
+    motion.settle()
     window.home.mode_control.buttons[1].click()
     assert not hasattr(view, "sidebar_button")
     assert window.pane_button.toolTip() == "Hide navigation pane"
     question = view.question
     window.pane_button.click()
-    QTest.qWait(220)
+    motion.settle()
     assert window.sidebar_width() == 0
     assert window.stack.currentWidget() is view and view.question is question
     assert window.pane_button.toolTip() == "Show navigation pane"
@@ -499,7 +499,7 @@ def test_sidebar_tooltip_describes_the_selected_list(window: MainWindow) -> None
     assert window.sidebar_width() == 0
     assert window.pane_button.toolTip() == "Show navigation pane"
     window.pane_button.click()
-    QTest.qWait(220)
+    motion.settle()
     assert window.sidebar_width() > 0
     assert window.stack.currentWidget() is view and view.question is question
 

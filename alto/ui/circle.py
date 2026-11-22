@@ -54,6 +54,7 @@ from alto.theory.fifths import (
     cells_of_key,
 )
 from alto.theory.scales import format_key_signature
+from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
 from alto.ui.engraving import (
     accidental_width,
@@ -665,7 +666,7 @@ class FifthsCircle(QWidget):
         animation.setEndValue(1.0)
         animation.valueChanged.connect(step)
         self._animations.append(animation)
-        animation.start()
+        motion.play(animation)
 
     def _set_glow(self, level: float) -> None:
         """

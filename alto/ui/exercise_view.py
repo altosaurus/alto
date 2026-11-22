@@ -467,15 +467,16 @@ class ExerciseView(QWidget):
         )
         self.undo_button = QPushButton("Undo")  # takes back the last note or step of a scale
         self.undo_button.setMinimumHeight(px(40))
-        self.undo_button.setShortcut("Backspace")
+        motion.set_shortcut(self.undo_button, key="Backspace")
         self.undo_button.clicked.connect(self._undo_scale_note)
         self.place_button = QPushButton("Place note")  # puts the note at the caret on the staff, or marks the next step
         self.place_button.setMinimumHeight(px(40))
-        self.place_button.setShortcut("Return")  # Return does the next thing: place, then Answer once everything is placed
+        # Return does the next thing: place, then Answer once everything is placed
+        motion.set_shortcut(self.place_button, key="Return")
         self.place_button.clicked.connect(self._place_here)
         self.answer_button = QPushButton("Answer")  # hands in the signature picked on the fork, or the scale placed
         self.answer_button.setMinimumHeight(px(40))
-        self.answer_button.setShortcut("Return")
+        motion.set_shortcut(self.answer_button, key="Return")
         self.answer_button.clicked.connect(self._answer)
         self.staff.installEventFilter(self)  # the wheel over the music or Answer moves the fork's circle too
         self.answer_button.installEventFilter(self)
@@ -577,7 +578,7 @@ class ExerciseView(QWidget):
                 1: ("+", "Sharp"),
                 2: ("Ctrl++", "Double sharp"),
             }[acc]
-            b.setShortcut(key)
+            motion.set_shortcut(b, key=key)
             b.setToolTip(f"{word} (key {key}; the Left and Right arrows step through the signs)")
             b.setAccessibleName(word)
             self.accidental_buttons[acc] = b
@@ -602,7 +603,7 @@ class ExerciseView(QWidget):
             b.setMinimumHeight(px(40))
             b.setToolTip(f"{name} (key {step}; the arrow keys, the mouse wheel and a right click switch between them)")
             b.setAccessibleName(name)
-            b.setShortcut(step)
+            motion.set_shortcut(b, key=step)
             b.setStyleSheet(css("font-size: 15pt; font-weight: bold;"))
             b.clicked.connect(lambda _=False, s=step: self.scale_input.set_pending_step(s))
             self.step_group.addButton(b)
@@ -761,7 +762,7 @@ class ExerciseView(QWidget):
         lay.addWidget(self.rating_row, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.next_button = QPushButton("Next")
         self.next_button.setMinimumHeight(px(40))
-        self.next_button.setShortcut("Return")
+        motion.set_shortcut(self.next_button, key="Return")
         self.next_button.clicked.connect(self._advance_question)
         lay.addWidget(self.next_button, alignment=Qt.AlignmentFlag.AlignHCenter)
         lay.addStretch()
@@ -1357,7 +1358,7 @@ class ExerciseView(QWidget):
                     b.setAccessibleName(c)
                     break
             if keys[i]:  # every answer can be given from the keyboard
-                b.setShortcut(keys[i])
+                motion.set_shortcut(b, key=keys[i])
                 b.setToolTip(f"Key {keys[i]}")
             if q.octaves:
                 b.setCheckable(True)
@@ -1392,7 +1393,7 @@ class ExerciseView(QWidget):
                 b = QPushButton(octave)
                 b.setMinimumHeight(px(40))
                 if second_keys[i]:  # a key that the first row does not use
-                    b.setShortcut(second_keys[i])
+                    motion.set_shortcut(b, key=second_keys[i])
                     b.setToolTip(f"Key {second_keys[i]}")
                 b.setCheckable(True)
                 b.clicked.connect(lambda _=False, text=octave, btn=b: self._pick("octave", text=text, button=btn))
@@ -1876,7 +1877,7 @@ class ExerciseView(QWidget):
         label = "Place sign" if q.place_signature else "Mark step" if steps_turn else "Place note"
         if self.place_button.text() != label:
             self.place_button.setText(label)
-            self.place_button.setShortcut("P" if q.place_signature else "Return")
+            motion.set_shortcut(self.place_button, key="P" if q.place_signature else "Return")
         self.place_button.setEnabled(live and not (sequence and self.scale_input.done))
         self.answer_button.setVisible(sequence or fork or clef)
         self.answer_button.setEnabled(live and (fork or clef or q.place_signature or self.scale_input.done))

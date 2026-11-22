@@ -46,7 +46,7 @@ from alto.learning import (
     Learner,
 )
 from alto.learning.backup import app_version
-from alto.ui import icons
+from alto.ui import icons, motion
 from alto.ui import main_window as mw
 from alto.ui.colors import blend_name
 from alto.ui.exercise_settings import save_keyboard_intervals
@@ -464,16 +464,11 @@ def window(
     QApplication.sendPostedEvents(None, 0)
 
 
-def settle(ms: int = 260) -> None:
+def settle() -> None:
     """
-    Wait for the animations to finish.
-
-    Parameters
-    ----------
-    ms : int
-        How many milliseconds to wait.
+    Let the window's animations finish: the list sliding open or shut, and the page sliding in.
     """
-    QTest.qWait(ms)
+    motion.settle()
 
 
 def test_the_window_starts_on_the_home_screen_with_a_list_of_exercises(window: MainWindow) -> None:

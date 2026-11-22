@@ -39,6 +39,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QWidget
 
+from alto.ui import motion
 from alto.ui.store import (
     store,
     text_value,
@@ -1274,7 +1275,7 @@ class TransitionCanvas(QWidget):
         self._animation.setEndValue(length)
         self._animation.setDuration(max(int(length), 1))
         self._advance(0.0)
-        self._animation.start()
+        motion.play(self._animation)
 
     def stop(self) -> None:
         """
