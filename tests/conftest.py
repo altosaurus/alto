@@ -29,6 +29,11 @@ os.environ["XDG_DATA_HOME"] = f"{_HOME}/data"
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 atexit.register(lambda: shutil.rmtree(_HOME, ignore_errors=True))
 
+# Git tells a hook which repository it runs for. A push from a worktree sets GIT_DIR, and the tests that make throwaway
+# repositories would then run their git commands on Alto's own. Tests never run inside a git command, so drop these.
+for _name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_OBJECT_DIRECTORY", "GIT_PREFIX"):
+    os.environ.pop(_name, None)
+
 import pytest  # noqa: E402
 from PySide6.QtCore import (  # noqa: E402
     QEvent,
