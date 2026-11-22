@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
+import yaml
 
 if TYPE_CHECKING:
     from types import ModuleType
@@ -149,10 +150,10 @@ def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_p
 
 
 def test_the_pre_push_hook_and_github_use_the_same_full_suite_runner() -> None:
-    """Run the full suite by default, on every core with the budgets after, and share the command with the GitHub pytest job."""
+    """Run the full suite but the budgets by default, on every core, and share the command with the GitHub pytest job."""
     hook = (ROOT / "scripts" / "run-tests.sh").read_text(encoding="utf-8")
     assert '-n "$workers" --dist worksteal -m "not perf" "$@"' in hook  # everything but the budgets, on every core
-    assert '-m perf "$@"' in hook  # then the budgets, on their own
+    assert '-m perf "$@"' not in hook  # the Performance workflow runs the budgets on a machine of their own
     assert "changed_tests.py" not in hook
     config = (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "entry: sh scripts/run-tests.sh --patch-coverage" in config
@@ -182,3 +183,15 @@ def test_codecov_reads_the_report_produced_by_one_pytest_matrix_job() -> None:
     assert download["with"]["name"] == attach["with"]["name"]
     assert publish["with"]["files"] == attach["with"]["path"] == "coverage.xml"
     assert all("run" not in step for step in steps)
+
+
+def test_the_budgets_run_after_a_merge_and_a_missed_one_opens_an_issue() -> None:
+    """Check the budgets for themselves in the Performance workflow, where a miss opens or adds to an issue instead of failing."""
+    workflow = yaml.safe_load((WORKFLOWS / "performance.yml").read_text(encoding="utf-8"))
+    steps = {step.get("name"): step for step in workflow["jobs"]["budgets"]["steps"]}
+    check = steps["Check the budgets"]
+    assert "-m perf" in check["run"] and check["continue-on-error"] is True
+    report = steps["Open an issue if a budget was missed"]
+    assert report["if"] == "steps.budgets.outcome == 'failure'"
+    assert "gh issue create" in report["run"] and "gh issue comment" in report["run"]
+    assert workflow["permissions"]["issues"] == "write"

@@ -32,8 +32,8 @@ pytest tests/test_audio.py   # one file, in one process
 
 `-n auto` (from pytest-xdist) runs the tests in one process per core, which takes the suite from minutes to under a minute.
 Leave it out when running a few tests, where starting the processes would take longer than the tests.
-`sh scripts/run-tests.sh` runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets on
-every core, then the budgets on their own, since they time real operations and need a quiet machine. Set `ALTO_TEST_WORKERS`
+`sh scripts/run-tests.sh` runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets, on
+every core. The budgets time real operations, so they run in the Performance workflow instead (see below). Set `ALTO_TEST_WORKERS`
 to use a different number of processes.
 
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
@@ -77,13 +77,16 @@ Three things watch how fast Alto is, each for a different kind of slowdown. The 
 painting each screen, drawing the circle of fifths at new sizes, and reading and writing the data of a profile with a year of practice
 behind it.
 
-- **Budgets, on every pull request.** `tests/test_performance.py` fails when an operation takes longer than its budget in
+- **Budgets, after each merge.** `tests/test_performance.py` (marked `perf`) fails when an operation takes longer than its budget in
   `benchmarks/budgets.py`. A budget is four or five times what the operation takes on a development machine, so that a slow build
   machine does not fail a test but a change that makes something many times slower does. The first use of something in a new process
   (starting the app, the first look at a page, the circle at sizes not used before) is measured in a process of its own, because Qt
-  makes fonts and layouts on first use and later runs hide that cost.
+  makes fonts and layouts on first use and later runs hide that cost. The budgets time real operations, so they are left out of the
+  pull request's tests, where other test processes share the cores. The Performance workflow runs them on a machine of their own
+  after each merge into `main` that touches the app, when a version is tagged and once a month. A missed budget opens an issue labeled
+  `performance`, or adds the run to the one that is open, and does not fail the run. Run them yourself with `pytest -m perf`.
 - **A history, from release to release.** `benchmarks/suite.py` is an [ASV](https://asv.readthedocs.io/) suite, and the Performance
-  workflow (`.github/workflows/performance.yml`) runs it when a version is tagged and once a week, and keeps the results on the
+  workflow (`.github/workflows/performance.yml`) runs it when a version is tagged and once a month, and keeps the results on the
   branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
   failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
   would catch.
@@ -93,7 +96,7 @@ behind it.
 ```bash
 python -m benchmarks.survey        # every operation once, slowest first, in milliseconds
 python -m benchmarks.operations page:lesson --profile   # where the time goes in one operation, the first time
-pytest tests/test_performance.py   # the budgets
+pytest -m perf                     # the budgets
 asv run -E existing:$(which python) --set-commit-hash $(git rev-parse HEAD)   # record this commit
 asv compare v0.0.0 HEAD            # what changed since a release, once both have been recorded
 ```
