@@ -5,7 +5,7 @@ package: alto
 permalink: /api/alto.settings/
 ---
 {% raw %}
-User settings. Pure Python (no Qt); persistence lives in ui/settings_panel.py.
+User settings. Pure Python (no Qt); persistence lives in ui/exercise_settings.py.
 
 Each exercise with settings has a small dataclass here (`NoteNameSettings`, `KeyboardSettings` and so on) and one shared
 instance of it (`note_names`, `keyboard` ...) that the exercise and its settings panel both read and write.
@@ -90,6 +90,89 @@ Return the name and octave of the natural note on a staff step.
 'E4'
 ```
 
+## ClefChoice
+
+```python
+class ClefChoice
+```
+
+Settings with a set of chosen clefs, which are always used in the same order.
+
+**Attributes**
+
+- `CLEF_ORDER` (*tuple of str*): Every clef the settings may hold, in the order they are offered and used. Each subclass sets it.
+- `clefs` (*set of str*): The chosen clefs. The dataclass that uses this mixin declares the field and its default.
+
+**Examples**
+
+```pycon
+>>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
+['alto', 'tenor']
+```
+
+### ClefChoice.active_clefs
+
+```python
+def active_clefs() -> list[str]
+```
+
+Return the clefs to use, in canonical order.
+
+**Returns**
+
+- *list of str*: The chosen clefs in the order of `CLEF_ORDER`, or the treble clef if none are chosen.
+
+**Examples**
+
+```pycon
+>>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
+['tenor', 'grand']
+>>> ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
+['treble', 'subbass']
+>>> NoteNameSettings(clefs=set()).active_clefs()
+['treble']
+```
+
+## KeyChoice
+
+```python
+class KeyChoice
+```
+
+Settings with a set of chosen key signatures.
+
+**Attributes**
+
+- `keys` (*set of int*): The chosen key signatures, as sharps (positive) or flats (negative). The dataclass that uses this mixin declares the field and its default.
+
+**Examples**
+
+```pycon
+>>> KeyboardSettings(keys={3, -2}).active_keys()
+[-2, 3]
+```
+
+### KeyChoice.active_keys
+
+```python
+def active_keys() -> list[int]
+```
+
+Return the key signatures to draw from, lowest first.
+
+**Returns**
+
+- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
+
+**Examples**
+
+```pycon
+>>> ConstructionSettings(keys={2, -1}).active_keys()
+[-1, 2]
+>>> KeySignatureSettings(keys=set()).active_keys()
+[0]
+```
+
 ## StaffRangeSettings
 
 ```python
@@ -100,6 +183,8 @@ StaffRangeSettings(
     note_values: set[str] = field(default_factory=lambda: {'whole'}),
 )
 ```
+
+Bases: `ClefChoice`
 
 Selected clefs and inclusive pitch limits for each staff.
 
@@ -127,27 +212,6 @@ Return the note values to draw, from longest to shortest.
 ```pycon
 >>> NoteNameSettings(note_values={"half", "whole"}).active_values()
 ['whole', 'half']
-```
-
-### StaffRangeSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to draw from, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-['tenor', 'grand']
->>> NoteNameSettings(clefs=set()).active_clefs()
-['treble']
 ```
 
 ### StaffRangeSettings.range_for
@@ -216,6 +280,9 @@ def active_keys() -> list[int]
 ```
 
 Return the key signatures to draw from, lowest first.
+
+The field is named `key_signatures` rather than `keys`, as in `KeyChoice`, because the name is part of the practice
+signature that stored questions are matched by; renaming it would orphan every learner's saved questions.
 
 **Returns**
 
@@ -356,6 +423,8 @@ KeyboardSettings(
 )
 ```
 
+Bases: `KeyChoice`
+
 The settings of the keyboard identification exercise.
 
 **Attributes**
@@ -373,25 +442,6 @@ The settings of the keyboard identification exercise.
 >>> cfg = KeyboardSettings()
 >>> key_name(cfg.low), key_name(cfg.high)
 ('C3', 'C5')
-```
-
-### KeyboardSettings.active_keys
-
-```python
-def active_keys() -> list[int]
-```
-
-Return the key signatures to draw from, lowest first.
-
-**Returns**
-
-- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-**Examples**
-
-```pycon
->>> KeyboardSettings().active_keys()
-[-3, -2, -1, 0, 1, 2, 3]
 ```
 
 ## keyboard_interval_name
@@ -534,6 +584,8 @@ ConstructionSettings(
 )
 ```
 
+Bases: `ClefChoice, KeyChoice`
+
 The settings of the note construction exercise.
 
 **Attributes**
@@ -557,44 +609,6 @@ The settings of the note construction exercise.
 ['grand']
 ```
 
-### ConstructionSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to draw from, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> ConstructionSettings().active_clefs()
-['treble', 'bass']
-```
-
-### ConstructionSettings.active_keys
-
-```python
-def active_keys() -> list[int]
-```
-
-Return the key signatures to draw from, lowest first.
-
-**Returns**
-
-- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-**Examples**
-
-```pycon
->>> ConstructionSettings(keys={3, -2}).active_keys()
-[-2, 3]
-```
-
 ## ArpeggioSettings
 
 ```python
@@ -607,6 +621,8 @@ ArpeggioSettings(
     keys: set[int] = field(default_factory=lambda: {-3, -2, -1, 0, 1, 2, 3}),
 )
 ```
+
+Bases: `ClefChoice, KeyChoice`
 
 The settings of the arpeggio identification exercise.
 
@@ -623,25 +639,6 @@ The settings of the arpeggio identification exercise.
 ```pycon
 >>> ArpeggioSettings().active_types()
 ['major', 'minor', 'dominant 7th', 'diminished 7th']
-```
-
-### ArpeggioSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to draw from, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
-['alto', 'tenor']
 ```
 
 ### ArpeggioSettings.active_types
@@ -711,25 +708,6 @@ used.
 [0]
 ```
 
-### ArpeggioSettings.active_keys
-
-```python
-def active_keys() -> list[int]
-```
-
-Return the key signatures to draw from, lowest first.
-
-**Returns**
-
-- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-**Examples**
-
-```pycon
->>> ArpeggioSettings(keys={1}).active_keys()
-[1]
-```
-
 ## KeySignatureSettings
 
 ```python
@@ -740,6 +718,8 @@ KeySignatureSettings(
     keys: set[int] = field(default_factory=lambda: set(range(-7, 8))),
 )
 ```
+
+Bases: `ClefChoice, KeyChoice`
 
 The settings of the key signature identification exercise.
 
@@ -755,25 +735,6 @@ The settings of the key signature identification exercise.
 >>> cfg = KeySignatureSettings()
 >>> cfg.active_clefs(), len(cfg.active_keys())
 (['treble', 'bass'], 15)
-```
-
-### KeySignatureSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to draw signatures on, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> KeySignatureSettings().active_clefs()
-['treble', 'bass']
 ```
 
 ### KeySignatureSettings.active_modes
@@ -793,25 +754,6 @@ Return the scales to ask about, in the order of `KEY_MODES`.
 ```pycon
 >>> KeySignatureSettings().active_modes()
 ['Major (Ionian)', 'Natural minor (Aeolian)']
-```
-
-### KeySignatureSettings.active_keys
-
-```python
-def active_keys() -> list[int]
-```
-
-Return the key signatures to ask about, lowest first.
-
-**Returns**
-
-- *list of int*: Sharps (positive) or flats (negative); no sharps or flats if none are chosen.
-
-**Examples**
-
-```pycon
->>> KeySignatureSettings(keys={3, -4}).active_keys()
-[-4, 3]
 ```
 
 ## OrderOfKeysSettings
@@ -1006,6 +948,8 @@ ClefBasicsSettings(
 )
 ```
 
+Bases: `ClefChoice`
+
 The settings of the clef basics exercise: what kind of question is asked, and which clefs.
 
 Every clef is one of three symbols, the G, C or F clef, put on a line of the staff: the mezzo-soprano clef is the C clef
@@ -1023,27 +967,6 @@ on the second line. The three symbols can always be chosen from.
 ['alto', 'subbass']
 >>> ClefBasicsSettings().question_type
 'construction'
-```
-
-### ClefBasicsSettings.active_clefs
-
-```python
-def active_clefs() -> list[str]
-```
-
-Return the clefs to ask for, in canonical order.
-
-**Returns**
-
-- *list of str*: The chosen clefs, or the treble clef if none are chosen.
-
-**Examples**
-
-```pycon
->>> ClefBasicsSettings().active_clefs()
-['treble', 'bass']
->>> ClefBasicsSettings(clefs=set()).active_clefs()
-['treble']
 ```
 
 ### ClefBasicsSettings.active_type

@@ -31,14 +31,16 @@ from alto.terms import PLUGIN_TERMS
 from alto.theory.pitch import Note
 from alto.ui import database_page, instrument_picker, main_window
 from alto.ui.anki_exporter import card_fields
+from alto.ui.exercise_settings import (
+    load_pack_options,
+    save_pack_options,
+)
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import FingerboardWidget, neck_view, ruler_base, ruler_reach
 from alto.ui.plugins_dialog import PluginsDialog
 from alto.ui.question_preview import QuestionPreview
 from alto.ui.settings_panel import (
     PackSettingsPanel,
-    load_pack_options,
-    save_pack_options,
     settings_panel_for,
 )
 from viola_pack import (

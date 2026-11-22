@@ -24,12 +24,12 @@ from alto.theory.scales import (
 )
 from alto.ui import icons
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_settings import load_scale_identification
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import EXERCISE_ICONS
 from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import (
     KeySignatureSettingsPanel,
-    load_scale_identification,
     settings_panel_for,
 )
 from alto.ui.store import store

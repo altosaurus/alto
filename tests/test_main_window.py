@@ -49,6 +49,7 @@ from alto.learning.backup import app_version
 from alto.ui import icons
 from alto.ui import main_window as mw
 from alto.ui.colors import blend_name
+from alto.ui.exercise_settings import save_keyboard_intervals
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import (
     CARD_W,
@@ -59,10 +60,7 @@ from alto.ui.home import (
 from alto.ui.lesson import LessonsPage
 from alto.ui.main_window import MainWindow
 from alto.ui.pictures import ClefPictures
-from alto.ui.settings_panel import (
-    KeyboardIntervalSettingsPanel,
-    save_keyboard_intervals,
-)
+from alto.ui.settings_panel import KeyboardIntervalSettingsPanel
 from alto.ui.store import store
 from alto.ui.theme import apply_theme, custom_theme, theme_palette
 

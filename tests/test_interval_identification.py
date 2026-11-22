@@ -15,9 +15,10 @@ from alto.exercises.base import Question
 from alto.exercises.library import IntervalNames
 from alto.theory.pitch import QUALITY_NAMES, Interval, key_accidental
 from alto.ui.dropdown import FieldComboBox
+from alto.ui.exercise_settings import load_intervals
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import IntervalSettingsPanel, load_intervals
+from alto.ui.settings_panel import IntervalSettingsPanel
 from alto.ui.staff import StaffWidget
 from alto.ui.store import store
 from alto.ui.style import app_style

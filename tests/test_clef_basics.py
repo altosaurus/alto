@@ -20,6 +20,7 @@ from alto import settings
 from alto.exercises import REGISTRY
 from alto.exercises.base import Question
 from alto.exercises.library import ClefBasics
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.staff import (
@@ -712,10 +713,10 @@ def test_the_question_type_is_chosen_saved_and_loaded(app: QApplication) -> None
     assert panel.type_row.value.text() == "Identification"
     assert str(store().value("clefBasics/type")) == "identification"
     settings.clef_basics.question_type = "construction"
-    sp.load_clef_basics()
+    es.load_clef_basics()
     assert settings.clef_basics.question_type == "identification"
     store().setValue("clefBasics/type", "nonsense")
-    sp.load_clef_basics()
+    es.load_clef_basics()
     assert settings.clef_basics.question_type == "identification"  # not a kind of question: left as it was
     assert settings.ClefBasicsSettings(question_type="nonsense").active_type() == "construction"
 
@@ -787,13 +788,13 @@ def test_the_clefs_are_saved_and_loaded(app: QApplication) -> None:
     sp.ClefBasicsSettingsPanel(settings.clef_basics).boxes["french"].setChecked(True)
     assert str(store().value("clefBasics/clefs")) == "treble,bass,french"
     settings.clef_basics.clefs = {"treble"}
-    sp.load_clef_basics()
+    es.load_clef_basics()
     assert settings.clef_basics.clefs == {"treble", "bass", "french"}
     store().setValue("clefBasics/clefs", "flute,subbass")
-    sp.load_clef_basics()
+    es.load_clef_basics()
     assert settings.clef_basics.clefs == {"subbass"}
     store().setValue("clefBasics/clefs", "flute")
-    sp.load_clef_basics()
+    es.load_clef_basics()
     assert settings.clef_basics.clefs == {"subbass"}  # nothing valid: left as it was
 
 

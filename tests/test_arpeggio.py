@@ -30,7 +30,10 @@ from alto.theory.scales import (
     INVERSION_NAMES,
     arpeggio,
 )
-from alto.ui import settings_panel
+from alto.ui import (
+    exercise_settings,
+    settings_panel,
+)
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.settings_panel import ArpeggioSettingsPanel
 
@@ -346,6 +349,8 @@ def view(
         The view; it is closed afterwards.
     """
     # noinspection PyUnresolvedReferences
+    monkeypatch.setattr(exercise_settings, "store", lambda: FakeStore())
+    # noinspection PyUnresolvedReferences
     monkeypatch.setattr(settings_panel, "store", lambda: FakeStore())
     cfg.types, cfg.inversions, cfg.clefs = {"major", "minor"}, {0, 1}, {"treble"}
     # Nothing is played: a note scheduled for later would sound (and load the audio system) during some other test.
@@ -457,7 +462,7 @@ def test_the_settings_panel_edits_and_saves_the_settings(
     """
     saved = FakeStore()
     # noinspection PyUnresolvedReferences
-    monkeypatch.setattr(settings_panel, "store", lambda: saved)
+    monkeypatch.setattr(exercise_settings, "store", lambda: saved)
     panel = view.settings_panel
     assert isinstance(panel, ArpeggioSettingsPanel)
     seen = []
@@ -491,7 +496,7 @@ def test_the_saved_settings_are_read_back(
     """
     # noinspection PyUnresolvedReferences
     monkeypatch.setattr(
-        settings_panel,
+        exercise_settings,
         "store",
         lambda: FakeStore(
             {
@@ -503,6 +508,6 @@ def test_the_saved_settings_are_read_back(
             },
         ),
     )
-    settings_panel.load_arpeggio()
+    exercise_settings.load_arpeggio()
     assert cfg.clefs == {"alto", "tenor"} and cfg.types == {"minor 7th", "half-diminished 7th"}
     assert cfg.inversions == {2, 3} and cfg.key_signature and cfg.keys == {-1, 2}

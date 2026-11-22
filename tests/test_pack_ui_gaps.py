@@ -24,12 +24,13 @@ from alto.exercises.packs import InstalledPlugin, installed_plugins, load_packs
 from alto.instrument_packs import INSTALLED, PackKeyboard, PackString
 from alto.lessons import LESSONS
 from alto.ui import glossary, main_window, plugins_dialog
+from alto.ui.exercise_settings import load_pack_options
 from alto.ui.fingerboard import FingerboardWidget, ruler_base
 from alto.ui.glossary import GlossaryPage
 from alto.ui.instrument_picker import InstrumentPicker
 from alto.ui.lesson import LessonsPage
 from alto.ui.plugins_dialog import PluginsDialog
-from alto.ui.settings_panel import PackKeyboardSettingsPanel, load_pack_options
+from alto.ui.settings_panel import PackKeyboardSettingsPanel
 from alto.ui.store import store
 from test_harpsichord_pack import _install as install_harpsichord
 from test_harpsichord_pack import _intervals

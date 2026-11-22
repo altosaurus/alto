@@ -97,6 +97,7 @@ from alto.ui import (
 from alto.ui.anki_exporter import ExporterSession
 from alto.ui.app_settings import AppSettingsDialog
 from alto.ui.database_page import DatabasePage
+from alto.ui.exercise_settings import load_exercise_settings
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
 from alto.ui.home import (
@@ -118,7 +119,6 @@ from alto.ui.profile_dialog import (
     ProfileDialog,
     remember_profile,
 )
-from alto.ui.settings_panel import load_exercise_settings
 from alto.ui.stats_dialog import StatsPage
 from alto.ui.store import (
     import_settings,

@@ -19,9 +19,13 @@ from alto.exercises.packs import PackExercise, load_packs, read_pack
 from alto.instrument_packs import PackKeyboard, read_keyboard_style
 from alto.theory.pitch import Note
 from alto.ui.colors import CORRECT_ANSWER_COLOR
+from alto.ui.exercise_settings import (
+    load_pack_options,
+    save_pack_options,
+)
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import FingerboardWidget
-from alto.ui.settings_panel import PackKeyboardSettingsPanel, load_pack_options, save_pack_options
+from alto.ui.settings_panel import PackKeyboardSettingsPanel
 from alto.ui.store import store
 from pack_fixtures import ensure_icons, ensure_pictures, ensure_sounds
 

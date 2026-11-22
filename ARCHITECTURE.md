@@ -55,8 +55,9 @@ One small object per exercise that has settings (`NoteNameSettings`, `KeyboardSe
 `settings.keyboard`, and so on. They hold only data and the rules about it, such as which clefs are active and what range
 each clef allows.
 
-Nothing in this module saves anything. Persistence lives in `alto/ui/settings_panel.py`, which has a `load_*` and `save_*` pair
-for each object. The window loads them all at start-up and each panel saves after every edit.
+Nothing in this module saves anything. Persistence lives in `alto/ui/exercise_settings.py`, which has a `load_*` and `save_*`
+pair for each object, built on the readers in `alto/ui/store.py` (`bool_value`, `choices_value`, `keys_value` and so on). The
+window loads them all at start-up with `load_exercise_settings()` and each panel saves after every edit.
 
 ## Exercises (`alto/exercises/`)
 

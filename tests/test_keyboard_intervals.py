@@ -30,15 +30,15 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.ui import exercise_view
+from alto.ui.exercise_settings import (
+    load_keyboard_intervals,
+    save_keyboard_intervals,
+)
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.home import EXERCISE_ICONS
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import (
-    KeyboardIntervalSettingsPanel,
-    load_keyboard_intervals,
-    save_keyboard_intervals,
-)
+from alto.ui.settings_panel import KeyboardIntervalSettingsPanel
 from alto.ui.store import store
 from alto.ui.style import app_style
 

@@ -28,10 +28,10 @@ from alto.ui import (
 from alto.ui import (
     main_window as mw,
 )
+from alto.ui.exercise_settings import save_note_names
 from alto.ui.instrument_picker import save_instrument
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import remember_profile
-from alto.ui.settings_panel import save_note_names
 from alto.ui.store import (
     export_settings,
     store,

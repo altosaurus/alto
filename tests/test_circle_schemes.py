@@ -31,6 +31,7 @@ from alto.circle_schemes import (
     resolve,
 )
 from alto.exercises.library import CircleOfFifths
+from alto.ui import exercise_settings as es
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
     FifthsCircle,
@@ -59,12 +60,12 @@ def test_legacy_color_settings_survive_the_spelling_change() -> None:
         '[{"id":"custom-1","name":"Sea","mode":"single","colours":["#00ffff"],"light":false}]',
     )
     try:
-        sp.load_circle()
+        es.load_circle()
         assert settings.circle.scheme == "color-blind"
         assert settings.circle.customs[0]["colors"] == ["#00ffff"]
     finally:
         store().remove("circle")
-        sp.load_circle()
+        es.load_circle()
 
 
 def test_there_are_fourteen_presets_and_cyan_to_indigo_is_the_default_and_comes_first() -> None:
@@ -295,7 +296,7 @@ def test_the_colors_page_chooses_creates_edits_and_deletes_and_it_all_survives_a
     assert chosen() == "custom-1" and [r["name"] for r in settings.circle.customs] == ["Sea"]
     assert "custom-1" in pane.schemes.thumbs and pane.colors_row.value.text() == "Sea"
     settings.circle.scheme, settings.circle.customs = DEFAULT_SCHEME, []
-    sp.load_circle()
+    es.load_circle()
     assert chosen() == "custom-1" and settings.circle.customs[0]["colors"][0] == "#00ffff"  # a restart finds it
     pane.schemes.edit_asked.emit("custom-1")
     assert pane.editor.name.text() == "Sea" and not pane.editor.delete_button.isHidden()
@@ -310,10 +311,10 @@ def test_a_saved_scheme_that_no_longer_exists_loads_as_the_default() -> None:
     """
     settings.circle.scheme = "midnight"
     store().setValue("circle/scheme", "custom-9")
-    sp.load_circle()
+    es.load_circle()
     assert settings.circle.scheme == DEFAULT_SCHEME
     store().setValue("circle/customSchemes", "garbage")
-    sp.load_circle()
+    es.load_circle()
     assert settings.circle.customs == []
     store().remove("circle")
 
