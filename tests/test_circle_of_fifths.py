@@ -67,7 +67,6 @@ from alto.ui import exercise_settings as es
 from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
-    GLOW_MS,
     WRONG_COLOR,
     WRONG_MS,
     FifthsCircle,
@@ -482,7 +481,7 @@ def test_a_right_answer_names_the_cell_and_shows_its_key_signature(app: QApplica
     assert circle.shown["outer"] == {3} and circle.title == "A major" and circle.subtitle == "3 sharps" and circle.signature == 3
     assert "A major" in circle.accessibleDescription() and "F♯m" in circle.accessibleDescription()
     assert circle._glow < 1.0
-    QTest.qWait(GLOW_MS + 150)
+    motion.settle()
     assert circle._glow == pytest.approx(1.0)
     flat = FifthsCircle()
     flat.show_question("major", place=7, title="B♭ minor")
@@ -490,6 +489,7 @@ def test_a_right_answer_names_the_cell_and_shows_its_key_signature(app: QApplica
     assert flat.title == "D♭ major" and flat.subtitle == "5 flats" and flat.signature == -5
 
 
+@pytest.mark.motion  # about how the flash fades
 def test_a_wrong_answer_flashes_the_cell_and_then_lets_it_go(app: QApplication) -> None:
     """
     Check that the warning shows at full strength on the right ring, fades, and is gone after its time.
@@ -878,7 +878,7 @@ def test_a_wrong_name_in_the_middle_of_two_misses_the_question_but_keeps_what_wa
     wrong.click()
     assert view.missed and not view.answered and (view.total, view.correct, view.streak) == (1, 0, 0)
     assert view.circle._warning is not None and not wrong.isEnabled() and not button(view, first).isEnabled()
-    QTest.qWait(WRONG_MS + 200)
+    motion.settle()
     assert view.circle._warning is None and view.circle.target == ("outer", q.circle)
     button(view, second).click()
     assert view.answered and view.correct == 0 and view.total == 1  # only the first try counts toward the score
@@ -946,7 +946,7 @@ def test_a_numeral_question_flashes_the_ring_that_was_asked_and_shows_all_six_nu
     wrong.click()
     assert view.missed and view.circle._warning is not None and view.circle._warning[:2] == (q.circle_ring, q.circle)
     assert view.circle.signature == SIGNATURES[q.circle_key or 0]  # its staff was there all along
-    QTest.qWait(WRONG_MS + 200)
+    motion.settle()
     button(view, q.answer).click()
     assert view.answered and len(view.circle.numerals) == 6 and view.circle.numerals == cells_of_key(q.circle_key or 0)
     assert view.circle.subtitle == " ".join(NUMERALS)
@@ -968,7 +968,7 @@ def test_a_wrong_answer_flashes_the_cell_and_can_be_tried_again(app: QApplicatio
     assert view.missed and not view.answered and (view.total, view.correct, view.streak) == (1, 0, 0)
     assert view.circle._warning is not None and view.circle._warning[:2] == ("outer", q.circle)
     assert not wrong.isEnabled() and view.circle.shown["outer"] == set()
-    QTest.qWait(WRONG_MS + 200)
+    motion.settle()
     assert view.circle._warning is None
     for name in q.required or (q.answer,):
         button(view, name).click()

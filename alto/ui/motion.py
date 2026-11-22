@@ -3,12 +3,14 @@ Animations and feedback delays, run in one place so that tests decide when they 
 
 The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. In the app they take their real time.
+does. A button given a key with `set_shortcut` shows as pressed for a moment when the key is pressed, then clicks. In the app
+they take their real time.
 
 Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
 it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait.
+slide), and the motion happens only when the test says so, never during some other wait. A button's key clicks it at once,
+since its pressed look is all there is to see in the meantime.
 
 Examples
 --------
@@ -27,15 +29,23 @@ Examples
 
 from __future__ import annotations
 
+import time
 from collections.abc import Callable
 
 import shiboken6
 from PySide6.QtCore import (
     QAbstractAnimation,
     QCoreApplication,
+    QEvent,
     QObject,
+    Qt,
     QTimer,
 )
+from PySide6.QtGui import (
+    QKeySequence,
+    QShortcutEvent,
+)
+from PySide6.QtWidgets import QAbstractButton
 
 _instant = False
 
@@ -356,7 +366,7 @@ def settle(*, rounds: int = 1000) -> None:
     Parameters
     ----------
     rounds : int, default 1000
-        The most pieces of motion, or passes of the event loop, to go through. Keyword-only.
+        The most pieces of motion to go through or, in real time, about how many milliseconds to wait. Keyword-only.
 
     Raises
     ------
@@ -389,5 +399,129 @@ def settle(*, rounds: int = 1000) -> None:
             return
         if _instant:
             waiting.run()
+        else:
+            time.sleep(0.001)  # real motion takes its time: a round is about a millisecond
     if busy():
         raise RuntimeError(f"Motion is still going after {rounds} rounds.")
+
+
+PRESS_MS = 100  # how long a button that a key presses shows as pressed before it clicks, as Qt has it
+
+
+class _KeyPress(QObject):
+    """
+    Click a button when its key is pressed: after a moment showing as pressed in the app, and at once with instant motion.
+
+    It takes the place of Qt's own handling, which waits on a timer that tests cannot hold or settle.
+
+    Examples
+    --------
+    >>> from PySide6.QtWidgets import QPushButton
+    >>> set_instant(True)
+    >>> button = QPushButton("Answer")
+    >>> clicks = []
+    >>> _ = button.clicked.connect(lambda: clicks.append(1))
+    >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))
+    True
+    >>> clicks
+    [1]
+    >>> set_instant(False)
+    """
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (Qt passes both arguments positionally)
+        """
+        Press the button whose key it is, unless the key is shared and Qt only moves the focus.
+
+        Parameters
+        ----------
+        watched : QObject
+            The button.
+        event : QEvent
+            The event on its way to the button.
+
+        Returns
+        -------
+        bool
+            True when the event was the button's key, which is handled here.
+
+        Examples
+        --------
+        >>> from PySide6.QtWidgets import QPushButton
+        >>> button = QPushButton("Answer")
+        >>> _KeyPress().eventFilter(button, QEvent(QEvent.Type.Enter))
+        False
+        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, True))  # shared: Qt moves the focus
+        False
+        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))  # shown pressed, then clicked
+        True
+        >>> button.isDown()
+        True
+        >>> settle()
+        >>> button.isDown()
+        False
+        """
+        if event.type() != QEvent.Type.Shortcut or not isinstance(watched, QAbstractButton):
+            return False
+        if not isinstance(event, QShortcutEvent) or event.isAmbiguous():
+            return False
+        if watched.isEnabled() and not watched.isDown():
+            if watched.isCheckable() and watched.focusPolicy() & Qt.FocusPolicy.ClickFocus:
+                watched.setFocus(Qt.FocusReason.ShortcutFocusReason)
+            if _instant:
+                watched.click()
+            else:
+                watched.setDown(True)
+                later(PRESS_MS, owner=watched, step=lambda: _release(watched))
+        return True
+
+
+def _release(button: QAbstractButton) -> None:
+    """
+    Let go of a button that a key pressed, and click it.
+
+    Parameters
+    ----------
+    button : QAbstractButton
+        The button.
+
+    Examples
+    --------
+    >>> from PySide6.QtWidgets import QPushButton
+    >>> button = QPushButton("Next")
+    >>> button.setDown(True)
+    >>> _release(button)
+    >>> button.isDown()
+    False
+    """
+    button.setDown(False)
+    button.click()
+
+
+_key_press = _KeyPress()
+
+
+def set_shortcut(
+    button: QAbstractButton,
+    *,
+    key: QKeySequence | str,
+) -> None:
+    """
+    Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.
+
+    Parameters
+    ----------
+    button : QAbstractButton
+        The button.
+    key : QKeySequence or str
+        The key, such as "Return" or "Shift+C". Keyword-only.
+
+    Examples
+    --------
+    >>> from PySide6.QtWidgets import QPushButton
+    >>> button = QPushButton("Undo")
+    >>> set_shortcut(button, key="Backspace")
+    >>> button.shortcut().toString()
+    'Backspace'
+    """
+    button.setShortcut(key)
+    button.installEventFilter(_key_press)  # installing it again only moves it to the front

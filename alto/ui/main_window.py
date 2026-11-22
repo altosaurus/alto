@@ -91,6 +91,7 @@ from alto.location import database_path
 from alto.ui import (
     backup_flow,
     icons,
+    motion,
     update_flow,
     zoom,
 )
@@ -1073,7 +1074,7 @@ class MainWindow(QMainWindow):
             self._update_sidebar_button()
 
         anim.finished.connect(done)
-        anim.start()
+        motion.play(anim)
 
     def _shuffle_choices(self) -> list[type[Exercise]]:
         """
@@ -1472,7 +1473,7 @@ class MainWindow(QMainWindow):
         self._build()
         self._restore_page(state)
         animation = self._sidebar_anim
-        if animation is not None and animation.state() == QAbstractAnimation.State.Running:
+        if animation is not None and animation.state() != QAbstractAnimation.State.Stopped:
             animation.setCurrentTime(animation.duration())  # the list is already open, not sliding open again
         if old is not None:
             old.deleteLater()
@@ -2138,7 +2139,7 @@ class MainWindow(QMainWindow):
         self.stack.currentChanged.connect(slide.stop)
         self.stack.currentChanged.connect(background.close)
         slide.finished.connect(background.close)
-        slide.start()
+        motion.play(slide)
         background.show()
         background.raise_()
 

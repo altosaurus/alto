@@ -156,6 +156,8 @@ Animations and feedback delays go through `alto/ui/motion.py`:
 - `motion.play(animation)` starts an animation, in place of `animation.start()`.
 - `motion.later(delay, owner=..., step=...)` runs a step after a delay, in place of `QTimer.singleShot`.
 - `motion.start_timer(timer, delay=...)` starts a single-shot timer.
+- `motion.set_shortcut(button, key=...)` gives a button a key. Pressing the key shows the button pressed for a moment and
+  then clicks it, as Qt does, but in tests the key clicks the button at once.
 
 In the app these take their real time. In tests, `tests/conftest.py` turns on instant motion for every test not marked
 `motion`. Then nothing moves on by itself: an animation holds at its start, and a delayed step or timer waits, however long

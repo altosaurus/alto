@@ -69,7 +69,10 @@ from alto.lessons import (
     LESSONS,
     Lesson,
 )
-from alto.ui import icons
+from alto.ui import (
+    icons,
+    motion,
+)
 from alto.ui.lesson import saved_step
 from alto.ui.store import (
     store,
@@ -967,7 +970,7 @@ class HomePage(QWidget):
         direction = QAbstractAnimation.Direction.Forward if expanded else QAbstractAnimation.Direction.Backward
         self._filter_slide.setDirection(direction)
         if self._filter_slide.state() != QAbstractAnimation.State.Running:
-            self._filter_slide.start()
+            motion.play(self._filter_slide)
 
     def _selection_changed(self) -> None:
         """

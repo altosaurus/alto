@@ -9,12 +9,14 @@ Animations and feedback delays, run in one place so that tests decide when they 
 
 The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. In the app they take their real time.
+does. A button given a key with `set_shortcut` shows as pressed for a moment when the key is pressed, then clicks. In the app
+they take their real time.
 
 Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
 it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait.
+slide), and the motion happens only when the test says so, never during some other wait. A button's key clicks it at once,
+since its pressed look is all there is to see in the meantime.
 
 **Examples**
 
@@ -210,7 +212,7 @@ the next question, which slides in) happens too. In the app's real time this wai
 
 **Parameters**
 
-- `rounds` (*int, default 1000*): The most pieces of motion, or passes of the event loop, to go through. Keyword-only.
+- `rounds` (*int, default 1000*): The most pieces of motion to go through or, in real time, about how many milliseconds to wait. Keyword-only.
 
 **Raises**
 
@@ -235,5 +237,32 @@ Traceback (most recent call last):
     ...
 RuntimeError: Motion is still going after 3 rounds.
 >>> set_instant(False)
+```
+
+## set_shortcut
+
+```python
+def set_shortcut(
+    button: QAbstractButton,
+    *,
+    key: QKeySequence | str,
+) -> None
+```
+
+Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.
+
+**Parameters**
+
+- `button` (*QAbstractButton*): The button.
+- `key` (*QKeySequence or str*): The key, such as "Return" or "Shift+C". Keyword-only.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtWidgets import QPushButton
+>>> button = QPushButton("Undo")
+>>> set_shortcut(button, key="Backspace")
+>>> button.shortcut().toString()
+'Backspace'
 ```
 {% endraw %}

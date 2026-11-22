@@ -7,10 +7,8 @@ from __future__ import annotations
 import random
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QKeySequence
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
-    QAbstractButton,
     QApplication,
     QWidget,
 )
@@ -59,7 +57,6 @@ NAMED_KEYS = {
     "PgDown": Qt.Key.Key_PageDown,
     "Home": Qt.Key.Key_Home,
 }
-BUTTON_CLICK_MS = 130  # a button that a key presses is let go after 100 ms, and only then is it clicked
 MODIFIER_KEYS = {
     "Shift": Qt.KeyboardModifier.ShiftModifier,
     "Ctrl": Qt.KeyboardModifier.ControlModifier,
@@ -86,7 +83,4 @@ def press(
     for modifier in modifiers:
         held |= MODIFIER_KEYS[modifier]
     QApplication.processEvents()  # widgets that were just added become visible, and so their keys live, in the event loop
-    QTest.keyClick(view, key, held)
-    wanted = QKeySequence(text)
-    if any(b.shortcut() == wanted and b.isEnabled() and b.isVisible() for b in view.findChildren(QAbstractButton)):
-        QTest.qWait(BUTTON_CLICK_MS)  # a button's shortcut presses it, and it is let go, and clicked, a moment later
+    QTest.keyClick(view, key, held)  # a button whose key it is clicks at once: tests do not wait for its pressed look
