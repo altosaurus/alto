@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795357746">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
   
 </head>
 <body>
@@ -746,46 +746,6 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 ()
 </code></pre>
 
-<h2 id="read_text">read_text</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_text</span><span class="p">(</span>
-    <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-</code></pre></div></div>
-
-<p>Check one piece of plain text and return it trimmed.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The manifest entry.</li>
-  <li><code class="language-plaintext highlighter-rouge">limit</code> (<em>int</em>): The most characters allowed. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">what</code> (<em>str</em>): What the entry is, for the message. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): Which lesson or step it belongs to, for the message. Keyword-only.</li>
-</ul>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>str</em>: The entry without surrounding space.</li>
-</ul>
-
-<p><strong>Raises</strong></p>
-
-<ul>
-  <li><em>ValueError</em>: If it is not nonblank plain text within the limit.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; read_text("  Hello ", limit=10, what="title", where="lesson demo")
-'Hello'
-</code></pre>
-
 <h2 id="read_picture">read_picture</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_picture</span><span class="p">(</span>
@@ -1015,8 +975,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795357746" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795357746" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795357746">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
   
 </head>
 <body>
@@ -815,7 +815,7 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_keyboard_style</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PackKeyboardStyle</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
 
@@ -825,7 +825,7 @@
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The instrument’s <code class="language-plaintext highlighter-rouge">keyboard_style</code> entry, an object, or None.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s qualified key, used in messages. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The instrument’s qualified key, used in messages. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -842,10 +842,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboard_style(None, key="pack.v.va") is None
+<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboard_style(None, where="pack.v.va") is None
 True
 &gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, key="pack.v.va").colors[1]
+&gt;&gt;&gt; read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, where="pack.v.va").colors[1]
 ('white', ('#2a211c', '#120d0a'))
 </code></pre>
 
@@ -1052,7 +1052,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_sound_info</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">pack_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstrumentInfo</span> <span class="o">|</span> <span class="bp">None</span>
 </code></pre></div></div>
@@ -1063,7 +1063,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The instrument’s <code class="language-plaintext highlighter-rouge">sound_info</code> entry, or None when it has none.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">pack_name</code> (<em>str</em>): The pack’s display name, shown as the source when the entry gives none. Keyword-only.</li>
 </ul>
 
@@ -1081,10 +1081,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; info = read_sound_info({"summary": "A viola."}, key="pack.v.va", pack_name="Viola")
+<pre><code class="language-pycon">&gt;&gt;&gt; info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
 &gt;&gt;&gt; info.source if info else None
 'Viola'
-&gt;&gt;&gt; read_sound_info(None, key="pack.v.va", pack_name="Viola") is None
+&gt;&gt;&gt; read_sound_info(None, where="pack.v.va", pack_name="Viola") is None
 True
 </code></pre>
 
@@ -1116,6 +1116,46 @@ True
 
 <pre><code class="language-pycon">&gt;&gt;&gt; plain_text("Name the note.", limit=40), plain_text("&lt;b&gt;Name&lt;/b&gt;", limit=40), plain_text(None, limit=40)
 (True, False, False)
+</code></pre>
+
+<h2 id="read_text">read_text</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_text</span><span class="p">(</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Check one piece of plain text and return it trimmed.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The manifest entry.</li>
+  <li><code class="language-plaintext highlighter-rouge">limit</code> (<em>int</em>): The most characters allowed. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">what</code> (<em>str</em>): What the entry is, for the message. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): Which lesson or step it belongs to, for the message. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The entry without surrounding space.</li>
+</ul>
+
+<p><strong>Raises</strong></p>
+
+<ul>
+  <li><em>ValueError</em>: If it is not nonblank plain text within the limit.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; read_text("  Hello ", limit=10, what="title", where="lesson demo")
+'Hello'
 </code></pre>
 
 <h2 id="read_focus">read_focus</h2>
@@ -1258,7 +1298,7 @@ True
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">files</span><span class="p">:</span> <span class="n">PackFiles</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PackView</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
@@ -1269,7 +1309,7 @@ True
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The instrument’s <code class="language-plaintext highlighter-rouge">views</code> entry, an object from a view name to a pack-relative picture path, or None.</li>
   <li><code class="language-plaintext highlighter-rouge">files</code> (<em>PackFiles</em>): The pack’s files. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -1287,7 +1327,7 @@ True
 <p><strong>Examples</strong></p>
 
 <pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; read_views(None, files=None, key="pack.v.va")
+&gt;&gt;&gt; read_views(None, files=None, where="pack.v.va")
 ()
 </code></pre>
 
@@ -1296,7 +1336,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_keyboards</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PackKeyboard</span><span class="p">,</span> <span class="p">...]</span>
 </code></pre></div></div>
 
@@ -1306,7 +1346,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The instrument’s <code class="language-plaintext highlighter-rouge">keyboards</code> entry, a list of objects, or None.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s qualified key, used in messages. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The instrument’s qualified key, used in messages. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -1323,9 +1363,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboards(None, key="pack.v.va")
+<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboards(None, where="pack.v.va")
 ()
-&gt;&gt;&gt; read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], key="pack.v.va")[0].naturals
+&gt;&gt;&gt; read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
 3
 </code></pre>
 
@@ -1334,7 +1374,7 @@ True
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_positions</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="p">...]</span>
 </code></pre></div></div>
 
@@ -1344,7 +1384,7 @@ True
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The instrument’s <code class="language-plaintext highlighter-rouge">positions</code> entry, a list of <code class="language-plaintext highlighter-rouge">{"name": ..., "half_steps": ...}</code>, or None when it has none.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The instrument’s qualified key, used in error messages. Keyword-only.</li>
 </ul>
 
 <p><strong>Returns</strong></p>
@@ -1361,9 +1401,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], key="pack.v.va")
+<pre><code class="language-pycon">&gt;&gt;&gt; read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
 ((2, '1st'), (3, '2nd'))
-&gt;&gt;&gt; read_positions(None, key="pack.v.va")
+&gt;&gt;&gt; read_positions(None, where="pack.v.va")
 ()
 </code></pre>
 
@@ -1537,8 +1577,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795357746" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795357746" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

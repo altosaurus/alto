@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795357746">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
   
 </head>
 <body>
@@ -996,7 +996,7 @@ disk is left out.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_controls</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">kinds</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="n">CONTROL_KINDS</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">]</span>
 </code></pre></div></div>
@@ -1007,7 +1007,7 @@ disk is left out.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">value</code> (<em>object</em>): The exercise’s <code class="language-plaintext highlighter-rouge">settings</code> entry: an object that may hold <code class="language-plaintext highlighter-rouge">sound</code> (the label of a switch that plays the pack’s own sound), <code class="language-plaintext highlighter-rouge">range</code> (a clef to draw a range selector on, or true for the keys of a keyboard exercise), <code class="language-plaintext highlighter-rouge">accidentals</code> and <code class="language-plaintext highlighter-rouge">octave</code> (true for a switch), <code class="language-plaintext highlighter-rouge">intervals</code> (true for a choice of intervals), <code class="language-plaintext highlighter-rouge">manuals</code> (true for a choice of keyboards), or None.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The exercise id, for diagnostics. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">where</code> (<em>str</em>): The exercise id, for diagnostics. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">kinds</code> (<em>tuple of str, default CONTROL_KINDS</em>): The settings this kind of exercise can have. Keyword-only.</li>
 </ul>
 
@@ -1025,11 +1025,11 @@ disk is left out.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_controls({"range": "alto", "octave": True}, key="pack.v.notes")
+<pre><code class="language-pycon">&gt;&gt;&gt; read_controls({"range": "alto", "octave": True}, where="pack.v.notes")
 {'range': 'alto', 'octave': True}
-&gt;&gt;&gt; read_controls({"range": True, "intervals": True}, key="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
+&gt;&gt;&gt; read_controls({"range": True, "intervals": True}, where="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
 {'range': True, 'intervals': True}
-&gt;&gt;&gt; read_controls(None, key="pack.v.notes")
+&gt;&gt;&gt; read_controls(None, where="pack.v.notes")
 {}
 </code></pre>
 
@@ -1398,8 +1398,8 @@ disk is left out.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795357746" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795357746" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
