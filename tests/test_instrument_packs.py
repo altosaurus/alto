@@ -230,15 +230,15 @@ def test_sound_info_rejects_bad_entries(value: object) -> None:
         A malformed sound_info entry.
     """
     with pytest.raises(ValueError, match="sound_info"):
-        read_sound_info(value, key="pack.viola.bowed-viola", pack_name="Viola Instrument Pack")
+        read_sound_info(value, where="pack.viola.bowed-viola", pack_name="Viola Instrument Pack")
 
 
 def test_sound_info_defaults_to_the_plugin_name() -> None:
     """Name the plugin as the source when a pack gives only some facts, and none when it gives no entry."""
-    info = read_sound_info({"performer": " A. Player "}, key="pack.viola.bowed-viola", pack_name="Viola Instrument Pack")
+    info = read_sound_info({"performer": " A. Player "}, where="pack.viola.bowed-viola", pack_name="Viola Instrument Pack")
     assert info is not None and info.source == "Viola Instrument Pack" and info.performer == "A. Player"
     assert info.summary == "Recordings supplied by an installed instrument pack." and info.source_url == ""
-    assert read_sound_info(None, key="pack.viola.bowed-viola", pack_name="Viola Instrument Pack") is None
+    assert read_sound_info(None, where="pack.viola.bowed-viola", pack_name="Viola Instrument Pack") is None
 
 
 @pytest.mark.parametrize(
@@ -269,7 +269,7 @@ def test_positions_reject_bad_entries(value: object) -> None:
         A malformed positions entry.
     """
     with pytest.raises(ValueError, match="osition"):
-        read_positions(value, key="pack.viola.bowed-viola")
+        read_positions(value, where="pack.viola.bowed-viola")
 
 
 def _edited_pack(tmp_path: Path, *, edit: Callable[[dict], None], pack_id: str = "edited-viola") -> Path:

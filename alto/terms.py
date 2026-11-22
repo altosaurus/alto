@@ -22,11 +22,13 @@ from alto.exercises.base import (
     FingerboardPosition,
     PicturePosition,
 )
-from alto.instrument_packs import PackInstrument
+from alto.instrument_packs import (
+    PackInstrument,
+    read_text,
+)
 from alto.lessons.packs import (
     inline,
     read_picture,
-    read_text,
 )
 
 TERM_LIMIT = 40  # glossary entries in one plugin

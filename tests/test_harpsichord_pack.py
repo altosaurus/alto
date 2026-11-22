@@ -105,11 +105,11 @@ def test_keys_exist_by_their_letter_names() -> None:
 
 def test_keyboard_style_reads_colors_and_numbers() -> None:
     """Read a keyboard look: colors as #rrggbb, a top and a bottom color for keys, and numbers within their ranges."""
-    style = read_keyboard_style({"white": ["#2a211c", "#120d0a"], "cap": "#eee3c8", "length": 4.5, "gap": 1}, key="pack.v.va")
+    style = read_keyboard_style({"white": ["#2a211c", "#120d0a"], "cap": "#eee3c8", "length": 4.5, "gap": 1}, where="pack.v.va")
     assert style is not None
     assert dict(style.colors) == {"white": ("#2a211c", "#120d0a"), "cap": "#eee3c8"}
     assert dict(style.numbers) == {"length": 4.5, "gap": 1.0}
-    assert read_keyboard_style(None, key="pack.v.va") is None
+    assert read_keyboard_style(None, where="pack.v.va") is None
 
 
 def test_harpsichord_pack_contents(app: QApplication) -> None:

@@ -156,7 +156,7 @@ How a plugin's keyboards look: the colors of the keys and case, and the proporti
 def read_keyboard_style(
     value: object,
     *,
-    key: str,
+    where: str,
 ) -> PackKeyboardStyle | None
 ```
 
@@ -165,7 +165,7 @@ Validate the optional look of an instrument's keyboards.
 **Parameters**
 
 - `value` (*object*): The instrument's ``keyboard_style`` entry, an object, or None.
-- `key` (*str*): The instrument's qualified key, used in messages. Keyword-only.
+- `where` (*str*): The instrument's qualified key, used in messages. Keyword-only.
 
 **Returns**
 
@@ -178,10 +178,10 @@ Validate the optional look of an instrument's keyboards.
 **Examples**
 
 ```pycon
->>> read_keyboard_style(None, key="pack.v.va") is None
+>>> read_keyboard_style(None, where="pack.v.va") is None
 True
 >>> # noinspection PyUnresolvedReferences
->>> read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, key="pack.v.va").colors[1]
+>>> read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, where="pack.v.va").colors[1]
 ('white', ('#2a211c', '#120d0a'))
 ```
 
@@ -370,7 +370,7 @@ Validate a marker or string endpoint against the image dimensions.
 def read_sound_info(
     value: object,
     *,
-    key: str,
+    where: str,
     pack_name: str,
 ) -> InstrumentInfo | None
 ```
@@ -380,7 +380,7 @@ Validate the optional facts a pack gives about where its recordings came from.
 **Parameters**
 
 - `value` (*object*): The instrument's ``sound_info`` entry, or None when it has none.
-- `key` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
+- `where` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
 - `pack_name` (*str*): The pack's display name, shown as the source when the entry gives none. Keyword-only.
 
 **Returns**
@@ -394,10 +394,10 @@ Validate the optional facts a pack gives about where its recordings came from.
 **Examples**
 
 ```pycon
->>> info = read_sound_info({"summary": "A viola."}, key="pack.v.va", pack_name="Viola")
+>>> info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
 >>> info.source if info else None
 'Viola'
->>> read_sound_info(None, key="pack.v.va", pack_name="Viola") is None
+>>> read_sound_info(None, where="pack.v.va", pack_name="Viola") is None
 True
 ```
 
@@ -427,6 +427,42 @@ Check that a manifest entry is nonblank plain text of a reasonable length.
 ```pycon
 >>> plain_text("Name the note.", limit=40), plain_text("<b>Name</b>", limit=40), plain_text(None, limit=40)
 (True, False, False)
+```
+
+## read_text
+
+```python
+def read_text(
+    value: object,
+    *,
+    limit: int,
+    what: str,
+    where: str,
+) -> str
+```
+
+Check one piece of plain text and return it trimmed.
+
+**Parameters**
+
+- `value` (*object*): The manifest entry.
+- `limit` (*int*): The most characters allowed. Keyword-only.
+- `what` (*str*): What the entry is, for the message. Keyword-only.
+- `where` (*str*): Which lesson or step it belongs to, for the message. Keyword-only.
+
+**Returns**
+
+- *str*: The entry without surrounding space.
+
+**Raises**
+
+- *ValueError*: If it is not nonblank plain text within the limit.
+
+**Examples**
+
+```pycon
+>>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
+'Hello'
 ```
 
 ## read_focus
@@ -553,7 +589,7 @@ def read_views(
     value: object,
     *,
     files: PackFiles,
-    key: str,
+    where: str,
 ) -> tuple[PackView, ...]
 ```
 
@@ -563,7 +599,7 @@ Validate the optional extra pictures of an instrument, such as a view of its bac
 
 - `value` (*object*): The instrument's ``views`` entry, an object from a view name to a pack-relative picture path, or None.
 - `files` (*PackFiles*): The pack's files. Keyword-only.
-- `key` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
+- `where` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
 
 **Returns**
 
@@ -577,7 +613,7 @@ Validate the optional extra pictures of an instrument, such as a view of its bac
 
 ```pycon
 >>> # noinspection PyTypeChecker
->>> read_views(None, files=None, key="pack.v.va")
+>>> read_views(None, files=None, where="pack.v.va")
 ()
 ```
 
@@ -587,7 +623,7 @@ Validate the optional extra pictures of an instrument, such as a view of its bac
 def read_keyboards(
     value: object,
     *,
-    key: str,
+    where: str,
 ) -> tuple[PackKeyboard, ...]
 ```
 
@@ -596,7 +632,7 @@ Validate the optional keyboards of an instrument, which Alto draws from their ra
 **Parameters**
 
 - `value` (*object*): The instrument's ``keyboards`` entry, a list of objects, or None.
-- `key` (*str*): The instrument's qualified key, used in messages. Keyword-only.
+- `where` (*str*): The instrument's qualified key, used in messages. Keyword-only.
 
 **Returns**
 
@@ -609,9 +645,9 @@ Validate the optional keyboards of an instrument, which Alto draws from their ra
 **Examples**
 
 ```pycon
->>> read_keyboards(None, key="pack.v.va")
+>>> read_keyboards(None, where="pack.v.va")
 ()
->>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], key="pack.v.va")[0].naturals
+>>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
 3
 ```
 
@@ -621,7 +657,7 @@ Validate the optional keyboards of an instrument, which Alto draws from their ra
 def read_positions(
     value: object,
     *,
-    key: str,
+    where: str,
 ) -> tuple[tuple[int, str], ...]
 ```
 
@@ -630,7 +666,7 @@ Validate the optional named positions along a string, which label the ruler besi
 **Parameters**
 
 - `value` (*object*): The instrument's ``positions`` entry, a list of ``{"name": ..., "half_steps": ...}``, or None when it has none.
-- `key` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
+- `where` (*str*): The instrument's qualified key, used in error messages. Keyword-only.
 
 **Returns**
 
@@ -643,9 +679,9 @@ Validate the optional named positions along a string, which label the ruler besi
 **Examples**
 
 ```pycon
->>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], key="pack.v.va")
+>>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
 ((2, '1st'), (3, '2nd'))
->>> read_positions(None, key="pack.v.va")
+>>> read_positions(None, where="pack.v.va")
 ()
 ```
 

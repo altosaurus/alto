@@ -29,9 +29,9 @@ from alto.instrument_packs import (
     identifier,
     image_point,
     pitch,
-    plain_text,
     read_focus,
     read_marker_size,
+    read_text,
 )
 from alto.lessons.base import (
     Lesson,
@@ -133,42 +133,6 @@ def read_lessons(
             raise ValueError(f"Duplicate lesson id {lesson.key}.")
         lessons.append(lesson)
     return tuple(lessons)
-
-
-def read_text(value: object, *, limit: int, what: str, where: str) -> str:
-    """
-    Check one piece of plain text and return it trimmed.
-
-    Parameters
-    ----------
-    value : object
-        The manifest entry.
-    limit : int
-        The most characters allowed. Keyword-only.
-    what : str
-        What the entry is, for the message. Keyword-only.
-    where : str
-        Which lesson or step it belongs to, for the message. Keyword-only.
-
-    Returns
-    -------
-    str
-        The entry without surrounding space.
-
-    Raises
-    ------
-    ValueError
-        If it is not nonblank plain text within the limit.
-
-    Examples
-    --------
-    >>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
-    'Hello'
-    """
-    if not plain_text(value, limit=limit):
-        raise ValueError(f"Give {where} a plain-text {what} of at most {limit} characters.")
-    assert isinstance(value, str)
-    return value.strip()
 
 
 def _read_lesson(
