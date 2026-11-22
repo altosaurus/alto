@@ -89,6 +89,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.anki_exporter](alto.ui.anki_exporter/) | Modeless Anki deck exporter using Alto's exercise controls and music engraving. |
 | [alto.ui.answer_bank](alto.ui.answer_bank/) | A responsive, scrollable grid for large banks of answer buttons. |
 | [alto.ui.app_settings](alto.ui.app_settings/) | The application-wide settings dialog. |
+| [alto.ui.background](alto.ui.background/) | Run slow work, such as a download, on another thread, and hear how it went on the window's thread. |
 | [alto.ui.backup_flow](alto.ui.backup_flow/) | Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced. |
 | [alto.ui.charts](alto.ui.charts/) | Small charts drawn with QPainter, in the application's theme colors. |
 | [alto.ui.circle](alto.ui.circle/) | The circle of fifths: twelve wedges, the major keys on the outside and their relative minors on the inside. |

@@ -16,7 +16,6 @@ Examples
 from __future__ import annotations
 
 import shutil
-import threading
 import time
 from typing import TYPE_CHECKING
 
@@ -51,6 +50,7 @@ from alto import (
     selfupdate,
     updates,
 )
+from alto.ui.background import run_in_background
 from alto.ui.package_update import PackageUpdateDialog
 from alto.ui.store import (
     int_value,
@@ -514,27 +514,39 @@ class ReleaseFetcher(QObject):
             How long to wait for GitHub. Keyword-only.
         """
         self._canceled = False
-        threading.Thread(target=self._work, args=(seconds,), daemon=True).start()
+        run_in_background(
+            lambda: updates.fetch_text(updates.RELEASES_API, seconds=seconds),
+            owner=self,
+            done=self._answered,
+            failed=lambda error: self._answered((0, str(error))),
+        )
 
     def cancel(self) -> None:
         """Stop caring about the answer; the thread ends by itself when GitHub answers or the time is up."""
         self._canceled = True
 
-    def _work(self, seconds: int) -> None:
+    def _answered(self, answer: tuple[int, str]) -> None:
         """
-        Ask, on the thread, and hand the answer back to the window's thread through the signal.
+        Pass GitHub's answer on, unless the question was canceled meanwhile.
 
         Parameters
         ----------
-        seconds : int
-            How long to wait for GitHub.
+        answer : tuple of (int, str)
+            The HTTP status (0 if GitHub was not reached) and the answer or the reason there was none.
+
+        Examples
+        --------
+        >>> fetcher = ReleaseFetcher()
+        >>> heard = []
+        >>> _ = fetcher.done.connect(lambda status, text: heard.append(status))
+        >>> fetcher._answered((200, "[]"))
+        >>> fetcher.cancel()
+        >>> fetcher._answered((200, "[]"))
+        >>> heard
+        [200]
         """
-        status, text = updates.fetch_text(updates.RELEASES_API, seconds=seconds)
         if not self._canceled:
-            try:
-                self.done.emit(status, text)
-            except RuntimeError:  # the window was closed, and with it this object, while the thread waited
-                return
+            self.done.emit(*answer)
 
 
 class DailyReleaseCheck(QTimer):

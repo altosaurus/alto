@@ -21,6 +21,58 @@ Changes apply as soon as they are made. Each style is a card that previews it.
 3
 ```
 
+## PreviewCard
+
+```python
+PreviewCard(
+    preview: QWidget,
+    *,
+    key: str,
+    title: str,
+    blurb: str,
+    height: int,
+    parent: QWidget | None = None,
+)
+```
+
+Bases: `QPushButton`
+
+A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.
+
+**Attributes**
+
+- `style_key` (*str*): The key of the style the card stands for.
+
+**Examples**
+
+```pycon
+>>> card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
+>>> card.style_key, card.isCheckable(), card.height()
+('demo', True, 120)
+```
+
+**Constructor**
+
+Build the card around its preview.
+
+**Parameters**
+
+- `preview` (*QWidget*): The picture of the style. Clicks pass through it to the card.
+- `key` (*str*): The key of the style. Keyword-only.
+- `title` (*str*): The style's name, shown in bold. Keyword-only.
+- `blurb` (*str*): A few words about the style, shown in small gray type. Keyword-only.
+- `height` (*int*): The card's height before zooming; every card is 232 wide. Keyword-only.
+- `parent` (*QWidget or None, default None*): The widget that owns the card. Keyword-only.
+
+**Constructor examples**
+
+```pycon
+>>> label = QLabel("♪")
+>>> card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
+>>> label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+True
+```
+
 ## StyleCard
 
 ```python
@@ -31,7 +83,7 @@ StyleCard(
 )
 ```
 
-Bases: `QPushButton`
+Bases: `PreviewCard`
 
 A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.
 
@@ -74,7 +126,7 @@ KeyboardCard(
 )
 ```
 
-Bases: `QPushButton`
+Bases: `PreviewCard`
 
 A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.
 

@@ -29,9 +29,10 @@ return app.exec()  # does not return until the last window closes
 The most important rule follows directly: **never block the event loop.** While your handler runs, the window cannot repaint
 or respond. A `time.sleep(2)` in a click handler freezes the whole program for two seconds. To do something later, use a
 timer (`QTimer.singleShot(ms, callback)`); to do something over time, use an animation (see
-[Animation]({{ '/guide/animation/' | relative_url }})). Alto does all its work in the one thread, and none of it is slow
-enough to need more. (If you ever add something heavy, read about `QThread` and `QRunnable` first. Touching a widget from
-another thread is not allowed.)
+[Animation]({{ '/guide/animation/' | relative_url }})). Alto does nearly all its work in the one thread. The exceptions are
+network work, such as checking for a new release or installing a plugin, which goes through `run_in_background` in
+`alto/ui/background.py`. It runs the slow part on another thread and calls you back on the window's thread with the result
+or the error. The slow part must not touch widgets: touching a widget from another thread is not allowed.
 
 There is one `QApplication`, and `QApplication.instance()` returns it (or `None` if none exists). Tests create one through a
 fixture, because widgets cannot exist without it.

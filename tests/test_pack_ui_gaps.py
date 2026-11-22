@@ -443,7 +443,7 @@ def test_the_keyboard_settings_step_and_slide(tmp_path: Path, app: QApplication)
 
 def test_the_release_worker_reports_each_outcome(tmp_path: Path, app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
     """
-    Report an installed release, an up-to-date plugin and a failure through the dialog's signal, from the thread that ran it.
+    Report an installed release, an up-to-date plugin and a failure to the dialog, from the thread that ran each one.
 
     Parameters
     ----------
@@ -454,11 +454,26 @@ def test_the_release_worker_reports_each_outcome(tmp_path: Path, app: QApplicati
     monkeypatch : pytest.MonkeyPatch
         Supply the outcomes.
     """
-    del app
     monkeypatch.setattr(plugins_dialog.QMessageBox, "question", lambda *args: plugins_dialog.QMessageBox.StandardButton.No)
     dialog = PluginsDialog(tmp_path / "plugins")
     heard: list[tuple[str | None, str]] = []
-    dialog._release_finished.connect(lambda result, error: heard.append((result, error)))  # noqa: SLF001
+    finish = dialog._finish_release  # noqa: SLF001
+
+    def record(result: str | None, error: str) -> None:  # noqa: PLR0917 (the dialog's own arguments)
+        """
+        Note what the dialog was told, then show it as the dialog would.
+
+        Parameters
+        ----------
+        result : str or None
+            The installed plugin, or None.
+        error : str
+            Why it failed, or empty.
+        """
+        heard.append((result, error))
+        finish(result, error)
+
+    monkeypatch.setattr(dialog, "_finish_release", record)
     outcomes: list[str | None | Exception] = [
         "Viola Instrument Pack (summer)",
         None,
@@ -494,6 +509,10 @@ def test_the_release_worker_reports_each_outcome(tmp_path: Path, app: QApplicati
         return outcome
 
     monkeypatch.setattr(plugins_dialog, "install_registered", answer)
-    for _ in range(3):
-        dialog._run_release("9", selected=None)  # noqa: SLF001
+    for count in range(1, 4):
+        dialog._start_release("9", selected=None)  # noqa: SLF001
+        deadline = time.monotonic() + 5
+        while len(heard) < count and time.monotonic() < deadline:
+            app.processEvents()
+            time.sleep(0.005)
     assert heard == [("Viola Instrument Pack (summer)", ""), (None, ""), (None, "No registered plugin has code 9.")]
