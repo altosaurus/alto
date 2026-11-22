@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795354161">
   
 </head>
 <body>
@@ -455,6 +455,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -685,9 +688,10 @@ loop.</p>
 <p>The most important rule follows directly: <strong>never block the event loop.</strong> While your handler runs, the window cannot repaint
 or respond. A <code class="language-plaintext highlighter-rouge">time.sleep(2)</code> in a click handler freezes the whole program for two seconds. To do something later, use a
 timer (<code class="language-plaintext highlighter-rouge">QTimer.singleShot(ms, callback)</code>); to do something over time, use an animation (see
-<a href="/alto/dev/guide/animation/">Animation</a>). Alto does all its work in the one thread, and none of it is slow
-enough to need more. (If you ever add something heavy, read about <code class="language-plaintext highlighter-rouge">QThread</code> and <code class="language-plaintext highlighter-rouge">QRunnable</code> first. Touching a widget from
-another thread is not allowed.)</p>
+<a href="/alto/dev/guide/animation/">Animation</a>). Alto does nearly all its work in the one thread. The exceptions are
+network work, such as checking for a new release or installing a plugin, which goes through <code class="language-plaintext highlighter-rouge">run_in_background</code> in
+<code class="language-plaintext highlighter-rouge">alto/ui/background.py</code>. It runs the slow part on another thread and calls you back on the window’s thread with the result
+or the error. The slow part must not touch widgets: touching a widget from another thread is not allowed.</p>
 
 <p>There is one <code class="language-plaintext highlighter-rouge">QApplication</code>, and <code class="language-plaintext highlighter-rouge">QApplication.instance()</code> returns it (or <code class="language-plaintext highlighter-rouge">None</code> if none exists). Tests create one through a
 fixture, because widgets cannot exist without it.</p>
@@ -962,8 +966,8 @@ is what signals and slots are, and MVC’s origins are described there.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795354161" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795354161" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

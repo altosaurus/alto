@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795354161">
   
 </head>
 <body>
@@ -453,6 +453,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/">app_settings</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.background/">background</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
@@ -907,6 +910,10 @@
       <td>The application-wide settings dialog.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.background/">alto.ui.background</a></td>
+      <td>Run slow work, such as a download, on another thread, and hear how it went on the window’s thread.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.backup_flow/">alto.ui.backup_flow</a></td>
       <td>Exporting a backup and importing one: the file dialogs, the questions asked, and the safety copy made before anything is replaced.</td>
     </tr>
@@ -1251,8 +1258,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795354161" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795354161" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

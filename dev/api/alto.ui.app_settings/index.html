@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795352584">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795354161">
   
 </head>
 <body>
@@ -455,6 +455,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.app_settings/" aria-current="page">app_settings</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.background/">background</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.backup_flow/">backup_flow</a></li>
                 
                 
@@ -677,6 +680,59 @@
 3
 </code></pre>
 
+<h2 id="previewcard">PreviewCard</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PreviewCard</span><span class="p">(</span>
+    <span class="n">preview</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">blurb</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
+
+<p>A selectable tile that previews a style: a picture drawn in it, with its name and a few words about it underneath.</p>
+
+<p><strong>Attributes</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">style_key</code> (<em>str</em>): The key of the style the card stands for.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
+&gt;&gt;&gt; card.style_key, card.isCheckable(), card.height()
+('demo', True, 120)
+</code></pre>
+
+<p><strong>Constructor</strong></p>
+
+<p>Build the card around its preview.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">preview</code> (<em>QWidget</em>): The picture of the style. Clicks pass through it to the card.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The key of the style. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">title</code> (<em>str</em>): The style’s name, shown in bold. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">blurb</code> (<em>str</em>): A few words about the style, shown in small gray type. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">height</code> (<em>int</em>): The card’s height before zooming; every card is 232 wide. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the card. Keyword-only.</li>
+</ul>
+
+<p><strong>Constructor examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; label = QLabel("♪")
+&gt;&gt;&gt; card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
+&gt;&gt;&gt; label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+True
+</code></pre>
+
 <h2 id="stylecard">StyleCard</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StyleCard</span><span class="p">(</span>
@@ -686,7 +742,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
 <p>A selectable tile that previews a notation style: a short phrase on a staff, drawn in that style.</p>
 
@@ -730,7 +786,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">PreviewCard</code></p>
 
 <p>A selectable tile that previews a keyboard style: a short stretch of keys drawn in that style.</p>
 
@@ -1165,7 +1221,7 @@ False
           
           <nav class="page-nav" aria-label="Previous and next pages">
             <a class="prev" href="/alto/dev/api/alto.ui.answer_bank/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.answer_bank</span></a>
-            <a class="next" href="/alto/dev/api/alto.ui.backup_flow/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.backup_flow<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
+            <a class="next" href="/alto/dev/api/alto.ui.background/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.background<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
         </article>
@@ -1227,8 +1283,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795352584" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795352584" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795354161" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795354161" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
