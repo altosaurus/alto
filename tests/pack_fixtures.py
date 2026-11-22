@@ -90,6 +90,37 @@ def tone(pitch: str, *, seconds: float) -> bytes:
     return struct.pack(f"<{count}h", *samples)
 
 
+def staging(folder: Path) -> Path:
+    """
+    Give this process a folder beside a pack's to write a file in before moving it into the pack.
+
+    Another test process may be zipping or copying the pack at the same moment. A file is moved into the pack only once it is
+    written, in one step, so nothing ever finds one half written there. The folder is beside the pack, on the same disk, so the
+    move is a rename.
+
+    Parameters
+    ----------
+    folder : Path
+        An example pack's folder.
+
+    Returns
+    -------
+    Path
+        A folder of this process's own, next to the pack's.
+
+    Examples
+    --------
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as tmp:
+    ...     place = staging(Path(tmp) / "viola")
+    ...     place.parent == Path(tmp) and place.is_dir()
+    True
+    """
+    place = folder.parent / f".{folder.name}.{os.getpid()}.part"
+    place.mkdir(parents=True, exist_ok=True)
+    return place
+
+
 def ensure_sounds(folder: Path, *, seconds: float) -> None:
     """
     Write the recording of every pitch the folder's manifest names, unless it is there already.
@@ -117,7 +148,7 @@ def ensure_sounds(folder: Path, *, seconds: float) -> None:
             if target.is_file():
                 continue
             target.parent.mkdir(parents=True, exist_ok=True)
-            partial = target.with_name(f"{target.name}.{os.getpid()}.part")
+            partial = staging(folder) / target.name
             with wave.open(str(partial), "wb") as sound:
                 sound.setnchannels(1)
                 sound.setsampwidth(2)
@@ -168,7 +199,7 @@ def ensure_pictures(folder: Path) -> None:
             painter.setPen(pen)
             painter.drawPolygon(band)
             painter.end()
-        partial = target.with_name(f"{os.getpid()}.part{target.suffix}")
+        partial = staging(folder) / target.name
         assert picture.save(str(partial)), relative
         partial.replace(target)
 
@@ -201,6 +232,6 @@ def ensure_icons(folder: Path) -> None:
         if target.is_file():
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
-        partial = target.with_name(f"{os.getpid()}.part{target.suffix}")
+        partial = staging(folder) / target.name
         partial.write_text(ICON)
         partial.replace(target)

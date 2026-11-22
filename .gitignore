@@ -35,3 +35,4 @@ docs/assets/img/plugin-harpsichord-*.png
 tests/packs/*/sounds/
 tests/packs/*/images/
 tests/packs/*/icons/
+tests/packs/.*.part/

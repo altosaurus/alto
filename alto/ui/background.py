@@ -17,12 +17,14 @@ Examples
 from __future__ import annotations
 
 import threading
+import weakref
 from collections.abc import Callable
 from typing import (
     TypeVar,
     cast,
 )
 
+import shiboken6
 from PySide6.QtCore import (
     QObject,
     Signal,
@@ -31,12 +33,17 @@ from PySide6.QtCore import (
 T = TypeVar("T")
 
 
+_relays: set[_Relay] = set()  # relays whose work is still running, kept here so that nothing deletes them
+
+
 class _Relay(QObject):
     """
     Carry the outcome of background work back to the thread the relay was made on, where its callbacks run.
 
-    It is owned by the object the work is for, so if that object is deleted first (a window closed while a download was still
-    going), the outcome is dropped instead of reaching a widget that no longer exists.
+    The worker emits on the relay, so nothing else may delete the relay while the work runs: it has no parent, and it is kept
+    in `_relays` until its outcome arrives. Emitting from another thread on an object that is being deleted can crash the
+    program. Whether the object the work is for still exists (a window closed while a download was still going) is checked
+    when the outcome arrives, on that object's thread, and if it is gone the outcome is dropped.
 
     Attributes
     ----------
@@ -51,6 +58,12 @@ class _Relay(QObject):
     >>> owner = QObject()
     >>> relay = _Relay(owner, done=heard.append, failed=heard.append)
     >>> relay._finish("ok")
+    >>> heard
+    ['ok']
+    >>> gone = QObject()
+    >>> late = _Relay(gone, done=heard.append, failed=heard.append)
+    >>> shiboken6.delete(gone)  # the window closed while the work ran
+    >>> late._finish("too late")
     >>> heard
     ['ok']
     """
@@ -71,7 +84,7 @@ class _Relay(QObject):
         Parameters
         ----------
         owner : QObject
-            The object the work is for. The relay is its child, on its thread.
+            The object the work is for. The relay is made on its thread but does not belong to it.
         done : callable
             Called with what the work returned. Keyword-only.
         failed : callable
@@ -80,14 +93,33 @@ class _Relay(QObject):
         Examples
         --------
         >>> owner = QObject()
-        >>> _Relay(owner, done=print, failed=print).parent() is owner
+        >>> _Relay(owner, done=print, failed=print).parent() is None
         True
         """
-        super().__init__(owner)
+        super().__init__()
+        self._owner = weakref.ref(owner)  # not kept alive by the relay
         self._done = done
         self._failed = failed
         self.finished.connect(self._finish)
         self.crashed.connect(self._crash)
+
+    def _owner_exists(self) -> bool:
+        """
+        Say whether the object the work is for still exists.
+
+        Returns
+        -------
+        bool
+            False once Python or Qt has deleted it.
+
+        Examples
+        --------
+        >>> owner = QObject()
+        >>> _Relay(owner, done=print, failed=print)._owner_exists()
+        True
+        """
+        owner = self._owner()
+        return owner is not None and shiboken6.isValid(owner)
 
     def _finish(self, result: object) -> None:
         """
@@ -106,8 +138,10 @@ class _Relay(QObject):
         >>> heard
         [3]
         """
+        _relays.discard(self)
         self.deleteLater()
-        self._done(result)
+        if self._owner_exists():
+            self._done(result)
 
     def _crash(self, error: Exception) -> None:
         """
@@ -126,8 +160,10 @@ class _Relay(QObject):
         >>> heard
         [ValueError('no')]
         """
+        _relays.discard(self)
         self.deleteLater()
-        self._failed(error)
+        if self._owner_exists():
+            self._failed(error)
 
 
 def run_in_background(
@@ -174,6 +210,7 @@ def run_in_background(
     ['offline']
     """
     relay = _Relay(owner, done=lambda result: done(cast("T", result)), failed=failed)  # the result comes back as it went
+    _relays.add(relay)  # kept until its outcome arrives, so the worker never emits on a deleted object
 
     def run() -> None:
         """
@@ -188,10 +225,7 @@ def run_in_background(
         except Exception as error:  # every failure is reported, not lost on the thread
             outcome = (relay.crashed, error)
         signal, value = outcome
-        try:
-            signal.emit(value)
-        except RuntimeError:  # the owner, and with it the relay, was deleted while the work ran
-            return
+        signal.emit(value)
 
     thread = threading.Thread(target=run, daemon=True)
     thread.start()

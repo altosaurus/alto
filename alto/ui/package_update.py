@@ -50,6 +50,39 @@ TITLE = "Update Alto"
 READY = "The update is ready. Alto will close, install it and open again when you press OK."
 
 
+class _Channel(QObject):
+    """
+    The signals a preparer's thread emits on.
+
+    It belongs to the thread, not to a window, so nothing deletes it while the thread still uses it. Emitting from another thread
+    on an object that is being deleted can crash the program, so the thread never emits on the preparer itself. The channel's
+    signals are connected to the preparer's, and Qt drops those connections if the preparer is deleted (its window closed while
+    the download was still going).
+
+    Attributes
+    ----------
+    status : Signal
+        What is being done.
+    progress : Signal
+        The bytes received so far, and the total.
+    done : Signal
+        The end: 0 or 1, and the reason.
+
+    Examples
+    --------
+    >>> heard = []
+    >>> channel = _Channel()
+    >>> _ = channel.status.connect(heard.append)
+    >>> _ = channel.status.emit("Checking…")
+    >>> heard
+    ['Checking…']
+    """
+
+    status = Signal(str)
+    progress = Signal(int, int)
+    done = Signal(int, str)
+
+
 class UpdatePreparer(QObject):
     """
     Download and check an update on another thread, and report how it goes through signals.
@@ -88,6 +121,10 @@ class UpdatePreparer(QObject):
         super().__init__(parent)
         self._canceled = False
         self.prepared: Prepared | None = None
+        self._channel = _Channel()  # what the thread emits on; it passes the signals on to this object while it exists
+        self._channel.status.connect(self.status)
+        self._channel.progress.connect(self.progress)
+        self._channel.done.connect(self.done)
 
     def start(
         self,
@@ -112,7 +149,7 @@ class UpdatePreparer(QObject):
             The public keys (base64) a signature may be made with.
         """
         self._canceled = False
-        arguments = {"release": release, "target": target, "work": work, "keys": keys}
+        arguments = {"release": release, "target": target, "work": work, "keys": keys, "channel": self._channel}
         threading.Thread(target=self._work, kwargs=arguments, daemon=True).start()
 
     def cancel(self) -> None:
@@ -140,9 +177,10 @@ class UpdatePreparer(QObject):
         code: int,
         *,
         message: str,
+        channel: _Channel | None = None,
     ) -> None:
         """
-        Announce the end, unless the person canceled or the window is gone.
+        Announce the end, unless the person canceled. If the window is gone, nothing hears it.
 
         Parameters
         ----------
@@ -150,13 +188,20 @@ class UpdatePreparer(QObject):
             0 for ready, 1 for failed.
         message : str
             The reason, if it failed. Keyword-only.
+        channel : _Channel or None, default None
+            What to emit on: the thread's channel, or this preparer's own. Keyword-only.
+
+        Examples
+        --------
+        >>> preparer = UpdatePreparer()
+        >>> ends = []
+        >>> _ = preparer.done.connect(lambda code, message: ends.append(code))
+        >>> preparer._say(1, message="offline")
+        >>> ends
+        [1]
         """
-        if self._canceled:
-            return
-        try:
-            self.done.emit(code, message)
-        except RuntimeError:  # the window was closed, and with it this object, while the thread worked
-            return
+        if not self._canceled:
+            (channel or self._channel).done.emit(code, message)
 
     def _work(
         self,
@@ -165,6 +210,7 @@ class UpdatePreparer(QObject):
         target: Target,
         work: Path,
         keys: tuple[str, ...],
+        channel: _Channel,
     ) -> None:
         """
         Do the work, on the thread.
@@ -179,7 +225,39 @@ class UpdatePreparer(QObject):
             An empty folder to work in. Keyword-only.
         keys : tuple of str
             The public keys a signature may be made with. Keyword-only.
+        channel : _Channel
+            What to emit on. Keyword-only.
         """
+
+        def status(text: str) -> None:
+            """
+            Pass on what is being done, unless the person canceled.
+
+            Parameters
+            ----------
+            text : str
+                What is being done.
+            """
+            if not self._canceled:
+                channel.status.emit(text)
+
+        def progress(  # noqa: PLR0917  (a progress callback, which is called with two numbers)
+            done: int,
+            total: int,
+        ) -> None:
+            """
+            Pass on how much has been downloaded, unless the person canceled.
+
+            Parameters
+            ----------
+            done : int
+                The bytes received so far.
+            total : int
+                The total, or 0 if it is not known.
+            """
+            if not self._canceled:
+                channel.progress.emit(done, total)
+
         try:
             self.prepared = selfupdate.prepare_update(
                 release,
@@ -188,58 +266,22 @@ class UpdatePreparer(QObject):
                 keys=keys,
                 machine=platform.machine(),
                 base=updates.DOWNLOAD_BASE,
-                status=self._emit_status,
-                progress=self._emit_progress,
+                status=status,
+                progress=progress,
                 canceled=self.is_canceled,
             )
         except UpdateCanceled:
             shutil.rmtree(work, ignore_errors=True)  # the window removes it too, but this thread may still have been writing
         except UpdateError as error:
             shutil.rmtree(work, ignore_errors=True)
-            self._say(1, message=str(error))
+            self._say(1, message=str(error), channel=channel)
         except Exception as error:  # noqa: BLE001  (anything at all must end up in the window, not in a thread that nobody sees)
             shutil.rmtree(work, ignore_errors=True)
-            self._say(1, message=f"The update could not be prepared: {error}")
+            self._say(1, message=f"The update could not be prepared: {error}", channel=channel)
         else:
             if self._canceled:
                 shutil.rmtree(work, ignore_errors=True)
-            self._say(0, message="")
-
-    def _emit_status(self, text: str) -> None:
-        """
-        Pass on what is being done.
-
-        Parameters
-        ----------
-        text : str
-            What is being done.
-        """
-        if not self._canceled:
-            try:
-                self.status.emit(text)
-            except RuntimeError:
-                return
-
-    def _emit_progress(  # noqa: PLR0917  (a progress callback, which is called with two numbers)
-        self,
-        done: int,
-        total: int,
-    ) -> None:
-        """
-        Pass on how much has been downloaded.
-
-        Parameters
-        ----------
-        done : int
-            The bytes received so far.
-        total : int
-            The total, or 0 if it is not known.
-        """
-        if not self._canceled:
-            try:
-                self.progress.emit(done, total)
-            except RuntimeError:
-                return
+            self._say(0, message="", channel=channel)
 
 
 class PackageUpdateDialog(QDialog):

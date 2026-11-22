@@ -335,3 +335,60 @@ def test_the_preparer_reports_through_signals_and_stays_quiet_when_canceled(wind
     quiet._say(0, message="")
     quiet._say(1, message="x")
     assert quiet_ends == [] and quiet.is_canceled()
+
+
+def test_an_unexpected_error_while_preparing_reaches_the_window_and_the_work_is_removed(
+    app: QApplication,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that an error nobody planned for still ends the update with its reason, instead of being lost on the thread.
+
+    Parameters
+    ----------
+    app : QApplication
+        Delivers the thread's signal.
+    tmp_path : Path
+        A new folder.
+    monkeypatch : pytest.MonkeyPatch
+        Makes preparing the update fail.
+    """
+
+    def broken(*args: object, **kwargs: object) -> None:
+        """
+        Fail the way no update error does.
+
+        Parameters
+        ----------
+        *args : object
+            Ignored.
+        **kwargs : object
+            Ignored.
+
+        Raises
+        ------
+        RuntimeError
+            Always.
+        """
+        del args, kwargs
+        raise RuntimeError("disk on fire")
+
+    monkeypatch.setattr(selfupdate, "prepare_update", broken)
+    preparer = UpdatePreparer()
+    ends: list[tuple[int, str]] = []
+    preparer.done.connect(lambda code, message: ends.append((code, message)))
+    work = tmp_path / "work"
+    work.mkdir()
+    preparer.start(
+        release=Release("1.0.0", tag="v1.0.0", url="https://example.org/release"),
+        target=Target("linux", folder=tmp_path, prefix=tmp_path),
+        work=work,
+        keys=(),
+    )
+    deadline = time.monotonic() + 5
+    while not ends and time.monotonic() < deadline:  # the thread's answer arrives through the event loop
+        app.processEvents()
+        time.sleep(0.005)
+    assert ends == [(1, "The update could not be prepared: disk on fire")]
+    assert not work.exists()
