@@ -77,6 +77,7 @@ from alto.ui.circle import (
 )
 from alto.ui.pictures import ClefPictures
 from alto.ui.scale_explorer import ScaleExplorer
+from alto.ui.zoom import px
 
 if TYPE_CHECKING:
     from alto.exercises.base import Exercise
@@ -129,7 +130,7 @@ class ExplorableCircle(FifthsCircle):
         self.interactive = True
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.setMinimumSize(280, 280)
+        self.setMinimumSize(px(280), px(280))
         self.clear()
 
     def set_interactive(self, interactive: bool) -> None:
@@ -470,7 +471,7 @@ class ReferencePanel(QWidget):
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scroll.setMinimumHeight(150)
+        scroll.setMinimumHeight(px(150))
         scroll.setWidget(self.explanation)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(

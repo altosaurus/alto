@@ -38,6 +38,7 @@ from alto.exercises.packs import (
     installed_plugins,
 )
 from alto.plugin_registry import install_registered
+from alto.ui.zoom import px
 
 ROW_HEIGHT = 32  # pixels: one line of text with the list style's padding
 
@@ -103,7 +104,7 @@ class PluginsDialog(QDialog):
         self._release_finished.connect(self._finish_release)
         self.setWindowTitle("Plugins")
         self.setModal(True)
-        self.setMinimumSize(560, 340)
+        self.setMinimumSize(px(560), px(340))
 
         layout = QVBoxLayout(self)
         layout.setSpacing(10)
@@ -203,7 +204,7 @@ class PluginsDialog(QDialog):
             item = QListWidgetItem(plugin.title)
             item.setData(Qt.ItemDataRole.UserRole, plugin)
             item.setToolTip(str(plugin.path))
-            item.setSizeHint(QSize(0, ROW_HEIGHT))  # room for the name, the same for every row
+            item.setSizeHint(QSize(0, px(ROW_HEIGHT)))  # room for the name, the same for every row
             self.list.addItem(item)
             if keep is not None and plugin.path == keep.path:
                 self.list.setCurrentItem(item)

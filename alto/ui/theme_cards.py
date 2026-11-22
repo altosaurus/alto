@@ -37,6 +37,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.ui import zoom
 from alto.ui.theme import (
     DEFAULT_LIGHT_WINDOW,
     USER_PREFIX,
@@ -46,6 +47,7 @@ from alto.ui.theme import (
     preview_colors,
     variant_key,
 )
+from alto.ui.zoom import css, px
 
 THUMB_W, THUMB_H = 116, 78  # the size of a clickable picture
 SLANT = 10  # how far the cut through the System picture leans, in pixels
@@ -155,6 +157,7 @@ class ThemeThumb(QPushButton):
         self.theme_key = key
         self.colors = colors
         self.other = other
+        scale *= zoom.factor()  # the thumbnail is as much larger as the zoom says
         self.scale_by = scale
         self.setCheckable(True)
         self.setFixedSize(round(THUMB_W * scale), round(THUMB_H * scale))
@@ -332,7 +335,7 @@ class ThemeCard(QFrame):
         lay.setSpacing(8)
         name = QLabel(f"<b>{label}</b>")
         about = QLabel(note)
-        about.setStyleSheet("color: gray; font-size: 9pt;")
+        about.setStyleSheet(css("color: gray; font-size: 9pt;"))
         lay.addWidget(name)
         lay.addWidget(about)
         self.thumbs: dict[str, ThemeThumb] = {}
@@ -353,12 +356,12 @@ class ThemeCard(QFrame):
             if custom is not None and version != "system":  # a theme's own colors, as squares, and written out as the page did
                 words.addLayout(self._chips(custom))
                 values = QLabel(f"window {custom.window}   accent {custom.accent}   ink {custom.ink}")
-                values.setStyleSheet("color: gray; font-family: monospace; font-size: 9pt;")
+                values.setStyleSheet(css("color: gray; font-family: monospace; font-size: 9pt;"))
                 values.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
                 words.addWidget(values)
             else:  # nothing of its own to show: say what the picture is
                 what = QLabel(TIPS[version])
-                what.setStyleSheet("color: gray; font-size: 9pt;")
+                what.setStyleSheet(css("color: gray; font-size: 9pt;"))
                 words.addWidget(what)
             words.addStretch(1)
             row = QHBoxLayout()
@@ -400,10 +403,10 @@ class ThemeCard(QFrame):
         row.setSpacing(3)
         for part in ("window", "panel", "line", "muted", "ink", "accent", "track"):
             chip = QFrame()
-            chip.setFixedSize(18, 18)
+            chip.setFixedSize(px(18), px(18))
             color = getattr(theme, part)
             chip.setToolTip(f"{part} {color}")
-            chip.setStyleSheet(f"background: {color}; border: 1px solid rgba(128, 128, 128, 90); border-radius: 4px;")
+            chip.setStyleSheet(css(f"background: {color}; border: 1px solid rgba(128, 128, 128, 90); border-radius: 4px;"))
             row.addWidget(chip)
         row.addStretch(1)
         return row
@@ -430,4 +433,4 @@ class ThemeCard(QFrame):
             font = self._captions[thumb_key].font()
             font.setBold(thumb_key == key)
             self._captions[thumb_key].setFont(font)
-        self.setStyleSheet("ThemeCard { border: 2px solid palette(highlight); border-radius: 8px; }" if here else "")
+        self.setStyleSheet(css("ThemeCard { border: 2px solid palette(highlight); border-radius: 8px; }" if here else ""))

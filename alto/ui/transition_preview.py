@@ -49,6 +49,7 @@ from alto.ui.transitions import (
     transition_named,
 )
 from alto.ui.widgets import SegmentedControl
+from alto.ui.zoom import px
 
 PAUSE_MS = 600  # how long the exercises rest before the preview switches to the lessons
 COLUMNS = 3  # how many cards are in a row on the preview's page
@@ -87,7 +88,6 @@ def make_sides() -> tuple[list[TileCard], list[TileCard]]:
                 category=category,
                 name=name,
                 about=about,
-                status="Example",
             ),
         )
     return exercises, lessons
@@ -231,7 +231,7 @@ class TransitionPreview(QFrame):
         rule.setFrameShape(QFrame.Shape.HLine)
         rule.setFrameShadow(QFrame.Shadow.Sunken)
         self.stage = Stage()
-        self.stage.setMinimumSize(280, 220)
+        self.stage.setMinimumSize(px(280), px(220))
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             0,

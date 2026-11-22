@@ -37,6 +37,10 @@ from PySide6.QtCore import (
     Signal,
 )
 from PySide6.QtGui import (
+    QColor,
+    QPainter,
+    QPainterPath,
+    QPaintEvent,
     QPalette,
     QResizeEvent,
     QShowEvent,
@@ -71,7 +75,10 @@ from alto.ui.store import (
     store,
     text_value,
 )
-from alto.ui.style import navigation_heading_style
+from alto.ui.style import (
+    RADIUS,
+    navigation_heading_style,
+)
 from alto.ui.transitions import (
     SIDEBAR_SLIDE_MS,
     Sprite,
@@ -80,6 +87,7 @@ from alto.ui.transitions import (
     transition_named,
 )
 from alto.ui.widgets import PracticeCounts, SegmentedControl
+from alto.ui.zoom import css, px
 
 # Icon for each exercise, keyed by class name.
 EXERCISE_ICONS = {
@@ -162,7 +170,7 @@ def category_tree(name: str) -> QTreeWidget:
     tree = QTreeWidget()
     tree.setObjectName("tileFilterTree")
     tree.setAccessibleName(name)
-    tree.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
+    tree.setIconSize(QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)))
     tree.setHeaderHidden(True)
     tree.setColumnCount(2)
     tree.setTreePosition(1)
@@ -177,9 +185,102 @@ def category_tree(name: str) -> QTreeWidget:
     return tree
 
 
+class _ProgressBar(QWidget):
+    """
+    A flat strip along the bottom edge of a card that fills from the left, in the palette's accent over a faint track.
+
+    The strip is cut to the card's rounded bottom corners, so it lies flush with the edge instead of floating above it.
+
+    Attributes
+    ----------
+    fraction : float
+        How much of the strip is filled, from 0 to 1.
+
+    Examples
+    --------
+    >>> bar = _ProgressBar(fraction=0.5, card_height=185, radius=9)
+    >>> bar.fraction
+    0.5
+    """
+
+    def __init__(
+        self,
+        *,
+        fraction: float,
+        card_height: int,
+        radius: int,
+        parent: QWidget | None = None,
+    ) -> None:
+        """
+        Build a strip.
+
+        Parameters
+        ----------
+        fraction : float
+            How much of the strip is filled, from 0 to 1. Keyword-only.
+        card_height : int
+            The height of the card inside its outline, in pixels; the strip is cut to the card's outline over this height.
+            Keyword-only.
+        radius : int
+            The radius of the card's corners inside its outline, in pixels. Keyword-only.
+        parent : QWidget or None, default None
+            The widget that owns the strip. Keyword-only.
+
+        Examples
+        --------
+        >>> _ProgressBar(fraction=0.25, card_height=185, radius=9).fraction
+        0.25
+        """
+        super().__init__(parent)
+        self.fraction = min(max(fraction, 0.0), 1.0)
+        self.card_height = card_height
+        self.radius = radius
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+
+    def paintEvent(self, event: QPaintEvent) -> None:
+        """
+        Draw the track and the filled part, cut to the card's bottom corners.
+
+        Parameters
+        ----------
+        event : QPaintEvent
+            The paint request from Qt; the whole strip is always redrawn.
+
+        Examples
+        --------
+        >>> _ProgressBar(fraction=0.5, card_height=185, radius=9).grab().isNull()
+        False
+        """
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setPen(Qt.PenStyle.NoPen)
+        area = QRectF(self.rect())
+        card = QPainterPath()
+        card.addRoundedRect(
+            QRectF(0.0, area.height() - self.card_height, area.width(), self.card_height),
+            self.radius,
+            self.radius,
+        )
+        painter.setClipPath(card)
+        palette = self.palette()
+        track = QColor(palette.color(QPalette.ColorRole.WindowText))
+        track.setAlpha(45)
+        painter.fillRect(area, track)
+        if self.fraction > 0:
+            painter.fillRect(
+                QRectF(0.0, 0.0, area.width() * self.fraction, area.height()),
+                palette.color(QPalette.ColorRole.Highlight),
+            )
+        painter.end()
+
+
 class TileCard(QPushButton):
     """
-    A big button: an icon on top, then a category, a name and a one-line description, and optionally a line of status.
+    A big button: an icon on top, then a category, a name and a short description, and optionally a lesson's progress.
+
+    Progress takes no room in the layout: a strip along the bottom edge shows it, and "Step N/M" sits in the top-right
+    corner, both only once the lesson has been begun. A card with or without progress therefore has the same size and the
+    same icon.
 
     Examples
     --------
@@ -197,7 +298,7 @@ class TileCard(QPushButton):
         category: str,
         name: str,
         about: str,
-        status: str = "",
+        progress: tuple[int, int] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -213,24 +314,27 @@ class TileCard(QPushButton):
             The name. Keyword-only.
         about : str
             A line of description, which is also the tooltip. Keyword-only.
-        status : str, default ""
-            A line under the description, such as how far through a lesson you are; nothing if empty. Keyword-only.
+        progress : tuple of int or None, default None
+            The step you are on, counting from 0, and how many steps there are. The bar and "Step N/M" appear only once the first
+            step has been passed; nothing is drawn if None or at step 0. Keyword-only.
         parent : QWidget or None, default None
             The widget that owns the card. Keyword-only.
 
         Examples
         --------
-        >>> TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", status="Step 2 of 8").toolTip()
-        'Get help.'
+        >>> card = TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", progress=(1, 8))
+        >>> card.toolTip(), card.accessibleDescription()
+        ('Get help.', 'Get help. Continue at step 2 of 8.')
         """
         super().__init__(parent)
         self.category = category
         self.title = name
         self.icon_svg = icon
-        self.setFixedSize(CARD_W, CARD_H)
+        self.setFixedSize(px(CARD_W), px(CARD_H))
         self.setToolTip(about)
         self.setAccessibleName(f"{name}, {category}")  # the card's text is in labels that a screen reader would skip
-        self.setAccessibleDescription(f"{about} {status}".strip())
+        where = f" Continue at step {progress[0] + 1} of {progress[1]}." if progress and progress[0] else ""
+        self.setAccessibleDescription(f"{about}{where}".strip())
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             12,
@@ -240,24 +344,37 @@ class TileCard(QPushButton):
         )
         lay.setSpacing(6)
         self.picture = QLabel(alignment=Qt.AlignmentFlag.AlignCenter)
+        self.picture.setMinimumHeight(px(56))  # the icon is never squeezed by the text under it
         self._refresh_icon()
         heading = QLabel(category.upper(), alignment=Qt.AlignmentFlag.AlignCenter)
-        heading.setStyleSheet("color: gray; font-size: 8pt; letter-spacing: 1px;")
+        heading.setStyleSheet(css("color: gray; font-size: 8pt; letter-spacing: 1px;"))
         title = QLabel(f"<b>{name}</b>", alignment=Qt.AlignmentFlag.AlignCenter)
         title.setWordWrap(True)  # a long name, such as Key Signature Identification, goes on two lines
         text = QLabel(about, alignment=Qt.AlignmentFlag.AlignCenter)
         text.setWordWrap(True)
-        text.setStyleSheet("color: gray; font-size: 9pt;")
+        text.setStyleSheet(css("color: gray; font-size: 9pt;"))
         labels = [self.picture, heading, title, text]
         lay.addWidget(self.picture)
         lay.addWidget(heading)
         lay.addWidget(title)
         lay.addWidget(text, 1)
-        if status:
-            line = QLabel(status, alignment=Qt.AlignmentFlag.AlignCenter)
-            line.setStyleSheet("font-size: 9pt; font-weight: bold;")
-            lay.addWidget(line)
-            labels.append(line)
+        self.progress_bar: _ProgressBar | None = None
+        self.step_label: QLabel | None = None
+        if progress and progress[0]:
+            step, steps = progress
+            edge, height = px(1), px(5)  # inside the one-pixel outline, along the bottom of the card
+            self.progress_bar = _ProgressBar(
+                fraction=step / steps,
+                card_height=px(CARD_H) - 2 * edge,
+                radius=px(RADIUS) - edge,
+                parent=self,
+            )
+            self.progress_bar.setGeometry(edge, px(CARD_H) - edge - height, px(CARD_W) - 2 * edge, height)
+            self.step_label = QLabel(f"Step {step + 1}/{steps}", self)
+            self.step_label.setStyleSheet(css("color: palette(highlight); font-size: 8pt; font-weight: bold;"))
+            self.step_label.adjustSize()
+            self.step_label.move(px(CARD_W) - self.step_label.width() - px(10), px(7))
+            labels.append(self.step_label)
         for label in labels:
             label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
@@ -273,7 +390,7 @@ class TileCard(QPushButton):
         False
         """
         color = self.palette().color(QPalette.ColorRole.WindowText)
-        self.picture.setPixmap(icons.svg_icon(self.icon_svg, color=color, size=56).pixmap(QSize(56, 56)))
+        self.picture.setPixmap(icons.svg_icon(self.icon_svg, color=color, size=56).pixmap(QSize(px(56), px(56))))
 
     def changeEvent(self, event: QEvent) -> None:
         """
@@ -428,7 +545,7 @@ def lesson_card(
     parent: QWidget | None = None,
 ) -> TileCard:
     """
-    Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.
+    Make the card of a lesson: the icon of the exercise that practices the same topic, and a bar for how far through it you are.
 
     Parameters
     ----------
@@ -440,7 +557,7 @@ def lesson_card(
     Returns
     -------
     TileCard
-        The card, which says "Start" or "Continue at step N".
+        The card, with a progress bar and "Step N/M" in its corner once the lesson has been begun.
 
     Examples
     --------
@@ -448,13 +565,12 @@ def lesson_card(
     >>> card.accessibleName()
     'Pitches and Notes, Notation'
     """
-    where = saved_step(lesson)
     return TileCard(
         icon=lesson_icon(lesson),
         category=lesson.category,
         name=lesson.title,
         about=lesson.summary,
-        status=f"Continue at step {where + 1}" if where else "Start",
+        progress=(saved_step(lesson), len(lesson.steps)),
         parent=parent,
     )
 
@@ -556,8 +672,8 @@ class HomePage(QWidget):
         self._filter_groups: list[QTreeWidgetItem] = []
         self.category_filter = QToolButton(self)
         self.category_filter.setAutoRaise(True)
-        self.category_filter.setIconSize(QSize(20, 20))
-        self.category_filter.setMinimumSize(32, 32)
+        self.category_filter.setIconSize(QSize(px(20), px(20)))
+        self.category_filter.setMinimumSize(px(32), px(32))
         self.category_filter.setCheckable(True)
         self.filter_sidebar = QFrame()
         self.filter_sidebar.setObjectName("settingsPane")
@@ -606,7 +722,7 @@ class HomePage(QWidget):
             28,
             12,
         )
-        self.rows.setSpacing(GAP)
+        self.rows.setSpacing(px(GAP))
         self._columns = 0
         scroll = QScrollArea()
         scroll.setWidget(body)
@@ -797,7 +913,7 @@ class HomePage(QWidget):
         --------
         A narrow window reserves at least one tile's width for the grid.
         """
-        available = self._filter_host.width() - CARD_W - 56 - self.scroll_area.verticalScrollBar().sizeHint().width()
+        available = self._filter_host.width() - px(CARD_W) - px(56) - self.scroll_area.verticalScrollBar().sizeHint().width()
         if not self.queue_totals.isHidden() and self.isVisible():
             available -= self.queue_totals.sizeHint().width()
         width = min(self._filter_width, max(120, available))
@@ -1195,7 +1311,7 @@ class HomePage(QWidget):
             usable -= self.queue_totals.sizeHint().width()
         if self.filter_sidebar.parentWidget() is self and not self.filter_sidebar.isHidden():
             usable -= self.filter_sidebar.width()
-        columns = max(1, (usable + GAP) // (CARD_W + GAP))
+        columns = max(1, (usable + px(GAP)) // (px(CARD_W) + px(GAP)))
         if columns == self._columns and not force:
             return
         self._columns = columns
@@ -1213,7 +1329,7 @@ class HomePage(QWidget):
             card.setVisible(False)
         for start in range(0, len(shown), columns):
             row = QHBoxLayout()
-            row.setSpacing(GAP)
+            row.setSpacing(px(GAP))
             row.addStretch(1)
             for card in shown[start : start + columns]:
                 row.addWidget(card)

@@ -45,6 +45,7 @@ from alto.ui.keyboard_styles import (
     KeyboardStyle,
     on_redraw,
 )
+from alto.ui.zoom import px
 
 WHITE_PITCH_CLASSES = (
     0,
@@ -196,8 +197,8 @@ class KeyboardWidget(QWidget):
         self.highlight: int | None = None
         self.additional_highlights: set[int] = set()
         self.style_override: KeyboardStyle | None = None  # a fixed style, for the preview cards in the settings
-        self.pad = PAD
-        self.max_key_width = MAX_KEY_WIDTH  # smaller when something else (the key signature) shares the page
+        self.pad = px(PAD)
+        self.max_key_width: float = float(px(MAX_KEY_WIDTH))  # smaller when something else (the key signature) shares the page
         self.highlight_color = QColor(self.palette().color(QPalette.ColorRole.Highlight))
         self.key_length = KEY_LENGTH
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -720,7 +721,7 @@ class KeyboardSpan(QWidget):
             self.setFixedSize(*size)
             self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row underneath is the click target
         else:
-            self.setFixedHeight(64)
+            self.setFixedHeight(px(64))
             self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
             self.setCursor(Qt.CursorShape.PointingHandCursor)
         self._mode: str | None = None  # while a button is held: new, pan, lo or hi

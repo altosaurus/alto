@@ -29,6 +29,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.ui.zoom import px
+
 
 class IntervalRangeSlider(QWidget):
     """
@@ -75,8 +77,8 @@ class IntervalRangeSlider(QWidget):
         self.active = True
         self._endpoint = "low"
         self._dragging = False
-        self.setFixedHeight(36)
-        self.setMinimumWidth(120)
+        self.setFixedHeight(px(36))
+        self.setMinimumWidth(px(120))
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setAccessibleName("Interval range")

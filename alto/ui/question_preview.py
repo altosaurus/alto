@@ -40,6 +40,7 @@ from alto.ui.staff import (
     StaffWidget,
 )
 from alto.ui.staff_playback import StaffPlayback
+from alto.ui.zoom import css, px
 
 
 class QuestionPreview(QDialog):
@@ -95,7 +96,7 @@ class QuestionPreview(QDialog):
         super().__init__(parent)
         self.question = question
         self.setWindowTitle(exercise_name)
-        self.setMinimumWidth(560)
+        self.setMinimumWidth(px(560))
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         title = QLabel(f"<h3>{exercise_name}</h3>")
@@ -104,7 +105,7 @@ class QuestionPreview(QDialog):
         if statistics is not None:
             stats_button = QToolButton()
             icons.set_svg_icon(stats_button, icons.BAR_CHART, role=QPalette.ColorRole.ButtonText)
-            stats_button.setIconSize(QSize(22, 22))
+            stats_button.setIconSize(QSize(px(22), px(22)))
             stats_button.setAccessibleName("Question Statistics")
             stats_button.setToolTip("Question Statistics")
             stats_button.clicked.connect(lambda: statistics(self))
@@ -113,7 +114,7 @@ class QuestionPreview(QDialog):
         if question.prompt and not question.caption:
             prompt = QLabel(question.prompt)
             prompt.setWordWrap(True)
-            prompt.setStyleSheet("font-size: 14pt;")
+            prompt.setStyleSheet(css("font-size: 14pt;"))
             lay.addWidget(prompt)
 
         q = question
@@ -138,7 +139,7 @@ class QuestionPreview(QDialog):
             lay.addWidget(staff, alignment=Qt.AlignmentFlag.AlignHCenter)
         if q.circle is not None:  # a circle of fifths question shows the circle with its answer in
             circle = FifthsCircle()
-            circle.setFixedSize(380, 380)
+            circle.setFixedSize(px(380), px(380))
             circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
             circle.reveal(animate=False)
             lay.addWidget(circle, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -156,11 +157,11 @@ class QuestionPreview(QDialog):
                     margin=3.6,
                     compact=True,
                 )
-                key_staff.setFixedWidth(210)
+                key_staff.setFixedWidth(px(210))
                 key_staff.show_notes([], clef="treble", key=q.key)
                 lay.addWidget(key_staff, alignment=Qt.AlignmentFlag.AlignHCenter)
             keyboard = KeyboardWidget()
-            keyboard.max_key_width = 30.0 if q.key_staff else 38.0
+            keyboard.max_key_width = px(30.0 if q.key_staff else 38.0)
             if q.keyboard_notes:
                 keyboard.show_keys([note.midi for note in q.keyboard_notes], span=q.keyboard_range)
             elif q.keyboard is not None:

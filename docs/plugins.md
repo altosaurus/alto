@@ -18,6 +18,10 @@ To register your plugin, [open an issue on Alto’s GitHub repository](https://g
 
 Select a plugin’s name to see its details in Alto’s docs.
 
+> **Third-party plugins**
+>
+> Third-party developers create and maintain the plugins listed below. You install, update, and use them at your own risk. Alto accepts no responsibility for their content, how they work, or any loss or damage they cause.
+
 <table id="plugin-list" data-registry="{{ site.site_root }}/plugins.json" data-details="{{ '/plugins/detail/' | relative_url }}">
   <thead><tr><th scope="col">Plugin</th><th scope="col">Code</th><th scope="col">Description</th></tr></thead>
   <tbody><tr><td colspan="3" id="plugin-status" role="status">Loading registered plugins…</td></tr></tbody>

@@ -43,6 +43,7 @@ from alto.selfupdate import (
     UpdateCanceled,
     UpdateError,
 )
+from alto.ui.zoom import px
 from alto.updates import Release
 
 TITLE = "Update Alto"
@@ -296,7 +297,7 @@ class PackageUpdateDialog(QDialog):
         lay = QVBoxLayout(self)
         self.status = QLabel(f"Getting Alto {release.version}…")
         self.status.setWordWrap(True)
-        self.status.setMinimumWidth(380)
+        self.status.setMinimumWidth(px(380))
         lay.addWidget(self.status)
         self.bar = QProgressBar()
         self.bar.setRange(0, 0)

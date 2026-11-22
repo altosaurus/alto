@@ -63,6 +63,7 @@ topics:
 - **Anki-compatible decks.** Add music theory to your usual Anki reviews by exporting just the exercises you want, such as interval identification in bass clef. [Anki export guide]({{ '/data/' | relative_url }}#anki-decks).
 - **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}).
 - **Notation and keyboards your way.** Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. [Settings]({{ '/settings/' | relative_url }}).
+- **Plugins for more instruments.** An instrument pack adds artwork, recordings, exercises, lessons and glossary entries in one ZIP: name the notes on a viola fingerboard, find the interval between two highlighted harpsichord keys, or label an instrument's parts. Install one with a registration code or from a file under Tools → Plugins, and uninstall it without losing your practice history. [Plugins]({{ '/plugins/' | relative_url }}).
 - **Local and private.** Your history is one file on your computer. [Your data]({{ '/data/' | relative_url }}).
 - **Free and open source** under the MIT License.
 

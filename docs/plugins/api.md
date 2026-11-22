@@ -85,6 +85,8 @@ In **Menu → Tools → Plugins…**, enter the code under **Install plugin by c
 
 ### Plugin details and releases
 
+Alto’s plugin details page displays the README from the default branch of your registered GitHub repository. It also shows your registration code and a link to the repository. Update the README in your repository to revise what readers see in Alto’s docs.
+
 To keep the details page current, publish a JSON file in your plugin repository and include its raw HTTPS URL in your registration issue. Use a URL that follows your release branch so the same address serves each update. The file must be publicly readable by a browser on the Alto docs site. A raw GitHub file URL works for a public repository. If you host the file yourself, allow cross-origin reads from the docs site.
 
 ```json

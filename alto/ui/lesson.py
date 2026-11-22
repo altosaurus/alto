@@ -59,6 +59,7 @@ from alto.ui.store import (
     int_value,
     store,
 )
+from alto.ui.zoom import css, px
 
 TEXT_WIDTH = 560  # the widest a paragraph is set, in pixels, so lines stay short enough to read comfortably
 CIRCLE_SIZE = 560  # the biggest the circle is in a lesson, in pixels
@@ -139,8 +140,8 @@ class _IllustratedStep(QWidget):
             Play the pitches shown in this example.
         """
         super().__init__()
-        self.setMinimumWidth(1)
-        self.setMaximumWidth(980)
+        self.setMinimumWidth(px(1))
+        self.setMaximumWidth(px(980))
         self.prose = text
         self.full_text = text.text()
         opening, end, rest = self.full_text.partition("</p>")
@@ -148,7 +149,7 @@ class _IllustratedStep(QWidget):
         self.rest = QLabel(rest)
         self.rest.setTextFormat(Qt.TextFormat.RichText)
         self.rest.setWordWrap(True)
-        self.rest.setMaximumWidth(TEXT_WIDTH)
+        self.rest.setMaximumWidth(px(TEXT_WIDTH))
         self.rest.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.grid = QGridLayout(self)
         self.grid.setContentsMargins(0, 0, 0, 0)
@@ -174,10 +175,10 @@ class _IllustratedStep(QWidget):
             for _ in staves[1:]:
                 divider = QFrame(self.panel)
                 divider.setObjectName("lessonExampleDivider")
-                divider.setFixedWidth(1)
+                divider.setFixedWidth(px(1))
                 self.dividers.append(divider)
         if keyboard is not None:
-            keyboard.setMaximumWidth(300)
+            keyboard.setMaximumWidth(px(300))
             group.addWidget(keyboard)
         if playback is not None:
             group.addWidget(playback, alignment=Qt.AlignmentFlag.AlignLeft)
@@ -225,7 +226,7 @@ class _IllustratedStep(QWidget):
                         self.gallery.removeWidget(divider)
                     divider.setVisible(bool(col))
         if self.keyboard is not None:
-            self.panel.setFixedWidth(min(326, max(1, budget)))
+            self.panel.setFixedWidth(min(px(326), max(1, budget)))
         else:
             self.panel.setMaximumWidth(max(1, budget))
         self.grid.invalidate()
@@ -250,7 +251,7 @@ class _LessonChoices(QWidget):
     def __init__(self) -> None:
         """Start with an empty, left-aligned answer row."""
         super().__init__()
-        self.setMinimumWidth(1)
+        self.setMinimumWidth(px(1))
         self.grid = QGridLayout(self)
         self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setSpacing(7)
@@ -389,7 +390,7 @@ class StepView(QWidget):
         text = QLabel(step.text)
         text.setTextFormat(Qt.TextFormat.RichText)
         text.setWordWrap(True)
-        text.setMaximumWidth(TEXT_WIDTH)
+        text.setMaximumWidth(px(TEXT_WIDTH))
         text.setAlignment(Qt.AlignmentFlag.AlignTop)
         text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.hear_button: QPushButton | None = None
@@ -431,7 +432,7 @@ class StepView(QWidget):
         self.again.hide()
         if step.circle != "none":
             circle = ExplorableCircle()
-            circle.setMaximumSize(CIRCLE_SIZE, CIRCLE_SIZE)
+            circle.setMaximumSize(px(CIRCLE_SIZE), px(CIRCLE_SIZE))
             circle.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
             circle.set_interactive(step.circle != "rest")
             circle.picked.connect(lambda ring, place: self._picked(ring, place=place))
@@ -449,7 +450,7 @@ class StepView(QWidget):
         side.addWidget(self.info)
         self.task_box = QFrame()
         self.task_box.setObjectName("lessonKnowledgeCheck")
-        self.task_box.setMaximumWidth(TEXT_WIDTH)
+        self.task_box.setMaximumWidth(px(TEXT_WIDTH))
         heading = QLabel("Knowledge check")
         heading.setObjectName("knowledgeCheckHeading")
         self.task_box.setAccessibleName(heading.text())
@@ -707,7 +708,7 @@ class StepView(QWidget):
                 self.illustration.arrange()
         for text in task.choices:
             button = QPushButton(text)
-            button.setMinimumWidth(56)
+            button.setMinimumWidth(px(56))
             button.clicked.connect(lambda _=False, answer=text, pressed=button: self._answered(answer, button=pressed))
             self.choice_buttons.append(button)
         self.choices.set_buttons(self.choice_buttons)
@@ -951,7 +952,7 @@ class LessonView(QWidget):
         lay = QVBoxLayout(self)
         top = QHBoxLayout()
         self.heading = QLabel()
-        self.heading.setStyleSheet("font-size: 18pt; font-weight: bold;")
+        self.heading.setStyleSheet(css("font-size: 18pt; font-weight: bold;"))
         self.heading.setAccessibleName("Step title")
         self.counter = QLabel()
         top.addWidget(self.heading, 1)
@@ -959,7 +960,7 @@ class LessonView(QWidget):
         lay.addLayout(top)
         self.progress = QProgressBar()
         self.progress.setTextVisible(False)
-        self.progress.setMaximumHeight(6)
+        self.progress.setMaximumHeight(px(6))
         self.progress.setRange(0, len(lesson.steps))
         lay.addWidget(self.progress)
         self.pages = QStackedWidget()

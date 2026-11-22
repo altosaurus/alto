@@ -29,6 +29,7 @@ from alto.ui import keyboard_styles
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.keyboard_styles import KeyboardStyle
+from alto.ui.zoom import px
 
 OCTAVE = 12  # half steps: the ruler always reaches at least this far
 RULER_OFFSET = 1.8  # string spacings beyond the highest string: clear of the fingerboard's edge
@@ -207,9 +208,9 @@ class FingerboardWidget(QWidget):
         self._manuals: dict[str, KeyboardWidget] = {}  # the drawn keyboards of the current instrument, by name
         self._manual_layout = QVBoxLayout(self)
         self._manual_layout.setContentsMargins(0, 0, 0, 0)
-        self._manual_layout.setSpacing(MANUAL_GAP)
+        self._manual_layout.setSpacing(px(MANUAL_GAP))
         self.setAccessibleName("Instrument picture")
-        self.setMinimumHeight(155)
+        self.setMinimumHeight(px(155))
 
     def sizeHint(self) -> QSize:
         """
@@ -222,9 +223,9 @@ class FingerboardWidget(QWidget):
         """
         shown = [widget for widget in self._manuals.values() if not widget.isHidden()]
         if shown:  # the height the manuals need at their widest keys, whatever size they have been squeezed to
-            tall = sum(2 * widget.pad + widget.style.rail + MANUAL_KEY_WIDTH * widget.key_length for widget in shown)
-            return QSize(720, round(tall + MANUAL_GAP * (len(shown) - 1)))
-        return QSize(720, 270)
+            tall = sum(2 * widget.pad + widget.style.rail + px(MANUAL_KEY_WIDTH) * widget.key_length for widget in shown)
+            return QSize(px(720), round(tall + px(MANUAL_GAP) * (len(shown) - 1)))
+        return QSize(px(720), px(270))
 
     def show_position(self, position: FingerboardPosition | PicturePosition | None) -> None:
         """Resolve the saved pack identity and clear the previous playback highlight."""
@@ -287,11 +288,11 @@ class FingerboardWidget(QWidget):
             widget = self._manuals.get(board.name)
             if widget is None:
                 widget = self._manuals[board.name] = KeyboardWidget(self)
-                widget.max_key_width = MANUAL_KEY_WIDTH
+                widget.max_key_width = px(MANUAL_KEY_WIDTH)
                 self._manual_layout.insertWidget(index, widget)
             widget.style_override = style
             widget.key_length = length
-            widget.pad = MANUAL_PAD
+            widget.pad = px(MANUAL_PAD)
             low, high = position.span or (board.lowest, board.highest)
             widget.show_keys(
                 [Note.parse(key).midi for name, key in position.keys if name == board.name],
@@ -310,11 +311,11 @@ class FingerboardWidget(QWidget):
         shown = [widget for widget in self._manuals.values() if not widget.isHidden()]
         if not shown:
             return
-        room = (self.height() - MANUAL_GAP * (len(shown) - 1)) / len(shown)
+        room = (self.height() - px(MANUAL_GAP) * (len(shown) - 1)) / len(shown)
         for widget in shown:
             rail = widget.style.rail
             by_height = (room - 2 * widget.pad - rail) / widget.key_length
-            widget.max_key_width = max(8.0, min(MANUAL_KEY_WIDTH, by_height))
+            widget.max_key_width = max(px(8.0), min(px(MANUAL_KEY_WIDTH), by_height))
             widget.refit()
 
     def resizeEvent(self, event: QResizeEvent) -> None:

@@ -54,6 +54,7 @@ from alto.ui.store import (
     store,
     text_value,
 )
+from alto.ui.zoom import css, px
 
 PREVIEW = (
     74,
@@ -211,13 +212,13 @@ class InstrumentPicker(QWidget):
         super().__init__(parent)
         self.list = QListWidget()
         self.list.setObjectName("categories")  # the rounded list used for the settings categories
-        self.list.setFixedWidth(220)
+        self.list.setFixedWidth(px(220))
         self.list.setStyleSheet("")  # set when shown, from the palette
         self.groups = dict(instrument_groups())  # list entry -> the ways of playing it
         for name in self.groups:
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, name)
-            item.setSizeHint(QSize(0, 34))
+            item.setSizeHint(QSize(0, px(34)))
             self.list.addItem(item)
         # noinspection PyNoneFunctionAssignment
         self.list.currentItemChanged.connect(lambda cur, _prev: cur and self.show_group(cur.data(Qt.ItemDataRole.UserRole)))
@@ -269,7 +270,7 @@ class InstrumentPicker(QWidget):
         scroll.setWidget(page)
         scroll.setStyleSheet("QScrollArea, QWidget#instrumentPage { background: transparent; }")
         self.divider = QFrame()
-        self.divider.setFixedHeight(1)
+        self.divider.setFixedHeight(px(1))
 
         self.card = card = QFrame()  # the summary sits in a card; the buttons stay in view below the scrolling details
         card.setObjectName("helpCard")
@@ -479,7 +480,7 @@ class InstrumentPicker(QWidget):
             colors = f"color: {t[kind]}; background: {t[kind + '_soft']}; border: 1px solid transparent; font-weight: 600;"
         else:
             colors = f"color: {t['muted']}; background: transparent; border: 1px solid {t['line']};"
-        chip.setStyleSheet(colors + " border-radius: 10px; padding: 2px 10px;")
+        chip.setStyleSheet(css(colors + " border-radius: 10px; padding: 2px 10px;"))
         return chip
 
     def _link(
@@ -543,7 +544,7 @@ class InstrumentPicker(QWidget):
         """
         name = QLabel(label)
         name.setStyleSheet(f"color: {tokens(self)['muted']};")
-        name.setFixedWidth(84)
+        name.setFixedWidth(px(84))
         name.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         text = QLabel(value)
         text.setWordWrap(True)
@@ -651,11 +652,11 @@ class InstrumentPicker(QWidget):
         files = [sounds.recordings(m) for m in members]
         t = tokens(self)
         self.title.setText(members[0].label if members[0].pack_name else group)
-        self.card.setStyleSheet(f"QFrame#helpCard {{ background: {t['panel']}; border: 1px solid {t['line']}; }}")
+        self.card.setStyleSheet(css(f"QFrame#helpCard {{ background: {t['panel']}; border: 1px solid {t['line']}; }}"))
         self.list.setStyleSheet(f"QListWidget#categories {{ background: {t['well']}; }}")  # a shade apart from the card
         self.divider.setStyleSheet(f"background: {t['line']};")
         self.summary.setStyleSheet(f"color: {t['muted']};")
-        self.banner.setStyleSheet(f"color: {t['bad']}; background: {t['bad_soft']}; border-radius: 8px; padding: 8px 12px;")
+        self.banner.setStyleSheet(css(f"color: {t['bad']}; background: {t['bad_soft']}; border-radius: 8px; padding: 8px 12px;"))
         self.summary.setText(FAMILY_SUMMARY.get(group, infos[0].summary) if many else infos[0].summary)
 
         # The chips: what is in use, what is installed, how notes behave.

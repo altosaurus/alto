@@ -53,6 +53,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto.ui.colors import CORRECT_ANSWER_COLOR, blend
+from alto.ui.zoom import px
 
 GOOD, BAD = QColor(CORRECT_ANSWER_COLOR), QColor("#c62828")  # the same greens and reds the exercise feedback uses
 FOCUS_LIGHTER = 125  # the element under the pointer is drawn this many percent as light (100 is unchanged)
@@ -173,7 +174,10 @@ class _Chart(QWidget):
         self.hovered: object | None = None
         self.selected: object | None = None
         self._pressed: object | None = None
-        self.setMinimumSize(260, 190)
+        for name in ("LEFT", "RIGHT", "TOP", "BOTTOM", "ROW"):  # the margins and rows follow the zoom, as the text does
+            if hasattr(type(self), name):
+                setattr(self, name, px(getattr(type(self), name)))
+        self.setMinimumSize(px(260), px(190))
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setMouseTracking(True)
 
@@ -1280,7 +1284,7 @@ class HBarChart(_Chart):
         306
         """
         self.rows = list(rows)
-        self.setMinimumHeight(max(190, self.TOP + 12 + self.ROW * len(self.rows)))
+        self.setMinimumHeight(max(px(190), self.TOP + px(12) + self.ROW * len(self.rows)))
         self.update()
 
     def paintEvent(self, _: QPaintEvent) -> None:
@@ -1454,7 +1458,7 @@ class HeatmapChart(_Chart):
         self.counts: dict[date, int] = {}
         self.today = date.today()
         self.weeks = 53
-        self.setMinimumSize(260, 190)
+        self.setMinimumSize(px(260), px(190))
 
     def set_data(
         self,

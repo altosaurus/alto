@@ -369,3 +369,19 @@ h2, h3 { scroll-margin-top: 76px; }
 .hero h1 .hl { color: var(--accent); }
 
 .viola-example img { display: block; max-width: 100%; height: auto; }
+
+.plugin-code {
+  display: grid;
+  width: fit-content;
+  min-width: 10rem;
+  padding: .8rem 1.25rem;
+  margin: 1rem 0;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent-soft);
+}
+.plugin-code strong { font-size: 2rem; line-height: 1.2; overflow-wrap: anywhere; }
+.plugin-repository { display: inline-flex; align-items: center; gap: .45em; }
+.plugin-readme { margin-top: 1.5rem; overflow-wrap: anywhere; }
+.plugin-readme img { max-width: 100%; height: auto; }
+.plugin-readme pre { overflow-x: auto; }

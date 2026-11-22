@@ -50,14 +50,18 @@ TileCard(
     category: str,
     name: str,
     about: str,
-    status: str = '',
+    progress: tuple[int, int] | None = None,
     parent: QWidget | None = None,
 )
 ```
 
 Bases: `QPushButton`
 
-A big button: an icon on top, then a category, a name and a one-line description, and optionally a line of status.
+A big button: an icon on top, then a category, a name and a short description, and optionally a lesson's progress.
+
+Progress takes no room in the layout: a strip along the bottom edge shows it, and "Step N/M" sits in the top-right
+corner, both only once the lesson has been begun. A card with or without progress therefore has the same size and the
+same icon.
 
 **Examples**
 
@@ -79,14 +83,15 @@ Build a card.
 - `category` (*str*): The small heading above the name. Keyword-only.
 - `name` (*str*): The name. Keyword-only.
 - `about` (*str*): A line of description, which is also the tooltip. Keyword-only.
-- `status` (*str, default ""*): A line under the description, such as how far through a lesson you are; nothing if empty. Keyword-only.
+- `progress` (*tuple of int or None, default None*): The step you are on, counting from 0, and how many steps there are. The bar and "Step N/M" appear only once the first step has been passed; nothing is drawn if None or at step 0. Keyword-only.
 - `parent` (*QWidget or None, default None*): The widget that owns the card. Keyword-only.
 
 **Constructor examples**
 
 ```pycon
->>> TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", status="Step 2 of 8").toolTip()
-'Get help.'
+>>> card = TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", progress=(1, 8))
+>>> card.toolTip(), card.accessibleDescription()
+('Get help.', 'Get help. Continue at step 2 of 8.')
 ```
 
 ### TileCard.changeEvent
@@ -232,7 +237,7 @@ def lesson_card(
 ) -> TileCard
 ```
 
-Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.
+Make the card of a lesson: the icon of the exercise that practices the same topic, and a bar for how far through it you are.
 
 **Parameters**
 
@@ -241,7 +246,7 @@ Make the card of a lesson: the icon of the exercise that practices the same topi
 
 **Returns**
 
-- *TileCard*: The card, which says "Start" or "Continue at step N".
+- *TileCard*: The card, with a progress bar and "Step N/M" in its corner once the lesson has been begun.
 
 **Examples**
 

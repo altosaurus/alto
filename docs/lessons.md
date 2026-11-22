@@ -23,7 +23,7 @@ side you were on. The cards change with the transition chosen under **Settingsâ€
 
 During an exercise or lesson, the two icons switch the navigation list. Your current activity stays open until you choose another one.
 
-A tile says **Start**, or **Continue at step N** if you have begun. Click it to open the lesson, and **Leave lesson** (or <kbd>Esc</kbd>)
+Once you have begun a lesson, a bar along the bottom of its tile shows how far through you are and the corner says **Step N/M**. Click it to open the lesson, and **Leave lesson** (or <kbd>Esc</kbd>)
 to return to where you were. **Start over** goes back to the first step.
 
 The Circle of Fifths exercise also has a way in: open its reference pane with the book button, and press **New to this? Take the

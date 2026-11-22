@@ -100,6 +100,7 @@ from alto.ui.store import export_settings, import_settings, store, text_value
 from alto.ui.style import navigation_heading_style
 from alto.ui.theme import apply_theme, saved_theme
 from alto.ui.widgets import SegmentedControl
+from alto.ui.zoom import px
 
 
 def _picture(widget: QWidget, *, folder: Path, label: str) -> str:
@@ -240,7 +241,7 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
         front.append(_picture(keyboard, folder=folder, label="Highlighted piano keys"))
     if q.circle is not None:
         circle = FifthsCircle()
-        circle.setFixedSize(380, 380)
+        circle.setFixedSize(px(380), px(380))
         circle.show_question(q.circle_kind, place=q.circle, ring=q.circle_ring, key=q.circle_key, title=q.caption)
         front.append(_picture(circle, folder=folder, label="Circle of fifths"))
         circle.reveal(animate=False)
@@ -654,7 +655,7 @@ class AnkiExporter(QDialog):
         layout.addLayout(toolbar)
         self.nav_toggle = QToolButton()
         self.nav_toggle.setAutoRaise(True)
-        self.nav_toggle.setIconSize(QSize(18, 18))
+        self.nav_toggle.setIconSize(QSize(px(18), px(18)))
         self.nav_toggle.setCheckable(True)
         self.nav_toggle.setChecked(True)
         self.nav_toggle.setToolTip("Show or hide exercise decks")
@@ -665,7 +666,7 @@ class AnkiExporter(QDialog):
         toolbar.addWidget(self.heading, 1)
         self.gear = QToolButton()
         self.gear.setAutoRaise(True)
-        self.gear.setIconSize(QSize(24, 24))
+        self.gear.setIconSize(QSize(px(24), px(24)))
         self.gear.setAccessibleName("Exercise settings")
         self.gear.setToolTip("Show or hide exercise settings")
         self.gear.setCheckable(True)
@@ -702,7 +703,7 @@ class AnkiExporter(QDialog):
             + 2 * self.tree.frameWidth(),
         )
         for item in (root, *groups.values(), *self.items.values()):
-            item.setSizeHint(0, QSize(0, 30))
+            item.setSizeHint(0, QSize(0, px(30)))
         center = QVBoxLayout()
         body.addLayout(center, 1)
         self.side = SegmentedControl(["Front", "Back"])
@@ -714,7 +715,7 @@ class AnkiExporter(QDialog):
         self.fields: list[str] = []
         self.pane = QFrame()
         self.pane.setObjectName("settingsPane")
-        self.pane.setFixedWidth(290)
+        self.pane.setFixedWidth(px(290))
         self.pane_layout = QVBoxLayout(self.pane)
         self.pane.hide()
         body.addWidget(self.pane)

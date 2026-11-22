@@ -67,6 +67,21 @@ Almost everything is adjustable.
   </picture>
 </p>
 
+## Plugins
+
+Plugins add instruments and practice material to Alto. Each one is an instrument pack in a single ZIP, and it can include:
+
+- **Artwork and recordings** for the instrument, with an animation that shows each correct answer.
+- **Exercises** that ask you to name a note on a fingerboard, find the interval between two highlighted keys on a keyboard,
+  name an instrument's parts, or answer a knowledge check by clicking the picture.
+- **Lessons and glossary entries**, linked to the plugin's exercises.
+- **Extra views and settings**, such as the back of an instrument, a choice of sound, a note range, accidentals and the octave.
+- **Keyboards** drawn in a look the plugin chooses, with a range selector and a choice of intervals and manuals.
+
+Choose **Tools → Plugins** to see what is installed. You can install a registered plugin by its code or a downloaded ZIP,
+update it, or uninstall it and keep your practice history. Installed exercises appear under **Instruments**.
+The [viola](docs/plugins/viola.md) and [harpsichord](docs/plugins/harpsichord.md) tutorials each build a finished example pack.
+
 ## Spaced repetition
 
 Choose a spaced repetition algorithm under **Settings → Practice**.
@@ -133,7 +148,8 @@ The first time it opens, Alto asks you to create a profile. There is no password
 Guides for every exercise, how the practice scheduling works, the statistics, settings and shortcuts are in
 [`docs/`](docs/) and published at https://altosaurus.github.io/alto/, with a version for each release and one for the development docs.
 
-Package instrument artwork, recordings, and exercises with the [Plugins](docs/plugins.md) and the [viola plugin tutorial](docs/plugins/viola.md).
+To package your own instrument artwork, recordings, exercises and lessons, start with the [Plugins](docs/plugins.md) page,
+then follow the [viola](docs/plugins/viola.md) or [harpsichord](docs/plugins/harpsichord.md) plugin tutorial.
 
 ## Development
 

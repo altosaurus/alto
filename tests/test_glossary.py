@@ -156,3 +156,35 @@ def test_search_without_matches_clears_the_example_and_recovers(app: QApplicatio
     page.search.setText("major scale")
     assert not page.demo.isHidden()
     assert page.activity_tiles.count() > 0
+
+
+def test_interval_entries_describe_what_their_examples_show() -> None:
+    """Check each interval example against the number and half steps its caption and entry claim."""
+    sizes = {
+        "interval": None,
+        "unison": {(1, 0), (1, 1)},
+        "simple intervals": None,
+        "compound intervals": None,
+        "perfect": {(4, 5), (5, 7), (8, 12)},
+        "major": {(2, 2), (3, 4), (6, 9)},
+        "minor": {(2, 1), (3, 3), (6, 8)},
+    }
+    for term, expected in sizes.items():
+        found = set()
+        for example in TERMS[term].examples:
+            columns = [[Note.parse(name) for name in column.split("+")] for column in example.pitches.split()]
+            low, high = columns[0][0], columns[1][0]
+            found.add((abs(high.diatonic - low.diatonic) + 1, abs(high.midi - low.midi)))
+            number = abs(high.diatonic - low.diatonic) + 1
+            if term == "simple intervals":
+                assert number <= 8
+            if term == "compound intervals":
+                assert number >= 9
+        if expected is not None:
+            assert found == expected, term
+    for example in TERMS["harmonic interval"].examples:
+        columns = [column.split("+") for column in example.pitches.split()]
+        assert len(columns) == 1 and len(columns[0]) == 2
+    for example in TERMS["melodic interval"].examples:
+        columns = [column.split("+") for column in example.pitches.split()]
+        assert len(columns) == 2 and all(len(column) == 1 for column in columns)

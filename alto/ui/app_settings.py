@@ -93,6 +93,7 @@ from alto.ui.update_flow import (
     save_channel,
     saved_channel,
 )
+from alto.ui.zoom import css, px
 
 NEW_THEME = "__new__"  # what the row that makes a new theme holds in place of a theme's key
 
@@ -227,7 +228,7 @@ class StyleCard(QPushButton):
         self.style_key = style.key
         self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedSize(232, 150)
+        self.setFixedSize(px(232), px(150))
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             8,
@@ -245,7 +246,7 @@ class StyleCard(QPushButton):
         )
         self.staff.notation_style = style
         self.staff.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.staff.setFixedWidth(214)
+        self.staff.setFixedWidth(px(214))
         self.staff.show_notes(
             [
                 [Note(5, letter=1)],
@@ -260,7 +261,7 @@ class StyleCard(QPushButton):
         name = QLabel(f"<b>{style.label}</b>")
         name.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         blurb = QLabel(style.note)
-        blurb.setStyleSheet("color: gray; font-size: 9pt;")
+        blurb.setStyleSheet(css("color: gray; font-size: 9pt;"))
         blurb.setWordWrap(True)
         blurb.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         lay.addWidget(self.staff)
@@ -315,7 +316,7 @@ class KeyboardCard(QPushButton):
         self.style_key = style.key
         self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedSize(232, 222)
+        self.setFixedSize(px(232), px(222))
         lay = QVBoxLayout(self)
         lay.setContentsMargins(
             8,
@@ -326,13 +327,13 @@ class KeyboardCard(QPushButton):
         lay.setSpacing(4)
         self.keys = KeyboardWidget()
         self.keys.style_override = style
-        self.keys.pad = 6.0
-        self.keys.max_key_width = 16.0
-        self.keys.setFixedWidth(2 * 6 + 10 * 16)  # ten white keys, C4 to E5
+        self.keys.pad = px(6.0)
+        self.keys.max_key_width = px(16.0)
+        self.keys.setFixedWidth(px(2 * 6 + 10 * 16))  # ten white keys, C4 to E5
         self.keys.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.keys.show_key(None, span=(60, 76))
         holder = QWidget()
-        holder.setFixedHeight(int(2 * 6 + 30 + 16 * 6.2))  # room for the tallest strip above the keys
+        holder.setFixedHeight(px(int(2 * 6 + 30 + 16 * 6.2)))  # room for the tallest strip above the keys
         holder.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         holder_lay = QVBoxLayout(holder)
         holder_lay.setContentsMargins(
@@ -345,7 +346,7 @@ class KeyboardCard(QPushButton):
         name = QLabel(f"<b>{style.label}</b>")
         name.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         blurb = QLabel(style.note)
-        blurb.setStyleSheet("color: gray; font-size: 9pt;")
+        blurb.setStyleSheet(css("color: gray; font-size: 9pt;"))
         blurb.setWordWrap(True)
         blurb.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         lay.addWidget(holder)
@@ -435,10 +436,10 @@ class KeyboardBuilder(QFrame):
             row = QHBoxLayout()
             row.setSpacing(4)
             name = QLabel(label)
-            name.setFixedWidth(84)
+            name.setFixedWidth(px(84))
             row.addWidget(name)
             swatch = QPushButton()
-            swatch.setFixedSize(46, 24)
+            swatch.setFixedSize(px(46), px(24))
             swatch.setCursor(Qt.CursorShape.PointingHandCursor)
             swatch.setToolTip(f"Pick a color for the {label.lower()}")
             swatch.clicked.connect(lambda _=False, p=part, t=label: self._pick(p, title=t))
@@ -488,13 +489,13 @@ class KeyboardBuilder(QFrame):
         'Ivory  #f1e5c6'
         """
         chip = QToolButton()
-        chip.setFixedSize(20, 20)
+        chip.setFixedSize(px(20), px(20))
         chip.setToolTip(tip)
         chip.setCursor(Qt.CursorShape.PointingHandCursor)
         if color:
-            chip.setStyleSheet(f"QToolButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 10px; }}")
+            chip.setStyleSheet(css(f"QToolButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 10px; }}"))
         else:
-            chip.setStyleSheet(f"QToolButton {{ border: 1px solid {RIM}; border-radius: 10px; color: gray; }}")
+            chip.setStyleSheet(css(f"QToolButton {{ border: 1px solid {RIM}; border-radius: 10px; color: gray; }}"))
         return chip
 
     def refresh(self) -> None:
@@ -512,9 +513,11 @@ class KeyboardBuilder(QFrame):
             swatch = self.swatches[part]
             swatch.setText("" if color else "none")
             swatch.setStyleSheet(
-                f"QPushButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 6px; }}"
-                if color
-                else f"QPushButton {{ border: 1px dashed {RIM}; border-radius: 6px; color: gray; }}",
+                css(
+                    f"QPushButton {{ background: {color}; border: 1px solid {RIM}; border-radius: 6px; }}"
+                    if color
+                    else f"QPushButton {{ border: 1px dashed {RIM}; border-radius: 6px; color: gray; }}",
+                ),
             )
 
     def _set(
@@ -658,13 +661,13 @@ class AppSettingsDialog(QDialog):
         # The categories sit in a list on the left; choosing one shows its settings on the right.
         self.categories = QListWidget()
         self.categories.setObjectName("categories")  # styled in style.py
-        self.categories.setFixedWidth(170)
+        self.categories.setFixedWidth(px(170))
         self.pages = _LazyPages()
         self._appearance_expanded = True
         appearance = QListWidgetItem()
         appearance.setData(Qt.ItemDataRole.AccessibleTextRole, "Appearance")
         appearance.setData(Qt.ItemDataRole.UserRole, ("group", 0))
-        appearance.setSizeHint(QSize(0, 36))
+        appearance.setSizeHint(QSize(0, px(36)))
         self.categories.addItem(appearance)
         parent_row = QWidget()
         parent_layout = QHBoxLayout(parent_row)
@@ -681,7 +684,7 @@ class AppSettingsDialog(QDialog):
         for index, name in enumerate(("Theme", "Notation style", "Keyboard style", "Transitions")):
             item = QListWidgetItem(f"\u2003{name}")
             item.setData(Qt.ItemDataRole.UserRole, ("appearance", index))
-            item.setSizeHint(QSize(0, 32))
+            item.setSizeHint(QSize(0, px(32)))
             self.categories.addItem(item)
         self.pages.add_page(self._appearance_page)
         sections = [("Sound", self._sound_page, 1), ("Updates", self._updates_page, 2)]
@@ -690,7 +693,7 @@ class AppSettingsDialog(QDialog):
         for name, factory, index in sections:
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, ("page", index))
-            item.setSizeHint(QSize(0, 36))
+            item.setSizeHint(QSize(0, px(36)))
             self.categories.addItem(item)
             self.pages.add_page(factory)
         self.categories.currentRowChanged.connect(self._select_category)
@@ -901,7 +904,7 @@ class AppSettingsDialog(QDialog):
             ),
         ):
             section = QLabel(heading.upper())
-            section.setStyleSheet("color: palette(placeholder-text); font-size: 9pt; padding-top: 14px;")
+            section.setStyleSheet(css("color: palette(placeholder-text); font-size: 9pt; padding-top: 14px;"))
             lay.addWidget(section)
             for row, title, description in children:
                 button = QPushButton()
@@ -909,10 +912,12 @@ class AppSettingsDialog(QDialog):
                 button.setAccessibleDescription(description)
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
                 button.setStyleSheet(
-                    "QPushButton { text-align: left; border: none; border-bottom: 1px solid palette(mid); "
-                    "border-radius: 0; background: transparent; padding: 0; }"
-                    "QPushButton:hover { background: palette(midlight); }"
-                    "QPushButton:focus { border: 1px solid palette(highlight); }",
+                    css(
+                        "QPushButton { text-align: left; border: none; border-bottom: 1px solid palette(mid); "
+                        "border-radius: 0; background: transparent; padding: 0; }"
+                        "QPushButton:hover { background: palette(midlight); }"
+                        "QPushButton:focus { border: 1px solid palette(highlight); }",
+                    ),
                 )
                 contents = QHBoxLayout(button)
                 contents.setContentsMargins(8, 14, 12, 14)
@@ -1044,7 +1049,7 @@ class AppSettingsDialog(QDialog):
         body.setSpacing(18)
         self.theme_list = QListWidget()
         self.theme_list.setObjectName("categories")  # styled as the list of settings pages is
-        self.theme_list.setFixedWidth(220)
+        self.theme_list.setFixedWidth(px(220))
         self.theme_list.setAccessibleName("Themes")
         self.theme_pages = QStackedWidget()
         self.theme_editor = ThemeEditor()
@@ -1096,13 +1101,13 @@ class AppSettingsDialog(QDialog):
             for family, label in rows:
                 row = QListWidgetItem(label)
                 row.setData(Qt.ItemDataRole.UserRole, family)
-                row.setSizeHint(QSize(0, 34))
+                row.setSizeHint(QSize(0, px(34)))
                 self.theme_list.addItem(row)
                 self.theme_items[family] = row
             if mine:
                 self.new_theme_item = QListWidgetItem("＋  New theme…")
                 self.new_theme_item.setData(Qt.ItemDataRole.UserRole, NEW_THEME)
-                self.new_theme_item.setSizeHint(QSize(0, 34))
+                self.new_theme_item.setSizeHint(QSize(0, px(34)))
                 self.theme_list.addItem(self.new_theme_item)
         self.theme_list.blockSignals(False)
         in_use = saved_theme()
@@ -1419,17 +1424,17 @@ class AppSettingsDialog(QDialog):
         body.setSpacing(18)
         self.transition_preview = TransitionPreview()
         name = QLabel()
-        name.setStyleSheet("font-weight: bold; font-size: 12pt;")
+        name.setStyleSheet(css("font-weight: bold; font-size: 12pt;"))
         about = self._about("")
         self.transition_list = QListWidget()
         self.transition_list.setObjectName("categories")  # styled as the list of settings pages is
-        self.transition_list.setFixedWidth(220)
+        self.transition_list.setFixedWidth(px(220))
         self.transition_list.setAccessibleName("Transitions")
         self.transition_items = {}
         for transition in TRANSITIONS:
             row = QListWidgetItem(transition.label)
             row.setData(Qt.ItemDataRole.UserRole, transition.key)
-            row.setSizeHint(QSize(0, 34))
+            row.setSizeHint(QSize(0, px(34)))
             self.transition_list.addItem(row)
             self.transition_items[transition.key] = row
         chosen = saved_transition()
@@ -1627,10 +1632,10 @@ class AppSettingsDialog(QDialog):
         self.scheduler_list = QListWidget()
         self.scheduler_list.setObjectName("categories")
         self.scheduler_list.setAccessibleName("Scheduling algorithms")
-        self.scheduler_list.setFixedWidth(150)
+        self.scheduler_list.setFixedWidth(px(150))
         for mode in SCHEDULERS:
             item = QListWidgetItem(mode, self.scheduler_list)
-            item.setSizeHint(QSize(0, 34))
+            item.setSizeHint(QSize(0, px(34)))
 
         selected = self.learner.mode
         self.scheduler_list.setCurrentRow(SCHEDULERS.index(selected))

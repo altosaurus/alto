@@ -45,7 +45,7 @@ from alto.learning import (  # noqa: E402
     Database,
     Learner,
 )
-from alto.ui import keyboard_styles  # noqa: E402
+from alto.ui import keyboard_styles, zoom  # noqa: E402
 
 
 @pytest.fixture(scope="session")
@@ -71,6 +71,25 @@ def _close_every_window() -> None:
         widget.close()
         widget.deleteLater()
     QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+
+
+@pytest.fixture(autouse=True)
+def _zoom_at_100() -> Iterator[None]:
+    """
+    Every test starts at a zoom of 100%, whatever an earlier test chose, and leaves the application font as it found it.
+
+    Yields
+    ------
+    None
+        Control, while the test runs.
+    """
+    app = QApplication.instance()
+    font = app.font() if isinstance(app, QApplication) else None
+    zoom._percent, zoom._base_font = zoom.DEFAULT, None
+    yield
+    zoom._percent, zoom._base_font = zoom.DEFAULT, None
+    if isinstance(app, QApplication) and font is not None:
+        app.setFont(font)
 
 
 @pytest.fixture(autouse=True)

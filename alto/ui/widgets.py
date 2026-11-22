@@ -39,6 +39,7 @@ from alto.ui.icons import (
     SIDEBAR_OPEN,
     set_svg_icon,
 )
+from alto.ui.zoom import px
 
 
 class PracticeCounts(QLabel):
@@ -152,7 +153,7 @@ class SidebarToggle(QToolButton):
         super().__init__(parent)
         self.noun = noun
         self.setAutoRaise(True)
-        self.setIconSize(QSize(24, 24))  # same size as the sound and settings buttons
+        self.setIconSize(QSize(px(24), px(24)))  # same size as the sound and settings buttons
         self.set_open(True)
 
     def set_open(self, is_open: bool) -> None:
@@ -216,7 +217,7 @@ class HelpButton(QToolButton):
         self._text = text_provider  # called each time, so the text can follow the current settings
         self.setAutoRaise(True)
         set_svg_icon(self, HELP)
-        self.setIconSize(QSize(24, 24))
+        self.setIconSize(QSize(px(24), px(24)))
         self.setToolTip("How this exercise works")
         self.setAccessibleName("How this exercise works")
         self.clicked.connect(self.show_help)
@@ -237,7 +238,7 @@ class HelpButton(QToolButton):
         label = QLabel(self._text())
         label.setWordWrap(True)
         label.setTextFormat(Qt.TextFormat.RichText)
-        label.setFixedWidth(340)
+        label.setFixedWidth(px(340))
         inner = QVBoxLayout(card)
         inner.setContentsMargins(
             16,
@@ -335,7 +336,7 @@ class SegmentedControl(QFrame):
             button.setChecked(number == 0)
             if number < len(icons):
                 set_svg_icon(button, icons[number], size=18)
-                button.setIconSize(QSize(18, 18))
+                button.setIconSize(QSize(px(18), px(18)))
             self._group.addButton(button, number)
             button.clicked.connect(lambda _=False, n=number: self.chosen.emit(n))
             row.addWidget(button)

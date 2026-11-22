@@ -38,6 +38,7 @@ from alto.ui.reference import ExplorableCircle
 from alto.ui.staff import StaffWidget
 from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import SegmentedControl
+from alto.ui.zoom import px
 
 _STEP_LABELS = {1: "H", 2: "W", 3: "3H"}
 PLUGIN_ROLE = Qt.ItemDataRole.UserRole  # the name of a plugin's entry, on its row in the list
@@ -45,7 +46,12 @@ PLUGIN_ROLE = Qt.ItemDataRole.UserRole  # the name of a plugin's entry, on its r
 
 @dataclass(frozen=True)
 class _Example:
-    """A caption and the spelled pitches to display and play, in reading order."""
+    """
+    A caption and the spelled pitches to display and play, in reading order.
+
+    Pitches are separated by spaces and sound one after another. Join pitches with "+" to stack them in one column, so that
+    they are written and sound together, as in "C4+G4".
+    """
 
     pitches: str
     caption: str
@@ -370,6 +376,124 @@ TERMS = {
         exercises=("KeySignatures", "ScaleIdentification"),
         lesson="key-signatures",
     ),
+    "interval": _Term(
+        definition="An interval is the distance between two pitches. Its name combines a number, which counts "
+        "letter names from the lower note to the upper note with both ends included, and a quality such as perfect, "
+        "major or minor, which tells the exact size in half steps.",
+        guide="Count the letters from the lower note: C, D, E is a third, and C, D, E, F, G is a fifth. "
+        "Staff positions count the same way, one line or space at a time. Play each pair to hear how the distance grows.",
+        examples=(
+            _Example("C4 E4", "C up to E · a third"),
+            _Example("C4 G4", "C up to G · a fifth"),
+            _Example("E4 C5", "E up to C · a sixth"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals", "IntervalConstruction"),
+        lesson="intervals",
+    ),
+    "harmonic interval": _Term(
+        definition="A harmonic interval is an interval whose two notes sound at the same time. "
+        "On the staff the notes are stacked in one column, with the lower note at the bottom.",
+        guide="Play each example and listen to the two notes blend into one sound. Read the interval from the bottom note "
+        "to the top note. Notes a second apart sound rough together, while a fifth sounds open.",
+        examples=(
+            _Example("C4+E4", "C and E together · a harmonic third"),
+            _Example("C4+G4", "C and G together · a harmonic fifth"),
+            _Example("D4+C5", "D and C together · a harmonic seventh"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "melodic interval": _Term(
+        definition="A melodic interval is an interval whose two notes sound one after the other. "
+        "On the staff the notes are written in separate columns, and the second can be higher or lower than the first.",
+        guide="Play each example from left to right. The interval is the same size in either direction. "
+        "The first example rises a fifth and the second falls a fifth.",
+        examples=(
+            _Example("C4 G4", "C up to G · a rising melodic fifth"),
+            _Example("G4 C4", "G down to C · a falling melodic fifth"),
+            _Example("E4 G4", "E up to G · a rising melodic third"),
+        ),
+        exercises=("IntervalNames", "IntervalConstruction"),
+        lesson="intervals",
+    ),
+    "unison": _Term(
+        definition="A unison is the interval between two notes on the same line or space, with the same letter name. "
+        "A perfect unison is the same pitch, zero half steps apart. Its number is one.",
+        guide="Play the first example. The second note is a repeat of the first. In the second example the note "
+        "is raised a half step by a sharp. It stays on the same line or space, so the number is still one, "
+        "but the quality is now augmented.",
+        examples=(
+            _Example("C4 C4", "C then C · a perfect unison"),
+            _Example("C4 C#4", "C then C♯ · an augmented unison"),
+        ),
+        exercises=("IntervalNames", "IntervalConstruction"),
+        lesson="intervals",
+    ),
+    "simple intervals": _Term(
+        definition="A simple interval is no larger than an octave. Its number runs from one, a unison, to eight, "
+        "an octave, and it spans up to twelve half steps.",
+        guide="Count the letters from the lower note to the upper one. If you reach eight or fewer, the interval is simple. "
+        "Play each example, and compare the wider one with the compound intervals.",
+        examples=(
+            _Example("C4 G4", "C up to G · a fifth"),
+            _Example("D4 B4", "D up to B · a sixth"),
+            _Example("C4 C5", "C up to C · an octave"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "compound intervals": _Term(
+        definition="A compound interval is larger than an octave. Its number is nine or more. Take away an octave, "
+        "which removes seven from the number, and you have the simple interval it is built on. The quality stays the same.",
+        guide="Count from C4 to E5 and you reach ten. Subtract seven to get three, so a tenth is a third plus an octave. "
+        "Play each example, then compare with the same notes brought within one octave.",
+        examples=(
+            _Example("C4 D5", "C up to D an octave higher · a ninth, which is a second plus an octave"),
+            _Example("C4 E5", "C up to E an octave higher · a tenth, which is a third plus an octave"),
+            _Example("C4 G5", "C up to G an octave higher · a twelfth, which is a fifth plus an octave"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "perfect": _Term(
+        definition="Perfect is the quality of a unison, fourth, fifth or octave in its standard size: "
+        "zero, five, seven or twelve half steps. These intervals are never called major or minor.",
+        guide="Count the half steps. From C to F is five, from C to G is seven, and from C to the next C is twelve. "
+        "Widen a perfect interval by a half step and it becomes augmented. Narrow it by a half step and it becomes diminished.",
+        examples=(
+            _Example("C4 F4", "C up to F · a perfect fourth, five half steps"),
+            _Example("C4 G4", "C up to G · a perfect fifth, seven half steps"),
+            _Example("C4 C5", "C up to C · a perfect octave, twelve half steps"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "major": _Term(
+        definition="Major is the larger of the two standard sizes for a second, third, sixth or seventh. "
+        "Each matches the distance from the tonic to that note of the major scale. Major also names a scale and a key.",
+        guide="Count from C and compare with the C major scale. D, E and A are all in it, so the intervals are major. "
+        "A major second is two half steps, a third is four, and a sixth is nine.",
+        examples=(
+            _Example("C4 D4", "C up to D · a major second, two half steps"),
+            _Example("C4 E4", "C up to E · a major third, four half steps"),
+            _Example("C4 A4", "C up to A · a major sixth, nine half steps"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
+    "minor": _Term(
+        definition="Minor is the smaller of the two standard sizes for a second, third, sixth or seventh. "
+        "It is one half step narrower than the major interval with the same number. Minor also names a scale and a key.",
+        guide="Lower the top note of a major interval by a half step to make it minor. The letters stay the same, "
+        "so the interval keeps its number. A minor second is one half step, a third is three, and a sixth is eight.",
+        examples=(
+            _Example("C4 Db4", "C up to D♭ · a minor second, one half step"),
+            _Example("C4 Eb4", "C up to E♭ · a minor third, three half steps"),
+            _Example("C4 Ab4", "C up to A♭ · a minor sixth, eight half steps"),
+        ),
+        exercises=("IntervalNames", "KeyboardIntervals"),
+        lesson="intervals",
+    ),
 }
 
 
@@ -407,7 +531,7 @@ class _DefinitionArea(QScrollArea):
         """Place the example alongside the definition when both can fit."""
         super().resizeEvent(event)
         available = self.viewport().width() - 16  # content margins
-        self.example.setFixedWidth(max(280, min(available, 380)))
+        self.example.setFixedWidth(max(px(280), min(available, px(380))))
         wide = available >= 700
         direction = QBoxLayout.Direction.LeftToRight if wide else QBoxLayout.Direction.TopToBottom
         self.content_layout.setDirection(direction)
@@ -425,7 +549,7 @@ class GlossaryPage(QWidget):
         super().__init__()
         layout = QHBoxLayout(self)
         sidebar = QWidget()
-        sidebar.setMaximumWidth(210)
+        sidebar.setMaximumWidth(px(210))
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(0, 0, 0, 0)
         self.search = QLineEdit()
@@ -444,7 +568,7 @@ class GlossaryPage(QWidget):
         for name, pack in sorted(listed, key=lambda pair: (pair[0].casefold(), pair[1])):
             clash = bool(pack) and name in TERMS  # a plugin's term that a built-in one already uses carries its plugin's name
             row = QListWidgetItem(f"{name} ({pack})" if clash else name)
-            row.setSizeHint(QSize(0, 40))
+            row.setSizeHint(QSize(0, px(40)))
             if pack:
                 row.setData(PLUGIN_ROLE, name)
             self.terms.addItem(row)
@@ -460,15 +584,15 @@ class GlossaryPage(QWidget):
         demo = QVBoxLayout()
         self.example_circle = ExplorableCircle()
         self.example_circle.set_interactive(False)
-        self.example_circle.setFixedHeight(280)
+        self.example_circle.setFixedHeight(px(280))
         demo.addWidget(self.example_circle)
         self.example_staff = StaffWidget(gap=10, side=12, note_offset=60, margin=5, compact=True)
         self.example_keyboard = KeyboardWidget()
-        self.example_keyboard.max_key_width = 26
+        self.example_keyboard.max_key_width = px(26)
         demo.addWidget(self.example_staff)
         demo.addWidget(self.example_keyboard)
         self.example_board = FingerboardWidget()  # a plugin's term shows its instrument here instead of notation
-        self.example_board.setFixedHeight(190)
+        self.example_board.setFixedHeight(px(190))
         self.example_board.hide()
         demo.addWidget(self.example_board)
         self.playback = StaffPlayback(self, highlight=self.example_staff.highlight_column)
@@ -608,8 +732,8 @@ class GlossaryPage(QWidget):
         self.example_board.hide()
         term = entry
         example = term.examples[self._example_index % len(term.examples)]
-        notes = [Note.parse(name) for name in example.pitches.split()]
-        self._example_midis = [note.midi for note in notes]
+        columns = [[Note.parse(name) for name in column.split("+")] for column in example.pitches.split()]
+        self._example_midis = [note.midi for column in columns for note in column]
         self.example_circle.setVisible(term.circle)
         if term.circle:
             self.example_circle.select("outer", place=example.signature)
@@ -621,9 +745,9 @@ class GlossaryPage(QWidget):
             self.example_staff.wedges = (
                 [_STEP_LABELS[abs(right - left)] for left, right in pairwise(self._example_midis)] if term.label_steps else []
             )
-            self.example_staff.show_notes([[note] for note in notes], clef=example.clef, key=example.signature)
+            self.example_staff.show_notes(columns, clef=example.clef, key=example.signature)
         self.example_label.setText(example.caption)
-        self.hear.setText("▶  Hear note" if len(notes) == 1 else "▶  Hear example")
+        self.hear.setText("▶  Hear note" if len(self._example_midis) == 1 else "▶  Hear example")
 
     def _show_plugin_example(self, entry: PluginTerm) -> None:
         """
