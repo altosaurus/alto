@@ -7,13 +7,17 @@
   if (!container) return;
   const status = document.getElementById("plugin-status");
 
-  async function readJSON(url) {
+  async function request(url, accept) {
     const response = await fetch(url, {
-      cache: "no-cache", credentials: "omit", referrerPolicy: "no-referrer",
+      headers: { Accept: accept }, cache: "no-cache", credentials: "omit", referrerPolicy: "no-referrer",
       signal: AbortSignal.timeout(10000)
     });
     if (!response.ok) throw new Error("Could not read JSON");
-    return response.json();
+    return response;
+  }
+
+  async function readJSON(url) {
+    return (await request(url, "application/json")).json();
   }
 
   function httpsURL(value) {
@@ -36,6 +40,55 @@
     const node = element("a", label);
     node.href = href;
     return node;
+  }
+
+  async function readREADME(repository) {
+    const url = new URL(repository);
+    const path = url.pathname.replace(/\/$/, "");
+    if (url.hostname !== "github.com" || !/^\/[\w-]+\/[\w.-]+$/.test(path)) {
+      throw new Error("Expected a GitHub repository");
+    }
+    const response = await request("https://api.github.com/repos" + path + "/readme", "application/vnd.github.html+json");
+    const source = document.createElement("template");
+    source.innerHTML = await response.text();
+    const article = document.createElement("div");
+    article.className = "plugin-readme";
+    const tags = new Set("a article b blockquote br code dd del details div dl dt em h1 h2 h3 h4 h5 h6 hr i img kbd li ol p picture pre s samp source span strong sub summary sup table tbody td th thead tr ul".split(" "));
+
+    function copy(parent, children) {
+      for (const child of children) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          parent.append(document.createTextNode(child.textContent));
+          continue;
+        }
+        const tag = child.localName;
+        if (!tags.has(tag) || (tag === "a" && child.classList.contains("anchor"))) continue;
+        const node = document.createElement(tag === "h1" ? "h2" : tag);
+        if (tag === "a" || tag === "img" || tag === "source") {
+          const attr = tag === "a" ? "href" : tag === "img" ? "src" : "srcset";
+          const value = child.getAttribute(attr)?.trim();
+          const base = tag === "a" ? repository.replace(/\/$/, "") + "/blob/HEAD/" : "https://raw.githubusercontent.com" + path + "/HEAD/";
+          if (value && (attr !== "srcset" || !/\s/.test(value))) {
+            const target = value.startsWith("#")
+              ? repository.replace(/\/$/, "") + value
+              : URL.canParse(value, base) && httpsURL(new URL(value, base).href);
+            if (target) node.setAttribute(attr, target);
+          }
+        }
+        for (const attr of tag === "img" ? ["alt", "width", "height"] : tag === "source" ? ["media", "type"] : []) {
+          if (child.hasAttribute(attr)) node.setAttribute(attr, child.getAttribute(attr));
+        }
+        if (tag === "img") {
+          node.loading = "lazy";
+          node.referrerPolicy = "no-referrer";
+        }
+        parent.append(node);
+        copy(node, child.childNodes);
+      }
+    }
+
+    copy(article, source.content.childNodes);
+    return article;
   }
 
   let registry;
@@ -75,9 +128,24 @@
   document.querySelector("article h1").textContent = plugin.name;
   document.title = plugin.name + " · Alto";
   details.append(element("p", plugin.description));
-  details.append(element("p", "Install in Alto with registration code " + plugin.code + "."));
+  const code = element("div", "");
+  code.className = "plugin-code";
+  code.append(element("span", "Registration code"), element("strong", plugin.code));
+  details.append(code);
   const repository = httpsURL(plugin.repository);
-  if (repository) details.append(link("Plugin repository", repository));
+  if (repository) {
+    const repoLink = link("Plugin repository", repository);
+    repoLink.className = "plugin-repository";
+    const icon = document.getElementById("plugin-github-icon");
+    if (icon) repoLink.prepend(icon.content.cloneNode(true));
+    details.append(repoLink);
+    const readme = element("div", "Loading README…");
+    readme.setAttribute("aria-live", "polite");
+    details.append(readme);
+    readREADME(repository).then(article => readme.replaceChildren(article)).catch(() => {
+      readme.textContent = "The README is unavailable here. You can read it in the plugin repository.";
+    });
+  }
 
   status.textContent = "";
   if (!plugin.metadata) return;
