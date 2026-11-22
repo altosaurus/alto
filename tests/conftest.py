@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 
 import atexit
-import copy
 import os
 import random
 import shutil
@@ -92,34 +91,56 @@ def _zoom_at_100() -> Iterator[None]:
         app.setFont(font)
 
 
+SHARED_SETTINGS = (
+    "note_names",
+    "intervals",
+    "interval_construction",
+    "keyboard",
+    "keyboard_intervals",
+    "construction",
+    "arpeggio",
+    "key_signatures",
+    "key_construction",
+    "order_of_keys",
+    "scale_construction",
+    "scale_identification",
+    "clef_basics",
+    "notation",
+    "circle",
+)
+
+
+def _default_settings() -> None:
+    """
+    Put every shared settings object back to its defaults, forget plugin exercises' options, and clear the saved settings.
+
+    Each object is reset in place, because screens and panels keep references to it.
+    """
+    for name in SHARED_SETTINGS:
+        chosen = getattr(settings, name)
+        chosen.__dict__.clear()
+        chosen.__dict__.update(type(chosen)().__dict__)
+    settings.pack_exercises.clear()
+    saved = QSettings("alto", "alto")
+    saved.clear()
+    saved.sync()
+    ChoiceExercise.button_settings.cache_clear()
+
+
 @pytest.fixture(autouse=True)
 def _isolated_state() -> Iterator[None]:
     """
     Every test starts with the default exercise settings and no saved settings, and sound off.
+
+    The settings are reset before the test as well as after it, so a doctest or anything else that ran earlier in the session
+    and changed them cannot make a test depend on the order it runs in.
 
     Yields
     ------
     None
         Control, while the test runs with fresh settings.
     """
-    names = (
-        "note_names",
-        "intervals",
-        "interval_construction",
-        "keyboard",
-        "keyboard_intervals",
-        "construction",
-        "arpeggio",
-        "key_signatures",
-        "key_construction",
-        "order_of_keys",
-        "scale_construction",
-        "scale_identification",
-        "clef_basics",
-        "notation",
-        "circle",
-    )
-    before = {n: copy.deepcopy(getattr(settings, n).__dict__) for n in names}
+    _default_settings()
     muted = sounds.enabled
     sounds.enabled = False
     yield
@@ -131,13 +152,7 @@ def _isolated_state() -> Iterator[None]:
     keyboard_styles._custom.clear()
     # noinspection PyProtectedMember
     keyboard_styles._custom.update(keyboard_styles.DEFAULT_CUSTOM)
-    for n in names:
-        getattr(settings, n).__dict__.clear()
-        getattr(settings, n).__dict__.update(before[n])
-    saved = QSettings("alto", "alto")
-    saved.clear()
-    saved.sync()
-    ChoiceExercise.button_settings.cache_clear()
+    _default_settings()
 
 
 @pytest.fixture
