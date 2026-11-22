@@ -29,6 +29,11 @@ os.environ["XDG_DATA_HOME"] = f"{_HOME}/data"
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 atexit.register(lambda: shutil.rmtree(_HOME, ignore_errors=True))
 
+# Git tells a hook which repository it runs for. A push from a worktree sets GIT_DIR, and the tests that make throwaway
+# repositories would then run their git commands on Alto's own. Tests never run inside a git command, so drop these.
+for _name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_OBJECT_DIRECTORY", "GIT_PREFIX"):
+    os.environ.pop(_name, None)
+
 import pytest  # noqa: E402
 from PySide6.QtCore import (  # noqa: E402
     QEvent,
@@ -44,7 +49,11 @@ from alto.learning import (  # noqa: E402
     Database,
     Learner,
 )
-from alto.ui import keyboard_styles, zoom  # noqa: E402
+from alto.ui import (  # noqa: E402
+    keyboard_styles,
+    motion,
+    zoom,
+)
 
 
 @pytest.fixture(scope="session")
@@ -89,6 +98,28 @@ def _zoom_at_100() -> Iterator[None]:
     zoom._percent, zoom._base_font = zoom.DEFAULT, None
     if isinstance(app, QApplication) and font is not None:
         app.setFont(font)
+
+
+@pytest.fixture(autouse=True)
+def _instant_motion(request: pytest.FixtureRequest) -> Iterator[None]:
+    """
+    Run animations and feedback delays instantly, so a test checks what the interface does, not how long it takes.
+
+    A test marked `motion` keeps the real durations: it is about the animation or the timing itself.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The running test, whose markers say whether it is about motion.
+
+    Yields
+    ------
+    None
+        Control, while the test runs.
+    """
+    motion.set_instant("motion" not in request.keywords)
+    yield
+    motion.set_instant(False)
 
 
 SHARED_SETTINGS = (

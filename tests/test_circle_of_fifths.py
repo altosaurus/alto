@@ -64,6 +64,7 @@ from alto.theory.pitch import (
 from alto.theory.scales import mode_tonic
 from alto.ui import circle as circle_module
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_panel as sp
 from alto.ui.circle import (
     GLOW_MS,
@@ -1069,7 +1070,7 @@ def test_the_circle_has_a_settings_panel_with_the_three_kinds(app: QApplication)
     es.load_circle()
     assert settings.circle.questions == {"minor"}  # nothing usable: what was there stays
     pane.questions_row.click()
-    QTest.qWait(300)
+    motion.settle()
     assert pane.stack.currentIndex() == 1
 
 

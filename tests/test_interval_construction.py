@@ -15,6 +15,7 @@ from alto.audio import sounds
 from alto.exercises.base import Question
 from alto.exercises.library import IntervalConstruction, IntervalNames
 from alto.theory.pitch import Interval, Note
+from alto.ui import motion
 from alto.ui.anki_exporter import card_fields
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_settings import load_exercise_settings
@@ -137,7 +138,7 @@ def test_settings_retries_and_export(app: QApplication, tmp_path: Path) -> None:
     for wrong, hint in ((first, "staff position"), (Note.from_diatonic(target.diatonic, accidental=2), "accidental")):
         view._place(wrong)
         assert hint in view.place_status.text() and view.input_staff.columns[0][0] == first
-        QTest.qWait(520)
+        motion.settle()
         assert not view.input_staff.locked and view.input_staff.columns == [[first]]
     alternate = next(
         Note.from_diatonic(target.diatonic, accidental=a)

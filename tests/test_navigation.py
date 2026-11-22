@@ -25,6 +25,7 @@ from alto.learning import (
     Database,
     Learner,
 )
+from alto.ui import motion
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.glossary import GlossaryPage
 from alto.ui.lesson import LessonsPage
@@ -642,7 +643,9 @@ def test_shuffle_uses_matching_exercises_from_another_category(window: MainWindo
     second.settings_panel.next_question_mode = "Immediately"
     second.submit("wrong", button=None)
     assert second.answered and second._advance.isActive()
-    assert QSignalSpy(second.shuffle_requested).wait(2000)
+    shuffled = QSignalSpy(second.shuffle_requested)
+    motion.settle()  # the next question comes, from the other exercise
+    assert shuffled.count() == 1
     assert window.nav.currentItem() is window._items[KeyboardNotes]
     assert shuffle.isChecked()
     shuffle.click()
@@ -650,7 +653,7 @@ def test_shuffle_uses_matching_exercises_from_another_category(window: MainWindo
     assert current is not None and current.question is not None and not current.shuffle_answers
     current.settings_panel.next_question_mode = "Immediately"
     current.submit(current.question.answer, button=None)
-    assert QSignalSpy(current._advance.timeout).wait(2000)
+    motion.settle()  # the next question comes
     assert window._exercise_page is current and not current.answered
     shuffle.click()
     assert window._exercise_page is current and current.shuffle_answers
@@ -704,6 +707,7 @@ def test_shuffle_between_two_notation_exercises(window: MainWindow) -> None:
 
 
 @pytest.mark.parametrize("pace", ["After Animation", "Immediately"])
+@pytest.mark.motion  # about when the next question comes after the answer is played
 def test_shuffle_after_correct_audio_answer(window: MainWindow, pace: str) -> None:
     """
     Advance a correct keyboard answer at the selected pace while keeping shuffle checked.

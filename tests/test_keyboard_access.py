@@ -46,6 +46,7 @@ from alto.theory.pitch import (
     Note,
     key_accidental,
 )
+from alto.ui import motion
 from alto.ui.exercise_view import (
     ExerciseView,
     choice_keys,
@@ -440,7 +441,7 @@ def test_a_wrong_note_is_cleared_and_the_caret_comes_back_for_another_try(app: Q
     caret = view.input_staff.caret
     press(view, "Return")
     assert view.missed and not view.answered and not view.place_button.isEnabled()
-    QTest.qWait(1200)
+    motion.settle()  # the wrong-answer feedback ends
     assert view.place_button.isEnabled() and not view.input_staff.locked
     assert view.input_staff.caret == caret and len(view.input_staff.columns) == 1  # the caret's note is back
     reach(view, q.construct)

@@ -538,7 +538,9 @@ def _interval_starts(
     return starts
 
 
+INTERVAL_CONSONANCE_PROMPT = "Is this interval consonant or dissonant?"
 INTERVAL_INVERSION_PROMPTS = {
+    "consonance": "Is the inverted interval consonant or dissonant?",
     "interval": "What is the number of the inverted interval?",
     "quality": "What is the quality of the inverted interval?",
     "combined": "What is the inversion of this interval?",
@@ -585,7 +587,7 @@ class IntervalNames(Exercise):
         'Identify the interval and quality.'
         """
         q = question
-        if q.prompt in INTERVAL_INVERSION_PROMPTS.values():
+        if q.prompt == INTERVAL_CONSONANCE_PROMPT or q.prompt in INTERVAL_INVERSION_PROMPTS.values():
             return q.prompt
         if q.answer.isdecimal():
             return "Identify the numeric interval."
@@ -612,6 +614,8 @@ class IntervalNames(Exercise):
             "<br><br>An interval has a quality followed by a number. The number counts the letter names it "
             "spans, including both notes. The quality is P (perfect), M (major), m (minor), A (augmented) or "
             "d (diminished). In Quality, choose whether to answer with the number, the full interval, or the quality alone. "
+            "Turn on Consonance to classify the interval. In this exercise, perfect unisons, fourths, fifths and octaves, "
+            "and major or minor thirds and sixths, are consonant, including their compound forms. "
             "Turn on Inversions to name the inverted interval. For example, C up to E is a major third. "
             "Move C up an octave. From E up to C, the interval is a minor sixth. Reduce compound intervals first. "
             "Use Display Mode to choose how the two notes appear. Under Melodic, check Ascending, Descending, or both. "
@@ -638,6 +642,8 @@ class IntervalNames(Exercise):
             # The original melodic questions were stored with an empty signature.
             return ""
         parts = vars(cfg).copy()
+        if not cfg.consonance:
+            del parts["consonance"]
         if not cfg.inversions:
             del parts["inversions"]  # Keep earlier identification questions eligible for review.
         if cfg.quality_mode != "quality":
@@ -763,10 +769,25 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
         explanation += f" The inversion of {iv.short} is {inverted.short}."
         iv = inverted
         available = sorted(dict.fromkeys(other.inversion for other in available), key=lambda other: other.number)
-    if cfg.quality_mode == "interval":
+    mode = "consonance" if cfg.consonance else cfg.quality_mode
+    if mode == "consonance":
+        prompt = INTERVAL_CONSONANCE_PROMPT
+        consonant = ((iv.number - 1) % 7, iv.quality) in {
+            (0, "P"),
+            (3, "P"),
+            (4, "P"),
+            (2, "M"),
+            (2, "m"),
+            (5, "M"),
+            (5, "m"),
+        }
+        answer = "Consonant" if consonant else "Dissonant"
+        pool = ["Consonant", "Dissonant"]
+        explanation += f" It is {answer.lower()}."
+    elif mode == "interval":
         prompt, answer = "What is the interval number?", str(iv.number)
         pool = list(dict.fromkeys(str(other.number) for other in available))
-    elif cfg.quality_mode == "quality":
+    elif mode == "quality":
         prompt, answer = "What is the interval quality?", QUALITY_NAMES[iv.quality]
         qualities = {other.quality for other in available}
         pool = [QUALITY_NAMES[quality] for quality in settings.INTERVAL_QUALITY_ORDER if quality in qualities]
@@ -774,8 +795,10 @@ def _written_interval_question(cfg: settings.IntervalSettings, *, rng: random.Ra
         prompt, answer = "", iv.short
         pool = [other.short for other in available]
     return Question(
-        INTERVAL_INVERSION_PROMPTS[cfg.quality_mode] if cfg.inversions else prompt,
-        choices=pool if cfg.button_mode == "all" else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
+        INTERVAL_INVERSION_PROMPTS[mode] if cfg.inversions else prompt,
+        choices=pool
+        if mode == "consonance" or cfg.button_mode == "all"
+        else pick_distractors(answer, pool=pool, n=cfg.button_count - 1, rng=rng),
         answer=answer,
         staff=staff,
         clef=clef,
@@ -927,7 +950,9 @@ class IntervalConstruction(Exercise):
         --------
         A change in staff ranges changes which stored questions are eligible.
         """
-        return signature({key: value for key, value in vars(settings.interval_construction).items() if key != "inversions"})
+        parts = vars(settings.interval_construction).copy()
+        del parts["inversions"], parts["consonance"]
+        return signature(parts)
 
     def generate(self, rng: random.Random) -> Question:
         """

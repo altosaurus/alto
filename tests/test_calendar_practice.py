@@ -34,6 +34,7 @@ from alto.learning.database import (
 from alto.learning.grading import DAY, MAX_DAYS, _fuzz, inherited_state, review_options
 from alto.learning.learner import PracticeComplete
 from alto.theory.pitch import Note
+from alto.ui import motion
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.main_window import MainWindow
 from alto.ui.settings_panel import NotationSettingsPanel, NoteConstructionSettingsPanel, NoteNameSettingsPanel
@@ -1273,7 +1274,8 @@ def test_daily_limit_controls_follow_the_scheduler(app: QApplication) -> None:
     assert not panel.limits_row.isHidden() and panel.limits_row.value.text() == "3 new · 8 reviews"
     page_changed = QSignalSpy(panel.stack.currentChanged)
     panel.limits_row.click()
-    assert page_changed.count() or page_changed.wait(2000)
+    motion.settle()
+    assert page_changed.count()
     assert panel.stack.currentIndex() == panel.limits_page
     assert all(box.isChecked() for box in editor.inherit)
     editor.inherit[0].click()

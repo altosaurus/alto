@@ -13,7 +13,9 @@ Alto uses [semantic versioning](https://semver.org/).
 
 - The glossary explains intervals: interval, harmonic interval, melodic interval, unison, simple intervals, compound intervals, perfect, major and minor. A harmonic interval's example stacks its two notes and plays them together.
 
-- Interval Identification has an **Inversions** switch for naming the inversion of a written interval.
+- Interval Identification has an **Inversions** switch for naming the inversion of a written interval. After a right answer, the staff shows and plays the inversion.
+
+- Interval Identification has a **Consonance** switch for telling whether an interval is consonant or dissonant. Perfect unisons, fourths, fifths and octaves, and major and minor thirds and sixths, count as consonant, as do their compound forms. With **Inversions** on too, it asks about the inversion.
 
 - Lesson keyboards highlight each note as it sounds and show chord tones together during playback.
 - The Pitches and Notes lesson labels C and brackets its neighboring pair of black keys before asking learners to name the next white key.

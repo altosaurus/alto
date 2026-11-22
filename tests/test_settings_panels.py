@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 
 from alto import settings
 from alto.ui import exercise_settings as es
+from alto.ui import motion
 from alto.ui import settings_menu as sm
 from alto.ui import settings_panel as sp
 from alto.ui.store import store
@@ -32,9 +33,9 @@ if TYPE_CHECKING:
 
 def slide() -> None:
     """
-    Wait for a page to finish sliding in.
+    Let the page that was asked for finish sliding in.
     """
-    QTest.qWait(300)  # a page slides in over about 220 ms
+    motion.settle()
 
 
 def back(panel: QWidget) -> None:

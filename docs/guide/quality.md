@@ -67,7 +67,9 @@ Two `conftest.py` files set the stage.
 3. Seed every random source. A flaky test teaches people to ignore red.
 4. Do not test private details if a public behavior says the same thing. The exceptions are private helpers that are hard to
    reach through the public interface (the animations' final states, for example).
-5. Keep durations short: `QTest.qWait` costs real time.
+5. Test one thing. Check answers in logic tests, without widgets. In a screen test, call `motion.settle()` to end feedback
+   and animations instead of waiting; keep `QTest.qWait`, which costs real time, for tests marked `motion` that are about
+   the timing itself.
 
 ### Coverage
 
