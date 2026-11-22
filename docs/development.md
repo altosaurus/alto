@@ -26,8 +26,15 @@ The theory, exercise generation, and learning code can be tested without a displ
 
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest -n auto        # the whole suite, on every core at once
+pytest tests/test_audio.py   # one file, in one process
 ```
+
+`-n auto` (from pytest-xdist) runs the tests in one process per core, which takes the suite from minutes to under a minute.
+Leave it out when running a few tests, where starting the processes would take longer than the tests.
+`sh scripts/run-tests.sh` runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets on
+every core, then the budgets on their own, since they time real operations and need a quiet machine. Set `ALTO_TEST_WORKERS`
+to use a different number of processes.
 
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
 

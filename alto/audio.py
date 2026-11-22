@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import io
+import os
 import tempfile
 import time
 import wave
@@ -391,6 +392,35 @@ def to_wav_bytes(
     return buf.getvalue()
 
 
+def write_file_atomically(
+    path: Path,
+    *,
+    data: bytes,
+) -> None:
+    """
+    Write a file so that nothing ever reads it half written, even another copy of Alto writing the same file.
+
+    The bytes go to a file of the writer's own first and then replace the file in one step.
+
+    Parameters
+    ----------
+    path : Path
+        The file.
+    data : bytes
+        What it holds. Keyword-only.
+
+    Examples
+    --------
+    >>> folder = Path(tempfile.mkdtemp())
+    >>> write_file_atomically(folder / "note.wav", data=b"RIFF")
+    >>> (folder / "note.wav").read_bytes(), [p.name for p in folder.iterdir()]
+    (b'RIFF', ['note.wav'])
+    """
+    partial = path.with_name(f".{path.name}.{os.getpid()}.part")
+    partial.write_bytes(data)
+    partial.replace(path)
+
+
 ASSETS = Path(__file__).parent / "assets"
 ASSET_DIR = ASSETS / "piano"
 
@@ -524,9 +554,9 @@ class Sounds:
         if samples and (inst.key != "piano" or abs(min(samples, key=lambda m: abs(m - midi)) - midi) <= 2):
             nearest = min(samples, key=lambda m: abs(m - midi))
             audio, rate = read_wav(samples[nearest])
-            path.write_bytes(to_wav_bytes(shift_pitch(audio, semitones=midi - nearest), rate=rate))
+            write_file_atomically(path, data=to_wav_bytes(shift_pitch(audio, semitones=midi - nearest), rate=rate))
         else:  # the piano outside its sampled range
-            path.write_bytes(to_wav_bytes(synth_piano(midi)))
+            write_file_atomically(path, data=to_wav_bytes(synth_piano(midi)))
         return path
 
     def note_duration_ms(self, midi: int, *, instrument: str | None = None) -> int:
@@ -772,7 +802,7 @@ class Sounds:
             # A pack update can replace the recordings under the same instrument key.
             path = self._dir / f"preview_{hashlib.sha256(wav).hexdigest()}.wav"
         if not path.exists():
-            path.write_bytes(wav)
+            write_file_atomically(path, data=wav)
         return path
 
     def preview(
