@@ -28,11 +28,11 @@ from alto.instrument_packs import (
     identifier,
     image_point,
     pitch,
-    plain_text,
     read_focus,
     read_icon,
     read_instrument,
     read_marker_size,
+    read_text,
 )
 from alto.lessons import register_lesson
 from alto.lessons.base import Lesson
@@ -467,7 +467,7 @@ CONTROL_KINDS = ("sound", "range", "accidentals", "octave")  # the settings a no
 KEYBOARD_CONTROL_KINDS = ("sound", "range", "intervals", "manuals")  # the settings a keyboard interval exercise can offer
 
 
-def read_controls(value: object, *, key: str, kinds: tuple[str, ...] = CONTROL_KINDS) -> dict[str, str | bool]:
+def read_controls(value: object, *, where: str, kinds: tuple[str, ...] = CONTROL_KINDS) -> dict[str, str | bool]:
     """
     Validate the settings a pack offers for one of its exercises.
 
@@ -478,7 +478,7 @@ def read_controls(value: object, *, key: str, kinds: tuple[str, ...] = CONTROL_K
         sound), ``range`` (a clef to draw a range selector on, or true for the keys of a keyboard exercise),
         ``accidentals`` and ``octave`` (true for a switch), ``intervals`` (true for a choice of intervals),
         ``manuals`` (true for a choice of keyboards), or None.
-    key : str
+    where : str
         The exercise id, for diagnostics. Keyword-only.
     kinds : tuple of str, default CONTROL_KINDS
         The settings this kind of exercise can have. Keyword-only.
@@ -495,27 +495,27 @@ def read_controls(value: object, *, key: str, kinds: tuple[str, ...] = CONTROL_K
 
     Examples
     --------
-    >>> read_controls({"range": "alto", "octave": True}, key="pack.v.notes")
+    >>> read_controls({"range": "alto", "octave": True}, where="pack.v.notes")
     {'range': 'alto', 'octave': True}
-    >>> read_controls({"range": True, "intervals": True}, key="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
+    >>> read_controls({"range": True, "intervals": True}, where="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
     {'range': True, 'intervals': True}
-    >>> read_controls(None, key="pack.v.notes")
+    >>> read_controls(None, where="pack.v.notes")
     {}
     """
     if value is None:
         return {}
     if not isinstance(value, dict) or not value or set(value) - set(kinds):
-        raise ValueError(f"Give the settings of {key} as an object with any of: {', '.join(kinds)}.")
+        raise ValueError(f"Give the settings of {where} as an object with any of: {', '.join(kinds)}.")
     keyboard = kinds == KEYBOARD_CONTROL_KINDS
     for kind, setting in value.items():
-        if kind == "sound" and not plain_text(setting, limit=30):
-            raise ValueError(f"Give the sound setting of {key} a plain-text label of at most 30 characters.")
+        if kind == "sound":
+            read_text(setting, limit=30, what="label", where=f"the sound setting of {where}")
         if kind == "range" and keyboard and setting is not True:
-            raise ValueError(f"Set range in the settings of {key} to true, or leave it out.")
+            raise ValueError(f"Set range in the settings of {where} to true, or leave it out.")
         if kind == "range" and not keyboard and setting not in settings.CLEFS:
-            raise ValueError(f"Set the range of {key} to one clef: {', '.join(settings.CLEFS)}.")
+            raise ValueError(f"Set the range of {where} to one clef: {', '.join(settings.CLEFS)}.")
         if kind in ("accidentals", "octave", "intervals", "manuals") and setting is not True:
-            raise ValueError(f"Set {kind} in the settings of {key} to true, or leave it out.")
+            raise ValueError(f"Set {kind} in the settings of {where} to true, or leave it out.")
     return dict(value)
 
 
@@ -624,8 +624,7 @@ def _fingerboard_cards(
         grid = {note.name: (row_of[note.accidental], note.letter) for note in ordered}
         names = {note.name: note for note in ordered}
     prompt = exercise.get("prompt", "Name the note at the dot.")
-    if not plain_text(prompt, limit=120):
-        raise ValueError(f"Give {key} a plain-text prompt of at most 120 characters.")
+    prompt = read_text(prompt, limit=120, what="prompt", where=key)
     cards = []
     for position in positions:
         note = Note.parse(position.note)
@@ -652,7 +651,7 @@ def _fingerboard_cards(
     return cards
 
 
-def _keyboard_limits(exercise: dict, *, key: str) -> tuple[tuple[int, int], tuple[int, int]]:
+def _keyboard_limits(exercise: dict, *, where: str) -> tuple[tuple[int, int], tuple[int, int]]:
     """
     Read the range of keys a keyboard exercise has cards for, and the part of it asked until the learner chooses another.
 
@@ -660,7 +659,7 @@ def _keyboard_limits(exercise: dict, *, key: str) -> tuple[tuple[int, int], tupl
     ----------
     exercise : dict
         Exercise manifest entry, with ``lowest`` and ``highest`` and optionally ``default_range``.
-    key : str
+    where : str
         Exercise id for diagnostics. Keyword-only.
 
     Returns
@@ -675,28 +674,28 @@ def _keyboard_limits(exercise: dict, *, key: str) -> tuple[tuple[int, int], tupl
 
     Examples
     --------
-    >>> _keyboard_limits({"lowest": "E1", "highest": "F6", "default_range": ["C3", "C5"]}, key="pack.v.keys")
+    >>> _keyboard_limits({"lowest": "E1", "highest": "F6", "default_range": ["C3", "C5"]}, where="pack.v.keys")
     ((28, 89), (48, 72))
-    >>> _keyboard_limits({"lowest": "C3", "highest": "C5"}, key="pack.v.keys")
+    >>> _keyboard_limits({"lowest": "C3", "highest": "C5"}, where="pack.v.keys")
     ((48, 72), (48, 72))
     """
     low, high = pitch(exercise.get("lowest")).midi, pitch(exercise.get("highest")).midi
     if not 1 <= high - low:
-        raise ValueError(f"Put the lowest key of {key} below its highest key.")
+        raise ValueError(f"Put the lowest key of {where} below its highest key.")
     chosen = exercise.get("default_range")
     if chosen is None:
         return (low, high), (low, high)
     if not isinstance(chosen, list) or len(chosen) != 2:
-        raise ValueError(f"Give the default_range of {key} as the lowest and the highest key to ask at first.")
+        raise ValueError(f"Give the default_range of {where} as the lowest and the highest key to ask at first.")
     start, end = pitch(chosen[0]).midi, pitch(chosen[1]).midi
     if not low <= start < end <= high:
         raise ValueError(
-            f"Keep the default_range of {key} inside its lowest and highest keys, with the lowest below the highest.",
+            f"Keep the default_range of {where} inside its lowest and highest keys, with the lowest below the highest.",
         )
     return (low, high), (start, end)
 
 
-def _keyboard_cards(exercise: dict, *, model: PackInstrument, key: str) -> list[Question]:
+def _keyboard_cards(exercise: dict, *, model: PackInstrument, where: str) -> list[Question]:
     """
     Build a card for each interval, each lowest key, and each placement of the two keys on the instrument's keyboards.
 
@@ -707,7 +706,7 @@ def _keyboard_cards(exercise: dict, *, model: PackInstrument, key: str) -> list[
         ``intervals`` to ask, and whether the keys sit on the ``same`` keyboard or ``across`` two.
     model : PackInstrument
         The instrument whose keyboards Alto draws.
-    key : str
+    where : str
         Exercise id for diagnostics. Keyword-only.
 
     Returns
@@ -728,31 +727,30 @@ def _keyboard_cards(exercise: dict, *, model: PackInstrument, key: str) -> list[
         raise ValueError(f"Declare keyboards on {model.key} for a keyboard-intervals exercise.")
     names = exercise.get("keyboards", [board.name for board in model.keyboards])
     if not isinstance(names, list) or not names or len(set(names)) != len(names):
-        raise ValueError(f"List each keyboard of {key} once.")
+        raise ValueError(f"List each keyboard of {where} once.")
     boards = []
     for name in names:
         board = model.keyboard(name) if isinstance(name, str) else None
         if board is None:
-            raise ValueError(f"{key} names a keyboard {name!r} that {model.key} does not have.")
+            raise ValueError(f"{where} names a keyboard {name!r} that {model.key} does not have.")
         boards.append(board)
-    (low, high), _ = _keyboard_limits(exercise, key=key)
+    (low, high), _ = _keyboard_limits(exercise, where=where)
     table = settings.KEYBOARD_INTERVAL_NAMES[:12]
     wanted = exercise.get("intervals", list(table))
     if not isinstance(wanted, list) or not wanted or len(set(wanted)) != len(wanted) or any(name not in table for name in wanted):
-        raise ValueError(f"List distinct intervals for {key}, from {', '.join(table)}.")
+        raise ValueError(f"List distinct intervals for {where}, from {', '.join(table)}.")
     placements = exercise.get("placements", ["same", "across"])
     if not isinstance(placements, list) or not placements or not set(placements) <= {"same", "across"}:
-        raise ValueError(f'Set placements for {key} to "same", "across" or both.')
+        raise ValueError(f'Set placements for {where} to "same", "across" or both.')
     if "across" in placements and len(boards) < 2:
-        raise ValueError(f'Use "across" in {key} only with two or more keyboards.')
+        raise ValueError(f'Use "across" in {where} only with two or more keyboards.')
     pairs = []
     if "same" in placements:
         pairs.extend((board, board) for board in boards)
     if "across" in placements:
         pairs.extend((first, second) for first in boards for second in boards if first is not second)
     prompt = exercise.get("prompt", "Name the interval from the lower key to the higher key.")
-    if not plain_text(prompt, limit=120):
-        raise ValueError(f"Give {key} a plain-text prompt of at most 120 characters.")
+    prompt = read_text(prompt, limit=120, what="prompt", where=where)
     cards = []
     for name in wanted:
         distance = table.index(name) + 1
@@ -782,7 +780,7 @@ def _keyboard_cards(exercise: dict, *, model: PackInstrument, key: str) -> list[
                     ),
                 )
     if not cards:
-        raise ValueError(f"{key} has no pair of keys to ask. Check its range, intervals and keyboards.")
+        raise ValueError(f"{where} has no pair of keys to ask. Check its range, intervals and keyboards.")
     return cards
 
 
@@ -1008,14 +1006,14 @@ def read_pack(path: Path) -> list[type[PackExercise]]:
         if not isinstance(title, str) or not title.strip() or "<" in title or ">" in title:
             raise ValueError(f"Give {key} a plain-text title.")
         description = exercise.get("description")
-        if description is not None and not plain_text(description, limit=400):
-            raise ValueError(f"Give {key} a plain-text description of at most 400 characters.")
+        if description is not None:
+            description = read_text(description, limit=400, what="description", where=key)
         instrument_id = f"pack.{pack_id}.{identifier(exercise.get('instrument'))}"
         if instrument_id not in instruments:
             raise ValueError(f"Unknown instrument {instrument_id} in {key}.")
         model = instruments[instrument_id]
         keyboard = exercise["type"] == "keyboard-intervals"
-        controls = read_controls(exercise.get("settings"), key=key, kinds=KEYBOARD_CONTROL_KINDS if keyboard else CONTROL_KINDS)
+        controls = read_controls(exercise.get("settings"), where=key, kinds=KEYBOARD_CONTROL_KINDS if keyboard else CONTROL_KINDS)
         span = (0, 0)
         key_span = key_default = (0, 0)
         interval_names: tuple[str, ...] = ()
@@ -1027,8 +1025,8 @@ def read_pack(path: Path) -> list[type[PackExercise]]:
             tuning = ", ".join(string.pitch for string in model.strings)
             help_text = f"Name the note marked on the fingerboard. The open strings from lowest to highest are {tuning}."
         elif exercise["type"] == "keyboard-intervals":
-            cards = _keyboard_cards(exercise, model=model, key=key)
-            key_span, key_default = _keyboard_limits(exercise, key=key)
+            cards = _keyboard_cards(exercise, model=model, where=key)
+            key_span, key_default = _keyboard_limits(exercise, where=key)
             interval_names = tuple(exercise.get("intervals", settings.KEYBOARD_INTERVAL_NAMES[:12]))
             manual_names = tuple(exercise.get("keyboards", [board.name for board in model.keyboards]))
             help_text = "Name the interval between the two highlighted keys."

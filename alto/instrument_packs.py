@@ -169,7 +169,7 @@ class PackKeyboardStyle:
     numbers: tuple[tuple[str, float], ...] = ()
 
 
-def read_keyboard_style(value: object, *, key: str) -> PackKeyboardStyle | None:
+def read_keyboard_style(value: object, *, where: str) -> PackKeyboardStyle | None:
     """
     Validate the optional look of an instrument's keyboards.
 
@@ -177,7 +177,7 @@ def read_keyboard_style(value: object, *, key: str) -> PackKeyboardStyle | None:
     ----------
     value : object
         The instrument's ``keyboard_style`` entry, an object, or None.
-    key : str
+    where : str
         The instrument's qualified key, used in messages. Keyword-only.
 
     Returns
@@ -192,36 +192,36 @@ def read_keyboard_style(value: object, *, key: str) -> PackKeyboardStyle | None:
 
     Examples
     --------
-    >>> read_keyboard_style(None, key="pack.v.va") is None
+    >>> read_keyboard_style(None, where="pack.v.va") is None
     True
     >>> # noinspection PyUnresolvedReferences
-    >>> read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, key="pack.v.va").colors[1]
+    >>> read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, where="pack.v.va").colors[1]
     ('white', ('#2a211c', '#120d0a'))
     """
     if value is None:
         return None
     allowed = (*STYLE_COLORS, *STYLE_GRADIENTS, *STYLE_NUMBERS)
     if not isinstance(value, dict) or not value or set(value) - set(allowed):
-        raise ValueError(f"Give the keyboard_style of {key} as an object with any of: {', '.join(allowed)}.")
+        raise ValueError(f"Give the keyboard_style of {where} as an object with any of: {', '.join(allowed)}.")
 
     colors: list[tuple[str, str | tuple[str, str]]] = []
     numbers = []
     for name, entry in value.items():
         if name in STYLE_COLORS:
-            colors.append((name, _color(entry, key=key)))
+            colors.append((name, _color(entry, where=where)))
         elif name in STYLE_GRADIENTS:
             if not isinstance(entry, list) or len(entry) != 2:
-                raise ValueError(f"Give {name} in the keyboard_style of {key} as two colors: the top and the bottom of a key.")
-            colors.append((name, (_color(entry[0], key=key), _color(entry[1], key=key))))
+                raise ValueError(f"Give {name} in the keyboard_style of {where} as two colors: the top and the bottom of a key.")
+            colors.append((name, (_color(entry[0], where=where), _color(entry[1], where=where))))
         else:
             low, high = STYLE_NUMBERS[name]
             if type(entry) not in (int, float) or not low <= entry <= high:
-                raise ValueError(f"Set {name} in the keyboard_style of {key} to a number from {low} to {high}.")
+                raise ValueError(f"Set {name} in the keyboard_style of {where} to a number from {low} to {high}.")
             numbers.append((name, float(entry)))
     return PackKeyboardStyle(tuple(colors), tuple(numbers))
 
 
-def _color(text: object, *, key: str) -> str:
+def _color(text: object, *, where: str) -> str:
     """
     Check one ``#rrggbb`` color.
 
@@ -229,7 +229,7 @@ def _color(text: object, *, key: str) -> str:
     ----------
     text : object
         The color from the manifest.
-    key : str
+    where : str
         The instrument's qualified key, used in messages. Keyword-only.
 
     Returns
@@ -244,11 +244,11 @@ def _color(text: object, *, key: str) -> str:
 
     Examples
     --------
-    >>> _color("#eee3c8", key="pack.v.va")
+    >>> _color("#eee3c8", where="pack.v.va")
     '#eee3c8'
     """
     if not isinstance(text, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", text):
-        raise ValueError(f"Write each keyboard_style color of {key} as #rrggbb, not {text!r}.")
+        raise ValueError(f"Write each keyboard_style color of {where} as #rrggbb, not {text!r}.")
     return text
 
 
@@ -499,7 +499,7 @@ SOUND_INFO_FIELDS = ("summary", "source", "source_url", "performer", "recorded",
 SOUND_INFO_LIMIT = 800  # characters in one field
 
 
-def read_sound_info(value: object, *, key: str, pack_name: str) -> InstrumentInfo | None:
+def read_sound_info(value: object, *, where: str, pack_name: str) -> InstrumentInfo | None:
     """
     Validate the optional facts a pack gives about where its recordings came from.
 
@@ -507,7 +507,7 @@ def read_sound_info(value: object, *, key: str, pack_name: str) -> InstrumentInf
     ----------
     value : object
         The instrument's ``sound_info`` entry, or None when it has none.
-    key : str
+    where : str
         The instrument's qualified key, used in error messages. Keyword-only.
     pack_name : str
         The pack's display name, shown as the source when the entry gives none. Keyword-only.
@@ -524,24 +524,24 @@ def read_sound_info(value: object, *, key: str, pack_name: str) -> InstrumentInf
 
     Examples
     --------
-    >>> info = read_sound_info({"summary": "A viola."}, key="pack.v.va", pack_name="Viola")
+    >>> info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
     >>> info.source if info else None
     'Viola'
-    >>> read_sound_info(None, key="pack.v.va", pack_name="Viola") is None
+    >>> read_sound_info(None, where="pack.v.va", pack_name="Viola") is None
     True
     """
     if value is None:
         return None
     if not isinstance(value, dict) or set(value) - set(SOUND_INFO_FIELDS):
-        raise ValueError(f"Give {key} a sound_info object with only these fields: {', '.join(SOUND_INFO_FIELDS)}.")
+        raise ValueError(f"Give {where} a sound_info object with only these fields: {', '.join(SOUND_INFO_FIELDS)}.")
     text = {}
     for field, entry in value.items():
         if not isinstance(entry, str) or len(entry) > SOUND_INFO_LIMIT or any(c in entry for c in "<>"):
-            raise ValueError(f"Make sound_info {field} for {key} plain text of at most {SOUND_INFO_LIMIT} characters.")
+            raise ValueError(f"Make sound_info {field} for {where} plain text of at most {SOUND_INFO_LIMIT} characters.")
         text[field] = entry.strip()
     url = text.get("source_url", "")
     if url and (not url.startswith("https://") or any(c in url for c in " \t\n\"'")):
-        raise ValueError(f"Make sound_info source_url for {key} an https address.")
+        raise ValueError(f"Make sound_info source_url for {where} an https address.")
     return InstrumentInfo(
         text.get("summary") or "Recordings supplied by an installed instrument pack.",
         source=text.get("source") or pack_name,
@@ -576,6 +576,42 @@ def plain_text(value: object, *, limit: int) -> bool:
     (True, False, False)
     """
     return isinstance(value, str) and bool(value.strip()) and len(value) <= limit and "<" not in value and ">" not in value
+
+
+def read_text(value: object, *, limit: int, what: str, where: str) -> str:
+    """
+    Check one piece of plain text and return it trimmed.
+
+    Parameters
+    ----------
+    value : object
+        The manifest entry.
+    limit : int
+        The most characters allowed. Keyword-only.
+    what : str
+        What the entry is, for the message. Keyword-only.
+    where : str
+        Which lesson or step it belongs to, for the message. Keyword-only.
+
+    Returns
+    -------
+    str
+        The entry without surrounding space.
+
+    Raises
+    ------
+    ValueError
+        If it is not nonblank plain text within the limit.
+
+    Examples
+    --------
+    >>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
+    'Hello'
+    """
+    if not plain_text(value, limit=limit):
+        raise ValueError(f"Give {where} a plain-text {what} of at most {limit} characters.")
+    assert isinstance(value, str)
+    return value.strip()
 
 
 def read_focus(value: object, *, width: int, height: int) -> tuple[float, float, float, float]:
@@ -785,7 +821,7 @@ def read_picture_file(files: PackFiles, *, name: object) -> tuple[Path, tuple[in
     return image, (size.width(), size.height())
 
 
-def read_views(value: object, *, files: PackFiles, key: str) -> tuple[PackView, ...]:
+def read_views(value: object, *, files: PackFiles, where: str) -> tuple[PackView, ...]:
     """
     Validate the optional extra pictures of an instrument, such as a view of its back.
 
@@ -795,7 +831,7 @@ def read_views(value: object, *, files: PackFiles, key: str) -> tuple[PackView, 
         The instrument's ``views`` entry, an object from a view name to a pack-relative picture path, or None.
     files : PackFiles
         The pack's files. Keyword-only.
-    key : str
+    where : str
         The instrument's qualified key, used in error messages. Keyword-only.
 
     Returns
@@ -811,13 +847,13 @@ def read_views(value: object, *, files: PackFiles, key: str) -> tuple[PackView, 
     Examples
     --------
     >>> # noinspection PyTypeChecker
-    >>> read_views(None, files=None, key="pack.v.va")
+    >>> read_views(None, files=None, where="pack.v.va")
     ()
     """
     if value is None:
         return ()
     if not isinstance(value, dict) or not value or len(value) > VIEW_LIMIT:
-        raise ValueError(f"Give {key} up to {VIEW_LIMIT} views, as an object from each view's name to its picture.")
+        raise ValueError(f"Give {where} up to {VIEW_LIMIT} views, as an object from each view's name to its picture.")
     views = []
     for name, path in value.items():
         identifier(name)
@@ -826,7 +862,7 @@ def read_views(value: object, *, files: PackFiles, key: str) -> tuple[PackView, 
     return tuple(views)
 
 
-def read_keyboards(value: object, *, key: str) -> tuple[PackKeyboard, ...]:
+def read_keyboards(value: object, *, where: str) -> tuple[PackKeyboard, ...]:
     """
     Validate the optional keyboards of an instrument, which Alto draws from their ranges.
 
@@ -834,7 +870,7 @@ def read_keyboards(value: object, *, key: str) -> tuple[PackKeyboard, ...]:
     ----------
     value : object
         The instrument's ``keyboards`` entry, a list of objects, or None.
-    key : str
+    where : str
         The instrument's qualified key, used in messages. Keyword-only.
 
     Returns
@@ -850,24 +886,22 @@ def read_keyboards(value: object, *, key: str) -> tuple[PackKeyboard, ...]:
 
     Examples
     --------
-    >>> read_keyboards(None, key="pack.v.va")
+    >>> read_keyboards(None, where="pack.v.va")
     ()
-    >>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], key="pack.v.va")[0].naturals
+    >>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
     3
     """
     if value is None:
         return ()
     if not isinstance(value, list) or not value or len(value) > KEYBOARD_LIMIT:
-        raise ValueError(f"Give {key} up to {KEYBOARD_LIMIT} keyboards, as a list of objects.")
+        raise ValueError(f"Give {where} up to {KEYBOARD_LIMIT} keyboards, as a list of objects.")
     keyboards = []
     for row in value:
         if not isinstance(row, dict) or set(row) - {"name", "lowest", "highest"}:
-            raise ValueError(f"Give each keyboard of {key} as an object with only a name, a lowest key, and a highest key.")
-        name = row.get("name")
-        if not isinstance(name, str) or not name.strip() or not plain_text(name, limit=40):
-            raise ValueError(f"Give each keyboard of {key} a plain-text name of at most 40 characters.")
+            raise ValueError(f"Give each keyboard of {where} as an object with only a name, a lowest key, and a highest key.")
+        name = read_text(row.get("name"), limit=40, what="name", where=f"each keyboard of {where}")
         if any(existing.name == name for existing in keyboards):
-            raise ValueError(f"Give each keyboard of {key} its own name. Check {name!r}.")
+            raise ValueError(f"Give each keyboard of {where} its own name. Check {name!r}.")
         ends = []
         for field in ("lowest", "highest"):
             end = pitch(row.get(field))
@@ -884,7 +918,7 @@ POSITION_LIMIT = 12  # named positions on one instrument
 POSITION_STEPS = 36  # the highest half step a position may sit at
 
 
-def read_positions(value: object, *, key: str) -> tuple[tuple[int, str], ...]:
+def read_positions(value: object, *, where: str) -> tuple[tuple[int, str], ...]:
     """
     Validate the optional named positions along a string, which label the ruler beside the fingerboard.
 
@@ -892,7 +926,7 @@ def read_positions(value: object, *, key: str) -> tuple[tuple[int, str], ...]:
     ----------
     value : object
         The instrument's ``positions`` entry, a list of ``{"name": ..., "half_steps": ...}``, or None when it has none.
-    key : str
+    where : str
         The instrument's qualified key, used in error messages. Keyword-only.
 
     Returns
@@ -907,26 +941,26 @@ def read_positions(value: object, *, key: str) -> tuple[tuple[int, str], ...]:
 
     Examples
     --------
-    >>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], key="pack.v.va")
+    >>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
     ((2, '1st'), (3, '2nd'))
-    >>> read_positions(None, key="pack.v.va")
+    >>> read_positions(None, where="pack.v.va")
     ()
     """
     if value is None:
         return ()
     if not isinstance(value, list) or len(value) > POSITION_LIMIT:
-        raise ValueError(f"Give {key} a list of at most {POSITION_LIMIT} positions, each with a name and half_steps.")
+        raise ValueError(f"Give {where} a list of at most {POSITION_LIMIT} positions, each with a name and half_steps.")
     found: list[tuple[int, str]] = []
     for row in value:
         if not isinstance(row, dict) or set(row) != {"name", "half_steps"}:
-            raise ValueError(f"Give each position of {key} exactly a name and half_steps.")
+            raise ValueError(f"Give each position of {where} exactly a name and half_steps.")
         name, steps = row["name"], row["half_steps"]
         if not isinstance(name, str) or not name.strip() or len(name) > 12 or any(c in name for c in "<>"):
-            raise ValueError(f"Make each position name for {key} plain text of at most 12 characters.")
+            raise ValueError(f"Make each position name for {where} plain text of at most 12 characters.")
         if type(steps) is not int or not 1 <= steps <= POSITION_STEPS:
-            raise ValueError(f"Give each position of {key} whole half_steps from 1 to {POSITION_STEPS}.")
+            raise ValueError(f"Give each position of {where} whole half_steps from 1 to {POSITION_STEPS}.")
         if found and steps <= found[-1][0]:
-            raise ValueError(f"List the positions of {key} in ascending order of half_steps, with no repeats.")
+            raise ValueError(f"List the positions of {where} in ascending order of half_steps, with no repeats.")
         found.append((steps, name.strip()))
     return tuple(found)
 
@@ -1033,11 +1067,11 @@ def read_instrument(row: object, *, pack: str, files: PackFiles, pack_name: str 
         ):
             raise ValueError(f"Supply an animated GIF with at least two frames and at most 16 megapixels: {spec.get('file')}.")
         animation = AnswerAnimation(file, anchor)
-    info = read_sound_info(row.get("sound_info"), key=key, pack_name=pack_name or pack)
-    positions = read_positions(row.get("positions"), key=key)
-    views = read_views(row.get("views"), files=files, key=key)
-    keyboards = read_keyboards(row.get("keyboards"), key=key)
-    keyboard_style = read_keyboard_style(row.get("keyboard_style"), key=key)
+    info = read_sound_info(row.get("sound_info"), where=key, pack_name=pack_name or pack)
+    positions = read_positions(row.get("positions"), where=key)
+    views = read_views(row.get("views"), files=files, where=key)
+    keyboards = read_keyboards(row.get("keyboards"), where=key)
+    keyboard_style = read_keyboard_style(row.get("keyboard_style"), where=key)
     if keyboard_style is not None and not keyboards:
         raise ValueError(f"Declare keyboards on {key} to give it a keyboard_style.")
     return PackInstrument(

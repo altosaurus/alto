@@ -81,42 +81,6 @@ Validate the optional ``lessons`` list of a plugin manifest and build its lesson
 ()
 ```
 
-## read_text
-
-```python
-def read_text(
-    value: object,
-    *,
-    limit: int,
-    what: str,
-    where: str,
-) -> str
-```
-
-Check one piece of plain text and return it trimmed.
-
-**Parameters**
-
-- `value` (*object*): The manifest entry.
-- `limit` (*int*): The most characters allowed. Keyword-only.
-- `what` (*str*): What the entry is, for the message. Keyword-only.
-- `where` (*str*): Which lesson or step it belongs to, for the message. Keyword-only.
-
-**Returns**
-
-- *str*: The entry without surrounding space.
-
-**Raises**
-
-- *ValueError*: If it is not nonblank plain text within the limit.
-
-**Examples**
-
-```pycon
->>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
-'Hello'
-```
-
 ## read_picture
 
 ```python
