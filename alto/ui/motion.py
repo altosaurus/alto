@@ -132,6 +132,10 @@ def _add(pending: _Pending) -> None:
     >>> _add(_Pending(alive=lambda: False, run=print))
     >>> busy()
     False
+    >>> for _ in range(40):  # motion that is over is dropped, so the list does not grow without end
+    ...     _add(_Pending(alive=lambda: False, run=print))
+    >>> len(_queue) <= 33
+    True
     """
     if len(_queue) > 32:
         _queue[:] = [other for other in _queue if other.waiting()]
@@ -364,6 +368,19 @@ def settle(*, rounds: int = 1000) -> None:
     >>> settle()
     >>> busy()
     False
+
+    A step that always asks for itself again never settles:
+
+    >>> set_instant(True)
+    >>> owner = QObject()
+    >>> def again():
+    ...     later(10, owner=owner, step=again)
+    >>> later(10, owner=owner, step=again)
+    >>> settle(rounds=3)
+    Traceback (most recent call last):
+        ...
+    RuntimeError: Motion is still going after 3 rounds.
+    >>> set_instant(False)
     """
     for _ in range(rounds):
         QCoreApplication.processEvents()

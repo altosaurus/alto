@@ -222,5 +222,18 @@ the next question, which slides in) happens too. In the app's real time this wai
 >>> settle()
 >>> busy()
 False
+
+A step that always asks for itself again never settles:
+
+>>> set_instant(True)
+>>> owner = QObject()
+>>> def again():
+...     later(10, owner=owner, step=again)
+>>> later(10, owner=owner, step=again)
+>>> settle(rounds=3)
+Traceback (most recent call last):
+    ...
+RuntimeError: Motion is still going after 3 rounds.
+>>> set_instant(False)
 ```
 {% endraw %}
