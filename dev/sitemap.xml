@@ -190,6 +190,9 @@
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.notes/</loc>
 </url>
 <url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.pack_settings_panel/</loc>
+</url>
+<url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.package_update/</loc>
 </url>
 <url>
@@ -218,6 +221,9 @@
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.score_excerpt/</loc>
+</url>
+<url>
+<loc>https://altosaurus.github.io/alto/dev/api/alto.ui.settings_menu/</loc>
 </url>
 <url>
 <loc>https://altosaurus.github.io/alto/dev/api/alto.ui.settings_panel/</loc>

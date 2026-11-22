@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -1201,8 +1207,8 @@ request calls for a shared preference or the exercises already share it.</p>
 
 <h4 id="exercise-option-vocabulary">Exercise option vocabulary</h4>
 
-<p>The template exercise gives you a place to try the option in Alto. Its panel and the named helpers are in
-<code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>. Start with the option’s effect on the question or answer to choose among variants.</p>
+<p>The template exercise gives you a place to try the option in Alto. Its panel is in
+<code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code>, and the named helpers are in <code class="language-plaintext highlighter-rouge">alto/ui/settings_menu.py</code>. Start with the option’s effect on the question or answer to choose among variants.</p>
 
 <table>
   <thead>
@@ -1216,7 +1222,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Clefs</strong> (also “Clef”)</td>
       <td>A row showing the selected clef symbols. Its submenu has grouped, illustrated checkboxes. At least one stays checked. Offer the grand staff when the exercise supports questions on both staves.</td>
-      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">ClefPictures</code> with <code class="language-plaintext highlighter-rouge">_clefs_page</code>. <strong>Scale Construction</strong> shows the single-staff variant of the same picker.</td>
+      <td><strong>Note Identification</strong> uses <code class="language-plaintext highlighter-rouge">ClefPictures</code> with <code class="language-plaintext highlighter-rouge">clef_choice_page</code>. <strong>Scale Construction</strong> shows the single-staff variant of the same picker.</td>
     </tr>
     <tr>
       <td><strong>Range</strong></td>
@@ -1231,7 +1237,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Scale Key</strong></td>
       <td>Choose the musical keys used in questions. Underlined Major and Minor tabs each offer 15 signatures. Either tab may be empty if the other has a selection. The row counts selections by mode.</td>
-      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">_ScaleKeyPicker</code>. When both key options apply, place <strong>Staff Key</strong> above <strong>Scale Key</strong>.</td>
+      <td><strong>Scale Identification</strong> uses <code class="language-plaintext highlighter-rouge">ScaleKeyPicker</code>. When both key options apply, place <strong>Staff Key</strong> above <strong>Scale Key</strong>.</td>
     </tr>
     <tr>
       <td><strong>Key signatures</strong></td>
@@ -1281,7 +1287,7 @@ request calls for a shared preference or the exercises already share it.</p>
     <tr>
       <td><strong>Octave</strong></td>
       <td>An inline switch that makes the octave part of the required answer.</td>
-      <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">_ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
+      <td><strong>Note Construction</strong> uses <code class="language-plaintext highlighter-rouge">ToggleRow</code>. <strong>Keyboard Note Identification</strong> labels its variant <strong>Octave number</strong>.</td>
     </tr>
     <tr>
       <td><strong>Note names</strong>, <strong>Note values</strong>, <strong>Accidentals</strong></td>
@@ -1313,14 +1319,14 @@ When a new option needs a distinct interaction, describe the difference from its
 entry when introducing a reusable option or variant so it can be requested by name next time.</p>
 
 <ol>
-  <li>Give the option a row on the exercise settings menu. Use the shared <code class="language-plaintext highlighter-rouge">_Row</code> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_panel.py</code> with
+  <li>Give the option a row on the exercise settings menu. Use the shared <code class="language-plaintext highlighter-rouge">MenuRow</code> in <code class="language-plaintext highlighter-rouge">alto/ui/settings_menu.py</code> with
 the option name, a short summary of the current selection, and the chevron. For a standalone on/off setting,
 such as <strong>Octave</strong>, an inline <code class="language-plaintext highlighter-rouge">Switch</code> in a row without a chevron is appropriate. Two named modes, such as
 <strong>Click on Staff</strong> and <strong>Answer Button</strong>, belong together in a submenu.</li>
-  <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">_subpage</code> so the title matches the row and
+  <li>Open the option with the panel’s <code class="language-plaintext highlighter-rouge">SlideStack</code>. Build its page with <code class="language-plaintext highlighter-rouge">subpage</code> so the title matches the row and
 Back returns to the settings menu. Use radio buttons when exactly one choice applies and checkboxes when
 several can apply. Group controls below the header at their natural height and leave extra space below the
-last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">_scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">_subpage</code> so the
+last row. For scrollable option lists, use <code class="language-plaintext highlighter-rouge">scrolling</code> for the body and <code class="language-plaintext highlighter-rouge">fill=True</code> on <code class="language-plaintext highlighter-rouge">subpage</code> so the
 viewport can grow while the choices stay together. Verify row spacing at short and tall window sizes and
 check that the last option remains reachable when scrolling.</li>
   <li>Load the saved value when building the panel, using a default for first use. When a choice changes, save it,
@@ -1737,8 +1743,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/" aria-current="page">settings_panel</a></li>
@@ -656,389 +662,18 @@
         <article>
           <h1>alto.ui.settings_panel</h1>
           
-<p>The settings panels that slide in beside an exercise, and the small widgets they are built from.</p>
+<p>The settings panels of the built-in exercises, and <code class="language-plaintext highlighter-rouge">settings_panel_for</code>, which picks the panel for any exercise.</p>
 
 <p>Each exercise with settings has a panel: a menu of rows (Clefs, Range, Key signatures …) that each lead to a page. Edits
 are live: they change the shared settings object, are saved, and a <code class="language-plaintext highlighter-rouge">changed</code> signal tells the exercise to ask a new
-question. Loading and saving the settings is in <code class="language-plaintext highlighter-rouge">alto.ui.exercise_settings</code>.</p>
+question. The widgets the panels are built from are in <code class="language-plaintext highlighter-rouge">alto.ui.settings_menu</code>, plugin exercises’ panels are in
+<code class="language-plaintext highlighter-rouge">alto.ui.pack_settings_panel</code>, and loading and saving the settings is in <code class="language-plaintext highlighter-rouge">alto.ui.exercise_settings</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; _key_label(2)
-'D  ·  2♯'
-&gt;&gt;&gt; row = _Row("Clefs")
-&gt;&gt;&gt; row.title.text()
-'&lt;b&gt;Clefs&lt;/b&gt;'
-</code></pre>
-
-<h2 id="rangeeditor">RangeEditor</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RangeEditor</span><span class="p">(</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">low</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">high</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">limits</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
-
-<p>A staff showing the lowest and highest note asked for a clef.</p>
-
-<p>Arrows on the left move the lower bound, arrows on the right move the upper bound.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">edited</code> (<em>Signal</em>): Emitted with the clef key, the lowest note and the highest note (as staff steps) after a change.</li>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The clef.</li>
-  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest note asked, as a staff step (<code class="language-plaintext highlighter-rouge">Note.diatonic</code>).</li>
-  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest note asked.</li>
-  <li><code class="language-plaintext highlighter-rouge">limits</code> (<em>tuple of (int, int)</em>): The furthest the bounds may go.</li>
-  <li><code class="language-plaintext highlighter-rouge">staff</code> (<em>StaffWidget</em>): Shows the two notes.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = RangeEditor("treble", low=28, high=34)
-&gt;&gt;&gt; editor.caption_text.text()
-'&lt;b&gt;C4 – B4&lt;/b&gt;'
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the editor for a clef’s range.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>str</em>): The clef, a key of <code class="language-plaintext highlighter-rouge">RANGE_LIMITS</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">low</code> (<em>int</em>): The lowest note asked, as a staff step. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">high</code> (<em>int</em>): The highest note asked. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">limits</code> (<em>tuple of (int, int) or None, default None</em>): The furthest the bounds may go, as staff steps; None for the clef’s usual limits. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the editor. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
-True
-&gt;&gt;&gt; RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
-(21, 30)
-</code></pre>
-
-<h2 id="keydiagram">KeyDiagram</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyDiagram</span><span class="p">(</span>
-    <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
-
-<p>A small fork showing which key signatures are selected.</p>
-
-<p>C major is on the left, then two rows of seven dots: 1 to 7 sharps on the top row and 1 to 7 flats on the bottom.
-Selected keys are filled, the rest are hollow.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">DOT, PITCH, ROW_GAP, PAD</code> (<em>float</em>): The dot radius and the spacing, in pixels.</li>
-  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): The selected key signatures: sharps if positive, flats if negative.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 2}).toolTip()
-'C, D'
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Create the diagram.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int or None, default None</em>): The key signatures to show as selected.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram().keys
-set()
-</code></pre>
-
-<h3 id="keydiagramset_keys">KeyDiagram.set_keys</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Choose which key signatures are shown as selected.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">keys</code> (<em>set of int</em>): Sharps if positive, flats if negative.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; diagram = KeyDiagram()
-&gt;&gt;&gt; diagram.set_keys({2, -1, 0})
-&gt;&gt;&gt; diagram.toolTip()
-'C, D, F'
-</code></pre>
-
-<h3 id="keydiagrampaintevent">KeyDiagram.paintEvent</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Draw a dot for each key signature, filled when selected.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 1, -1}).grab().isNull()
-False
-</code></pre>
-
-<h2 id="switch">Switch</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Switch</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QAbstractButton</code></p>
-
-<p>A pill-shaped on/off switch whose knob slides across when toggled.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">W, H</code> (<em>int</em>): The switch’s size, in pixels.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
-&gt;&gt;&gt; switch.setChecked(True)
-&gt;&gt;&gt; switch.isChecked()
-True
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Create a switch that is off.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().isChecked()
-False
-</code></pre>
-
-<h3 id="switchsetchecked">Switch.setChecked</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">setChecked</span><span class="p">(</span><span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Turn the switch on or off without animating, as when a setting is loaded.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">on</code> (<em>bool</em>): The new state.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
-&gt;&gt;&gt; switch.setChecked(True)
-&gt;&gt;&gt; switch._pos
-1.0
-</code></pre>
-
-<h3 id="switchpaintevent">Switch.paintEvent</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">QPaintEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Draw the track, tinted between off and on, and the knob.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">_</code> (<em>QPaintEvent</em>): The paint request; the whole widget is always redrawn.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().grab().isNull()
-False
-</code></pre>
-
-<h3 id="switchsizehint">Switch.sizeHint</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sizeHint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QSize</span>
-</code></pre></div></div>
-
-<p>Return the switch’s fixed size.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>QSize</em>: <code class="language-plaintext highlighter-rouge">W</code> by <code class="language-plaintext highlighter-rouge">H</code>.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().sizeHint()
-PySide6.QtCore.QSize(42, 24)
-</code></pre>
-
-<h2 id="slidestack">SlideStack</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SlideStack</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QStackedWidget</code></p>
-
-<p>A stacked widget whose pages slide in from the right (going deeper) or the left (going back).</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; stack.sliding
-False
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Create an empty stack.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().count()
-0
-</code></pre>
-
-<h3 id="slidestacksliding">SlideStack.sliding</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">property</span>
-<span class="k">def</span> <span class="nf">sliding</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
-
-<p>Report whether a page is sliding in.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>bool</em>: True from the start of a slide until it finishes.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().sliding
-False
-</code></pre>
-
-<h3 id="slidestackslide_to">SlideStack.slide_to</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide_to</span><span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Slide to another page.</p>
-
-<p>Going to a later page slides it in from the right and going back slides it in from the left. A request made during a
-slide, or for the page already showing, is ignored.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">index</code> (<em>int</em>): The page to go to.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; stack.slide_to(1)
-&gt;&gt;&gt; stack.sliding
-True
-</code></pre>
-
-<h2 id="exercisesettingspanel">ExerciseSettingsPanel</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ExerciseSettingsPanel</span><span class="p">(</span><span class="n">QWidget</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>What every exercise’s settings pane has in common: it says when a setting has been edited.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after any setting is edited that changes what is asked, so the exercise asks a new question.</li>
-  <li><code class="language-plaintext highlighter-rouge">restyled</code> (<em>Signal</em>): Emitted after a setting is edited that changes only how the exercise looks, so the question stays and the picture is drawn again.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ExerciseSettingsPanel()
-&gt;&gt;&gt; got = []
-&gt;&gt;&gt; _ = panel.changed.connect(lambda: got.append(1))
-&gt;&gt;&gt; panel.changed.emit()
-True
-&gt;&gt;&gt; got
-[1]
-</code></pre>
-
-<h3 id="exercisesettingspanelrefresh_limits">ExerciseSettingsPanel.refresh_limits</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh_limits</span><span class="p">(</span>
-    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">self_grading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Update scheduling controls for the active scheduler and profile.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">mode</code> (<em>str</em>): Selected question scheduler.</li>
-  <li><code class="language-plaintext highlighter-rouge">self_grading</code> (<em>bool</em>): Disable Next Question when a passing grade advances the exercise.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">Switching to ASRS hides the row and leaves its submenu.
+<pre><code class="language-pycon">&gt;&gt;&gt; panel = settings_panel_for(ClefBasics())
+&gt;&gt;&gt; type(panel).__name__
+'ClefBasicsSettingsPanel'
 </code></pre>
 
 <h2 id="notenamesettingspanel">NoteNameSettingsPanel</h2>
@@ -1050,7 +685,7 @@ True
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangePanel</code></p>
 
 <p>The settings of the note identification exercise: a menu leading to a page for each group of settings.</p>
 
@@ -1066,7 +701,7 @@ each. Edits are live: each changes the settings, saves them and emits <code clas
   <li><code class="language-plaintext highlighter-rouge">key_boxes</code> (<em>dict of int to QCheckBox</em>): The key signature checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">value_boxes</code> (<em>dict of str to QCheckBox</em>): The note value checkboxes.</li>
   <li><code class="language-plaintext highlighter-rouge">naming_radios</code> (<em>dict of str to QRadioButton</em>): The letters and solfège choices, plus caret and function notation in the Scale degrees group.</li>
-  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>_ToggleRow</em>): Whether the answer must include the written octave.</li>
+  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>ToggleRow</em>): Whether the answer must include the written octave.</li>
   <li><code class="language-plaintext highlighter-rouge">range_editors</code> (<em>dict of str to RangeEditor</em>): The range editor of each clef in use, built when the Range page opens.</li>
 </ul>
 
@@ -1093,166 +728,6 @@ each. Edits are live: each changes the settings, saves them and emits <code clas
 <pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteNameSettingsPanel(NoteNameSettings())
 &gt;&gt;&gt; panel.stack.count()  # the menu and five pages
 6
-</code></pre>
-
-<h2 id="keychecklist">KeyChecklist</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeyChecklist</span><span class="p">(</span>
-    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-    <span class="n">counts_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
-
-<p>Checkboxes for the 15 major keys, flats on the left and sharps on the right.</p>
-
-<p>At least one stays checked. Each is labeled with a picture of its signature.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is checked or unchecked.</li>
-  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict of int to QCheckBox</em>): The checkbox of each key signature, from -7 (seven flats) to 7 (seven sharps).</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({0, 2}).selected() == {0, 2}
-True
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the checklist.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially.</li>
-  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">counts_only</code> (<em>bool, default False</em>): Label each box with its accidental count instead of drawing a signature. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; len(KeyChecklist({0}).boxes)
-15
-</code></pre>
-
-<h3 id="keychecklistselected">KeyChecklist.selected</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the checked key signatures.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>set of int</em>: Sharps if positive, flats if negative.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({-3, 1}).selected() == {-3, 1}
-True
-</code></pre>
-
-<h2 id="keysignaturepage">KeySignaturePage</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignaturePage</span><span class="p">(</span>
-    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-    <span class="n">key_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
-
-<p>The key signature sub-page: a switch for using key signatures at all, and the keys to draw from.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after the switch or a key is changed.</li>
-  <li><code class="language-plaintext highlighter-rouge">switch_row</code> (<em>_ToggleRow</em>): The “Use key signatures” switch.</li>
-  <li><code class="language-plaintext highlighter-rouge">checklist</code> (<em>KeyChecklist</em>): The keys; only enabled while the switch is on.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(True, selected={0, 1})
-&gt;&gt;&gt; page.enabled(), page.selected() == {0, 1}
-(True, True)
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the page.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">enabled</code> (<em>bool</em>): Whether key signatures are on.</li>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set of int</em>): The key signatures to check initially. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow every key to be unchecked. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">key_names</code> (<em>dict of int to str or None, default None</em>): Key names to display beside the signature diagrams. With None, show only diagrams. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(False, selected={0})
-&gt;&gt;&gt; page.checklist.isEnabled()
-False
-</code></pre>
-
-<h3 id="keysignaturepageenabled">KeySignaturePage.enabled</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">enabled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
-</code></pre></div></div>
-
-<p>Report whether key signatures are switched on.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>bool</em>: True if the switch is on.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={0}).enabled()
-True
-</code></pre>
-
-<h3 id="keysignaturepageselected">KeySignaturePage.selected</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Return the checked key signatures.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>set of int</em>: Sharps if positive, flats if negative.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
-True
 </code></pre>
 
 <h2 id="keyboardsettingspanel">KeyboardSettingsPanel</h2>
@@ -1314,7 +789,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
 <p>The settings of the note construction exercise: a menu with a page for the staff and one for the keys.</p>
 
@@ -1354,79 +829,6 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 4
 </code></pre>
 
-<h2 id="choicechecklist">ChoiceChecklist</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ChoiceChecklist</span><span class="p">(</span>
-    <span class="n">groups</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">selected</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span>
-    <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-    <span class="n">positions</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">QWidget</code></p>
-
-<p>Checkboxes for a list of choices, optionally under headings and allowing an empty selection.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">changed</code> (<em>Signal</em>): Emitted after a box is checked or unchecked.</li>
-  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool</em>): Whether all choices may be unchecked.</li>
-  <li><code class="language-plaintext highlighter-rouge">boxes</code> (<em>dict</em>): The checkbox of each choice, by its key.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
-&gt;&gt;&gt; checklist = ChoiceChecklist(groups, selected={"major"})
-&gt;&gt;&gt; checklist.selected()
-{'major'}
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the checklist.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">groups</code> (<em>list of tuple of (str, list of tuple of (object, str))</em>): The headings and, under each, the choices as (key, label); an empty heading shows none.</li>
-  <li><code class="language-plaintext highlighter-rouge">selected</code> (<em>set</em>): The keys to check initially. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">allow_empty</code> (<em>bool, default False</em>): Allow all choices to be unchecked. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">positions</code> (<em>mapping or None, default None</em>): Optional (row, column) for each key within its group. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns it. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
-&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; sorted(checklist.boxes)
-[0, 1]
-</code></pre>
-
-<h3 id="choicechecklistselected">ChoiceChecklist.selected</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selected</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span>
-</code></pre></div></div>
-
-<p>Return the checked choices.</p>
-
-<p><strong>Returns</strong></p>
-
-<ul>
-  <li><em>set</em>: The keys of the checked boxes.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
-{0, 1}
-</code></pre>
-
 <h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IntervalSettingsPanel</span><span class="p">(</span>
@@ -1436,7 +838,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">StaffRangePanel</code></p>
 
 <p>Choose the notation and answer format for written intervals.</p>
 
@@ -1522,7 +924,7 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
 <p>The settings of the arpeggio exercise: a menu with a page for each group of settings.</p>
 
@@ -1575,7 +977,7 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
 <p>The settings of a key signature exercise: a menu with a page for each group of settings.</p>
 
@@ -1657,7 +1059,7 @@ True
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
+<p>Bases: <code class="language-plaintext highlighter-rouge">ClefsPanel</code></p>
 
 <p>The settings of the clef basics exercise: a menu with two pages, Question Type and Clefs.</p>
 
@@ -1740,8 +1142,8 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 <ul>
   <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>CircleSettings</em>): The settings being edited.</li>
   <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The menu and its pages: the menu, the questions, the color schemes and the editor of a scheme.</li>
-  <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>_Row</em>): The menu row for the questions.</li>
-  <li><code class="language-plaintext highlighter-rouge">colors_row</code> (<em>_Row</em>): The menu row for the colors; its value is the name of the chosen scheme.</li>
+  <li><code class="language-plaintext highlighter-rouge">questions_row</code> (<em>MenuRow</em>): The menu row for the questions.</li>
+  <li><code class="language-plaintext highlighter-rouge">colors_row</code> (<em>MenuRow</em>): The menu row for the colors; its value is the name of the chosen scheme.</li>
   <li><code class="language-plaintext highlighter-rouge">questions</code> (<em>ChoiceChecklist</em>): The kinds of question: relative major, relative minor and Roman numerals.</li>
   <li><code class="language-plaintext highlighter-rouge">schemes</code> (<em>SchemePage</em>): The color schemes.</li>
   <li><code class="language-plaintext highlighter-rouge">editor</code> (<em>SchemeEditor</em>): The editor of a scheme of your own.</li>
@@ -1769,175 +1171,6 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
-</code></pre>
-
-<h2 id="packsettingspanel">PackSettingsPanel</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PackSettingsPanel</span><span class="p">(</span>
-    <span class="n">exercise</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">_StaffRangePanel</code></p>
-
-<p>The settings a plugin declared for one of its note exercises, drawn from a fixed set of controls.</p>
-
-<p>The plugin picks which controls appear: a switch for its own sound, a range selector on one clef, and switches for
-accidentals and for the octave. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise whose options are edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>PackExerciseSettings</em>): The options being edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">range_row</code> (<em>_Row</em>): The Range row, present only if the plugin declared a range.</li>
-  <li><code class="language-plaintext highlighter-rouge">sound_row</code> (<em>_ToggleRow or None</em>): The plugin sound switch, if declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">accidentals_row</code> (<em>_ToggleRow or None</em>): The accidentals switch, if declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">octave_row</code> (<em>_ToggleRow or None</em>): The octave switch, if declared.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"octave": True}
-&gt;&gt;&gt; panel = PackSettingsPanel(Demo)
-&gt;&gt;&gt; panel.octave_row is not None and not hasattr(panel, "range_row")
-True
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the menu and, if the plugin offers a range, its page.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise to edit.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
-...     controls = {"sound": "Demo sound"}
-&gt;&gt;&gt; panel = PackSettingsPanel(Sounds)
-&gt;&gt;&gt; panel.stack.count()
-2
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
-</code></pre>
-
-<h2 id="packkeyboardsettingspanel">PackKeyboardSettingsPanel</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span>
-    <span class="n">exercise</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">PackExercise</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div></div>
-
-<p>Bases: <code class="language-plaintext highlighter-rouge">ExerciseSettingsPanel</code></p>
-
-<p>The settings a plugin declared for a keyboard interval exercise: its sound, the range of keys, and the intervals.</p>
-
-<p>The plugin picks which controls appear. Edits are live: each changes the options, saves them and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
-
-<p><strong>Attributes</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise whose options are edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>PackExerciseSettings</em>): The options being edited.</li>
-  <li><code class="language-plaintext highlighter-rouge">stack</code> (<em>SlideStack</em>): The settings menu, then the range page and the intervals page, as the plugin offers them.</li>
-  <li><code class="language-plaintext highlighter-rouge">sound_row</code> (<em>_ToggleRow or None</em>): The plugin sound switch, if declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">range_row</code> (<em>_Row or None</em>): The Range row, if declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">span</code> (<em>KeyboardSpan or None</em>): The draggable range selector, if a range is declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">interval_page</code> (<em>ChoiceChecklist or None</em>): The interval checkboxes, keyed by interval name, if a choice of intervals is declared.</li>
-  <li><code class="language-plaintext highlighter-rouge">manual_page</code> (<em>ChoiceChecklist or None</em>): The keyboard checkboxes, keyed by keyboard name, if a choice of manuals is declared.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"range": True, "intervals": True, "manuals": True}
-...     spec = {"type": "keyboard-intervals"}
-...     key_span, key_default = (28, 89), (48, 72)
-...     interval_names = ("m2", "M2", "m3")
-...     manual_names = ("Upper manual", "Lower manual")
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel.stack.count(), panel.low_label.text(), panel.high_label.text()
-(4, 'C3', 'C5')
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
-
-<p><strong>Constructor</strong></p>
-
-<p>Build the menu and the pages the plugin offers.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>type of PackExercise</em>): The exercise to edit.</li>
-  <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the panel. Keyword-only.</li>
-</ul>
-
-<p><strong>Constructor examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Sounds)
-&gt;&gt;&gt; panel.stack.count()
-2
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
-</code></pre>
-
-<h3 id="packkeyboardsettingspanelflush">PackKeyboardSettingsPanel.flush</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flush</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Save the options and ask a new question now, if an edit is waiting.</p>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel._sound_chosen("piano")
-&gt;&gt;&gt; panel.flush()
-&gt;&gt;&gt; panel._commit_timer.isActive()
-False
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
-
-<h3 id="packkeyboardsettingspanelhideevent">PackKeyboardSettingsPanel.hideEvent</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hideEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">QHideEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
-</code></pre></div></div>
-
-<p>Keep an edit that is still waiting when the panel closes.</p>
-
-<p><strong>Parameters</strong></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">event</code> (<em>QHideEvent</em>): The event.</li>
-</ul>
-
-<p><strong>Examples</strong></p>
-
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel._sound_chosen("piano")
-&gt;&gt;&gt; panel.show()
-&gt;&gt;&gt; panel.hide()
-&gt;&gt;&gt; panel._commit_timer.isActive()
-False
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
 </code></pre>
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
@@ -2194,8 +1427,12 @@ False
           
           
           
+          
+          
+          
+          
           <nav class="page-nav" aria-label="Previous and next pages">
-            <a class="prev" href="/alto/dev/api/alto.ui.score_excerpt/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.score_excerpt</span></a>
+            <a class="prev" href="/alto/dev/api/alto.ui.settings_menu/" rel="prev"><span class="np-label">Previous</span><span class="np-title"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-prev"/></svg>alto.ui.settings_menu</span></a>
             <a class="next" href="/alto/dev/api/alto.ui.staff/" rel="next"><span class="np-label">Next</span><span class="np-title">alto.ui.staff<svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-next"/></svg></span></a>
           </nav>
           
@@ -2258,8 +1495,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -698,7 +704,7 @@ so on. Each role has three states: active, inactive and disabled.</li>
     <tr>
       <td>Switches, theme cards, charts, the staff, the keyboard</td>
       <td>Custom painting</td>
-      <td><code class="language-plaintext highlighter-rouge">settings_panel.py</code>, <code class="language-plaintext highlighter-rouge">app_settings.py</code>, <code class="language-plaintext highlighter-rouge">charts.py</code>, <code class="language-plaintext highlighter-rouge">staff.py</code>, <code class="language-plaintext highlighter-rouge">keyboard.py</code></td>
+      <td><code class="language-plaintext highlighter-rouge">settings_menu.py</code>, <code class="language-plaintext highlighter-rouge">app_settings.py</code>, <code class="language-plaintext highlighter-rouge">charts.py</code>, <code class="language-plaintext highlighter-rouge">staff.py</code>, <code class="language-plaintext highlighter-rouge">keyboard.py</code></td>
     </tr>
     <tr>
       <td>Monochrome icons that match the text color</td>
@@ -776,7 +782,7 @@ colors come from the palette.</p>
 
 <h2 id="painting-your-own-widgets">Painting your own widgets</h2>
 
-<p>When no sheet can do it, draw it. The <code class="language-plaintext highlighter-rouge">Switch</code> in <code class="language-plaintext highlighter-rouge">settings_panel.py</code> is a good small example: about thirty lines of
+<p>When no sheet can do it, draw it. The <code class="language-plaintext highlighter-rouge">Switch</code> in <code class="language-plaintext highlighter-rouge">settings_menu.py</code> is a good small example: about thirty lines of
 <code class="language-plaintext highlighter-rouge">paintEvent</code> give a pill-shaped track whose color is a blend between the “off” and “on” palette colors, and a white knob
 that slides.</p>
 
@@ -997,8 +1003,8 @@ color spaces from the source.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

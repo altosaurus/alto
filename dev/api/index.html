@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -1001,6 +1007,10 @@
       <td>Engraved notes built from the Noto Music font’s glyphs, the way notation software draws them.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.pack_settings_panel/">alto.ui.pack_settings_panel</a></td>
+      <td>The settings panels of exercises that plugins add.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.package_update/">alto.ui.package_update</a></td>
       <td>The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next.</td>
     </tr>
@@ -1041,8 +1051,12 @@
       <td>Paint the engraved score and locate symbols from a pixel map made from the same SVG.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.settings_menu/">alto.ui.settings_menu</a></td>
+      <td>The building blocks of the settings panels that slide in beside an exercise.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.settings_panel/">alto.ui.settings_panel</a></td>
-      <td>The settings panels that slide in beside an exercise, and the small widgets they are built from.</td>
+      <td>The settings panels of the built-in exercises, and <code class="language-plaintext highlighter-rouge">settings_panel_for</code>, which picks the panel for any exercise.</td>
     </tr>
     <tr>
       <td><a href="alto.ui.staff/">alto.ui.staff</a></td>
@@ -1237,8 +1251,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
   <script defer src="/alto/dev/assets/vendor/temml-0.14.0/temml.min.js"
           onload="temml.renderMathInElement(document.querySelector('article'), {fences: '(', annotate: true})"></script>
@@ -533,6 +533,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -561,6 +564,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -1382,8 +1388,8 @@ The scheduler uses the same intervals as the corresponding grade buttons.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

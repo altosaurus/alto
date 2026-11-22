@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -1051,6 +1057,27 @@ setting as it was.</p>
 &gt;&gt;&gt; store().remove("clefBasics")
 </code></pre>
 
+<h2 id="save_clef_basics">save_clef_basics</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">save_clef_basics</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Save clef basics settings, the form <code class="language-plaintext highlighter-rouge">load_clef_basics</code> reads.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cfg</code> (<em>ClefBasicsSettings</em>): The settings to save.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; save_clef_basics(settings.ClefBasicsSettings(clefs={"french", "treble"}, question_type="identification"))
+&gt;&gt;&gt; str(store().value("clefBasics/clefs")), str(store().value("clefBasics/type"))
+('treble,french', 'identification')
+&gt;&gt;&gt; store().remove("clefBasics")
+</code></pre>
+
 <h2 id="load_circle">load_circle</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_circle</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span>
@@ -1386,8 +1413,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

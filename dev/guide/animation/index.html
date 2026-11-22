@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795348824">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795351604">
   
 </head>
 <body>
@@ -530,6 +530,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notes/">notes</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.pack_settings_panel/">pack_settings_panel</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.package_update/">package_update</a></li>
                 
                 
@@ -558,6 +561,9 @@
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.score_excerpt/">score_excerpt</a></li>
+                
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_menu/">settings_menu</a></li>
                 
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.settings_panel/">settings_panel</a></li>
@@ -732,7 +738,7 @@ another on screen; and <strong>linear</strong> only for color fades, rotations a
 
 <h3 id="the-settings-page-slide-slidestack">The settings page slide: <code class="language-plaintext highlighter-rouge">SlideStack</code></h3>
 
-<p><code class="language-plaintext highlighter-rouge">SlideStack</code> in <code class="language-plaintext highlighter-rouge">settings_panel.py</code> is a <code class="language-plaintext highlighter-rouge">QStackedWidget</code> whose pages slide instead of switching. It is a good model of how
+<p><code class="language-plaintext highlighter-rouge">SlideStack</code> in <code class="language-plaintext highlighter-rouge">settings_menu.py</code> is a <code class="language-plaintext highlighter-rouge">QStackedWidget</code> whose pages slide instead of switching. It is a good model of how
 to build a transition by hand:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slide_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
@@ -781,7 +787,7 @@ clicking the toggle in the middle of a slide reverses smoothly instead of jumpin
 
 <h3 id="the-switch-knob-animate-a-number-paint-from-it">The switch knob: animate a number, paint from it</h3>
 
-<p><code class="language-plaintext highlighter-rouge">Switch</code> (also in <code class="language-plaintext highlighter-rouge">settings_panel.py</code>) holds a float <code class="language-plaintext highlighter-rouge">_pos</code> between 0 and 1. A <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> of 140 ms moves <code class="language-plaintext highlighter-rouge">_pos</code>, and
+<p><code class="language-plaintext highlighter-rouge">Switch</code> (also in <code class="language-plaintext highlighter-rouge">settings_menu.py</code>) holds a float <code class="language-plaintext highlighter-rouge">_pos</code> between 0 and 1. A <code class="language-plaintext highlighter-rouge">QVariantAnimation</code> of 140 ms moves <code class="language-plaintext highlighter-rouge">_pos</code>, and
 each tick calls <code class="language-plaintext highlighter-rouge">update()</code>. <code class="language-plaintext highlighter-rouge">paintEvent</code> draws the track color as <code class="language-plaintext highlighter-rouge">blend(off, b=on, t=self._pos)</code> and the knob at
 <code class="language-plaintext highlighter-rouge">margin + r + _pos * travel</code>. One number drives both the color and the position, so they cannot disagree. The class
 <code class="language-plaintext highlighter-rouge">setChecked</code> skips the animation (<strong>“no animation when set programmatically”</strong>) so that loading a setting at start-up does not
@@ -999,8 +1005,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795348824" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795348824" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795351604" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795351604" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
