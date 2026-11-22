@@ -634,6 +634,27 @@ def load_clef_basics() -> None:
         settings.clef_basics.question_type = kind
 
 
+def save_clef_basics(cfg: settings.ClefBasicsSettings) -> None:
+    """
+    Save clef basics settings, the form `load_clef_basics` reads.
+
+    Parameters
+    ----------
+    cfg : ClefBasicsSettings
+        The settings to save.
+
+    Examples
+    --------
+    >>> save_clef_basics(settings.ClefBasicsSettings(clefs={"french", "treble"}, question_type="identification"))
+    >>> str(store().value("clefBasics/clefs")), str(store().value("clefBasics/type"))
+    ('treble,french', 'identification')
+    >>> store().remove("clefBasics")
+    """
+    saved = store()
+    saved.setValue("clefBasics/clefs", joined(cfg.active_clefs()))
+    saved.setValue("clefBasics/type", cfg.question_type)
+
+
 def load_circle() -> None:
     """
     Load the saved circle of fifths settings into the shared settings object.

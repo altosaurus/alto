@@ -429,6 +429,27 @@ setting as it was.
 >>> store().remove("clefBasics")
 ```
 
+## save_clef_basics
+
+```python
+def save_clef_basics(cfg: settings.ClefBasicsSettings) -> None
+```
+
+Save clef basics settings, the form `load_clef_basics` reads.
+
+**Parameters**
+
+- `cfg` (*ClefBasicsSettings*): The settings to save.
+
+**Examples**
+
+```pycon
+>>> save_clef_basics(settings.ClefBasicsSettings(clefs={"french", "treble"}, question_type="identification"))
+>>> str(store().value("clefBasics/clefs")), str(store().value("clefBasics/type"))
+('treble,french', 'identification')
+>>> store().remove("clefBasics")
+```
+
 ## load_circle
 
 ```python

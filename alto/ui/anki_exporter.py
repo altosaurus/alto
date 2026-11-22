@@ -94,10 +94,8 @@ from alto.ui.home import category_tree, exercise_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
 from alto.ui.notation import load_style as load_notation_style
-from alto.ui.settings_panel import (
-    ExerciseSettingsPanel,
-    settings_panel_for,
-)
+from alto.ui.settings_menu import ExerciseSettingsPanel
+from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import MAX_STEP, StaffWidget
 from alto.ui.staff_input import SignatureInput
 from alto.ui.store import export_settings, import_settings, store, text_value

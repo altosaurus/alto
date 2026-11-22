@@ -114,6 +114,7 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.main_window](alto.ui.main_window/) | The main window: tile browsing or a workspace with an independently selected exercise or lesson list. |
 | [alto.ui.notation](alto.ui.notation/) | Notation styles: which music font the staff, clefs, notes and accidentals are engraved in. |
 | [alto.ui.notes](alto.ui.notes/) | Engraved notes built from the Noto Music font's glyphs, the way notation software draws them. |
+| [alto.ui.pack_settings_panel](alto.ui.pack_settings_panel/) | The settings panels of exercises that plugins add. |
 | [alto.ui.package_update](alto.ui.package_update/) | The window that updates a packaged copy of Alto: the download and its checks with their progress, then what happens next. |
 | [alto.ui.pictures](alto.ui.pictures/) | Small pictures of musical things (clefs, note values, key signatures, note ranges ...) for the settings panes. |
 | [alto.ui.plugins_dialog](alto.ui.plugins_dialog/) | The Plugins dialog: the installed plugins on the left, and the buttons that add or remove one on the right. |
@@ -124,7 +125,8 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.response_times](alto.ui.response_times/) | Profile speed-grading settings and the rolling distribution for each exercise. |
 | [alto.ui.scale_explorer](alto.ui.scale_explorer/) | Interactive notation and step patterns for learning scales. |
 | [alto.ui.score_excerpt](alto.ui.score_excerpt/) | Paint the engraved score and locate symbols from a pixel map made from the same SVG. |
-| [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels that slide in beside an exercise, and the small widgets they are built from. |
+| [alto.ui.settings_menu](alto.ui.settings_menu/) | The building blocks of the settings panels that slide in beside an exercise. |
+| [alto.ui.settings_panel](alto.ui.settings_panel/) | The settings panels of the built-in exercises, and `settings_panel_for`, which picks the panel for any exercise. |
 | [alto.ui.staff](alto.ui.staff/) | The staff: lines, clefs, key signatures and notes, drawn on a rounded white "paper". |
 | [alto.ui.staff_input](alto.ui.staff_input/) | The staffs you click to place notes or a clef. |
 | [alto.ui.staff_playback](alto.ui.staff_playback/) | Connect a displayed music sample to the notes sounding on its staff. |

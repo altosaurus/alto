@@ -49,7 +49,7 @@
   centered value, and stacked step arrows. Give the field a label and accessible name, and check that its widest
   value and both arrows fit in the settings pane. See the [numeric field guidelines](docs/guide/styling.md#numeric-fields).
 
-- Match arrow buttons to Alto's shared button styling in `alto/ui/style.py`. Reuse `_arrow()` in settings panels;
+- Match arrow buttons to Alto's shared button styling in `alto/ui/style.py`. Reuse `arrow_button()` from `alto/ui/settings_menu.py` in settings panels;
   elsewhere, mark `QToolButton` controls with `setProperty("arrowButton", True)`.
 - Preserve the shared rounded border, heavier lower edge, palette colors, and hover, focus, pressed, and disabled states.
   Avoid local styling and hardcoded arrow colors unless the user explicitly requests a different appearance.

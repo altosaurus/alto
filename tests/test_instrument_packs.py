@@ -37,12 +37,10 @@ from alto.ui.exercise_settings import (
 )
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.fingerboard import FingerboardWidget, neck_view, ruler_base, ruler_reach
+from alto.ui.pack_settings_panel import PackSettingsPanel
 from alto.ui.plugins_dialog import PluginsDialog
 from alto.ui.question_preview import QuestionPreview
-from alto.ui.settings_panel import (
-    PackSettingsPanel,
-    settings_panel_for,
-)
+from alto.ui.settings_panel import settings_panel_for
 from viola_pack import (
     MANIFEST,
     TUTORIAL,

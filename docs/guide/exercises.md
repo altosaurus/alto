@@ -122,8 +122,9 @@ If users should be able to change what is asked, there are four more places to t
 2. **The exercise reads it** when it generates a question: `settings.note_names.active_clefs()`. Because the instance is shared,
    a change takes effect on the next question.
 3. **A signature.** For a `ChoiceExercise`, return `signature(...)` from `practice_signature()`. The framework includes the button layout when matching stored questions. Other exercises return their signature from `settings_signature()`.
-4. **A panel and persistence.** In `alto/ui/settings_panel.py`, a panel class (a subclass of `ExerciseSettingsPanel` that
-   emits `changed` when something is edited) and a branch in `_exercise_panel`. In `alto/ui/exercise_settings.py`, `load_*`
+4. **A panel and persistence.** In `alto/ui/settings_panel.py`, a panel class and a branch in `_exercise_panel`. The panel
+   subclasses `ExerciseSettingsPanel` from `alto/ui/settings_menu.py` (or `ClefsPanel` if it has a Clefs page), builds its
+   pages from that module's rows and pages, and overrides `_persist` to save; `_save_and_emit` then saves and emits `changed`. In `alto/ui/exercise_settings.py`, `load_*`
    and `save_*` functions that read and write `QSettings` through `store()` with the readers in `alto/ui/store.py`, and a
    call to your `load_*` in `load_exercise_settings` so settings are restored at start. The screen connects `changed` to
    `next_question`, so edits apply at once.

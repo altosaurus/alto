@@ -53,7 +53,7 @@ another on screen; and **linear** only for color fades, rotations and progress b
 
 ### The settings page slide: `SlideStack`
 
-`SlideStack` in `settings_panel.py` is a `QStackedWidget` whose pages slide instead of switching. It is a good model of how
+`SlideStack` in `settings_menu.py` is a `QStackedWidget` whose pages slide instead of switching. It is a good model of how
 to build a transition by hand:
 
 ```python
@@ -101,7 +101,7 @@ tick, calls `splitter.setSizes`. The animation is a number; the callback decides
 
 ### The switch knob: animate a number, paint from it
 
-`Switch` (also in `settings_panel.py`) holds a float `_pos` between 0 and 1. A `QVariantAnimation` of 140 ms moves `_pos`, and
+`Switch` (also in `settings_menu.py`) holds a float `_pos` between 0 and 1. A `QVariantAnimation` of 140 ms moves `_pos`, and
 each tick calls `update()`. `paintEvent` draws the track color as `blend(off, b=on, t=self._pos)` and the knob at
 `margin + r + _pos * travel`. One number drives both the color and the position, so they cannot disagree. The class
 `setChecked` skips the animation (**"no animation when set programmatically"**) so that loading a setting at start-up does not

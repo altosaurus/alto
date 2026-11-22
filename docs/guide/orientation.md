@@ -70,7 +70,7 @@ pyproject.toml         dependencies, entry point, pytest, Ruff, Pyright and cove
 ```
 
 `alto/ui/` is large because drawing is verbose. The biggest files are `settings_panel.py` (the sliding settings panes for
-every exercise), `charts.py`, `pictures.py` (the small illustrations in the settings), `staff.py`, `keyboard.py` and
+every exercise, built from the rows and pages in `settings_menu.py`), `charts.py`, `pictures.py` (the small illustrations in the settings), `staff.py`, `keyboard.py` and
 `exercise_view.py`. You will rarely need to read any of them from top to bottom. Read one class, and use its docstring.
 
 ### The files to read first
