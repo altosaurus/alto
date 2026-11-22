@@ -1609,6 +1609,9 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         >>> panel._step("low", delta=1)
         >>> panel.cfg.low
         49
+        >>> panel._step("high", delta=-1)
+        >>> panel.cfg.high == settings.KeyboardIntervalSettings().high - 1
+        True
         """
         low, high = self.cfg.low, self.cfg.high
         first, last = settings.KEYBOARD_FULL
@@ -1736,6 +1739,10 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         >>> panel._button_count_edited()
         >>> panel.cfg.button_count
         8
+        >>> panel.button_count.setText("")  # not a number: the field shows the saved count again
+        >>> panel._button_count_edited()
+        >>> panel.button_count.text(), panel.cfg.button_count
+        ('8', 8)
         """
         try:
             count = int(self.button_count.text())
