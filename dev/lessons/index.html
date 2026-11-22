@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795313489">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
   
 </head>
 <body>
@@ -598,6 +598,9 @@
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.zoom/">zoom</a></li>
+                
                 </ul></details></li>
               </ul>
             </details></li>
@@ -668,7 +671,7 @@ side you were on. The cards change with the transition chosen under <strong>Sett
 
 <p>During an exercise or lesson, the two icons switch the navigation list. Your current activity stays open until you choose another one.</p>
 
-<p>A tile says <strong>Start</strong>, or <strong>Continue at step N</strong> if you have begun. Click it to open the lesson, and <strong>Leave lesson</strong> (or <kbd>Esc</kbd>)
+<p>Once you have begun a lesson, a bar along the bottom of its tile shows how far through you are and the corner says <strong>Step N/M</strong>. Click it to open the lesson, and <strong>Leave lesson</strong> (or <kbd>Esc</kbd>)
 to return to where you were. <strong>Start over</strong> goes back to the first step.</p>
 
 <p>The Circle of Fifths exercise also has a way in: open its reference pane with the book button, and press <strong>New to this? Take the
@@ -830,8 +833,8 @@ you would write for A♭ major and try a fresh signature in treble or bass clef.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795313489" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795313489" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795313489">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
   
 </head>
 <body>
@@ -598,6 +598,9 @@
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.zoom/">zoom</a></li>
+                
                 </ul></details></li>
               </ul>
             </details></li>
@@ -695,14 +698,18 @@ True
     <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">about</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">''</span><span class="p">,</span>
+    <span class="n">progress</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QPushButton</code></p>
 
-<p>A big button: an icon on top, then a category, a name and a one-line description, and optionally a line of status.</p>
+<p>A big button: an icon on top, then a category, a name and a short description, and optionally a lesson’s progress.</p>
+
+<p>Progress takes no room in the layout: a strip along the bottom edge shows it, and “Step N/M” sits in the top-right
+corner, both only once the lesson has been begun. A card with or without progress therefore has the same size and the
+same icon.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -724,14 +731,15 @@ True
   <li><code class="language-plaintext highlighter-rouge">category</code> (<em>str</em>): The small heading above the name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">name</code> (<em>str</em>): The name. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">about</code> (<em>str</em>): A line of description, which is also the tooltip. Keyword-only.</li>
-  <li><code class="language-plaintext highlighter-rouge">status</code> (<em>str, default ““</em>): A line under the description, such as how far through a lesson you are; nothing if empty. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">progress</code> (<em>tuple of int or None, default None</em>): The step you are on, counting from 0, and how many steps there are. The bar and “Step N/M” appear only once the first step has been passed; nothing is drawn if None or at step 0. Keyword-only.</li>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the card. Keyword-only.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", status="Step 2 of 8").toolTip()
-'Get help.'
+<pre><code class="language-pycon">&gt;&gt;&gt; card = TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", progress=(1, 8))
+&gt;&gt;&gt; card.toolTip(), card.accessibleDescription()
+('Get help.', 'Get help. Continue at step 2 of 8.')
 </code></pre>
 
 <h3 id="tilecardchangeevent">TileCard.changeEvent</h3>
@@ -879,7 +887,7 @@ Green — 2 reviews due
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TileCard</span>
 </code></pre></div></div>
 
-<p>Make the card of a lesson: the icon of the exercise that practices the same topic, and how far through it you are.</p>
+<p>Make the card of a lesson: the icon of the exercise that practices the same topic, and a bar for how far through it you are.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -891,7 +899,7 @@ Green — 2 reviews due
 <p><strong>Returns</strong></p>
 
 <ul>
-  <li><em>TileCard</em>: The card, which says “Start” or “Continue at step N”.</li>
+  <li><em>TileCard</em>: The card, with a progress bar and “Step N/M” in its corner once the lesson has been begun.</li>
 </ul>
 
 <p><strong>Examples</strong></p>
@@ -1448,8 +1456,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795313489" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795313489" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

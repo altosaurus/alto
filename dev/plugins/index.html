@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795313489">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
   
 </head>
 <body>
@@ -598,6 +598,9 @@
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.zoom/">zoom</a></li>
+                
                 </ul></details></li>
               </ul>
             </details></li>
@@ -660,6 +663,12 @@
 <p>To register your plugin, <a href="https://github.com/altosaurus/alto/issues/new?template=plugin-registration.yml">open an issue on Alto’s GitHub repository</a>. In the issue, include your plugin’s name, its Pack ID from <code class="language-plaintext highlighter-rouge">pack.json</code>, a description, and a repository link. Confirm that you have the rights to distribute the plugin and its contents. Once the registration is approved and published, the issue number is your install code.</p>
 
 <p>Select a plugin’s name to see its details in Alto’s docs.</p>
+
+<blockquote>
+  <p><strong>Third-party plugins</strong></p>
+
+  <p>Third-party developers create and maintain the plugins listed below. You install, update, and use them at your own risk. Alto accepts no responsibility for their content, how they work, or any loss or damage they cause.</p>
+</blockquote>
 
 <table id="plugin-list" data-registry="/alto/plugins.json" data-details="/alto/dev/plugins/detail/">
   <thead><tr><th scope="col">Plugin</th><th scope="col">Code</th><th scope="col">Description</th></tr></thead>
@@ -757,8 +766,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795313489" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795313489" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

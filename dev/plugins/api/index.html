@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795313489">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795316595">
   
 </head>
 <body>
@@ -598,6 +598,9 @@
                 
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
+                
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.zoom/">zoom</a></li>
+                
                 </ul></details></li>
               </ul>
             </details></li>
@@ -730,6 +733,8 @@
 <p>In <strong>Menu → Tools → Plugins…</strong>, enter the code under <strong>Install plugin by code…</strong>. To update, select the installed ZIP and choose <strong>Update selected plugin</strong>. Alto looks up the registration, checks the latest release, and validates the new pack before replacing the installed ZIP. Existing ZIP installs with the registered pack ID can update the same way. Editable folders stay under the author’s control. A successful install or update offers a restart.</p>
 
 <h3 id="plugin-details-and-releases">Plugin details and releases</h3>
+
+<p>Alto’s plugin details page displays the README from the default branch of your registered GitHub repository. It also shows your registration code and a link to the repository. Update the README in your repository to revise what readers see in Alto’s docs.</p>
 
 <p>To keep the details page current, publish a JSON file in your plugin repository and include its raw HTTPS URL in your registration issue. Use a URL that follows your release branch so the same address serves each update. The file must be publicly readable by a browser on the Alto docs site. A raw GitHub file URL works for a public repository. If you host the file yourself, allow cross-origin reads from the docs site.</p>
 
@@ -1248,8 +1253,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795313489" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795313489" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795316595" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795316595" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
