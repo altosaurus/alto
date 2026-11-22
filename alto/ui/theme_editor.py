@@ -43,6 +43,7 @@ from alto.ui.theme import (
     preview_colors,
 )
 from alto.ui.theme_cards import ThemeThumb
+from alto.ui.zoom import css, px
 
 QUIET = "color: gray; font-family: monospace; font-size: 9pt;"  # how the code beside a color looks
 LIT = "color: palette(text); font-family: monospace; font-size: 9pt; font-weight: bold;"  # and while its color is pointed at
@@ -161,7 +162,7 @@ class ThemeEditor(QWidget):
         )
         # The heading and the buttons stay at the top, where they are always in view, and only the form below them scrolls.
         self.heading = QLabel()
-        self.heading.setStyleSheet("font-weight: bold; font-size: 12pt;")
+        self.heading.setStyleSheet(css("font-weight: bold; font-size: 12pt;"))
         self.save_button = QPushButton("Save")
         self.save_button.setProperty("primary", True)  # filled with the accent color, in style.py
         self.save_button.setDefault(True)
@@ -217,7 +218,7 @@ class ThemeEditor(QWidget):
             grid.setVerticalSpacing(3)
             for row, part in enumerate(PARTS):
                 button = QPushButton()
-                button.setFixedSize(56, 26)
+                button.setFixedSize(px(56), px(26))
                 button.setCursor(Qt.CursorShape.PointingHandCursor)
                 button.setToolTip(f"Click to change the color of the {PART_NAMES[part].lower()}")
                 button.setAccessibleName(f"{title}, {PART_NAMES[part]}")
@@ -419,9 +420,11 @@ class ThemeEditor(QWidget):
                     "#ffffff" if QColor(color).lightness() < 140 else "#1a1a1a"
                 )  # a ring that shows on this color, whatever it is
                 self.buttons[version][part].setStyleSheet(
-                    f"QPushButton {{ background: {color}; border: 1px solid gray; border-radius: 5px; }}"
-                    f"QPushButton:hover {{ border: 3px solid {ring}; }}"  # shows that the color can be changed
-                    f"QPushButton:pressed {{ border: 3px solid {ring}; padding-top: 1px; }}",
+                    css(
+                        f"QPushButton {{ background: {color}; border: 1px solid gray; border-radius: 5px; }}"
+                        f"QPushButton:hover {{ border: 3px solid {ring}; }}"  # shows that the color can be changed
+                        f"QPushButton:pressed {{ border: 3px solid {ring}; padding-top: 1px; }}",
+                    ),
                 )
                 self._values[version][part].setText(color)
             picture = self.pictures[version]

@@ -24,6 +24,7 @@ from alto.theory.pitch import Note
 from alto.theory.scales import SCALES, build
 from alto.ui.staff import StaffWidget
 from alto.ui.staff_playback import StaffPlayback
+from alto.ui.zoom import css, px
 
 
 class ScaleExplorer(QWidget):
@@ -100,7 +101,7 @@ class ScaleExplorer(QWidget):
         else:
             scroll = QScrollArea()
             scroll.setWidgetResizable(True)
-            scroll.setFixedHeight(180)
+            scroll.setFixedHeight(px(180))
             scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             scroll.setWidget(self.staff)
             layout.addWidget(scroll)
@@ -116,7 +117,7 @@ class ScaleExplorer(QWidget):
         for index in range(7):
             button = QPushButton()
             button.setMinimumWidth(0)
-            button.setStyleSheet("QPushButton { padding: 5px 2px; }")
+            button.setStyleSheet(css("QPushButton { padding: 5px 2px; }"))
             button.clicked.connect(lambda _checked=False, gap=index: self.select_gap(gap))
             gaps.addWidget(button)
             self.steps.append(button)

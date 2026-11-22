@@ -64,6 +64,7 @@ from alto.ui.staff import (
     StaffWidget,
     draw_key_signature,
 )
+from alto.ui.zoom import px
 
 OUTER_FROM = 0.746  # where the outer ring starts, as a fraction of the circle's radius
 DISC = 0.485  # the radius of the disc in the middle
@@ -361,7 +362,7 @@ class FifthsCircle(QWidget):
         self._glow = 0.0  # how far the answered cell has brightened, from 0 to 1
         self._warning: tuple[str, int, float] | None = None  # a cell showing its warning, and how strongly
         self._animations: list[QVariantAnimation] = []
-        self.setMinimumSize(300, 300)
+        self.setMinimumSize(px(300), px(300))
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setAccessibleName("Circle of fifths")
 
@@ -379,7 +380,7 @@ class FifthsCircle(QWidget):
         >>> FifthsCircle().sizeHint().width()
         460
         """
-        return QSize(460, 460)
+        return QSize(px(460), px(460))
 
     def show_question(
         self,

@@ -38,8 +38,10 @@ from PySide6.QtCore import (
     QTimer,
     QUrl,
     QVariantAnimation,
+    Signal,
 )
 from PySide6.QtGui import (
+    QAction,
     QCloseEvent,
     QColor,
     QDesktopServices,
@@ -47,6 +49,7 @@ from PySide6.QtGui import (
     QIcon,
     QKeySequence,
     QMoveEvent,
+    QPainter,
     QPalette,
     QPixmap,
     QShowEvent,
@@ -56,6 +59,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QFileDialog,
     QFrame,
+    QGraphicsEffect,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -88,6 +92,7 @@ from alto.ui import (
     backup_flow,
     icons,
     update_flow,
+    zoom,
 )
 from alto.ui.anki_exporter import ExporterSession
 from alto.ui.app_settings import AppSettingsDialog
@@ -128,6 +133,7 @@ from alto.ui.theme import (
 )
 from alto.ui.transitions import SIDEBAR_SLIDE_MS, saved_transition
 from alto.ui.widgets import SidebarToggle
+from alto.ui.zoom import css, px
 
 DEFAULT_WIDTH, DEFAULT_HEIGHT = 1100, 820  # big enough for a lesson step with its circle, and an exercise with its pane
 SCREEN_FRACTION = 0.92  # the most of the screen the window opens to, so that it never starts bigger than the screen
@@ -287,6 +293,95 @@ class _AdjacentSubmenu(QMenu):
             self.move(self.x() + offset, self.y())
 
 
+ZOOM_SETTLE_MS = 120
+ZOOM_INDICATOR_MS = 1200
+
+
+class _ZoomPreview(QGraphicsEffect):
+    """
+    Animate the workspace from a single frame captured by Qt during painting.
+
+    Examples
+    --------
+    >>> preview = _ZoomPreview(window.splitter)  # doctest: +SKIP
+    >>> preview.move_to(1.25)  # doctest: +SKIP
+    """
+
+    frame_ready = Signal()
+
+    def __init__(self, workspace: QWidget) -> None:
+        """
+        Prepare to capture the workspace on its first paint.
+
+        Parameters
+        ----------
+        workspace : QWidget
+            The live workspace below the toolbar.
+
+        Examples
+        --------
+        >>> preview = _ZoomPreview(window.splitter)  # doctest: +SKIP
+        """
+        super().__init__(workspace)
+        self.frame = QPixmap()
+        self.animation = QVariantAnimation(self)
+        self.animation.setDuration(90)
+        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self.animation.setStartValue(1.0)
+        self.animation.setEndValue(1.0)
+        self.animation.valueChanged.connect(lambda _value: self.update())
+        self.setEnabled(False)
+        workspace.setGraphicsEffect(self)
+
+    def move_to(self, scale: float) -> None:
+        """
+        Retarget the animation from the scale currently on screen.
+
+        Parameters
+        ----------
+        scale : float
+            Requested zoom divided by the zoom of the captured workspace.
+
+        Examples
+        --------
+        >>> preview.move_to(1.25)  # doctest: +SKIP
+        """
+        current = self.animation.currentValue() if self.isEnabled() else 1.0
+        self.setEnabled(True)
+        self.animation.stop()
+        self.animation.setStartValue(current)
+        self.animation.setEndValue(scale)
+        if self.frame.isNull():
+            self.update()
+        else:
+            self.animation.start()
+
+    def draw(self, painter: QPainter) -> None:
+        """
+        Paint the workspace at the current animation scale.
+
+        Parameters
+        ----------
+        painter : QPainter
+            The workspace painter supplied by Qt.
+
+        Examples
+        --------
+        >>> preview.update()  # doctest: +SKIP
+        """
+        if self.frame.isNull():
+            self.frame = self.sourcePixmap(mode=QGraphicsEffect.PixmapPadMode.NoPad)
+            self.animation.start()
+            self.frame_ready.emit()
+        scale = self.animation.currentValue()
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.translate(self.frame.deviceIndependentSize().width() * (1 - scale) / 2, 0)
+        painter.scale(scale, scale)
+        painter.drawPixmap(0, 0, self.frame)
+        painter.restore()
+
+
 class MainWindow(QMainWindow):
     """
     The application window.
@@ -366,6 +461,20 @@ class MainWindow(QMainWindow):
         self._settings: AppSettingsDialog | None = None  # the settings, while they are open
         self._exporter = ExporterSession()
         self.learner = learner  # who is practicing, and their history; None practices without recording
+        zoom.load()
+        self._zoom_timer = QTimer(self)  # a turn of the wheel makes several steps; the window is made again once they stop
+        self._zoom_timer.setSingleShot(True)
+        self._zoom_timer.setInterval(ZOOM_SETTLE_MS)
+        self._zoom_timer.timeout.connect(self._apply_zoom)
+        self._layout_zoom = zoom.percent()
+        self._zoom_notice_timer = QTimer(self)
+        self._zoom_notice_timer.setSingleShot(True)
+        self._zoom_notice_timer.setInterval(ZOOM_INDICATOR_MS)
+        zoom.signals.changed.connect(self._zoom_changed)
+        self._wheel_zoom = zoom.WheelZoom(self)
+        app = QApplication.instance()
+        assert app is not None
+        app.installEventFilter(self._wheel_zoom)
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
         saved_geometry = store().value("ui/windowGeometry", QByteArray())
@@ -401,6 +510,7 @@ class MainWindow(QMainWindow):
         >>> window.title_label.text()
         'Alto - Music Theory'
         """
+        self._layout_zoom = zoom.percent()
         self._pane_view = False
         self._exercise_page = None
         self._lesson_page = None
@@ -408,13 +518,13 @@ class MainWindow(QMainWindow):
         self._lesson_return = None
         self.nav = QListWidget()  # the exercise list: section labels and exercises, as a flat sidebar
         self.nav.setObjectName("nav")  # styled in style.py
-        self.nav.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
+        self.nav.setIconSize(QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)))
         self.nav.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
         self.lesson_nav = LessonNav()  # the lesson list, which takes the exercise list's place in lesson mode
         self.nav_stack = QStackedWidget()  # holds the two lists; the page decides which shows
         self.nav_stack.addWidget(self.nav)
         self.nav_stack.addWidget(self.lesson_nav)
-        self.nav_stack.setMinimumWidth(self.SIDEBAR_MIN)
+        self.nav_stack.setMinimumWidth(px(self.SIDEBAR_MIN))
         self.lesson_nav.lesson_chosen.connect(self._lesson_picked)
         self.lesson_nav.step_chosen.connect(self._step_picked)
         self.stack = QStackedWidget()
@@ -450,7 +560,7 @@ class MainWindow(QMainWindow):
             item = QListWidgetItem(cls.name)
             item.setData(Qt.ItemDataRole.UserRole, cls)
             item.setToolTip(cls.description)
-            item.setSizeHint(QSize(0, 38))
+            item.setSizeHint(QSize(0, px(38)))
             self.nav.addItem(item)
             self._items[cls] = item
         icons.set_item_icons(
@@ -458,7 +568,7 @@ class MainWindow(QMainWindow):
             [(EXERCISE_ICONS.get(cls.__name__, icons.EXERCISE_NOTE_NAMES), item.setIcon) for cls, item in self._items.items()],
         )
         widest_navigation = max(self.nav.sizeHintForColumn(0), self.lesson_nav.sizeHintForColumn(0))
-        self.SIDEBAR_DEFAULT = max(self.SIDEBAR_MIN, widest_navigation + 28)
+        self.SIDEBAR_DEFAULT = max(px(self.SIDEBAR_MIN), widest_navigation + 28)
         # noinspection PyShadowingNames
         self.nav.itemClicked.connect(lambda item: self.open_exercise(item.data(Qt.ItemDataRole.UserRole)))
 
@@ -468,7 +578,7 @@ class MainWindow(QMainWindow):
         self.menu_button.setToolTip("Menu")
         self.menu_button.setAccessibleName("Menu")
         self.menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
-        self.menu_button.setStyleSheet("QToolButton { font-size: 16pt; } QToolButton::menu-indicator { image: none; }")
+        self.menu_button.setStyleSheet(css("QToolButton { font-size: 16pt; } QToolButton::menu-indicator { image: none; }"))
         menu = QMenu(self.menu_button)
         tools_menu = _AdjacentSubmenu("Tools", menu)
         help_menu = _AdjacentSubmenu("Help", menu)
@@ -544,6 +654,7 @@ class MainWindow(QMainWindow):
         self.addAction(settings_action)
         self.addAction(restart)  # keep the shortcuts working while the menu is closed
         self.addAction(quit_action)
+        self._add_zoom_actions()
 
         load_exercise_settings()
         load_instrument()
@@ -553,6 +664,8 @@ class MainWindow(QMainWindow):
         # The list and the exercise sit in a splitter: drag the handle to resize, or drag the list
         # narrower than its minimum to collapse it.
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
+        self._zoom_preview = _ZoomPreview(self.splitter)
+        self._zoom_preview.frame_ready.connect(self._zoom_timer.start)
         self.splitter.setHandleWidth(10)
         self.splitter.addWidget(self.nav_stack)
         self.splitter.addWidget(workspace)
@@ -567,7 +680,6 @@ class MainWindow(QMainWindow):
         self.splitter.splitterMoved.connect(self._sidebar_dragged)
         self.splitter.setSizes([0, 10_000])  # start on the home screen, with no list
         self.splitter.handle(1).setEnabled(False)
-        self._update_sidebar_button()
 
         root = QWidget()
         lay = QVBoxLayout(root)
@@ -585,13 +697,13 @@ class MainWindow(QMainWindow):
         buttons.addWidget(self.menu_button)
         self.view_button = QToolButton()
         self.view_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
-        self.view_button.setIconSize(QSize(18, 18))
+        self.view_button.setIconSize(QSize(px(18), px(18)))
         self.view_button.setAutoRaise(True)
         self.view_button.clicked.connect(self._toggle_tiles_workspace)
         self.pane_button = SidebarToggle(noun="navigation pane")
         self.pane_button.setObjectName("navigationPane")
         self.pane_button.setCheckable(True)
-        self.pane_button.setIconSize(QSize(18, 18))
+        self.pane_button.setIconSize(QSize(px(18), px(18)))
         self.pane_button.set_open(False)
         set_svg_icon(self.pane_button, icons.NAVIGATION_OPEN)
         self.pane_button.clicked.connect(self.toggle_navigation)
@@ -599,7 +711,7 @@ class MainWindow(QMainWindow):
         self.search_field.setObjectName("navigationSearch")
         self.search_field.setClearButtonEnabled(True)
         self.search_field.setMinimumWidth(0)
-        self.search_field.setMinimumHeight(32)
+        self.search_field.setMinimumHeight(px(32))
         self.search_field.textChanged.connect(self.home.set_search)
         self.search_action = self.search_field.addAction(
             QIcon(),
@@ -609,11 +721,11 @@ class MainWindow(QMainWindow):
         self.search_action.setText("Search")
         self.search_action.triggered.connect(lambda: self.search_field.setFocus())
         self.view_button.setObjectName("navigationView")
-        self.view_button.setMinimumHeight(32)
+        self.view_button.setMinimumHeight(px(32))
         self.search_row = QFrame()
         self.search_row.setObjectName("navigationSearchGroup")
         self.search_row.setProperty("focusWithin", False)
-        self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
+        self.search_row.setFixedWidth(max(px(self.SIDEBAR_MIN), self._sidebar_width))
         self.navigation_group = QFrame()
         self.navigation_group.setObjectName("navigationGroup")
         self.home.mode_control.setStyleSheet("""
@@ -629,7 +741,7 @@ class MainWindow(QMainWindow):
         """)
         for name, button in zip(("navigationExercises", "navigationLessons"), self.home.mode_control.buttons, strict=True):
             button.setObjectName(name)
-            button.setMinimumHeight(32)
+            button.setMinimumHeight(px(32))
         section_layout = self.home.mode_control.layout()
         assert section_layout is not None
         section_layout.setContentsMargins(
@@ -651,7 +763,7 @@ class MainWindow(QMainWindow):
         navigation_row.addWidget(self.pane_button)
         self.navigation_divider = QFrame()
         self.navigation_divider.setObjectName("navigationDivider")
-        self.navigation_divider.setFixedSize(1, 22)
+        self.navigation_divider.setFixedSize(px(1), px(22))
         navigation_row.addWidget(self.navigation_divider, alignment=Qt.AlignmentFlag.AlignVCenter)
         navigation_row.addWidget(self.view_button)
         buttons.addWidget(self.navigation_group)
@@ -672,8 +784,12 @@ class MainWindow(QMainWindow):
             0,
             0,
         )
+        self.zoom_indicator = QLabel(f"{zoom.percent()}%")
+        self.zoom_indicator.setAccessibleName("Zoom level")
+        self._zoom_notice_timer.timeout.connect(self.zoom_indicator.hide)
+        tools.addWidget(self.zoom_indicator)
         self.glossary_button = QToolButton()
-        self.glossary_button.setIconSize(QSize(22, 22))
+        self.glossary_button.setIconSize(QSize(px(22), px(22)))
         self.glossary_button.setAutoRaise(True)
         self.glossary_button.setCheckable(True)
         self.glossary_button.setStyleSheet("QToolButton:checked { background: transparent; }")
@@ -683,7 +799,7 @@ class MainWindow(QMainWindow):
         tools.addWidget(self.glossary_button)
         self.stats_button = QToolButton()  # data tools stay separate from navigation
         set_svg_icon(self.stats_button, icons.CHART)
-        self.stats_button.setIconSize(QSize(22, 22))
+        self.stats_button.setIconSize(QSize(px(22), px(22)))
         self.stats_button.setAutoRaise(True)
         self.stats_button.setCheckable(True)
         self.stats_button.setStyleSheet(
@@ -697,7 +813,7 @@ class MainWindow(QMainWindow):
         tools.addWidget(self.stats_button)
         self.database_button = QToolButton()
         set_svg_icon(self.database_button, icons.DATABASE)
-        self.database_button.setIconSize(QSize(22, 22))
+        self.database_button.setIconSize(QSize(px(22), px(22)))
         self.database_button.setAutoRaise(True)
         self.database_button.setCheckable(True)
         self.database_button.setStyleSheet(
@@ -763,6 +879,10 @@ class MainWindow(QMainWindow):
         lay.addLayout(bar)
         lay.addWidget(self.splitter, 1)
         self.setCentralWidget(root)
+        if self.isVisible():
+            root.show()
+        self.zoom_indicator.setVisible(self._zoom_notice_timer.isActive())
+        self._update_sidebar_button()
 
     def eventFilter(  # noqa: PLR0917 (Qt calls this override with both positional arguments)
         self,
@@ -854,7 +974,7 @@ class MainWindow(QMainWindow):
             icon_color = QPalette.ColorRole.Highlight if is_open else QPalette.ColorRole.WindowText
             set_svg_icon(self.pane_button, icons.NAVIGATION_CLOSE if is_open else icons.NAVIGATION_OPEN, role=icon_color)
         if hasattr(self, "search_row"):
-            self.search_row.setFixedWidth(max(self.SIDEBAR_MIN, self._sidebar_width))
+            self.search_row.setFixedWidth(max(px(self.SIDEBAR_MIN), self._sidebar_width))
         for i in range(self.stack.count()):
             button = getattr(self.stack.widget(i), "sidebar_button", None)
             if isinstance(button, SidebarToggle):
@@ -947,7 +1067,7 @@ class MainWindow(QMainWindow):
             --------
             >>> done()  # doctest: +SKIP
             """
-            self.nav_stack.setMinimumWidth(self.SIDEBAR_MIN)
+            self.nav_stack.setMinimumWidth(px(self.SIDEBAR_MIN))
             self.splitter.setSizes([end, total - end])
             self._save_sidebar()
             self._update_sidebar_button()
@@ -1228,6 +1348,83 @@ class MainWindow(QMainWindow):
         if old is not None:
             old.deleteLater()
 
+    def _add_zoom_actions(self) -> None:
+        """
+        Add the keyboard shortcuts that zoom in and out and go back to 100%, which work in every window of the app.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> sorted(action.text() for action in window.actions() if action.objectName().startswith("zoom"))
+        ['Actual Size', 'Zoom In', 'Zoom Out']
+        """
+        for name, text, shortcuts, change in (
+            (
+                "zoomIn",
+                "Zoom In",
+                [*QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomIn), QKeySequence("Ctrl+=")],
+                lambda: zoom.step(1),
+            ),
+            ("zoomOut", "Zoom Out", QKeySequence.keyBindings(QKeySequence.StandardKey.ZoomOut), lambda: zoom.step(-1)),
+            ("zoomReset", "Actual Size", [QKeySequence("Ctrl+0")], self._reset_zoom),
+        ):
+            action = QAction(text, self.menu_button)
+            action.setObjectName(name)
+            action.setShortcuts(shortcuts)
+            action.setShortcutContext(Qt.ShortcutContext.ApplicationShortcut)
+            action.triggered.connect(change)
+            self.addAction(action)
+
+    def _reset_zoom(self) -> None:
+        """
+        Reset the workspace and confirm actual size even when it is already at 100%.
+
+        Examples
+        --------
+        >>> window._reset_zoom()  # doctest: +SKIP
+        """
+        if not zoom.reset():
+            self.zoom_indicator.show()
+            self._zoom_notice_timer.start()
+
+    def _zoom_changed(self, percent: int) -> None:
+        """
+        Show the requested percentage and animate the workspace until input settles.
+
+        Parameters
+        ----------
+        percent : int
+            The newly requested zoom level.
+
+        Examples
+        --------
+        >>> zoom.step(1)  # doctest: +SKIP
+        """
+        self.zoom_indicator.setText(f"{percent}%")
+        self.zoom_indicator.show()
+        self._zoom_notice_timer.start()
+        if self.isVisible():
+            self._zoom_preview.move_to(percent / self._layout_zoom)
+        self._zoom_timer.start()
+
+    def _apply_zoom(self) -> None:
+        """
+        Draw everything again at the new zoom: the stylesheet, and the window with the sizes it fixes in pixels.
+
+        Examples
+        --------
+        >>> window = MainWindow()
+        >>> window._apply_zoom()
+        """
+        self._zoom_preview.animation.stop()
+        self._zoom_preview.setEnabled(False)
+        self._zoom_preview.frame = QPixmap()
+        if self._layout_zoom != zoom.percent():
+            self.rebuild()
+            self._layout_zoom = zoom.percent()
+            self.zoom_indicator.show()
+            self._zoom_notice_timer.start()
+
     def _settings_closed(self) -> None:
         """
         Pick up what the settings changed once they are closed: a new theme needs the window to be rebuilt.
@@ -1263,7 +1460,15 @@ class MainWindow(QMainWindow):
         self._overlay_return = None
         for action in self.actions():
             self.removeAction(action)
-        old = self.takeCentralWidget()
+        if self._layout_zoom != zoom.percent():
+            old = self.centralWidget()
+            if old is not None:
+                old.deleteLater()
+                QApplication.sendPostedEvents(old, QEvent.Type.DeferredDelete)
+                old = None
+            apply_theme(saved_theme())
+        else:
+            old = self.takeCentralWidget()
         self._build()
         self._restore_page(state)
         animation = self._sidebar_anim

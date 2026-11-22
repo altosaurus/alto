@@ -137,3 +137,4 @@ The windows, widgets and drawing code. Everything that needs Qt is in here.
 | [alto.ui.transitions](alto.ui.transitions/) | The transitions between the exercises and the lessons on the home page. |
 | [alto.ui.update_flow](alto.ui.update_flow/) | Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards. |
 | [alto.ui.widgets](alto.ui.widgets/) | Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control. |
+| [alto.ui.zoom](alto.ui.zoom/) | Zoom: make everything in Alto larger or smaller together. |

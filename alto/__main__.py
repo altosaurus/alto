@@ -23,6 +23,7 @@ from alto.location import (
     database_path,
     desktop_name,
 )
+from alto.ui import zoom
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import startup_profile
 from alto.ui.theme import (
@@ -67,6 +68,7 @@ def main() -> int:
     app = QApplication(sys.argv)
     app.setApplicationName("Alto")
     app.setApplicationDisplayName("Alto - Music Theory" if alto_home() is None else "Alto (dev) - Music Theory")
+    zoom.load()  # before the theme, whose stylesheet is scaled by it
     apply_theme(saved_theme())
     app.setDesktopFileName(desktop_name())  # lets the desktop match the window to alto.desktop (or alto-dev.desktop) and its icon
     app.setWindowIcon(QIcon(str(Path(__file__).parent / "assets" / "icon.svg")))

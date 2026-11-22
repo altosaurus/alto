@@ -52,6 +52,7 @@ from alto.ui.circle import (
     wedge_color,
     wedge_path,
 )
+from alto.ui.zoom import px
 
 START_COLORS = ["#1fa7c9", "#2f6bd0", "#6a4fe0"]  # what a new scheme starts with: the idea of "Cyan to indigo"
 THUMB = 112  # the size of a scheme's picture, in pixels
@@ -124,7 +125,7 @@ class SchemeThumb(QPushButton):
         super().__init__(parent)
         self.scheme = scheme
         self.setCheckable(True)
-        self.setFixedSize(size, size)
+        self.setFixedSize(px(size), px(size))
         self.setToolTip(scheme.description)
         self.setAccessibleName(scheme.name)
         self.setCursor(Qt.CursorShape.PointingHandCursor)

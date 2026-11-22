@@ -25,6 +25,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QApplication
 
+from alto.ui import zoom
 from alto.ui.colors import blend
 from alto.ui.store import (
     store,
@@ -907,7 +908,7 @@ def apply_theme(key: str) -> None:
         stylesheet = app_style(app.palette(), paper_palette=theme_palette(light) if light else None)
         if app.styleSheet():
             app.setStyleSheet("")  # replacing a live sheet recursively repolishes its descendants many times
-        app.setStyleSheet(stylesheet)
+        app.setStyleSheet(zoom.css(stylesheet))
     finally:
         if collecting:
             gc.enable()

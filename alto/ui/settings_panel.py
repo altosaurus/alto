@@ -114,6 +114,7 @@ from alto.theory.pitch import (
     Note,
 )
 from alto.theory.scales import INVERSION_NAMES, format_key_signature, mode_tonic
+from alto.ui import zoom
 from alto.ui.circle_colors import (
     SchemeEditor,
     SchemePage,
@@ -140,6 +141,7 @@ from alto.ui.store import (
     store,
     text_value,
 )
+from alto.ui.zoom import css, px
 
 
 def load_note_names() -> None:
@@ -373,7 +375,7 @@ class RangeEditor(QWidget):
         self.key, self.low, self.high = key, low, high
         self.limits = limits or RANGE_LIMITS[key]
         self.caption_text = QLabel()
-        self.caption_text.setStyleSheet("font-size: 12pt;")
+        self.caption_text.setStyleSheet(css("font-size: 12pt;"))
         self.caption = QWidget()  # the clef as a picture, then the lowest and highest note
         caption_row = QHBoxLayout(self.caption)
         caption_row.setContentsMargins(
@@ -392,7 +394,7 @@ class RangeEditor(QWidget):
             margin=8.0,
             compact=True,
         )
-        self.staff.setFixedWidth(168)
+        self.staff.setFixedWidth(px(168))
         self.low_up = _arrow(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
         self.low_down = _arrow(Qt.ArrowType.DownArrow, tip="Lower the lowest note")
         self.high_up = _arrow(Qt.ArrowType.UpArrow, tip="Raise the highest note")
@@ -532,10 +534,14 @@ class KeyDiagram(QWidget):
         """
         super().__init__(parent)
         self.keys: set[int] = set(keys or ())
-        self.first_column = self.PAD + 2 * self.DOT + 7 + self.DOT  # x of the 1-sharp / 1-flat dots
+        zoomed = zoom.factor()  # the dots and their spacing follow the zoom
+        self.DOT, self.PITCH, self.ROW_GAP, self.PAD = (
+            value * zoomed for value in (type(self).DOT, type(self).PITCH, type(self).ROW_GAP, type(self).PAD)
+        )
+        self.first_column = self.PAD + 2 * self.DOT + px(7) + self.DOT  # x of the 1-sharp / 1-flat dots
         self.setFixedSize(
-            int(self.first_column + 6 * self.PITCH + self.DOT + self.PAD) + 1,
-            int(self.ROW_GAP + 2 * self.DOT + 2 * self.PAD) + 3,
+            int(self.first_column + 6 * self.PITCH + self.DOT + self.PAD) + px(1),
+            int(self.ROW_GAP + 2 * self.DOT + 2 * self.PAD) + px(3),
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row underneath is the click target
         self._update_tip()
@@ -995,7 +1001,7 @@ class _Row(QPushButton):
             outer.addLayout(self._below)
             self._contents = outer
             return
-        self.setMinimumHeight(48)
+        self.setMinimumHeight(px(48))
         lay = QHBoxLayout(self)
         self._contents = lay
         lay.setContentsMargins(
@@ -1089,7 +1095,7 @@ class Switch(QAbstractButton):
         """
         super().__init__(parent)
         self.setCheckable(True)
-        self.setFixedSize(self.W, self.H)
+        self.setFixedSize(px(self.W), px(self.H))
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self._pos = 0.0  # knob position, 0 (off) .. 1 (on)
         self._anim = QVariantAnimation(self)
@@ -1646,7 +1652,7 @@ class _StaffRangePanel(ExerciseSettingsPanel):
         for v, box in self.value_boxes.items():
             picture = ValuePictures([v], scale=1.25, center_stemless=True)
             picture.label_button(box)
-            box.setStyleSheet("QCheckBox { font-size: 11pt; }")
+            box.setStyleSheet(css("QCheckBox { font-size: 11pt; }"))
             box.setChecked(v in self.cfg.note_values)
             box.toggled.connect(self._values_edited)
             vlay.addWidget(box)
@@ -1908,7 +1914,7 @@ class NoteNameSettingsPanel(_StaffRangePanel):
         self.keys_row.attach(self.keys_diagram)
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
-        self.range_pictures = RangePictures(max_width=ROW_PICTURE_WIDTH)
+        self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
         self.range_row.attach(self.range_pictures)
         self.value_pictures = ValuePictures()
         self.values_row.attach(self.value_pictures)
@@ -2603,7 +2609,10 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
         mlay.addWidget(QLabel("<h3>Settings</h3>"))
         self.range_row = _Row("Range", tall=True)
         self.range_row.clicked.connect(lambda: self._go(1))
-        self.range_keyboard = KeyboardSpan(compact=True, size=(ROW_PICTURE_WIDTH, 36))  # the asked span, lit on a miniature piano
+        self.range_keyboard = KeyboardSpan(
+            compact=True,
+            size=(px(ROW_PICTURE_WIDTH), px(36)),
+        )  # the asked span, lit on a miniature piano
         self.range_row.attach(self.range_keyboard)
         self.black_keys_row = _ToggleRow("Black keys")
         self.black_keys_row.setToolTip("Also ask the black keys, answered by either of their names")
@@ -2651,7 +2660,7 @@ class KeyboardSettingsPanel(ExerciseSettingsPanel):
             down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setMinimumWidth(48)
+            label.setMinimumWidth(px(48))
             row.addWidget(down)
             row.addWidget(label)
             row.addWidget(up)
@@ -3681,7 +3690,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
         self.clef_pictures = ClefPictures()
         self.clefs_row.attach(self.clef_pictures)
         self.range_row = _Row("Range", tall=True)
-        self.range_pictures = RangePictures(max_width=ROW_PICTURE_WIDTH)
+        self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
         self.range_row.attach(self.range_pictures)
         self.staff_key_row = _Row("Staff Key")
         self.key_diagram = KeyDiagram()
@@ -3790,7 +3799,7 @@ class IntervalSettingsPanel(_StaffRangePanel):
             selected=cfg.accidentals,
             positions={0: (0, 0), -1: (1, 0), 1: (1, 1), -2: (2, 0), 2: (2, 1)},
         )
-        self.accidental_list.setStyleSheet("QCheckBox { font-size: 22pt; }")
+        self.accidental_list.setStyleSheet(css("QCheckBox { font-size: 22pt; }"))
         for sign, name in settings.INTERVAL_ACCIDENTALS.items():
             box = self.accidental_list.boxes[sign]
             box.setAccessibleName(name)
@@ -4000,7 +4009,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         menu_layout.addWidget(QLabel("<h3>Settings</h3>"))
         self.range_row = _Row("Range", tall=True)
         self.range_row.clicked.connect(lambda: self._go(1))
-        self.range_keyboard = KeyboardSpan(compact=True, size=(ROW_PICTURE_WIDTH, 36))
+        self.range_keyboard = KeyboardSpan(compact=True, size=(px(ROW_PICTURE_WIDTH), px(36)))
         self.range_row.attach(self.range_keyboard)
         self.intervals_row = _Row("Intervals")
         self.intervals_row.clicked.connect(lambda: self._go(2))
@@ -4037,7 +4046,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
         self.button_count = QLineEdit()
         self.button_count.setProperty("field", True)
         self.button_count.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.button_count.setFixedWidth(54)
+        self.button_count.setFixedWidth(px(54))
         self.button_count.setValidator(QIntValidator(1, len(settings.KEYBOARD_INTERVAL_NAMES), self.button_count))
         self.button_count.setAccessibleName("Answer button count")
         self.button_count.setToolTip("Maximum answer buttons in limited mode; fewer are shown if fewer intervals are selected")
@@ -4067,7 +4076,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
             down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setMinimumWidth(48)
+            label.setMinimumWidth(px(48))
             row.addWidget(down)
             row.addWidget(label)
             row.addWidget(up)
@@ -4105,7 +4114,7 @@ class KeyboardIntervalSettingsPanel(ExerciseSettingsPanel):
             down.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self.interval_slider.move_endpoint(w, delta=1))
             label.setProperty("field", True)
-            label.setMinimumWidth(48)
+            label.setMinimumWidth(px(48))
             label.setMaxVisibleItems(12)
             label.setPlaceholderText("—")
             label.setAccessibleName("Lowest interval" if which == "low" else "Highest interval")
@@ -6407,7 +6416,7 @@ class PackSettingsPanel(_StaffRangePanel):
         pages = [menu]
         if "range" in controls:
             row = self.range_row = _Row("Range", tall=True)
-            self.range_pictures = RangePictures(max_width=ROW_PICTURE_WIDTH)
+            self.range_pictures = RangePictures(max_width=px(ROW_PICTURE_WIDTH))
             row.attach(self.range_pictures)
             row.clicked.connect(lambda _=False: self._go(self.range_index))
             layout.addWidget(row)
@@ -6703,7 +6712,7 @@ class PackKeyboardSettingsPanel(ExerciseSettingsPanel):
             self.sound_row = sound
         if "range" in controls:
             row = _Row("Range", tall=True)
-            self.range_keyboard = KeyboardSpan(compact=True, size=(ROW_PICTURE_WIDTH, 36))
+            self.range_keyboard = KeyboardSpan(compact=True, size=(px(ROW_PICTURE_WIDTH), px(36)))
             self.range_keyboard.full = exercise.key_span
             row.attach(self.range_keyboard)
             range_page = len(pages)
@@ -6772,7 +6781,7 @@ class PackKeyboardSettingsPanel(ExerciseSettingsPanel):
             down.clicked.connect(lambda _=False, w=which: self._step(w, delta=-1))
             up.clicked.connect(lambda _=False, w=which: self._step(w, delta=1))
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setMinimumWidth(48)
+            label.setMinimumWidth(px(48))
             row.addWidget(down)
             row.addWidget(label)
             row.addWidget(up)

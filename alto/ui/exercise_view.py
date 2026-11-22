@@ -125,6 +125,7 @@ from alto.ui.staff_input import (
 )
 from alto.ui.staff_playback import StaffPlayback
 from alto.ui.widgets import HelpButton, PracticeCounts
+from alto.ui.zoom import css, px
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -443,7 +444,7 @@ class ExerciseView(QWidget):
         self._count_timer.setInterval(30_000)
         self._count_timer.timeout.connect(self._refresh_queue_counts)
         self.prompt = DegreeLabel()
-        self.prompt.setStyleSheet("font-size: 16pt;")
+        self.prompt.setStyleSheet(css("font-size: 16pt;"))
         self.staff = StaffWidget(max_step=MAX_STEP)
         self.staff.interval_voices = isinstance(exercise, (IntervalNames, IntervalConstruction))
         self._answer_playback = StaffPlayback(self, highlight=self._light_answer_notes)
@@ -462,15 +463,15 @@ class ExerciseView(QWidget):
             0,
         )
         self.undo_button = QPushButton("Undo")  # takes back the last note or step of a scale
-        self.undo_button.setMinimumHeight(40)
+        self.undo_button.setMinimumHeight(px(40))
         self.undo_button.setShortcut("Backspace")
         self.undo_button.clicked.connect(self._undo_scale_note)
         self.place_button = QPushButton("Place note")  # puts the note at the caret on the staff, or marks the next step
-        self.place_button.setMinimumHeight(40)
+        self.place_button.setMinimumHeight(px(40))
         self.place_button.setShortcut("Return")  # Return does the next thing: place, then Answer once everything is placed
         self.place_button.clicked.connect(self._place_here)
         self.answer_button = QPushButton("Answer")  # hands in the signature picked on the fork, or the scale placed
-        self.answer_button.setMinimumHeight(40)
+        self.answer_button.setMinimumHeight(px(40))
         self.answer_button.setShortcut("Return")
         self.answer_button.clicked.connect(self._answer)
         self.staff.installEventFilter(self)  # the wheel over the music or Answer moves the fork's circle too
@@ -499,10 +500,10 @@ class ExerciseView(QWidget):
         for symbol in app_settings.CLEF_SYMBOLS:
             button = QPushButton()
             set_palette_icon(button, lambda palette, clef=symbol: symbol_icon(clef, color=palette.buttonText().color()))
-            button.setIconSize(QSize(56, 56))
+            button.setIconSize(QSize(px(56), px(56)))
             button.setAccessibleName(app_settings.CLEF_SYMBOL_NAMES[symbol])
             button.setCheckable(True)
-            button.setMinimumHeight(68)
+            button.setMinimumHeight(px(68))
             button.setToolTip(f"{app_settings.CLEF_SYMBOL_NAMES[symbol]} (or turn the mouse wheel, or use Left and Right)")
             button.clicked.connect(lambda _=False, chosen=symbol: self.clef_input.select(chosen))
             self.symbol_group.addButton(button)
@@ -537,7 +538,7 @@ class ExerciseView(QWidget):
             ("octave_up", "Octave ↑", 7, "An octave higher (Page Up)"),
         ):
             b = QPushButton(text)
-            b.setMinimumHeight(40)
+            b.setMinimumHeight(px(40))
             b.setToolTip(tip)
             b.setAccessibleName(tip.split(" (")[0])
             b.clicked.connect(lambda _=False, n=steps: self._move_caret(n))
@@ -563,8 +564,8 @@ class ExerciseView(QWidget):
             symbol = ACCIDENTAL_SYMBOLS[acc] or "♮"
             b = QPushButton(symbol)
             b.setCheckable(True)
-            b.setMinimumHeight(40)
-            b.setStyleSheet("font-size: 15pt;")
+            b.setMinimumHeight(px(40))
+            b.setStyleSheet(css("font-size: 15pt;"))
             b.clicked.connect(lambda _=False, a=acc: self._pick_accidental(a))
             key, word = {
                 -2: ("Ctrl+-", "Double flat"),
@@ -595,11 +596,11 @@ class ExerciseView(QWidget):
         for step, name in (("W", "Whole step"), ("H", "Half step")):
             b = QPushButton(step)
             b.setCheckable(True)
-            b.setMinimumHeight(40)
+            b.setMinimumHeight(px(40))
             b.setToolTip(f"{name} (key {step}; the arrow keys, the mouse wheel and a right click switch between them)")
             b.setAccessibleName(name)
             b.setShortcut(step)
-            b.setStyleSheet("font-size: 15pt; font-weight: bold;")
+            b.setStyleSheet(css("font-size: 15pt; font-weight: bold;"))
             b.clicked.connect(lambda _=False, s=step: self.scale_input.set_pending_step(s))
             self.step_group.addButton(b)
             self.step_buttons[step] = b
@@ -613,9 +614,9 @@ class ExerciseView(QWidget):
             margin=3.6,
             compact=True,
         )  # key signature only
-        self.key_staff.setFixedWidth(210)
+        self.key_staff.setFixedWidth(px(210))
         self.choice_area = QWidget()  # holds the answer buttons, with room around them and a widest it will be
-        self.choice_area.setMaximumWidth(self.CHOICE_MAX_WIDTH)
+        self.choice_area.setMaximumWidth(px(self.CHOICE_MAX_WIDTH))
         self.choice_box = QGridLayout(self.choice_area)
         self.choice_box.setContentsMargins(
             16,
@@ -657,7 +658,7 @@ class ExerciseView(QWidget):
         ):  # an experiment: a book beside the help that opens what there is to look up, in a pane on the right
             book = QToolButton()
             set_svg_icon(book, BOOK)
-            book.setIconSize(QSize(24, 24))
+            book.setIconSize(QSize(px(24), px(24)))
             book.setCheckable(True)
             book.setAutoRaise(True)
             book.setToolTip("Reference")
@@ -667,7 +668,7 @@ class ExerciseView(QWidget):
             self.book_btn = book
         self.sound_btn = QToolButton()
         self.sound_btn.setAutoRaise(True)
-        self.sound_btn.setIconSize(QSize(24, 24))
+        self.sound_btn.setIconSize(QSize(px(24), px(24)))
         self.sound_btn.clicked.connect(self._toggle_sound)
         self._show_sound_state()
         top.addWidget(self.sound_btn)
@@ -675,7 +676,7 @@ class ExerciseView(QWidget):
         if self.settings_panel:
             self.gear = QToolButton()
             set_svg_icon(self.gear, SLIDERS)
-            self.gear.setIconSize(QSize(24, 24))
+            self.gear.setIconSize(QSize(px(24), px(24)))
             self.gear.setCheckable(True)
             self.gear.setAutoRaise(True)
             self.gear.setToolTip("Exercise settings")
@@ -723,7 +724,7 @@ class ExerciseView(QWidget):
         self._keyboard_interval_row.installEventFilter(self)
         lay.addWidget(self._keyboard_interval_row)
         answers = QWidget()
-        answers.setMaximumWidth(self.CHOICE_MAX_WIDTH)
+        answers.setMaximumWidth(px(self.CHOICE_MAX_WIDTH))
         answer_layout = QVBoxLayout(answers)
         answer_layout.setContentsMargins(0, 0, 0, 0)
         self.quality_label = QLabel("Quality")
@@ -756,7 +757,7 @@ class ExerciseView(QWidget):
             self.grade_controls[grade] = label, button
         lay.addWidget(self.rating_row, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.next_button = QPushButton("Next")
-        self.next_button.setMinimumHeight(40)
+        self.next_button.setMinimumHeight(px(40))
         self.next_button.setShortcut("Return")
         self.next_button.clicked.connect(self._advance_question)
         lay.addWidget(self.next_button, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -782,7 +783,7 @@ class ExerciseView(QWidget):
             self.settings_collapse.clicked.connect(lambda: self.gear.setChecked(False))
             settings_header.addWidget(self.settings_collapse)
             pane_lay.addLayout(settings_header)
-            self.settings_panel.setFixedWidth(self.PANE_WIDTH - 2 * 9)
+            self.settings_panel.setFixedWidth(px(self.PANE_WIDTH - 2 * 9))
             pane_lay.addWidget(self.settings_panel, 1)  # fill the pane so long pages (Range) can scroll
             self.pane.hide()
             outer.addWidget(self.pane)
@@ -812,7 +813,7 @@ class ExerciseView(QWidget):
             self.reference_collapse.clicked.connect(lambda: book.setChecked(False))
             reference_header.addWidget(self.reference_collapse)
             book_lay.addLayout(reference_header)
-            reference.setFixedWidth(self.REFERENCE_WIDTH - 2 * 9)
+            reference.setFixedWidth(px(self.REFERENCE_WIDTH - 2 * 9))
             book_lay.addWidget(reference, 1)
             ref_pane.hide()
             outer.addWidget(ref_pane)
@@ -1040,7 +1041,7 @@ class ExerciseView(QWidget):
             stack.setCurrentIndex(index)
         self.gear.setChecked(open_)
         self._pane_anim.stop()
-        self.pane.setMaximumWidth(self.PANE_WIDTH if open_ else 0)
+        self.pane.setMaximumWidth(px(self.PANE_WIDTH) if open_ else 0)
         self.pane.setVisible(open_)
         page = stack.currentWidget() if stack is not None else panel
         scroll = page.findChild(QScrollArea) if page is not None else None
@@ -1070,7 +1071,7 @@ class ExerciseView(QWidget):
         self._pane_anim.stop()
         self.pane.show()
         self._pane_anim.setStartValue(self.pane.maximumWidth())
-        self._pane_anim.setEndValue(self.PANE_WIDTH if open_ else 0)
+        self._pane_anim.setEndValue(px(self.PANE_WIDTH) if open_ else 0)
         self._pane_anim.start()
 
     def _pane_settled(self) -> None:
@@ -1115,7 +1116,7 @@ class ExerciseView(QWidget):
         self._reference_anim.stop()
         pane.show()
         self._reference_anim.setStartValue(pane.maximumWidth())
-        self._reference_anim.setEndValue(self.REFERENCE_WIDTH if open_ else 0)
+        self._reference_anim.setEndValue(px(self.REFERENCE_WIDTH) if open_ else 0)
         self._reference_anim.start()
 
     def _reference_settled(self) -> None:
@@ -1294,7 +1295,7 @@ class ExerciseView(QWidget):
         self.fingerboard.setVisible(position is not None)
         self.key_staff.setVisible(q.key_staff)
         self.key_staff.show_notes([], clef="treble", key=q.key)
-        self.keyboard.max_key_width = 30.0 if q.key_staff else 38.0  # leave room for the staff above
+        self.keyboard.max_key_width = px(30.0 if q.key_staff else 38.0)  # leave room for the staff above
         if q.keyboard_notes:
             self.keyboard.show_keys([note.midi for note in q.keyboard_notes], span=q.keyboard_range)
         else:
@@ -1311,7 +1312,7 @@ class ExerciseView(QWidget):
             caption=q.caption,
         )
         visible_staff = self.input_staff if construct else self.staff
-        self.prompt.setMaximumWidth(visible_staff.maximumWidth() if not visible_staff.isHidden() else self.CHOICE_MAX_WIDTH)
+        self.prompt.setMaximumWidth(visible_staff.maximumWidth() if not visible_staff.isHidden() else px(self.CHOICE_MAX_WIDTH))
         for b in self.buttons:
             b.setShortcut(QKeySequence())  # a button waiting to be deleted must not share its key with the new one
             b.hide()
@@ -1343,13 +1344,13 @@ class ExerciseView(QWidget):
             if isinstance(self.exercise, IntervalNames) and c in INTERVAL_QUALITY_SYMBOLS:
                 b.setText(INTERVAL_QUALITY_SYMBOLS[c])
                 b.setAccessibleName(c)
-            b.setMinimumHeight(40)
+            b.setMinimumHeight(px(40))
             for function in app_settings.DEGREE_FUNCTIONS:
                 if c.endswith(function):
                     prefix = c[: -len(function)].rstrip()
                     if prefix:
                         b.setText(f"{prefix}\n{function}")
-                    b.setMinimumHeight(56)
+                    b.setMinimumHeight(px(56))
                     b.setAccessibleName(c)
                     break
             if keys[i]:  # every answer can be given from the keyboard
@@ -1386,7 +1387,7 @@ class ExerciseView(QWidget):
             number_buttons = []
             for i, octave in enumerate(q.octaves):
                 b = QPushButton(octave)
-                b.setMinimumHeight(40)
+                b.setMinimumHeight(px(40))
                 if second_keys[i]:  # a key that the first row does not use
                     b.setShortcut(second_keys[i])
                     b.setToolTip(f"Key {second_keys[i]}")

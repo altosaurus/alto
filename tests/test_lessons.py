@@ -862,10 +862,14 @@ def test_a_started_lesson_says_where_to_continue_and_can_start_over(app: QApplic
         Clears what is saved.
     """
     home = HomePage(REGISTRY)
-    assert "Start" in [label.text() for label in home.lesson_cards[0].findChildren(QLabel)]
+    assert not any(label.text().startswith("Step") for label in home.lesson_cards[0].findChildren(QLabel))
+    assert home.lesson_cards[0].progress_bar is None
     page = LessonsPage(LESSONS[0].key, step=3)
     home.show()  # showing the page brings its cards up to date
-    assert "Continue at step 4" in [label.text() for label in home.lesson_cards[0].findChildren(QLabel)]
+    card = home.lesson_cards[0]
+    assert f"Step 4/{len(LESSONS[0].steps)}" in [label.text() for label in card.findChildren(QLabel)]
+    assert card.progress_bar is not None and card.progress_bar.fraction == 3 / len(LESSONS[0].steps)
+    assert "Continue at step 4 of" in card.accessibleDescription()
     page.restart_button.click()
     assert page.view.current == 0 and saved_step(LESSONS[0]) == 0
 

@@ -45,6 +45,7 @@ from PySide6.QtWidgets import (
 )
 
 from alto.ui.colors import blend
+from alto.ui.zoom import px
 
 MAX_ACCIDENTALS = 7  # a signature has at most seven sharps or flats
 FORK_W, FORK_H = 440, 140
@@ -349,7 +350,7 @@ class KeyFork(QWidget):
         self._slide.setEndValue(1.0)
         self._slide.valueChanged.connect(self._move)
         self._path = [self._marker]  # the way the circle is sliding along
-        self.setFixedSize(FORK_W, FORK_H)
+        self.setFixedSize(px(FORK_W), px(FORK_H))
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMouseTracking(True)  # numbers light up as the mouse passes over them

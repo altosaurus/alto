@@ -79,8 +79,16 @@ note or marks a step while there is something to place, and answers once there i
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> | Open the app settings.                        |
 | <kbd>Ctrl</kbd>+<kbd>R</kbd>                | Restart Alto.                                 |
 | <kbd>Ctrl</kbd>+<kbd>Q</kbd>                | Quit.                                         |
+| <kbd>Ctrl</kbd>+<kbd>+</kbd>                | Zoom in. <kbd>Ctrl</kbd>+<kbd>=</kbd> does the same, so no <kbd>Shift</kbd> is needed. |
+| <kbd>Ctrl</kbd>+<kbd>-</kbd>                | Zoom out.                                     |
+| <kbd>Ctrl</kbd>+<kbd>0</kbd>                | Go back to 100%.                              |
 
 On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kbd>.
+
+Zoom makes everything larger or smaller together: the text, the buttons, the lists, the notation, the keyboard and the icons. It
+moves through 50%, 67%, 75%, 80%, 90%, 100%, 110%, 125%, 150%, 175%, 200%, 250% and 300%. Alto draws the window again at each
+step, and remembers the zoom the next time it starts. The current percentage briefly appears to the left of the Glossary button. Windows that are already open, such as the settings, take the new
+zoom when you open them again.
 
 ## Mouse
 
@@ -92,6 +100,7 @@ On macOS, Qt shows these shortcuts with <kbd>⌘</kbd> in place of <kbd>Ctrl</kb
 | Double-click a row            | Database: Answers or Questions                               | Preview that question.                                                                   |
 | Click a column heading        | Database                                                     | Sort by that column.                                                                     |
 | Hover a chart                 | Statistics                                                   | Show the exact values for that period.                                                   |
+| Turn the wheel with <kbd>Ctrl</kbd> held | Anywhere                                        | Zoom in or out one step for each click of the wheel.                                     |
 | Drag the edge of the sidebar  | Exercise screens                                             | Resize the exercise list, or drag it narrower than its minimum to hide it.               |
 
 ## The menu

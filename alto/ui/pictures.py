@@ -39,7 +39,7 @@ from alto.theory.pitch import (
     MAJOR_KEYS,
     Note,
 )
-from alto.ui import engraving
+from alto.ui import engraving, zoom
 from alto.ui.colors import blend
 from alto.ui.degree_text import (
     degree_tooltip,
@@ -164,7 +164,7 @@ class _Picture(QWidget):
         1.5
         """
         super().__init__(parent)
-        self.scale = scale
+        self.scale = scale * zoom.factor()  # a picture is as much larger as the zoom says
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # the row or checkbox underneath is the click target
 
     def _fit(

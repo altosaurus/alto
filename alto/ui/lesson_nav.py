@@ -29,6 +29,7 @@ from alto.lessons import LESSONS
 from alto.ui import icons
 from alto.ui.home import lesson_icon
 from alto.ui.style import navigation_heading_style
+from alto.ui.zoom import px
 
 LESSON_ROLE = Qt.ItemDataRole.UserRole  # holds the lesson's key on a lesson's row
 STEP_ROLE = Qt.ItemDataRole.UserRole + 1  # holds the step's number on a step's row
@@ -65,7 +66,7 @@ def section_item(
     item.setFont(font)
     item.setForeground(ink)
     item.setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
-    item.setSizeHint(QSize(0, 40))
+    item.setSizeHint(QSize(0, px(40)))
     return item
 
 
@@ -111,7 +112,7 @@ class LessonNav(QListWidget):
         """
         super().__init__(parent)
         self.setObjectName("nav")  # styled in style.py, as the exercise list is
-        self.setIconSize(QSize(icons.ACTIVITY_ICON_SIZE, icons.ACTIVITY_ICON_SIZE))
+        self.setIconSize(QSize(px(icons.ACTIVITY_ICON_SIZE), px(icons.ACTIVITY_ICON_SIZE)))
         self.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
         self.setAccessibleName("Lessons")
         self.step_items: list[QListWidgetItem] = []
@@ -149,7 +150,7 @@ class LessonNav(QListWidget):
             drawings.append((lesson_icon(lesson), row.setIcon))
             row.setData(LESSON_ROLE, lesson.key)
             row.setToolTip(lesson.summary)
-            row.setSizeHint(QSize(0, 38))
+            row.setSizeHint(QSize(0, px(38)))
             if lesson.key == key:
                 font = row.font()
                 font.setBold(True)
@@ -160,7 +161,7 @@ class LessonNav(QListWidget):
                     item = QListWidgetItem(f"      {number + 1}.  {step.title}")
                     item.setData(LESSON_ROLE, lesson.key)
                     item.setData(STEP_ROLE, number)
-                    item.setSizeHint(QSize(0, 30))
+                    item.setSizeHint(QSize(0, px(30)))
                     self.addItem(item)
                     self.step_items.append(item)
         icons.set_item_icons(self, drawings)

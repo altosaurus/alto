@@ -30,9 +30,12 @@ from PySide6.QtGui import (
     QPainter,
     QPalette,
     QPixmap,
+    QPixmapCache,
 )
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QAbstractButton, QAbstractItemView, QMenu
+
+from alto.ui import zoom
 
 ACTIVITY_ICON_SIZE = 20
 
@@ -272,16 +275,22 @@ def svg_icon(
     >>> icon.isNull()
     False
     """
+    side = int(size * zoom.factor() * scale)
+    key = f"alto.svg/{side}/{scale}/{color.name()}/{inner}"
+    cached = QPixmap()
+    if QPixmapCache.find(key, cached):
+        return QIcon(cached)
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">{inner.replace("COLOR", color.name())}</svg>'
     renderer = QSvgRenderer(QByteArray(svg.encode()))
-    px = QPixmap(int(size * scale), int(size * scale))
-    px.fill(Qt.GlobalColor.transparent)
-    p = QPainter(px)
+    pixmap = QPixmap(side, side)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    p = QPainter(pixmap)
     p.setRenderHint(QPainter.RenderHint.Antialiasing)
     renderer.render(p)
     p.end()
-    px.setDevicePixelRatio(scale)
-    return QIcon(px)
+    pixmap.setDevicePixelRatio(scale)
+    QPixmapCache.insert(key, pixmap)
+    return QIcon(pixmap)
 
 
 # Sidebar toggle: an edge bar with a chevron pointing toward the edge while the list is shown

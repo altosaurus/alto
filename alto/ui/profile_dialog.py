@@ -34,6 +34,7 @@ from alto.ui.store import (
     int_value,
     store,
 )
+from alto.ui.zoom import px
 
 
 class ProfileDialog(QDialog):
@@ -96,7 +97,7 @@ class ProfileDialog(QDialog):
         first_run = not db.profiles()
         self.setWindowTitle("Welcome" if first_run else "Profile")
         self.setModal(True)
-        self.setMinimumWidth(380)
+        self.setMinimumWidth(px(380))
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         if first_run:

@@ -62,7 +62,7 @@ from alto.theory.pitch import (
     Note,
     key_accidental,
 )
-from alto.ui import engraving
+from alto.ui import engraving, zoom
 from alto.ui.degree_text import draw_degree_text
 from alto.ui.notation import (
     NotationStyle,
@@ -72,6 +72,7 @@ from alto.ui.notation import (
 from alto.ui.notation import current as current_style
 from alto.ui.notes import draw_note
 from alto.ui.score_excerpt import ScoreExcerpt, score_artwork
+from alto.ui.zoom import px
 
 # Chord noteheads also carry their pitch so each head can be pointed to separately.
 Component = tuple[str, int] | tuple[str, int, int]
@@ -486,10 +487,17 @@ class StaffWidget(QWidget):
         8.0
         """
         super().__init__(parent)
-        self.GAP, self.side, self.note_offset, self.margin, self.compact = gap, side, note_offset, margin, compact
+        scale = zoom.factor()  # the notation is drawn at the zoom, so its sizes in pixels follow it
+        self.GAP, self.side, self.note_offset, self.margin, self.compact = (
+            gap * scale,
+            side * scale,
+            note_offset * scale,
+            margin,
+            compact,
+        )
         self.lesson_peers: WeakSet[StaffWidget] = WeakSet()
         self.lesson_layout = lesson_layout
-        self.max_step = max_step
+        self.max_step = None if max_step is None else max_step * scale
         self.clef = "treble"
         self.interval_voices = False
         self.given_note: Note | None = None
@@ -572,7 +580,7 @@ class StaffWidget(QWidget):
         self._fit_height(clef)
         self._fit_width()
         if self.excerpt:
-            self.setMaximumWidth(760)
+            self.setMaximumWidth(px(760))
         self.update()
 
     def _fit_width(self) -> None:
@@ -835,7 +843,7 @@ class StaffWidget(QWidget):
         if self.compact:
             self.setFixedHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP))
         else:
-            self.setMinimumHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP) + 10)
+            self.setMinimumHeight(int((grand_height if clef == "grand" else 4 + 2 * self.margin) * self.GAP) + px(10))
 
     def highlight_column(self, index: int | None) -> None:
         """

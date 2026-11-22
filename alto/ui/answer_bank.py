@@ -20,6 +20,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from alto.ui.zoom import px
+
 
 class AnswerBank(QScrollArea):
     """
@@ -65,9 +67,9 @@ class AnswerBank(QScrollArea):
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.setMaximumWidth(760)
-        self.setMaximumHeight(240)
-        self.setMinimumWidth(120)
+        self.setMaximumWidth(px(760))
+        self.setMaximumHeight(px(240))
+        self.setMinimumWidth(px(120))
         self.setAccessibleName("Interval answer buttons")
 
     def set_buttons(self, buttons: list[QAbstractButton], *, positions: list[tuple[int, int]] | None = None) -> None:

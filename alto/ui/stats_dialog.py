@@ -60,6 +60,7 @@ from alto.ui.charts import (
 from alto.ui.database_page import ROW_ROLE, AnswerList, open_preview
 from alto.ui.dropdown import FieldComboBox
 from alto.ui.response_times import ResponseTimeDialog
+from alto.ui.zoom import css, px
 
 DAY = 86400.0
 DETAIL_LIMIT = 500  # the most answers the drilldown lists; the note above it says when there are more
@@ -232,7 +233,7 @@ class Tile(QFrame):
         lay = QVBoxLayout(self)
         lay.setSpacing(0)
         self.value = QLabel("–")
-        self.value.setStyleSheet("font-size: 20pt; font-weight: bold;")
+        self.value.setStyleSheet(css("font-size: 20pt; font-weight: bold;"))
         self.caption = QLabel(caption)
         self.caption.setStyleSheet("color: gray;")
         lay.addWidget(self.value)
@@ -404,7 +405,7 @@ class StatsPage(QWidget):
         # The calendar always looks back about a year, whatever the timeframe, so it follows only the exercise filter.
         self.heatmap = HeatmapChart("Reviews, last 12 months")
         self.heatmap.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.heatmap.setFixedHeight(190)
+        self.heatmap.setFixedHeight(px(190))
         lay.addWidget(self.heatmap)
 
         # Clicking a bar, a point, a row or a day lists the answers behind it here.
@@ -424,8 +425,8 @@ class StatsPage(QWidget):
         self.detail_note.setWordWrap(True)
         detail_lay.addWidget(self.detail_note)
         self.answers = AnswerList(names=self._names(), learner=learner)
-        self.answers.setMinimumHeight(240)
-        self.answers.setMaximumHeight(380)
+        self.answers.setMinimumHeight(px(240))
+        self.answers.setMaximumHeight(px(380))
         detail_lay.addWidget(self.answers)
         self.detail.hide()
         lay.addWidget(self.detail)
@@ -591,7 +592,7 @@ class StatsPage(QWidget):
                 if col >= 2:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table.setItem(row, col, item)
-        self.table.setFixedHeight(self.table.horizontalHeader().height() + 30 * max(len(s.hardest), 1) + 6)
+        self.table.setFixedHeight(self.table.horizontalHeader().height() + px(30) * max(len(s.hardest), 1) + px(6))
 
     def _show_volume(self) -> None:
         """

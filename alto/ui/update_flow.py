@@ -57,6 +57,7 @@ from alto.ui.store import (
     store,
     text_value,
 )
+from alto.ui.zoom import px
 from alto.updates import (
     InstallKind,
     Release,
@@ -376,7 +377,7 @@ class WaitDialog(QDialog):
         bar = QProgressBar()
         bar.setRange(0, 0)
         bar.setTextVisible(False)
-        bar.setMinimumWidth(320)
+        bar.setMinimumWidth(px(320))
         lay.addWidget(bar)
         cancel = QPushButton("Cancel")
         cancel.clicked.connect(self.reject)
@@ -767,7 +768,7 @@ class UpdateDialog(QDialog):
         self.log.setMaximumBlockCount(500)
         self.log.setFont(QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont))
         self.log.setAccessibleName("Update details")
-        self.log.setMinimumSize(520, 180)
+        self.log.setMinimumSize(px(520), px(180))
         lay.addWidget(self.log, 1)
         self.button = QPushButton("OK")
         self.button.setEnabled(False)
