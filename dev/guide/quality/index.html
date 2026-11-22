@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notation/">notation</a></li>
                 
                 
@@ -782,7 +785,9 @@ play a sound or open a real dialog.</li>
   <li>Seed every random source. A flaky test teaches people to ignore red.</li>
   <li>Do not test private details if a public behavior says the same thing. The exceptions are private helpers that are hard to
 reach through the public interface (the animations’ final states, for example).</li>
-  <li>Keep durations short: <code class="language-plaintext highlighter-rouge">QTest.qWait</code> costs real time.</li>
+  <li>Test one thing. Check answers in logic tests, without widgets. In a screen test, call <code class="language-plaintext highlighter-rouge">motion.settle()</code> to end feedback
+and animations instead of waiting; keep <code class="language-plaintext highlighter-rouge">QTest.qWait</code>, which costs real time, for tests marked <code class="language-plaintext highlighter-rouge">motion</code> that are about
+the timing itself.</li>
 </ol>
 
 <h3 id="coverage">Coverage</h3>
@@ -1019,8 +1024,8 @@ versioning.</em> <em>Linter, formatter, static analysis, type checker.</em> <em>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

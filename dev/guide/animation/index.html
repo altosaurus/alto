@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notation/">notation</a></li>
                 
                 
@@ -762,8 +765,8 @@ to build a transition by hand:</p>
         <span class="n">anim</span><span class="p">.</span><span class="n">setEndValue</span><span class="p">(</span><span class="n">QPoint</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="n">group</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">anim</span><span class="p">)</span>
     <span class="n">group</span><span class="p">.</span><span class="n">finished</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>  <span class="c1"># setCurrentIndex(index) and put both pages at (0, 0)
-</span>    <span class="n">group</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
-</code></pre></div></div>
+</span>    <span class="n">motion</span><span class="p">.</span><span class="n">play</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>  <span class="c1"># group.start(), held still in tests until they settle it
+</span></code></pre></div></div>
 
 <p>Points to copy: the new page is positioned off-screen <em>before</em> it is shown (otherwise it flashes in place for one frame); the two
 pages move in parallel; a request that arrives mid-slide is ignored rather than queued (so a double click does not slide twice);
@@ -834,12 +837,60 @@ widget sixty times a second is not. If a widget is expensive to draw, draw it on
 
 <h2 id="testing-animations">Testing animations</h2>
 
-<p>Tests run the event loop long enough for an animation to finish: <code class="language-plaintext highlighter-rouge">QTest.qWait(300)</code> after triggering a 220 ms slide, then
-assert the end state. A shorter wait asserts the middle. <code class="language-plaintext highlighter-rouge">tests/test_settings_panels.py</code> has a <code class="language-plaintext highlighter-rouge">slide()</code> helper that waits
-300 ms for a page to finish sliding, and <code class="language-plaintext highlighter-rouge">SlideStack.sliding</code> reports whether a slide is underway. To test that your code ignores a request
-during a slide, call it twice in a row and assert one slide happened.</p>
+<p>A test checks one thing. A test of whether an answer is right should not depend on how long the feedback takes to fade,
+and a test of a fade should not depend on what was answered. Alto’s tests come in three kinds:</p>
 
-<p>Because tests wait in real time, keep durations short. There is no virtual clock in Qt’s animation framework.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Kind</th>
+      <th>Tests</th>
+      <th>Motion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Logic</td>
+      <td>Questions, answers, scheduling: <code class="language-plaintext highlighter-rouge">exercise.generate</code>, <code class="language-plaintext highlighter-rouge">question.check</code>, the learner</td>
+      <td>None: no widgets</td>
+    </tr>
+    <tr>
+      <td>Screen</td>
+      <td>What the interface shows and does: a click answers, a wrong answer clears the staff to try again</td>
+      <td>Held until the test settles it</td>
+    </tr>
+    <tr>
+      <td>Motion</td>
+      <td>The animation or the timing itself: a flash fades, notes light up as they sound</td>
+      <td>Real durations, marked <code class="language-plaintext highlighter-rouge">@pytest.mark.motion</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Animations and feedback delays go through <code class="language-plaintext highlighter-rouge">alto/ui/motion.py</code>:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">motion.play(animation)</code> starts an animation, in place of <code class="language-plaintext highlighter-rouge">animation.start()</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion.later(delay, owner=..., step=...)</code> runs a step after a delay, in place of <code class="language-plaintext highlighter-rouge">QTimer.singleShot</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion.start_timer(timer, delay=...)</code> starts a single-shot timer.</li>
+</ul>
+
+<p>In the app these take their real time. In tests, <code class="language-plaintext highlighter-rouge">tests/conftest.py</code> turns on instant motion for every test not marked
+<code class="language-plaintext highlighter-rouge">motion</code>. Then nothing moves on by itself: an animation holds at its start, and a delayed step or timer waits, however long
+the test takes, until the test calls <code class="language-plaintext highlighter-rouge">motion.settle()</code>. That runs everything waiting, in order, at once. So a screen test
+looks like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">view</span><span class="p">.</span><span class="n">answer_button</span><span class="p">.</span><span class="n">click</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">view</span><span class="p">.</span><span class="n">missed</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">scale_input</span><span class="p">.</span><span class="n">locked</span>  <span class="c1"># the wrong-answer feedback is showing
+</span><span class="n">motion</span><span class="p">.</span><span class="n">settle</span><span class="p">()</span>  <span class="c1"># the feedback ends
+</span><span class="k">assert</span> <span class="ow">not</span> <span class="n">view</span><span class="p">.</span><span class="n">scale_input</span><span class="p">.</span><span class="n">locked</span>  <span class="c1"># cleared to try again
+</span></code></pre></div></div>
+
+<p>There is no wait to guess at, so the test is as fast on a slow machine as on a fast one, and it cannot fail because a
+machine was busy. Use <code class="language-plaintext highlighter-rouge">QTest.qWait</code> only in a motion test.</p>
+
+<p>New animations and delays should go through <code class="language-plaintext highlighter-rouge">alto/ui/motion.py</code> so their tests can settle them. <code class="language-plaintext highlighter-rouge">SlideStack.sliding</code>
+reports whether a slide is underway; to test that a request during a slide is ignored, call it twice in a row and assert
+one slide happened.</p>
 
 <h2 id="deciding-how-it-should-move">Deciding how it should move</h2>
 
@@ -1008,8 +1059,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

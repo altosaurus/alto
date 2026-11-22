@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notation/">notation</a></li>
                 
                 
@@ -820,8 +823,9 @@ milliseconds.</p>
 
 <p>Use <code class="language-plaintext highlighter-rouge">QTest</code> (in <code class="language-plaintext highlighter-rouge">PySide6.QtTest</code>) to act like a user: <code class="language-plaintext highlighter-rouge">QTest.mouseClick(widget, Qt.MouseButton.LeftButton)</code>, <code class="language-plaintext highlighter-rouge">button.click()</code>,
 <code class="language-plaintext highlighter-rouge">QTest.keyClick(widget, Qt.Key.Key_1)</code>. <code class="language-plaintext highlighter-rouge">QTest.qWait(300)</code> runs the event loop for 300 ms, which lets animations and timers
-progress. A widget that has not been shown gets no resize or paint events, so <code class="language-plaintext highlighter-rouge">show()</code> it (the offscreen platform makes this
-safe) before testing anything about its size.</p>
+progress, but Alto’s own animations and delays wait for <code class="language-plaintext highlighter-rouge">motion.settle()</code> in tests (see the
+<a href="/alto/dev/guide/animation/#testing-animations">Animation</a> guide). A widget that has not been shown gets no
+resize or paint events, so <code class="language-plaintext highlighter-rouge">show()</code> it (the offscreen platform makes this safe) before testing anything about its size.</p>
 
 <h2 id="enums-the-full-form">Enums, the full form</h2>
 
@@ -966,8 +970,8 @@ is what signals and slots are, and MVC’s origins are described there.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

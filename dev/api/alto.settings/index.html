@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795369217">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.notation/">notation</a></li>
                 
                 
@@ -1010,6 +1013,7 @@ True
     <span class="n">accidentals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">DEFAULT_INTERVAL_ACCIDENTALS</span><span class="p">)),</span>
     <span class="n">quality_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'combined'</span><span class="p">,</span>
     <span class="n">inversions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">consonance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">intervals</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">iv</span> <span class="ow">in</span> <span class="n">WRITTEN_INTERVALS</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">iv</span><span class="p">.</span><span class="n">number</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s">'P8'</span><span class="p">}),</span>
 <span class="p">)</span>
 </code></pre></div></div>
@@ -1926,8 +1930,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795369217" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795369217" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
