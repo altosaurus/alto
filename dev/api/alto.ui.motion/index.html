@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795372208">
   
 </head>
 <body>
@@ -672,12 +672,14 @@
 
 <p>The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: <code class="language-plaintext highlighter-rouge">play</code> starts an animation, <code class="language-plaintext highlighter-rouge">later</code> runs a step after a delay and <code class="language-plaintext highlighter-rouge">start_timer</code> starts a timer that
-does. In the app they take their real time.</p>
+does. A button given a key with <code class="language-plaintext highlighter-rouge">set_shortcut</code> shows as pressed for a moment when the key is pressed, then clicks. In the app
+they take their real time.</p>
 
 <p>Tests switch to instant motion with <code class="language-plaintext highlighter-rouge">set_instant</code>. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls <code class="language-plaintext highlighter-rouge">settle</code>. That runs everything waiting, in the order
 it was asked for, at once. So a test can look at the state just after an action (the feedback showing, a page about to
-slide), and the motion happens only when the test says so, never during some other wait.</p>
+slide), and the motion happens only when the test says so, never during some other wait. A button’s key clicks it at once,
+since its pressed look is all there is to see in the meantime.</p>
 
 <p><strong>Examples</strong></p>
 
@@ -872,7 +874,7 @@ the next question, which slides in) happens too. In the app’s real time this w
 <p><strong>Parameters</strong></p>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">rounds</code> (<em>int, default 1000</em>): The most pieces of motion, or passes of the event loop, to go through. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">rounds</code> (<em>int, default 1000</em>): The most pieces of motion to go through or, in real time, about how many milliseconds to wait. Keyword-only.</li>
 </ul>
 
 <p><strong>Raises</strong></p>
@@ -899,6 +901,33 @@ Traceback (most recent call last):
     ...
 RuntimeError: Motion is still going after 3 rounds.
 &gt;&gt;&gt; set_instant(False)
+</code></pre>
+
+<h2 id="set_shortcut">set_shortcut</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_shortcut</span><span class="p">(</span>
+    <span class="n">button</span><span class="p">:</span> <span class="n">QAbstractButton</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="n">QKeySequence</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">button</code> (<em>QAbstractButton</em>): The button.</li>
+  <li><code class="language-plaintext highlighter-rouge">key</code> (<em>QKeySequence or str</em>): The key, such as “Return” or “Shift+C”. Keyword-only.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtWidgets import QPushButton
+&gt;&gt;&gt; button = QPushButton("Undo")
+&gt;&gt;&gt; set_shortcut(button, key="Backspace")
+&gt;&gt;&gt; button.shortcut().toString()
+'Backspace'
 </code></pre>
 
 
@@ -1164,8 +1193,8 @@ RuntimeError: Motion is still going after 3 rounds.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795372208" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795372208" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

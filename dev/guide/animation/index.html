@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795370183">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795372208">
   
 </head>
 <body>
@@ -872,6 +872,8 @@ and a test of a fade should not depend on what was answered. Alto’s tests come
   <li><code class="language-plaintext highlighter-rouge">motion.play(animation)</code> starts an animation, in place of <code class="language-plaintext highlighter-rouge">animation.start()</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">motion.later(delay, owner=..., step=...)</code> runs a step after a delay, in place of <code class="language-plaintext highlighter-rouge">QTimer.singleShot</code>.</li>
   <li><code class="language-plaintext highlighter-rouge">motion.start_timer(timer, delay=...)</code> starts a single-shot timer.</li>
+  <li><code class="language-plaintext highlighter-rouge">motion.set_shortcut(button, key=...)</code> gives a button a key. Pressing the key shows the button pressed for a moment and
+then clicks it, as Qt does, but in tests the key clicks the button at once.</li>
 </ul>
 
 <p>In the app these take their real time. In tests, <code class="language-plaintext highlighter-rouge">tests/conftest.py</code> turns on instant motion for every test not marked
@@ -1059,8 +1061,8 @@ w3.org/TR/WCAG21: on motion and people who are sensitive to it.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795370183" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795370183" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795372208" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795372208" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
