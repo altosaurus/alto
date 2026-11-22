@@ -69,7 +69,10 @@ def draw_note(
 ) -> None
 ```
 
-Draw a note with its head centered on a point.
+Draw a note with its head centered on a point, in Noto Music.
+
+The note is drawn from the Noto Music font, so it is only drawn as it should be where that font is installed. The staff
+draws with Bravura, which comes with Alto, wherever Noto Music is missing.
 
 **Parameters**
 
@@ -91,7 +94,8 @@ Draw a note with its head centered on a point.
 >>> draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
 >>> painter.end()
 True
->>> image.pixelColor(50, 50).lightness() < 128  # the head is drawn at the point
+>>> from PySide6.QtGui import QFontDatabase
+>>> not QFontDatabase.hasFamily("Noto Music") or image.pixelColor(50, 50).lightness() < 128  # the head is at the point
 True
 ```
 {% endraw %}

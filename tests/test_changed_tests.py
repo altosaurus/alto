@@ -149,9 +149,10 @@ def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_p
 
 
 def test_the_pre_push_hook_and_github_use_the_same_full_suite_runner() -> None:
-    """Run the full suite by default and share the coverage command with the GitHub pytest job."""
+    """Run the full suite by default, on every core with the budgets after, and share the command with the GitHub pytest job."""
     hook = (ROOT / "scripts" / "run-tests.sh").read_text(encoding="utf-8")
-    assert 'pytest -q -o faulthandler_timeout=120 "$@"' in hook
+    assert '-n "$workers" --dist worksteal -m "not perf" "$@"' in hook  # everything but the budgets, on every core
+    assert '-m perf "$@"' in hook  # then the budgets, on their own
     assert "changed_tests.py" not in hook
     config = (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "entry: sh scripts/run-tests.sh --patch-coverage" in config

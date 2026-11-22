@@ -269,6 +269,34 @@ Encode samples as a mono 16-bit WAV file in memory.
 b'RIFF'
 ```
 
+## write_file_atomically
+
+```python
+def write_file_atomically(
+    path: Path,
+    *,
+    data: bytes,
+) -> None
+```
+
+Write a file so that nothing ever reads it half written, even another copy of Alto writing the same file.
+
+The bytes go to a file of the writer's own first and then replace the file in one step.
+
+**Parameters**
+
+- `path` (*Path*): The file.
+- `data` (*bytes*): What it holds. Keyword-only.
+
+**Examples**
+
+```pycon
+>>> folder = Path(tempfile.mkdtemp())
+>>> write_file_atomically(folder / "note.wav", data=b"RIFF")
+>>> (folder / "note.wav").read_bytes(), [p.name for p in folder.iterdir()]
+(b'RIFF', ['note.wav'])
+```
+
 ## Sounds
 
 ```python

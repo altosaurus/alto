@@ -39,6 +39,7 @@ from PySide6.QtCore import (  # noqa: E402
     QEvent,
     QSettings,
 )
+from PySide6.QtGui import QPalette  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from alto import settings  # noqa: E402
@@ -52,6 +53,7 @@ from alto.learning import (  # noqa: E402
 from alto.ui import (  # noqa: E402
     keyboard_styles,
     motion,
+    notation,
     zoom,
 )
 
@@ -164,7 +166,9 @@ def _isolated_state() -> Iterator[None]:
     Every test starts with the default exercise settings and no saved settings, and sound off.
 
     The settings are reset before the test as well as after it, so a doctest or anything else that ran earlier in the session
-    and changed them cannot make a test depend on the order it runs in.
+    and changed them cannot make a test depend on the order it runs in. After the test, the keyboard style, the notation font,
+    the baritone clef and the theme go back to how they were too, since tests that run in several processes meet each other's
+    leftovers in an order no one chose.
 
     Yields
     ------
@@ -174,9 +178,19 @@ def _isolated_state() -> Iterator[None]:
     _default_settings()
     muted = sounds.enabled
     sounds.enabled = False
+    app = QApplication.instance()
+    look = (app.styleSheet(), QPalette(app.palette())) if isinstance(app, QApplication) else None
     yield
     _close_every_window()
     sounds.enabled = muted
+    if isinstance(app, QApplication) and look is not None and app.styleSheet() != look[0]:
+        app.setStyleSheet(look[0])  # a test that applied a theme leaves the next one the look it found
+        app.setPalette(look[1])
+
+    # noinspection PyProtectedMember
+    notation._current = notation.BY_KEY[notation.DEFAULT]
+    # noinspection PyProtectedMember
+    notation._baritone = notation.DEFAULT_BARITONE
 
     keyboard_styles._current = keyboard_styles.BY_KEY[keyboard_styles.DEFAULT]
     # noinspection PyProtectedMember
