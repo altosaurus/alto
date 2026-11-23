@@ -80,6 +80,7 @@ from alto.exercises.library import (
     NoteNames,
     OrderOfKeys,
     RythmicEquations,
+    ScaleConstruction,
     ScaleIdentification,
 )
 from alto.exercises.packs import PackExercise
@@ -677,7 +678,7 @@ class ExerciseView(QWidget):
             top.addWidget(book)
             self.book_btn = book
         self.midi_input = None
-        if isinstance(exercise, IntervalConstruction) and sys.platform.startswith("linux"):
+        if isinstance(exercise, (NoteNames, IntervalConstruction, ScaleConstruction)) and sys.platform.startswith("linux"):
             self.midi_input = MidiInput()
             self.midi_input.note_pressed.connect(self._place_midi)
             top.addWidget(self.midi_input)
@@ -1782,7 +1783,7 @@ class ExerciseView(QWidget):
 
     def _place_midi(self, pitch: int) -> None:
         """
-        Submit a played pitch using the written spelling of a matching interval endpoint.
+        Use a played pitch to identify a note, place an interval endpoint, or enter the next scale note.
 
         Parameters
         ----------
@@ -1796,13 +1797,60 @@ class ExerciseView(QWidget):
         q = self.question
         if not self.isVisible() or QApplication.activeModalWidget() or QApplication.activePopupWidget():
             return
-        if q is None or q.construct is None:
+        if q is None or self.answered or self._busy:
             return
-        note = q.construct
-        if note.midi != pitch:
-            alternatives = (Note.parse(name) for name in q.accept)
-            note = next((alt for alt in alternatives if alt.midi == pitch), Note.parse(app_settings.key_name(pitch)))
-        self._place(note)
+        if isinstance(self.exercise, NoteNames) and q.staff and q.staff[0]:
+            self._identify_midi(pitch, question=q)
+        elif q.construct_scale and not self.scale_input.complete:
+            spelling = next((n for n in q.construct_scale if n.pitch_class == pitch % 12), None)
+            note = (
+                replace(spelling, octave=spelling.octave + (pitch - spelling.midi) // 12)
+                if spelling is not None
+                else Note.parse(app_settings.key_name(pitch))
+            )
+            self.scale_input.place_next(note)
+            if self.scale_input.done:
+                self._check_scale()
+        elif q.construct is not None:
+            note = q.construct
+            if note.midi != pitch:
+                alternatives = (Note.parse(name) for name in q.accept)
+                note = next((alt for alt in alternatives if alt.midi == pitch), Note.parse(app_settings.key_name(pitch)))
+            self._place(note)
+
+    def _identify_midi(self, pitch: int, *, question: Question) -> None:
+        """
+        Grade a keyboard pitch and show the answer in the question's naming system.
+
+        Parameters
+        ----------
+        pitch : int
+            Played MIDI note number.
+        question : Question
+            Note identification question on the staff.
+
+        Examples
+        --------
+        A played F sharp identifies a written G flat, including when the answer buttons use solfège.
+        """
+        target = question.staff[0][0]
+        for _, button in self._pending.values():
+            button.setChecked(False)
+        self._pending.clear()
+        prompt = self.exercise.card_prompt(question)
+        if pitch % 12 != target.pitch_class or (question.octaves and pitch != target.midi):
+            played = app_settings.key_name(pitch)
+            self.submit(f"Played {played}", button=None)
+            if not self.answered:
+                self.prompt.setText(f"Played {played}. Try again. {prompt}")
+                self.prompt.show()
+            return
+        self.prompt.setText(prompt)
+        octave = str(target.octave)
+        name = question.answer.removesuffix(question.joiner + octave) if question.octaves else question.answer
+        self.buttons[question.choices.index(name)].click()
+        if question.octaves:
+            self.buttons[len(question.choices) + question.octaves.index(octave)].click()
 
     def _place(self, note: Note) -> None:
         """

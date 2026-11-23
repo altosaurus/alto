@@ -1,6 +1,7 @@
-"""MIDI source selection and pitch grading in Interval Construction."""
+"""MIDI source selection and pitch grading in music exercises."""
 
 import os
+import random
 import subprocess
 import sys
 from pathlib import Path
@@ -9,7 +10,8 @@ from unittest.mock import patch
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from alto.exercises.library import IntervalConstruction
+from alto import settings
+from alto.exercises.library import IntervalConstruction, NoteNames, ScaleConstruction
 from alto.theory.pitch import Note
 from alto.ui.exercise_view import ExerciseView
 from alto.ui.midi_input import MidiInput
@@ -114,3 +116,80 @@ def test_unavailable_sources(app: QApplication) -> None:
     with patch("alto.ui.midi_input.subprocess.run", return_value=subprocess.CompletedProcess([], 0, b" 0:0 System Timer\n")):
         midi._refresh()
         assert midi.menu().actions()[-1].text() == "No MIDI inputs found"
+
+
+@pytest.mark.skipif(sys.platform != "linux", reason="ALSA sequencer input")
+@pytest.mark.parametrize(("naming", "octave"), [("solfege", False), ("degrees", True)])
+def test_identify_played_note(app: QApplication, naming: str, octave: bool) -> None:
+    """
+    Score a played note in the chosen naming system and respect the question's octave requirement.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    naming : str
+        Naming system for the answer buttons.
+    octave : bool
+        Whether the written octave is required.
+    """
+    cfg = settings.note_names
+    cfg.naming, cfg.require_octave, cfg.minor_degrees = naming, octave, True
+    view = ExerciseView(NoteNames(), rng=random.Random(5))
+    view.settings_panel.next_question_mode = "Wait"
+    view.show()
+    midi, q = view.midi_input, view.question
+    assert midi is not None and q is not None
+    target = q.staff[0][0]
+    if octave:
+        view.buttons[-1].click()  # MIDI replaces an unfinished mouse answer.
+    midi.note_pressed.emit(target.midi + (12 if octave else 1))
+    assert view.total == 1 and view.missed and "Try again" in view.prompt.text()
+    midi.note_pressed.emit(target.midi + (0 if octave else 12))
+    midi.note_pressed.emit(target.midi)
+    assert view.answered and view._attempts == 2 and (view.correct, view.total) == (0, 1)
+    if octave:
+        assert view._pending["octave"][0] == str(target.octave)
+    view.close()
+
+
+@pytest.mark.skipif(sys.platform != "linux", reason="ALSA sequencer input")
+@pytest.mark.parametrize("steps", [True, False])
+def test_play_scale(app: QApplication, steps: bool) -> None:
+    """
+    Place and undo played notes, then grade the scale with the configured octave and step rules.
+
+    Parameters
+    ----------
+    app : QApplication
+        Shared Qt application.
+    steps : bool
+        Ask for manual whole and half steps after the notes.
+    """
+    cfg = settings.scale_construction
+    cfg.motion, cfg.keys, cfg.modes = "descending", {-6}, {"Major (Ionian)"}
+    cfg.steps, cfg.octave = steps, steps
+    view = ExerciseView(ScaleConstruction(), rng=random.Random(5))
+    view.settings_panel.next_question_mode = "Wait"
+    view.show()
+    midi, q = view.midi_input, view.question
+    assert midi is not None and q is not None and q.construct_scale
+    scale = q.construct_scale
+    foreign = next(n for n in range(60, 72) if all(note.pitch_class != n % 12 for note in scale))
+    midi.note_pressed.emit(foreign)
+    assert view.scale_input.notes[-1].midi == foreign
+    view.undo_button.click()
+    assert not view.scale_input.notes
+    for note in scale:
+        midi.note_pressed.emit(note.midi + (0 if steps else 12))
+    assert [n.name for n in view.scale_input.notes] == [n.name for n in scale]
+    if steps:
+        assert not view.answered and q.construct_steps
+        midi.note_pressed.emit(60)
+        assert not view.scale_input.steps
+        for step in q.construct_steps:
+            view.step_buttons[step].click()
+            view.place_button.click()
+        view.answer_button.click()
+    assert view.answered and view.total == view.correct == 1
+    view.close()
