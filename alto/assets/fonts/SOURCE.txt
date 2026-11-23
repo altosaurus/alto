@@ -7,7 +7,7 @@ Petaluma  Steinberg      https://github.com/steinbergmedia/petaluma
 Leland    MuseScore      https://github.com/musescore/MuseScore/tree/main/fonts/leland
 MuseJazz  MuseScore      https://github.com/musescore/MuseScore/tree/main/fonts/musejazz
 Eugene    Mikko Patama   https://github.com/mikkopatama/eugenefont
-Leipzig   RISM Digital   https://github.com/rism-digital/leipzig
-Sebastian F. Kretlow     https://github.com/fkretlow/sebastian
+Leipzig   Etienne Darbellay, Jean-François Marti and Laurent Pugin  https://github.com/rism-digital/leipzig
+Sebastian Florian Kretlow and Ben Byram-Wigfield  https://github.com/fkretlow/sebastian
 Finale Maestro, Finale Broadway   MakeMusic, via https://github.com/musescore/MuseScore/tree/main/fonts
 Golden Age  Don Rice     https://github.com/benwiggy/GoldenAge

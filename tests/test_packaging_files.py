@@ -83,7 +83,9 @@ def test_the_installer_and_the_workflows_agree_on_the_names_of_what_is_built() -
     assert "path: dist/alto-*-setup.exe" in BUILD
     assert 'NAME="alto-$VERSION-linux-$(uname -m)"' in (ROOT / "scripts" / "build-linux.sh").read_text(encoding="utf-8")
     assert "path: dist/alto-*.tar.gz" in BUILD
-    assert "dist/alto-*.tar.gz dist/alto-*-setup.exe dist/SHA256SUMS" in RELEASE
+    assert BUILD.count("path: dist/qt-sources/*.tar.xz") == 2
+    assert "dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/SHA256SUMS" in RELEASE
+    assert "sha256sum alto-* *-everywhere-src-*.tar.xz > SHA256SUMS" in RELEASE
     assert "alto-$Version-windows-x64-setup.exe" in (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
 
 

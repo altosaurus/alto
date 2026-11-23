@@ -28,7 +28,6 @@
       <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-013243?logo=numpy&amp;logoColor=white" alt="NumPy"></a>
       <a href="https://pypi.org/project/fsrs/"><img src="docs/assets/img/fsrs-badge.svg" alt="FSRS 6"></a>
       <a href="https://sqlite.org/"><img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite&amp;logoColor=white" alt="SQLite"></a>
-      <a href="docs/data.md#anki-decks"><img src="docs/assets/img/anki-compatible.svg" alt="Anki compatible"></a>
     </td>
   </tr>
 </table>
@@ -118,8 +117,8 @@ For a comparison, follow the same note through all four algorithms in the
 ## Free and open source
 
 Alto is released under the [MIT License](LICENSE). There are no accounts and no tracking.
-Your history is one SQLite file on your computer that you can back up, move or open with any SQLite tool. The bundled
-music fonts and recordings all come with their licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Your history is one SQLite file on your computer that you can back up, move or open with any SQLite tool. The terms for the bundled
+music fonts, recordings, and score transcriptions are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Built for Linux
 
@@ -171,5 +170,5 @@ recipes such as adding an exercise or a notation font.
 
 ## License
 
-[MIT](LICENSE). The bundled fonts and recordings keep their authors' licenses; see
+[MIT](LICENSE). For the bundled fonts, recordings, and score transcriptions, see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -38,6 +38,12 @@ jobs:
           path: dist/alto-*.tar.gz
           if-no-files-found: error
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qt-sources-linux
+          path: dist/qt-sources/*.tar.xz
+          if-no-files-found: error
+
   windows:
     runs-on: windows-latest
     steps:
@@ -59,4 +65,10 @@ jobs:
         with:
           name: windows
           path: dist/alto-*-setup.exe
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qt-sources-windows
+          path: dist/qt-sources/*.tar.xz
           if-no-files-found: error

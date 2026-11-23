@@ -132,6 +132,8 @@ Suppose F♯ and an unseen B are eligible. If you last identified F♯ in **one 
 
 ## SM-2
 
+Alto’s SM-2 scheduler is based on Piotr Woźniak’s algorithm. Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/)
+
 **SuperMemo 2 (SM-2)** keeps a count of successive successful reviews, the last interval in days, and an **ease factor** $$E$$ for each card. A new card starts with $$E=2.5$$. During calibration, Alto grades a correct first answer Good and a miss Again. Under **Settings → Practice**, select **Grade correct answers with Hard, Good, or Easy** to choose the grade yourself. Each button shows its interval above it. A wrong answer records Again and advances automatically. The exercise’s **Next Question** preference is disabled while self-grading is on. [Original SM-2 specification](https://super-memory.com/english/ol/sm2.htm)
 
 ### Review intervals and ease

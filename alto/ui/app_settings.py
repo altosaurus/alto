@@ -1650,6 +1650,7 @@ class AppSettingsDialog(QDialog):
             ),
             "SM-2": (
                 "<h3>SuperMemo 2 (SM-2)</h3>"
+                '<p>Algorithm SM-2, © <a href="https://www.supermemo.com/">SuperMemo World</a>, 1991.</p>'
                 "<p>Your first answer sets the next review date. During calibration, a new correct card returns in one day. "
                 "After 40 timed answers to an exercise, speed determines the grade. Speed and button grading use Anki’s "
                 "learning steps instead. Hard repeats the step, Good advances, and Easy skips to a day-based review.</p>"
@@ -1678,6 +1679,7 @@ class AppSettingsDialog(QDialog):
         detail_layout.setContentsMargins(16, 12, 16, 12)
         self.scheduler_description = QLabel(descriptions[selected])
         self.scheduler_description.setWordWrap(True)
+        self.scheduler_description.setOpenExternalLinks(True)
         detail_layout.addWidget(self.scheduler_description)
         self.self_grading = QCheckBox("Grade correct answers with Hard, Good, or Easy")
         self.self_grading.setToolTip(
