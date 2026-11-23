@@ -78,6 +78,7 @@ def load_note_names() -> None:
         cfg.note_values = choices_value(s, key="noteNames/values", allowed=NOTE_VALUES) or {"whole"}
     naming = text_value(s, key="noteNames/naming", default=cfg.naming)
     cfg.naming = naming if naming in NAMINGS else "letters"
+    cfg.minor_degrees = bool_value(s, key="noteNames/minorDegrees", default=False)
     cfg.accidentals = bool_value(s, key="noteNames/accidentals", default=False)
     cfg.require_octave = bool_value(s, key="noteNames/requireOctave", default=False)
     cfg.ranges = {}
@@ -111,6 +112,7 @@ def save_note_names() -> None:
     s.setValue("noteNames/keys", joined(cfg.active_keys()))
     s.setValue("noteNames/values", joined(cfg.active_values()))
     s.setValue("noteNames/naming", cfg.naming)
+    s.setValue("noteNames/minorDegrees", "true" if cfg.minor_degrees else "false")
     save_bool(s, key="noteNames/accidentals", value=cfg.accidentals)
     save_bool(s, key="noteNames/requireOctave", value=cfg.require_octave)
     s.setValue("noteNames/ranges", ",".join(f"{k}:{lo}-{hi}" for k, (lo, hi) in cfg.ranges.items()))
@@ -814,6 +816,15 @@ def load_exercise_settings() -> None:
     >>> load_exercise_settings()
     """
     load_choice_buttons()
+    saved = store()
+    settings.rhythm_ties = bool_value(saved, key="rythmicEquations/ties", default=False)
+    settings.rhythm_beams = bool_value(saved, key="rythmicEquations/beams", default=False)
+    settings.rhythm_operators = choices_value(saved, key="rythmicEquations/operators", allowed=settings.RHYTHM_OPERATORS) or (
+        settings.DEFAULT_RHYTHM_OPERATORS.copy()
+    )
+    settings.rhythm_symbols = choices_value(saved, key="rythmicEquations/symbols", allowed=settings.RHYTHM_DURATIONS) or (
+        settings.DEFAULT_RHYTHM_SYMBOLS.copy()
+    )
     load_note_names()
     load_intervals()
     load_intervals(settings.interval_construction, prefix="intervalConstruction")

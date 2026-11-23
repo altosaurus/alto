@@ -8,7 +8,7 @@ import random
 from typing import TYPE_CHECKING
 
 import pytest
-from PySide6.QtWidgets import QCheckBox, QGroupBox
+from PySide6.QtWidgets import QCheckBox, QGroupBox, QRadioButton
 
 from alto import settings
 from alto.exercises.library import (
@@ -262,6 +262,16 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
         settings.note_names.naming = "letters"
         load_note_names()
         assert settings.note_names.naming == naming
+    radios["degrees"].click()
+    natural_minor = next(radio for radio in group.findChildren(QRadioButton) if radio.text() == "Natural minor")
+    natural_minor.click()
+    settings.note_names.minor_degrees = False
+    load_note_names()
+    assert settings.note_names.minor_degrees
+    exercise = NoteNames()
+    q = exercise._question_for(Note.parse("E4"), clef="treble", key=1, value="whole")
+    assert q.minor and q.answer == "1̂" and "E natural minor" in exercise.card_prompt(q)
+    assert q.grid[q.answer] == (0, 0)
     panel.close()
 
 

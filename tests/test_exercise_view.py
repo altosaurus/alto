@@ -24,6 +24,7 @@ from alto.exercises.library import (
     NotationIdentification,
     NoteConstruction,
     NoteNames,
+    RythmicEquations,
 )
 from alto.theory.pitch import Note
 from alto.ui import motion
@@ -821,3 +822,63 @@ def test_the_staff_for_placing_a_note_is_capped_too(app: QApplication) -> None:
     QTest.qWait(50)
     assert view.input_staff.width() == view.input_staff.maximumWidth() < 1000
     view.hide()
+
+
+@pytest.mark.parametrize("ties", [False, True])
+@pytest.mark.parametrize("operator", ["+", "−", "×", "÷"])
+def test_rythmic_equations_show_and_fill_the_missing_note(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    operator: str,
+    ties: bool,
+) -> None:
+    """
+    Check the equation arithmetic and fill the visual blank through an answer button.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the operator selection.
+    operator : str
+        The operator under test.
+    ties : bool
+        Whether the generator may use tied notes.
+    """
+    monkeypatch.setattr(settings, "rhythm_operators", {operator})
+    monkeypatch.setattr(settings, "rhythm_ties", ties)
+    exercise = RythmicEquations()
+    rng = random.Random(2)
+    factors, tie_states = set(), set()
+    for _ in range(60):
+        question = exercise.generate(rng)
+        left, shown_operator, right, _, result = question.prompt.replace("_", question.answer).split()
+        assert shown_operator == operator
+        a, b, c = (
+            int(term) if term.isdecimal() else sum(exercise.durations[value] for value in term.split("~"))
+            for term in (left, right, result)
+        )
+        assert {"+": a + b, "−": a - b, "×": a * b, "÷": a / b}[operator] == c
+        tie_states.add("~" in question.prompt)
+        assert "~" not in question.answer
+        if operator in {"×", "÷"}:
+            factor = question.prompt.split()[2]
+            assert factor.isdecimal()
+            factors.add(int(factor))
+    assert tie_states == ({False, True} if ties else {False})
+    if operator in {"×", "÷"}:
+        assert len(factors) > 1 and factors <= set(range(2, 9))
+        if ties:
+            assert 3 in factors
+    view = view_of(exercise)
+    view.show()
+    app.processEvents()
+    question = view.question
+    assert question is not None and view.rhythm_equation.isVisible() and view.prompt.isHidden()
+    assert view.rhythm_terms.count() == 5
+    assert all(not button.icon().isNull() for button in view.buttons)
+    view.buttons[question.choices.index(question.answer)].click()
+    assert view.answered
+    assert "blank" not in view.rhythm_equation.accessibleName()
+    view.close()

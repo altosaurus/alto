@@ -1746,4 +1746,62 @@ Recover an eligible saved example under the current term and button selections.
 >>> ex.review_question(q, same_settings=True) == q
 True
 ```
+
+## RythmicEquations
+
+```python
+class RythmicEquations(ChoiceExercise)
+```
+
+Complete arithmetic equations with written note values.
+
+**Examples**
+
+```pycon
+>>> q = RythmicEquations().generate(random.Random(2))
+>>> "_" in q.prompt and q.answer in q.choices
+True
+```
+
+### RythmicEquations.practice_signature
+
+```python
+def practice_signature() -> str
+```
+
+Keep review questions tied to the options that generated them.
+
+**Returns**
+
+- *str*: The selected operators and symbols, or an empty string for the original defaults.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().practice_signature()
+''
+```
+
+### RythmicEquations.make_question
+
+```python
+def make_question(rng: random.Random) -> Question
+```
+
+Write a rhythm equation and hide one of its note values.
+
+**Parameters**
+
+- `rng` (*random.Random*): Chooses the note value, operation, and blank position.
+
+**Returns**
+
+- *Question*: The equation and the note values available as answers.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().make_question(random.Random(0)).prompt.count("_")
+1
+```
 {% endraw %}

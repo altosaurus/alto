@@ -246,6 +246,7 @@ NoteNameSettings(
     *,
     key_signatures: set[int] = field(default_factory=lambda: {0}),
     naming: str = 'letters',
+    minor_degrees: bool = False,
     accidentals: bool = False,
     require_octave: bool = False,
 )
