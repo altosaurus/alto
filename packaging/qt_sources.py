@@ -4,9 +4,10 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import lzma
+import posixpath
 import re
-import shutil
 import subprocess
 import sys
 import tarfile
@@ -41,9 +42,37 @@ def _fetch_source(url: str, *, directory: Path) -> tuple[Path, str]:
     return path, expected
 
 
+def _in_shipped_module(path: PurePosixPath, *, bindings: bool) -> bool:
+    # Everything in the binding source is shipped; of Qt, only the modules in QT_MODULES.
+    return len(path.parts) >= 3 and (bindings or path.parts[1] in QT_MODULES)
+
+
+def _referenced_notices(archive: Path, *, bindings: bool) -> set[str]:
+    # The license files each qt_attribution.json names, and the FreeType texts its license refers to by path.
+    referenced = set()
+    with lzma.open(archive, "rb") as source_stream, tarfile.open(fileobj=source_stream, mode="r|") as tar:
+        for entry in tar:
+            path = PurePosixPath(entry.name)
+            if not entry.isfile() or not _in_shipped_module(path, bindings=bindings):
+                continue
+            if path.parent.name == "docs" and path.parent.parent.name == "freetype" and path.name in {"FTL.TXT", "GPLv2.TXT"}:
+                referenced.add(path.as_posix())
+            if path.name != "qt_attribution.json":
+                continue
+            source = tar.extractfile(entry)
+            assert source is not None
+            data = json.loads(source.read(), strict=False)  # some descriptions contain raw tabs
+            for item in data if isinstance(data, list) else [data]:
+                files = item.get("LicenseFiles") or ([item["LicenseFile"]] if item.get("LicenseFile") else [])
+                referenced |= {posixpath.normpath(posixpath.join(path.parent.as_posix(), name)) for name in files}
+    return referenced
+
+
 def _collect_notices(archive: Path, *, notices: ZipFile, destination: Path, bindings: bool) -> None:
     # Preserve upstream paths so each component retains its own credits.
     # Bound each decompressed read even when the source contains highly compressible assets.
+    referenced = _referenced_notices(archive, bindings=bindings)
+    written = set()
     with lzma.open(archive, "rb") as source_stream, tarfile.open(fileobj=source_stream, mode="r|") as tar:
         for entry in tar:
             path = PurePosixPath(entry.name)
@@ -53,16 +82,21 @@ def _collect_notices(archive: Path, *, notices: ZipFile, destination: Path, bind
             if bindings and path.parts[1] == "LICENSES" and path.name in {"LGPL-3.0-only.txt", "GPL-3.0-only.txt"}:
                 source = tar.extractfile(entry)
                 assert source is not None
-                with (destination / path.name).open("wb") as out:
-                    shutil.copyfileobj(source, out)
-                continue
-            if not bindings and path.parts[1] not in QT_MODULES:
+                (destination / path.name).write_bytes(source.read())
                 continue
             name = path.name.lower()
-            if name == "qt_attribution.json" or any(term in name for term in ("license", "copying", "copyright", "notice")):
+            notice_like = name == "qt_attribution.json" or any(
+                term in name for term in ("license", "licence", "copying", "copyright", "notice")
+            )
+            wanted = path.as_posix() in referenced or (notice_like and _in_shipped_module(path, bindings=bindings))
+            if wanted:
                 source = tar.extractfile(entry)
                 assert source is not None
                 notices.writestr(path.as_posix(), source.read())
+                written.add(path.as_posix())
+    missing = sorted(referenced - written)
+    if missing:
+        raise ValueError(f"License files named in {archive.name} are not in it: {missing}")
 
 
 def _install(frozen: Path, *, sources: Path) -> None:

@@ -138,9 +138,27 @@ Write-Host "Wrote $Setup ($([math]::Round((Get-Item $Setup).Length / 1MB)) MB)"
 $Target = Join-Path $Work "installed"
 $Data = Join-Path $env:APPDATA "Alto"
 $Quiet = @("/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART")
+$TermsKey = "HKCU:\Software\Alto Installer"
+
+# A silent install for a Windows account that has not accepted the terms in microsoft-components.txt asks first, and installs
+# nothing until they are answered. Setup.exe runs the installer as a child process, which shows the question, so both are stopped.
+Remove-Item -Path $TermsKey -Recurse -ErrorAction SilentlyContinue
+$Asking = Start-Process -FilePath $Setup -ArgumentList ($Quiet + @("/CURRENTUSER", "/DIR=$Target")) -PassThru
+Start-Sleep -Seconds 15
+if ($Asking.HasExited) { throw "A silent install without accepted terms ended (exit code $($Asking.ExitCode)) instead of asking" }
+if (Test-Path (Join-Path $Target "alto.exe")) { throw "A silent install without accepted terms installed Alto before asking" }
+Get-CimInstance Win32_Process -Filter "ParentProcessId = $($Asking.Id)" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+Stop-Process -Id $Asking.Id -Force -ErrorAction SilentlyContinue
+$Asking.WaitForExit(30000) | Out-Null
+if (Test-Path $Target) { throw "A silent install without accepted terms changed $Target" }
+Write-Host "A silent install for an account that has not accepted the terms asks first, and changes nothing until then."
+
+# The installs below accept the terms the way an automated install does. Alto's own update, further down, passes no such
+# argument: the terms accepted by the install before it are remembered.
+$Accept = @("/ACCEPTTERMS=1")
 $InstallLog = Join-Path $Work "install.log"
 try {
-    RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target", "/RUNTIMETEST=1", "/LOG=$InstallLog"))
+    RunAndWait $Setup ($Quiet + $Accept + @("/CURRENTUSER", "/DIR=$Target", "/RUNTIMETEST=1", "/LOG=$InstallLog"))
 }
 catch {
     # Exit code 7 means the runtime step stopped the installation: the log says why.
@@ -153,6 +171,7 @@ if (-not (Select-String -Path $InstallLog -SimpleMatch "The Microsoft Visual C++
     throw "The installer did not download, check and run Microsoft's Visual C++ Redistributable"
 }
 Write-Host "The installer downloads Microsoft's Visual C++ Redistributable, checks Microsoft's signature on it and runs it."
+if ((Get-ItemProperty -Path $TermsKey -ErrorAction SilentlyContinue).AcceptedTerms -ne "1") { throw "The installer did not record the accepted terms" }
 Run (Join-Path $Target "alto.exe") @("--version")
 CheckStaysOpen (Join-Path $Target "alto.exe")
 Run $Py @($DependencyLicenses, "verify", $Target)
@@ -168,10 +187,11 @@ WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 if (-not (Test-Path (Join-Path $Data "alto.db"))) { throw "A silent uninstall removed the practice history, and should have kept it" }
 Write-Host "A silent uninstall removes the program and keeps the data."
 
-RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target"))
+RunAndWait $Setup ($Quiet + $Accept + @("/CURRENTUSER", "/DIR=$Target"))
 RunAndWait $Uninstaller ($Quiet + @("/PURGE=1"))
 WaitUntilGone (Join-Path $Target "alto.exe") "The program"
 WaitUntilGone $Data "The practice history"
+if (Test-Path $TermsKey) { throw "An uninstall with /PURGE=1 kept the record of the accepted terms" }
 Write-Host "An uninstall with /PURGE=1 removes the data too."
 
 # An update, the way Alto does it: Alto starts the step that Alto itself builds (`selfupdate.windows_handoff_command`) and quits; the step
@@ -180,7 +200,7 @@ $Newer = "99.0.0"
 Run $Iscc (@("/Qp", "/DAppVersion=$Newer", "/DSourceDir=$Frozen", "/DOutputDir=$Work", "/DIconFile=$Icon") + $InstallerDefines + @((Join-Path $Root "packaging\windows\alto.iss")))
 $NewerSetup = Join-Path $Work "alto-$Newer-windows-x64-setup.exe"
 if (-not (Test-Path $NewerSetup)) { throw "The newer installer was not written: $NewerSetup" }
-RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target"))
+RunAndWait $Setup ($Quiet + $Accept + @("/CURRENTUSER", "/DIR=$Target"))
 $env:QT_QPA_PLATFORM = "offscreen"
 $env:ALTO_HOME = Join-Path $Work "home"
 try {

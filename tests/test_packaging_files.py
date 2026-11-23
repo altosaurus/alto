@@ -115,6 +115,75 @@ def test_the_linux_download_leaves_out_gtk_and_readline_and_covers_its_system_li
     assert not {"gtk+3.0", "readline"} & (copyleft | permissive)  # left out of the download, so never expected
 
 
+def test_the_packages_carry_the_notices_of_python_its_packages_and_the_native_code_in_them() -> None:
+    """
+    Check that the build installs the notices of the interpreter, the frozen packages, and the native code they contain.
+
+    The license helper copies the license of each frozen package from its wheel, the interpreter's license and CPython's list
+    of incorporated software, certifi's license with where its source is, and the licenses of LibYAML, libffi, ICU and
+    OpenSSL, read for the versions in the build. Both build scripts run it and check the installed copy.
+    """
+    helper = (ROOT / "packaging" / "dependency_licenses.py").read_text(encoding="utf-8")
+    for package in ("typing_extensions", "chevron", "cached-property", "PyYAML", "cffi", "certifi", "fsrs"):
+        assert f'("{package}", "LICENSE", "{package}/LICENSE")' in helper
+    for source in (
+        "/python/cpython/v{python}/Doc/license.rst",
+        "https://pypi.org/pypi/certifi/{certifi}/json",
+        "https://www.mozilla.org/media/MPL/2.0/index.txt",
+        "/yaml/libyaml/{libyaml}/License",
+        "/libffi/libffi/v{libffi}/LICENSE",
+        "/python-cffi/cffi/v{cffi}/src/c/libffi_x86_x64/LICENSE",
+        "/unicode-org/icu/release-",
+        "/openssl/openssl/openssl-{openssl}/LICENSE.txt",
+    ):
+        assert source in helper
+    assert '"notices.json"' in helper and '"README.txt"' in helper
+    for script in ("build-linux.sh", "build-windows.ps1"):
+        text = (ROOT / "scripts" / script).read_text(encoding="utf-8")
+        assert "dependency_licenses.py" in text and "copy" in text and "verify" in text
+
+
+def test_the_qt_notices_follow_the_license_files_qt_names_and_mesa_is_left_out() -> None:
+    """
+    Check that the Qt notices include every license file a qt_attribution.json names, and that Windows has no Mesa renderer.
+
+    PCRE2's LICENCE.md and Shiboken's Python license are found only through the attribution files. The build fails if a named
+    file is missing from the source. Alto does not draw with OpenGL, so Qt's software OpenGL renderer is not shipped.
+    """
+    helper = (ROOT / "packaging" / "qt_sources.py").read_text(encoding="utf-8")
+    assert '"LicenseFiles"' in helper and '"LicenseFile"' in helper and '"licence"' in helper
+    assert '{"FTL.TXT", "GPLv2.TXT"}' in helper and "are not in it" in helper
+    assert '"opengl32sw.dll"' in (ROOT / "packaging" / "alto.spec").read_text(encoding="utf-8")
+
+
+def test_a_silent_install_asks_for_the_microsoft_terms_once_before_changing_anything() -> None:
+    """
+    Check that the terms in microsoft-components.txt are accepted once per Windows account, also on a silent update.
+
+    Alto's update runs the installer silently, which skips the license page, so the installer asks with a message (which
+    /SUPPRESSMSGBOXES does not hide) before anything is changed, and records the answer. The build test checks that an
+    install without accepted terms waits and installs nothing, and accepts them for its own installs with /ACCEPTTERMS=1.
+    """
+    iss = INSTALLER.read_text(encoding="utf-8")
+    code = iss.split("function InitializeSetup: Boolean;")[1].split("procedure InitializeWizard;")[0]
+    assert "if not WizardSilent or TermsAccepted then" in code and "{param:ACCEPTTERMS|0}" in code
+    assert "MsgBox(Terms, mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES" in code  # No is the default answer
+    assert "SuppressibleMsgBox" not in code  # that one would be answered by /SUPPRESSMSGBOXES
+    assert "ExtractTemporaryFile('microsoft-components.txt')" in iss and '#define TermsVersion "' in iss
+    assert "if CurPageID = wpLicense then" in iss and "RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, TermsKey);" in iss
+    script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
+    assert '$Accept = @("/ACCEPTTERMS=1")' in script and script.count("$Quiet + $Accept +") == 3
+    assert "A silent install without accepted terms installed Alto before asking" in script
+    assert "ACCEPTTERMS" not in "".join(selfupdate.WINDOWS_INSTALLER_ARGUMENTS)  # an update asks if the terms are not accepted
+
+
+def test_the_documentation_carries_temml_and_katex_notices() -> None:
+    """Check that the vendored Temml has its own MIT license and that of KaTeX, from which it is derived."""
+    vendor = ROOT / "docs" / "assets" / "vendor" / "temml-0.14.0"
+    assert "Ron Kok" in (vendor / "LICENSE").read_text(encoding="utf-8")
+    assert "Khan Academy and other contributors" in (vendor / "LICENSE-KaTeX").read_text(encoding="utf-8")
+
+
 def test_the_installer_keeps_its_id_installs_for_one_user_and_asks_about_the_data() -> None:
     """Check the settings of the installer that must not drift: its identity, no administrator prompt, and the data question."""
     iss = INSTALLER.read_text(encoding="utf-8")
@@ -138,7 +207,7 @@ def test_the_windows_package_leaves_out_microsofts_runtime_and_the_installer_get
     assert '"numpy"' in spec.split("excludes=")[1].split("]")[0]
     assert "MICROSOFT_RUNTIME" in spec and "ALTO_RUNTIME_FILE" in spec
     assert "Microsoft's runtime must not be in the desktop package" in spec
-    dependencies = re.search(r"(?ms)^dependencies = \[(.*?)^\]", (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    dependencies = re.search(r"(?ms)^dependencies = \[(.*?)^]", (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     assert dependencies and "numpy" not in dependencies.group(1)
     iss = INSTALLER.read_text(encoding="utf-8")
     assert "https://aka.ms/vs/17/release/vc_redist.x64.exe" in iss and "SignedByMicrosoft" in iss
