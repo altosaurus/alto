@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795400453">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795403182">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
                 
                 
@@ -847,7 +850,7 @@ Note(octave=4, letter=2, accidental=0)
 <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Note</span>
 </code></pre></div></div>
 
-<p>Parse a note written in plain text, such as ‘F#4’, ‘Bb3’ or ‘Ebb2’.</p>
+<p>Parse a note with ASCII or musical accidentals, such as ‘F#4’, ‘B♭3’ or ‘E𝄫2’.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -874,6 +877,8 @@ Note(octave=4, letter=2, accidental=0)
 Note(octave=4, letter=3, accidental=1)
 &gt;&gt;&gt; Note.parse("Bb3")
 Note(octave=3, letter=6, accidental=-1)
+&gt;&gt;&gt; str(Note.parse("G𝄫4"))
+'G𝄫4'
 &gt;&gt;&gt; Note.parse("H4")
 Traceback (most recent call last):
     ...
@@ -1328,8 +1333,8 @@ Interval(number=7, quality='m')
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795400453" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795400453" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795403182" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795403182" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

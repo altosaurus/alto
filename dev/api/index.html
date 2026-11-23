@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795400453">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795403182">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
                 
                 
@@ -1009,6 +1012,10 @@
       <td>The main window: tile browsing or a workspace with an independently selected exercise or lesson list.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.midi_input/">alto.ui.midi_input</a></td>
+      <td>ALSA keyboard input for answering a question with a played pitch.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.motion/">alto.ui.motion</a></td>
       <td>Animations and feedback delays, run in one place so that tests decide when they happen.</td>
     </tr>
@@ -1265,8 +1272,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795400453" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795400453" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795403182" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795403182" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

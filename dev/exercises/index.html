@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795400453">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795403182">
   
 </head>
 <body>
@@ -527,6 +527,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.main_window/">main_window</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.midi_input/">midi_input</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.motion/">motion</a></li>
                 
                 
@@ -919,6 +922,10 @@ Choose <strong>All</strong> to show every eligible answer for the current staff 
 <h2 id="interval-construction">Interval Construction</h2>
 
 <p>Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.</p>
+
+<p>On Ubuntu, connect a USB MIDI keyboard or start VMPK with its ALSA output enabled. Open <strong>MIDI</strong> in the exercise toolbar and choose the input. For a perfect fifth above C4, play G4. Each key press submits an answer, even while VMPK has focus. Alto checks the sounding pitch and octave and shows the accepted spelling on the staff. To practice choosing the spelling yourself, use the staff controls. Choose <strong>MIDI → Off</strong> to disconnect. Leaving the exercise also disconnects it.</p>
+
+<p>If the MIDI menu asks for <code class="language-plaintext highlighter-rouge">alsa-utils</code>, install it with <code class="language-plaintext highlighter-rouge">sudo apt install alsa-utils</code>. Reopen the menu after connecting a new device.</p>
 
 <p><strong>Clefs</strong>, <strong>Range</strong>, and <strong>Staff Key</strong> determine where the notes can appear. <strong>Display Mode</strong> stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under <strong>Quality</strong>, choose <strong>Interval and Quality</strong> for an exact spelling, <strong>Interval Only</strong> for a number, or <strong>Quality Only</strong> for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. <strong>Intervals</strong>, <strong>Accidentals</strong>, and <strong>Note Value</strong> control which spellings, written signs, and durations appear.</p>
 
@@ -1374,8 +1381,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795400453" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795400453" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795403182" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795403182" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
