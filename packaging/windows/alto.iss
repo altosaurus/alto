@@ -142,11 +142,27 @@ end;
 function SignedByMicrosoft(const Path: String): Boolean;
 var
   ResultCode: Integer;
+  Report: String;
+  Found: AnsiString;
 begin
-  Result := Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
+  Result := False;
+  Report := ExpandConstant('{tmp}\signature.txt');
+  { PowerShell writes the signature's status and its signer's name; the decision is made here, where it can be logged. }
+  if not Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
     '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$s = Get-AuthenticodeSignature -LiteralPath ''' + Path + '''; ' +
-    'if ($s.Status -eq ''Valid'' -and $s.SignerCertificate.Subject -match ''O=Microsoft Corporation'') { exit 0 } else { exit 1 }"',
-    '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+    'Set-Content -LiteralPath ''' + Report + ''' -Encoding ASCII -Value ([string]$s.Status + ''|'' + $s.SignerCertificate.Subject)"',
+    '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+  begin
+    Log(Format('PowerShell could not be started to check the signature: %s', [SysErrorMessage(ResultCode)]));
+    Exit;
+  end;
+  if not LoadStringFromFile(Report, Found) then
+  begin
+    Log(Format('PowerShell ended with code %d and did not report the signature.', [ResultCode]));
+    Exit;
+  end;
+  Log('Signature of ' + Path + ': ' + String(Found));
+  Result := (Pos('Valid|', String(Found)) = 1) and (Pos('O=Microsoft Corporation', String(Found)) > 0);
 end;
 
 { Download Microsoft's Visual C++ Redistributable and run it. Page shows the download, or is nil for a silent install.
