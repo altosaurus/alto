@@ -46,6 +46,8 @@ _ASCII = {
     2: "x",
 }
 
+_WRITTEN_ACCIDENTALS = str.maketrans({symbol: _ASCII[number] for number, symbol in ACCIDENTAL_SYMBOLS.items() if symbol})
+
 _MAJOR_BASE = (
     0,
     2,
@@ -220,7 +222,7 @@ class Note:
     @classmethod
     def parse(cls, text: str) -> Note:
         """
-        Parse a note written in plain text, such as 'F#4', 'Bb3' or 'Ebb2'.
+        Parse a note with ASCII or musical accidentals, such as 'F#4', 'B♭3' or 'E𝄫2'.
 
         Parameters
         ----------
@@ -246,13 +248,15 @@ class Note:
         Note(octave=4, letter=3, accidental=1)
         >>> Note.parse("Bb3")
         Note(octave=3, letter=6, accidental=-1)
+        >>> str(Note.parse("G𝄫4"))
+        'G𝄫4'
         >>> Note.parse("H4")
         Traceback (most recent call last):
             ...
         ValueError: substring not found
         """
         letter = LETTERS.index(text[0].upper())
-        rest = text[1:]
+        rest = text[1:].translate(_WRITTEN_ACCIDENTALS)
         octave = int(rest.lstrip("#bx"))
         acc_text = rest[: len(rest) - len(str(octave))]
         acc = {v: k for k, v in _ASCII.items()}[acc_text]
