@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,13 +682,13 @@ font chosen in the settings.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_signature_positions("treble", sign=1)
-['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
-&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="treble", key=2)
-&gt;&gt;&gt; staff.clef, staff.key
-('treble', 2)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature_positions</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">clef</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="go">('treble', 2)
+</span></code></pre></div></div>
 
 <h2 id="clef_targets">clef_targets</h2>
 
@@ -711,13 +711,13 @@ font chosen in the settings.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
-True
-&gt;&gt;&gt; sorted(clef_targets("baritone"))
-[('C', 8), ('F', 4)]
-&gt;&gt;&gt; sorted(clef_targets("french") | clef_targets("subbass"))
-[('F', 8), ('G', 0)]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_targets</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span> <span class="o">==</span> <span class="p">{(</span><span class="s">"G"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span> <span class="ow">and</span> <span class="n">clef_targets</span><span class="p">(</span><span class="s">"mezzo"</span><span class="p">)</span> <span class="o">==</span> <span class="p">{(</span><span class="s">"C"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">clef_targets</span><span class="p">(</span><span class="s">"baritone"</span><span class="p">))</span>
+<span class="go">[('C', 8), ('F', 4)]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">clef_targets</span><span class="p">(</span><span class="s">"french"</span><span class="p">)</span> <span class="o">|</span> <span class="n">clef_targets</span><span class="p">(</span><span class="s">"subbass"</span><span class="p">))</span>
+<span class="go">[('F', 8), ('G', 0)]
+</span></code></pre></div></div>
 
 <h2 id="clef_target_of">clef_target_of</h2>
 
@@ -740,9 +740,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; clef_target_of("bass"), clef_target_of("soprano")
-(('F', 6), ('C', 0))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_target_of</span><span class="p">(</span><span class="s">"bass"</span><span class="p">),</span> <span class="n">clef_target_of</span><span class="p">(</span><span class="s">"soprano"</span><span class="p">)</span>
+<span class="go">(('F', 6), ('C', 0))
+</span></code></pre></div></div>
 
 <h2 id="draw_key_signature">draw_key_signature</h2>
 
@@ -780,16 +780,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(200, 120, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("white"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; draw_key_signature(painter, clef="treble", key=3, x=10, bottom=80, gap=12, color=QColor("black"), font="bravura")
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; any(image.pixelColor(x_, y_).lightness() &lt; 128 for x_ in range(10, 60) for y_ in range(20, 100))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_key_signature</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span> <span class="k">for</span> <span class="n">y_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_signature_sign">draw_signature_sign</h2>
 
@@ -823,8 +823,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Both the printed signature and signs placed by the learner use this drawing.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Both the printed signature and signs placed by the learner use this drawing.
+</code></pre></div></div>
 
 <h2 id="staffwidget">StaffWidget</h2>
 
@@ -871,11 +871,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.show_notes([[Note.parse("E4")], [Note.parse("G4")]], clef="treble")
-&gt;&gt;&gt; len(staff.columns)
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">)],</span> <span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">)]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -896,9 +896,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget(gap=8.0, compact=True).GAP
-8.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffWidget</span><span class="p">(</span><span class="n">gap</span><span class="o">=</span><span class="mf">8.0</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">GAP</span>
+<span class="go">8.0
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetshow_notes">StaffWidget.show_notes</h3>
 
@@ -932,11 +932,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="bass", key=-1, value="quarter", caption="_ Major")
-&gt;&gt;&gt; staff.clef, staff.key, staff.value, staff.caption
-('bass', -1, 'quarter', '_ Major')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"_ Major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">clef</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">caption</span>
+<span class="go">('bass', -1, 'quarter', '_ Major')
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetsizehint">StaffWidget.sizeHint</h3>
 
@@ -955,11 +955,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget(max_step=120.0)
-&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]])
-&gt;&gt;&gt; staff.sizeHint().width()
-500
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">(</span><span class="n">max_step</span><span class="o">=</span><span class="mf">120.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="go">500
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetresizeevent">StaffWidget.resizeEvent</h3>
 
@@ -976,9 +976,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget(lesson_layout=True)
-&gt;&gt;&gt; staff.resize(300, staff.height())
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">(</span><span class="n">lesson_layout</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">height</span><span class="p">())</span>
+</code></pre></div></div>
 
 <h3 id="staffwidgethighlight_column">StaffWidget.highlight_column</h3>
 
@@ -995,11 +995,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.highlight_column(0)
-&gt;&gt;&gt; staff.playback_column
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">highlight_column</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">playback_column</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetset_note_color">StaffWidget.set_note_color</h3>
 
@@ -1016,15 +1016,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.set_note_color(QColor("#2e7d32"))
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; staff.note_color.name()
-'#2e7d32'
-&gt;&gt;&gt; staff.set_note_color(None)
-&gt;&gt;&gt; staff.note_color is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">set_note_color</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">note_color</span><span class="p">.</span><span class="n">name</span><span class="p">()</span>
+<span class="go">'#2e7d32'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">set_note_color</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">note_color</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetstaff_bottoms">StaffWidget.staff_bottoms</h3>
 
@@ -1041,11 +1041,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.resize(400, 400)
-&gt;&gt;&gt; staff.staff_bottoms()
-{'treble': 232.0}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()</span>
+<span class="go">{'treble': 232.0}
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetpaintevent">StaffWidget.paintEvent</h3>
 
@@ -1062,12 +1062,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffWidget()
-&gt;&gt;&gt; staff.resize(400, 400)
-&gt;&gt;&gt; staff.show_notes([[Note.parse("C4")]], clef="treble")
-&gt;&gt;&gt; staff.grab().toImage().pixelColor(200, 5).name()  # the white paper
-'#ffffff'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">toImage</span><span class="p">().</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">5</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>  <span class="c1"># the white paper
+</span><span class="go">'#ffffff'
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetmousemoveevent">StaffWidget.mouseMoveEvent</h3>
 
@@ -1084,9 +1084,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hasMouseTracking()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffWidget</span><span class="p">().</span><span class="n">hasMouseTracking</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="staffwidgetleaveevent">StaffWidget.leaveEvent</h3>
 
@@ -1103,8 +1103,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffWidget</span><span class="p">().</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+</code></pre></div></div>
 
 <h3 id="staffwidgethits_notation">StaffWidget.hits_notation</h3>
 
@@ -1127,9 +1127,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffWidget().hits_notation(QPoint(0, 0))
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffWidget</span><span class="p">().</span><span class="n">hits_notation</span><span class="p">(</span><span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1428,8 +1428,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

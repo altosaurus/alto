@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,9 +682,9 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; inline("A **scroll** is the carved end.")
-'A &lt;b&gt;scroll&lt;/b&gt; is the carved end.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">inline</span><span class="p">(</span><span class="s">"A **scroll** is the carved end."</span><span class="p">)</span>
+<span class="go">'A &lt;b&gt;scroll&lt;/b&gt; is the carved end.'
+</span></code></pre></div></div>
 
 <h2 id="inline">inline</h2>
 
@@ -707,9 +707,9 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; inline("The **nut** &amp; the bridge.")
-'The &lt;b&gt;nut&lt;/b&gt; &amp;amp; the bridge.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">inline</span><span class="p">(</span><span class="s">"The **nut** &amp; the bridge."</span><span class="p">)</span>
+<span class="go">'The &lt;b&gt;nut&lt;/b&gt; &amp;amp; the bridge.'
+</span></code></pre></div></div>
 
 <h2 id="read_lessons">read_lessons</h2>
 
@@ -751,9 +751,9 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_lessons(None, pack_id="demo", pack_name="Demo", instruments={}, exercises={})
-()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_lessons</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{})</span>
+<span class="go">()
+</span></code></pre></div></div>
 
 <h2 id="read_picture">read_picture</h2>
 
@@ -984,8 +984,8 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

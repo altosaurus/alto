@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,11 +682,11 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sorted(HEADS)
-['breve', 'half', 'whole']
-&gt;&gt;&gt; ACCIDENTALS[1]
-'accidentalSharp'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">HEADS</span><span class="p">)</span>
+<span class="go">['breve', 'half', 'whole']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ACCIDENTALS</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">'accidentalSharp'
+</span></code></pre></div></div>
 
 <h2 id="notation_glyph">notation_glyph</h2>
 
@@ -715,9 +715,9 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; notation_glyph("bravura", codepoint=0xE260).isEmpty()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notation_glyph</span><span class="p">(</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">codepoint</span><span class="o">=</span><span class="mh">0xE260</span><span class="p">).</span><span class="n">isEmpty</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="staff_line_width">staff_line_width</h2>
 
@@ -745,9 +745,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff_line_width("bravura", gap=16) &gt;= 1.0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff_line_width</span><span class="p">(</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="ledger_width">ledger_width</h2>
 
@@ -775,9 +775,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ledger_width("bravura", gap=16) &gt;= 1.2
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ledger_width</span><span class="p">(</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.2</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_note">draw_note</h2>
 
@@ -815,16 +815,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(100, 100, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("white"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; draw_note(painter, font="bravura", value="eighth", x=50, y=60, gap=16, color=QColor("black"))
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; image.pixelColor(50, 60).lightness() &lt; 128
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"eighth"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_clef">draw_clef</h2>
 
@@ -856,16 +856,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(100, 100, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("white"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; draw_clef(painter, font="bravura", clef="treble", x=10, bottom=70, gap=10, color=QColor("black"))
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; any(image.pixelColor(x_, y).lightness() &lt; 128 for x_ in range(10, 40) for y in range(20, 90))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_clef</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">clef</span><span class="o">=</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="accidental_width">accidental_width</h2>
 
@@ -895,9 +895,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; accidental_width(font="bravura", sign=1, gap=16) &gt; accidental_width(font="bravura", sign=1, gap=8)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">accidental_width</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">accidental_width</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_accidental">draw_accidental</h2>
 
@@ -937,16 +937,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(100, 100, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; normal = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"))
-&gt;&gt;&gt; squeezed = draw_accidental(painter, font="bravura", sign=1, x=10, y=50, gap=16, color=QColor("black"), fit=5.0)
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; squeezed &lt;= 5.0 &lt; normal
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">normal</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">squeezed</span> <span class="o">=</span> <span class="n">draw_accidental</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">fit</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">squeezed</span> <span class="o">&lt;=</span> <span class="mf">5.0</span> <span class="o">&lt;</span> <span class="n">normal</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_brace">draw_brace</h2>
 
@@ -984,14 +984,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(100, 100, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; draw_brace(painter, font="bravura", x=30, y0=10, y1=90, color=QColor("black"), width=12)
-True
-&gt;&gt;&gt; painter.end()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_brace</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s">"bravura"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1226,8 +1226,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

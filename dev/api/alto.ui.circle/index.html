@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,11 +682,11 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=3, title="F♯ minor")
-&gt;&gt;&gt; circle.target
-('outer', 3)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"F♯ minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span>
+<span class="go">('outer', 3)
+</span></code></pre></div></div>
 
 <h2 id="wedge_path">wedge_path</h2>
 
@@ -718,10 +718,10 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
-&gt;&gt;&gt; shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
-(True, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span> <span class="o">=</span> <span class="n">wedge_path</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">inner</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">outer</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span> <span class="n">shape</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">170</span><span class="p">))</span>  <span class="c1"># the top of the circle, and the bottom
+</span><span class="go">(True, False)
+</span></code></pre></div></div>
 
 <h2 id="wedge_middle">wedge_middle</h2>
 
@@ -751,11 +751,11 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
-(100.0, 50.0)
-&gt;&gt;&gt; round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
-150
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_middle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># straight up
+</span><span class="go">(100.0, 50.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">wedge_middle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">x</span><span class="p">())</span>  <span class="c1"># a quarter of the way around: to the right
+</span><span class="go">150
+</span></code></pre></div></div>
 
 <h2 id="wedge_color">wedge_color</h2>
 
@@ -787,18 +787,18 @@ and its name (or its Roman numeral) is blank until the answer is right.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; spectrum = preset("spectrum")
-&gt;&gt;&gt; wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
-(0, 180)
-&gt;&gt;&gt; lit, quiet = (wedge_color(0, inner=False, lift=amount, scheme=spectrum) for amount in (1.0, 0.0))
-&gt;&gt;&gt; lit.lightness() &gt; quiet.lightness()
-True
-&gt;&gt;&gt; # no wedge looks too bright for white names
-&gt;&gt;&gt; every = [wedge_color(i, inner=False, lift=1.0, scheme=spectrum) for i in range(12)]
-&gt;&gt;&gt; all(0.299 * c.redF() + 0.587 * c.greenF() + 0.114 * c.blueF() &lt;= 0.44 for c in every)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wedge_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">).</span><span class="n">hue</span><span class="p">(),</span> <span class="n">wedge_color</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">).</span><span class="n">hue</span><span class="p">()</span>
+<span class="go">(0, 180)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="p">(</span><span class="n">wedge_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">)</span> <span class="k">for</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lit</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">quiet</span><span class="p">.</span><span class="n">lightness</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># no wedge looks too bright for white names
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">every</span> <span class="o">=</span> <span class="p">[</span><span class="n">wedge_color</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">spectrum</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">all</span><span class="p">(</span><span class="mf">0.299</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">redF</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.587</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">greenF</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.114</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">blueF</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.44</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">every</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="write_text">write_text</h2>
 
@@ -833,16 +833,16 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(120, 60, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("black"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; write_text(painter, center=QPointF(60, 30), text="B♭m", pixels=24, weight=QFont.Weight.Bold, color=QColor("white"))
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; any(image.pixelColor(x, 30).lightness() &gt; 128 for x in range(20, 100))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_text</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s">"B♭m"</span><span class="p">,</span> <span class="n">pixels</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">QFont</span><span class="p">.</span><span class="n">Weight</span><span class="p">.</span><span class="n">Bold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">128</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="fifthscircle">FifthsCircle</h2>
 
@@ -868,12 +868,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.shown["outer"], circle.signature
-({0}, 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="go">({0}, 0)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -887,9 +887,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FifthsCircle().target is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FifthsCircle</span><span class="p">().</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclesizehint">FifthsCircle.sizeHint</h3>
 
@@ -906,9 +906,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FifthsCircle().sizeHint().width()
-460
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FifthsCircle</span><span class="p">().</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="go">460
+</span></code></pre></div></div>
 
 <h3 id="fifthscircleshow_question">FifthsCircle.show_question</h3>
 
@@ -940,14 +940,14 @@ asks for the Roman numeral of one of them.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("minor", place=3, title="A major")
-&gt;&gt;&gt; circle.target, circle.shown["outer"] == set(range(12)), circle.shown["inner"], circle.signature
-(('inner', 3), True, set(), None)
-&gt;&gt;&gt; circle.show_question("numeral", place=11, ring="outer", key=0, title="C major")
-&gt;&gt;&gt; sorted(circle.lit), circle.signature, circle.numerals
-([0, 1, 11], 0, {})
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"outer"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)),</span> <span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="go">(('inner', 3), True, set(), None)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"numeral"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">ring</span><span class="o">=</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"C major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">numerals</span>
+<span class="go">([0, 1, 11], 0, {})
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclereset">FifthsCircle.reset</h3>
 
@@ -958,12 +958,12 @@ asks for the Roman numeral of one of them.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=2, title="B minor")
-&gt;&gt;&gt; circle.reset()
-&gt;&gt;&gt; circle.target is None and circle.title == "" and circle.lit == set()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span> <span class="o">==</span> <span class="s">""</span> <span class="ow">and</span> <span class="n">circle</span><span class="p">.</span><span class="n">lit</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclereveal">FifthsCircle.reveal</h3>
 
@@ -985,12 +985,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("minor", place=5, title="B major / C♭ major")
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.shown["inner"], circle.title, circle.subtitle, circle.signature
-({5}, 'G♯ minor', '5 sharps', 5)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"B major / C♭ major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">],</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="go">({5}, 'G♯ minor', '5 sharps', 5)
+</span></code></pre></div></div>
 
 <h3 id="fifthscircleset_subtitle">FifthsCircle.set_subtitle</h3>
 
@@ -1007,11 +1007,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.set_subtitle("and its other name")
-&gt;&gt;&gt; circle.subtitle
-'and its other name'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">set_subtitle</span><span class="p">(</span><span class="s">"and its other name"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span>
+<span class="go">'and its other name'
+</span></code></pre></div></div>
 
 <h3 id="fifthscircleflash_wrong">FifthsCircle.flash_wrong</h3>
 
@@ -1022,12 +1022,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.flash_wrong()
-&gt;&gt;&gt; circle._warning is not None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">flash_wrong</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">_warning</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclelift_of">FifthsCircle.lift_of</h3>
 
@@ -1058,14 +1058,14 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.lift_of("outer", place=0), circle.lift_of("inner", place=0), circle.lift_of("outer", place=5)
-(0.5, 0.3, 0.0)
-&gt;&gt;&gt; circle.reveal(animate=False)
-&gt;&gt;&gt; circle.lift_of("outer", place=0)
-1.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">(0.5, 0.3, 0.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">reveal</span><span class="p">(</span><span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">1.0
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclegeometry_of">FifthsCircle.geometry_of</h3>
 
@@ -1084,15 +1084,15 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.resize(400, 300)
-&gt;&gt;&gt; middle, radius = circle.geometry_of()
-&gt;&gt;&gt; middle.toTuple(), radius &lt; 150
-((200.0, 150.0), True)
-&gt;&gt;&gt; circle.resize(2400, 2000)
-&gt;&gt;&gt; circle.geometry_of()[1] == MAX_RADIUS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">.</span><span class="n">toTuple</span><span class="p">(),</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="mi">150</span>
+<span class="go">((200.0, 150.0), True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">2400</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">MAX_RADIUS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fifthscirclepaintevent">FifthsCircle.paintEvent</h3>
 
@@ -1109,12 +1109,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = FifthsCircle()
-&gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; circle.show_question("major", place=0, title="A minor")
-&gt;&gt;&gt; circle.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">FifthsCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show_question</span><span class="p">(</span><span class="s">"major"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"A minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1337,8 +1337,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

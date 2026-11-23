@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,9 +681,9 @@ the built-in exercises’ panels. Its options are saved under the exercise’s n
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; COMMIT_DELAY_MS
-150
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">COMMIT_DELAY_MS</span>
+<span class="go">150
+</span></code></pre></div></div>
 
 <h2 id="packsettingspanel">PackSettingsPanel</h2>
 
@@ -714,13 +714,13 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"octave": True}
-&gt;&gt;&gt; panel = PackSettingsPanel(Demo)
-&gt;&gt;&gt; panel.octave_row is not None and not hasattr(panel, "range_row")
-True
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"octave"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">octave_row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="s">"range_row"</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -735,13 +735,13 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
-...     controls = {"sound": "Demo sound"}
-&gt;&gt;&gt; panel = PackSettingsPanel(Sounds)
-&gt;&gt;&gt; panel.stack.count()
-2
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Sounds</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"sound"</span><span class="p">:</span> <span class="s">"Demo sound"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackSettingsPanel</span><span class="p">(</span><span class="n">Sounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="go">2
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Sounds"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="packkeyboardsettingspanel">PackKeyboardSettingsPanel</h2>
 
@@ -773,17 +773,17 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"range": True, "intervals": True, "manuals": True}
-...     spec = {"type": "keyboard-intervals"}
-...     key_span, key_default = (28, 89), (48, 72)
-...     interval_names = ("m2", "M2", "m3")
-...     manual_names = ("Upper manual", "Lower manual")
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel.stack.count(), panel.low_label.text(), panel.high_label.text()
-(4, 'C3', 'C5')
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"range"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"intervals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">"manuals"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"keyboard-intervals"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">key_span</span><span class="p">,</span> <span class="n">key_default</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span> <span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">interval_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">"m2"</span><span class="p">,</span> <span class="s">"M2"</span><span class="p">,</span> <span class="s">"m3"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">manual_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">"Upper manual"</span><span class="p">,</span> <span class="s">"Lower manual"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">low_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">high_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">(4, 'C3', 'C5')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -798,14 +798,14 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Sounds(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Sounds)
-&gt;&gt;&gt; panel.stack.count()
-2
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Sounds")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Sounds</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"sound"</span><span class="p">:</span> <span class="s">"Demo sound"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"keyboard-intervals"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span><span class="n">Sounds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="go">2
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Sounds"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="packkeyboardsettingspanelflush">PackKeyboardSettingsPanel.flush</h3>
 
@@ -816,16 +816,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel._sound_chosen("piano")
-&gt;&gt;&gt; panel.flush()
-&gt;&gt;&gt; panel._commit_timer.isActive()
-False
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"sound"</span><span class="p">:</span> <span class="s">"Demo sound"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"keyboard-intervals"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">_sound_chosen</span><span class="p">(</span><span class="s">"piano"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">flush</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">_commit_timer</span><span class="p">.</span><span class="n">isActive</span><span class="p">()</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="packkeyboardsettingspanelhideevent">PackKeyboardSettingsPanel.hideEvent</h3>
 
@@ -842,17 +842,17 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; class Demo(PackExercise):
-...     controls = {"sound": "Demo sound"}
-...     spec = {"type": "keyboard-intervals"}
-&gt;&gt;&gt; panel = PackKeyboardSettingsPanel(Demo)
-&gt;&gt;&gt; panel._sound_chosen("piano")
-&gt;&gt;&gt; panel.show()
-&gt;&gt;&gt; panel.hide()
-&gt;&gt;&gt; panel._commit_timer.isActive()
-False
-&gt;&gt;&gt; _ = settings.pack_exercises.pop("Demo")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">class</span> <span class="nc">Demo</span><span class="p">(</span><span class="n">PackExercise</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">controls</span> <span class="o">=</span> <span class="p">{</span><span class="s">"sound"</span><span class="p">:</span> <span class="s">"Demo sound"</span><span class="p">}</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"keyboard-intervals"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">PackKeyboardSettingsPanel</span><span class="p">(</span><span class="n">Demo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">_sound_chosen</span><span class="p">(</span><span class="s">"piano"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">hide</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">_commit_timer</span><span class="p">.</span><span class="n">isActive</span><span class="p">()</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">pack_exercises</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"Demo"</span><span class="p">)</span>
+</code></pre></div></div>
 
 
           
@@ -1125,8 +1125,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,10 +678,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; button = DegreeButton("♭3̂")
-&gt;&gt;&gt; button.text()
-'♭3̂'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">DegreeButton</span><span class="p">(</span><span class="s">"♭3̂"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'♭3̂'
+</span></code></pre></div></div>
 
 <h2 id="draw_degree_text">draw_degree_text</h2>
 
@@ -707,13 +707,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QPixmap
-&gt;&gt;&gt; pixmap = QPixmap(100, 40)
-&gt;&gt;&gt; painter_ = QPainter(pixmap)
-&gt;&gt;&gt; draw_degree_text(painter_, rect=QRectF(0, 0, 100, 40), text="3̂")
-&gt;&gt;&gt; painter_.end()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QPixmap</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter_</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_degree_text</span><span class="p">(</span><span class="n">painter_</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s">"3̂"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter_</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="degree_tooltip">degree_tooltip</h2>
 
@@ -736,11 +736,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; degree_tooltip("Letters")
-'Letters'
-&gt;&gt;&gt; "data:image/png;base64," in degree_tooltip("Caret (1̂ 2̂ 3̂)")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">degree_tooltip</span><span class="p">(</span><span class="s">"Letters"</span><span class="p">)</span>
+<span class="go">'Letters'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"data:image/png;base64,"</span> <span class="ow">in</span> <span class="n">degree_tooltip</span><span class="p">(</span><span class="s">"Caret (1̂ 2̂ 3̂)"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="degreebutton">DegreeButton</h2>
 
@@ -751,9 +751,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; DegreeButton("2̂").text()
-'2̂'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DegreeButton</span><span class="p">(</span><span class="s">"2̂"</span><span class="p">).</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'2̂'
+</span></code></pre></div></div>
 
 <h3 id="degreebuttonpaintevent">DegreeButton.paintEvent</h3>
 
@@ -770,9 +770,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; DegreeButton("2̂").grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DegreeButton</span><span class="p">(</span><span class="s">"2̂"</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="degreecheckbox">DegreeCheckBox</h2>
 
@@ -797,9 +797,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; DegreeLabel("Note to place: 2̂ / 4").text()
-'Note to place: 2̂ / 4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DegreeLabel</span><span class="p">(</span><span class="s">"Note to place: 2̂ / 4"</span><span class="p">).</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Note to place: 2̂ / 4'
+</span></code></pre></div></div>
 
 <h3 id="degreelabelpaintevent">DegreeLabel.paintEvent</h3>
 
@@ -816,9 +816,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; DegreeLabel("2̂").grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DegreeLabel</span><span class="p">(</span><span class="s">"2̂"</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1049,8 +1049,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -695,9 +695,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ReviewInterval(600, (1, "NoteNames", "abc", "FSRS"), None).seconds
-600
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span> <span class="bp">None</span><span class="p">).</span><span class="n">seconds</span>
+<span class="go">600
+</span></code></pre></div></div>
 
 <h3 id="reviewintervalduration">ReviewInterval.duration</h3>
 
@@ -715,9 +715,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ReviewInterval(330, (1, "NoteNames", "abc", "FSRS"), None).duration
-'5 min 30 s'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReviewInterval</span><span class="p">(</span><span class="mi">330</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">,</span> <span class="s">"FSRS"</span><span class="p">),</span> <span class="bp">None</span><span class="p">).</span><span class="n">duration</span>
+<span class="go">'5 min 30 s'
+</span></code></pre></div></div>
 
 <h2 id="calendarpractice">CalendarPractice</h2>
 
@@ -728,10 +728,10 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; practice = CalendarPractice(Database())
-&gt;&gt;&gt; practice.db.profiles()
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">db</span><span class="p">.</span><span class="n">profiles</span><span class="p">()</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -745,9 +745,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CalendarPractice(Database())._batches
-{}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">_batches</span>
+<span class="go">{}
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticeinherit_schedules">CalendarPractice.inherit_schedules</h3>
 
@@ -769,8 +769,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Switching to FSRS carries over an SM-2 due date without consuming a review.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Switching to FSRS carries over an SM-2 due date without consuming a review.
+</code></pre></div></div>
 
 <h3 id="calendarpracticelimits">CalendarPractice.limits</h3>
 
@@ -798,9 +798,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CalendarPractice(Database()).limits(1)
-(10, 200)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">limits</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">(10, 200)
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticeoverrides">CalendarPractice.overrides</h3>
 
@@ -828,9 +828,9 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CalendarPractice(Database()).overrides(1, exercise="NoteNames")
-(None, None)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">overrides</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">)</span>
+<span class="go">(None, None)
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticeset_limits">CalendarPractice.set_limits</h3>
 
@@ -856,13 +856,13 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; practice = CalendarPractice(db)
-&gt;&gt;&gt; profile = db.add_profile("Ada").id
-&gt;&gt;&gt; practice.set_limits(profile, new_cards=5, reviews=30)
-&gt;&gt;&gt; practice.limits(profile, exercise="NoteNames")
-(5, 30)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">profile</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">new_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">reviews</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">limits</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">)</span>
+<span class="go">(5, 30)
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticereset_limits">CalendarPractice.reset_limits</h3>
 
@@ -879,8 +879,8 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Restoring defaults keeps the day's introductions and completed reviews.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restoring defaults keeps the day's introductions and completed reviews.
+</code></pre></div></div>
 
 <h3 id="calendarpracticequeue">CalendarPractice.queue</h3>
 
@@ -912,13 +912,13 @@ questions under its current settings. Counting a prepared question does not intr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; due, new = CalendarPractice(db).queue(NoteNames(), profile=ada.id, mode="FSRS", now=1000)
-&gt;&gt;&gt; not due and len(new) == DAILY_NEW
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">due</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">queue</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="ow">not</span> <span class="n">due</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">==</span> <span class="n">DAILY_NEW</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticecounts">CalendarPractice.counts</h3>
 
@@ -950,11 +950,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; CalendarPractice(db).counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[1] &gt; 0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">counts</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticetile_counts">CalendarPractice.tile_counts</h3>
 
@@ -986,11 +986,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; CalendarPractice(db).tile_counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[2]
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">tile_counts</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticestudy_counts">CalendarPractice.study_counts</h3>
 
@@ -1024,8 +1024,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A missed card that comes due again is underlined as incorrect during its retry.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A missed card that comes due again is underlined as incorrect during its retry.
+</code></pre></div></div>
 
 <h3 id="calendarpracticetake">CalendarPractice.take</h3>
 
@@ -1057,13 +1057,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import ChordQualities
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; practice = CalendarPractice(db)
-&gt;&gt;&gt; question = practice.take(ChordQualities(), profile=db.add_profile("Ada").id, mode="SM-2", now=1000)
-&gt;&gt;&gt; isinstance(question, Question)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">ChordQualities</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="n">ChordQualities</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">).</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">Question</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticetake_or_wait">CalendarPractice.take_or_wait</h3>
 
@@ -1099,8 +1099,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A single missed card can wake the exercise when its learning step expires.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A single missed card can wake the exercise when its learning step expires.
+</code></pre></div></div>
 
 <h3 id="calendarpracticeintroduce">CalendarPractice.introduce</h3>
 
@@ -1126,8 +1126,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Answering a pending card keeps its original introduction day.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Answering a pending card keeps its original introduction day.
+</code></pre></div></div>
 
 <h3 id="calendarpracticecorrect_interval">CalendarPractice.correct_interval</h3>
 
@@ -1161,9 +1161,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CalendarPractice(Database()).correct_interval("NoteNames", profile=1, key="abc", mode="FSRS", now=1000).seconds
-600
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">()).</span><span class="n">correct_interval</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"FSRS"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">).</span><span class="n">seconds</span>
+<span class="go">600
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticepassing_intervals">CalendarPractice.passing_intervals</h3>
 
@@ -1199,10 +1199,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; practice = CalendarPractice(Database())
-&gt;&gt;&gt; practice.passing_intervals("NoteNames", profile=1, key="abc", mode="SM-2", now=0)[Rating.Good].seconds
-600
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">Database</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">passing_intervals</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">].</span><span class="n">seconds</span>
+<span class="go">600
+</span></code></pre></div></div>
 
 <h3 id="calendarpracticegrade">CalendarPractice.grade</h3>
 
@@ -1236,15 +1236,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; practice = CalendarPractice(db)
-&gt;&gt;&gt; question = practice.take(NoteNames(), profile=ada.id, mode="SM-2", now=1000)
-&gt;&gt;&gt; practice.grade("NoteNames", profile=ada.id, key=question.item_key(), mode="SM-2", correct=True, now=1002)
-&gt;&gt;&gt; db.conn.execute("SELECT due FROM review_schedules").fetchone()[0]
-87402.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span> <span class="o">=</span> <span class="n">CalendarPractice</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">practice</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">practice</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">question</span><span class="p">.</span><span class="n">item_key</span><span class="p">(),</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">1002</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"SELECT due FROM review_schedules"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">87402.0
+</span></code></pre></div></div>
 
 
           
@@ -1417,8 +1417,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

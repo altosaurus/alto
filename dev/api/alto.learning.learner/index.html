@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,13 +678,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; question = learner.pick(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; question.answer in question.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">learner</span><span class="p">.</span><span class="n">pick</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">question</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="practicecomplete">PracticeComplete</h2>
 
@@ -697,9 +697,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; issubclass(PracticeComplete, Exception)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">PracticeComplete</span><span class="p">,</span> <span class="nb">Exception</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -713,9 +713,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; PracticeComplete().retry_at is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PracticeComplete</span><span class="p">().</span><span class="n">retry_at</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="learner">Learner</h2>
 
@@ -738,15 +738,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; rng = random.Random(2)
-&gt;&gt;&gt; question = learner.pick(NoteNames(), rng=rng)
-&gt;&gt;&gt; learner.record(NoteNames(), question=question, answer=question.answer, correct=True, attempt_no=1, seconds=2.5)
-&gt;&gt;&gt; db.count_attempts(learner.profile.id)
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">learner</span><span class="p">.</span><span class="n">pick</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">record</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">learner</span><span class="p">.</span><span class="n">profile</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -761,11 +761,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database = Database()
-&gt;&gt;&gt; learner = Learner(database, profile=database.add_profile("Ada"))
-&gt;&gt;&gt; learner.profile.name
-'Ada'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">profile</span><span class="p">.</span><span class="n">name</span>
+<span class="go">'Ada'
+</span></code></pre></div></div>
 
 <h3 id="learnerset_profile">Learner.set_profile</h3>
 
@@ -782,12 +782,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; learner.set_profile(db.add_profile("Ben"))
-&gt;&gt;&gt; learner.profile.name
-'Ben'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">set_profile</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ben"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">profile</span><span class="p">.</span><span class="n">name</span>
+<span class="go">'Ben'
+</span></code></pre></div></div>
 
 <h3 id="learnermode">Learner.mode</h3>
 
@@ -805,10 +805,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; Learner(db, profile=db.add_profile("Ada")).mode
-'ASRS'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)).</span><span class="n">mode</span>
+<span class="go">'ASRS'
+</span></code></pre></div></div>
 
 <h3 id="learnerself_grading">Learner.self_grading</h3>
 
@@ -826,10 +826,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; Learner(db, profile=db.add_profile("Ada")).self_grading
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)).</span><span class="n">self_grading</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="learnerresponse_times">Learner.response_times</h3>
 
@@ -852,10 +852,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
-()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)).</span><span class="n">response_times</span><span class="p">(</span><span class="s">"KeyboardNotes"</span><span class="p">).</span><span class="n">times</span>
+<span class="go">()
+</span></code></pre></div></div>
 
 <h3 id="learnerset_speed_thresholds">Learner.set_speed_thresholds</h3>
 
@@ -883,8 +883,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Setting both tails to zero assigns Good to every correct first answer.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Setting both tails to zero assigns Good to every correct first answer.
+</code></pre></div></div>
 
 <h3 id="learnerset_self_grading">Learner.set_self_grading</h3>
 
@@ -901,12 +901,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; learner.set_self_grading(True)
-&gt;&gt;&gt; learner.self_grading
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">set_self_grading</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">self_grading</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="learnerset_mode">Learner.set_mode</h3>
 
@@ -929,12 +929,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; learner.set_mode("FSRS")
-&gt;&gt;&gt; learner.mode
-'FSRS'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">set_mode</span><span class="p">(</span><span class="s">"FSRS"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">mode</span>
+<span class="go">'FSRS'
+</span></code></pre></div></div>
 
 <h3 id="learnerpick">Learner.pick</h3>
 
@@ -972,14 +972,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; first = learner.pick(NoteNames(), rng=random.Random(3))
-&gt;&gt;&gt; second = learner.pick(NoteNames(), rng=random.Random(3), avoid=first.item_key())
-&gt;&gt;&gt; second.item_key() != first.item_key()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span> <span class="o">=</span> <span class="n">learner</span><span class="p">.</span><span class="n">pick</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second</span> <span class="o">=</span> <span class="n">learner</span><span class="p">.</span><span class="n">pick</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">avoid</span><span class="o">=</span><span class="n">first</span><span class="p">.</span><span class="n">item_key</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second</span><span class="p">.</span><span class="n">item_key</span><span class="p">()</span> <span class="o">!=</span> <span class="n">first</span><span class="p">.</span><span class="n">item_key</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="learnerrecord">Learner.record</h3>
 
@@ -1025,18 +1025,18 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; learner = Learner(db, profile=db.add_profile("Ada"))
-&gt;&gt;&gt; q = learner.pick(NoteNames(), rng=random.Random(4))
-&gt;&gt;&gt; learner.record(NoteNames(), question=q, answer="?", correct=False, attempt_no=1, seconds=3.0)
-&gt;&gt;&gt; learner.record(NoteNames(), question=q, answer=q.answer, correct=True, attempt_no=2, seconds=1.0)
-&gt;&gt;&gt; [row["correct"] for row in db.attempts(learner.profile.id)]
-[0, 1]
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; db.get_item(learner.profile.id, exercise="NoteNames", item_key=q.item_key()).wrong_attempts
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">learner</span><span class="p">.</span><span class="n">pick</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">record</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"?"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">learner</span><span class="p">.</span><span class="n">record</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="n">q</span><span class="p">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s">"correct"</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">learner</span><span class="p">.</span><span class="n">profile</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="go">[0, 1]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">learner</span><span class="p">.</span><span class="n">profile</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="n">q</span><span class="p">.</span><span class="n">item_key</span><span class="p">()).</span><span class="n">wrong_attempts</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 
           
@@ -1215,8 +1215,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -683,11 +683,11 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [inst.label for inst in INSTRUMENTS][:2]
-['Piano', 'Flute']
-&gt;&gt;&gt; Sounds().instrument
-'piano'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">inst</span><span class="p">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">INSTRUMENTS</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">['Piano', 'Flute']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sounds</span><span class="p">().</span><span class="n">instrument</span>
+<span class="go">'piano'
+</span></code></pre></div></div>
 
 <h2 id="synth_piano">synth_piano</h2>
 
@@ -717,12 +717,12 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; samples = synth_piano(60, duration=0.1)
-&gt;&gt;&gt; len(samples)
-4410
-&gt;&gt;&gt; round(float(np.max(np.abs(samples))), 1)
-0.8
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">samples</span> <span class="o">=</span> <span class="n">synth_piano</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="go">4410
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">samples</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">0.8
+</span></code></pre></div></div>
 
 <h2 id="instrument">Instrument</h2>
 
@@ -762,11 +762,11 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Instrument("flute", label="Flute", folder="samples/flute", sustained=True).gain
-1.0
-&gt;&gt;&gt; INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
-(True, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Instrument</span><span class="p">(</span><span class="s">"flute"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"Flute"</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s">"samples/flute"</span><span class="p">,</span> <span class="n">sustained</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">gain</span>
+<span class="go">1.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">].</span><span class="n">damped</span><span class="p">,</span> <span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"marimba"</span><span class="p">].</span><span class="n">damped</span>
+<span class="go">(True, False)
+</span></code></pre></div></div>
 
 <h3 id="instrumentkind_name">Instrument.kind_name</h3>
 
@@ -784,9 +784,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
-('viola', 'flute')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"viola_bowed"</span><span class="p">].</span><span class="n">kind_name</span><span class="p">,</span> <span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"flute"</span><span class="p">].</span><span class="n">kind_name</span>
+<span class="go">('viola', 'flute')
+</span></code></pre></div></div>
 
 <h3 id="instrumentpicker_group">Instrument.picker_group</h3>
 
@@ -804,9 +804,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["viola_bowed"].picker_group
-'Viola'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"viola_bowed"</span><span class="p">].</span><span class="n">picker_group</span>
+<span class="go">'Viola'
+</span></code></pre></div></div>
 
 <h3 id="instrumentplayback_volume">Instrument.playback_volume</h3>
 
@@ -829,9 +829,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; INSTRUMENT_BY_KEY["flute"].playback_volume()
-0.85
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"flute"</span><span class="p">].</span><span class="n">playback_volume</span><span class="p">()</span>
+<span class="go">0.85
+</span></code></pre></div></div>
 
 <h2 id="instrument_groups">instrument_groups</h2>
 
@@ -850,11 +850,11 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [name for name, _ in instrument_groups()]
-['Piano', 'Flute', 'French Horn', 'Viola', 'Marimba', 'Vibraphone']
-&gt;&gt;&gt; [inst_.variant for inst_ in dict(instrument_groups())["Viola"]]
-['Arco', 'Pizzicato']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">instrument_groups</span><span class="p">()]</span>
+<span class="go">['Piano', 'Flute', 'French Horn', 'Viola', 'Marimba', 'Vibraphone']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">inst_</span><span class="p">.</span><span class="n">variant</span> <span class="k">for</span> <span class="n">inst_</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">instrument_groups</span><span class="p">())[</span><span class="s">"Viola"</span><span class="p">]]</span>
+<span class="go">['Arco', 'Pizzicato']
+</span></code></pre></div></div>
 
 <h2 id="read_wav">read_wav</h2>
 
@@ -877,13 +877,13 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import tempfile
-&gt;&gt;&gt; path_ = Path(tempfile.mkdtemp()) / "silence.wav"
-&gt;&gt;&gt; _ = path_.write_bytes(to_wav_bytes(np.zeros(10)))
-&gt;&gt;&gt; samples, rate = read_wav(path_)
-&gt;&gt;&gt; len(samples), rate
-(10, 44100)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s">"silence.wav"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">path_</span><span class="p">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">to_wav_bytes</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">samples</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">read_wav</span><span class="p">(</span><span class="n">path_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">rate</span>
+<span class="go">(10, 44100)
+</span></code></pre></div></div>
 
 <h2 id="shift_pitch">shift_pitch</h2>
 
@@ -913,9 +913,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(shift_pitch(np.zeros(100), semitones=12))  # an octave up: half as long
-50
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">shift_pitch</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">semitones</span><span class="o">=</span><span class="mi">12</span><span class="p">))</span>  <span class="c1"># an octave up: half as long
+</span><span class="go">50
+</span></code></pre></div></div>
 
 <h2 id="to_wav_bytes">to_wav_bytes</h2>
 
@@ -943,9 +943,9 @@ The module-level <code class="language-plaintext highlighter-rouge">sounds</code
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; to_wav_bytes(np.zeros(10))[:4]
-b'RIFF'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">to_wav_bytes</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">))[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="go">b'RIFF'
+</span></code></pre></div></div>
 
 <h2 id="write_file_atomically">write_file_atomically</h2>
 
@@ -969,11 +969,11 @@ b'RIFF'
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; folder = Path(tempfile.mkdtemp())
-&gt;&gt;&gt; write_file_atomically(folder / "note.wav", data=b"RIFF")
-&gt;&gt;&gt; (folder / "note.wav").read_bytes(), [p.name for p in folder.iterdir()]
-(b'RIFF', ['note.wav'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_file_atomically</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s">"RIFF"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"note.wav"</span><span class="p">).</span><span class="n">read_bytes</span><span class="p">(),</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">folder</span><span class="p">.</span><span class="n">iterdir</span><span class="p">()]</span>
+<span class="go">(b'RIFF', ['note.wav'])
+</span></code></pre></div></div>
 
 <h2 id="sounds">Sounds</h2>
 
@@ -992,12 +992,12 @@ b'RIFF'
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; s = Sounds()
-&gt;&gt;&gt; s.enabled, s.instrument
-(True, 'piano')
-&gt;&gt;&gt; s.enabled = False  # muted: nothing below makes a sound
-&gt;&gt;&gt; s.play_midi(60)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">instrument</span>
+<span class="go">(True, 'piano')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># muted: nothing below makes a sound
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_midi</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1005,9 +1005,9 @@ b'RIFF'
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Sounds().instrument
-'piano'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sounds</span><span class="p">().</span><span class="n">instrument</span>
+<span class="go">'piano'
+</span></code></pre></div></div>
 
 <h3 id="soundsrecordings">Sounds.recordings</h3>
 
@@ -1030,9 +1030,9 @@ b'RIFF'
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; 60 in Sounds().recordings(INSTRUMENT_BY_KEY["piano"])
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">60</span> <span class="ow">in</span> <span class="n">Sounds</span><span class="p">().</span><span class="n">recordings</span><span class="p">(</span><span class="n">INSTRUMENT_BY_KEY</span><span class="p">[</span><span class="s">"piano"</span><span class="p">])</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="soundsnote_duration_ms">Sounds.note_duration_ms</h3>
 
@@ -1060,8 +1060,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A one-second sample has the same 1000 ms feedback interval when muted.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A one-second sample has the same 1000 ms feedback interval when muted.
+</code></pre></div></div>
 
 <h3 id="soundsplay_midi">Sounds.play_midi</h3>
 
@@ -1094,11 +1094,11 @@ that start together. Nothing plays while muted unless
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; s = Sounds()
-&gt;&gt;&gt; s.enabled = False
-&gt;&gt;&gt; s.play_midi(60)  # muted: returns at once
-&gt;&gt;&gt; Sounds().play_midi(60)  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_midi</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>  <span class="c1"># muted: returns at once
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sounds</span><span class="p">().</span><span class="n">play_midi</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="soundsstop_all">Sounds.stop_all</h3>
 
@@ -1109,8 +1109,8 @@ that start together. Nothing plays while muted unless
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Sounds().stop_all()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sounds</span><span class="p">().</span><span class="n">stop_all</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="soundspreview">Sounds.preview</h3>
 
@@ -1137,8 +1137,8 @@ Starting a preview silences the one before it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sounds.preview("flute", midis=[60, 64, 67])  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">preview</span><span class="p">(</span><span class="s">"flute"</span><span class="p">,</span> <span class="n">midis</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">67</span><span class="p">])</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="soundsplay_notes">Sounds.play_notes</h3>
 
@@ -1170,10 +1170,10 @@ Starting a preview silences the one before it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; s = Sounds()
-&gt;&gt;&gt; s.enabled = False
-&gt;&gt;&gt; s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_notes</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"E4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">)]])</span>  <span class="c1"># muted: nothing sounds
+</span></code></pre></div></div>
 
 <h3 id="soundsstop_sample">Sounds.stop_sample</h3>
 
@@ -1190,8 +1190,8 @@ Starting a preview silences the one before it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Sounds().stop_sample(print)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sounds</span><span class="p">().</span><span class="n">stop_sample</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="soundsplay_sample">Sounds.play_sample</h3>
 
@@ -1221,13 +1221,13 @@ Starting a preview silences the one before it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; player = Sounds()
-&gt;&gt;&gt; player.enabled = False
-&gt;&gt;&gt; player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
-0
-&gt;&gt;&gt; player.stop_sample(print)
-None
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">play_sample</span><span class="p">([[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)]],</span> <span class="n">gap_ms</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="k">print</span><span class="p">)</span>
+<span class="go">0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">stop_sample</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
+<span class="go">None
+</span></code></pre></div></div>
 
 <h3 id="soundsplay_correct">Sounds.play_correct</h3>
 
@@ -1244,10 +1244,10 @@ None
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; s = Sounds()
-&gt;&gt;&gt; s.enabled = False
-&gt;&gt;&gt; s.play_correct(3)  # muted: nothing sounds
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span> <span class="o">=</span> <span class="n">Sounds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">play_correct</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># muted: nothing sounds
+</span></code></pre></div></div>
 
 
           
@@ -1388,8 +1388,8 @@ None
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

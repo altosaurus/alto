@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,18 +681,18 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for i, ok in enumerate((True, True, False)):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=ok,
-...                    duration_ms=2000, answered_at=1000.0 + i)
-&gt;&gt;&gt; stats = collect(db, profile_ids=[ada.id], now=1010.0)
-&gt;&gt;&gt; stats.questions, stats.first_right
-(3, 2)
-&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; round(stats.accuracy)
-67
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">((</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">)):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="n">ok</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1010.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">questions</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">first_right</span>
+<span class="go">(3, 2)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="p">.</span><span class="n">accuracy</span><span class="p">)</span>
+<span class="go">67
+</span></code></pre></div></div>
 
 <h2 id="bucket">Bucket</h2>
 
@@ -720,10 +720,10 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; bucket = Bucket(datetime(2026, 1, 5), label="Jan 5", questions=2, first_right=1, times=[2.0, 4.0])
-&gt;&gt;&gt; bucket.accuracy, bucket.median_seconds
-(50.0, 3.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bucket</span> <span class="o">=</span> <span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bucket</span><span class="p">.</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">bucket</span><span class="p">.</span><span class="n">median_seconds</span>
+<span class="go">(50.0, 3.0)
+</span></code></pre></div></div>
 
 <h3 id="bucketaccuracy">Bucket.accuracy</h3>
 
@@ -741,11 +741,11 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Bucket(datetime(2026, 1, 5), label="Jan 5", questions=4, first_right=3).accuracy
-75.0
-&gt;&gt;&gt; Bucket(datetime(2026, 1, 5), label="Jan 5").accuracy is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">accuracy</span>
+<span class="go">75.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">).</span><span class="n">accuracy</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="bucketmedian_seconds">Bucket.median_seconds</h3>
 
@@ -763,9 +763,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Bucket(datetime(2026, 1, 5), label="Jan 5", times=[1.0, 2.0, 9.0]).median_seconds
-2.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Bucket</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">"Jan 5"</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">]).</span><span class="n">median_seconds</span>
+<span class="go">2.0
+</span></code></pre></div></div>
 
 <h2 id="exercisestats">ExerciseStats</h2>
 
@@ -791,9 +791,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ExerciseStats("NoteNames", questions=40, accuracy=87.5, median_seconds=3.2).accuracy
-87.5
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseStats</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="mf">87.5</span><span class="p">,</span> <span class="n">median_seconds</span><span class="o">=</span><span class="mf">3.2</span><span class="p">).</span><span class="n">accuracy</span>
+<span class="go">87.5
+</span></code></pre></div></div>
 
 <h2 id="hardquestion">HardQuestion</h2>
 
@@ -825,9 +825,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; HardQuestion("NoteNames", text="Treble: G4", strain=4.5, seen=6, wrong=5).wrong
-5
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HardQuestion</span><span class="p">(</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Treble: G4"</span><span class="p">,</span> <span class="n">strain</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">wrong</span><span class="o">=</span><span class="mi">5</span><span class="p">).</span><span class="n">wrong</span>
+<span class="go">5
+</span></code></pre></div></div>
 
 <h2 id="stats">Stats</h2>
 
@@ -867,11 +867,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Stats().accuracy is None  # nothing answered yet
-True
-&gt;&gt;&gt; Stats(4, first_right=3, attempts=6).attempts_per_question
-1.5
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">().</span><span class="n">accuracy</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># nothing answered yet
+</span><span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">6</span><span class="p">).</span><span class="n">attempts_per_question</span>
+<span class="go">1.5
+</span></code></pre></div></div>
 
 <h3 id="statsaccuracy">Stats.accuracy</h3>
 
@@ -889,9 +889,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Stats(4, first_right=3).accuracy
-75.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">first_right</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">accuracy</span>
+<span class="go">75.0
+</span></code></pre></div></div>
 
 <h3 id="statsattempts_per_question">Stats.attempts_per_question</h3>
 
@@ -909,9 +909,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Stats(4, attempts=5).attempts_per_question
-1.25
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stats</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">).</span><span class="n">attempts_per_question</span>
+<span class="go">1.25
+</span></code></pre></div></div>
 
 <h2 id="period_end">period_end</h2>
 
@@ -939,11 +939,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; period_end(datetime(2026, 1, 5), granularity="week")
-datetime.datetime(2026, 1, 12, 0, 0)
-&gt;&gt;&gt; period_end(datetime(2026, 12, 1), granularity="month")
-datetime.datetime(2027, 1, 1, 0, 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"week"</span><span class="p">)</span>
+<span class="go">datetime.datetime(2026, 1, 12, 0, 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_end</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"month"</span><span class="p">)</span>
+<span class="go">datetime.datetime(2027, 1, 1, 0, 0)
+</span></code></pre></div></div>
 
 <h2 id="describe">describe</h2>
 
@@ -966,10 +966,10 @@ datetime.datetime(2027, 1, 1, 0, 0)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.base import Question
-&gt;&gt;&gt; describe(Question("What type of chord is this?", choices=["major", "minor"], answer="minor"))
-'What type of chord is this? → minor'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.base</span> <span class="kn">import</span> <span class="n">Question</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">describe</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">"What type of chord is this?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"minor"</span><span class="p">))</span>
+<span class="go">'What type of chord is this? → minor'
+</span></code></pre></div></div>
 
 <h2 id="daily_counts">daily_counts</h2>
 
@@ -1006,15 +1006,15 @@ counts questions (first attempts), not attempts, like everything else here.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database = Database()
-&gt;&gt;&gt; ada = database.add_profile("Ada")
-&gt;&gt;&gt; noon = datetime(2026, 11, 13, 12).timestamp()
-&gt;&gt;&gt; for i in range(3):
-...     database.add_attempt(ada.id, exercise="NoteNames", item_key=str(i), attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=noon + i)
-&gt;&gt;&gt; daily_counts(database, profile_ids=[ada.id], now=noon + 60)
-{datetime.date(2026, 11, 13): 3}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">noon</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span><span class="p">).</span><span class="n">timestamp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">daily_counts</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="n">noon</span> <span class="o">+</span> <span class="mi">60</span><span class="p">)</span>
+<span class="go">{datetime.date(2026, 11, 13): 3}
+</span></code></pre></div></div>
 
 <h2 id="collect">collect</h2>
 
@@ -1052,16 +1052,16 @@ counts questions (first attempts), not attempts, like everything else here.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database = Database()
-&gt;&gt;&gt; ada = database.add_profile("Ada")
-&gt;&gt;&gt; database.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                duration_ms=4000, answered_at=1000.0)
-&gt;&gt;&gt; stats = collect(database, profile_ids=[ada.id], now=1060.0)
-&gt;&gt;&gt; stats.questions, stats.median_seconds, stats.practice_seconds
-(1, 4.0, 4.0)
-&gt;&gt;&gt; collect(database, profile_ids=[999], now=1060.0).questions  # nobody has answered anything
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">questions</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">median_seconds</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">practice_seconds</span>
+<span class="go">(1, 4.0, 4.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">collect</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">profile_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">999</span><span class="p">],</span> <span class="n">now</span><span class="o">=</span><span class="mf">1060.0</span><span class="p">).</span><span class="n">questions</span>  <span class="c1"># nobody has answered anything
+</span><span class="go">0
+</span></code></pre></div></div>
 
 
           
@@ -1246,8 +1246,8 @@ counts questions (first attempts), not attempts, like everything else here.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

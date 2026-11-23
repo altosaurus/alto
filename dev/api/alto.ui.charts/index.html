@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,13 +681,13 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nice_ticks(13)
-[0, 5, 10, 15]
-&gt;&gt;&gt; chart = StackedBarChart("Questions answered")
-&gt;&gt;&gt; chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
-&gt;&gt;&gt; chart.right, chart.wrong
-([3, 1], [1, 0])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nice_ticks</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+<span class="go">[0, 5, 10, 15]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions answered"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">wrong</span>
+<span class="go">([3, 1], [1, 0])
+</span></code></pre></div></div>
 
 <h2 id="nice_ticks">nice_ticks</h2>
 
@@ -715,13 +715,13 @@ show, and explains the bar or square under the pointer in a tooltip.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nice_ticks(13)
-[0, 5, 10, 15]
-&gt;&gt;&gt; nice_ticks(8)[-1] &gt;= 8
-True
-&gt;&gt;&gt; nice_ticks(0)
-[0.0, 1.0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nice_ticks</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+<span class="go">[0, 5, 10, 15]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nice_ticks</span><span class="p">(</span><span class="mi">8</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">8</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nice_ticks</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[0.0, 1.0]
+</span></code></pre></div></div>
 
 <h2 id="stackedbarchart">StackedBarChart</h2>
 
@@ -746,11 +746,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = StackedBarChart("Questions answered per day")
-&gt;&gt;&gt; chart.set_data(["Mon", "Tue", "Wed"], right=[3, 0, 5], wrong=[1, 2, 0])
-&gt;&gt;&gt; chart.labels
-['Mon', 'Tue', 'Wed']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions answered per day"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">labels</span>
+<span class="go">['Mon', 'Tue', 'Wed']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -766,9 +766,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StackedBarChart("Questions").right
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">).</span><span class="n">right</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="stackedbarchartset_data">StackedBarChart.set_data</h3>
 
@@ -792,11 +792,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = StackedBarChart("Questions")
-&gt;&gt;&gt; chart.set_data(["a", "b"], right=[2, 0], wrong=[0, 4])
-&gt;&gt;&gt; chart.right, chart.wrong
-([2, 0], [0, 4])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">right</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">wrong</span>
+<span class="go">([2, 0], [0, 4])
+</span></code></pre></div></div>
 
 <h3 id="stackedbarchartpaintevent">StackedBarChart.paintEvent</h3>
 
@@ -813,12 +813,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = StackedBarChart("Questions")
-&gt;&gt;&gt; chart.resize(400, 300)
-&gt;&gt;&gt; chart.set_data(["a", "b"], right=[3, 1], wrong=[1, 0])
-&gt;&gt;&gt; chart.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="stackedbarchartmousemoveevent">StackedBarChart.mouseMoveEvent</h3>
 
@@ -835,15 +835,15 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; from PySide6.QtGui import QMouseEvent
-&gt;&gt;&gt; chart = StackedBarChart("Questions")
-&gt;&gt;&gt; chart.resize(400, 300)
-&gt;&gt;&gt; chart.set_data(["Mon", "Tue"], right=[3, 1], wrong=[1, 0])
-&gt;&gt;&gt; point = QPointF(chart._centers()[0], chart._plot().center().y())
-&gt;&gt;&gt; chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">StackedBarChart</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">],</span> <span class="n">right</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">wrong</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+</code></pre></div></div>
 
 <h2 id="linechart">LineChart</h2>
 
@@ -872,11 +872,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
-&gt;&gt;&gt; chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
-&gt;&gt;&gt; chart.values
-[40.0, None, 80.0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Right on the first try"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s">%"</span><span class="p">,</span> <span class="n">fixed_top</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"Mon"</span><span class="p">,</span> <span class="s">"Tue"</span><span class="p">,</span> <span class="s">"Wed"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">40.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">values</span>
+<span class="go">[40.0, None, 80.0]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -893,9 +893,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; LineChart("Speed", fmt=lambda v: f"{v:.1f} s").fixed_top is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">).</span><span class="n">fixed_top</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="linechartset_data">LineChart.set_data</h3>
 
@@ -917,11 +917,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
-&gt;&gt;&gt; chart.set_data(["a", "b"], values=[2.5, None])
-&gt;&gt;&gt; chart.labels
-['a', 'b']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">labels</span>
+<span class="go">['a', 'b']
+</span></code></pre></div></div>
 
 <h3 id="linechartpaintevent">LineChart.paintEvent</h3>
 
@@ -938,12 +938,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
-&gt;&gt;&gt; chart.resize(400, 300)
-&gt;&gt;&gt; chart.set_data(["a", "b", "c"], values=[2.0, None, 3.0])
-&gt;&gt;&gt; chart.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="linechartmousemoveevent">LineChart.mouseMoveEvent</h3>
 
@@ -960,15 +960,15 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; from PySide6.QtGui import QMouseEvent
-&gt;&gt;&gt; chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
-&gt;&gt;&gt; chart.resize(400, 300)
-&gt;&gt;&gt; chart.set_data(["a", "b"], values=[2.0, 3.0])
-&gt;&gt;&gt; point = QPointF(chart._centers()[0], chart._plot().center().y())
-&gt;&gt;&gt; chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="s">"Speed"</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">_centers</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chart</span><span class="p">.</span><span class="n">_plot</span><span class="p">().</span><span class="n">center</span><span class="p">().</span><span class="n">y</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+</code></pre></div></div>
 
 <h2 id="hbarchart">HBarChart</h2>
 
@@ -992,11 +992,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HBarChart("Right on the first try, by exercise")
-&gt;&gt;&gt; chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
-&gt;&gt;&gt; len(chart.rows)
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"Right on the first try, by exercise"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="s">"Intervals"</span><span class="p">,</span> <span class="mf">77.0</span><span class="p">,</span> <span class="s">"77%  ·  52 q"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Chords"</span><span class="p">,</span> <span class="mf">88.0</span><span class="p">,</span> <span class="s">"88%  ·  48 q"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">rows</span><span class="p">)</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1011,9 +1011,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; HBarChart("By exercise").rows
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">).</span><span class="n">rows</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="hbarchartset_data">HBarChart.set_data</h3>
 
@@ -1030,11 +1030,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HBarChart("By exercise")
-&gt;&gt;&gt; chart.set_data([(f"Exercise {i}", 50.0, "50%") for i in range(10)])
-&gt;&gt;&gt; chart.minimumHeight()
-306
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="sa">f</span><span class="s">"Exercise </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s">"50%"</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">minimumHeight</span><span class="p">()</span>
+<span class="go">306
+</span></code></pre></div></div>
 
 <h3 id="hbarchartpaintevent">HBarChart.paintEvent</h3>
 
@@ -1051,12 +1051,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HBarChart("By exercise")
-&gt;&gt;&gt; chart.resize(400, 300)
-&gt;&gt;&gt; chart.set_data([("Intervals", 77.0, "77%")])
-&gt;&gt;&gt; chart.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="s">"Intervals"</span><span class="p">,</span> <span class="mf">77.0</span><span class="p">,</span> <span class="s">"77%"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="hbarchartmousemoveevent">HBarChart.mouseMoveEvent</h3>
 
@@ -1073,15 +1073,15 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; chart = HBarChart("By exercise")
-&gt;&gt;&gt; chart.set_data([("A", 50.0, "50%")])
-&gt;&gt;&gt; point = QPointF(10, chart.TOP + chart.ROW / 2)
-&gt;&gt;&gt; chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; chart.hovered
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HBarChart</span><span class="p">(</span><span class="s">"By exercise"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">([(</span><span class="s">"A"</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s">"50%"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">TOP</span> <span class="o">+</span> <span class="n">chart</span><span class="p">.</span><span class="n">ROW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">hovered</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h2 id="heatmapchart">HeatmapChart</h2>
 
@@ -1107,11 +1107,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.set_data({date(2026, 11, 13): 12}, today=date(2026, 11, 13))
-&gt;&gt;&gt; chart.counts
-{datetime.date(2026, 11, 13): 12}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">12</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">counts</span>
+<span class="go">{datetime.date(2026, 11, 13): 12}
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1126,9 +1126,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; HeatmapChart("Reviews").weeks
-53
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">).</span><span class="n">weeks</span>
+<span class="go">53
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartset_data">HeatmapChart.set_data</h3>
 
@@ -1152,11 +1152,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.set_data({}, today=date(2026, 11, 13), weeks=26)
-&gt;&gt;&gt; chart.weeks
-26
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">weeks</span><span class="o">=</span><span class="mi">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">weeks</span>
+<span class="go">26
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartfirst_day">HeatmapChart.first_day</h3>
 
@@ -1173,11 +1173,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.set_data({}, today=date(2026, 11, 13))
-&gt;&gt;&gt; chart.first_day(), chart.first_day().weekday()
-(datetime.date(2025, 11, 10), 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">first_day</span><span class="p">().</span><span class="n">weekday</span><span class="p">()</span>
+<span class="go">(datetime.date(2025, 11, 10), 0)
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartlevel">HeatmapChart.level</h3>
 
@@ -1200,11 +1200,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.set_data({date(2026, 11, 13): 40, date(2026, 11, 12): 20, date(2026, 11, 11): 1}, today=date(2026, 11, 13))
-&gt;&gt;&gt; chart.level(0), chart.level(1), chart.level(40)
-(0, 1, 4)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">40</span><span class="p">,</span> <span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span> <span class="mi">20</span><span class="p">,</span> <span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span> <span class="mi">1</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">chart</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">(0, 1, 4)
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartday_at">HeatmapChart.day_at</h3>
 
@@ -1227,15 +1227,15 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.resize(760, 190)
-&gt;&gt;&gt; chart.set_data({}, today=date(2026, 11, 13))
-&gt;&gt;&gt; cell_, (x0_, y0_) = chart._cell(), chart._origin()
-&gt;&gt;&gt; chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 4.5 * cell_))  # the last column, Friday
-datetime.date(2026, 11, 13)
-&gt;&gt;&gt; chart.day_at(QPointF(x0_ + 52.5 * cell_, y0_ + 6.5 * cell_)) is None  # Sunday: not yet
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell_</span><span class="p">,</span> <span class="p">(</span><span class="n">x0_</span><span class="p">,</span> <span class="n">y0_</span><span class="p">)</span> <span class="o">=</span> <span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span> <span class="n">y0_</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">))</span>  <span class="c1"># the last column, Friday
+</span><span class="go">datetime.date(2026, 11, 13)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">day_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">x0_</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">,</span> <span class="n">y0_</span> <span class="o">+</span> <span class="mf">6.5</span> <span class="o">*</span> <span class="n">cell_</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># Sunday: not yet
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartpaintevent">HeatmapChart.paintEvent</h3>
 
@@ -1252,12 +1252,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.resize(760, 190)
-&gt;&gt;&gt; chart.set_data({date(2026, 11, 13): 5}, today=date(2026, 11, 13))
-&gt;&gt;&gt; chart.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">5</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="heatmapchartmousemoveevent">HeatmapChart.mouseMoveEvent</h3>
 
@@ -1274,16 +1274,16 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; from PySide6.QtGui import QMouseEvent
-&gt;&gt;&gt; chart = HeatmapChart("Reviews")
-&gt;&gt;&gt; chart.resize(760, 190)
-&gt;&gt;&gt; chart.set_data({date(2026, 11, 13): 3}, today=date(2026, 11, 13))
-&gt;&gt;&gt; cell, (x0, y0) = chart._cell(), chart._origin()
-&gt;&gt;&gt; point = QPointF(x0 + 52.5 * cell, y0 + 4.5 * cell)
-&gt;&gt;&gt; chart.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QMouseEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span> <span class="o">=</span> <span class="n">HeatmapChart</span><span class="p">(</span><span class="s">"Reviews"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">760</span><span class="p">,</span> <span class="mi">190</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">set_data</span><span class="p">({</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="mi">3</span><span class="p">},</span> <span class="n">today</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span> <span class="o">=</span> <span class="n">chart</span><span class="p">.</span><span class="n">_cell</span><span class="p">(),</span> <span class="n">chart</span><span class="p">.</span><span class="n">_origin</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="mf">52.5</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mf">4.5</span> <span class="o">*</span> <span class="n">cell</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chart</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+</code></pre></div></div>
 
 
           
@@ -1504,8 +1504,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

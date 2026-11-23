@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,11 +680,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; BY_KEY["leland"].label
-'Leland'
-&gt;&gt;&gt; clef_shape("treble")
-'treble'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"leland"</span><span class="p">].</span><span class="n">label</span>
+<span class="go">'Leland'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="go">'treble'
+</span></code></pre></div></div>
 
 <h2 id="notationstyle">NotationStyle</h2>
 
@@ -712,10 +712,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; style = BY_KEY["noto"]
-&gt;&gt;&gt; style.label, style.font
-('Noto Music', None)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span> <span class="o">=</span> <span class="n">BY_KEY</span><span class="p">[</span><span class="s">"noto"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span><span class="p">.</span><span class="n">label</span><span class="p">,</span> <span class="n">style</span><span class="p">.</span><span class="n">font</span>
+<span class="go">('Noto Music', None)
+</span></code></pre></div></div>
 
 <h2 id="baritone_clef">baritone_clef</h2>
 
@@ -732,9 +732,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; baritone_clef() in BARITONE_CLEFS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">baritone_clef</span><span class="p">()</span> <span class="ow">in</span> <span class="n">BARITONE_CLEFS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="clef_shape">clef_shape</h2>
 
@@ -757,15 +757,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; clef_shape("alto")
-'alto'
-&gt;&gt;&gt; set_baritone_clef("c")
-&gt;&gt;&gt; clef_shape("baritone")
-'baritone_c'
-&gt;&gt;&gt; set_baritone_clef("f")  # back to the default
-&gt;&gt;&gt; clef_shape("baritone")
-'baritone_f'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"alto"</span><span class="p">)</span>
+<span class="go">'alto'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"baritone"</span><span class="p">)</span>
+<span class="go">'baritone_c'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"f"</span><span class="p">)</span>  <span class="c1"># back to the default
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clef_shape</span><span class="p">(</span><span class="s">"baritone"</span><span class="p">)</span>
+<span class="go">'baritone_f'
+</span></code></pre></div></div>
 
 <h2 id="set_baritone_clef">set_baritone_clef</h2>
 
@@ -782,13 +782,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; set_baritone_clef("c")
-&gt;&gt;&gt; baritone_clef()
-'c'
-&gt;&gt;&gt; set_baritone_clef("sideways")  # not a choice: the default
-&gt;&gt;&gt; baritone_clef()
-'f'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">baritone_clef</span><span class="p">()</span>
+<span class="go">'c'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_baritone_clef</span><span class="p">(</span><span class="s">"sideways"</span><span class="p">)</span>  <span class="c1"># not a choice: the default
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">baritone_clef</span><span class="p">()</span>
+<span class="go">'f'
+</span></code></pre></div></div>
 
 <h2 id="current">current</h2>
 
@@ -805,9 +805,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; current().key in BY_KEY
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span> <span class="ow">in</span> <span class="n">BY_KEY</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="load_style">load_style</h2>
 
@@ -818,12 +818,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("ui/notation", "bravura")
-&gt;&gt;&gt; load_style()
-&gt;&gt;&gt; current().key
-'bravura'
-&gt;&gt;&gt; set_style(DEFAULT)  # back to the default
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"ui/notation"</span><span class="p">,</span> <span class="s">"bravura"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_style</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span>
+<span class="go">'bravura'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>  <span class="c1"># back to the default
+</span></code></pre></div></div>
 
 <h2 id="set_style">set_style</h2>
 
@@ -840,11 +840,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; set_style("leland")
-&gt;&gt;&gt; current().label
-'Leland'
-&gt;&gt;&gt; set_style(DEFAULT)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="s">"leland"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">label</span>
+<span class="go">'Leland'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="on_redraw">on_redraw</h2>
 
@@ -864,15 +864,15 @@ this module.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; calls = []
-&gt;&gt;&gt; def repaint() -&gt; None:
-...     calls.append(1)
-&gt;&gt;&gt; on_redraw(repaint)
-&gt;&gt;&gt; _redraw()
-&gt;&gt;&gt; calls
-[1]
-&gt;&gt;&gt; _redraw_hooks.remove(repaint)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">def</span> <span class="nf">repaint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">on_redraw</span><span class="p">(</span><span class="n">repaint</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_redraw</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>
+<span class="go">[1]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_redraw_hooks</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">repaint</span><span class="p">)</span>
+</code></pre></div></div>
 
 
           
@@ -1141,8 +1141,8 @@ this module.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

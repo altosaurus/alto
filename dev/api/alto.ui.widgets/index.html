@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,9 +678,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SidebarToggle().toolTip()
-'Hide exercise list'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SidebarToggle</span><span class="p">().</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Hide exercise list'
+</span></code></pre></div></div>
 
 <h2 id="practicecounts">PracticeCounts</h2>
 
@@ -691,11 +691,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; label = PracticeCounts()
-&gt;&gt;&gt; label.set_counts((2, 3, 1), studying=True, current="incorrect")
-&gt;&gt;&gt; "1 incorrect card" in label.toolTip()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">PracticeCounts</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">set_counts</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">studying</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="s">"incorrect"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"1 incorrect card"</span> <span class="ow">in</span> <span class="n">label</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="practicecountsset_counts">PracticeCounts.set_counts</h3>
 
@@ -721,11 +721,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; label = PracticeCounts()
-&gt;&gt;&gt; label.set_counts((1, 2, 0))
-&gt;&gt;&gt; label.toolTip().startswith("Blue — 2 new cards available")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">PracticeCounts</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">set_counts</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">toolTip</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"Blue — 2 new cards available"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="sidebartoggle">SidebarToggle</h2>
 
@@ -744,13 +744,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; button = SidebarToggle()
-&gt;&gt;&gt; button.toolTip()
-'Hide exercise list'
-&gt;&gt;&gt; button.set_open(False)
-&gt;&gt;&gt; button.toolTip()
-'Show exercise list'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">SidebarToggle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Hide exercise list'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">set_open</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Show exercise list'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -765,11 +765,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SidebarToggle().autoRaise()
-True
-&gt;&gt;&gt; SidebarToggle(noun="lesson list").toolTip()
-'Hide lesson list'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SidebarToggle</span><span class="p">().</span><span class="n">autoRaise</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SidebarToggle</span><span class="p">(</span><span class="n">noun</span><span class="o">=</span><span class="s">"lesson list"</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Hide lesson list'
+</span></code></pre></div></div>
 
 <h3 id="sidebartoggleset_open">SidebarToggle.set_open</h3>
 
@@ -786,11 +786,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; button = SidebarToggle()
-&gt;&gt;&gt; button.set_open(False)
-&gt;&gt;&gt; button.toolTip()
-'Show exercise list'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">SidebarToggle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">set_open</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Show exercise list'
+</span></code></pre></div></div>
 
 <h2 id="helpbutton">HelpButton</h2>
 
@@ -809,9 +809,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; HelpButton(lambda: "&lt;b&gt;Press the right note.&lt;/b&gt;").toolTip()
-'How this exercise works'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Press the right note.&lt;/b&gt;"</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'How this exercise works'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -826,11 +826,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; calls = []
-&gt;&gt;&gt; button = HelpButton(lambda: calls.append(1) or "help")
-&gt;&gt;&gt; calls  # the text is not asked for until the button is clicked
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="s">"help"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>  <span class="c1"># the text is not asked for until the button is clicked
+</span><span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="helpbuttonshow_help">HelpButton.show_help</h3>
 
@@ -841,8 +841,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; HelpButton(lambda: "&lt;b&gt;Help&lt;/b&gt;").show_help()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">HelpButton</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">"&lt;b&gt;Help&lt;/b&gt;"</span><span class="p">).</span><span class="n">show_help</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h2 id="segmentedcontrol">SegmentedControl</h2>
 
@@ -867,13 +867,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; control = SegmentedControl(["Exercises", "Lessons"])
-&gt;&gt;&gt; control.current()
-0
-&gt;&gt;&gt; control.set_current(1)
-&gt;&gt;&gt; control.current(), control.buttons[1].isChecked()
-(1, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">()</span>
+<span class="go">0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_current</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">(),</span> <span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="go">(1, True)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -889,11 +889,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(SegmentedControl(["A", "B", "C"]).buttons)
-3
-&gt;&gt;&gt; SegmentedControl(["A"], icons=[HELP]).buttons[0].icon().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">]).</span><span class="n">buttons</span><span class="p">)</span>
+<span class="go">3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">],</span> <span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">]).</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">icon</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="segmentedcontrolset_compact">SegmentedControl.set_compact</h3>
 
@@ -912,14 +912,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; control = SegmentedControl(["Exercises", "Lessons"], icons=[HELP, HELP])
-&gt;&gt;&gt; control.set_compact(True)
-&gt;&gt;&gt; control.buttons[0].text(), control.buttons[0].toolTip()
-('', 'Exercises')
-&gt;&gt;&gt; control.set_compact(False)
-&gt;&gt;&gt; control.buttons[0].text()
-'Exercises'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"Exercises"</span><span class="p">,</span> <span class="s">"Lessons"</span><span class="p">],</span> <span class="n">icons</span><span class="o">=</span><span class="p">[</span><span class="n">HELP</span><span class="p">,</span> <span class="n">HELP</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_compact</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">(),</span> <span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">('', 'Exercises')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_compact</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Exercises'
+</span></code></pre></div></div>
 
 <h3 id="segmentedcontrolcurrent">SegmentedControl.current</h3>
 
@@ -936,9 +936,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SegmentedControl(["A", "B"]).current()
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">]).</span><span class="n">current</span><span class="p">()</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="segmentedcontrolset_current">SegmentedControl.set_current</h3>
 
@@ -955,11 +955,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; control = SegmentedControl(["A", "B"])
-&gt;&gt;&gt; control.set_current(1)
-&gt;&gt;&gt; control.current()
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span> <span class="o">=</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">set_current</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">current</span><span class="p">()</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="segmentedcontrolrestyle">SegmentedControl.restyle</h3>
 
@@ -973,9 +973,9 @@ the settings, is restyled by calling this.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "segments" in SegmentedControl(["A", "B"]).styleSheet()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"segments"</span> <span class="ow">in</span> <span class="n">SegmentedControl</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">]).</span><span class="n">styleSheet</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1300,8 +1300,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,16 +678,16 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import time
-&gt;&gt;&gt; heard = []
-&gt;&gt;&gt; owner = QObject()
-&gt;&gt;&gt; _ = run_in_background(lambda: 6 * 7, owner=owner, done=heard.append, failed=heard.append)
-&gt;&gt;&gt; deadline = time.monotonic() + 5
-&gt;&gt;&gt; while not heard and time.monotonic() &lt; deadline:
-...     app.processEvents()
-&gt;&gt;&gt; heard
-[42]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">heard</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">owner</span> <span class="o">=</span> <span class="n">QObject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">run_in_background</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="n">heard</span><span class="p">.</span><span class="n">append</span><span class="p">,</span> <span class="n">failed</span><span class="o">=</span><span class="n">heard</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">while</span> <span class="ow">not</span> <span class="n">heard</span> <span class="ow">and</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">deadline</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">app</span><span class="p">.</span><span class="n">processEvents</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">heard</span>
+<span class="go">[42]
+</span></code></pre></div></div>
 
 <h2 id="run_in_background">run_in_background</h2>
 
@@ -722,18 +722,18 @@ does not keep Alto from quitting.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import time
-&gt;&gt;&gt; heard = []
-&gt;&gt;&gt; owner = QObject()
-&gt;&gt;&gt; def broken():
-...     raise OSError("offline")
-&gt;&gt;&gt; _ = run_in_background(broken, owner=owner, done=heard.append, failed=lambda error: heard.append(str(error)))
-&gt;&gt;&gt; deadline = time.monotonic() + 5
-&gt;&gt;&gt; while not heard and time.monotonic() &lt; deadline:
-...     app.processEvents()
-&gt;&gt;&gt; heard
-['offline']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">heard</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">owner</span> <span class="o">=</span> <span class="n">QObject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">def</span> <span class="nf">broken</span><span class="p">():</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">raise</span> <span class="nb">OSError</span><span class="p">(</span><span class="s">"offline"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">run_in_background</span><span class="p">(</span><span class="n">broken</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="n">heard</span><span class="p">.</span><span class="n">append</span><span class="p">,</span> <span class="n">failed</span><span class="o">=</span><span class="k">lambda</span> <span class="n">error</span><span class="p">:</span> <span class="n">heard</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">while</span> <span class="ow">not</span> <span class="n">heard</span> <span class="ow">and</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">deadline</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">app</span><span class="p">.</span><span class="n">processEvents</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">heard</span>
+<span class="go">['offline']
+</span></code></pre></div></div>
 
 
           
@@ -950,8 +950,8 @@ does not keep Alto from quitting.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

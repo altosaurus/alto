@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,12 +681,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; view.question.answer in [button.text() for button in view.buttons]
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="p">[</span><span class="n">button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span><span class="p">]</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="choice_keys">choice_keys</h2>
 
@@ -715,13 +715,13 @@ Ctrl for a flat, and Alt added for double alterations.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; choice_keys(["major", "minor", "diminished"])
-['1', '2', '3']
-&gt;&gt;&gt; choice_keys(list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"])
-['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
-&gt;&gt;&gt; choice_keys([str(n) for n in range(12)])[8:]
-['9', '0', '', '']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">([</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"minor"</span><span class="p">,</span> <span class="s">"diminished"</span><span class="p">])</span>
+<span class="go">['1', '2', '3']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s">"CDEFGAB"</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s">"C♯"</span><span class="p">,</span> <span class="s">"B♭"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">"F♯"</span><span class="p">])</span>
+<span class="go">['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Shift+C', 'Ctrl+B', 'Shift+F']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choice_keys</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)])[</span><span class="mi">8</span><span class="p">:]</span>
+<span class="go">['9', '0', '', '']
+</span></code></pre></div></div>
 
 <h2 id="second_row_keys">second_row_keys</h2>
 
@@ -753,11 +753,11 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; second_row_keys(["1", "2", "3"], labels=["root position", "1st inversion"])
-['A', 'S']
-&gt;&gt;&gt; second_row_keys(["C", "Shift+C"], labels=["3", "4", "5"])
-['3', '4', '5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">"root position"</span><span class="p">,</span> <span class="s">"1st inversion"</span><span class="p">])</span>
+<span class="go">['A', 'S']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second_row_keys</span><span class="p">([</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"Shift+C"</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">"3"</span><span class="p">,</span> <span class="s">"4"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">])</span>
+<span class="go">['3', '4', '5']
+</span></code></pre></div></div>
 
 <h2 id="note_name">note_name</h2>
 
@@ -787,9 +787,9 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; note_name(Note.parse("F#4"))
-'F♯4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_name</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">))</span>
+<span class="go">'F♯4'
+</span></code></pre></div></div>
 
 <h2 id="note_words">note_words</h2>
 
@@ -819,9 +819,9 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; note_words(Note.parse("F#4")), note_words(Note.parse("Bb3")), note_words(Note.parse("C4"))
-('F sharp 4', 'B flat 3', 'C 4')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">)),</span> <span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Bb3"</span><span class="p">)),</span> <span class="n">note_words</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="go">('F sharp 4', 'B flat 3', 'C 4')
+</span></code></pre></div></div>
 
 <h2 id="exerciseview">ExerciseView</h2>
 
@@ -869,11 +869,11 @@ digit takes that digit.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; view.score.text()
-'0/0 (–)   streak 0'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">score</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'0/0 (–)   streak 0'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -890,11 +890,11 @@ digit takes that digit.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeySignatures
-&gt;&gt;&gt; view = ExerciseView(KeySignatures(), rng=random.Random(2))
-&gt;&gt;&gt; view.settings_panel is not None  # the exercise has settings behind the gear button
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeySignatures</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">KeySignatures</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">settings_panel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>  <span class="c1"># the exercise has settings behind the gear button
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewhideevent">ExerciseView.hideEvent</h3>
 
@@ -911,13 +911,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames())
-&gt;&gt;&gt; view.show()
-&gt;&gt;&gt; view.hide()
-&gt;&gt;&gt; view._advance.isActive()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">hide</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">_advance</span><span class="p">.</span><span class="n">isActive</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewshowevent">ExerciseView.showEvent</h3>
 
@@ -934,14 +934,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames())
-&gt;&gt;&gt; view.show()
-&gt;&gt;&gt; view.hide()
-&gt;&gt;&gt; view.show()
-&gt;&gt;&gt; view._hidden_at is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">hide</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">_hidden_at</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewsettings_state">ExerciseView.settings_state</h3>
 
@@ -958,10 +958,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; ExerciseView(NoteNames(), rng=random.Random(1)).settings_state()
-(False, 0, 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">settings_state</span><span class="p">()</span>
+<span class="go">(False, 0, 0)
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewrestore_settings_state">ExerciseView.restore_settings_state</h3>
 
@@ -978,12 +978,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; view.restore_settings_state((True, 0, 0))
-&gt;&gt;&gt; view.settings_state()
-(True, 0, 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">restore_settings_state</span><span class="p">((</span><span class="bp">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">settings_state</span><span class="p">()</span>
+<span class="go">(True, 0, 0)
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewscheduling_changed">ExerciseView.scheduling_changed</h3>
 
@@ -994,8 +994,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Lowering the daily allowance on the home page also applies to a previously opened exercise.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Lowering the daily allowance on the home page also applies to a previously opened exercise.
+</code></pre></div></div>
 
 <h3 id="exerciseviewnext_question">ExerciseView.next_question</h3>
 
@@ -1006,13 +1006,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; view = ExerciseView(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; view.next_question()
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; view.answered, len(view.buttons) == len(view.question.choices)
-(False, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">next_question</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">answered</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">question</span><span class="p">.</span><span class="n">choices</span><span class="p">)</span>
+<span class="go">(False, True)
+</span></code></pre></div></div>
 
 <h3 id="exercisevieweventfilter">ExerciseView.eventFilter</h3>
 
@@ -1039,19 +1039,19 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint, QPointF
-&gt;&gt;&gt; from PySide6.QtGui import QWheelEvent
-&gt;&gt;&gt; from alto.exercises.library import KeySignatureConstruction
-&gt;&gt;&gt; view = ExerciseView(KeySignatureConstruction(), rng=random.Random(1))
-&gt;&gt;&gt; view.show()
-&gt;&gt;&gt; here = QPointF(5, 5)
-&gt;&gt;&gt; turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
-&gt;&gt;&gt; view.eventFilter(view.answer_button, turn)
-True
-&gt;&gt;&gt; view.fork.value
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span><span class="p">,</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QWheelEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeySignatureConstruction</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">KeySignatureConstruction</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">answer_button</span><span class="p">,</span> <span class="n">turn</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="exerciseviewsubmit">ExerciseView.submit</h3>
 
@@ -1076,24 +1076,24 @@ In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS all
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; sounds.enabled = False
-&gt;&gt;&gt; view = ExerciseView(NoteNames(), rng=random.Random(1))
-&gt;&gt;&gt; question = view.question
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; wrong = next(b for b in view.buttons if b.text() != question.answer)
-&gt;&gt;&gt; view.submit(wrong.text(), button=wrong)
-&gt;&gt;&gt; view.missed, wrong.isEnabled()
-(True, False)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; right = next(b for b in view.buttons if b.text() == question.answer)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; view.submit(question.answer, button=right)
-&gt;&gt;&gt; view.answered
-True
-&gt;&gt;&gt; view._advance.stop()
-&gt;&gt;&gt; sounds.enabled = True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">ExerciseView</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">question</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">question</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wrong</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">!=</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wrong</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">button</span><span class="o">=</span><span class="n">wrong</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">missed</span><span class="p">,</span> <span class="n">wrong</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
+<span class="go">(True, False)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">right</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">view</span><span class="p">.</span><span class="n">buttons</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">question</span><span class="p">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">answered</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">_advance</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">True</span>
+</code></pre></div></div>
 
 
           
@@ -1332,8 +1332,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

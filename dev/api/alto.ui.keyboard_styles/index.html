@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,11 +680,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; BY_KEY["classic"].label
-'Classic'
-&gt;&gt;&gt; style_for("no such style").key == DEFAULT
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">].</span><span class="n">label</span>
+<span class="go">'Classic'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style_for</span><span class="p">(</span><span class="s">"no such style"</span><span class="p">).</span><span class="n">key</span> <span class="o">==</span> <span class="n">DEFAULT</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="keyboardstyle">KeyboardStyle</h2>
 
@@ -744,10 +744,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; style = BY_KEY["modern"]
-&gt;&gt;&gt; style.label, style.case
-('Modern piano', '#0d0d0f')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span> <span class="o">=</span> <span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span><span class="p">.</span><span class="n">label</span><span class="p">,</span> <span class="n">style</span><span class="p">.</span><span class="n">case</span>
+<span class="go">('Modern piano', '#0d0d0f')
+</span></code></pre></div></div>
 
 <h2 id="custom_colors">custom_colors</h2>
 
@@ -764,9 +764,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sorted(custom_colors())
-['caps', 'case', 'felt', 'naturals', 'sharps']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">custom_colors</span><span class="p">())</span>
+<span class="go">['caps', 'case', 'felt', 'naturals', 'sharps']
+</span></code></pre></div></div>
 
 <h2 id="custom_style">custom_style</h2>
 
@@ -785,9 +785,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; custom_style().key, custom_style().label
-('custom', 'Custom')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">custom_style</span><span class="p">().</span><span class="n">key</span><span class="p">,</span> <span class="n">custom_style</span><span class="p">().</span><span class="n">label</span>
+<span class="go">('custom', 'Custom')
+</span></code></pre></div></div>
 
 <h2 id="style_for">style_for</h2>
 
@@ -810,11 +810,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; style_for("modern").label
-'Modern piano'
-&gt;&gt;&gt; style_for("nonsense").label
-'Classic'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style_for</span><span class="p">(</span><span class="s">"modern"</span><span class="p">).</span><span class="n">label</span>
+<span class="go">'Modern piano'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style_for</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">label</span>
+<span class="go">'Classic'
+</span></code></pre></div></div>
 
 <h2 id="current">current</h2>
 
@@ -831,9 +831,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; current().key in BY_KEY or current().key == CUSTOM
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span> <span class="ow">in</span> <span class="n">BY_KEY</span> <span class="ow">or</span> <span class="n">current</span><span class="p">().</span><span class="n">key</span> <span class="o">==</span> <span class="n">CUSTOM</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="load_style">load_style</h2>
 
@@ -844,12 +844,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("ui/keyboard", "modern")
-&gt;&gt;&gt; load_style()
-&gt;&gt;&gt; current().key
-'modern'
-&gt;&gt;&gt; set_style(DEFAULT)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"ui/keyboard"</span><span class="p">,</span> <span class="s">"modern"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_style</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span>
+<span class="go">'modern'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="set_style">set_style</h2>
 
@@ -866,11 +866,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; set_style("modern")
-&gt;&gt;&gt; current().label
-'Modern piano'
-&gt;&gt;&gt; set_style(DEFAULT)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="s">"modern"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">label</span>
+<span class="go">'Modern piano'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="set_custom_color">set_custom_color</h2>
 
@@ -892,12 +892,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; set_custom_color("naturals", color="#ffffff")
-&gt;&gt;&gt; current().key, custom_colors()["naturals"]
-('custom', '#ffffff')
-&gt;&gt;&gt; set_custom_color("naturals", color=DEFAULT_CUSTOM["naturals"])
-&gt;&gt;&gt; set_style(DEFAULT)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span><span class="s">"naturals"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"#ffffff"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">().</span><span class="n">key</span><span class="p">,</span> <span class="n">custom_colors</span><span class="p">()[</span><span class="s">"naturals"</span><span class="p">]</span>
+<span class="go">('custom', '#ffffff')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_custom_color</span><span class="p">(</span><span class="s">"naturals"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">DEFAULT_CUSTOM</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">set_style</span><span class="p">(</span><span class="n">DEFAULT</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="on_redraw">on_redraw</h2>
 
@@ -917,15 +917,15 @@ this module.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; calls = []
-&gt;&gt;&gt; def repaint() -&gt; None:
-...     calls.append(1)
-&gt;&gt;&gt; on_redraw(repaint)
-&gt;&gt;&gt; _redraw()
-&gt;&gt;&gt; calls
-[1]
-&gt;&gt;&gt; _redraw_hooks.remove(repaint)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">def</span> <span class="nf">repaint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">on_redraw</span><span class="p">(</span><span class="n">repaint</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_redraw</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>
+<span class="go">[1]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_redraw_hooks</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">repaint</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="reversed_key">reversed_key</h2>
 
@@ -953,12 +953,12 @@ this module.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from dataclasses import replace
-&gt;&gt;&gt; reversed_key(BY_KEY["classic"], midi=40)
-False
-&gt;&gt;&gt; reversed_key(replace(BY_KEY["classic"], reverse_below=50), midi=40)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">replace</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">reversed_key</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">reversed_key</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">reverse_below</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span> <span class="n">midi</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="key_brush">key_brush</h2>
 
@@ -992,11 +992,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_brush(BY_KEY["classic"], midi=60, black=False, y=0, height=100).color().name()
-'#fbfbfc'
-&gt;&gt;&gt; key_brush(BY_KEY["modern"], midi=60, black=False, y=0, height=100).gradient() is not None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">).</span><span class="n">color</span><span class="p">().</span><span class="n">name</span><span class="p">()</span>
+<span class="go">'#fbfbfc'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_brush</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">).</span><span class="n">gradient</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="edge_color">edge_color</h2>
 
@@ -1026,11 +1026,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; edge_color(BY_KEY["classic"], midi=60, black=False).name()
-'#9a9a9f'
-&gt;&gt;&gt; edge_color(BY_KEY["classic"], midi=61, black=True).name()
-'#111114'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<span class="go">'#9a9a9f'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">edge_color</span><span class="p">(</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">],</span> <span class="n">midi</span><span class="o">=</span><span class="mi">61</span><span class="p">,</span> <span class="n">black</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">name</span><span class="p">()</span>
+<span class="go">'#111114'
+</span></code></pre></div></div>
 
 
           
@@ -1287,8 +1287,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

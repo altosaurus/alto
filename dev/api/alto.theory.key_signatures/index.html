@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -712,11 +712,11 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_signature_positions("treble", sign=1)
-['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
-&gt;&gt;&gt; key_signature_positions("bass", sign=-1)
-['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature_positions</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature_positions</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">sign</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
+</span></code></pre></div></div>
 
 <h2 id="written_signature">written_signature</h2>
 
@@ -744,9 +744,9 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [str(note) for note in written_signature("bass", key=-2)]
-['B♭2', 'E♭3']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">written_signature</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)]</span>
+<span class="go">['B♭2', 'E♭3']
+</span></code></pre></div></div>
 
 
           
@@ -951,8 +951,8 @@ the treble, bass, alto and tenor clefs, and works out the rest.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

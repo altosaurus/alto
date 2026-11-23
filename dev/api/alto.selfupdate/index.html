@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -684,9 +684,9 @@ checksums verifies against a key that came with Alto, the list names the file, a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; self_update_target(executable=Path("/nowhere/alto"), system="linux") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="updateerror">UpdateError</h2>
 
@@ -723,9 +723,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Target("windows", folder=Path("C:/Alto"), prefix=None).system
-'windows'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Target</span><span class="p">(</span><span class="s">"windows"</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto"</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">).</span><span class="n">system</span>
+<span class="go">'windows'
+</span></code></pre></div></div>
 
 <h2 id="prepared">Prepared</h2>
 
@@ -748,9 +748,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Prepared(Path("/tmp/x"), installer=None, root=Path("/tmp/x/unpacked/alto-0.1.0")).installer is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Prepared</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x"</span><span class="p">),</span> <span class="n">installer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/tmp/x/unpacked/alto-0.1.0"</span><span class="p">)).</span><span class="n">installer</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="self_update_target">self_update_target</h2>
 
@@ -781,11 +781,11 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; self_update_target(executable=Path("/usr/bin/python3"), system="linux") is None
-True
-&gt;&gt;&gt; self_update_target(executable=Path("/nowhere/alto.exe"), system="windows") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/usr/bin/python3"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"linux"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_update_target</span><span class="p">(</span><span class="n">executable</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere/alto.exe"</span><span class="p">),</span> <span class="n">system</span><span class="o">=</span><span class="s">"windows"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="download">download</h2>
 
@@ -877,8 +877,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ignore_progress(1, 2)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ignore_progress</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="prepare_update">prepare_update</h2>
 
@@ -950,13 +950,13 @@ what it passed on. The desktop’s start-up token is for this launch only, so it
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": "/usr/lib", "_PYI_ARCHIVE_FILE": "x"})
-{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
-&gt;&gt;&gt; clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": ""})
-{'PYINSTALLER_RESET_ENVIRONMENT': '1'}
-&gt;&gt;&gt; clean_environment({"HOME": "/home/me"})
-{'HOME': '/home/me', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span> <span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">"/usr/lib"</span><span class="p">,</span> <span class="s">"_PYI_ARCHIVE_FILE"</span><span class="p">:</span> <span class="s">"x"</span><span class="p">})</span>
+<span class="go">{'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"LD_LIBRARY_PATH"</span><span class="p">:</span> <span class="s">"/app/lib"</span><span class="p">,</span> <span class="s">"LD_LIBRARY_PATH_ORIG"</span><span class="p">:</span> <span class="s">""</span><span class="p">})</span>
+<span class="go">{'PYINSTALLER_RESET_ENVIRONMENT': '1'}
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_environment</span><span class="p">({</span><span class="s">"HOME"</span><span class="p">:</span> <span class="s">"/home/me"</span><span class="p">})</span>
+<span class="go">{'HOME': '/home/me', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
+</span></code></pre></div></div>
 
 <h2 id="log_path">log_path</h2>
 
@@ -973,9 +973,9 @@ what it passed on. The desktop’s start-up token is for this launch only, so it
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; log_path().name
-'update.log'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">log_path</span><span class="p">().</span><span class="n">name</span>
+<span class="go">'update.log'
+</span></code></pre></div></div>
 
 <h2 id="windows_handoff_command">windows_handoff_command</h2>
 
@@ -1008,13 +1008,13 @@ up. So Alto starts this command and quits, and the command waits for Alto’s pr
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; command = windows_handoff_command(Path("C:/Temp/setup.exe"), pid=42, alto=Path("C:/Alto/alto.exe"))
-&gt;&gt;&gt; command[0], command[1:-1] == list(POWERSHELL_ARGUMENTS)
-('powershell.exe', True)
-&gt;&gt;&gt; text = base64.b64decode(command[-1]).decode("utf-16-le")
-&gt;&gt;&gt; "Wait-Process -Id 42" in text and "/RELAUNCH=1" in text
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">command</span> <span class="o">=</span> <span class="n">windows_handoff_command</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Temp/setup.exe"</span><span class="p">),</span> <span class="n">pid</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">alto</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"C:/Alto/alto.exe"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">POWERSHELL_ARGUMENTS</span><span class="p">)</span>
+<span class="go">('powershell.exe', True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-16-le"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Wait-Process -Id 42"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="s">"/RELAUNCH=1"</span> <span class="ow">in</span> <span class="n">text</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="start_handoff">start_handoff</h2>
 
@@ -1061,11 +1061,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; folder = new_work_folder()
-&gt;&gt;&gt; folder.is_dir() and folder.name.startswith(LEFTOVER_PREFIX)
-True
-&gt;&gt;&gt; folder.rmdir()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">new_work_folder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span><span class="p">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">folder</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">LEFTOVER_PREFIX</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span><span class="p">.</span><span class="n">rmdir</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="remove_leftovers">remove_leftovers</h2>
 
@@ -1095,9 +1095,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; remove_leftovers(root=Path("/no/such/folder"))
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remove_leftovers</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/no/such/folder"</span><span class="p">))</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 
           
@@ -1254,8 +1254,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

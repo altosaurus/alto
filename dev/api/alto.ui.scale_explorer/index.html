@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,10 +678,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; explorer = ScaleExplorer()
-&gt;&gt;&gt; len(explorer.notes)
-8
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span> <span class="o">=</span> <span class="n">ScaleExplorer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">explorer</span><span class="p">.</span><span class="n">notes</span><span class="p">)</span>
+<span class="go">8
+</span></code></pre></div></div>
 
 <h2 id="scaleexplorer">ScaleExplorer</h2>
 
@@ -700,9 +700,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleExplorer().mode.currentText()
-'Major (Ionian)'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleExplorer</span><span class="p">().</span><span class="n">mode</span><span class="p">.</span><span class="n">currentText</span><span class="p">()</span>
+<span class="go">'Major (Ionian)'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -719,9 +719,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleExplorer(scale="Dorian", tonic="D4").notes[0].name
-'D'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleExplorer</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s">"Dorian"</span><span class="p">,</span> <span class="n">tonic</span><span class="o">=</span><span class="s">"D4"</span><span class="p">).</span><span class="n">notes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
+<span class="go">'D'
+</span></code></pre></div></div>
 
 <h3 id="scaleexplorerrefresh">ScaleExplorer.refresh</h3>
 
@@ -732,11 +732,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; explorer = ScaleExplorer()
-&gt;&gt;&gt; explorer.mode.setCurrentText("Harmonic minor")
-&gt;&gt;&gt; explorer.steps[5].text()
-'3H'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span> <span class="o">=</span> <span class="n">ScaleExplorer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">mode</span><span class="p">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="s">"Harmonic minor"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">5</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'3H'
+</span></code></pre></div></div>
 
 <h3 id="scaleexplorerselect_gap">ScaleExplorer.select_gap</h3>
 
@@ -753,9 +753,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; explorer = ScaleExplorer()
-&gt;&gt;&gt; explorer.select_gap(2)  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span> <span class="o">=</span> <span class="n">ScaleExplorer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">explorer</span><span class="p">.</span><span class="n">select_gap</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="scaleexplorerhear">ScaleExplorer.hear</h3>
 
@@ -775,8 +775,8 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleExplorer().hear()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleExplorer</span><span class="p">().</span><span class="n">hear</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 
           
@@ -1067,8 +1067,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

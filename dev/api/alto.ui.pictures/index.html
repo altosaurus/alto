@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,11 +681,11 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CLEF_NAMES["treble"], VALUE_NAMES["sixteenth"]
-('Treble', '16th')
-&gt;&gt;&gt; ClefPictures(["treble", "bass"]).toolTip()
-'Treble, Bass'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CLEF_NAMES</span><span class="p">[</span><span class="s">"treble"</span><span class="p">],</span> <span class="n">VALUE_NAMES</span><span class="p">[</span><span class="s">"sixteenth"</span><span class="p">]</span>
+<span class="go">('Treble', '16th')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">]).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Treble, Bass'
+</span></code></pre></div></div>
 
 <h2 id="symbol_icon">symbol_icon</h2>
 
@@ -717,9 +717,9 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; symbol_icon("F", color=QColor("black")).isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">symbol_icon</span><span class="p">(</span><span class="s">"F"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">)).</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="clefpictures">ClefPictures</h2>
 
@@ -747,9 +747,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["alto", "tenor"]).toolTip()
-'Alto, Tenor'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"alto"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">]).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Alto, Tenor'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -765,9 +765,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["treble"], scale=2.0).width()
-60
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
+<span class="go">60
+</span></code></pre></div></div>
 
 <h3 id="clefpicturesset_clefs">ClefPictures.set_clefs</h3>
 
@@ -784,13 +784,13 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ClefPictures()
-&gt;&gt;&gt; pictures.set_clefs(["treble", "bass", "alto"])
-&gt;&gt;&gt; pictures.width()  # three clefs and the space between them
-106
-&gt;&gt;&gt; pictures.toolTip()
-'Treble, Bass, Alto'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ClefPictures</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_clefs</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">width</span><span class="p">()</span>  <span class="c1"># three clefs and the space between them
+</span><span class="go">106
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Treble, Bass, Alto'
+</span></code></pre></div></div>
 
 <h3 id="clefpicturesicon">ClefPictures.icon</h3>
 
@@ -819,9 +819,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures.icon("grand").isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">.</span><span class="n">icon</span><span class="p">(</span><span class="s">"grand"</span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="clefpicturespaintevent">ClefPictures.paintEvent</h3>
 
@@ -838,9 +838,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefPictures(["treble", "grand"]).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"grand"</span><span class="p">]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="valuepictures">ValuePictures</h2>
 
@@ -866,10 +866,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ValuePictures(["whole", "quarter", "eighth"])
-&gt;&gt;&gt; pictures.values
-['whole', 'quarter', 'eighth']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ValuePictures</span><span class="p">([</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">,</span> <span class="s">"eighth"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">values</span>
+<span class="go">['whole', 'quarter', 'eighth']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -886,9 +886,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures(["half"], center_stemless=True).center_stemless
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">([</span><span class="s">"half"</span><span class="p">],</span> <span class="n">center_stemless</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">center_stemless</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="valuepicturesset_values">ValuePictures.set_values</h3>
 
@@ -905,11 +905,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; pictures = ValuePictures()
-&gt;&gt;&gt; pictures.set_values(["breve", "whole"])
-&gt;&gt;&gt; pictures.values
-['breve', 'whole']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">ValuePictures</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_values</span><span class="p">([</span><span class="s">"breve"</span><span class="p">,</span> <span class="s">"whole"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">values</span>
+<span class="go">['breve', 'whole']
+</span></code></pre></div></div>
 
 <h3 id="valuepicturesicon">ValuePictures.icon</h3>
 
@@ -938,9 +938,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures.icon("quarter").isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">.</span><span class="n">icon</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="valuepicturespaintevent">ValuePictures.paintEvent</h3>
 
@@ -957,9 +957,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ValuePictures(["whole", "half", "quarter"]).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ValuePictures</span><span class="p">([</span><span class="s">"whole"</span><span class="p">,</span> <span class="s">"half"</span><span class="p">,</span> <span class="s">"quarter"</span><span class="p">]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="rhythm_picture">rhythm_picture</h2>
 
@@ -982,9 +982,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; rhythm_picture("eighth|eighth").beam_count
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rhythm_picture</span><span class="p">(</span><span class="s">"eighth|eighth"</span><span class="p">).</span><span class="n">beam_count</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h2 id="keysignaturepicture">KeySignaturePicture</h2>
 
@@ -1012,9 +1012,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(2).toolTip()
-'D major: 2 sharps'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePicture</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'D major: 2 sharps'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1030,11 +1030,11 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(0).toolTip()
-'C major: no sharps or flats'
-&gt;&gt;&gt; KeySignaturePicture(-1).toolTip()
-'F major: 1 flat'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePicture</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'C major: no sharps or flats'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePicture</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'F major: 1 flat'
+</span></code></pre></div></div>
 
 <h3 id="keysignaturepictureicon">KeySignaturePicture.icon</h3>
 
@@ -1063,9 +1063,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture.icon(3).isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePicture</span><span class="p">.</span><span class="n">icon</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="keysignaturepicturepaintevent">KeySignaturePicture.paintEvent</h3>
 
@@ -1082,9 +1082,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePicture(-3).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePicture</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="rangepictures">RangePictures</h2>
 
@@ -1112,10 +1112,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; pictures = RangePictures([("treble", 22, 52)])
-&gt;&gt;&gt; pictures.toolTip()
-'Treble: D3 to F7'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Treble: D3 to F7'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1132,9 +1132,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RangePictures([("treble", 22, 52)], max_width=238).scale
-1.9
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">)],</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">238</span><span class="p">).</span><span class="n">scale</span>
+<span class="go">1.9
+</span></code></pre></div></div>
 
 <h3 id="rangepicturesset_items">RangePictures.set_items</h3>
 
@@ -1151,11 +1151,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; pictures = RangePictures()
-&gt;&gt;&gt; pictures.set_items([("bass", 10, 40), ("alto", 21, 35)])
-&gt;&gt;&gt; pictures.toolTip().splitlines()
-['Bass: F1 to A5', 'Alto: C3 to C5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span> <span class="o">=</span> <span class="n">RangePictures</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">set_items</span><span class="p">([(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="s">"alto"</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">35</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pictures</span><span class="p">.</span><span class="n">toolTip</span><span class="p">().</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="go">['Bass: F1 to A5', 'Alto: C3 to C5']
+</span></code></pre></div></div>
 
 <h3 id="rangepicturespaintevent">RangePictures.paintEvent</h3>
 
@@ -1172,9 +1172,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RangePictures([("treble", 22, 52), ("bass", 10, 40)]).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangePictures</span><span class="p">([(</span><span class="s">"treble"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">52</span><span class="p">),</span> <span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="namepicture">NamePicture</h2>
 
@@ -1200,9 +1200,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture("solfege").toolTip()
-'Solfège (Do Re Mi)'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NamePicture</span><span class="p">(</span><span class="s">"solfege"</span><span class="p">).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Solfège (Do Re Mi)'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1218,9 +1218,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture().naming
-'letters'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NamePicture</span><span class="p">().</span><span class="n">naming</span>
+<span class="go">'letters'
+</span></code></pre></div></div>
 
 <h3 id="namepictureset_naming">NamePicture.set_naming</h3>
 
@@ -1237,11 +1237,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picture = NamePicture()
-&gt;&gt;&gt; picture.set_naming("solfege")
-&gt;&gt;&gt; picture.toolTip()
-'Solfège (Do Re Mi)'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picture</span> <span class="o">=</span> <span class="n">NamePicture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picture</span><span class="p">.</span><span class="n">set_naming</span><span class="p">(</span><span class="s">"solfege"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picture</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'Solfège (Do Re Mi)'
+</span></code></pre></div></div>
 
 <h3 id="namepictureicon">NamePicture.icon</h3>
 
@@ -1270,9 +1270,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture.icon("letters").isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NamePicture</span><span class="p">.</span><span class="n">icon</span><span class="p">(</span><span class="s">"letters"</span><span class="p">).</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="namepicturepaintevent">NamePicture.paintEvent</h3>
 
@@ -1289,9 +1289,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NamePicture("letters").grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NamePicture</span><span class="p">(</span><span class="s">"letters"</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1568,8 +1568,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

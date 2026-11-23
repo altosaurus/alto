@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,9 +681,9 @@ tasks cannot be failed and are not recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; LessonsPage("circle-of-fifths", step=0).view.counter.text()
-'Step 1 of 8'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LessonsPage</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">view</span><span class="p">.</span><span class="n">counter</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Step 1 of 8'
+</span></code></pre></div></div>
 
 <h2 id="saved_step">saved_step</h2>
 
@@ -706,9 +706,9 @@ tasks cannot be failed and are not recorded.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; saved_step(LESSONS[0]) in range(len(LESSONS[0].steps))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_step</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">steps</span><span class="p">))</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="save_step">save_step</h2>
 
@@ -730,10 +730,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; save_step(LESSONS[0], step=0)
-&gt;&gt;&gt; saved_step(LESSONS[0])
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_step</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_step</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h2 id="stepview">StepView</h2>
 
@@ -765,11 +765,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[1], rng=random.Random(1))
-&gt;&gt;&gt; view.task is not None and len(view.choice_buttons) == 4
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">StepView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">choice_buttons</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -785,10 +785,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; StepView(CIRCLE_OF_FIFTHS.steps[0]).circle is not None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StepView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="n">circle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="stepviewhear">StepView.hear</h3>
 
@@ -799,11 +799,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; from unittest.mock import patch
-&gt;&gt;&gt; with patch.object(sounds, "enabled", False):
-...     StepView(CIRCLE_OF_FIFTHS.steps[1]).hear()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">with</span> <span class="n">patch</span><span class="p">.</span><span class="nb">object</span><span class="p">(</span><span class="n">sounds</span><span class="p">,</span> <span class="s">"enabled"</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">StepView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">hear</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="stepviewwalk">StepView.walk</h3>
 
@@ -820,18 +820,18 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[2])
-&gt;&gt;&gt; view.walk(1)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; view.circle.cell
-('outer', 1)
-&gt;&gt;&gt; view.walk(-1)
-&gt;&gt;&gt; view.walk(-1)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; view.circle.cell
-('outer', 11)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">StepView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
+<span class="go">('outer', 1)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
+<span class="go">('outer', 11)
+</span></code></pre></div></div>
 
 <h3 id="stepviewask">StepView.ask</h3>
 
@@ -842,13 +842,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; view = StepView(CIRCLE_OF_FIFTHS.steps[3], rng=random.Random(1))
-&gt;&gt;&gt; first = view.task
-&gt;&gt;&gt; view.ask()
-&gt;&gt;&gt; view.task is not None and view.again.isHidden()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">StepView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">task</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">ask</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">again</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="lessonview">LessonView</h2>
 
@@ -881,14 +881,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.lessons.circle_of_fifths import CIRCLE_OF_FIFTHS
-&gt;&gt;&gt; view = LessonView(CIRCLE_OF_FIFTHS)
-&gt;&gt;&gt; view.counter.text()
-'Step 1 of 8'
-&gt;&gt;&gt; view.go(to=1)
-&gt;&gt;&gt; view.heading.text(), view.counter.text()
-('A fifth', 'Step 2 of 8')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.lessons.circle_of_fifths</span> <span class="kn">import</span> <span class="n">CIRCLE_OF_FIFTHS</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">LessonView</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">counter</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Step 1 of 8'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">go</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">heading</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">view</span><span class="p">.</span><span class="n">counter</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">('A fifth', 'Step 2 of 8')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -904,9 +904,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; LessonView(LESSONS[0], start=3).current
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LessonView</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="mi">3</span><span class="p">).</span><span class="n">current</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h3 id="lessonviewgo">LessonView.go</h3>
 
@@ -926,11 +926,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; view = LessonView(LESSONS[0])
-&gt;&gt;&gt; view.go(to=2)
-&gt;&gt;&gt; view.current
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">LessonView</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">go</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">current</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <h2 id="lessonspage">LessonsPage</h2>
 
@@ -956,10 +956,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = LessonsPage("circle-of-fifths")
-&gt;&gt;&gt; page.view.lesson.key
-'circle-of-fifths'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">LessonsPage</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">lesson</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'circle-of-fifths'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -981,9 +981,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; LessonsPage("circle-of-fifths", step=2).view.current
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LessonsPage</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">).</span><span class="n">view</span><span class="p">.</span><span class="n">current</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 
           
@@ -1242,8 +1242,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

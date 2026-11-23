@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -685,12 +685,12 @@ scheme: it takes the colors of the app’s theme. Nothing here needs Qt, so the 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; scheme = preset("cyan-indigo")
-&gt;&gt;&gt; scheme.name, scheme.light
-('Cyan to indigo', False)
-&gt;&gt;&gt; round(scheme.color("outer", place=0, lift=1.0)[2], 2) &gt; round(scheme.color("outer", place=0, lift=0.0)[2], 2)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme</span> <span class="o">=</span> <span class="n">preset</span><span class="p">(</span><span class="s">"cyan-indigo"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">scheme</span><span class="p">.</span><span class="n">light</span>
+<span class="go">('Cyan to indigo', False)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">scheme</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="n">scheme</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="cellmaker">CellMaker</h2>
 
@@ -767,12 +767,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; red, green, blue = preset("spectrum").color("outer", place=0, lift=1.0)
-&gt;&gt;&gt; red &gt; green and red &gt; blue
-True
-&gt;&gt;&gt; preset("spectrum").color("outer", place=6, lift=0.0)[0] &lt; 0.2
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span> <span class="o">=</span> <span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">).</span><span class="n">color</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">red</span> <span class="o">&gt;</span> <span class="n">green</span> <span class="ow">and</span> <span class="n">red</span> <span class="o">&gt;</span> <span class="n">blue</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">).</span><span class="n">color</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">lift</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.2</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="schemenames">Scheme.names</h3>
 
@@ -789,9 +789,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preset("paper").names()["ink"], preset("spectrum").names()["ink"]
-('#1b2030', '#f5f5f5')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">).</span><span class="n">names</span><span class="p">()[</span><span class="s">"ink"</span><span class="p">],</span> <span class="n">preset</span><span class="p">(</span><span class="s">"spectrum"</span><span class="p">).</span><span class="n">names</span><span class="p">()[</span><span class="s">"ink"</span><span class="p">]</span>
+<span class="go">('#1b2030', '#f5f5f5')
+</span></code></pre></div></div>
 
 <h2 id="rgb_of">rgb_of</h2>
 
@@ -822,12 +822,12 @@ white names can stand is brought down to the limit.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; r, g, b = rgb_of((60.0, 0.9, 0.5), capped=True)
-&gt;&gt;&gt; 0.299 * r + 0.587 * g + 0.114 * b &lt;= MAX_BRIGHTNESS + 1e-9
-True
-&gt;&gt;&gt; rgb_of((0.0, 0.0, 1.0), capped=False)
-(1.0, 1.0, 1.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">rgb_of</span><span class="p">((</span><span class="mf">60.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">capped</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mf">0.299</span> <span class="o">*</span> <span class="n">r</span> <span class="o">+</span> <span class="mf">0.587</span> <span class="o">*</span> <span class="n">g</span> <span class="o">+</span> <span class="mf">0.114</span> <span class="o">*</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="n">MAX_BRIGHTNESS</span> <span class="o">+</span> <span class="mf">1e-9</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rgb_of</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">capped</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">(1.0, 1.0, 1.0)
+</span></code></pre></div></div>
 
 <h2 id="hex_of">hex_of</h2>
 
@@ -850,9 +850,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; hex_of((1.0, 0.5, 0.0))
-'#ff8000'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hex_of</span><span class="p">((</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="go">'#ff8000'
+</span></code></pre></div></div>
 
 <h2 id="hsl_of">hsl_of</h2>
 
@@ -875,9 +875,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; hsl_of("#ff0000")
-(0.0, 1.0, 0.5)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hsl_of</span><span class="p">(</span><span class="s">"#ff0000"</span><span class="p">)</span>
+<span class="go">(0.0, 1.0, 0.5)
+</span></code></pre></div></div>
 
 <h2 id="signature_of">signature_of</h2>
 
@@ -900,9 +900,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [signature_of(at) for at in (0, 1, 6, 7, 11)]
-[0, 1, 6, -5, -1]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">signature_of</span><span class="p">(</span><span class="n">at</span><span class="p">)</span> <span class="k">for</span> <span class="n">at</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+<span class="go">[0, 1, 6, -5, -1]
+</span></code></pre></div></div>
 
 <h2 id="preset">preset</h2>
 
@@ -931,11 +931,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preset("midnight").name
-'Midnight'
-&gt;&gt;&gt; len(PRESETS)
-14
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preset</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'Midnight'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">PRESETS</span><span class="p">)</span>
+<span class="go">14
+</span></code></pre></div></div>
 
 <h2 id="record_of">record_of</h2>
 
@@ -969,9 +969,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])["light"]
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">])[</span><span class="s">"light"</span><span class="p">]</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="clean_record">clean_record</h2>
 
@@ -994,16 +994,16 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; good = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"])
-&gt;&gt;&gt; clean_record(good) == good
-True
-&gt;&gt;&gt; few = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0"])
-&gt;&gt;&gt; unknown = record_of("custom-1", name="Mine", mode="nope", colors=["#2f6bd0", "#18a0c0"])
-&gt;&gt;&gt; clean_record(few) is None, clean_record(unknown) is None
-(True, True)
-&gt;&gt;&gt; clean_record("not a record") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">good</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"rings"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">,</span> <span class="s">"#18a0c0"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_record</span><span class="p">(</span><span class="n">good</span><span class="p">)</span> <span class="o">==</span> <span class="n">good</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">few</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"rings"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">unknown</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"nope"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">,</span> <span class="s">"#18a0c0"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_record</span><span class="p">(</span><span class="n">few</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">clean_record</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean_record</span><span class="p">(</span><span class="s">"not a record"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="custom_scheme">custom_scheme</h2>
 
@@ -1029,12 +1029,12 @@ light wedges, paler).</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"]))
-&gt;&gt;&gt; scheme.key, scheme.name, scheme.light
-('custom-1', 'Mine', False)
-&gt;&gt;&gt; scheme.cells["outer"][0][1][0] != scheme.cells["inner"][0][1][0]  # two rings, two hues
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme</span> <span class="o">=</span> <span class="n">custom_scheme</span><span class="p">(</span><span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"rings"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">,</span> <span class="s">"#18a0c0"</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">scheme</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">scheme</span><span class="p">.</span><span class="n">light</span>
+<span class="go">('custom-1', 'Mine', False)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scheme</span><span class="p">.</span><span class="n">cells</span><span class="p">[</span><span class="s">"outer"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">scheme</span><span class="p">.</span><span class="n">cells</span><span class="p">[</span><span class="s">"inner"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># two rings, two hues
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="dump_customs">dump_customs</h2>
 
@@ -1057,9 +1057,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dump_customs([])
-'[]'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dump_customs</span><span class="p">([])</span>
+<span class="go">'[]'
+</span></code></pre></div></div>
 
 <h2 id="load_customs">load_customs</h2>
 
@@ -1082,12 +1082,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; load_customs("not json"), load_customs("[1, 2]")
-([], [])
-&gt;&gt;&gt; one = record_of("custom-1", name="A", mode="single", colors=["#2f6bd0"])
-&gt;&gt;&gt; [r["id"] for r in load_customs(dump_customs([one, one]))]  # a repeated key is dropped
-['custom-1']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_customs</span><span class="p">(</span><span class="s">"not json"</span><span class="p">),</span> <span class="n">load_customs</span><span class="p">(</span><span class="s">"[1, 2]"</span><span class="p">)</span>
+<span class="go">([], [])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">one</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"A"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">load_customs</span><span class="p">(</span><span class="n">dump_customs</span><span class="p">([</span><span class="n">one</span><span class="p">,</span> <span class="n">one</span><span class="p">]))]</span>  <span class="c1"># a repeated key is dropped
+</span><span class="go">['custom-1']
+</span></code></pre></div></div>
 
 <h2 id="resolve">resolve</h2>
 
@@ -1115,9 +1115,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; resolve("midnight", customs=[]).name, resolve("gone", customs=[]).key
-('Midnight', 'cyan-indigo')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">resolve</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[]).</span><span class="n">name</span><span class="p">,</span> <span class="n">resolve</span><span class="p">(</span><span class="s">"gone"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[]).</span><span class="n">key</span>
+<span class="go">('Midnight', 'cyan-indigo')
+</span></code></pre></div></div>
 
 <h2 id="next_custom_key">next_custom_key</h2>
 
@@ -1140,10 +1140,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; taken = [record_of("custom-1", name="", mode="single", colors=[])]
-&gt;&gt;&gt; next_custom_key([]), next_custom_key(taken)
-('custom-1', 'custom-2')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">taken</span> <span class="o">=</span> <span class="p">[</span><span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[])]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">next_custom_key</span><span class="p">([]),</span> <span class="n">next_custom_key</span><span class="p">(</span><span class="n">taken</span><span class="p">)</span>
+<span class="go">('custom-1', 'custom-2')
+</span></code></pre></div></div>
 
 
           
@@ -1286,8 +1286,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

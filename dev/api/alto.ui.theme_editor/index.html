@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,11 +678,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = ThemeEditor()
-&gt;&gt;&gt; editor.load(None)
-&gt;&gt;&gt; editor.record()["name"]
-'My theme'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"name"</span><span class="p">]</span>
+<span class="go">'My theme'
+</span></code></pre></div></div>
 
 <h2 id="theme_of">theme_of</h2>
 
@@ -710,9 +710,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; theme_of({part: "#102030" for part in PARTS}, dark=True).window
-'#102030'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">theme_of</span><span class="p">({</span><span class="n">part</span><span class="p">:</span> <span class="s">"#102030"</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">PARTS</span><span class="p">},</span> <span class="n">dark</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">window</span>
+<span class="go">'#102030'
+</span></code></pre></div></div>
 
 <h2 id="themeeditor">ThemeEditor</h2>
 
@@ -743,9 +743,9 @@ colors at once.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ThemeEditor().save_button.text()
-'Save'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeEditor</span><span class="p">().</span><span class="n">save_button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Save'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -759,9 +759,9 @@ colors at once.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sorted(ThemeEditor().colors)
-['dark', 'light']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">ThemeEditor</span><span class="p">().</span><span class="n">colors</span><span class="p">)</span>
+<span class="go">['dark', 'light']
+</span></code></pre></div></div>
 
 <h3 id="themeeditoreventfilter">ThemeEditor.eventFilter</h3>
 
@@ -788,15 +788,15 @@ colors at once.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = ThemeEditor()
-&gt;&gt;&gt; button = editor.buttons["light"]["accent"]
-&gt;&gt;&gt; _ = editor.eventFilter(button, QEvent(QEvent.Type.Enter))
-&gt;&gt;&gt; "bold" in editor._values["light"]["accent"].styleSheet()
-True
-&gt;&gt;&gt; _ = editor.eventFilter(button, QEvent(QEvent.Type.Leave))
-&gt;&gt;&gt; "bold" in editor._values["light"]["accent"].styleSheet()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">buttons</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Enter</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"bold"</span> <span class="ow">in</span> <span class="n">editor</span><span class="p">.</span><span class="n">_values</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"accent"</span><span class="p">].</span><span class="n">styleSheet</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="themeeditorload">ThemeEditor.load</h3>
 
@@ -813,11 +813,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = ThemeEditor()
-&gt;&gt;&gt; editor.load(None)
-&gt;&gt;&gt; editor.delete_button.isHidden(), editor.name_edit.text()
-(True, 'My theme')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">(),</span> <span class="n">editor</span><span class="p">.</span><span class="n">name_edit</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">(True, 'My theme')
+</span></code></pre></div></div>
 
 <h3 id="themeeditorrecord">ThemeEditor.record</h3>
 
@@ -834,10 +834,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = ThemeEditor()
-&gt;&gt;&gt; editor.record()["light"]["window"] == editor.colors["light"]["window"]
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">ThemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"window"</span><span class="p">]</span> <span class="o">==</span> <span class="n">editor</span><span class="p">.</span><span class="n">colors</span><span class="p">[</span><span class="s">"light"</span><span class="p">][</span><span class="s">"window"</span><span class="p">]</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1152,8 +1152,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

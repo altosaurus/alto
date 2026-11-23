@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,11 +681,11 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings().active_clefs()
-['treble', 'bass']
-&gt;&gt;&gt; spell(Note.parse("F#4"))
-'F♯'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">().</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['treble', 'bass']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">))</span>
+<span class="go">'F♯'
+</span></code></pre></div></div>
 
 <h2 id="spell">spell</h2>
 
@@ -719,23 +719,23 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; spell(Note.parse("F#4"))
-'F♯'
-&gt;&gt;&gt; spell(Note.parse("F#4"), naming="solfege")
-'Fa♯'
-&gt;&gt;&gt; spell(Note.parse("F#4"), naming="degrees", key=1)
-'7̂'
-&gt;&gt;&gt; spell(Note.parse("F4"), naming="degrees", key=1)
-'♭7̂'
-&gt;&gt;&gt; spell(Note.parse("Eb4"), naming="degrees")
-'♭3̂'
-&gt;&gt;&gt; spell(Note.parse("G4"), naming="functions", key=1)
-'Tonic'
-&gt;&gt;&gt; spell(Note.parse("F4"), naming="functions", key=1)
-'Lowered Leading tone'
-&gt;&gt;&gt; spell(Note.parse("G4"), naming="degrees", key=1, octave=True)
-'1̂ / 4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">))</span>
+<span class="go">'F♯'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"solfege"</span><span class="p">)</span>
+<span class="go">'Fa♯'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'7̂'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'♭7̂'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Eb4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">)</span>
+<span class="go">'♭3̂'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'Tonic'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"functions"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'Lowered Leading tone'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">spell</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span> <span class="n">naming</span><span class="o">=</span><span class="s">"degrees"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">octave</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">'1̂ / 4'
+</span></code></pre></div></div>
 
 <h2 id="diatonic_name">diatonic_name</h2>
 
@@ -758,9 +758,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; diatonic_name(30)
-'E4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">diatonic_name</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="go">'E4'
+</span></code></pre></div></div>
 
 <h2 id="clefchoice">ClefChoice</h2>
 
@@ -778,9 +778,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
-['alto', 'tenor']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"tenor"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['alto', 'tenor']
+</span></code></pre></div></div>
 
 <h3 id="clefchoiceactive_clefs">ClefChoice.active_clefs</h3>
 
@@ -797,13 +797,13 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
-['tenor', 'grand']
-&gt;&gt;&gt; ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
-['treble', 'subbass']
-&gt;&gt;&gt; NoteNameSettings(clefs=set()).active_clefs()
-['treble']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['tenor', 'grand']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"treble"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['treble', 'subbass']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['treble']
+</span></code></pre></div></div>
 
 <h2 id="keychoice">KeyChoice</h2>
 
@@ -820,9 +820,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettings(keys={3, -2}).active_keys()
-[-2, 3]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">}).</span><span class="n">active_keys</span><span class="p">()</span>
+<span class="go">[-2, 3]
+</span></code></pre></div></div>
 
 <h3 id="keychoiceactive_keys">KeyChoice.active_keys</h3>
 
@@ -839,11 +839,11 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(keys={2, -1}).active_keys()
-[-1, 2]
-&gt;&gt;&gt; KeySignatureSettings(keys=set()).active_keys()
-[0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="n">active_keys</span><span class="p">()</span>
+<span class="go">[-1, 2]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_keys</span><span class="p">()</span>
+<span class="go">[0]
+</span></code></pre></div></div>
 
 <h2 id="staffrangesettings">StaffRangeSettings</h2>
 
@@ -861,9 +861,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffRangeSettings().active_clefs()
-['treble', 'bass']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffRangeSettings</span><span class="p">().</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['treble', 'bass']
+</span></code></pre></div></div>
 
 <h3 id="staffrangesettingsactive_values">StaffRangeSettings.active_values</h3>
 
@@ -880,9 +880,9 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(note_values={"half", "whole"}).active_values()
-['whole', 'half']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">note_values</span><span class="o">=</span><span class="p">{</span><span class="s">"half"</span><span class="p">,</span> <span class="s">"whole"</span><span class="p">}).</span><span class="n">active_values</span><span class="p">()</span>
+<span class="go">['whole', 'half']
+</span></code></pre></div></div>
 
 <h3 id="staffrangesettingsrange_for">StaffRangeSettings.range_for</h3>
 
@@ -905,11 +905,11 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings().range_for("treble")
-(22, 52)
-&gt;&gt;&gt; NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
-(30, 40)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">().</span><span class="n">range_for</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="go">(22, 52)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}).</span><span class="n">range_for</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>  <span class="c1"># given in the wrong order
+</span><span class="go">(30, 40)
+</span></code></pre></div></div>
 
 <h2 id="notenamesettings">NoteNameSettings</h2>
 
@@ -941,10 +941,10 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
-&gt;&gt;&gt; cfg.active_clefs(), cfg.active_keys()
-(['bass'], [2])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"bass"</span><span class="p">},</span> <span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">()</span>
+<span class="go">(['bass'], [2])
+</span></code></pre></div></div>
 
 <h3 id="notenamesettingsactive_keys">NoteNameSettings.active_keys</h3>
 
@@ -964,9 +964,9 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNameSettings(key_signatures={2, -1}).active_keys()
-[-1, 2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNameSettings</span><span class="p">(</span><span class="n">key_signatures</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="n">active_keys</span><span class="p">()</span>
+<span class="go">[-1, 2]
+</span></code></pre></div></div>
 
 <h2 id="packexercisesettings">PackExerciseSettings</h2>
 
@@ -1002,11 +1002,11 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; PackExerciseSettings(clefs={"alto"}).sound is None
-True
-&gt;&gt;&gt; PackExerciseSettings(clefs={"alto"}).keys is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">sound</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackExerciseSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">keys</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="intervalsettings">IntervalSettings</h2>
 
@@ -1031,9 +1031,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings().quality_mode
-'combined'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettings</span><span class="p">().</span><span class="n">quality_mode</span>
+<span class="go">'combined'
+</span></code></pre></div></div>
 
 <h3 id="intervalsettingsstaff_span">IntervalSettings.staff_span</h3>
 
@@ -1056,9 +1056,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettings</span><span class="p">(</span><span class="n">ranges</span><span class="o">=</span><span class="p">{</span><span class="s">"treble"</span><span class="p">:</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">)}).</span><span class="n">staff_span</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h2 id="key_name">key_name</h2>
 
@@ -1081,9 +1081,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_name(60), key_name(61)
-('C4', 'C♯4')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_name</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span> <span class="n">key_name</span><span class="p">(</span><span class="mi">61</span><span class="p">)</span>
+<span class="go">('C4', 'C♯4')
+</span></code></pre></div></div>
 
 <h2 id="keyboardsettings">KeyboardSettings</h2>
 
@@ -1115,10 +1115,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeyboardSettings()
-&gt;&gt;&gt; key_name(cfg.low), key_name(cfg.high)
-('C3', 'C5')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">KeyboardSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_name</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="n">low</span><span class="p">),</span> <span class="n">key_name</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="n">high</span><span class="p">)</span>
+<span class="go">('C3', 'C5')
+</span></code></pre></div></div>
 
 <h2 id="keyboard_interval_name">keyboard_interval_name</h2>
 
@@ -1147,11 +1147,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keyboard_interval_name(13), keyboard_interval_name(18), keyboard_interval_name(24)
-('m9', 'A11 / d12', 'P15')
-&gt;&gt;&gt; keyboard_interval_name(87)
-'m52'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">18</span><span class="p">),</span> <span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<span class="go">('m9', 'A11 / d12', 'P15')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keyboard_interval_name</span><span class="p">(</span><span class="mi">87</span><span class="p">)</span>
+<span class="go">'m52'
+</span></code></pre></div></div>
 
 <h2 id="keyboardintervalsettings">KeyboardIntervalSettings</h2>
 
@@ -1180,9 +1180,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings().bounds()
-(48, 72)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">().</span><span class="n">bounds</span><span class="p">()</span>
+<span class="go">(48, 72)
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalsettingsanswer_button_limit">KeyboardIntervalSettings.answer_button_limit</h3>
 
@@ -1199,11 +1199,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings().answer_button_limit()
-6
-&gt;&gt;&gt; KeyboardIntervalSettings(button_count=0).answer_button_limit()
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">().</span><span class="n">answer_button_limit</span><span class="p">()</span>
+<span class="go">6
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">button_count</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">answer_button_limit</span><span class="p">()</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalsettingsbounds">KeyboardIntervalSettings.bounds</h3>
 
@@ -1220,9 +1220,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings(low=60, high=60).bounds()
-(60, 61)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">60</span><span class="p">).</span><span class="n">bounds</span><span class="p">()</span>
+<span class="go">(60, 61)
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalsettingsactive_intervals">KeyboardIntervalSettings.active_intervals</h3>
 
@@ -1239,11 +1239,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervalSettings(low=60, high=64, intervals={3, 4, 12}).active_intervals()
-[3, 4]
-&gt;&gt;&gt; KeyboardIntervalSettings(intervals=set()).active_intervals()
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">intervals</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">}).</span><span class="n">active_intervals</span><span class="p">()</span>
+<span class="go">[3, 4]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervalSettings</span><span class="p">(</span><span class="n">intervals</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_intervals</span><span class="p">()</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h2 id="constructionsettings">ConstructionSettings</h2>
 
@@ -1285,9 +1285,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ConstructionSettings(clefs={"grand"}).active_clefs()
-['grand']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ConstructionSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"grand"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['grand']
+</span></code></pre></div></div>
 
 <h2 id="arpeggiosettings">ArpeggioSettings</h2>
 
@@ -1317,9 +1317,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings().active_types()
-['major', 'minor', 'dominant 7th', 'diminished 7th']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">().</span><span class="n">active_types</span><span class="p">()</span>
+<span class="go">['major', 'minor', 'dominant 7th', 'diminished 7th']
+</span></code></pre></div></div>
 
 <h3 id="arpeggiosettingsactive_types">ArpeggioSettings.active_types</h3>
 
@@ -1336,9 +1336,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(types={"minor 7th", "major"}).active_types()
-['major', 'minor 7th']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">{</span><span class="s">"minor 7th"</span><span class="p">,</span> <span class="s">"major"</span><span class="p">}).</span><span class="n">active_types</span><span class="p">()</span>
+<span class="go">['major', 'minor 7th']
+</span></code></pre></div></div>
 
 <h3 id="arpeggiosettingsactive_inversions">ArpeggioSettings.active_inversions</h3>
 
@@ -1355,9 +1355,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettings(inversions={2, 0}).active_inversions()
-[0, 2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}).</span><span class="n">active_inversions</span><span class="p">()</span>
+<span class="go">[0, 2]
+</span></code></pre></div></div>
 
 <h3 id="arpeggiosettingsinversions_for">ArpeggioSettings.inversions_for</h3>
 
@@ -1383,12 +1383,12 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ArpeggioSettings()
-&gt;&gt;&gt; cfg.inversions_for("major"), cfg.inversions_for("dominant 7th")
-([0, 1, 2], [0, 1, 2, 3])
-&gt;&gt;&gt; ArpeggioSettings(inversions={3}).inversions_for("major")
-[0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ArpeggioSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"dominant 7th"</span><span class="p">)</span>
+<span class="go">([0, 1, 2], [0, 1, 2, 3])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettings</span><span class="p">(</span><span class="n">inversions</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">}).</span><span class="n">inversions_for</span><span class="p">(</span><span class="s">"major"</span><span class="p">)</span>
+<span class="go">[0]
+</span></code></pre></div></div>
 
 <h2 id="keysignaturesettings">KeySignatureSettings</h2>
 
@@ -1414,10 +1414,10 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeySignatureSettings()
-&gt;&gt;&gt; cfg.active_clefs(), len(cfg.active_keys())
-(['treble', 'bass'], 15)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">KeySignatureSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">())</span>
+<span class="go">(['treble', 'bass'], 15)
+</span></code></pre></div></div>
 
 <h3 id="keysignaturesettingsactive_modes">KeySignatureSettings.active_modes</h3>
 
@@ -1434,9 +1434,9 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettings().active_modes()
-['Major (Ionian)', 'Natural minor (Aeolian)']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureSettings</span><span class="p">().</span><span class="n">active_modes</span><span class="p">()</span>
+<span class="go">['Major (Ionian)', 'Natural minor (Aeolian)']
+</span></code></pre></div></div>
 
 <h2 id="orderofkeyssettings">OrderOfKeysSettings</h2>
 
@@ -1458,9 +1458,9 @@ used.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeysSettings(keys={-2, 4}).available_starts()
-range(-2, 5)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">OrderOfKeysSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">}).</span><span class="n">available_starts</span><span class="p">()</span>
+<span class="go">range(-2, 5)
+</span></code></pre></div></div>
 
 <h3 id="orderofkeyssettingsavailable_starts">OrderOfKeysSettings.available_starts</h3>
 
@@ -1477,9 +1477,9 @@ range(-2, 5)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; list(OrderOfKeysSettings(keys={-2}).available_starts())
-[-2, -1, 0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">OrderOfKeysSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}).</span><span class="n">available_starts</span><span class="p">())</span>
+<span class="go">[-2, -1, 0]
+</span></code></pre></div></div>
 
 <h2 id="keyconstructionsettings">KeyConstructionSettings</h2>
 
@@ -1500,10 +1500,10 @@ range(-2, 5)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = KeyConstructionSettings(keys={-2})
-&gt;&gt;&gt; cfg.active_keys(), cfg.active_modes()
-([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">KeyConstructionSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_modes</span><span class="p">()</span>
+<span class="go">([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
+</span></code></pre></div></div>
 
 <h2 id="scaleidentificationsettings">ScaleIdentificationSettings</h2>
 
@@ -1535,10 +1535,10 @@ range(-2, 5)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
-&gt;&gt;&gt; cfg.active_keys(), cfg.active_staff_keys()
-([2], [-3])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ScaleIdentificationSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span> <span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="go">([2], [-3])
+</span></code></pre></div></div>
 
 <h3 id="scaleidentificationsettingsactive_staff_keys">ScaleIdentificationSettings.active_staff_keys</h3>
 
@@ -1555,9 +1555,9 @@ range(-2, 5)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
-[0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleIdentificationSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="go">[0]
+</span></code></pre></div></div>
 
 <h2 id="scaleconstructionsettings">ScaleConstructionSettings</h2>
 
@@ -1594,10 +1594,10 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = ScaleConstructionSettings(keys={3})
-&gt;&gt;&gt; cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
-([3], ['treble', 'bass'], False, False, [0])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">active_keys</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">(),</span> <span class="n">cfg</span><span class="p">.</span><span class="n">steps</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">octave</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="go">([3], ['treble', 'bass'], False, False, [0])
+</span></code></pre></div></div>
 
 <h3 id="scaleconstructionsettingsactive_staff_keys">ScaleConstructionSettings.active_staff_keys</h3>
 
@@ -1614,11 +1614,11 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
-[-2, 3]
-&gt;&gt;&gt; ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
-[0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="go">[-2, 3]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstructionSettings</span><span class="p">(</span><span class="n">staff_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_staff_keys</span><span class="p">()</span>
+<span class="go">[0]
+</span></code></pre></div></div>
 
 <h2 id="clefbasicssettings">ClefBasicsSettings</h2>
 
@@ -1645,11 +1645,11 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(clefs={"subbass", "alto"}).active_clefs()
-['alto', 'subbass']
-&gt;&gt;&gt; ClefBasicsSettings().question_type
-'construction'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">}).</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['alto', 'subbass']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">().</span><span class="n">question_type</span>
+<span class="go">'construction'
+</span></code></pre></div></div>
 
 <h3 id="clefbasicssettingsactive_type">ClefBasicsSettings.active_type</h3>
 
@@ -1666,11 +1666,11 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(question_type="identification").active_type()
-'identification'
-&gt;&gt;&gt; ClefBasicsSettings(question_type="nonsense").active_type()
-'construction'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">question_type</span><span class="o">=</span><span class="s">"identification"</span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
+<span class="go">'identification'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">question_type</span><span class="o">=</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">active_type</span><span class="p">()</span>
+<span class="go">'construction'
+</span></code></pre></div></div>
 
 <h3 id="clefbasicssettingsanswer_clefs">ClefBasicsSettings.answer_clefs</h3>
 
@@ -1687,11 +1687,11 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasicsSettings(clefs={"alto", "tenor"}).answer_clefs()
-['alto', 'tenor']
-&gt;&gt;&gt; ClefBasicsSettings(clefs={"alto"}).answer_clefs()
-['treble', 'alto']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">}).</span><span class="n">answer_clefs</span><span class="p">()</span>
+<span class="go">['alto', 'tenor']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"alto"</span><span class="p">}).</span><span class="n">answer_clefs</span><span class="p">()</span>
+<span class="go">['treble', 'alto']
+</span></code></pre></div></div>
 
 <h2 id="notationsettings">NotationSettings</h2>
 
@@ -1705,9 +1705,9 @@ on the second line. The three symbols can always be chosen from.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Notehead" in NotationSettings().terms
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Notehead"</span> <span class="ow">in</span> <span class="n">NotationSettings</span><span class="p">().</span><span class="n">terms</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="circlesettings">CircleSettings</h2>
 
@@ -1730,13 +1730,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings().active_questions()
-['major', 'minor', 'numeral']
-&gt;&gt;&gt; CircleSettings(questions={"numeral"}).active_questions()
-['numeral']
-&gt;&gt;&gt; CircleSettings().active_scheme().name
-'Cyan to indigo'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">().</span><span class="n">active_questions</span><span class="p">()</span>
+<span class="go">['major', 'minor', 'numeral']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"numeral"</span><span class="p">}).</span><span class="n">active_questions</span><span class="p">()</span>
+<span class="go">['numeral']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">().</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">name</span>
+<span class="go">'Cyan to indigo'
+</span></code></pre></div></div>
 
 <h3 id="circlesettingsactive_questions">CircleSettings.active_questions</h3>
 
@@ -1753,11 +1753,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings(questions=set()).active_questions()
-['major', 'minor', 'numeral']
-&gt;&gt;&gt; CircleSettings(questions={"minor", "nonsense"}).active_questions()
-['minor']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="nb">set</span><span class="p">()).</span><span class="n">active_questions</span><span class="p">()</span>
+<span class="go">['major', 'minor', 'numeral']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="p">{</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"nonsense"</span><span class="p">}).</span><span class="n">active_questions</span><span class="p">()</span>
+<span class="go">['minor']
+</span></code></pre></div></div>
 
 <h3 id="circlesettingsactive_scheme">CircleSettings.active_scheme</h3>
 
@@ -1774,11 +1774,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettings(scheme="midnight").active_scheme().name
-'Midnight'
-&gt;&gt;&gt; CircleSettings(scheme="deleted").active_scheme().key
-'cyan-indigo'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s">"midnight"</span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">name</span>
+<span class="go">'Midnight'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettings</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s">"deleted"</span><span class="p">).</span><span class="n">active_scheme</span><span class="p">().</span><span class="n">key</span>
+<span class="go">'cyan-indigo'
+</span></code></pre></div></div>
 
 
           
@@ -1937,8 +1937,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,9 +681,9 @@ that is being worked on can have its own history and settings, apart from the co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
-'/tmp/alto-dev/data/alto.db'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}).</span><span class="n">as_posix</span><span class="p">()</span>
+<span class="go">'/tmp/alto-dev/data/alto.db'
+</span></code></pre></div></div>
 
 <h2 id="alto_home">alto_home</h2>
 
@@ -709,15 +709,15 @@ that is being worked on can have its own history and settings, apart from the co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; alto_home(environ={}) is None
-True
-&gt;&gt;&gt; alto_home(environ={"ALTO_HOME": ""}) is None
-True
-&gt;&gt;&gt; str(alto_home(environ={"ALTO_HOME": "/tmp/alto-dev"}))
-'/tmp/alto-dev'
-&gt;&gt;&gt; alto_home(environ={"ALTO_HOME": "~/alto-dev"}) == Path.home() / "alto-dev"
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{})</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">""</span><span class="p">})</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}))</span>
+<span class="go">'/tmp/alto-dev'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">alto_home</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"~/alto-dev"</span><span class="p">})</span> <span class="o">==</span> <span class="n">Path</span><span class="p">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s">"alto-dev"</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="database_path">database_path</h2>
 
@@ -743,11 +743,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
-'/tmp/alto-dev/data/alto.db'
-&gt;&gt;&gt; database_path(environ={}).name
-'alto.db'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}).</span><span class="n">as_posix</span><span class="p">()</span>
+<span class="go">'/tmp/alto-dev/data/alto.db'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database_path</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{}).</span><span class="n">name</span>
+<span class="go">'alto.db'
+</span></code></pre></div></div>
 
 <h2 id="settings_folder">settings_folder</h2>
 
@@ -773,11 +773,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; settings_folder(environ={}) is None
-True
-&gt;&gt;&gt; str(settings_folder(environ={"ALTO_HOME": "/tmp/alto-dev"}))
-'/tmp/alto-dev/config'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_folder</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{})</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">settings_folder</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">}))</span>
+<span class="go">'/tmp/alto-dev/config'
+</span></code></pre></div></div>
 
 <h2 id="desktop_name">desktop_name</h2>
 
@@ -803,9 +803,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; desktop_name(environ={}), desktop_name(environ={"ALTO_HOME": "/tmp/alto-dev"})
-('alto', 'alto-dev')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">desktop_name</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{}),</span> <span class="n">desktop_name</span><span class="p">(</span><span class="n">environ</span><span class="o">=</span><span class="p">{</span><span class="s">"ALTO_HOME"</span><span class="p">:</span> <span class="s">"/tmp/alto-dev"</span><span class="p">})</span>
+<span class="go">('alto', 'alto-dev')
+</span></code></pre></div></div>
 
 
           
@@ -954,8 +954,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

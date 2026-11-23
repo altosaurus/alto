@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,12 +678,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; remember_profile(db.add_profile("Ada"))
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; startup_profile(db).name  # the one used last time, with no dialog
-'Ada'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remember_profile</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">startup_profile</span><span class="p">(</span><span class="n">db</span><span class="p">).</span><span class="n">name</span>  <span class="c1"># the one used last time, with no dialog
+</span><span class="go">'Ada'
+</span></code></pre></div></div>
 
 <h2 id="profiledialog">ProfileDialog</h2>
 
@@ -714,11 +714,11 @@ another.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; dialog = ProfileDialog(db)
-&gt;&gt;&gt; dialog.windowTitle()  # nobody has a profile yet
-'Welcome'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">ProfileDialog</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">windowTitle</span><span class="p">()</span>  <span class="c1"># nobody has a profile yet
+</span><span class="go">'Welcome'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -734,11 +734,11 @@ another.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database = Database()
-&gt;&gt;&gt; _ = database.add_profile("Ada")
-&gt;&gt;&gt; ProfileDialog(database).windowTitle()
-'Profile'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ProfileDialog</span><span class="p">(</span><span class="n">database</span><span class="p">).</span><span class="n">windowTitle</span><span class="p">()</span>
+<span class="go">'Profile'
+</span></code></pre></div></div>
 
 <h2 id="remember_profile">remember_profile</h2>
 
@@ -755,10 +755,10 @@ another.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; remember_profile(Profile(7, name="Ada"))
-&gt;&gt;&gt; int_value(store(), key="profile/last", default=-1)
-7
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remember_profile</span><span class="p">(</span><span class="n">Profile</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Ada"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">int_value</span><span class="p">(</span><span class="n">store</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="s">"profile/last"</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">7
+</span></code></pre></div></div>
 
 <h2 id="startup_profile">startup_profile</h2>
 
@@ -781,13 +781,13 @@ another.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; database = Database()
-&gt;&gt;&gt; ada = database.add_profile("Ada")
-&gt;&gt;&gt; remember_profile(ada)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; startup_profile(database).name
-'Ada'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">remember_profile</span><span class="p">(</span><span class="n">ada</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">startup_profile</span><span class="p">(</span><span class="n">database</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'Ada'
+</span></code></pre></div></div>
 
 
           
@@ -1070,8 +1070,8 @@ another.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -683,18 +683,18 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import tempfile
-&gt;&gt;&gt; from alto.learning.database import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; folder = Path(tempfile.mkdtemp())
-&gt;&gt;&gt; info = write_backup(db, settings={"ui/theme": "dark"}, path=folder / "ada.altobackup")
-&gt;&gt;&gt; info.profiles, info.attempts
-(1, 0)
-&gt;&gt;&gt; backup = read_backup(folder / "ada.altobackup")
-&gt;&gt;&gt; backup.settings
-{'ui/theme': 'dark'}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning.database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{</span><span class="s">"ui/theme"</span><span class="p">:</span> <span class="s">"dark"</span><span class="p">},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">profiles</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">attempts</span>
+<span class="go">(1, 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">backup</span> <span class="o">=</span> <span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"ada.altobackup"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">backup</span><span class="p">.</span><span class="n">settings</span>
+<span class="go">{'ui/theme': 'dark'}
+</span></code></pre></div></div>
 
 <h2 id="backuperror">BackupError</h2>
 
@@ -705,9 +705,9 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; str(BackupError("This is not an Alto backup."))
-'This is not an Alto backup.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">BackupError</span><span class="p">(</span><span class="s">"This is not an Alto backup."</span><span class="p">))</span>
+<span class="go">'This is not an Alto backup.'
+</span></code></pre></div></div>
 
 <h2 id="backupinfo">BackupInfo</h2>
 
@@ -734,9 +734,9 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; BackupInfo(100.0, app_version="0.1.0", schema_version=1, profiles=2, attempts=30).profiles
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">BackupInfo</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">30</span><span class="p">).</span><span class="n">profiles</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <h2 id="backup">Backup</h2>
 
@@ -759,9 +759,9 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Backup(BackupInfo(1.0, app_version="0.1.0", schema_version=1, profiles=0, attempts=0), settings={}, database=b"").settings
-{}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Backup</span><span class="p">(</span><span class="n">BackupInfo</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">database</span><span class="o">=</span><span class="sa">b</span><span class="s">""</span><span class="p">).</span><span class="n">settings</span>
+<span class="go">{}
+</span></code></pre></div></div>
 
 <h2 id="app_version">app_version</h2>
 
@@ -778,9 +778,9 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; app_version().count(".") &gt;= 1
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">app_version</span><span class="p">().</span><span class="n">count</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="encode_value">encode_value</h2>
 
@@ -806,11 +806,11 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; encode_value("dark"), encode_value(5), encode_value(["a", "b"])
-('dark', 5, ['a', 'b'])
-&gt;&gt;&gt; encode_value(b"\x00\x01")
-{'bytes': 'AAE='}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">encode_value</span><span class="p">(</span><span class="s">"dark"</span><span class="p">),</span> <span class="n">encode_value</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">encode_value</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">])</span>
+<span class="go">('dark', 5, ['a', 'b'])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">encode_value</span><span class="p">(</span><span class="sa">b</span><span class="s">"</span><span class="se">\x00\x01</span><span class="s">"</span><span class="p">)</span>
+<span class="go">{'bytes': 'AAE='}
+</span></code></pre></div></div>
 
 <h2 id="decode_value">decode_value</h2>
 
@@ -833,11 +833,11 @@ dictionary with the bytes in base64, so <code class="language-plaintext highligh
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; decode_value({"bytes": "AAE="})
-b'\x00\x01'
-&gt;&gt;&gt; decode_value([1, 2])
-[1, 2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">decode_value</span><span class="p">({</span><span class="s">"bytes"</span><span class="p">:</span> <span class="s">"AAE="</span><span class="p">})</span>
+<span class="go">b'\x00\x01'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">decode_value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="go">[1, 2]
+</span></code></pre></div></div>
 
 <h2 id="write_backup">write_backup</h2>
 
@@ -875,12 +875,12 @@ b'\x00\x01'
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import tempfile
-&gt;&gt;&gt; from alto.learning.database import Database
-&gt;&gt;&gt; folder = Path(tempfile.mkdtemp())
-&gt;&gt;&gt; write_backup(Database(), settings={}, path=folder / "empty.altobackup", now=5.0).created
-5.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning.database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">write_backup</span><span class="p">(</span><span class="n">Database</span><span class="p">(),</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"empty.altobackup"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">5.0</span><span class="p">).</span><span class="n">created</span>
+<span class="go">5.0
+</span></code></pre></div></div>
 
 <h2 id="read_backup">read_backup</h2>
 
@@ -909,15 +909,15 @@ b'\x00\x01'
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import tempfile
-&gt;&gt;&gt; folder = Path(tempfile.mkdtemp())
-&gt;&gt;&gt; (folder / "x.altobackup").write_bytes(b"not a zip")
-9
-&gt;&gt;&gt; read_backup(folder / "x.altobackup")
-Traceback (most recent call last):
-    ...
-alto.learning.backup.BackupError: This is not an Alto backup.
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"x.altobackup"</span><span class="p">).</span><span class="n">write_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s">"not a zip"</span><span class="p">)</span>
+<span class="go">9
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"x.altobackup"</span><span class="p">)</span>
+<span class="go">Traceback (most recent call last):
+</span><span class="c">    ...
+</span><span class="go">alto.learning.backup.BackupError: This is not an Alto backup.
+</span></code></pre></div></div>
 
 <h2 id="restore_database">restore_database</h2>
 
@@ -945,17 +945,17 @@ alto.learning.backup.BackupError: This is not an Alto backup.
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import tempfile
-&gt;&gt;&gt; from alto.learning.database import Database
-&gt;&gt;&gt; source = Database()
-&gt;&gt;&gt; _ = source.add_profile("Ada")
-&gt;&gt;&gt; folder = Path(tempfile.mkdtemp())
-&gt;&gt;&gt; _ = write_backup(source, settings={}, path=folder / "a.altobackup")
-&gt;&gt;&gt; clean = Database()
-&gt;&gt;&gt; restore_database(clean, backup=read_backup(folder / "a.altobackup"))
-&gt;&gt;&gt; [p.name for p in clean.profiles()]
-['Ada']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning.database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="p">.</span><span class="n">mkdtemp</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">write_backup</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{},</span> <span class="n">path</span><span class="o">=</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">clean</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">restore_database</span><span class="p">(</span><span class="n">clean</span><span class="p">,</span> <span class="n">backup</span><span class="o">=</span><span class="n">read_backup</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s">"a.altobackup"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">clean</span><span class="p">.</span><span class="n">profiles</span><span class="p">()]</span>
+<span class="go">['Ada']
+</span></code></pre></div></div>
 
 
           
@@ -1126,8 +1126,8 @@ alto.learning.backup.BackupError: This is not an Alto backup.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

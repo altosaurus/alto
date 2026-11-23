@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,12 +682,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.windowTitle()
-'Settings'
-&gt;&gt;&gt; dialog.pages.count()  # Appearance, Sound and Updates
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">windowTitle</span><span class="p">()</span>
+<span class="go">'Settings'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">pages</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># Appearance, Sound and Updates
+</span><span class="go">3
+</span></code></pre></div></div>
 
 <h2 id="previewcard">PreviewCard</h2>
 
@@ -714,10 +714,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
-&gt;&gt;&gt; card.style_key, card.isCheckable(), card.height()
-('demo', True, 120)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s">"♪"</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">blurb</span><span class="o">=</span><span class="s">"A short note."</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span><span class="p">,</span> <span class="n">card</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">(),</span> <span class="n">card</span><span class="p">.</span><span class="n">height</span><span class="p">()</span>
+<span class="go">('demo', True, 120)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -736,11 +736,11 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; label = QLabel("♪")
-&gt;&gt;&gt; card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
-&gt;&gt;&gt; label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s">"♪"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">PreviewCard</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">blurb</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label</span><span class="p">.</span><span class="n">testAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">WidgetAttribute</span><span class="p">.</span><span class="n">WA_TransparentForMouseEvents</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="stylecard">StyleCard</h2>
 
@@ -764,10 +764,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = StyleCard(notation.BY_KEY["leland"])
-&gt;&gt;&gt; card.style_key, card.isCheckable()
-('leland', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">StyleCard</span><span class="p">(</span><span class="n">notation</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"leland"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span><span class="p">,</span> <span class="n">card</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">()</span>
+<span class="go">('leland', True)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -782,9 +782,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StyleCard(notation.BY_KEY["bravura"]).width()
-232
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StyleCard</span><span class="p">(</span><span class="n">notation</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"bravura"</span><span class="p">]).</span><span class="n">width</span><span class="p">()</span>
+<span class="go">232
+</span></code></pre></div></div>
 
 <h2 id="keyboardcard">KeyboardCard</h2>
 
@@ -808,10 +808,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = KeyboardCard(keyboard_styles.BY_KEY["modern"])
-&gt;&gt;&gt; card.style_key
-'modern'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">style_key</span>
+<span class="go">'modern'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -826,10 +826,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; KeyboardCard(keyboard_styles.BY_KEY["classic"]).keys.style_override.key
-'classic'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">]).</span><span class="n">keys</span><span class="p">.</span><span class="n">style_override</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'classic'
+</span></code></pre></div></div>
 
 <h3 id="keyboardcardshow_style">KeyboardCard.show_style</h3>
 
@@ -848,12 +848,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = KeyboardCard(keyboard_styles.BY_KEY["classic"])
-&gt;&gt;&gt; card.show_style(keyboard_styles.BY_KEY["modern"])
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; card.keys.style_override.key
-'modern'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">KeyboardCard</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"classic"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">show_style</span><span class="p">(</span><span class="n">keyboard_styles</span><span class="p">.</span><span class="n">BY_KEY</span><span class="p">[</span><span class="s">"modern"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">keys</span><span class="p">.</span><span class="n">style_override</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'modern'
+</span></code></pre></div></div>
 
 <h2 id="keyboardbuilder">KeyboardBuilder</h2>
 
@@ -876,10 +876,10 @@ the Custom style.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; builder = KeyboardBuilder()
-&gt;&gt;&gt; sorted(builder.swatches)
-['caps', 'case', 'felt', 'naturals', 'sharps']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span> <span class="o">=</span> <span class="n">KeyboardBuilder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">swatches</span><span class="p">)</span>
+<span class="go">['caps', 'case', 'felt', 'naturals', 'sharps']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -893,9 +893,9 @@ the Custom style.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardBuilder().swatches["naturals"].width()
-46
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardBuilder</span><span class="p">().</span><span class="n">swatches</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">].</span><span class="n">width</span><span class="p">()</span>
+<span class="go">46
+</span></code></pre></div></div>
 
 <h3 id="keyboardbuilderrefresh">KeyboardBuilder.refresh</h3>
 
@@ -906,11 +906,11 @@ the Custom style.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; builder = KeyboardBuilder()
-&gt;&gt;&gt; builder.refresh()
-&gt;&gt;&gt; builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
-''
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span> <span class="o">=</span> <span class="n">KeyboardBuilder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">swatches</span><span class="p">[</span><span class="s">"naturals"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>  <span class="c1"># a color is set, so the swatch shows it, not "none"
+</span><span class="go">''
+</span></code></pre></div></div>
 
 <h2 id="appsettingsdialog">AppSettingsDialog</h2>
 
@@ -951,10 +951,10 @@ the Custom style.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.theme_changed
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">theme_changed</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -969,10 +969,10 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.categories.currentRow()
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">categories</span><span class="p">.</span><span class="n">currentRow</span><span class="p">()</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="appsettingsdialogcard">AppSettingsDialog.card</h3>
 
@@ -998,12 +998,12 @@ been looked at exist.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; "sage" in dialog.theme_cards
-False
-&gt;&gt;&gt; dialog.card("sage") is dialog.card("sage"), "sage" in dialog.theme_cards
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"sage"</span> <span class="ow">in</span> <span class="n">dialog</span><span class="p">.</span><span class="n">theme_cards</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">),</span> <span class="s">"sage"</span> <span class="ow">in</span> <span class="n">dialog</span><span class="p">.</span><span class="n">theme_cards</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <h3 id="appsettingsdialogcard_page">AppSettingsDialog.card_page</h3>
 
@@ -1026,10 +1026,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.card_page("sage").widget() is dialog.card("sage")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">card_page</span><span class="p">(</span><span class="s">"sage"</span><span class="p">).</span><span class="n">widget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">dialog</span><span class="p">.</span><span class="n">card</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="appsettingsdialogthumb">AppSettingsDialog.thumb</h3>
 
@@ -1052,10 +1052,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.thumb("sage_dark").isChecked()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">thumb</span><span class="p">(</span><span class="s">"sage_dark"</span><span class="p">).</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="appsettingsdialogchoose_theme">AppSettingsDialog.choose_theme</h3>
 
@@ -1072,12 +1072,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; dialog = AppSettingsDialog()
-&gt;&gt;&gt; dialog.choose_theme("light")
-&gt;&gt;&gt; dialog.theme_changed, saved_theme()
-(True, 'light')
-&gt;&gt;&gt; dialog.choose_theme("system")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span> <span class="o">=</span> <span class="n">AppSettingsDialog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">choose_theme</span><span class="p">(</span><span class="s">"light"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">theme_changed</span><span class="p">,</span> <span class="n">saved_theme</span><span class="p">()</span>
+<span class="go">(True, 'light')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">dialog</span><span class="p">.</span><span class="n">choose_theme</span><span class="p">(</span><span class="s">"system"</span><span class="p">)</span>
+</code></pre></div></div>
 
 
           
@@ -1292,8 +1292,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

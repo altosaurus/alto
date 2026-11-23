@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -688,9 +688,9 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
-'b6e2091'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span><span class="p">)</span>
+<span class="go">'b6e2091'
+</span></code></pre></div></div>
 
 <h2 id="source">Source</h2>
 
@@ -713,9 +713,9 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Source("https://github.com/altosaurus/alto.git", commit="b6e2091").ref
-'HEAD'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Source</span><span class="p">(</span><span class="s">"https://github.com/altosaurus/alto.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"b6e2091"</span><span class="p">).</span><span class="n">ref</span>
+<span class="go">'HEAD'
+</span></code></pre></div></div>
 
 <h2 id="short">short</h2>
 
@@ -738,9 +738,9 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
-'b6e2091'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">short</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe"</span><span class="p">)</span>
+<span class="go">'b6e2091'
+</span></code></pre></div></div>
 
 <h2 id="parse_direct_url">parse_direct_url</h2>
 
@@ -763,17 +763,17 @@ file, and the file’s hash is the one listed.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; parse_direct_url('{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}')
-Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
-&gt;&gt;&gt; named = '{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; parse_direct_url(named).ref
-'dev'
-&gt;&gt;&gt; parse_direct_url('{"url": "file:///home/me/alto", "dir_info": {"editable": true}}') is None
-True
-&gt;&gt;&gt; parse_direct_url("not json") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">'{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}'</span><span class="p">)</span>
+<span class="go">Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">named</span> <span class="o">=</span> <span class="s">'{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="n">named</span><span class="p">).</span><span class="n">ref</span>
+<span class="go">'dev'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">'{"url": "file:///home/me/alto", "dir_info": {"editable": true}}'</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_direct_url</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="installed_source">installed_source</h2>
 
@@ -790,10 +790,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; source = installed_source()
-&gt;&gt;&gt; source is None or len(source.commit) == COMMIT_LENGTH
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">installed_source</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">commit</span><span class="p">)</span> <span class="o">==</span> <span class="n">COMMIT_LENGTH</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="is_tool_install">is_tool_install</h2>
 
@@ -819,9 +819,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_tool_install(prefix=Path("/nowhere"))
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_tool_install</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s">"/nowhere"</span><span class="p">))</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="installkind">InstallKind</h2>
 
@@ -841,9 +841,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; InstallKind.SCRIPT.name
-'SCRIPT'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span><span class="p">.</span><span class="n">name</span>
+<span class="go">'SCRIPT'
+</span></code></pre></div></div>
 
 <h2 id="is_frozen">is_frozen</h2>
 
@@ -860,9 +860,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_frozen()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_frozen</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="install_kind">install_kind</h2>
 
@@ -892,14 +892,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/a.git", commit="abc1234")
-&gt;&gt;&gt; install_kind(here, tool=True, frozen=False).name
-'SCRIPT'
-&gt;&gt;&gt; install_kind(here, tool=False, frozen=False).name, install_kind(None, tool=False, frozen=False).name
-('OTHER', 'SOURCE')
-&gt;&gt;&gt; install_kind(None, tool=False, frozen=True).name
-'PACKAGE'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'SCRIPT'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">install_kind</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="n">name</span>
+<span class="go">('OTHER', 'SOURCE')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_kind</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'PACKAGE'
+</span></code></pre></div></div>
 
 <h2 id="cannot_update">cannot_update</h2>
 
@@ -922,11 +922,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER, cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
-(True, True)
-&gt;&gt;&gt; cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SOURCE</span><span class="p">)</span> <span class="o">==</span> <span class="n">SOURCE_FOLDER</span><span class="p">,</span> <span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">OTHER</span><span class="p">)</span> <span class="o">==</span> <span class="n">NOT_BY_SCRIPT</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">SCRIPT</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cannot_update</span><span class="p">(</span><span class="n">InstallKind</span><span class="p">.</span><span class="n">PACKAGE</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="find_program">find_program</h2>
 
@@ -954,9 +954,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; find_program("no-such-program-anywhere") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_program</span><span class="p">(</span><span class="s">"no-such-program-anywhere"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="check_command">check_command</h2>
 
@@ -984,9 +984,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_command(Source("https://example.org/a.git", commit="abc1234"), git="git")
-('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_command</span><span class="p">(</span><span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">),</span> <span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">)</span>
+<span class="go">('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
+</span></code></pre></div></div>
 
 <h2 id="install_command">install_command</h2>
 
@@ -1019,12 +1019,12 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; here = Source("https://example.org/alto.git", commit="abc1234")
-&gt;&gt;&gt; install_command(here, uv="uv", tag="v0.1.0")
-('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
-&gt;&gt;&gt; install_command(here, uv="uv")
-('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/alto.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">)</span>
+<span class="go">('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install_command</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">uv</span><span class="o">=</span><span class="s">"uv"</span><span class="p">)</span>
+<span class="go">('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git'])
+</span></code></pre></div></div>
 
 <h2 id="parse_ls_remote">parse_ls_remote</h2>
 
@@ -1047,11 +1047,11 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; parse_ls_remote("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe\tHEAD\n")
-'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
-&gt;&gt;&gt; parse_ls_remote("") is None, parse_ls_remote("fatal: repository not found") is None
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">"b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe</span><span class="se">\t</span><span class="s">HEAD</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<span class="go">'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">parse_ls_remote</span><span class="p">(</span><span class="s">"fatal: repository not found"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <h2 id="asset">Asset</h2>
 
@@ -1074,9 +1074,9 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Asset("SHA256SUMS", url="https://example.org/s", size=300).size
-300
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Asset</span><span class="p">(</span><span class="s">"SHA256SUMS"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/s"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">300</span><span class="p">).</span><span class="n">size</span>
+<span class="go">300
+</span></code></pre></div></div>
 
 <h2 id="release">Release</h2>
 
@@ -1101,9 +1101,9 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Release("0.1.0", tag="v0.1.0", url="https://example.org/r").version
-'0.1.0'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Release</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/r"</span><span class="p">).</span><span class="n">version</span>
+<span class="go">'0.1.0'
+</span></code></pre></div></div>
 
 <h2 id="version_key">version_key</h2>
 
@@ -1126,11 +1126,11 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; version_key("v0.10.2"), version_key("1.0")
-((0, 10, 2), (1, 0))
-&gt;&gt;&gt; version_key("1.0.0rc1") is None, version_key("") is None, version_key("unknown") is None
-(True, True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">version_key</span><span class="p">(</span><span class="s">"v0.10.2"</span><span class="p">),</span> <span class="n">version_key</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">)</span>
+<span class="go">((0, 10, 2), (1, 0))
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">version_key</span><span class="p">(</span><span class="s">"1.0.0rc1"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">version_key</span><span class="p">(</span><span class="s">""</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">version_key</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">(True, True, True)
+</span></code></pre></div></div>
 
 <h2 id="is_newer">is_newer</h2>
 
@@ -1158,13 +1158,13 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; is_newer("0.10.0", installed="0.9.0"), is_newer("v0.1.0", installed="0.0.0")
-(True, True)
-&gt;&gt;&gt; is_newer("1.0", installed="1.0.0"), is_newer("0.0.0", installed="0.1.0")
-(False, False)
-&gt;&gt;&gt; is_newer("1.0.0", installed="unknown")
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"0.10.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.9.0"</span><span class="p">),</span> <span class="n">is_newer</span><span class="p">(</span><span class="s">"v0.1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.0.0"</span><span class="p">)</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">),</span> <span class="n">is_newer</span><span class="p">(</span><span class="s">"0.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">)</span>
+<span class="go">(False, False)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">is_newer</span><span class="p">(</span><span class="s">"1.0.0"</span><span class="p">,</span> <span class="n">installed</span><span class="o">=</span><span class="s">"unknown"</span><span class="p">)</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="installed_version">installed_version</h2>
 
@@ -1181,9 +1181,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; installed_version().count(".") &gt;= 1
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">installed_version</span><span class="p">().</span><span class="n">count</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="parse_latest_release">parse_latest_release</h2>
 
@@ -1206,14 +1206,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
-&gt;&gt;&gt; parse_latest_release(answer)
-Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
-&gt;&gt;&gt; parse_latest_release(answer.replace('"prerelease": false', '"prerelease": true')) is None
-True
-&gt;&gt;&gt; parse_latest_release("not json") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">answer</span> <span class="o">=</span> <span class="s">'{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+<span class="go">Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="n">answer</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'"prerelease": false'</span><span class="p">,</span> <span class="s">'"prerelease": true'</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_latest_release</span><span class="p">(</span><span class="s">"not json"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="release_answer">release_answer</h2>
 
@@ -1241,13 +1241,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; release_answer(404, text="") == NO_RELEASE
-True
-&gt;&gt;&gt; release_answer(0, text="Name or service not known")
-'Alto could not reach GitHub: Name or service not known'
-&gt;&gt;&gt; release_answer(403, text="rate limit exceeded")
-'GitHub answered with an error (403): rate limit exceeded'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">""</span><span class="p">)</span> <span class="o">==</span> <span class="n">NO_RELEASE</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"Name or service not known"</span><span class="p">)</span>
+<span class="go">'Alto could not reach GitHub: Name or service not known'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">release_answer</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">"rate limit exceeded"</span><span class="p">)</span>
+<span class="go">'GitHub answered with an error (403): rate limit exceeded'
+</span></code></pre></div></div>
 
 <h2 id="fetch_text">fetch_text</h2>
 
@@ -1275,9 +1275,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fetch_text</span><span class="p">(</span><span class="s">"http://127.0.0.1:9/"</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># nothing listens there
+</span><span class="go">0
+</span></code></pre></div></div>
 
 <h2 id="ssl_context">ssl_context</h2>
 
@@ -1297,9 +1297,9 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) &gt; 100
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ssl_context</span><span class="p">().</span><span class="n">verify_mode</span> <span class="o">==</span> <span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ssl_context</span><span class="p">().</span><span class="n">get_ca_certs</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">100</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <h2 id="platform_asset_name">platform_asset_name</h2>
 
@@ -1329,13 +1329,13 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="x86_64")
-'alto-0.1.0-linux-x86_64.tar.gz'
-&gt;&gt;&gt; platform_asset_name("0.1.0", system="Windows", machine="AMD64")
-'alto-0.1.0-windows-x64-setup.exe'
-&gt;&gt;&gt; platform_asset_name("0.1.0", system="Linux", machine="aarch64") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"x86_64"</span><span class="p">)</span>
+<span class="go">'alto-0.1.0-linux-x86_64.tar.gz'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Windows"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"AMD64"</span><span class="p">)</span>
+<span class="go">'alto-0.1.0-windows-x64-setup.exe'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">platform_asset_name</span><span class="p">(</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s">"Linux"</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="s">"aarch64"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="find_asset">find_asset</h2>
 
@@ -1365,13 +1365,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
-&gt;&gt;&gt; found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
-&gt;&gt;&gt; found.name if found else None
-'a'
-&gt;&gt;&gt; find_asset(Release("1", tag="v1", url="", assets=files), name="b") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">files</span> <span class="o">=</span> <span class="p">(</span><span class="n">Asset</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">DOWNLOAD_BASE</span> <span class="o">+</span> <span class="s">"v1/a"</span><span class="p">),</span> <span class="n">Asset</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://example.org/b"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span> <span class="o">=</span> <span class="n">find_asset</span><span class="p">(</span><span class="n">Release</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">found</span><span class="p">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">found</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="go">'a'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">find_asset</span><span class="p">(</span><span class="n">Release</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s">"v1"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">files</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"b"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="parse_checksums">parse_checksums</h2>
 
@@ -1394,10 +1394,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
-&gt;&gt;&gt; parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
-{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="s">"ab"</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="s">"  alto-0.1.0-linux-x86_64.tar.gz"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">parse_checksums</span><span class="p">(</span><span class="n">entry</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">not a line</span><span class="se">\n</span><span class="s">"</span> <span class="o">+</span> <span class="s">"cd"</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="s">"  ../evil"</span><span class="p">)</span>
+<span class="go">{'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
+</span></code></pre></div></div>
 
 <h2 id="verify_signature">verify_signature</h2>
 
@@ -1427,17 +1427,17 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from nacl.signing import SigningKey
-&gt;&gt;&gt; pair = SigningKey.generate()
-&gt;&gt;&gt; public = base64.b64encode(bytes(pair.verify_key)).decode()
-&gt;&gt;&gt; signed = base64.b64encode(pair.sign(b"the list").signature).decode()
-&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=(public,))
-True
-&gt;&gt;&gt; verify_signature(b"another list", signature=signed, keys=(public,))
-False
-&gt;&gt;&gt; verify_signature(b"the list", signature=signed, keys=())
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">nacl.signing</span> <span class="kn">import</span> <span class="n">SigningKey</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">pair</span> <span class="o">=</span> <span class="n">SigningKey</span><span class="p">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">public</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">verify_key</span><span class="p">)).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signed</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">sign</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">).</span><span class="n">signature</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,))</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"another list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="n">public</span><span class="p">,))</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">verify_signature</span><span class="p">(</span><span class="sa">b</span><span class="s">"the list"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">())</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="self_check">self_check</h2>
 
@@ -1457,9 +1457,9 @@ signature library (which PyInstaller must be told about), and that the keys in t
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; self_check()
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">self_check</span><span class="p">()</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 
           
@@ -1622,8 +1622,8 @@ signature library (which PyInstaller must be told about), and that the keys in t
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

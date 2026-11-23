@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -689,10 +689,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sample = ResponseTimes(tuple(range(1, 101)), 15, 15)
-&gt;&gt;&gt; sample.grade(1).name, sample.grade(50).name, sample.grade(100).name
-('Easy', 'Good', 'Hard')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sample</span> <span class="o">=</span> <span class="n">ResponseTimes</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">50</span><span class="p">).</span><span class="n">name</span><span class="p">,</span> <span class="n">sample</span><span class="p">.</span><span class="n">grade</span><span class="p">(</span><span class="mi">100</span><span class="p">).</span><span class="n">name</span>
+<span class="go">('Easy', 'Good', 'Hard')
+</span></code></pre></div></div>
 
 <h3 id="responsetimesready">ResponseTimes.ready</h3>
 
@@ -710,9 +710,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ResponseTimes((), 15, 15).ready
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">ready</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="responsetimespercentile">ResponseTimes.percentile</h3>
 
@@ -735,9 +735,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ResponseTimes((1000, 2000), 15, 15).percentile(25)
-1250.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">percentile</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+<span class="go">1250.0
+</span></code></pre></div></div>
 
 <h3 id="responsetimesgrade">ResponseTimes.grade</h3>
 
@@ -760,9 +760,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ResponseTimes((1000,) * 40, 15, 15).grade(1000).name
-'Good'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ResponseTimes</span><span class="p">((</span><span class="mi">1000</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">).</span><span class="n">grade</span><span class="p">(</span><span class="mi">1000</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'Good'
+</span></code></pre></div></div>
 
 
           
@@ -943,8 +943,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

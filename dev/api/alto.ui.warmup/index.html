@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -685,20 +685,20 @@ second.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; warmed = []
-&gt;&gt;&gt; owner = QObject()
-&gt;&gt;&gt; start(owner, steps=[lambda: warmed.append(1), lambda: warmed.append(2)], delay=0)
-&gt;&gt;&gt; import time
-&gt;&gt;&gt; deadline = time.monotonic() + 2
-&gt;&gt;&gt; while len(warmed) &lt; 2 and time.monotonic() &lt; deadline:
-...     app.processEvents()
-&gt;&gt;&gt; warmed
-[1, 2]
-&gt;&gt;&gt; while any(timer.isActive() for timer in owner.findChildren(QTimer)) and time.monotonic() &lt; deadline:
-...     app.processEvents()
-&gt;&gt;&gt; any(timer.isActive() for timer in owner.findChildren(QTimer))  # it stops once every step has run
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">warmed</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">owner</span> <span class="o">=</span> <span class="n">QObject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="k">lambda</span><span class="p">:</span> <span class="n">warmed</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">warmed</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">warmed</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">deadline</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">app</span><span class="p">.</span><span class="n">processEvents</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">warmed</span>
+<span class="go">[1, 2]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">while</span> <span class="nb">any</span><span class="p">(</span><span class="n">timer</span><span class="p">.</span><span class="n">isActive</span><span class="p">()</span> <span class="k">for</span> <span class="n">timer</span> <span class="ow">in</span> <span class="n">owner</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QTimer</span><span class="p">))</span> <span class="ow">and</span> <span class="n">time</span><span class="p">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">deadline</span><span class="p">:</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">app</span><span class="p">.</span><span class="n">processEvents</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="n">timer</span><span class="p">.</span><span class="n">isActive</span><span class="p">()</span> <span class="k">for</span> <span class="n">timer</span> <span class="ow">in</span> <span class="n">owner</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QTimer</span><span class="p">))</span>  <span class="c1"># it stops once every step has run
+</span><span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="warmup_steps">warmup_steps</h2>
 
@@ -715,9 +715,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(warmup_steps())  # a staff, then the application's size and the ten style sheet sizes, in two weights
-23
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">warmup_steps</span><span class="p">())</span>  <span class="c1"># a staff, then the application's size and the ten style sheet sizes, in two weights
+</span><span class="go">23
+</span></code></pre></div></div>
 
 <h2 id="start">start</h2>
 
@@ -744,8 +744,8 @@ owner is deleted first (the window closed), the rest of the steps are dropped.</
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; start(QObject(), steps=[], delay=0)  # nothing to do
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">(</span><span class="n">QObject</span><span class="p">(),</span> <span class="n">steps</span><span class="o">=</span><span class="p">[],</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># nothing to do
+</span></code></pre></div></div>
 
 
           
@@ -1068,8 +1068,8 @@ owner is deleted first (the window closed), the rest of the steps are dropped.</
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

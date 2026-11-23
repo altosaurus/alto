@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -683,10 +683,10 @@ question. The widgets the panels are built from are in <code class="language-pla
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = settings_panel_for(ClefBasics())
-&gt;&gt;&gt; type(panel).__name__
-'ClefBasicsSettingsPanel'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">settings_panel_for</span><span class="p">(</span><span class="n">ClefBasics</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">panel</span><span class="p">).</span><span class="n">__name__</span>
+<span class="go">'ClefBasicsSettingsPanel'
+</span></code></pre></div></div>
 
 <h2 id="notenamesettingspanel">NoteNameSettingsPanel</h2>
 
@@ -719,10 +719,10 @@ each. Edits are live: each changes the settings, saves them and emits <code clas
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteNameSettingsPanel(NoteNameSettings())
-&gt;&gt;&gt; panel.cfg.active_clefs()
-['treble', 'bass']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">NoteNameSettingsPanel</span><span class="p">(</span><span class="n">NoteNameSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="n">active_clefs</span><span class="p">()</span>
+<span class="go">['treble', 'bass']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -737,10 +737,10 @@ each. Edits are live: each changes the settings, saves them and emits <code clas
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteNameSettingsPanel(NoteNameSettings())
-&gt;&gt;&gt; panel.stack.count()  # the menu and five pages
-6
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">NoteNameSettingsPanel</span><span class="p">(</span><span class="n">NoteNameSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu and five pages
+</span><span class="go">6
+</span></code></pre></div></div>
 
 <h2 id="keyboardsettingspanel">KeyboardSettingsPanel</h2>
 
@@ -770,10 +770,10 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardSettingsPanel(settings.KeyboardSettings())
-&gt;&gt;&gt; panel.low_label.text(), panel.high_label.text()
-('C3', 'C5')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">KeyboardSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeyboardSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">low_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">high_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">('C3', 'C5')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -788,9 +788,9 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardSettingsPanel(settings.KeyboardSettings()).stack.count()  # the menu, the range and the keys
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeyboardSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu, the range and the keys
+</span><span class="go">3
+</span></code></pre></div></div>
 
 <h2 id="noteconstructionsettingspanel">NoteConstructionSettingsPanel</h2>
 
@@ -819,10 +819,10 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
-&gt;&gt;&gt; sorted(panel.boxes)[:3]
-['alto', 'baritone', 'bass']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ConstructionSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">panel</span><span class="p">.</span><span class="n">boxes</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">['alto', 'baritone', 'bass']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -837,9 +837,9 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
-4
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteConstructionSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ConstructionSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="go">4
+</span></code></pre></div></div>
 
 <h2 id="intervalsettingspanel">IntervalSettingsPanel</h2>
 
@@ -856,9 +856,9 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
-10
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="go">10
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -873,9 +873,9 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
-'Interval and Quality'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">IntervalSettings</span><span class="p">()).</span><span class="n">quality_row</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Interval and Quality'
+</span></code></pre></div></div>
 
 <h2 id="keyboardintervalsettingspanel">KeyboardIntervalSettingsPanel</h2>
 
@@ -904,10 +904,10 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
-&gt;&gt;&gt; panel.stack.count()
-4
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">KeyboardIntervalSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="go">4
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -922,10 +922,10 @@ emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
-&gt;&gt;&gt; panel.low_label.text(), panel.high_label.text()
-('C3', 'C5')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">KeyboardIntervalSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeyboardIntervalSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">low_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">high_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">('C3', 'C5')
+</span></code></pre></div></div>
 
 <h2 id="arpeggiosettingspanel">ArpeggioSettingsPanel</h2>
 
@@ -956,10 +956,10 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ArpeggioSettingsPanel(settings.ArpeggioSettings())
-&gt;&gt;&gt; panel.types_row.value.text()
-'4 of 9'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ArpeggioSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ArpeggioSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">types_row</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'4 of 9'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -974,9 +974,9 @@ and emits <code class="language-plaintext highlighter-rouge">changed</code>.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioSettingsPanel(settings.ArpeggioSettings()).stack.count()  # the menu and four pages
-5
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ArpeggioSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu and four pages
+</span><span class="go">5
+</span></code></pre></div></div>
 
 <h2 id="keysignaturesettingspanel">KeySignatureSettingsPanel</h2>
 
@@ -1013,10 +1013,10 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
-&gt;&gt;&gt; panel.modes_row.value.text()
-'2 of 7'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">KeySignatureSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">modes_row</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'2 of 7'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1033,9 +1033,9 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
-4
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">KeySignatureSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu and three pages
+</span><span class="go">4
+</span></code></pre></div></div>
 
 <h2 id="notationsettingspanel">NotationSettingsPanel</h2>
 
@@ -1048,9 +1048,9 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Trill" in NotationSettingsPanel().terms.boxes
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Trill"</span> <span class="ow">in</span> <span class="n">NotationSettingsPanel</span><span class="p">().</span><span class="n">terms</span><span class="p">.</span><span class="n">boxes</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1058,9 +1058,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">NotationSettingsPanel</span><span class="p">().</span><span class="n">terms</span><span class="p">.</span><span class="n">boxes</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">NOTATION_TERMS</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="clefbasicssettingspanel">ClefBasicsSettingsPanel</h2>
 
@@ -1090,10 +1090,10 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
-&gt;&gt;&gt; panel.stack.count()  # the menu and two pages
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu and two pages
+</span><span class="go">3
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1108,10 +1108,10 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
-&gt;&gt;&gt; panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
-(True, ['french', 'subbass'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">(</span><span class="n">clefs</span><span class="o">=</span><span class="p">{</span><span class="s">"subbass"</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">boxes</span><span class="p">[</span><span class="s">"subbass"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span> <span class="nb">list</span><span class="p">(</span><span class="n">panel</span><span class="p">.</span><span class="n">boxes</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+<span class="go">(True, ['french', 'subbass'])
+</span></code></pre></div></div>
 
 <h2 id="settings_inversion_names">settings_inversion_names</h2>
 
@@ -1128,9 +1128,9 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; settings_inversion_names()
-('Root position', '1st inversion', '2nd inversion', '3rd inversion')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings_inversion_names</span><span class="p">()</span>
+<span class="go">('Root position', '1st inversion', '2nd inversion', '3rd inversion')
+</span></code></pre></div></div>
 
 <h2 id="circlesettingspanel">CircleSettingsPanel</h2>
 
@@ -1163,10 +1163,10 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = CircleSettingsPanel(settings.CircleSettings())
-&gt;&gt;&gt; panel.questions_row.value.text(), panel.colors_row.value.text()
-('3 of 3', 'Cyan to indigo')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">CircleSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">questions_row</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">panel</span><span class="p">.</span><span class="n">colors_row</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">('3 of 3', 'Cyan to indigo')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1181,9 +1181,9 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
-4
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">CircleSettings</span><span class="p">()).</span><span class="n">stack</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># the menu, the questions, the colors and the editor
+</span><span class="go">4
+</span></code></pre></div></div>
 
 <h2 id="settings_panel_for">settings_panel_for</h2>
 
@@ -1211,12 +1211,12 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import IntervalNames, NoteNames
-&gt;&gt;&gt; type(settings_panel_for(NoteNames())).__name__
-'NoteNameSettingsPanel'
-&gt;&gt;&gt; type(settings_panel_for(IntervalNames())).__name__
-'IntervalSettingsPanel'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">IntervalNames</span><span class="p">,</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">settings_panel_for</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">())).</span><span class="n">__name__</span>
+<span class="go">'NoteNameSettingsPanel'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">settings_panel_for</span><span class="p">(</span><span class="n">IntervalNames</span><span class="p">())).</span><span class="n">__name__</span>
+<span class="go">'IntervalSettingsPanel'
+</span></code></pre></div></div>
 
 
           
@@ -1513,8 +1513,8 @@ of question emits <code class="language-plaintext highlighter-rouge">changed</co
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

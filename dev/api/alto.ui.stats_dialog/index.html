@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,11 +680,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; since_for(None, now=1000.0) is None  # all time: from the start
-True
-&gt;&gt;&gt; format_duration(3600)
-'1 h 00 min'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">since_for</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c1"># all time: from the start
+</span><span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_duration</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<span class="go">'1 h 00 min'
+</span></code></pre></div></div>
 
 <h2 id="since_for">since_for</h2>
 
@@ -712,13 +712,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; since_for(7, now=864000.0)
-259200.0
-&gt;&gt;&gt; since_for(None, now=864000.0) is None
-True
-&gt;&gt;&gt; 0 &lt;= 864000.0 - since_for("today", now=864000.0) &lt; 90000  # within a day of now
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">since_for</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">864000.0</span><span class="p">)</span>
+<span class="go">259200.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">since_for</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">864000.0</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="mf">864000.0</span> <span class="o">-</span> <span class="n">since_for</span><span class="p">(</span><span class="s">"today"</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">864000.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">90000</span>  <span class="c1"># within a day of now
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="format_duration">format_duration</h2>
 
@@ -741,11 +741,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; format_duration(5), format_duration(90), format_duration(3000)
-('5 s', '2 min', '50 min')
-&gt;&gt;&gt; format_duration(3 * 3600 + 7 * 60)
-'3 h 07 min'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_duration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">format_duration</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span> <span class="n">format_duration</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+<span class="go">('5 s', '2 min', '50 min')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_duration</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="go">'3 h 07 min'
+</span></code></pre></div></div>
 
 <h2 id="period_title">period_title</h2>
 
@@ -773,15 +773,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; period_title(datetime(2026, 1, 5, 14), granularity="hour")
-'Mon 5 Jan 2026, 14:00'
-&gt;&gt;&gt; period_title(datetime(2026, 1, 5), granularity="day")
-'Mon 5 Jan 2026'
-&gt;&gt;&gt; period_title(datetime(2026, 1, 5), granularity="week")
-'Week of Mon 5 Jan 2026'
-&gt;&gt;&gt; period_title(datetime(2026, 1, 1), granularity="month")
-'January 2026'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_title</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"hour"</span><span class="p">)</span>
+<span class="go">'Mon 5 Jan 2026, 14:00'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_title</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"day"</span><span class="p">)</span>
+<span class="go">'Mon 5 Jan 2026'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_title</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"week"</span><span class="p">)</span>
+<span class="go">'Week of Mon 5 Jan 2026'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">period_title</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">granularity</span><span class="o">=</span><span class="s">"month"</span><span class="p">)</span>
+<span class="go">'January 2026'
+</span></code></pre></div></div>
 
 <h2 id="tile">Tile</h2>
 
@@ -805,13 +805,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; tile = Tile("Questions answered")
-&gt;&gt;&gt; tile.value.text()
-'–'
-&gt;&gt;&gt; tile.show_value("12")
-&gt;&gt;&gt; tile.value.text()
-'12'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="s">"Questions answered"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'–'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">show_value</span><span class="p">(</span><span class="s">"12"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'12'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -826,10 +826,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; tile = Tile("Days practiced")
-&gt;&gt;&gt; tile.caption.text()
-'Days practiced'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="s">"Days practiced"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">caption</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Days practiced'
+</span></code></pre></div></div>
 
 <h3 id="tileshow_value">Tile.show_value</h3>
 
@@ -846,11 +846,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; tile = Tile("Typical first answer")
-&gt;&gt;&gt; tile.show_value("7.6 s")
-&gt;&gt;&gt; tile.value.text()
-'7.6 s'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="s">"Typical first answer"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">show_value</span><span class="p">(</span><span class="s">"7.6 s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tile</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'7.6 s'
+</span></code></pre></div></div>
 
 <h2 id="statspage">StatsPage</h2>
 
@@ -879,12 +879,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; page.note.text().startswith("No answers recorded for Ada")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">StatsPage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">note</span><span class="p">.</span><span class="n">text</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"No answers recorded for Ada"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -899,12 +899,12 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; page.timeframe.currentText()  # the last 30 days, until another is chosen
-'Last 30 days'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">StatsPage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">timeframe</span><span class="p">.</span><span class="n">currentText</span><span class="p">()</span>  <span class="c1"># the last 30 days, until another is chosen
+</span><span class="go">'Last 30 days'
+</span></code></pre></div></div>
 
 <h3 id="statspagerefresh">StatsPage.refresh</h3>
 
@@ -915,13 +915,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; page.refresh()
-&gt;&gt;&gt; page.tiles["questions"].value.text()  # nothing answered yet
-'0'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">StatsPage</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">tiles</span><span class="p">[</span><span class="s">"questions"</span><span class="p">].</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>  <span class="c1"># nothing answered yet
+</span><span class="go">'0'
+</span></code></pre></div></div>
 
 
           
@@ -1226,8 +1226,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

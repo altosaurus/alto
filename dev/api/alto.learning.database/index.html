@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,13 +678,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                duration_ms=2000, answered_at=100.0)
-&gt;&gt;&gt; db.count_attempts(ada.id)
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h2 id="check_snapshot">check_snapshot</h2>
 
@@ -713,13 +713,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_snapshot(Database().snapshot()) == (SCHEMA_VERSION, 0, 0)
-True
-&gt;&gt;&gt; check_snapshot(b"not a database")
-Traceback (most recent call last):
-    ...
-ValueError: This is not an Alto database.
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">Database</span><span class="p">().</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">SCHEMA_VERSION</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="sa">b</span><span class="s">"not a database"</span><span class="p">)</span>
+<span class="go">Traceback (most recent call last):
+</span><span class="c">    ...
+</span><span class="go">ValueError: This is not an Alto database.
+</span></code></pre></div></div>
 
 <h2 id="profile">Profile</h2>
 
@@ -741,9 +741,9 @@ ValueError: This is not an Alto database.
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Profile(1, name="Ada")
-Profile(id=1, name='Ada')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Profile</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="go">Profile(id=1, name='Ada')
+</span></code></pre></div></div>
 
 <h2 id="itemrecord">ItemRecord</h2>
 
@@ -779,11 +779,11 @@ Profile(id=1, name='Ada')
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; record = ItemRecord(2.0, seen=3, first_try_right=1, wrong_attempts=2, total_first_ms=9000,
-...                     last_seen=100.0, signature="s", payload="{}")
-&gt;&gt;&gt; record.seen
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">seen</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h2 id="database">Database</h2>
 
@@ -800,12 +800,12 @@ Profile(id=1, name='Ada')
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()  # in memory; give a path to keep it on disk
-&gt;&gt;&gt; db.profiles()
-[]
-&gt;&gt;&gt; db.add_profile("Ada")
-Profile(id=1, name='Ada')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>  <span class="c1"># in memory; give a path to keep it on disk
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">profiles</span><span class="p">()</span>
+<span class="go">[]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="go">Profile(id=1, name='Ada')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -819,10 +819,10 @@ Profile(id=1, name='Ada')
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; db.conn.execute("PRAGMA user_version").fetchone()[0] == SCHEMA_VERSION
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"PRAGMA user_version"</span><span class="p">).</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SCHEMA_VERSION</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="databasewrite_transaction">Database.write_transaction</h3>
 
@@ -840,13 +840,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; with db.write_transaction():
-...     print(db.conn.in_transaction)
-True
-&gt;&gt;&gt; db.conn.in_transaction
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">with</span> <span class="n">db</span><span class="p">.</span><span class="n">write_transaction</span><span class="p">():</span>
+<span class="gp">...</span><span class="w">     </span><span class="k">print</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">in_transaction</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">in_transaction</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="databaseclose">Database.close</h3>
 
@@ -857,9 +857,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; db.close()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="databasesnapshot">Database.snapshot</h3>
 
@@ -876,11 +876,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; check_snapshot(db.snapshot()) == (SCHEMA_VERSION, 1, 0)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_snapshot</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">snapshot</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="n">SCHEMA_VERSION</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="databaserestore">Database.restore</h3>
 
@@ -906,14 +906,14 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; source = Database()
-&gt;&gt;&gt; ada = source.add_profile("Ada")
-&gt;&gt;&gt; target = Database()
-&gt;&gt;&gt; _ = target.add_profile("Someone else")
-&gt;&gt;&gt; target.restore(source.snapshot())
-&gt;&gt;&gt; [p.name for p in target.profiles()]
-['Ada']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">source</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">target</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">target</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Someone else"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">target</span><span class="p">.</span><span class="n">restore</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">snapshot</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">target</span><span class="p">.</span><span class="n">profiles</span><span class="p">()]</span>
+<span class="go">['Ada']
+</span></code></pre></div></div>
 
 <h3 id="databaseprofiles">Database.profiles</h3>
 
@@ -930,12 +930,12 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; _ = db.add_profile("ben")
-&gt;&gt;&gt; _ = db.add_profile("Ada")
-&gt;&gt;&gt; [p.name for p in db.profiles()]
-['Ada', 'ben']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"ben"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">profiles</span><span class="p">()]</span>
+<span class="go">['Ada', 'ben']
+</span></code></pre></div></div>
 
 <h3 id="databaseprofile">Database.profile</h3>
 
@@ -958,14 +958,14 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; db.profile(ada.id).name
-'Ada'
-&gt;&gt;&gt; db.profile(999) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">profile</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">).</span><span class="n">name</span>
+<span class="go">'Ada'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">profile</span><span class="p">(</span><span class="mi">999</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="databaseadd_profile">Database.add_profile</h3>
 
@@ -994,14 +994,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; db.add_profile("  Ada   Lovelace ")
-Profile(id=1, name='Ada Lovelace')
-&gt;&gt;&gt; db.add_profile("ada lovelace")
-Traceback (most recent call last):
-    ...
-ValueError: There is already a profile called ada lovelace.
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"  Ada   Lovelace "</span><span class="p">)</span>
+<span class="go">Profile(id=1, name='Ada Lovelace')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"ada lovelace"</span><span class="p">)</span>
+<span class="go">Traceback (most recent call last):
+</span><span class="c">    ...
+</span><span class="go">ValueError: There is already a profile called ada lovelace.
+</span></code></pre></div></div>
 
 <h3 id="databasedelete_profile">Database.delete_profile</h3>
 
@@ -1018,12 +1018,12 @@ ValueError: There is already a profile called ada lovelace.
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.delete_profile(ada.id)
-&gt;&gt;&gt; db.profiles()
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">delete_profile</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">profiles</span><span class="p">()</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="databaseget_item">Database.get_item</h3>
 
@@ -1053,11 +1053,11 @@ ValueError: There is already a profile called ada lovelace.
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.get_item(ada.id, exercise="NoteNames", item_key="k") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="databasesave_item">Database.save_item</h3>
 
@@ -1083,15 +1083,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; record = ItemRecord(2.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=3000,
-...                     last_seen=100.0, signature="s", payload="{}")
-&gt;&gt;&gt; db.save_item(ada.id, exercise="NoteNames", item_key="k", item=record)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; db.get_item(ada.id, exercise="NoteNames", item_key="k").strain
-2.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">record</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                     </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">record</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">).</span><span class="n">strain</span>
+<span class="go">2.0
+</span></code></pre></div></div>
 
 <h3 id="databaseadd_attempt">Database.add_attempt</h3>
 
@@ -1127,13 +1127,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=False,
-...                duration_ms=1500, answered_at=50.0)
-&gt;&gt;&gt; [(r["answer"], r["correct"]) for r in db.attempts(ada.id)]
-[('C', 0)]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">50.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s">"answer"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"correct"</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="go">[('C', 0)]
+</span></code></pre></div></div>
 
 <h3 id="databaseattempts">Database.attempts</h3>
 
@@ -1161,16 +1161,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for i, name in enumerate(["NoteNames", "IntervalNames"]):
-...     db.add_attempt(ada.id, exercise=name, item_key="k", attempt_no=1, answer="x", correct=True,
-...                    duration_ms=1000, answered_at=float(i))
-&gt;&gt;&gt; [r["exercise"] for r in db.attempts(ada.id)]
-['NoteNames', 'IntervalNames']
-&gt;&gt;&gt; [r["exercise"] for r in db.attempts(ada.id, exercise="IntervalNames")]
-['IntervalNames']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="s">"IntervalNames"</span><span class="p">]):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"exercise"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="go">['NoteNames', 'IntervalNames']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"exercise"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"IntervalNames"</span><span class="p">)]</span>
+<span class="go">['IntervalNames']
+</span></code></pre></div></div>
 
 <h3 id="databaseattempts_in">Database.attempts_in</h3>
 
@@ -1202,14 +1202,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for t in (10.0, 20.0, 30.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
-&gt;&gt;&gt; [r["answered_at"] for r in db.attempts_in([ada.id], since=15.0)]
-[20.0, 30.0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempts_in</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">since</span><span class="o">=</span><span class="mf">15.0</span><span class="p">)]</span>
+<span class="go">[20.0, 30.0]
+</span></code></pre></div></div>
 
 <h3 id="databasefirst_attempts_per_day">Database.first_attempts_per_day</h3>
 
@@ -1239,14 +1239,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for attempt_no in (1, 2, 1):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=attempt_no, answer="C", correct=True,
-...                    duration_ms=900, answered_at=86_400.0 * 100 + 43_200)
-&gt;&gt;&gt; list(db.first_attempts_per_day([ada.id]).values())  # the second try of a question is not counted
-[2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">attempt_no</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="n">attempt_no</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="mf">86_400.0</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">43_200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">first_attempts_per_day</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">]).</span><span class="n">values</span><span class="p">())</span>  <span class="c1"># the second try of a question is not counted
+</span><span class="go">[2]
+</span></code></pre></div></div>
 
 <h3 id="databasestrained_items">Database.strained_items</h3>
 
@@ -1280,15 +1280,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for key, strain in (("easy", 0.5), ("hard", 4.0)):
-...     item = ItemRecord(strain, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=1000,
-...                       last_seen=1.0, signature="s", payload="{}")
-...     db.save_item(ada.id, exercise="NoteNames", item_key=key, item=item)
-&gt;&gt;&gt; [r["item_key"] for r in db.strained_items([ada.id], min_strain=1.0)]
-['hard']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">strain</span> <span class="ow">in</span> <span class="p">((</span><span class="s">"easy"</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="s">"hard"</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                       </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"item_key"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">strained_items</span><span class="p">([</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">],</span> <span class="n">min_strain</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="go">['hard']
+</span></code></pre></div></div>
 
 <h3 id="databasecount_attempts">Database.count_attempts</h3>
 
@@ -1320,16 +1320,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.count_attempts(ada.id)
-0
-&gt;&gt;&gt; for t in (1.0, 5.0, 9.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
-&gt;&gt;&gt; db.count_attempts(ada.id, since=2.0, until=9.0)  # from the start of the period up to, not including, its end
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="go">0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">count_attempts</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="mf">9.0</span><span class="p">)</span>  <span class="c1"># from the start of the period up to, not including, its end
+</span><span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="databaseattempt_rows">Database.attempt_rows</h3>
 
@@ -1363,16 +1363,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; for t in (1.0, 2.0):
-...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
-...                    duration_ms=1000, answered_at=t)
-&gt;&gt;&gt; [r["answered_at"] for r in db.attempt_rows(ada.id)]
-[2.0, 1.0]
-&gt;&gt;&gt; [r["answered_at"] for r in db.attempt_rows(ada.id, since=1.5)]
-[2.0]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">):</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">db</span><span class="p">.</span><span class="n">add_attempt</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">duration_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">answered_at</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)]</span>
+<span class="go">[2.0, 1.0]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s">"answered_at"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">attempt_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">since</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)]</span>
+<span class="go">[2.0]
+</span></code></pre></div></div>
 
 <h3 id="databaseitem_rows">Database.item_rows</h3>
 
@@ -1400,11 +1400,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; db.item_rows(ada.id)
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">item_rows</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="databaseprofile_rows">Database.profile_rows</h3>
 
@@ -1421,11 +1421,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; _ = db.add_profile("Ada")
-&gt;&gt;&gt; [(r["name"], r["attempts"], r["questions"]) for r in db.profile_rows()]
-[('Ada', 0, 0)]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s">"name"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"attempts"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s">"questions"</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">profile_rows</span><span class="p">()]</span>
+<span class="go">[('Ada', 0, 0)]
+</span></code></pre></div></div>
 
 <h3 id="databasereplay_candidates">Database.replay_candidates</h3>
 
@@ -1459,16 +1459,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; ada = db.add_profile("Ada")
-&gt;&gt;&gt; item = ItemRecord(3.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=1000,
-...                   last_seen=1.0, signature="s1", payload="{}")
-&gt;&gt;&gt; db.save_item(ada.id, exercise="NoteNames", item_key="k", item=item)
-&gt;&gt;&gt; [row_.item_key for row_ in db.replay_candidates(ada.id, exercise="NoteNames", signature="s1")]
-['k']
-&gt;&gt;&gt; db.replay_candidates(ada.id, exercise="NoteNames", signature="other settings")
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ada</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">item</span> <span class="o">=</span> <span class="n">ItemRecord</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">first_try_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wrong_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_first_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                   </span><span class="n">last_seen</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">"{}"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">save_item</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">item_key</span><span class="o">=</span><span class="s">"k"</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">row_</span><span class="p">.</span><span class="n">item_key</span> <span class="k">for</span> <span class="n">row_</span> <span class="ow">in</span> <span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"s1"</span><span class="p">)]</span>
+<span class="go">['k']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span><span class="p">.</span><span class="n">replay_candidates</span><span class="p">(</span><span class="n">ada</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"NoteNames"</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="s">"other settings"</span><span class="p">)</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 
           
@@ -1643,8 +1643,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

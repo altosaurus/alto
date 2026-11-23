@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -689,12 +689,12 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; strain = update_strain(NEW_STRAIN, correct=False, attempt_no=1, seconds=4.0, par_seconds=4.0)
-&gt;&gt;&gt; strain  # a miss pushes the question up
-3.0
-&gt;&gt;&gt; update_strain(strain, correct=True, attempt_no=2, seconds=2.0, par_seconds=4.0)  # a retry earns little
-2.8
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strain</span> <span class="o">=</span> <span class="n">update_strain</span><span class="p">(</span><span class="n">NEW_STRAIN</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strain</span>  <span class="c1"># a miss pushes the question up
+</span><span class="go">3.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>  <span class="c1"># a retry earns little
+</span><span class="go">2.8
+</span></code></pre></div></div>
 
 <h2 id="arts_priority">arts_priority</h2>
 
@@ -724,11 +724,11 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; arts_priority(1, correct=False, duration_ms=200)
-2.0
-&gt;&gt;&gt; arts_priority(0, correct=True, duration_ms=3000)
-0.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="go">2.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">arts_priority</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+<span class="go">0.0
+</span></code></pre></div></div>
 
 <h2 id="speed_term">speed_term</h2>
 
@@ -756,15 +756,15 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; speed_term(1.0, par_seconds=10.0)  # at or under half of par: the full bonus
--0.6
-&gt;&gt;&gt; round(speed_term(7.5, par_seconds=10.0), 2)
--0.3
-&gt;&gt;&gt; round(speed_term(25.0, par_seconds=10.0), 2)
-0.5
-&gt;&gt;&gt; speed_term(100.0, par_seconds=10.0)  # four times par or more: the full penalty
-1.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>  <span class="c1"># at or under half of par: the full bonus
+</span><span class="go">-0.6
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">speed_term</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">-0.3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">speed_term</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">0.5
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">speed_term</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>  <span class="c1"># four times par or more: the full penalty
+</span><span class="go">1.0
+</span></code></pre></div></div>
 
 <h2 id="update_strain">update_strain</h2>
 
@@ -798,13 +798,13 @@ answers take off up to FAST_BONUS, and slow ones add up to SLOW_PENALTY.</li>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; update_strain(1.5, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)
-3.0
-&gt;&gt;&gt; round(update_strain(1.5, correct=True, attempt_no=1, seconds=1.0, par_seconds=5.0), 2)  # right, and quick
-0.4
-&gt;&gt;&gt; update_strain(5.9, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)  # capped
-6.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="go">3.0
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">update_strain</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># right, and quick
+</span><span class="go">0.4
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_strain</span><span class="p">(</span><span class="mf">5.9</span><span class="p">,</span> <span class="n">correct</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempt_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">par_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>  <span class="c1"># capped
+</span><span class="go">6.0
+</span></code></pre></div></div>
 
 <h2 id="weight">weight</h2>
 
@@ -837,13 +837,13 @@ learned is not repeated right away but what you struggle with returns within the
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; round(weight(None, last_seen=None, now=0.0), 2)  # a new question
-2.46
-&gt;&gt;&gt; round(weight(3.0, last_seen=0.0, now=1e9), 2)  # a hard question, long unseen
-6.05
-&gt;&gt;&gt; round(weight(3.0, last_seen=100.0, now=100.0), 3)  # the same, just seen: held back
-0.121
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># a new question
+</span><span class="go">2.46
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">1e9</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># a hard question, long unseen
+</span><span class="go">6.05
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">last_seen</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># the same, just seen: held back
+</span><span class="go">0.121
+</span></code></pre></div></div>
 
 <h2 id="choose">choose</h2>
 
@@ -873,9 +873,9 @@ learned is not repeated right away but what you struggle with returns within the
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; choose(["a", "b"], weights=[1.0, 0.0], rng=random.Random(0))
-'a'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choose</span><span class="p">([</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">rng</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">'a'
+</span></code></pre></div></div>
 
 
           
@@ -1058,8 +1058,8 @@ learned is not repeated right away but what you struggle with returns within the
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

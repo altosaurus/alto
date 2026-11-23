@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -684,9 +684,9 @@ source folder is told to update with git.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; brief("fatal: unable to access 'https://example.org/': Could not resolve host\n")
-"fatal: unable to access 'https://example.org/': Could not resolve host"
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brief</span><span class="p">(</span><span class="s">"fatal: unable to access 'https://example.org/': Could not resolve host</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<span class="go">"fatal: unable to access 'https://example.org/': Could not resolve host"
+</span></code></pre></div></div>
 
 <h2 id="brief">brief</h2>
 
@@ -714,11 +714,11 @@ source folder is told to update with git.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; brief("  one\ntwo  \n")
-'one\ntwo'
-&gt;&gt;&gt; brief("x" * 10, limit=4)
-'xxxx'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brief</span><span class="p">(</span><span class="s">"  one</span><span class="se">\n</span><span class="s">two  </span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<span class="go">'one\ntwo'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brief</span><span class="p">(</span><span class="s">"x"</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">'xxxx'
+</span></code></pre></div></div>
 
 <h2 id="commandrunner">CommandRunner</h2>
 
@@ -738,10 +738,10 @@ source folder is told to update with git.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; runner = CommandRunner()
-&gt;&gt;&gt; runner.running
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span> <span class="o">=</span> <span class="n">CommandRunner</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">running</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -789,13 +789,13 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import sys
-&gt;&gt;&gt; runner = CommandRunner()
-&gt;&gt;&gt; runner.start(sys.executable, arguments=["-c", "import time; time.sleep(30)"])
-&gt;&gt;&gt; runner.stop()
-&gt;&gt;&gt; runner.running
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span> <span class="o">=</span> <span class="n">CommandRunner</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">[</span><span class="s">"-c"</span><span class="p">,</span> <span class="s">"import time; time.sleep(30)"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">runner</span><span class="p">.</span><span class="n">running</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="commandrunnerstop">CommandRunner.stop</h3>
 
@@ -806,8 +806,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CommandRunner().stop()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CommandRunner</span><span class="p">().</span><span class="n">stop</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="saved_channel">saved_channel</h2>
 
@@ -824,13 +824,13 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; saved_channel()
-'releases'
-&gt;&gt;&gt; save_channel("main")
-&gt;&gt;&gt; saved_channel()
-'main'
-&gt;&gt;&gt; save_channel("releases")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_channel</span><span class="p">()</span>
+<span class="go">'releases'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_channel</span><span class="p">(</span><span class="s">"main"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_channel</span><span class="p">()</span>
+<span class="go">'main'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_channel</span><span class="p">(</span><span class="s">"releases"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="save_channel">save_channel</h2>
 
@@ -847,10 +847,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; save_channel("nonsense")
-&gt;&gt;&gt; saved_channel()
-'releases'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_channel</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_channel</span><span class="p">()</span>
+<span class="go">'releases'
+</span></code></pre></div></div>
 
 <h2 id="waitdialog">WaitDialog</h2>
 
@@ -933,10 +933,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").canceled
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CheckDialog</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="s">"https://example.org/a.git"</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="s">"abc1234"</span><span class="p">),</span> <span class="n">git</span><span class="o">=</span><span class="s">"git"</span><span class="p">).</span><span class="n">canceled</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="releasefetcher">ReleaseFetcher</h2>
 
@@ -955,8 +955,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ReleaseFetcher().cancel()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReleaseFetcher</span><span class="p">().</span><span class="n">cancel</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1002,8 +1002,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Reopening Alto on the same afternoon reuses the previous check time.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Reopening Alto on the same afternoon reuses the previous check time.
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1017,8 +1017,8 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">Source checkouts continue to use Git for updates.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Source checkouts continue to use Git for updates.
+</code></pre></div></div>
 
 <h2 id="releasedialog">ReleaseDialog</h2>
 
@@ -1056,10 +1056,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; ReleaseDialog(None).canceled
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ReleaseDialog</span><span class="p">(</span><span class="bp">None</span><span class="p">).</span><span class="n">canceled</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="updatedialog">UpdateDialog</h2>
 
@@ -1115,10 +1115,10 @@ finished it says so, and its one button closes it. After a successful update the
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">UpdateDialog</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="p">(</span><span class="s">"uv"</span><span class="p">,</span> <span class="p">[</span><span class="s">"tool"</span><span class="p">,</span> <span class="s">"install"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">])).</span><span class="n">succeeded</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="updatedialogreject">UpdateDialog.reject</h3>
 
@@ -1166,8 +1166,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_for_updates  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_for_updates</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h2 id="check_release">check_release</h2>
 
@@ -1195,8 +1195,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_release  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_release</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h2 id="offer_release">offer_release</h2>
 
@@ -1228,8 +1228,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A manual check can offer a version the learner previously declined.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A manual check can offer a version the learner previously declined.
+</code></pre></div></div>
 
 <h2 id="check_main">check_main</h2>
 
@@ -1253,8 +1253,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; check_main  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">check_main</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h2 id="install">install</h2>
 
@@ -1280,8 +1280,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; install  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">install</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h2 id="update_package">update_package</h2>
 
@@ -1307,8 +1307,8 @@ or the main branch, and can install it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; update_package  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">update_package</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 
           
@@ -1629,8 +1629,8 @@ or the main branch, and can install it.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

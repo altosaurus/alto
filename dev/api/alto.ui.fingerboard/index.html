@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -697,13 +697,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from pathlib import Path
-&gt;&gt;&gt; bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
-&gt;&gt;&gt; ruler_reach(bare)
-12
-&gt;&gt;&gt; ruler_reach(PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None, positions=((14, "9th"),)))
-14
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bare</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ruler_reach</span><span class="p">(</span><span class="n">bare</span><span class="p">)</span>
+<span class="go">12
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ruler_reach</span><span class="p">(</span><span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="p">((</span><span class="mi">14</span><span class="p">,</span> <span class="s">"9th"</span><span class="p">),)))</span>
+<span class="go">14
+</span></code></pre></div></div>
 
 <h2 id="ruler_base">ruler_base</h2>
 
@@ -731,14 +731,14 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from pathlib import Path
-&gt;&gt;&gt; from alto.instrument_packs import PackString
-&gt;&gt;&gt; strings = (PackString("C3", (0, 10), (100, 10)), PackString("G3", (0, 0), (100, 0)))
-&gt;&gt;&gt; viola = PackInstrument("pack.x.y", Path("a.png"), (100, 10), strings, None)
-&gt;&gt;&gt; start, away, apart = ruler_base(viola, step=0)
-&gt;&gt;&gt; (start.x(), start.y(), away.y(), apart)
-(0.0, -18.0, -1.0, 10.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.instrument_packs</span> <span class="kn">import</span> <span class="n">PackString</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strings</span> <span class="o">=</span> <span class="p">(</span><span class="n">PackString</span><span class="p">(</span><span class="s">"C3"</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span> <span class="n">PackString</span><span class="p">(</span><span class="s">"G3"</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">viola</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">strings</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">,</span> <span class="n">away</span><span class="p">,</span> <span class="n">apart</span> <span class="o">=</span> <span class="n">ruler_base</span><span class="p">(</span><span class="n">viola</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">start</span><span class="p">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">start</span><span class="p">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">away</span><span class="p">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">apart</span><span class="p">)</span>
+<span class="go">(0.0, -18.0, -1.0, 10.0)
+</span></code></pre></div></div>
 
 <h2 id="neck_view">neck_view</h2>
 
@@ -768,14 +768,14 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from pathlib import Path
-&gt;&gt;&gt; from alto.instrument_packs import PackString
-&gt;&gt;&gt; strings = (PackString("C3", (100, 60), (900, 60)), PackString("G3", (100, 40), (900, 40)))
-&gt;&gt;&gt; board = PackInstrument("pack.x.y", Path("a.png"), (1000, 100), strings, None)
-&gt;&gt;&gt; view = neck_view(board, gap=20.0)
-&gt;&gt;&gt; view.left() &lt; 100 and view.right() &gt; 900 and view.top() &lt; 40 and view.bottom() &gt; 60
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.instrument_packs</span> <span class="kn">import</span> <span class="n">PackString</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">strings</span> <span class="o">=</span> <span class="p">(</span><span class="n">PackString</span><span class="p">(</span><span class="s">"C3"</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">60</span><span class="p">)),</span> <span class="n">PackString</span><span class="p">(</span><span class="s">"G3"</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">40</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">strings</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span> <span class="o">=</span> <span class="n">neck_view</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mf">20.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="n">left</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">right</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">900</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">40</span> <span class="ow">and</span> <span class="n">view</span><span class="p">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">60</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="manual_style">manual_style</h2>
 
@@ -798,18 +798,18 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from pathlib import Path
-&gt;&gt;&gt; bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
-&gt;&gt;&gt; manual_style(bare)
-(None, 4.5)
-&gt;&gt;&gt; from alto.instrument_packs import PackKeyboardStyle
-&gt;&gt;&gt; look = PackKeyboardStyle((("cap", "#eee3c8"),), (("length", 5.0),))
-&gt;&gt;&gt; styled = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None, keyboard_style=look)
-&gt;&gt;&gt; look_style, look_length = manual_style(styled)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; look_style.cap, look_length
-('#eee3c8', 5.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bare</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">manual_style</span><span class="p">(</span><span class="n">bare</span><span class="p">)</span>
+<span class="go">(None, 4.5)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.instrument_packs</span> <span class="kn">import</span> <span class="n">PackKeyboardStyle</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">look</span> <span class="o">=</span> <span class="n">PackKeyboardStyle</span><span class="p">(((</span><span class="s">"cap"</span><span class="p">,</span> <span class="s">"#eee3c8"</span><span class="p">),),</span> <span class="p">((</span><span class="s">"length"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">styled</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">keyboard_style</span><span class="o">=</span><span class="n">look</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">look_style</span><span class="p">,</span> <span class="n">look_length</span> <span class="o">=</span> <span class="n">manual_style</span><span class="p">(</span><span class="n">styled</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">look_style</span><span class="p">.</span><span class="n">cap</span><span class="p">,</span> <span class="n">look_length</span>
+<span class="go">('#eee3c8', 5.0)
+</span></code></pre></div></div>
 
 <h2 id="fingerboardwidget">FingerboardWidget</h2>
 
@@ -872,11 +872,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; board = FingerboardWidget()
-&gt;&gt;&gt; board.set_pickable(True)
-&gt;&gt;&gt; board.cursor().shape() == Qt.CursorShape.PointingHandCursor
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">FingerboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">set_pickable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">cursor</span><span class="p">().</span><span class="n">shape</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">CursorShape</span><span class="p">.</span><span class="n">PointingHandCursor</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="fingerboardwidgetshow_target">FingerboardWidget.show_target</h3>
 
@@ -893,10 +893,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; board = FingerboardWidget()
-&gt;&gt;&gt; board.show_target((10.0, 20.0))
-&gt;&gt;&gt; board.show_target(None)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">FingerboardWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">show_target</span><span class="p">((</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">show_target</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="fingerboardwidgetmousepressevent">FingerboardWidget.mousePressEvent</h3>
 
@@ -1191,8 +1191,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

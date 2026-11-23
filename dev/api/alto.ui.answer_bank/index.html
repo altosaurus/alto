@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,9 +678,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; AnswerBank().maximumHeight()
-240
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">AnswerBank</span><span class="p">().</span><span class="n">maximumHeight</span><span class="p">()</span>
+<span class="go">240
+</span></code></pre></div></div>
 
 <h2 id="answerbank">AnswerBank</h2>
 
@@ -704,10 +704,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; bank = AnswerBank()
-&gt;&gt;&gt; bank.buttons
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span> <span class="o">=</span> <span class="n">AnswerBank</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span><span class="p">.</span><span class="n">buttons</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -722,9 +722,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; AnswerBank().horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">AnswerBank</span><span class="p">().</span><span class="n">horizontalScrollBarPolicy</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollBarPolicy</span><span class="p">.</span><span class="n">ScrollBarAlwaysOff</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="answerbankset_buttons">AnswerBank.set_buttons</h3>
 
@@ -746,12 +746,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtWidgets import QPushButton
-&gt;&gt;&gt; bank = AnswerBank()
-&gt;&gt;&gt; bank.set_buttons([QPushButton("m3"), QPushButton("P5")])
-&gt;&gt;&gt; len(bank.buttons)
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="n">QPushButton</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span> <span class="o">=</span> <span class="n">AnswerBank</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span><span class="p">.</span><span class="n">set_buttons</span><span class="p">([</span><span class="n">QPushButton</span><span class="p">(</span><span class="s">"m3"</span><span class="p">),</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">"P5"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">bank</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <h3 id="answerbankresizeevent">AnswerBank.resizeEvent</h3>
 
@@ -768,11 +768,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; bank = AnswerBank()
-&gt;&gt;&gt; bank.resize(300, 200)
-&gt;&gt;&gt; bank.width()
-300
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span> <span class="o">=</span> <span class="n">AnswerBank</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bank</span><span class="p">.</span><span class="n">width</span><span class="p">()</span>
+<span class="go">300
+</span></code></pre></div></div>
 
 
           
@@ -985,8 +985,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

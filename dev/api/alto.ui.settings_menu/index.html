@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -683,12 +683,12 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; _key_label(2)
-'D  ·  2♯'
-&gt;&gt;&gt; row = MenuRow("Clefs")
-&gt;&gt;&gt; row.title.text()
-'&lt;b&gt;Clefs&lt;/b&gt;'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_key_label</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">'D  ·  2♯'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Clefs"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">title</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'&lt;b&gt;Clefs&lt;/b&gt;'
+</span></code></pre></div></div>
 
 <h2 id="guard_last">guard_last</h2>
 
@@ -710,16 +710,16 @@ in <code class="language-plaintext highlighter-rouge">alto.ui.settings_panel</co
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; first, second = QCheckBox(), QCheckBox()
-&gt;&gt;&gt; first.setChecked(True)
-&gt;&gt;&gt; guard_last([first, second])
-&gt;&gt;&gt; first.isEnabled(), second.isEnabled()
-(False, True)
-&gt;&gt;&gt; second.setChecked(True)
-&gt;&gt;&gt; guard_last([first, second])
-&gt;&gt;&gt; first.isEnabled()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span><span class="p">,</span> <span class="n">second</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(),</span> <span class="n">QCheckBox</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span><span class="p">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">guard_last</span><span class="p">([</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">(),</span> <span class="n">second</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
+<span class="go">(False, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">second</span><span class="p">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">guard_last</span><span class="p">([</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="arrow_button">arrow_button</h2>
 
@@ -747,10 +747,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; button = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
-&gt;&gt;&gt; button.toolTip(), button.autoRepeat()
-('Raise the lowest note', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span> <span class="o">=</span> <span class="n">arrow_button</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">ArrowType</span><span class="p">.</span><span class="n">UpArrow</span><span class="p">,</span> <span class="n">tip</span><span class="o">=</span><span class="s">"Raise the lowest note"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">button</span><span class="p">.</span><span class="n">toolTip</span><span class="p">(),</span> <span class="n">button</span><span class="p">.</span><span class="n">autoRepeat</span><span class="p">()</span>
+<span class="go">('Raise the lowest note', True)
+</span></code></pre></div></div>
 
 <h2 id="rangeeditor">RangeEditor</h2>
 
@@ -783,10 +783,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = RangeEditor("treble", low=28, high=34)
-&gt;&gt;&gt; editor.caption_text.text()
-'&lt;b&gt;C4 – B4&lt;/b&gt;'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">RangeEditor</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">34</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">caption_text</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'&lt;b&gt;C4 – B4&lt;/b&gt;'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -804,11 +804,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
-True
-&gt;&gt;&gt; RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
-(21, 30)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">28</span><span class="p">).</span><span class="n">limits</span> <span class="o">==</span> <span class="n">settings</span><span class="p">.</span><span class="n">RANGE_LIMITS</span><span class="p">[</span><span class="s">"bass"</span><span class="p">]</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RangeEditor</span><span class="p">(</span><span class="s">"alto"</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">30</span><span class="p">)).</span><span class="n">limits</span>
+<span class="go">(21, 30)
+</span></code></pre></div></div>
 
 <h2 id="keydiagram">KeyDiagram</h2>
 
@@ -835,9 +835,9 @@ Selected keys are filled, the rest are hollow.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 2}).toolTip()
-'C, D'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyDiagram</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}).</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'C, D'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -852,9 +852,9 @@ Selected keys are filled, the rest are hollow.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram().keys
-set()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyDiagram</span><span class="p">().</span><span class="n">keys</span>
+<span class="go">set()
+</span></code></pre></div></div>
 
 <h3 id="keydiagramset_keys">KeyDiagram.set_keys</h3>
 
@@ -871,11 +871,11 @@ set()
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; diagram = KeyDiagram()
-&gt;&gt;&gt; diagram.set_keys({2, -1, 0})
-&gt;&gt;&gt; diagram.toolTip()
-'C, D, F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">diagram</span> <span class="o">=</span> <span class="n">KeyDiagram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">diagram</span><span class="p">.</span><span class="n">set_keys</span><span class="p">({</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">diagram</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">'C, D, F'
+</span></code></pre></div></div>
 
 <h3 id="keydiagrampaintevent">KeyDiagram.paintEvent</h3>
 
@@ -892,9 +892,9 @@ set()
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyDiagram({0, 1, -1}).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyDiagram</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="label_with_picture">label_with_picture</h2>
 
@@ -920,11 +920,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; box = QCheckBox()
-&gt;&gt;&gt; label_with_picture(box, picture=ClefPictures(["treble"]), name="Treble")
-&gt;&gt;&gt; box.toolTip(), box.accessibleName()
-('Treble', 'Treble')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">box</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">label_with_picture</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">picture</span><span class="o">=</span><span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s">"Treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">box</span><span class="p">.</span><span class="n">toolTip</span><span class="p">(),</span> <span class="n">box</span><span class="p">.</span><span class="n">accessibleName</span><span class="p">()</span>
+<span class="go">('Treble', 'Treble')
+</span></code></pre></div></div>
 
 <h2 id="clef_choice_page">clef_choice_page</h2>
 
@@ -961,19 +961,19 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; checked = []
-&gt;&gt;&gt; boxes_, page_ = clef_choice_page(
-...     ("treble", "bass"),
-...     selected={"bass"},
-...     edited=lambda: checked.append(1),
-...     back=lambda: None,
-... )
-&gt;&gt;&gt; boxes_["bass"].isEnabled()  # it is the only one checked, so it stays checked
-False
-&gt;&gt;&gt; boxes_["treble"].setChecked(True)
-&gt;&gt;&gt; sorted(c for c, ticked_box in boxes_.items() if ticked_box.isChecked()), checked
-(['bass', 'treble'], [1])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">,</span> <span class="n">page_</span> <span class="o">=</span> <span class="n">clef_choice_page</span><span class="p">(</span>
+<span class="gp">...</span><span class="w">     </span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="s">"bass"</span><span class="p">},</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">edited</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">checked</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">...</span><span class="w">     </span><span class="n">back</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+<span class="gp">...</span><span class="w"> </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">[</span><span class="s">"bass"</span><span class="p">].</span><span class="n">isEnabled</span><span class="p">()</span>  <span class="c1"># it is the only one checked, so it stays checked
+</span><span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">boxes_</span><span class="p">[</span><span class="s">"treble"</span><span class="p">].</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ticked_box</span> <span class="ow">in</span> <span class="n">boxes_</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">ticked_box</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()),</span> <span class="n">checked</span>
+<span class="go">(['bass', 'treble'], [1])
+</span></code></pre></div></div>
 
 <h2 id="show_keys">show_keys</h2>
 
@@ -999,11 +999,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row_, diagram_ = MenuRow("Key signatures"), KeyDiagram()
-&gt;&gt;&gt; show_keys(row_, diagram=diagram_, enabled=False, keys={0})
-&gt;&gt;&gt; row_.value.text(), diagram_.isHidden()
-('Off', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row_</span><span class="p">,</span> <span class="n">diagram_</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Key signatures"</span><span class="p">),</span> <span class="n">KeyDiagram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">show_keys</span><span class="p">(</span><span class="n">row_</span><span class="p">,</span> <span class="n">diagram</span><span class="o">=</span><span class="n">diagram_</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row_</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">diagram_</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="go">('Off', True)
+</span></code></pre></div></div>
 
 <h2 id="menurow">MenuRow</h2>
 
@@ -1032,10 +1032,10 @@ readable.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = MenuRow("Range", tall=True)
-&gt;&gt;&gt; row.tall, row.title.text()
-(True, '&lt;b&gt;Range&lt;/b&gt;')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Range"</span><span class="p">,</span> <span class="n">tall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">tall</span><span class="p">,</span> <span class="n">row</span><span class="p">.</span><span class="n">title</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">(True, '&lt;b&gt;Range&lt;/b&gt;')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1051,9 +1051,9 @@ readable.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MenuRow("Clefs").minimumHeight()
-48
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MenuRow</span><span class="p">(</span><span class="s">"Clefs"</span><span class="p">).</span><span class="n">minimumHeight</span><span class="p">()</span>
+<span class="go">48
+</span></code></pre></div></div>
 
 <h3 id="menurowattach">MenuRow.attach</h3>
 
@@ -1072,13 +1072,13 @@ readable.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = MenuRow("Clefs")
-&gt;&gt;&gt; picture = ClefPictures(["treble"])
-&gt;&gt;&gt; row.attach(picture)
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; row.layout().indexOf(picture)
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Clefs"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picture</span> <span class="o">=</span> <span class="n">ClefPictures</span><span class="p">([</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">picture</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">layout</span><span class="p">().</span><span class="n">indexOf</span><span class="p">(</span><span class="n">picture</span><span class="p">)</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <h3 id="menurowfit">MenuRow.fit</h3>
 
@@ -1091,11 +1091,11 @@ readable.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = MenuRow("Range", tall=True)
-&gt;&gt;&gt; row.attach(QLabel("a picture"))
-&gt;&gt;&gt; row.minimumHeight() &gt; 0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">MenuRow</span><span class="p">(</span><span class="s">"Range"</span><span class="p">,</span> <span class="n">tall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s">"a picture"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">minimumHeight</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="switch">Switch</h2>
 
@@ -1114,11 +1114,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
-&gt;&gt;&gt; switch.setChecked(True)
-&gt;&gt;&gt; switch.isChecked()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span> <span class="o">=</span> <span class="n">Switch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span><span class="p">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1132,9 +1132,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().isChecked()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Switch</span><span class="p">().</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="switchsetchecked">Switch.setChecked</h3>
 
@@ -1151,11 +1151,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; switch = Switch()
-&gt;&gt;&gt; switch.setChecked(True)
-&gt;&gt;&gt; switch._pos
-1.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span> <span class="o">=</span> <span class="n">Switch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span><span class="p">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">switch</span><span class="p">.</span><span class="n">_pos</span>
+<span class="go">1.0
+</span></code></pre></div></div>
 
 <h3 id="switchpaintevent">Switch.paintEvent</h3>
 
@@ -1172,9 +1172,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Switch</span><span class="p">().</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="switchsizehint">Switch.sizeHint</h3>
 
@@ -1191,9 +1191,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Switch().sizeHint()
-PySide6.QtCore.QSize(42, 24)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Switch</span><span class="p">().</span><span class="n">sizeHint</span><span class="p">()</span>
+<span class="go">PySide6.QtCore.QSize(42, 24)
+</span></code></pre></div></div>
 
 <h2 id="togglerow">ToggleRow</h2>
 
@@ -1213,13 +1213,13 @@ PySide6.QtCore.QSize(42, 24)
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = ToggleRow("Accidentals")
-&gt;&gt;&gt; changes = []
-&gt;&gt;&gt; _ = row.switched.connect(changes.append)
-&gt;&gt;&gt; row.click()
-&gt;&gt;&gt; changes, row.isOn()
-([True], True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">ToggleRow</span><span class="p">(</span><span class="s">"Accidentals"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">changes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">row</span><span class="p">.</span><span class="n">switched</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">changes</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">changes</span><span class="p">,</span> <span class="n">row</span><span class="p">.</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">([True], True)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1233,9 +1233,9 @@ PySide6.QtCore.QSize(42, 24)
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ToggleRow("Accidentals").isOn()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ToggleRow</span><span class="p">(</span><span class="s">"Accidentals"</span><span class="p">).</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="togglerowison">ToggleRow.isOn</h3>
 
@@ -1252,9 +1252,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ToggleRow("Accidentals").isOn()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ToggleRow</span><span class="p">(</span><span class="s">"Accidentals"</span><span class="p">).</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="togglerowseton">ToggleRow.setOn</h3>
 
@@ -1271,11 +1271,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = ToggleRow("Accidentals")
-&gt;&gt;&gt; row.setOn(True)
-&gt;&gt;&gt; row.isOn()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="n">ToggleRow</span><span class="p">(</span><span class="s">"Accidentals"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">setOn</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span><span class="p">.</span><span class="n">isOn</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="subpage">subpage</h2>
 
@@ -1307,12 +1307,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; calls = []
-&gt;&gt;&gt; page_ = subpage("Clefs", body=QWidget(), back=lambda: calls.append("back"))
-&gt;&gt;&gt; next(b for b in page_.findChildren(QToolButton) if b.text() == "‹ Back").click()
-&gt;&gt;&gt; calls
-['back']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page_</span> <span class="o">=</span> <span class="n">subpage</span><span class="p">(</span><span class="s">"Clefs"</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">back</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">calls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"back"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">page_</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QToolButton</span><span class="p">)</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"‹ Back"</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">calls</span>
+<span class="go">['back']
+</span></code></pre></div></div>
 
 <h2 id="slidestack">SlideStack</h2>
 
@@ -1325,12 +1325,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; stack.sliding
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stack</span> <span class="o">=</span> <span class="n">SlideStack</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">sliding</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1344,9 +1344,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().count()
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SlideStack</span><span class="p">().</span><span class="n">count</span><span class="p">()</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="slidestacksliding">SlideStack.sliding</h3>
 
@@ -1364,9 +1364,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SlideStack().sliding
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SlideStack</span><span class="p">().</span><span class="n">sliding</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="slidestackslide_to">SlideStack.slide_to</h3>
 
@@ -1386,13 +1386,13 @@ slide, or for the page already showing, is ignored.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; stack = SlideStack()
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; _ = stack.addWidget(QWidget())
-&gt;&gt;&gt; stack.slide_to(1)
-&gt;&gt;&gt; stack.sliding
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stack</span> <span class="o">=</span> <span class="n">SlideStack</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">slide_to</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">sliding</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="exercisesettingspanel">ExerciseSettingsPanel</h2>
 
@@ -1410,14 +1410,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ExerciseSettingsPanel()
-&gt;&gt;&gt; got = []
-&gt;&gt;&gt; _ = panel.changed.connect(lambda: got.append(1))
-&gt;&gt;&gt; panel.changed.emit()
-True
-&gt;&gt;&gt; got
-[1]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ExerciseSettingsPanel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">panel</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">emit</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span>
+<span class="go">[1]
+</span></code></pre></div></div>
 
 <h3 id="exercisesettingspanelrefresh_limits">ExerciseSettingsPanel.refresh_limits</h3>
 
@@ -1439,8 +1439,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Switching to ASRS hides the row and leaves its submenu.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Switching to ASRS hides the row and leaves its submenu.
+</code></pre></div></div>
 
 <h2 id="clefspanel">ClefsPanel</h2>
 
@@ -1459,10 +1459,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.ui.settings_panel import ClefBasicsSettingsPanel
-&gt;&gt;&gt; isinstance(ClefBasicsSettingsPanel(settings.ClefBasicsSettings()), ClefsPanel)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.ui.settings_panel</span> <span class="kn">import</span> <span class="n">ClefBasicsSettingsPanel</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ClefBasicsSettingsPanel</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">ClefBasicsSettings</span><span class="p">()),</span> <span class="n">ClefsPanel</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="staffrangepanel">StaffRangePanel</h2>
 
@@ -1473,8 +1473,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Note and interval identification both open Range on page two.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note and interval identification both open Range on page two.
+</code></pre></div></div>
 
 <h2 id="keychecklist">KeyChecklist</h2>
 
@@ -1503,9 +1503,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({0, 2}).selected() == {0, 2}
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyChecklist</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1523,9 +1523,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(KeyChecklist({0}).boxes)
-15
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">KeyChecklist</span><span class="p">({</span><span class="mi">0</span><span class="p">}).</span><span class="n">boxes</span><span class="p">)</span>
+<span class="go">15
+</span></code></pre></div></div>
 
 <h3 id="keychecklistselected">KeyChecklist.selected</h3>
 
@@ -1542,9 +1542,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyChecklist({-3, 1}).selected() == {-3, 1}
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyChecklist</span><span class="p">({</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="keysignaturepage">KeySignaturePage</h2>
 
@@ -1572,10 +1572,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(True, selected={0, 1})
-&gt;&gt;&gt; page.enabled(), page.selected() == {0, 1}
-(True, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">enabled</span><span class="p">(),</span> <span class="n">page</span><span class="p">.</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+<span class="go">(True, True)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1593,10 +1593,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = KeySignaturePage(False, selected={0})
-&gt;&gt;&gt; page.checklist.isEnabled()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">checklist</span><span class="p">.</span><span class="n">isEnabled</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="keysignaturepageenabled">KeySignaturePage.enabled</h3>
 
@@ -1613,9 +1613,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={0}).enabled()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}).</span><span class="n">enabled</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignaturepageselected">KeySignaturePage.selected</h3>
 
@@ -1632,9 +1632,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignaturePage</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="scalekeypicker">ScaleKeyPicker</h2>
 
@@ -1651,9 +1651,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span><span class="n">major_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">}).</span><span class="n">count</span><span class="p">()</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1668,9 +1668,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleKeyPicker</span><span class="p">(</span><span class="n">major_keys</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">minor_keys</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}).</span><span class="n">currentIndex</span><span class="p">()</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h2 id="choicechecklist">ChoiceChecklist</h2>
 
@@ -1698,11 +1698,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
-&gt;&gt;&gt; checklist = ChoiceChecklist(groups, selected={"major"})
-&gt;&gt;&gt; checklist.selected()
-{'major'}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">groups</span> <span class="o">=</span> <span class="p">[(</span><span class="s">"Triads"</span><span class="p">,</span> <span class="p">[(</span><span class="s">"major"</span><span class="p">,</span> <span class="s">"Major"</span><span class="p">),</span> <span class="p">(</span><span class="s">"minor"</span><span class="p">,</span> <span class="s">"Minor"</span><span class="p">)]),</span> <span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="s">"x"</span><span class="p">,</span> <span class="s">"Other"</span><span class="p">)])]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="s">"major"</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span><span class="p">.</span><span class="n">selected</span><span class="p">()</span>
+<span class="go">{'major'}
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1720,11 +1720,11 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
-&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; sorted(checklist.boxes)
-[0, 1]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">checklist</span> <span class="o">=</span> <span class="n">ChoiceChecklist</span><span class="p">([(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">checklist</span><span class="p">.</span><span class="n">boxes</span><span class="p">)</span>
+<span class="go">[0, 1]
+</span></code></pre></div></div>
 
 <h3 id="choicechecklistselected">ChoiceChecklist.selected</h3>
 
@@ -1741,9 +1741,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
-{0, 1}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChoiceChecklist</span><span class="p">([(</span><span class="s">""</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Root"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"1st"</span><span class="p">)])],</span> <span class="n">selected</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}).</span><span class="n">selected</span><span class="p">()</span>
+<span class="go">{0, 1}
+</span></code></pre></div></div>
 
 <h2 id="buttons_page">buttons_page</h2>
 
@@ -1773,8 +1773,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Choosing All hides the count picker and retains its last value.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Choosing All hides the count picker and retains its last value.
+</code></pre></div></div>
 
 <h2 id="direction_choices">direction_choices</h2>
 
@@ -1802,12 +1802,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; cfg = settings.ScaleIdentificationSettings()
-&gt;&gt;&gt; choices = direction_choices(cfg, edited=lambda: None)
-&gt;&gt;&gt; next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
-&gt;&gt;&gt; cfg.motion
-'descending'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">ScaleIdentificationSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">choices</span> <span class="o">=</span> <span class="n">direction_choices</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">edited</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QRadioButton</span><span class="p">)</span> <span class="k">if</span> <span class="n">b</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">"Descending"</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">motion</span>
+<span class="go">'descending'
+</span></code></pre></div></div>
 
 <h2 id="scrolling">scrolling</h2>
 
@@ -1830,10 +1830,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = QWidget()
-&gt;&gt;&gt; scrolling(page).widget() is page
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scrolling</span><span class="p">(</span><span class="n">page</span><span class="p">).</span><span class="n">widget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">page</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -2128,8 +2128,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

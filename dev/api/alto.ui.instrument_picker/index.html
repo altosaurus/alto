@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,11 +678,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; format_size(2_500_000)
-'2.5 MB'
-&gt;&gt;&gt; list(PREVIEW)
-[74, 75, 72, 71]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_size</span><span class="p">(</span><span class="mi">2_500_000</span><span class="p">)</span>
+<span class="go">'2.5 MB'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">PREVIEW</span><span class="p">)</span>
+<span class="go">[74, 75, 72, 71]
+</span></code></pre></div></div>
 
 <h2 id="load_instrument">load_instrument</h2>
 
@@ -695,15 +695,15 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; store().setValue("audio/instrument", "flute")
-&gt;&gt;&gt; load_instrument()
-&gt;&gt;&gt; sounds.instrument
-'flute'
-&gt;&gt;&gt; store().setValue("audio/instrument", "not an instrument")
-&gt;&gt;&gt; load_instrument()
-&gt;&gt;&gt; sounds.instrument
-'piano'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"flute"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_instrument</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span>
+<span class="go">'flute'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">setValue</span><span class="p">(</span><span class="s">"audio/instrument"</span><span class="p">,</span> <span class="s">"not an instrument"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">load_instrument</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span>
+<span class="go">'piano'
+</span></code></pre></div></div>
 
 <h2 id="save_instrument">save_instrument</h2>
 
@@ -714,13 +714,13 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sounds.instrument = "marimba"
-&gt;&gt;&gt; save_instrument()
-&gt;&gt;&gt; str(store().value("audio/instrument"))
-'marimba'
-&gt;&gt;&gt; sounds.instrument = "piano"
-&gt;&gt;&gt; save_instrument()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="s">"marimba"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_instrument</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">store</span><span class="p">().</span><span class="n">value</span><span class="p">(</span><span class="s">"audio/instrument"</span><span class="p">))</span>
+<span class="go">'marimba'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="s">"piano"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_instrument</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="tokens">tokens</h2>
 
@@ -745,12 +745,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; colors = tokens(QWidget())
-&gt;&gt;&gt; sorted(colors)[:3]
-['accent', 'accent_soft', 'bad']
-&gt;&gt;&gt; colors["panel"].startswith("#")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">(</span><span class="n">QWidget</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">colors</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">['accent', 'accent_soft', 'bad']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors</span><span class="p">[</span><span class="s">"panel"</span><span class="p">].</span><span class="n">startswith</span><span class="p">(</span><span class="s">"#"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="format_size">format_size</h2>
 
@@ -773,9 +773,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; format_size(2_500_000), format_size(500_000), format_size(10)
-('2.5 MB', '500 KB', '1 KB')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_size</span><span class="p">(</span><span class="mi">2_500_000</span><span class="p">),</span> <span class="n">format_size</span><span class="p">(</span><span class="mi">500_000</span><span class="p">),</span> <span class="n">format_size</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">('2.5 MB', '500 KB', '1 KB')
+</span></code></pre></div></div>
 
 <h2 id="instrumentpicker">InstrumentPicker</h2>
 
@@ -800,11 +800,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; picker.select("viola_plucked")
-&gt;&gt;&gt; picker.shown
-'Viola'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"viola_plucked"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">shown</span>
+<span class="go">'Viola'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -818,10 +818,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; picker.list.count() == len(picker.groups)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="nb">list</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">picker</span><span class="p">.</span><span class="n">groups</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="instrumentpickerselect">InstrumentPicker.select</h3>
 
@@ -838,11 +838,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; picker.select("marimba")
-&gt;&gt;&gt; picker.shown
-'Marimba'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"marimba"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">shown</span>
+<span class="go">'Marimba'
+</span></code></pre></div></div>
 
 <h3 id="instrumentpickershow_group">InstrumentPicker.show_group</h3>
 
@@ -859,11 +859,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; picker.show_group("Flute")
-&gt;&gt;&gt; picker.shown
-'Flute'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">show_group</span><span class="p">(</span><span class="s">"Flute"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">shown</span>
+<span class="go">'Flute'
+</span></code></pre></div></div>
 
 <h3 id="instrumentpickerchangeevent">InstrumentPicker.changeEvent</h3>
 
@@ -880,12 +880,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; picker.show_group("Flute")
-&gt;&gt;&gt; picker.changeEvent(QEvent(QEvent.Type.PaletteChange))
-&gt;&gt;&gt; picker.shown
-'Flute'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">show_group</span><span class="p">(</span><span class="s">"Flute"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">changeEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">PaletteChange</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">shown</span>
+<span class="go">'Flute'
+</span></code></pre></div></div>
 
 <h3 id="instrumentpickeruse">InstrumentPicker.use</h3>
 
@@ -904,14 +904,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = InstrumentPicker()
-&gt;&gt;&gt; chosen = []
-&gt;&gt;&gt; _ = picker.chosen.connect(chosen.append)
-&gt;&gt;&gt; picker.use("marimba")
-&gt;&gt;&gt; sounds.instrument, chosen
-('marimba', ['marimba'])
-&gt;&gt;&gt; picker.use("piano")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">InstrumentPicker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">picker</span><span class="p">.</span><span class="n">chosen</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">use</span><span class="p">(</span><span class="s">"marimba"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sounds</span><span class="p">.</span><span class="n">instrument</span><span class="p">,</span> <span class="n">chosen</span>
+<span class="go">('marimba', ['marimba'])
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">use</span><span class="p">(</span><span class="s">"piano"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="instrumentpickerpreview">InstrumentPicker.preview</h3>
 
@@ -928,8 +928,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; InstrumentPicker().preview("flute")  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">InstrumentPicker</span><span class="p">().</span><span class="n">preview</span><span class="p">(</span><span class="s">"flute"</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 
           
@@ -1178,8 +1178,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

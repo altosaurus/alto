@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,10 +680,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.title_label.text()
-'Alto - Music Theory'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Alto - Music Theory'
+</span></code></pre></div></div>
 
 <h2 id="default_size">default_size</h2>
 
@@ -702,10 +702,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; width, height = default_size()
-&gt;&gt;&gt; 0 &lt; width &lt;= DEFAULT_WIDTH and 0 &lt; height &lt;= DEFAULT_HEIGHT
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">default_size</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">width</span> <span class="o">&lt;=</span> <span class="n">DEFAULT_WIDTH</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="n">DEFAULT_HEIGHT</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="mainwindow">MainWindow</h2>
 
@@ -736,13 +736,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.open_exercise(NoteNames)
-&gt;&gt;&gt; window.title_label.text()
-'Note Identification'
-&gt;&gt;&gt; window.show_home()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_exercise</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Note Identification'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">show_home</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -756,14 +756,14 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; window_ = MainWindow(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; window_.stats_button.isVisibleTo(window_)
-True
-&gt;&gt;&gt; MainWindow().stats_button.isVisibleTo(window_)  # no profile, no statistics
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window_</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window_</span><span class="p">.</span><span class="n">stats_button</span><span class="p">.</span><span class="n">isVisibleTo</span><span class="p">(</span><span class="n">window_</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">stats_button</span><span class="p">.</span><span class="n">isVisibleTo</span><span class="p">(</span><span class="n">window_</span><span class="p">)</span>  <span class="c1"># no profile, no statistics
+</span><span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="mainwindowcloseevent">MainWindow.closeEvent</h3>
 
@@ -780,8 +780,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; closeEvent()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">closeEvent</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="mainwindoweventfilter">MainWindow.eventFilter</h3>
 
@@ -808,12 +808,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
-False
-&gt;&gt;&gt; window.search_row.property("focusWithin")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">window</span><span class="p">.</span><span class="n">search_field</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">FocusIn</span><span class="p">))</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">search_row</span><span class="p">.</span><span class="nb">property</span><span class="p">(</span><span class="s">"focusWithin"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="mainwindowsidebar_width">MainWindow.sidebar_width</h3>
 
@@ -830,9 +830,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().sidebar_width()
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">sidebar_width</span><span class="p">()</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="mainwindowtoggle_sidebar">MainWindow.toggle_sidebar</h3>
 
@@ -843,11 +843,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.toggle_sidebar()
-&gt;&gt;&gt; window._sidebar_pref
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">toggle_sidebar</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">_sidebar_pref</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="mainwindowopen_exercise">MainWindow.open_exercise</h3>
 
@@ -864,12 +864,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import KeySignatures
-&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.open_exercise(KeySignatures)
-&gt;&gt;&gt; window.title_label.text()
-'Key Signature Identification'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">KeySignatures</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_exercise</span><span class="p">(</span><span class="n">KeySignatures</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Key Signature Identification'
+</span></code></pre></div></div>
 
 <h3 id="mainwindowshow_about">MainWindow.show_about</h3>
 
@@ -880,8 +880,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window.show_about()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">show_about</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="mainwindowopen_anki_exporter">MainWindow.open_anki_exporter</h3>
 
@@ -892,8 +892,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
+</code></pre></div></div>
 
 <h3 id="mainwindowopen_settings">MainWindow.open_settings</h3>
 
@@ -906,15 +906,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.open_settings()
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; window._settings is not None and not window._settings.isModal()
-True
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; window._settings.close()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_settings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">window</span><span class="p">.</span><span class="n">_settings</span><span class="p">.</span><span class="n">isModal</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">_settings</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="mainwindowrebuild">MainWindow.rebuild</h3>
 
@@ -928,12 +928,12 @@ already open or closed as it was, not sliding.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; old_root = window.centralWidget()
-&gt;&gt;&gt; window.rebuild()
-&gt;&gt;&gt; window.centralWidget() is old_root
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old_root</span> <span class="o">=</span> <span class="n">window</span><span class="p">.</span><span class="n">centralWidget</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">rebuild</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">centralWidget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">old_root</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="mainwindowopen_glossary">MainWindow.open_glossary</h3>
 
@@ -944,8 +944,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; open_glossary()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">open_glossary</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="mainwindowopen_stats">MainWindow.open_stats</h3>
 
@@ -956,14 +956,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; window.open_stats()
-&gt;&gt;&gt; window.title_label.text()
-'Statistics'
-&gt;&gt;&gt; window.close_overlay()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_stats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Statistics'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">close_overlay</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="mainwindowtoggle_navigation">MainWindow.toggle_navigation</h3>
 
@@ -974,11 +974,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.toggle_navigation()
-&gt;&gt;&gt; window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
-(True, 'Tiles')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">toggle_navigation</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="n">currentWidget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">window</span><span class="p">.</span><span class="n">empty_page</span><span class="p">,</span> <span class="n">window</span><span class="p">.</span><span class="n">view_button</span><span class="p">.</span><span class="n">accessibleName</span><span class="p">()</span>
+<span class="go">(True, 'Tiles')
+</span></code></pre></div></div>
 
 <h3 id="mainwindowshow_lessons">MainWindow.show_lessons</h3>
 
@@ -989,12 +989,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.show_lessons()
-&gt;&gt;&gt; window.home.mode
-'lessons'
-&gt;&gt;&gt; window.home.set_mode("exercises")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">show_lessons</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">home</span><span class="p">.</span><span class="n">mode</span>
+<span class="go">'lessons'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">home</span><span class="p">.</span><span class="n">set_mode</span><span class="p">(</span><span class="s">"exercises"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h3 id="mainwindowopen_lessons">MainWindow.open_lessons</h3>
 
@@ -1011,12 +1011,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.open_lessons("circle-of-fifths")
-&gt;&gt;&gt; window.title_label.text(), window.nav_stack.currentWidget() is window.lesson_nav
-('The Circle of Fifths', True)
-&gt;&gt;&gt; window.close_overlay()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_lessons</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">window</span><span class="p">.</span><span class="n">nav_stack</span><span class="p">.</span><span class="n">currentWidget</span><span class="p">()</span> <span class="ow">is</span> <span class="n">window</span><span class="p">.</span><span class="n">lesson_nav</span>
+<span class="go">('The Circle of Fifths', True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">close_overlay</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="mainwindowopen_database">MainWindow.open_database</h3>
 
@@ -1027,14 +1027,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; window.open_database()
-&gt;&gt;&gt; window.title_label.text()
-'Database'
-&gt;&gt;&gt; window.close_overlay()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Database'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">close_overlay</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="mainwindowclose_overlay">MainWindow.close_overlay</h3>
 
@@ -1045,14 +1045,14 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.learning import Database
-&gt;&gt;&gt; db = Database()
-&gt;&gt;&gt; window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
-&gt;&gt;&gt; window.open_stats()
-&gt;&gt;&gt; window.close_overlay()
-&gt;&gt;&gt; window.title_label.text()
-'Alto - Music Theory'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.learning</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="n">Learner</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">db</span><span class="p">.</span><span class="n">add_profile</span><span class="p">(</span><span class="s">"Ada"</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_stats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">close_overlay</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Alto - Music Theory'
+</span></code></pre></div></div>
 
 <h3 id="mainwindowswitch_profile">MainWindow.switch_profile</h3>
 
@@ -1065,9 +1065,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.switch_profile()  # without a profile there is nothing to switch
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">switch_profile</span><span class="p">()</span>  <span class="c1"># without a profile there is nothing to switch
+</span></code></pre></div></div>
 
 <h3 id="mainwindowexport_backup">MainWindow.export_backup</h3>
 
@@ -1078,8 +1078,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().export_backup()  # does nothing without a profile
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">export_backup</span><span class="p">()</span>  <span class="c1"># does nothing without a profile
+</span></code></pre></div></div>
 
 <h3 id="mainwindowcheck_for_updates">MainWindow.check_for_updates</h3>
 
@@ -1090,8 +1090,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().check_for_updates()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">check_for_updates</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 <h3 id="mainwindowimport_backup">MainWindow.import_backup</h3>
 
@@ -1102,8 +1102,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().import_backup()  # does nothing without a profile
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">import_backup</span><span class="p">()</span>  <span class="c1"># does nothing without a profile
+</span></code></pre></div></div>
 
 <h3 id="mainwindowshow_home">MainWindow.show_home</h3>
 
@@ -1114,13 +1114,13 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; window = MainWindow()
-&gt;&gt;&gt; window.open_exercise(NoteNames)
-&gt;&gt;&gt; window.show_home()
-&gt;&gt;&gt; window.title_label.text()
-'Alto - Music Theory'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">open_exercise</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">show_home</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">window</span><span class="p">.</span><span class="n">title_label</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'Alto - Music Theory'
+</span></code></pre></div></div>
 
 <h3 id="mainwindowopen_plugins">MainWindow.open_plugins</h3>
 
@@ -1131,8 +1131,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Choose Plugins in Tools to see the installed viola pack.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Choose Plugins in Tools to see the installed viola pack.
+</code></pre></div></div>
 
 <h3 id="mainwindowinstall_plugin">MainWindow.install_plugin</h3>
 
@@ -1152,8 +1152,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Press Install plugin from file in the Plugins dialog and open viola.zip.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Press Install plugin from file in the Plugins dialog and open viola.zip.
+</code></pre></div></div>
 
 <h3 id="mainwindowuninstall_plugin">MainWindow.uninstall_plugin</h3>
 
@@ -1175,8 +1175,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
+</code></pre></div></div>
 
 <h3 id="mainwindowrestart_app">MainWindow.restart_app</h3>
 
@@ -1196,8 +1196,8 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; MainWindow().restart_app()  # doctest: +SKIP
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">MainWindow</span><span class="p">().</span><span class="n">restart_app</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP
+</span></code></pre></div></div>
 
 
           
@@ -1460,8 +1460,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,11 +682,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [transition.key for transition in TRANSITIONS][:3]
-['none', 'cascade', 'fade']
-&gt;&gt;&gt; DEFAULT_TRANSITION
-'cascade'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span> <span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="n">TRANSITIONS</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">['none', 'cascade', 'fade']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">DEFAULT_TRANSITION</span>
+<span class="go">'cascade'
+</span></code></pre></div></div>
 
 <h2 id="sprite">Sprite</h2>
 
@@ -725,10 +725,10 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; sprite = Sprite(pixmap=QPixmap(), rect=QRectF(0, 0, 10, 10))
-&gt;&gt;&gt; sprite.opacity, sprite.reveal
-(1.0, 1.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">sprite</span><span class="p">.</span><span class="n">opacity</span><span class="p">,</span> <span class="n">sprite</span><span class="p">.</span><span class="n">reveal</span>
+<span class="go">(1.0, 1.0)
+</span></code></pre></div></div>
 
 <h2 id="scene">Scene</h2>
 
@@ -753,9 +753,9 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Scene(time=0.0, old=[], new=[], direction=1).direction
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">direction</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h2 id="ease_out">ease_out</h2>
 
@@ -778,9 +778,9 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ease_out(0.0), ease_out(1.0), ease_out(0.5)
-(0.0, 1.0, 0.875)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ease_out</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">ease_out</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">ease_out</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(0.0, 1.0, 0.875)
+</span></code></pre></div></div>
 
 <h2 id="ramp">ramp</h2>
 
@@ -810,9 +810,9 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ramp(50, start=100, length=200), ramp(200, start=100, length=200), ramp(900, start=100, length=200)
-(0.0, 0.5, 1.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ramp</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span> <span class="n">ramp</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span> <span class="n">ramp</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="go">(0.0, 0.5, 1.0)
+</span></code></pre></div></div>
 
 <h2 id="hide">hide</h2>
 
@@ -829,11 +829,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = Sprite(pixmap=QPixmap(), rect=QRectF())
-&gt;&gt;&gt; hide([card])
-&gt;&gt;&gt; card.opacity
-0.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">hide</span><span class="p">([</span><span class="n">card</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">opacity</span>
+<span class="go">0.0
+</span></code></pre></div></div>
 
 <h2 id="fade_in">fade_in</h2>
 
@@ -850,11 +850,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; fade_in(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].opacity
-0.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fade_in</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">0.0
+</span></code></pre></div></div>
 
 <h2 id="crossfade">crossfade</h2>
 
@@ -871,11 +871,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; old, new = [Sprite(pixmap=QPixmap(), rect=QRectF())], [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; crossfade(Scene(time=300, old=old, new=new, direction=1))
-&gt;&gt;&gt; old[0].opacity, new[0].opacity
-(0.0, 1.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())],</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">crossfade</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">(0.0, 1.0)
+</span></code></pre></div></div>
 
 <h2 id="slide">slide</h2>
 
@@ -892,11 +892,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; slide(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].dx
-60.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slide</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dx</span>
+<span class="go">60.0
+</span></code></pre></div></div>
 
 <h2 id="rise">rise</h2>
 
@@ -913,11 +913,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; rise(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].dy, new[0].opacity
-(22.0, 0.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">rise</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dy</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">(22.0, 0.0)
+</span></code></pre></div></div>
 
 <h2 id="cascade">cascade</h2>
 
@@ -934,11 +934,11 @@ different ones share one player.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF()) for _ in range(2)]
-&gt;&gt;&gt; cascade(Scene(time=100, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].opacity &gt; new[1].opacity &gt; 0.0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">cascade</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span> <span class="o">&gt;</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">opacity</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="zoom">zoom</h2>
 
@@ -955,11 +955,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; zoom(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].sx
-0.92
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">zoom</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">sx</span>
+<span class="go">0.92
+</span></code></pre></div></div>
 
 <h2 id="flip">flip</h2>
 
@@ -976,11 +976,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; flip(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].opacity
-0.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">flip</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">0.0
+</span></code></pre></div></div>
 
 <h2 id="blur">blur</h2>
 
@@ -997,11 +997,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; blur(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].blur, new[0].opacity
-(1.0, 0.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blur</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">blur</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">(1.0, 0.0)
+</span></code></pre></div></div>
 
 <h2 id="wipe">wipe</h2>
 
@@ -1018,11 +1018,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; wipe(Scene(time=0, old=[], new=new, direction=-1))
-&gt;&gt;&gt; new[0].reveal, new[0].reveal_from
-(0.0, -1)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">wipe</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">reveal</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">reveal_from</span>
+<span class="go">(0.0, -1)
+</span></code></pre></div></div>
 
 <h2 id="drop">drop</h2>
 
@@ -1039,11 +1039,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; drop(Scene(time=0, old=[], new=new, direction=1))
-&gt;&gt;&gt; new[0].opacity
-0.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">drop</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span>
+<span class="go">0.0
+</span></code></pre></div></div>
 
 <h2 id="transition">Transition</h2>
 
@@ -1070,9 +1070,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; TRANSITIONS[0].frame is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">TRANSITIONS</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">frame</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="motion">Motion</h2>
 
@@ -1122,9 +1122,9 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Motion().order, Motion().ease
-('index', 'out')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Motion</span><span class="p">().</span><span class="n">order</span><span class="p">,</span> <span class="n">Motion</span><span class="p">().</span><span class="n">ease</span>
+<span class="go">('index', 'out')
+</span></code></pre></div></div>
 
 <h2 id="eased">eased</h2>
 
@@ -1152,11 +1152,11 @@ look to rest) and leaving (from rest to that look).</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; eased(0.5, how="linear"), eased(1.0, how="back"), eased(0.5, how="in")
-(0.5, 1.0, 0.25)
-&gt;&gt;&gt; eased(0.8, how="back") &gt; 1.0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"linear"</span><span class="p">),</span> <span class="n">eased</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"back"</span><span class="p">),</span> <span class="n">eased</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"in"</span><span class="p">)</span>
+<span class="go">(0.5, 1.0, 0.25)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">eased</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">"back"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="ranks">ranks</h2>
 
@@ -1184,10 +1184,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; row = [Sprite(pixmap=QPixmap(), rect=QRectF(x, 0, 10, 10)) for x in (0, 20, 40)]
-&gt;&gt;&gt; ranks(row, order="index"), ranks(row, order="reverse"), ranks(row, order="outward")
-([0, 1, 2], [2, 1, 0], [1, 0, 2])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"index"</span><span class="p">),</span> <span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"reverse"</span><span class="p">),</span> <span class="n">ranks</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">"outward"</span><span class="p">)</span>
+<span class="go">([0, 1, 2], [2, 1, 0], [1, 0, 2])
+</span></code></pre></div></div>
 
 <h2 id="span">span</h2>
 
@@ -1215,9 +1215,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; span(Motion(length=300.0, per_card=50.0, start=10.0), count=4)
-460.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">span</span><span class="p">(</span><span class="n">Motion</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">per_card</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span> <span class="n">count</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">460.0
+</span></code></pre></div></div>
 
 <h2 id="move">move</h2>
 
@@ -1241,11 +1241,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; new = [Sprite(pixmap=QPixmap(), rect=QRectF())]
-&gt;&gt;&gt; move(Scene(time=0, old=[], new=new, direction=1), leaving=None, arriving=Motion(dy=20))
-&gt;&gt;&gt; new[0].opacity, new[0].dy
-(0.0, 20.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">move</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">opacity</span><span class="p">,</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">dy</span>
+<span class="go">(0.0, 20.0)
+</span></code></pre></div></div>
 
 <h2 id="built">built</h2>
 
@@ -1273,10 +1273,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; draw, lasts = built(leaving=None, arriving=Motion(length=300, per_card=50))
-&gt;&gt;&gt; lasts(Scene(time=0, old=[], new=[Sprite(pixmap=QPixmap(), rect=QRectF())] * 3, direction=1))
-400.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw</span><span class="p">,</span> <span class="n">lasts</span> <span class="o">=</span> <span class="n">built</span><span class="p">(</span><span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">per_card</span><span class="o">=</span><span class="mi">50</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">lasts</span><span class="p">(</span><span class="n">Scene</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="p">[],</span> <span class="n">new</span><span class="o">=</span><span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">())]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">400.0
+</span></code></pre></div></div>
 
 <h2 id="made">made</h2>
 
@@ -1310,9 +1310,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; made("x", label="X", about="Does x.", leaving=None, arriving=Motion()).key
-'x'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">made</span><span class="p">(</span><span class="s">"x"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"X"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">"Does x."</span><span class="p">,</span> <span class="n">leaving</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arriving</span><span class="o">=</span><span class="n">Motion</span><span class="p">()).</span><span class="n">key</span>
+<span class="go">'x'
+</span></code></pre></div></div>
 
 <h2 id="transition_named">transition_named</h2>
 
@@ -1335,9 +1335,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; transition_named("flip").label, transition_named("nonsense").key
-('Flip', 'cascade')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">transition_named</span><span class="p">(</span><span class="s">"flip"</span><span class="p">).</span><span class="n">label</span><span class="p">,</span> <span class="n">transition_named</span><span class="p">(</span><span class="s">"nonsense"</span><span class="p">).</span><span class="n">key</span>
+<span class="go">('Flip', 'cascade')
+</span></code></pre></div></div>
 
 <h2 id="saved_transition">saved_transition</h2>
 
@@ -1354,10 +1354,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; store().remove("ui/homeTransition")
-&gt;&gt;&gt; saved_transition()
-'cascade'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"ui/homeTransition"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_transition</span><span class="p">()</span>
+<span class="go">'cascade'
+</span></code></pre></div></div>
 
 <h2 id="save_transition">save_transition</h2>
 
@@ -1374,11 +1374,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; save_transition("flip")
-&gt;&gt;&gt; saved_transition()
-'flip'
-&gt;&gt;&gt; store().remove("ui/homeTransition")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">save_transition</span><span class="p">(</span><span class="s">"flip"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">saved_transition</span><span class="p">()</span>
+<span class="go">'flip'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">store</span><span class="p">().</span><span class="n">remove</span><span class="p">(</span><span class="s">"ui/homeTransition"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="paint_sprites">paint_sprites</h2>
 
@@ -1400,13 +1400,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(20, 20, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; brush = QPainter(image)
-&gt;&gt;&gt; paint_sprites(brush, sprites=[Sprite(pixmap=QPixmap(10, 10), rect=QRectF(0, 0, 10, 10))])
-&gt;&gt;&gt; brush.end()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brush</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">paint_sprites</span><span class="p">(</span><span class="n">brush</span><span class="p">,</span> <span class="n">sprites</span><span class="o">=</span><span class="p">[</span><span class="n">Sprite</span><span class="p">(</span><span class="n">pixmap</span><span class="o">=</span><span class="n">QPixmap</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">rect</span><span class="o">=</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">brush</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="transitioncanvas">TransitionCanvas</h2>
 
@@ -1428,10 +1428,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; canvas = TransitionCanvas()
-&gt;&gt;&gt; canvas.running
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1445,9 +1445,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; TransitionCanvas().isHidden()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">TransitionCanvas</span><span class="p">().</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="transitioncanvascover">TransitionCanvas.cover</h3>
 
@@ -1464,11 +1464,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; canvas = TransitionCanvas()
-&gt;&gt;&gt; canvas.cover([])
-&gt;&gt;&gt; canvas.running
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">cover</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="transitioncanvasplay">TransitionCanvas.play</h3>
 
@@ -1492,13 +1492,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; canvas = TransitionCanvas()
-&gt;&gt;&gt; canvas.cover([])
-&gt;&gt;&gt; canvas.play(TRANSITIONS[1], new=[], direction=1)
-&gt;&gt;&gt; canvas.running
-True
-&gt;&gt;&gt; canvas.stop()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">cover</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">play</span><span class="p">(</span><span class="n">TRANSITIONS</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new</span><span class="o">=</span><span class="p">[],</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h3 id="transitioncanvasstop">TransitionCanvas.stop</h3>
 
@@ -1509,12 +1509,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; canvas = TransitionCanvas()
-&gt;&gt;&gt; canvas.cover([])
-&gt;&gt;&gt; canvas.stop()
-&gt;&gt;&gt; canvas.running, canvas.isHidden()
-(False, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">cover</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span><span class="p">,</span> <span class="n">canvas</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="go">(False, True)
+</span></code></pre></div></div>
 
 <h3 id="transitioncanvaspaintevent">TransitionCanvas.paintEvent</h3>
 
@@ -1531,11 +1531,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; canvas = TransitionCanvas()
-&gt;&gt;&gt; canvas.resize(100, 100)
-&gt;&gt;&gt; canvas.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">TransitionCanvas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1854,8 +1854,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

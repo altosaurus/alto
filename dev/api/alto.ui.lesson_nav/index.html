@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,11 +680,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nav = LessonNav()
-&gt;&gt;&gt; nav.show_lesson("circle-of-fifths")
-&gt;&gt;&gt; nav.count() &gt; len(LESSONS)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span> <span class="o">=</span> <span class="n">LessonNav</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">show_lesson</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="section_item">section_item</h2>
 
@@ -712,9 +712,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; section_item("Scales &amp; Keys", palette=QPalette()).text()
-'SCALES &amp; KEYS'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">section_item</span><span class="p">(</span><span class="s">"Scales &amp; Keys"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">QPalette</span><span class="p">()).</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'SCALES &amp; KEYS'
+</span></code></pre></div></div>
 
 <h2 id="lessonnav">LessonNav</h2>
 
@@ -734,15 +734,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nav = LessonNav()
-&gt;&gt;&gt; chosen = []
-&gt;&gt;&gt; _ = nav.step_chosen.connect(chosen.append)
-&gt;&gt;&gt; nav.show_lesson("circle-of-fifths")
-&gt;&gt;&gt; nav.itemClicked.emit(nav.step_items[2])
-True
-&gt;&gt;&gt; chosen
-[2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span> <span class="o">=</span> <span class="n">LessonNav</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">nav</span><span class="p">.</span><span class="n">step_chosen</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">show_lesson</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">itemClicked</span><span class="p">.</span><span class="n">emit</span><span class="p">(</span><span class="n">nav</span><span class="p">.</span><span class="n">step_items</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span>
+<span class="go">[2]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -756,9 +756,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; LessonNav().objectName()
-'nav'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">LessonNav</span><span class="p">().</span><span class="n">objectName</span><span class="p">()</span>
+<span class="go">'nav'
+</span></code></pre></div></div>
 
 <h3 id="lessonnavshow_lesson">LessonNav.show_lesson</h3>
 
@@ -775,14 +775,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nav = LessonNav()
-&gt;&gt;&gt; nav.show_lesson("circle-of-fifths")
-&gt;&gt;&gt; len(nav.step_items)
-8
-&gt;&gt;&gt; nav.show_lesson(None)
-&gt;&gt;&gt; nav.step_items
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span> <span class="o">=</span> <span class="n">LessonNav</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">show_lesson</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">nav</span><span class="p">.</span><span class="n">step_items</span><span class="p">)</span>
+<span class="go">8
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">show_lesson</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">step_items</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="lessonnavselect_step">LessonNav.select_step</h3>
 
@@ -799,12 +799,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nav = LessonNav()
-&gt;&gt;&gt; nav.show_lesson("circle-of-fifths")
-&gt;&gt;&gt; nav.select_step(3)
-&gt;&gt;&gt; nav.currentItem() is nav.step_items[3]
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span> <span class="o">=</span> <span class="n">LessonNav</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">show_lesson</span><span class="p">(</span><span class="s">"circle-of-fifths"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">select_step</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nav</span><span class="p">.</span><span class="n">currentItem</span><span class="p">()</span> <span class="ow">is</span> <span class="n">nav</span><span class="p">.</span><span class="n">step_items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1065,8 +1065,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,10 +678,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; SchemeThumb(preset("midnight")).scheme.name
-'Midnight'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">)).</span><span class="n">scheme</span><span class="p">.</span><span class="n">name</span>
+<span class="go">'Midnight'
+</span></code></pre></div></div>
 
 <h2 id="blank">blank</h2>
 
@@ -704,9 +704,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; blank("custom-3")["id"], blank("custom-3")["mode"]
-('custom-3', 'signature')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"id"</span><span class="p">],</span> <span class="n">blank</span><span class="p">(</span><span class="s">"custom-3"</span><span class="p">)[</span><span class="s">"mode"</span><span class="p">]</span>
+<span class="go">('custom-3', 'signature')
+</span></code></pre></div></div>
 
 <h2 id="schemethumb">SchemeThumb</h2>
 
@@ -730,11 +730,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; thumb = SchemeThumb(preset("paper"))
-&gt;&gt;&gt; thumb.isCheckable(), thumb.toolTip()
-(True, 'Pastel wedges of every hue with dark names, which deepen when lit.')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">thumb</span> <span class="o">=</span> <span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">thumb</span><span class="p">.</span><span class="n">isCheckable</span><span class="p">(),</span> <span class="n">thumb</span><span class="p">.</span><span class="n">toolTip</span><span class="p">()</span>
+<span class="go">(True, 'Pastel wedges of every hue with dark names, which deepen when lit.')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -750,10 +750,10 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; SchemeThumb(preset("paper"), size=80).width()
-80
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">80</span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
+<span class="go">80
+</span></code></pre></div></div>
 
 <h3 id="schemethumbsizehint">SchemeThumb.sizeHint</h3>
 
@@ -770,10 +770,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; SchemeThumb(preset("paper"), size=90).sizeHint().width()
-90
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"paper"</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">90</span><span class="p">).</span><span class="n">sizeHint</span><span class="p">().</span><span class="n">width</span><span class="p">()</span>
+<span class="go">90
+</span></code></pre></div></div>
 
 <h3 id="schemethumbpaintevent">SchemeThumb.paintEvent</h3>
 
@@ -790,10 +790,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.circle_schemes import preset
-&gt;&gt;&gt; SchemeThumb(preset("midnight")).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">preset</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemeThumb</span><span class="p">(</span><span class="n">preset</span><span class="p">(</span><span class="s">"midnight"</span><span class="p">)).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="schemepage">SchemePage</h2>
 
@@ -815,11 +815,11 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = SchemePage()
-&gt;&gt;&gt; page.load(current="midnight", customs=[])
-&gt;&gt;&gt; page.thumbs["midnight"].isChecked(), len(page.thumbs)
-(True, 14)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">SchemePage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="s">"midnight"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">)</span>
+<span class="go">(True, 14)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -833,9 +833,9 @@ False
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; SchemePage().thumbs
-{}
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">SchemePage</span><span class="p">().</span><span class="n">thumbs</span>
+<span class="go">{}
+</span></code></pre></div></div>
 
 <h3 id="schemepageload">SchemePage.load</h3>
 
@@ -857,13 +857,13 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; page = SchemePage()
-&gt;&gt;&gt; from alto.circle_schemes import record_of
-&gt;&gt;&gt; mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
-&gt;&gt;&gt; page.load(current="custom-1", customs=[mine])
-&gt;&gt;&gt; page.thumbs["custom-1"].isChecked(), page.thumbs["midnight"].isChecked()
-(True, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span> <span class="o">=</span> <span class="n">SchemePage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.circle_schemes</span> <span class="kn">import</span> <span class="n">record_of</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">mine</span> <span class="o">=</span> <span class="n">record_of</span><span class="p">(</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"Mine"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"single"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s">"#2f6bd0"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="s">"custom-1"</span><span class="p">,</span> <span class="n">customs</span><span class="o">=</span><span class="p">[</span><span class="n">mine</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"custom-1"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">(),</span> <span class="n">page</span><span class="p">.</span><span class="n">thumbs</span><span class="p">[</span><span class="s">"midnight"</span><span class="p">].</span><span class="n">isChecked</span><span class="p">()</span>
+<span class="go">(True, False)
+</span></code></pre></div></div>
 
 <h2 id="schemeeditor">SchemeEditor</h2>
 
@@ -892,11 +892,11 @@ edited.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
-&gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.record()["mode"], editor.record()["id"]
-('signature', 'custom-1')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"mode"</span><span class="p">],</span> <span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"id"</span><span class="p">]</span>
+<span class="go">('signature', 'custom-1')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -910,9 +910,9 @@ edited.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(SchemeEditor().swatches)
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">SchemeEditor</span><span class="p">().</span><span class="n">swatches</span><span class="p">)</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h3 id="schemeeditorload">SchemeEditor.load</h3>
 
@@ -934,11 +934,11 @@ edited.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
-&gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.name.text(), editor.delete_button.isHidden()
-('My colors', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">editor</span><span class="p">.</span><span class="n">delete_button</span><span class="p">.</span><span class="n">isHidden</span><span class="p">()</span>
+<span class="go">('My colors', True)
+</span></code></pre></div></div>
 
 <h3 id="schemeeditorrecord">SchemeEditor.record</h3>
 
@@ -955,11 +955,11 @@ edited.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
-&gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.record()["colors"]
-['#1fa7c9', '#2f6bd0', '#6a4fe0']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"colors"</span><span class="p">]</span>
+<span class="go">['#1fa7c9', '#2f6bd0', '#6a4fe0']
+</span></code></pre></div></div>
 
 <h3 id="schemeeditorset_color">SchemeEditor.set_color</h3>
 
@@ -981,12 +981,12 @@ edited.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; editor = SchemeEditor()
-&gt;&gt;&gt; editor.load(None, taken=[])
-&gt;&gt;&gt; editor.set_color(0, color="#ff0000")
-&gt;&gt;&gt; editor.record()["colors"][0]
-'#ff0000'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span> <span class="o">=</span> <span class="n">SchemeEditor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">taken</span><span class="o">=</span><span class="p">[])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">set_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"#ff0000"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">record</span><span class="p">()[</span><span class="s">"colors"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">'#ff0000'
+</span></code></pre></div></div>
 
 
           
@@ -1211,8 +1211,8 @@ edited.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

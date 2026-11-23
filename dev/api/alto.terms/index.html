@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,12 +681,12 @@ page merges these with the built-in terms and lists them under their own names.<
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; entry = PluginTerm(name="scroll", pack="Demo", definition="The carved end.", lessons=("pack.demo.parts",))
-&gt;&gt;&gt; register_term(entry)
-&gt;&gt;&gt; PLUGIN_TERMS["scroll"] is entry
-True
-&gt;&gt;&gt; _ = PLUGIN_TERMS.pop("scroll")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">entry</span> <span class="o">=</span> <span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"scroll"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"The carved end."</span><span class="p">,</span> <span class="n">lessons</span><span class="o">=</span><span class="p">(</span><span class="s">"pack.demo.parts"</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PLUGIN_TERMS</span><span class="p">[</span><span class="s">"scroll"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">entry</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">PLUGIN_TERMS</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"scroll"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="pluginterm">PluginTerm</h2>
 
@@ -719,9 +719,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; PluginTerm(name="nut", pack="Demo", definition="It holds the strings.").exercises
-()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"nut"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"It holds the strings."</span><span class="p">).</span><span class="n">exercises</span>
+<span class="go">()
+</span></code></pre></div></div>
 
 <h2 id="register_term">register_term</h2>
 
@@ -744,13 +744,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; register_term(PluginTerm(name="bridge", pack="Demo", definition="It lifts the strings."))
-&gt;&gt;&gt; register_term(PluginTerm(name="bridge", pack="Other", definition="Again."))
-Traceback (most recent call last):
-...
-ValueError: The term bridge is already supplied by Demo.
-&gt;&gt;&gt; _ = PLUGIN_TERMS.pop("bridge")
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"It lifts the strings."</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">register_term</span><span class="p">(</span><span class="n">PluginTerm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"bridge"</span><span class="p">,</span> <span class="n">pack</span><span class="o">=</span><span class="s">"Other"</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="s">"Again."</span><span class="p">))</span>
+<span class="go">Traceback (most recent call last):
+</span><span class="c">...
+</span><span class="go">ValueError: The term bridge is already supplied by Demo.
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">PLUGIN_TERMS</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"bridge"</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="read_terms">read_terms</h2>
 
@@ -792,12 +792,12 @@ ValueError: The term bridge is already supplied by Demo.
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_terms(None, pack_id="demo", pack_name="Demo", instruments={}, exercises={}, lessons={})
-()
-&gt;&gt;&gt; read_terms([{"term": "nut", "definition": "It holds the strings."}], pack_id="demo", pack_name="Demo",
-...            instruments={}, exercises={}, lessons={})[0].name
-'nut'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span> <span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{},</span> <span class="n">lessons</span><span class="o">=</span><span class="p">{})</span>
+<span class="go">()
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_terms</span><span class="p">([{</span><span class="s">"term"</span><span class="p">:</span> <span class="s">"nut"</span><span class="p">,</span> <span class="s">"definition"</span><span class="p">:</span> <span class="s">"It holds the strings."</span><span class="p">}],</span> <span class="n">pack_id</span><span class="o">=</span><span class="s">"demo"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Demo"</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">            </span><span class="n">instruments</span><span class="o">=</span><span class="p">{},</span> <span class="n">exercises</span><span class="o">=</span><span class="p">{},</span> <span class="n">lessons</span><span class="o">=</span><span class="p">{})[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span>
+<span class="go">'nut'
+</span></code></pre></div></div>
 
 
           
@@ -958,8 +958,8 @@ ValueError: The term bridge is already supplied by Demo.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

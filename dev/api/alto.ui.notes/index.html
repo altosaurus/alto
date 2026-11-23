@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -684,11 +684,11 @@ from the stem’s end, as an engraver would write them.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; note_shape("quarter").isEmpty()
-False
-&gt;&gt;&gt; note_shape("whole", stem_down=True) is note_shape("whole")  # a whole note has no stem to turn
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">).</span><span class="n">isEmpty</span><span class="p">()</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">note_shape</span><span class="p">(</span><span class="s">"whole"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="ow">is</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"whole"</span><span class="p">)</span>  <span class="c1"># a whole note has no stem to turn
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="note_shape">note_shape</h2>
 
@@ -719,10 +719,10 @@ Shapes are cached after their first use.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; up, down = note_shape("quarter"), note_shape("quarter", stem_down=True)
-&gt;&gt;&gt; up == down
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">),</span> <span class="n">note_shape</span><span class="p">(</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">stem_down</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">up</span> <span class="o">==</span> <span class="n">down</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="draw_note">draw_note</h2>
 
@@ -757,17 +757,17 @@ draws with Bravura, which comes with Alto, wherever Noto Music is missing.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QImage
-&gt;&gt;&gt; image = QImage(100, 100, QImage.Format.Format_ARGB32)
-&gt;&gt;&gt; image.fill(QColor("white"))
-&gt;&gt;&gt; painter = QPainter(image)
-&gt;&gt;&gt; draw_note(painter, value="quarter", x=50, y=50, gap=16, color=QColor("black"))
-&gt;&gt;&gt; painter.end()
-True
-&gt;&gt;&gt; from PySide6.QtGui import QFontDatabase
-&gt;&gt;&gt; not QFontDatabase.hasFamily("Noto Music") or image.pixelColor(50, 50).lightness() &lt; 128  # the head is at the point
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QImage</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">QImage</span><span class="p">.</span><span class="n">Format</span><span class="p">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"white"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_note</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s">"quarter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QFontDatabase</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="ow">not</span> <span class="n">QFontDatabase</span><span class="p">.</span><span class="n">hasFamily</span><span class="p">(</span><span class="s">"Noto Music"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">image</span><span class="p">.</span><span class="n">pixelColor</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="n">lightness</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">128</span>  <span class="c1"># the head is at the point
+</span><span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1038,8 +1038,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

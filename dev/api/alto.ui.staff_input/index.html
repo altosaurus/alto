@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,10 +680,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.accidental is None and not staff.locked
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">staff</span><span class="p">.</span><span class="n">locked</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="staffinput">StaffInput</h2>
 
@@ -710,12 +710,12 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble", key=0)
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; str(staff.note_at(staff.staff_bottoms()["treble"]))  # the bottom line of the treble staff
-'E4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]))</span>  <span class="c1"># the bottom line of the treble staff
+</span><span class="go">'E4'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -729,9 +729,9 @@ the note that would be placed: <code class="language-plaintext highlighter-rouge
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; StaffInput().hasMouseTracking()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">StaffInput</span><span class="p">().</span><span class="n">hasMouseTracking</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="staffinputreset">StaffInput.reset</h3>
 
@@ -757,12 +757,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.accidental, staff.locked = 1, True
-&gt;&gt;&gt; staff.reset("bass", key=-2)
-&gt;&gt;&gt; staff.accidental is None, staff.locked, staff.key
-(True, False, -2)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">locked</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">locked</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="go">(True, False, -2)
+</span></code></pre></div></div>
 
 <h3 id="staffinputnote_at">StaffInput.note_at</h3>
 
@@ -788,15 +788,15 @@ staff and the lower half on the bass staff.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble", key=1)  # G major: F is sharp
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; bottom = staff.staff_bottoms()["treble"]
-&gt;&gt;&gt; str(staff.note_at(bottom - 3 * staff.GAP / 2))  # three steps above E4
-'A4'
-&gt;&gt;&gt; str(staff.note_at(bottom - staff.GAP / 2))  # one step above E4: F, sharp in this key
-'F♯4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># G major: F is sharp
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">bottom</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># three steps above E4
+</span><span class="go">'A4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_at</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># one step above E4: F, sharp in this key
+</span><span class="go">'F♯4'
+</span></code></pre></div></div>
 
 <h3 id="staffinputnote_for">StaffInput.note_for</h3>
 
@@ -821,14 +821,14 @@ staff and the lower half on the bass staff.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble", key=1)  # G major: F is sharp
-&gt;&gt;&gt; str(staff.note_for(Note.parse("F4").diatonic))
-'F♯4'
-&gt;&gt;&gt; staff.accidental = 0
-&gt;&gt;&gt; str(staff.note_for(Note.parse("F4").diatonic))
-'F4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># G major: F is sharp
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span><span class="p">))</span>
+<span class="go">'F♯4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">accidental</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">note_for</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F4"</span><span class="p">).</span><span class="n">diatonic</span><span class="p">))</span>
+<span class="go">'F4'
+</span></code></pre></div></div>
 
 <h3 id="staffinputcaret_start">StaffInput.caret_start</h3>
 
@@ -845,14 +845,14 @@ staff and the lower half on the bass staff.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))
-'B4'
-&gt;&gt;&gt; staff.reset("grand")
-&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))
-'C4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>
+<span class="go">'B4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"grand"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>
+<span class="go">'C4'
+</span></code></pre></div></div>
 
 <h3 id="staffinputcaret_note">StaffInput.caret_note</h3>
 
@@ -869,14 +869,14 @@ staff and the lower half on the bass staff.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("bass")
-&gt;&gt;&gt; staff.caret_note() is None
-True
-&gt;&gt;&gt; staff.move_cursor(0)
-&gt;&gt;&gt; str(staff.caret_note())
-'D3'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"bass"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>
+<span class="go">'D3'
+</span></code></pre></div></div>
 
 <h3 id="staffinputmove_cursor">StaffInput.move_cursor</h3>
 
@@ -895,18 +895,18 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; staff.move_cursor(1)
-&gt;&gt;&gt; str(staff.caret_note())
-'C5'
-&gt;&gt;&gt; staff.move_cursor(-7)
-&gt;&gt;&gt; str(staff.caret_note())
-'C4'
-&gt;&gt;&gt; staff.move_cursor(-500)  # no further than the ledger lines go
-&gt;&gt;&gt; staff.caret == RANGE_LIMITS["treble"][0]
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>
+<span class="go">'C5'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>
+<span class="go">'C4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># no further than the ledger lines go
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">caret</span> <span class="o">==</span> <span class="n">RANGE_LIMITS</span><span class="p">[</span><span class="s">"treble"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="staffinputjump_to_letter">StaffInput.jump_to_letter</h3>
 
@@ -923,16 +923,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; staff.move_cursor(0)  # B4, the middle line
-&gt;&gt;&gt; staff.jump_to_letter(0)
-&gt;&gt;&gt; str(staff.caret_note())  # the nearest C is the one just above
-'C5'
-&gt;&gt;&gt; staff.jump_to_letter(4)
-&gt;&gt;&gt; str(staff.caret_note())  # and the nearest G is the one just below
-'G4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># B4, the middle line
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">jump_to_letter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>  <span class="c1"># the nearest C is the one just above
+</span><span class="go">'C5'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">jump_to_letter</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_note</span><span class="p">())</span>  <span class="c1"># and the nearest G is the one just below
+</span><span class="go">'G4'
+</span></code></pre></div></div>
 
 <h3 id="staffinputplace_caret">StaffInput.place_caret</h3>
 
@@ -943,14 +943,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; placed = []
-&gt;&gt;&gt; _ = staff.placed.connect(placed.append)
-&gt;&gt;&gt; staff.place_caret()  # the first press places the note at the start
-&gt;&gt;&gt; [str(n) for n in placed]
-['B4']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">placed</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">placed</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_caret</span><span class="p">()</span>  <span class="c1"># the first press places the note at the start
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">placed</span><span class="p">]</span>
+<span class="go">['B4']
+</span></code></pre></div></div>
 
 <h3 id="staffinputshow_note">StaffInput.show_note</h3>
 
@@ -972,14 +972,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.show_note(Note.parse("C4"))
-&gt;&gt;&gt; len(staff.columns)
-1
-&gt;&gt;&gt; staff.show_note(None)
-&gt;&gt;&gt; staff.columns
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_note</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">1
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_note</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="staffinputrefresh_preview">StaffInput.refresh_preview</h3>
 
@@ -993,15 +993,15 @@ has put the caret somewhere.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.refresh_preview()  # the pointer is not over the staff, and there is no caret: nothing to redraw
-&gt;&gt;&gt; staff.columns
-[]
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; staff.move_cursor(0)
-&gt;&gt;&gt; len(staff.columns)  # the note at the caret
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">refresh_preview</span><span class="p">()</span>  <span class="c1"># the pointer is not over the staff, and there is no caret: nothing to redraw
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
+<span class="go">[]
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>  <span class="c1"># the note at the caret
+</span><span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="staffinputmousemoveevent">StaffInput.mouseMoveEvent</h3>
 
@@ -1018,16 +1018,16 @@ has put the caret somewhere.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
-&gt;&gt;&gt; staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; str(staff.columns[0][0])
-'E4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">'E4'
+</span></code></pre></div></div>
 
 <h3 id="staffinputleaveevent">StaffInput.leaveEvent</h3>
 
@@ -1044,12 +1044,12 @@ has put the caret somewhere.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.show_note(Note.parse("C4"))
-&gt;&gt;&gt; staff.leaveEvent(QEvent(QEvent.Type.Leave))
-&gt;&gt;&gt; staff.columns
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_note</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="staffinputmousepressevent">StaffInput.mousePressEvent</h3>
 
@@ -1066,18 +1066,18 @@ has put the caret somewhere.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = StaffInput()
-&gt;&gt;&gt; staff.reset("treble")
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; placed = []
-&gt;&gt;&gt; _ = staff.placed.connect(placed.append)
-&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
-&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; [str(n) for n in placed]
-['E4']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">StaffInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="s">"treble"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">placed</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">placed</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">placed</span><span class="p">]</span>
+<span class="go">['E4']
+</span></code></pre></div></div>
 
 <h2 id="scaleinput">ScaleInput</h2>
 
@@ -1110,16 +1110,16 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=8)
-&gt;&gt;&gt; staff.resize(600, 300)
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
-&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                   Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; [str(n) for n in staff.notes], len(staff.columns)
-(['E4'], 8)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">(['E4'], 8)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1133,9 +1133,9 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleInput().notes
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleInput</span><span class="p">().</span><span class="n">notes</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="scaleinputreset_scale">ScaleInput.reset_scale</h3>
 
@@ -1163,15 +1163,15 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.notes, staff.slots = [Note.parse("C4")], 3
-&gt;&gt;&gt; staff.reset_scale("bass", slots=8, caption="D Major")
-&gt;&gt;&gt; staff.notes, staff.slots, staff.caption, staff.key
-([], 8, 'D Major', 0)
-&gt;&gt;&gt; staff.reset_scale("bass", slots=8, key=-2)
-&gt;&gt;&gt; staff.key
--2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">)],</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D Major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">slots</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">caption</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="go">([], 8, 'D Major', 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">key</span>
+<span class="go">-2
+</span></code></pre></div></div>
 
 <h3 id="scaleinputcomplete">ScaleInput.complete</h3>
 
@@ -1189,14 +1189,14 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=1)
-&gt;&gt;&gt; staff.complete
-False
-&gt;&gt;&gt; staff.notes.append(Note.parse("C4"))
-&gt;&gt;&gt; staff.complete
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">complete</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">complete</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleinputplacing_steps">ScaleInput.placing_steps</h3>
 
@@ -1214,15 +1214,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
-&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
-&gt;&gt;&gt; staff.placing_steps
-True
-&gt;&gt;&gt; staff.steps.append("W")
-&gt;&gt;&gt; staff.placing_steps
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">placing_steps</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">steps</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"W"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">placing_steps</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="scaleinputdone">ScaleInput.done</h3>
 
@@ -1240,15 +1240,15 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
-&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
-&gt;&gt;&gt; staff.done
-False
-&gt;&gt;&gt; staff.steps.append("W")
-&gt;&gt;&gt; staff.done
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">done</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">steps</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"W"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">done</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleinputshow_note">ScaleInput.show_note</h3>
 
@@ -1270,12 +1270,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=4)
-&gt;&gt;&gt; staff.show_note(Note.parse("G4"))
-&gt;&gt;&gt; staff.columns[0], staff.notes
-([Note(octave=4, letter=4, accidental=0)], [])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">show_note</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span>
+<span class="go">([Note(octave=4, letter=4, accidental=0)], [])
+</span></code></pre></div></div>
 
 <h3 id="scaleinputset_pending_step">ScaleInput.set_pending_step</h3>
 
@@ -1292,14 +1292,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=3, with_steps=True)
-&gt;&gt;&gt; chosen = []
-&gt;&gt;&gt; _ = staff.step_selected.connect(chosen.append)
-&gt;&gt;&gt; staff.set_pending_step("H")
-&gt;&gt;&gt; staff.pending_step, chosen
-('H', ['H'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">chosen</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_selected</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">chosen</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">set_pending_step</span><span class="p">(</span><span class="s">"H"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span><span class="p">,</span> <span class="n">chosen</span>
+<span class="go">('H', ['H'])
+</span></code></pre></div></div>
 
 <h3 id="scaleinputtoggle_step">ScaleInput.toggle_step</h3>
 
@@ -1310,15 +1310,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=3, with_steps=True)
-&gt;&gt;&gt; staff.toggle_step()
-&gt;&gt;&gt; staff.pending_step
-'H'
-&gt;&gt;&gt; staff.toggle_step()
-&gt;&gt;&gt; staff.pending_step
-'W'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">toggle_step</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
+<span class="go">'H'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">toggle_step</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
+<span class="go">'W'
+</span></code></pre></div></div>
 
 <h3 id="scaleinputundo">ScaleInput.undo</h3>
 
@@ -1329,13 +1329,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=4)
-&gt;&gt;&gt; staff.notes.append(Note.parse("C4"))
-&gt;&gt;&gt; staff.undo()
-&gt;&gt;&gt; staff.notes
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">undo</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <h3 id="scaleinputwheelevent">ScaleInput.wheelEvent</h3>
 
@@ -1355,22 +1355,22 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint, QPointF
-&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
-&gt;&gt;&gt; signs = []
-&gt;&gt;&gt; _ = staff.accidental_stepped.connect(signs.append)
-&gt;&gt;&gt; here = QPointF(50, 50)
-&gt;&gt;&gt; turn = QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                    Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
-&gt;&gt;&gt; staff.wheelEvent(turn)
-&gt;&gt;&gt; signs, staff.pending_step
-([1], 'W')
-&gt;&gt;&gt; staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
-&gt;&gt;&gt; staff.wheelEvent(turn)
-&gt;&gt;&gt; signs, staff.pending_step
-([1], 'H')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span><span class="p">,</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">accidental_stepped</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">signs</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">turn</span> <span class="o">=</span> <span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">turn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
+<span class="go">([1], 'W')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">turn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">signs</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">pending_step</span>
+<span class="go">([1], 'H')
+</span></code></pre></div></div>
 
 <h3 id="scaleinputcaret_start">ScaleInput.caret_start</h3>
 
@@ -1387,14 +1387,14 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=8)
-&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))  # the middle line
-'B4'
-&gt;&gt;&gt; staff.notes.append(Note.parse("D4"))
-&gt;&gt;&gt; str(Note.from_diatonic(staff.caret_start()))  # the note before
-'D4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>  <span class="c1"># the middle line
+</span><span class="go">'B4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">from_diatonic</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">caret_start</span><span class="p">()))</span>  <span class="c1"># the note before
+</span><span class="go">'D4'
+</span></code></pre></div></div>
 
 <h3 id="scaleinputplace_next">ScaleInput.place_next</h3>
 
@@ -1411,14 +1411,14 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=2, with_steps=True)
-&gt;&gt;&gt; staff.place_next(Note.parse("C4"))
-&gt;&gt;&gt; staff.place_next(Note.parse("D4"))
-&gt;&gt;&gt; staff.place_next()  # the notes are placed: this marks the first step
-&gt;&gt;&gt; [str(n) for n in staff.notes], staff.steps
-(['C4', 'D4'], ['W'])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">()</span>  <span class="c1"># the notes are placed: this marks the first step
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">],</span> <span class="n">staff</span><span class="p">.</span><span class="n">steps</span>
+<span class="go">(['C4', 'D4'], ['W'])
+</span></code></pre></div></div>
 
 <h3 id="scaleinputplace_caret">ScaleInput.place_caret</h3>
 
@@ -1429,13 +1429,13 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=2)
-&gt;&gt;&gt; staff.move_cursor(2)
-&gt;&gt;&gt; staff.place_caret()
-&gt;&gt;&gt; [str(n) for n in staff.notes]
-['D5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_cursor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_caret</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">]</span>
+<span class="go">['D5']
+</span></code></pre></div></div>
 
 <h3 id="scaleinputmousepressevent">ScaleInput.mousePressEvent</h3>
 
@@ -1452,18 +1452,18 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; staff = ScaleInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=1)
-&gt;&gt;&gt; staff.resize(600, 300)
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
-&gt;&gt;&gt; press = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                     Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
-&gt;&gt;&gt; staff.mousePressEvent(press)
-&gt;&gt;&gt; staff.mousePressEvent(press)  # every place is taken
-&gt;&gt;&gt; [str(n) for n in staff.notes]
-['E4']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ScaleInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                     </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>  <span class="c1"># every place is taken
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">]</span>
+<span class="go">['E4']
+</span></code></pre></div></div>
 
 <h2 id="signatureinput">SignatureInput</h2>
 
@@ -1474,12 +1474,12 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
-&gt;&gt;&gt; staff.reset_scale("treble", slots=7, caption="D major")
-&gt;&gt;&gt; staff.place_next(Note.parse("F#5"))
-&gt;&gt;&gt; staff.notes, staff.columns
-([Note(octave=5, letter=3, accidental=1)], [])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#5"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">columns</span>
+<span class="go">([Note(octave=5, letter=3, accidental=1)], [])
+</span></code></pre></div></div>
 
 <h3 id="signatureinputreset_signature">SignatureInput.reset_signature</h3>
 
@@ -1505,11 +1505,11 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
-&gt;&gt;&gt; staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
-&gt;&gt;&gt; len(staff.template), staff.template[1]
-(7, Note(octave=5, letter=0, accidental=1))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span> <span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">staff</span><span class="p">.</span><span class="n">template</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">template</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">(7, Note(octave=5, letter=0, accidental=1))
+</span></code></pre></div></div>
 
 <h3 id="signatureinputentered_signature">SignatureInput.entered_signature</h3>
 
@@ -1526,12 +1526,12 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
-&gt;&gt;&gt; staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
-&gt;&gt;&gt; staff.place_next(Note.parse("F#5"))
-&gt;&gt;&gt; [str(n) for n in staff.entered_signature() if n is not None]
-['F♯5', 'C♯5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_signature</span><span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">"D major"</span><span class="p">,</span> <span class="n">starting_slots</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"F#5"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">staff</span><span class="p">.</span><span class="n">entered_signature</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+<span class="go">['F♯5', 'C♯5']
+</span></code></pre></div></div>
 
 <h3 id="signatureinputpaintevent">SignatureInput.paintEvent</h3>
 
@@ -1548,12 +1548,12 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = SignatureInput()
-&gt;&gt;&gt; staff.reset_scale("bass", slots=7)
-&gt;&gt;&gt; staff.place_next(Note.parse("Bb2"))
-&gt;&gt;&gt; staff.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">SignatureInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset_scale</span><span class="p">(</span><span class="s">"bass"</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_next</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Bb2"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="clefinput">ClefInput</h2>
 
@@ -1582,12 +1582,12 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G", "F"])
-&gt;&gt;&gt; staff.step_symbol(1)
-&gt;&gt;&gt; staff.selected
-'F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">step_symbol</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
+<span class="go">'F'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1601,9 +1601,9 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefInput().hasMouseTracking()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefInput</span><span class="p">().</span><span class="n">hasMouseTracking</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefinputreset">ClefInput.reset</h3>
 
@@ -1625,11 +1625,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["C", "F"], caption="Place the alto clef.")
-&gt;&gt;&gt; staff.selected, staff.placed_symbol, staff.caption
-('C', None, 'Place the alto clef.')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">],</span> <span class="n">caption</span><span class="o">=</span><span class="s">"Place the alto clef."</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">caption</span>
+<span class="go">('C', None, 'Place the alto clef.')
+</span></code></pre></div></div>
 
 <h3 id="clefinputselect">ClefInput.select</h3>
 
@@ -1646,12 +1646,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G", "C", "F"])
-&gt;&gt;&gt; staff.select("F")
-&gt;&gt;&gt; staff.selected
-'F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"F"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
+<span class="go">'F'
+</span></code></pre></div></div>
 
 <h3 id="clefinputstep_symbol">ClefInput.step_symbol</h3>
 
@@ -1668,12 +1668,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G", "C", "F"])
-&gt;&gt;&gt; staff.step_symbol(-1)
-&gt;&gt;&gt; staff.selected
-'F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">step_symbol</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
+<span class="go">'F'
+</span></code></pre></div></div>
 
 <h3 id="clefinputstep_at">ClefInput.step_at</h3>
 
@@ -1696,13 +1696,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G"])
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; floor = staff.staff_bottoms()["treble"]
-&gt;&gt;&gt; staff.step_at(floor), staff.step_at(floor - 1.4 * staff.GAP), staff.step_at(0), staff.step_at(10_000)
-(0, 3, 14, -6)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">floor</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="n">floor</span> <span class="o">-</span> <span class="mf">1.4</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">staff</span><span class="p">.</span><span class="n">step_at</span><span class="p">(</span><span class="mi">10_000</span><span class="p">)</span>
+<span class="go">(0, 3, 14, -6)
+</span></code></pre></div></div>
 
 <h3 id="clefinputmove_caret">ClefInput.move_caret</h3>
 
@@ -1719,15 +1719,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G"])
-&gt;&gt;&gt; staff.move_caret(1)
-&gt;&gt;&gt; staff.caret
-5
-&gt;&gt;&gt; staff.move_caret(20)
-&gt;&gt;&gt; staff.caret
-14
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_caret</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">caret</span>
+<span class="go">5
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_caret</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">caret</span>
+<span class="go">14
+</span></code></pre></div></div>
 
 <h3 id="clefinputplace">ClefInput.place</h3>
 
@@ -1744,14 +1744,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["F"])
-&gt;&gt;&gt; got = []
-&gt;&gt;&gt; _ = staff.placed.connect(lambda symbol, where: got.append((symbol, where)))
-&gt;&gt;&gt; staff.place(6)
-&gt;&gt;&gt; got, staff.placed_symbol, staff.placed_step
-([('F', 6)], 'F', 6)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">:</span> <span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">symbol</span><span class="p">,</span> <span class="n">where</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">placed_step</span>
+<span class="go">([('F', 6)], 'F', 6)
+</span></code></pre></div></div>
 
 <h3 id="clefinputplace_caret">ClefInput.place_caret</h3>
 
@@ -1762,13 +1762,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G"])
-&gt;&gt;&gt; staff.move_caret(-2)
-&gt;&gt;&gt; staff.place_caret()
-&gt;&gt;&gt; staff.placed_step
-2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">move_caret</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place_caret</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">placed_step</span>
+<span class="go">2
+</span></code></pre></div></div>
 
 <h3 id="clefinputclear_placed">ClefInput.clear_placed</h3>
 
@@ -1779,12 +1779,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.place(1)
-&gt;&gt;&gt; staff.clear_placed()
-&gt;&gt;&gt; staff.placed_symbol is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">clear_placed</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">placed_symbol</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefinputset_clef_color">ClefInput.set_clef_color</h3>
 
@@ -1801,11 +1801,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.set_clef_color(QColor("#2e7d32"))
-&gt;&gt;&gt; staff.clef_color == QColor("#2e7d32")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">set_clef_color</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">clef_color</span> <span class="o">==</span> <span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefinputmousemoveevent">ClefInput.mouseMoveEvent</h3>
 
@@ -1822,16 +1822,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G"])
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"] - 2 * staff.GAP)
-&gt;&gt;&gt; staff.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, point, point, Qt.MouseButton.NoButton,
-...                                  Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; staff._hover
-4
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">staff</span><span class="p">.</span><span class="n">GAP</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">_hover</span>
+<span class="go">4
+</span></code></pre></div></div>
 
 <h3 id="clefinputleaveevent">ClefInput.leaveEvent</h3>
 
@@ -1848,12 +1848,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff._hover = 2
-&gt;&gt;&gt; staff.leaveEvent(QEvent(QEvent.Type.Leave))
-&gt;&gt;&gt; staff._hover is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">_hover</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">_hover</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefinputmousepressevent">ClefInput.mousePressEvent</h3>
 
@@ -1870,16 +1870,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G", "F"])
-&gt;&gt;&gt; staff.resize(400, 300)
-&gt;&gt;&gt; from PySide6.QtCore import QPointF
-&gt;&gt;&gt; point = QPointF(50, staff.staff_bottoms()["treble"])
-&gt;&gt;&gt; staff.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.RightButton,
-...                                   Qt.MouseButton.RightButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; staff.selected
-'F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">staff</span><span class="p">.</span><span class="n">staff_bottoms</span><span class="p">()[</span><span class="s">"treble"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                   </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">RightButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
+<span class="go">'F'
+</span></code></pre></div></div>
 
 <h3 id="clefinputwheelevent">ClefInput.wheelEvent</h3>
 
@@ -1896,15 +1896,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint, QPointF
-&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G", "F"])
-&gt;&gt;&gt; here = QPointF(50, 50)
-&gt;&gt;&gt; staff.wheelEvent(QWheelEvent(here, here, QPoint(0, 0), QPoint(0, 120), Qt.MouseButton.NoButton,
-...                              Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
-&gt;&gt;&gt; staff.selected
-'F'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span><span class="p">,</span> <span class="n">QPointF</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">QWheelEvent</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                              </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">selected</span>
+<span class="go">'F'
+</span></code></pre></div></div>
 
 <h3 id="clefinputpaintevent">ClefInput.paintEvent</h3>
 
@@ -1923,12 +1923,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; staff = ClefInput()
-&gt;&gt;&gt; staff.reset(["G"])
-&gt;&gt;&gt; staff.place(1)
-&gt;&gt;&gt; staff.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span> <span class="o">=</span> <span class="n">ClefInput</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">reset</span><span class="p">([</span><span class="s">"G"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">place</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">staff</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -2229,8 +2229,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

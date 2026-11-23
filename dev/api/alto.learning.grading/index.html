@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -692,9 +692,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Sm2State.read(None).phase
-'learning'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sm2State</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="bp">None</span><span class="p">).</span><span class="n">phase</span>
+<span class="go">'learning'
+</span></code></pre></div></div>
 
 <h3 id="sm2stateread">Sm2State.read</h3>
 
@@ -718,9 +718,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Sm2State.read("[2, 6, 2.5]").phase
-'review'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Sm2State</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="s">"[2, 6, 2.5]"</span><span class="p">).</span><span class="n">phase</span>
+<span class="go">'review'
+</span></code></pre></div></div>
 
 <h2 id="inherited_state">inherited_state</h2>
 
@@ -754,10 +754,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; result = inherited_state("abc", source="SM-2", state="[8, 180, 2.5]", due=200 * DAY, rating=Rating.Good)
-&gt;&gt;&gt; Card.from_json(result).stability
-180.0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">result</span> <span class="o">=</span> <span class="n">inherited_state</span><span class="p">(</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s">"[8, 180, 2.5]"</span><span class="p">,</span> <span class="n">due</span><span class="o">=</span><span class="mi">200</span> <span class="o">*</span> <span class="n">DAY</span><span class="p">,</span> <span class="n">rating</span><span class="o">=</span><span class="n">Rating</span><span class="p">.</span><span class="n">Good</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Card</span><span class="p">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="n">stability</span>
+<span class="go">180.0
+</span></code></pre></div></div>
 
 <h2 id="review_options">review_options</h2>
 
@@ -791,9 +791,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; review_options("abc", mode="SM-2", previous=None, due=0, now=0)[Rating.Again][0]
-60
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">review_options</span><span class="p">(</span><span class="s">"abc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"SM-2"</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">due</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">Rating</span><span class="p">.</span><span class="n">Again</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">60
+</span></code></pre></div></div>
 
 
           
@@ -970,8 +970,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

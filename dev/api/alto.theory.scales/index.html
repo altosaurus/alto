@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,11 +681,11 @@ and the other functions work out key signatures, mode tonics and arpeggios from 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [str(n) for n in build(Note.parse("D4"), intervals=SCALES["Dorian"])]
-['D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
-&gt;&gt;&gt; [str(n) for n in build(Note.parse("C4"), intervals=CHORDS["minor 7th"])]
-['C4', 'E♭4', 'G4', 'B♭4']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">build</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"D4"</span><span class="p">),</span> <span class="n">intervals</span><span class="o">=</span><span class="n">SCALES</span><span class="p">[</span><span class="s">"Dorian"</span><span class="p">])]</span>
+<span class="go">['D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">build</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">intervals</span><span class="o">=</span><span class="n">CHORDS</span><span class="p">[</span><span class="s">"minor 7th"</span><span class="p">])]</span>
+<span class="go">['C4', 'E♭4', 'G4', 'B♭4']
+</span></code></pre></div></div>
 
 <h2 id="major_key_tonic">major_key_tonic</h2>
 
@@ -714,11 +714,11 @@ and the other functions work out key signatures, mode tonics and arpeggios from 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; str(major_key_tonic(2))  # two sharps: D major
-'D4'
-&gt;&gt;&gt; str(major_key_tonic(-3))  # three flats: E♭ major
-'E♭4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">major_key_tonic</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># two sharps: D major
+</span><span class="go">'D4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">major_key_tonic</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))</span>  <span class="c1"># three flats: E♭ major
+</span><span class="go">'E♭4'
+</span></code></pre></div></div>
 
 <h2 id="mode_tonic">mode_tonic</h2>
 
@@ -749,11 +749,11 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; str(mode_tonic(0, mode="Dorian"))  # no sharps or flats: D Dorian
-'D4'
-&gt;&gt;&gt; str(mode_tonic(2, mode="Natural minor (Aeolian)"))  # two sharps: B minor
-'B4'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">mode_tonic</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"Dorian"</span><span class="p">))</span>  <span class="c1"># no sharps or flats: D Dorian
+</span><span class="go">'D4'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">mode_tonic</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">"Natural minor (Aeolian)"</span><span class="p">))</span>  <span class="c1"># two sharps: B minor
+</span><span class="go">'B4'
+</span></code></pre></div></div>
 
 <h2 id="arpeggio">arpeggio</h2>
 
@@ -783,11 +783,11 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"])]
-['C4', 'E4', 'G4', 'C5']
-&gt;&gt;&gt; [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"], inversion=1)]
-['E4', 'G4', 'C5', 'E5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">arpeggio</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">intervals</span><span class="o">=</span><span class="n">CHORDS</span><span class="p">[</span><span class="s">"major"</span><span class="p">])]</span>
+<span class="go">['C4', 'E4', 'G4', 'C5']
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">arpeggio</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"C4"</span><span class="p">),</span> <span class="n">intervals</span><span class="o">=</span><span class="n">CHORDS</span><span class="p">[</span><span class="s">"major"</span><span class="p">],</span> <span class="n">inversion</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+<span class="go">['E4', 'G4', 'C5', 'E5']
+</span></code></pre></div></div>
 
 <h2 id="build">build</h2>
 
@@ -815,9 +815,9 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; [str(n) for n in build(Note.parse("G4"), intervals=SCALES["Major (Ionian)"])]
-['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F♯5']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">build</span><span class="p">(</span><span class="n">Note</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"G4"</span><span class="p">),</span> <span class="n">intervals</span><span class="o">=</span><span class="n">SCALES</span><span class="p">[</span><span class="s">"Major (Ionian)"</span><span class="p">])]</span>
+<span class="go">['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F♯5']
+</span></code></pre></div></div>
 
 <h2 id="key_signature">key_signature</h2>
 
@@ -845,13 +845,13 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_signature("G")  # G major has one sharp
-1
-&gt;&gt;&gt; key_signature("Eb")  # E♭ major has three flats
--3
-&gt;&gt;&gt; key_signature("A", scale="Natural minor (Aeolian)")  # A minor has none
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature</span><span class="p">(</span><span class="s">"G"</span><span class="p">)</span>  <span class="c1"># G major has one sharp
+</span><span class="go">1
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature</span><span class="p">(</span><span class="s">"Eb"</span><span class="p">)</span>  <span class="c1"># E♭ major has three flats
+</span><span class="go">-3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_signature</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s">"Natural minor (Aeolian)"</span><span class="p">)</span>  <span class="c1"># A minor has none
+</span><span class="go">0
+</span></code></pre></div></div>
 
 <h2 id="format_key_signature">format_key_signature</h2>
 
@@ -874,13 +874,13 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; format_key_signature(0)
-'no sharps or flats'
-&gt;&gt;&gt; format_key_signature(1)
-'1 sharp'
-&gt;&gt;&gt; format_key_signature(-3)
-'3 flats'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_key_signature</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">'no sharps or flats'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_key_signature</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">'1 sharp'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">format_key_signature</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">'3 flats'
+</span></code></pre></div></div>
 
 <h2 id="all_tonics">all_tonics</h2>
 
@@ -903,11 +903,11 @@ signature of C major, started from its second note.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(all_tonics())
-21
-&gt;&gt;&gt; [str(n) for n in all_tonics(0)]
-['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">all_tonics</span><span class="p">())</span>
+<span class="go">21
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">all_tonics</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+<span class="go">['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4']
+</span></code></pre></div></div>
 
 
           
@@ -1116,8 +1116,8 @@ signature of C major, started from its second note.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

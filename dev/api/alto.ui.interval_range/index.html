@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,11 +678,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; slider = IntervalRangeSlider()
-&gt;&gt;&gt; slider.set_range(3, high=12, maximum=24)
-&gt;&gt;&gt; slider.low, slider.high
-(3, 12)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span> <span class="o">=</span> <span class="n">IntervalRangeSlider</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">set_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">low</span><span class="p">,</span> <span class="n">slider</span><span class="p">.</span><span class="n">high</span>
+<span class="go">(3, 12)
+</span></code></pre></div></div>
 
 <h2 id="intervalrangeslider">IntervalRangeSlider</h2>
 
@@ -704,10 +704,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; slider = IntervalRangeSlider()
-&gt;&gt;&gt; slider.low, slider.high, slider.maximum
-(1, 12, 24)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span> <span class="o">=</span> <span class="n">IntervalRangeSlider</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">low</span><span class="p">,</span> <span class="n">slider</span><span class="p">.</span><span class="n">high</span><span class="p">,</span> <span class="n">slider</span><span class="p">.</span><span class="n">maximum</span>
+<span class="go">(1, 12, 24)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -721,9 +721,9 @@
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider().height()
-36
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">height</span><span class="p">()</span>
+<span class="go">36
+</span></code></pre></div></div>
 
 <h3 id="intervalrangesliderset_range">IntervalRangeSlider.set_range</h3>
 
@@ -751,11 +751,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; slider = IntervalRangeSlider()
-&gt;&gt;&gt; slider.set_range(3, high=7, maximum=12)
-&gt;&gt;&gt; slider.low, slider.high
-(3, 7)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span> <span class="o">=</span> <span class="n">IntervalRangeSlider</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">set_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">low</span><span class="p">,</span> <span class="n">slider</span><span class="p">.</span><span class="n">high</span>
+<span class="go">(3, 7)
+</span></code></pre></div></div>
 
 <h3 id="intervalrangeslidermove_endpoint">IntervalRangeSlider.move_endpoint</h3>
 
@@ -777,11 +777,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; slider = IntervalRangeSlider()
-&gt;&gt;&gt; slider.move_endpoint("low", delta=2)
-&gt;&gt;&gt; slider.low
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span> <span class="o">=</span> <span class="n">IntervalRangeSlider</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">move_endpoint</span><span class="p">(</span><span class="s">"low"</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">slider</span><span class="p">.</span><span class="n">low</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h3 id="intervalrangesliderpaintevent">IntervalRangeSlider.paintEvent</h3>
 
@@ -798,9 +798,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider().grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="intervalrangeslidermousepressevent">IntervalRangeSlider.mousePressEvent</h3>
 
@@ -817,9 +817,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider()._dragging
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">_dragging</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="intervalrangeslidermousemoveevent">IntervalRangeSlider.mouseMoveEvent</h3>
 
@@ -836,9 +836,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider().maximum
-24
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">maximum</span>
+<span class="go">24
+</span></code></pre></div></div>
 
 <h3 id="intervalrangeslidermousereleaseevent">IntervalRangeSlider.mouseReleaseEvent</h3>
 
@@ -855,9 +855,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider()._dragging
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">_dragging</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="intervalrangesliderkeypressevent">IntervalRangeSlider.keyPressEvent</h3>
 
@@ -874,9 +874,9 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalRangeSlider().focusPolicy() == Qt.FocusPolicy.StrongFocus
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalRangeSlider</span><span class="p">().</span><span class="n">focusPolicy</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">StrongFocus</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1127,8 +1127,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

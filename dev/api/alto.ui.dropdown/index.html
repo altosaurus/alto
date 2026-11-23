@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -678,9 +678,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FieldComboBox().property("field")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FieldComboBox</span><span class="p">().</span><span class="nb">property</span><span class="p">(</span><span class="s">"field"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="fieldcombobox">FieldComboBox</h2>
 
@@ -693,11 +693,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = FieldComboBox()
-&gt;&gt;&gt; picker.addItems(["m2", "M2", "m3"])
-&gt;&gt;&gt; picker.currentText()
-'m2'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">FieldComboBox</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">addItems</span><span class="p">([</span><span class="s">"m2"</span><span class="p">,</span> <span class="s">"M2"</span><span class="p">,</span> <span class="s">"m3"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">currentText</span><span class="p">()</span>
+<span class="go">'m2'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -711,9 +711,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; FieldComboBox().maxVisibleItems()
-12
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">FieldComboBox</span><span class="p">().</span><span class="n">maxVisibleItems</span><span class="p">()</span>
+<span class="go">12
+</span></code></pre></div></div>
 
 <h3 id="fieldcomboboxshowpopup">FieldComboBox.showPopup</h3>
 
@@ -724,13 +724,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; picker = FieldComboBox()
-&gt;&gt;&gt; picker.addItems(["P4", "P5"])
-&gt;&gt;&gt; picker.showPopup()
-&gt;&gt;&gt; picker.view().window().mask().isEmpty()
-False
-&gt;&gt;&gt; picker.hidePopup()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span> <span class="o">=</span> <span class="n">FieldComboBox</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">addItems</span><span class="p">([</span><span class="s">"P4"</span><span class="p">,</span> <span class="s">"P5"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">showPopup</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">view</span><span class="p">().</span><span class="n">window</span><span class="p">().</span><span class="n">mask</span><span class="p">().</span><span class="n">isEmpty</span><span class="p">()</span>
+<span class="go">False
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">picker</span><span class="p">.</span><span class="n">hidePopup</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="style_combo_popup">style_combo_popup</h2>
 
@@ -976,8 +976,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

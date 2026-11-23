@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,10 +681,10 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = ThemeCard("sage")
-&gt;&gt;&gt; sorted(card.thumbs)
-['sage', 'sage_auto', 'sage_dark']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">ThemeCard</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">thumbs</span><span class="p">)</span>
+<span class="go">['sage', 'sage_auto', 'sage_dark']
+</span></code></pre></div></div>
 
 <h2 id="colors_of">colors_of</h2>
 
@@ -707,9 +707,9 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; colors_of("dark")["window"], colors_of("studio")["window"]
-('#2b2b2b', '#eceef1')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">colors_of</span><span class="p">(</span><span class="s">"dark"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">],</span> <span class="n">colors_of</span><span class="p">(</span><span class="s">"studio"</span><span class="p">)[</span><span class="s">"window"</span><span class="p">]</span>
+<span class="go">('#2b2b2b', '#eceef1')
+</span></code></pre></div></div>
 
 <h2 id="themethumb">ThemeThumb</h2>
 
@@ -738,9 +738,9 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ThemeThumb("dark", colors=DARK).theme_key
-'dark'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"dark"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">DARK</span><span class="p">).</span><span class="n">theme_key</span>
+<span class="go">'dark'
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -758,9 +758,9 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ThemeThumb("system", colors=LIGHT, other=DARK).width(), ThemeThumb("light", colors=LIGHT, scale=2.0).width()
-(116, 232)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"system"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">DARK</span><span class="p">).</span><span class="n">width</span><span class="p">(),</span> <span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">).</span><span class="n">width</span><span class="p">()</span>
+<span class="go">(116, 232)
+</span></code></pre></div></div>
 
 <h3 id="themethumbpaintevent">ThemeThumb.paintEvent</h3>
 
@@ -777,9 +777,9 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ThemeThumb("light", colors=LIGHT).grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeThumb</span><span class="p">(</span><span class="s">"light"</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">LIGHT</span><span class="p">).</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="themecard">ThemeCard</h2>
 
@@ -810,10 +810,10 @@ because that version is light or dark as the desktop is.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = ThemeCard("default")
-&gt;&gt;&gt; list(card.thumbs)
-['light', 'dark', 'system']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">ThemeCard</span><span class="p">(</span><span class="s">"default"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">thumbs</span><span class="p">)</span>
+<span class="go">['light', 'dark', 'system']
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -829,9 +829,9 @@ because that version is light or dark as the desktop is.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ThemeCard("studio").family
-'studio'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ThemeCard</span><span class="p">(</span><span class="s">"studio"</span><span class="p">).</span><span class="n">family</span>
+<span class="go">'studio'
+</span></code></pre></div></div>
 
 <h3 id="themecardshow_current">ThemeCard.show_current</h3>
 
@@ -848,11 +848,11 @@ because that version is light or dark as the desktop is.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; card = ThemeCard("sage")
-&gt;&gt;&gt; card.show_current("sage_dark")
-&gt;&gt;&gt; [k for k, picture in card.thumbs.items() if picture.isChecked()]
-['sage_dark']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span> <span class="o">=</span> <span class="n">ThemeCard</span><span class="p">(</span><span class="s">"sage"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">card</span><span class="p">.</span><span class="n">show_current</span><span class="p">(</span><span class="s">"sage_dark"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">picture</span> <span class="ow">in</span> <span class="n">card</span><span class="p">.</span><span class="n">thumbs</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">picture</span><span class="p">.</span><span class="n">isChecked</span><span class="p">()]</span>
+<span class="go">['sage_dark']
+</span></code></pre></div></div>
 
 
           
@@ -1165,8 +1165,8 @@ because that version is light or dark as the desktop is.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

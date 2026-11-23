@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,9 +682,9 @@ Grand Piano). What is on disk
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; coverage(range(60, 73)).describe()
-'13 notes, C4 to C5, every semitone'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">73</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'13 notes, C4 to C5, every semitone'
+</span></code></pre></div></div>
 
 <h2 id="instrumentinfo">InstrumentInfo</h2>
 
@@ -718,10 +718,10 @@ Grand Piano). What is on disk
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; info = InstrumentInfo("A flute.", source=IOWA, source_url="https://example.org/flute")
-&gt;&gt;&gt; info.terms == IOWA_TERMS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">InstrumentInfo</span><span class="p">(</span><span class="s">"A flute."</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">IOWA</span><span class="p">,</span> <span class="n">source_url</span><span class="o">=</span><span class="s">"https://example.org/flute"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">terms</span> <span class="o">==</span> <span class="n">IOWA_TERMS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="coverage">Coverage</h2>
 
@@ -747,9 +747,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Coverage(0).describe()
-'None installed'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Coverage</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'None installed'
+</span></code></pre></div></div>
 
 <h3 id="coverageinstalled">Coverage.installed</h3>
 
@@ -767,9 +767,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Coverage(0).installed, coverage([60]).installed
-(False, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Coverage</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">installed</span><span class="p">,</span> <span class="n">coverage</span><span class="p">([</span><span class="mi">60</span><span class="p">]).</span><span class="n">installed</span>
+<span class="go">(False, True)
+</span></code></pre></div></div>
 
 <h3 id="coveragedescribe">Coverage.describe</h3>
 
@@ -786,15 +786,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; coverage(range(60, 73)).describe()
-'13 notes, C4 to C5, every semitone'
-&gt;&gt;&gt; coverage([60, 62, 64, 65]).describe()
-'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
-&gt;&gt;&gt; coverage(range(48, 73, 2)).describe()
-'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
-&gt;&gt;&gt; coverage(range(21, 109, 3)).describe()
-'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">73</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'13 notes, C4 to C5, every semitone'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">65</span><span class="p">]).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'4 notes, C4 to F4, almost every semitone. The few missing notes are shifted from a neighbor.'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'13 notes, C3 to C5, about every second semitone. The other notes are shifted from a neighbor.'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">3</span><span class="p">)).</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">'30 notes, A0 to C8, about every third semitone. The other notes are shifted from a neighbor.'
+</span></code></pre></div></div>
 
 <h2 id="coverage-1">coverage</h2>
 
@@ -817,9 +817,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; coverage([64, 60, 62])
-Coverage(count=3, lowest=60, highest=64, gaps=2)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">coverage</span><span class="p">([</span><span class="mi">64</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">])</span>
+<span class="go">Coverage(count=3, lowest=60, highest=64, gaps=2)
+</span></code></pre></div></div>
 
 
           
@@ -964,8 +964,8 @@ Coverage(count=3, lowest=60, highest=64, gaps=2)
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

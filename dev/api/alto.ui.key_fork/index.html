@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,11 +682,11 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork.set_value(-3)
-&gt;&gt;&gt; fork.value
--3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">-3
+</span></code></pre></div></div>
 
 <h2 id="node_position">node_position</h2>
 
@@ -709,11 +709,11 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; node_position(0).x() &lt; node_position(1).x() &lt; node_position(2).x()
-True
-&gt;&gt;&gt; node_position(3).y() &lt; node_position(0).y() &lt; node_position(-3).y()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">x</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">()</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">).</span><span class="n">y</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="route">route</h2>
 
@@ -736,13 +736,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(route(0)), len(route(2)) &gt; len(route(1)) &gt; len(route(0))
-(1, True)
-&gt;&gt;&gt; route(-1)[-1] == node_position(-1)
-True
-&gt;&gt;&gt; round(route(3)[1].x()) == round(APEX_X)  # it leaves the stem at the apex of the U
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">(1, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">route</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">round</span><span class="p">(</span><span class="n">route</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span><span class="p">())</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span><span class="n">APEX_X</span><span class="p">)</span>  <span class="c1"># it leaves the stem at the apex of the U
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="path_between">path_between</h2>
 
@@ -772,13 +772,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; path_between(2, b=2) == [node_position(2)]
-True
-&gt;&gt;&gt; path_between(1, b=-1)[0] == node_position(1) and path_between(1, b=-1)[-1] == node_position(-1)
-True
-&gt;&gt;&gt; any(abs(p.x() - APEX_X) &lt; 1e-9 for p in path_between(1, b=-1))  # it goes around the U, through its apex
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_between</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">-</span> <span class="n">APEX_X</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path_between</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># it goes around the U, through its apex
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="point_along">point_along</h2>
 
@@ -806,11 +806,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; point_along([QPointF(0, 0), QPointF(10, 0), QPointF(10, 10)], t=0.75).toTuple()
-(10.0, 5.0)
-&gt;&gt;&gt; point_along([QPointF(0, 0), QPointF(3, 4)], t=0.5).toTuple()  # slanting pieces are measured along their length
-(1.5, 2.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">([</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)],</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.75</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>
+<span class="go">(10.0, 5.0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point_along</span><span class="p">([</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.5</span><span class="p">).</span><span class="n">toTuple</span><span class="p">()</span>  <span class="c1"># slanting pieces are measured along their length
+</span><span class="go">(1.5, 2.0)
+</span></code></pre></div></div>
 
 <h2 id="nearest_on_fork">nearest_on_fork</h2>
 
@@ -833,11 +833,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; nearest_on_fork(QPointF(node_position(2).x(), 0)) == node_position(2)  # straight above the number
-True
-&gt;&gt;&gt; nearest_on_fork(QPointF(-50, node_position(0).y())) == node_position(0)  # past the end of the stem
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">x</span><span class="p">(),</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># straight above the number
+</span><span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">nearest_on_fork</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">y</span><span class="p">()))</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># past the end of the stem
+</span><span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="fork_path">fork_path</h2>
 
@@ -854,10 +854,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; outline = fork_path()
-&gt;&gt;&gt; outline.boundingRect().left() == STEM_X and outline.boundingRect().top() == TOP_Y
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">outline</span> <span class="o">=</span> <span class="n">fork_path</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">left</span><span class="p">()</span> <span class="o">==</span> <span class="n">STEM_X</span> <span class="ow">and</span> <span class="n">outline</span><span class="p">.</span><span class="n">boundingRect</span><span class="p">().</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="n">TOP_Y</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="draw_natural">draw_natural</h2>
 
@@ -883,12 +883,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtGui import QPixmap
-&gt;&gt;&gt; canvas = QPixmap(20, 20)
-&gt;&gt;&gt; painter = QPainter(canvas)
-&gt;&gt;&gt; draw_natural(painter, center=QPointF(10, 10), height=14, color=QColor("black"))
-&gt;&gt;&gt; _ = painter.end()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QPixmap</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">draw_natural</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="s">"black"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">painter</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="keyfork">KeyFork</h2>
 
@@ -912,14 +912,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; got = []
-&gt;&gt;&gt; _ = fork.changed.connect(got.append)
-&gt;&gt;&gt; fork.set_value(2)
-&gt;&gt;&gt; fork.set_value(2)  # no change, nothing said
-&gt;&gt;&gt; got
-[2]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">_</span> <span class="o">=</span> <span class="n">fork</span><span class="p">.</span><span class="n">changed</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">got</span><span class="p">.</span><span class="n">append</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># no change, nothing said
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">got</span>
+<span class="go">[2]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -933,9 +933,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyFork().value
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyFork</span><span class="p">().</span><span class="n">value</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="keyforkset_value">KeyFork.set_value</h3>
 
@@ -957,14 +957,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork.set_value(99)
-&gt;&gt;&gt; fork.value
-7
-&gt;&gt;&gt; fork.set_value(0, slide=False)
-&gt;&gt;&gt; fork.value, fork._marker == node_position(0)
-(0, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">7
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">slide</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="n">fork</span><span class="p">.</span><span class="n">_marker</span> <span class="o">==</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">(0, True)
+</span></code></pre></div></div>
 
 <h3 id="keyforkset_marker_color">KeyFork.set_marker_color</h3>
 
@@ -981,11 +981,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork.set_marker_color(QColor("#2e7d32"))
-&gt;&gt;&gt; fork._marker_color == QColor("#2e7d32")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">set_marker_color</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker_color</span> <span class="o">==</span> <span class="n">QColor</span><span class="p">(</span><span class="s">"#2e7d32"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyforkvalue_at">KeyFork.value_at</h3>
 
@@ -1009,12 +1009,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork.value_at(node_position(3)), fork.value_at(node_position(-4)), fork.value_at(node_position(0))
-(3, -4, 0)
-&gt;&gt;&gt; fork.value_at(QPointF(5, 130)) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)),</span> <span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">(3, -4, 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">130</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyforkmousepressevent">KeyFork.mousePressEvent</h3>
 
@@ -1031,14 +1031,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; point = node_position(-2)
-&gt;&gt;&gt; fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; fork.value
--2
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">-2
+</span></code></pre></div></div>
 
 <h3 id="keyforkmousemoveevent">KeyFork.mouseMoveEvent</h3>
 
@@ -1057,17 +1057,17 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; here = node_position(0)
-&gt;&gt;&gt; there = node_position(3)
-&gt;&gt;&gt; fork.mousePressEvent(QMouseEvent(QEvent.Type.MouseButtonPress, here, here, Qt.MouseButton.LeftButton,
-...                                  Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; fork.mouseMoveEvent(QMouseEvent(QEvent.Type.MouseMove, there, there, Qt.MouseButton.NoButton,
-...                                 Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; fork.value
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">here</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">there</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonPress</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                  </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseMove</span><span class="p">,</span> <span class="n">there</span><span class="p">,</span> <span class="n">there</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                 </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h3 id="keyforkmousereleaseevent">KeyFork.mouseReleaseEvent</h3>
 
@@ -1084,16 +1084,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork._dragging = True
-&gt;&gt;&gt; fork._marker = node_position(0) + QPointF(9, 0)
-&gt;&gt;&gt; fork.mouseReleaseEvent(QMouseEvent(QEvent.Type.MouseButtonRelease, fork._marker, fork._marker,
-...                                    Qt.MouseButton.LeftButton, Qt.MouseButton.NoButton,
-...                                    Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; fork._dragging
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_dragging</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_marker</span> <span class="o">=</span> <span class="n">node_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">MouseButtonRelease</span><span class="p">,</span> <span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span> <span class="n">fork</span><span class="p">.</span><span class="n">_marker</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                                    </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_dragging</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="keyforkleaveevent">KeyFork.leaveEvent</h3>
 
@@ -1110,12 +1110,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork._hover = 3
-&gt;&gt;&gt; fork.leaveEvent(QEvent(QEvent.Type.Leave))
-&gt;&gt;&gt; fork._hover is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_hover</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">_hover</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyforkwheelevent">KeyFork.wheelEvent</h3>
 
@@ -1134,14 +1134,14 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint
-&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; point = QPointF(100, 50)
-&gt;&gt;&gt; fork.wheelEvent(QWheelEvent(point, point, QPoint(0, 0), QPoint(0, -120), Qt.MouseButton.NoButton,
-...                             Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False))
-&gt;&gt;&gt; fork.value
--1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">point</span> <span class="o">=</span> <span class="n">QPointF</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">QWheelEvent</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">QPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">120</span><span class="p">),</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">NoButton</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                             </span><span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ScrollPhase</span><span class="p">.</span><span class="n">NoScrollPhase</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">-1
+</span></code></pre></div></div>
 
 <h3 id="keyforkkeypressevent">KeyFork.keyPressEvent</h3>
 
@@ -1158,12 +1158,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QEvent
-&gt;&gt;&gt; fork = KeyFork()
-&gt;&gt;&gt; fork.keyPressEvent(QKeyEvent(QEvent.Type.KeyPress, Qt.Key.Key_Up, Qt.KeyboardModifier.NoModifier))
-&gt;&gt;&gt; fork.value
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QEvent</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span> <span class="o">=</span> <span class="n">KeyFork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">QKeyEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Up</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">fork</span><span class="p">.</span><span class="n">value</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 <h3 id="keyforkpaintevent">KeyFork.paintEvent</h3>
 
@@ -1180,9 +1180,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyFork().grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyFork</span><span class="p">().</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 
           
@@ -1435,8 +1435,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

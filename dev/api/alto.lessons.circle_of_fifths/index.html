@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,11 +681,11 @@ key mean.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(CIRCLE_OF_FIFTHS.steps)
-8
-&gt;&gt;&gt; summary("outer", place=2)
-'&lt;b&gt;D major&lt;/b&gt;: 2 sharps (F♯, C♯)'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">CIRCLE_OF_FIFTHS</span><span class="p">.</span><span class="n">steps</span><span class="p">)</span>
+<span class="go">8
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">summary</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">'&lt;b&gt;D major&lt;/b&gt;: 2 sharps (F♯, C♯)'
+</span></code></pre></div></div>
 
 <h2 id="key_name">key_name</h2>
 
@@ -713,9 +713,9 @@ key mean.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; key_name("outer", place=1), key_name("inner", place=1)
-('G major', 'E minor')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">key_name</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">key_name</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">('G major', 'E minor')
+</span></code></pre></div></div>
 
 <h2 id="summary">summary</h2>
 
@@ -743,9 +743,9 @@ key mean.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; summary("outer", place=0), summary("inner", place=11)
-('&lt;b&gt;C major&lt;/b&gt;: no sharps or flats', '&lt;b&gt;D minor&lt;/b&gt;: 1 flat (B♭)')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">summary</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">summary</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="go">('&lt;b&gt;C major&lt;/b&gt;: no sharps or flats', '&lt;b&gt;D minor&lt;/b&gt;: 1 flat (B♭)')
+</span></code></pre></div></div>
 
 <h2 id="fifth_task">fifth_task</h2>
 
@@ -768,10 +768,10 @@ key mean.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; task = fifth_task(random.Random(1))
-&gt;&gt;&gt; task.correct in LETTERS and len(task.choices) == 4 and task.correct in task.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">fifth_task</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">correct</span> <span class="ow">in</span> <span class="n">LETTERS</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">task</span><span class="p">.</span><span class="n">correct</span> <span class="ow">in</span> <span class="n">task</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="sharps_task">sharps_task</h2>
 
@@ -794,11 +794,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; task = sharps_task(random.Random(2))
-&gt;&gt;&gt; ring, at = next(iter(task.cells))
-&gt;&gt;&gt; ring, SIGNATURES[at] == int(task.prompt.split("&lt;b&gt;")[1].split()[0])
-('outer', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">sharps_task</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="n">at</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">cells</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="n">SIGNATURES</span><span class="p">[</span><span class="n">at</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">prompt</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"&lt;b&gt;"</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">('outer', True)
+</span></code></pre></div></div>
 
 <h2 id="flats_task">flats_task</h2>
 
@@ -821,11 +821,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; task = flats_task(random.Random(3))
-&gt;&gt;&gt; ring, at = next(iter(task.cells))
-&gt;&gt;&gt; ring, -SIGNATURES[at] == int(task.prompt.split("&lt;b&gt;")[1].split()[0])
-('outer', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">flats_task</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="n">at</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">cells</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="o">-</span><span class="n">SIGNATURES</span><span class="p">[</span><span class="n">at</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">prompt</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"&lt;b&gt;"</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">('outer', True)
+</span></code></pre></div></div>
 
 <h2 id="relative_task">relative_task</h2>
 
@@ -848,10 +848,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; task = relative_task(random.Random(4))
-&gt;&gt;&gt; task.cells &lt;= {("inner", at) for at in range(12)}
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">relative_task</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">cells</span> <span class="o">&lt;=</span> <span class="p">{(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">at</span><span class="p">)</span> <span class="k">for</span> <span class="n">at</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)}</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="neighbor_task">neighbor_task</h2>
 
@@ -874,11 +874,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; task = neighbor_task(random.Random(5))
-&gt;&gt;&gt; ring, at = next(iter(task.cells))
-&gt;&gt;&gt; ring, at in range(12)
-('outer', True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">task</span> <span class="o">=</span> <span class="n">neighbor_task</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="n">at</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">cells</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span> <span class="n">at</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">('outer', True)
+</span></code></pre></div></div>
 
 
           
@@ -1067,8 +1067,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

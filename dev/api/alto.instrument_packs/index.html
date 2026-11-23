@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -742,12 +742,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keys = PackKeyboard("Manual", "C4", "E4")
-&gt;&gt;&gt; keys.naturals
-3
-&gt;&gt;&gt; keys.has("C#4"), keys.has("E#4")
-(True, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keys</span> <span class="o">=</span> <span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keys</span><span class="p">.</span><span class="n">naturals</span>
+<span class="go">3
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keys</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"C#4"</span><span class="p">),</span> <span class="n">keys</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"E#4"</span><span class="p">)</span>
+<span class="go">(True, False)
+</span></code></pre></div></div>
 
 <h3 id="packkeyboardnaturals">PackKeyboard.naturals</h3>
 
@@ -765,9 +765,9 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; PackKeyboard("M", "C4", "C5").naturals
-8
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"M"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"C5"</span><span class="p">).</span><span class="n">naturals</span>
+<span class="go">8
+</span></code></pre></div></div>
 
 <h3 id="packkeyboardhas">PackKeyboard.has</h3>
 
@@ -790,10 +790,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; board = PackKeyboard("M", "C4", "E4")
-&gt;&gt;&gt; board.has("C#4"), board.has("E#4"), board.has("F4"), board.has("Db4")
-(True, False, False, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"M"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"C#4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"E#4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"F4"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">"Db4"</span><span class="p">)</span>
+<span class="go">(True, False, False, False)
+</span></code></pre></div></div>
 
 <h2 id="packkeyboardstyle">PackKeyboardStyle</h2>
 
@@ -814,10 +814,10 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; style = PackKeyboardStyle((("cap", "#eee3c8"),), (("length", 4.5),))
-&gt;&gt;&gt; dict(style.colors), dict(style.numbers)
-({'cap': '#eee3c8'}, {'length': 4.5})
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">style</span> <span class="o">=</span> <span class="n">PackKeyboardStyle</span><span class="p">(((</span><span class="s">"cap"</span><span class="p">,</span> <span class="s">"#eee3c8"</span><span class="p">),),</span> <span class="p">((</span><span class="s">"length"</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">dict</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="n">colors</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="n">numbers</span><span class="p">)</span>
+<span class="go">({'cap': '#eee3c8'}, {'length': 4.5})
+</span></code></pre></div></div>
 
 <h2 id="read_keyboard_style">read_keyboard_style</h2>
 
@@ -851,12 +851,12 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboard_style(None, where="pack.v.va") is None
-True
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; read_keyboard_style({"cap": "#eee3c8", "white": ["#2a211c", "#120d0a"]}, where="pack.v.va").colors[1]
-('white', ('#2a211c', '#120d0a'))
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboard_style</span><span class="p">({</span><span class="s">"cap"</span><span class="p">:</span> <span class="s">"#eee3c8"</span><span class="p">,</span> <span class="s">"white"</span><span class="p">:</span> <span class="p">[</span><span class="s">"#2a211c"</span><span class="p">,</span> <span class="s">"#120d0a"</span><span class="p">]},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">).</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">('white', ('#2a211c', '#120d0a'))
+</span></code></pre></div></div>
 
 <h2 id="packinstrument">PackInstrument</h2>
 
@@ -898,11 +898,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; keys = PackKeyboard("Manual", "C4", "E4")
-&gt;&gt;&gt; board = PackInstrument("pack.x.y", Path("a.png"), (10, 20), (), None, keyboards=(keys,))
-&gt;&gt;&gt; board.keyboard("Manual") is keys, board.keyboard("Pedals")
-(True, None)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">keys</span> <span class="o">=</span> <span class="n">PackKeyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">,</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"E4"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"a.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">keyboards</span><span class="o">=</span><span class="p">(</span><span class="n">keys</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Manual"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">keys</span><span class="p">,</span> <span class="n">board</span><span class="p">.</span><span class="n">keyboard</span><span class="p">(</span><span class="s">"Pedals"</span><span class="p">)</span>
+<span class="go">(True, None)
+</span></code></pre></div></div>
 
 <h3 id="packinstrumentpicture">PackInstrument.picture</h3>
 
@@ -925,11 +925,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; back = PackView("back", Path("back.png"), (30, 40))
-&gt;&gt;&gt; board = PackInstrument("pack.x.y", Path("front.png"), (10, 20), (), None, views=(back,))
-&gt;&gt;&gt; board.picture(), board.picture("back"), board.picture("side")
-((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'), (30, 40)), None)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">back</span> <span class="o">=</span> <span class="n">PackView</span><span class="p">(</span><span class="s">"back"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"back.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span> <span class="o">=</span> <span class="n">PackInstrument</span><span class="p">(</span><span class="s">"pack.x.y"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s">"front.png"</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">views</span><span class="o">=</span><span class="p">(</span><span class="n">back</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(),</span> <span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"back"</span><span class="p">),</span> <span class="n">board</span><span class="p">.</span><span class="n">picture</span><span class="p">(</span><span class="s">"side"</span><span class="p">)</span>
+<span class="go">((PosixPath('front.png'), (10, 20)), (PosixPath('back.png'), (30, 40)), None)
+</span></code></pre></div></div>
 
 <h2 id="identifier">identifier</h2>
 
@@ -1090,12 +1090,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
-&gt;&gt;&gt; info.source if info else None
-'Viola'
-&gt;&gt;&gt; read_sound_info(None, where="pack.v.va", pack_name="Viola") is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span> <span class="o">=</span> <span class="n">read_sound_info</span><span class="p">({</span><span class="s">"summary"</span><span class="p">:</span> <span class="s">"A viola."</span><span class="p">},</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">source</span> <span class="k">if</span> <span class="n">info</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="go">'Viola'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_sound_info</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">,</span> <span class="n">pack_name</span><span class="o">=</span><span class="s">"Viola"</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="plain_text">plain_text</h2>
 
@@ -1123,9 +1123,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; plain_text("Name the note.", limit=40), plain_text("&lt;b&gt;Name&lt;/b&gt;", limit=40), plain_text(None, limit=40)
-(True, False, False)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">plain_text</span><span class="p">(</span><span class="s">"Name the note."</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span> <span class="n">plain_text</span><span class="p">(</span><span class="s">"&lt;b&gt;Name&lt;/b&gt;"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span> <span class="n">plain_text</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">(True, False, False)
+</span></code></pre></div></div>
 
 <h2 id="read_text">read_text</h2>
 
@@ -1163,9 +1163,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_text("  Hello ", limit=10, what="title", where="lesson demo")
-'Hello'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_text</span><span class="p">(</span><span class="s">"  Hello "</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s">"title"</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"lesson demo"</span><span class="p">)</span>
+<span class="go">'Hello'
+</span></code></pre></div></div>
 
 <h2 id="read_focus">read_focus</h2>
 
@@ -1201,9 +1201,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_focus([0, 10, 200, 100], width=400, height=300)
-(0.0, 10.0, 200.0, 100.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_focus</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="go">(0.0, 10.0, 200.0, 100.0)
+</span></code></pre></div></div>
 
 <h2 id="read_marker_size">read_marker_size</h2>
 
@@ -1232,9 +1232,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_marker_size(0), read_marker_size(24)
-(0.0, 24.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_marker_size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">read_marker_size</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<span class="go">(0.0, 24.0)
+</span></code></pre></div></div>
 
 <h2 id="read_icon">read_icon</h2>
 
@@ -1268,8 +1268,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">The viola's icon is its own silhouette traced from the museum photograph.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The viola's icon is its own silhouette traced from the museum photograph.
+</code></pre></div></div>
 
 <h2 id="read_picture_file">read_picture_file</h2>
 
@@ -1335,10 +1335,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; # noinspection PyTypeChecker
-&gt;&gt;&gt; read_views(None, files=None, where="pack.v.va")
-()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyTypeChecker
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_views</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+<span class="go">()
+</span></code></pre></div></div>
 
 <h2 id="read_keyboards">read_keyboards</h2>
 
@@ -1372,11 +1372,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_keyboards(None, where="pack.v.va")
-()
-&gt;&gt;&gt; read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
-3
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboards</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+<span class="go">()
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_keyboards</span><span class="p">([{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"Manual"</span><span class="p">,</span> <span class="s">"lowest"</span><span class="p">:</span> <span class="s">"C4"</span><span class="p">,</span> <span class="s">"highest"</span><span class="p">:</span> <span class="s">"E4"</span><span class="p">}],</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">naturals</span>
+<span class="go">3
+</span></code></pre></div></div>
 
 <h2 id="read_positions">read_positions</h2>
 
@@ -1410,11 +1410,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
-((2, '1st'), (3, '2nd'))
-&gt;&gt;&gt; read_positions(None, where="pack.v.va")
-()
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_positions</span><span class="p">([{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"1st"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s">"name"</span><span class="p">:</span> <span class="s">"2nd"</span><span class="p">,</span> <span class="s">"half_steps"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}],</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+<span class="go">((2, '1st'), (3, '2nd'))
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">read_positions</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s">"pack.v.va"</span><span class="p">)</span>
+<span class="go">()
+</span></code></pre></div></div>
 
 <h2 id="read_instrument">read_instrument</h2>
 
@@ -1586,8 +1586,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

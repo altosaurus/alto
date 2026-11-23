@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -680,11 +680,11 @@
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.show_transition("cascade")
-&gt;&gt;&gt; preview.transition.key
-'cascade'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">show_transition</span><span class="p">(</span><span class="s">"cascade"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'cascade'
+</span></code></pre></div></div>
 
 <h2 id="make_sides">make_sides</h2>
 
@@ -704,10 +704,10 @@ card to move.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; first, second = make_sides()
-&gt;&gt;&gt; len(first), len(second) &gt; len(LESSONS)
-(6, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">first</span><span class="p">,</span> <span class="n">second</span> <span class="o">=</span> <span class="n">make_sides</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">first</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">second</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">LESSONS</span><span class="p">)</span>
+<span class="go">(6, True)
+</span></code></pre></div></div>
 
 <h2 id="stage">Stage</h2>
 
@@ -727,9 +727,9 @@ card to move.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Stage().resting
-[]
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stage</span><span class="p">().</span><span class="n">resting</span>
+<span class="go">[]
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -743,9 +743,9 @@ card to move.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; Stage().canvas.running
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">Stage</span><span class="p">().</span><span class="n">canvas</span><span class="p">.</span><span class="n">running</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h3 id="stageresizeevent">Stage.resizeEvent</h3>
 
@@ -762,12 +762,12 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; stage = Stage()
-&gt;&gt;&gt; stage.show()  # a hidden widget is only told about its size once it is shown
-&gt;&gt;&gt; stage.resize(300, 200)
-&gt;&gt;&gt; stage.canvas.geometry() == stage.rect()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span> <span class="o">=</span> <span class="n">Stage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># a hidden widget is only told about its size once it is shown
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">canvas</span><span class="p">.</span><span class="n">geometry</span><span class="p">()</span> <span class="o">==</span> <span class="n">stage</span><span class="p">.</span><span class="n">rect</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="stagepaintevent">Stage.paintEvent</h3>
 
@@ -784,11 +784,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; stage = Stage()
-&gt;&gt;&gt; stage.resize(100, 100)
-&gt;&gt;&gt; stage.grab().isNull()
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span> <span class="o">=</span> <span class="n">Stage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p">.</span><span class="n">grab</span><span class="p">().</span><span class="n">isNull</span><span class="p">()</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="transitionpreview">TransitionPreview</h2>
 
@@ -813,10 +813,10 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.side
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">side</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -830,9 +830,9 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; TransitionPreview().transition.key
-'cascade'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">TransitionPreview</span><span class="p">().</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'cascade'
+</span></code></pre></div></div>
 
 <h3 id="transitionpreviewshow_transition">TransitionPreview.show_transition</h3>
 
@@ -849,11 +849,11 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.show_transition("flip")
-&gt;&gt;&gt; preview.transition.key
-'flip'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">show_transition</span><span class="p">(</span><span class="s">"flip"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'flip'
+</span></code></pre></div></div>
 
 <h3 id="transitionpreviewreplay">TransitionPreview.replay</h3>
 
@@ -864,11 +864,11 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.replay()
-&gt;&gt;&gt; preview.transition.key
-'cascade'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">replay</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">transition</span><span class="p">.</span><span class="n">key</span>
+<span class="go">'cascade'
+</span></code></pre></div></div>
 
 <h3 id="transitionpreviewgo_to">TransitionPreview.go_to</h3>
 
@@ -887,14 +887,14 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.go_to(1)
-&gt;&gt;&gt; preview.side, preview.switch.current()
-(1, 1)
-&gt;&gt;&gt; preview.go_to(0)
-&gt;&gt;&gt; preview.side
-0
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">go_to</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">side</span><span class="p">,</span> <span class="n">preview</span><span class="p">.</span><span class="n">switch</span><span class="p">.</span><span class="n">current</span><span class="p">()</span>
+<span class="go">(1, 1)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">go_to</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">side</span>
+<span class="go">0
+</span></code></pre></div></div>
 
 <h3 id="transitionpreviewresizeevent">TransitionPreview.resizeEvent</h3>
 
@@ -911,11 +911,11 @@ it plays the transition to the other side, so the learner can try it as often as
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; preview = TransitionPreview()
-&gt;&gt;&gt; preview.resize(700, 500)
-&gt;&gt;&gt; preview.stage.resting[0].rect.width() &lt;= CARD_W
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span> <span class="o">=</span> <span class="n">TransitionPreview</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">preview</span><span class="p">.</span><span class="n">stage</span><span class="p">.</span><span class="n">resting</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">rect</span><span class="p">.</span><span class="n">width</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">CARD_W</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1232,8 +1232,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

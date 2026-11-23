@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,11 +681,11 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.select("outer", place=2)
-&gt;&gt;&gt; circle.title, circle.signature
-('D major', 2)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span>
+<span class="go">('D major', 2)
+</span></code></pre></div></div>
 
 <h2 id="explorablecircle">ExplorableCircle</h2>
 
@@ -707,10 +707,10 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.cell, circle.title
-(None, 'Circle of fifths')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">title</span>
+<span class="go">(None, 'Circle of fifths')
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -724,9 +724,9 @@ the middle, and the text underneath explains it.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ExplorableCircle().shown["inner"] == set(range(12))
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ExplorableCircle</span><span class="p">().</span><span class="n">shown</span><span class="p">[</span><span class="s">"inner"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="explorablecircleset_interactive">ExplorableCircle.set_interactive</h3>
 
@@ -743,11 +743,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.set_interactive(False)
-&gt;&gt;&gt; circle.interactive, circle.focusPolicy() == Qt.FocusPolicy.NoFocus
-(False, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">set_interactive</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">interactive</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">focusPolicy</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="p">.</span><span class="n">FocusPolicy</span><span class="p">.</span><span class="n">NoFocus</span>
+<span class="go">(False, True)
+</span></code></pre></div></div>
 
 <h3 id="explorablecircleclear">ExplorableCircle.clear</h3>
 
@@ -758,12 +758,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.select("outer", place=4)
-&gt;&gt;&gt; circle.clear()
-&gt;&gt;&gt; circle.cell, circle.signature, circle.lit
-(None, None, set())
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">signature</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">lit</span>
+<span class="go">(None, None, set())
+</span></code></pre></div></div>
 
 <h3 id="explorablecircleselect">ExplorableCircle.select</h3>
 
@@ -787,11 +787,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.select("inner", place=3)
-&gt;&gt;&gt; circle.title, circle.subtitle, sorted(circle.lit), circle.numerals[("outer", 4)]
-('F♯ minor', '3 sharps', [2, 3, 4], 'V')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"inner"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">circle</span><span class="p">.</span><span class="n">subtitle</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">lit</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">numerals</span><span class="p">[(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="go">('F♯ minor', '3 sharps', [2, 3, 4], 'V')
+</span></code></pre></div></div>
 
 <h3 id="explorablecirclecell_at">ExplorableCircle.cell_at</h3>
 
@@ -814,16 +814,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; middle, size = circle.geometry_of()
-&gt;&gt;&gt; circle.cell_at(QPointF(middle.x(), middle.y() - 0.9 * size))
-('outer', 0)
-&gt;&gt;&gt; circle.cell_at(QPointF(middle.x() + 0.6 * size, middle.y()))
-('inner', 3)
-&gt;&gt;&gt; circle.cell_at(middle) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">middle</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">size</span><span class="p">))</span>
+<span class="go">('outer', 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">middle</span><span class="p">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="n">middle</span><span class="p">.</span><span class="n">y</span><span class="p">()))</span>
+<span class="go">('inner', 3)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell_at</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="explorablecirclelift_of">ExplorableCircle.lift_of</h3>
 
@@ -851,11 +851,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.hover = ("outer", 5)
-&gt;&gt;&gt; circle.lift_of("outer", place=5), circle.lift_of("outer", place=6)
-(0.2, 0.0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span> <span class="o">=</span> <span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">circle</span><span class="p">.</span><span class="n">lift_of</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">(0.2, 0.0)
+</span></code></pre></div></div>
 
 <h3 id="explorablecirclemousepressevent">ExplorableCircle.mousePressEvent</h3>
 
@@ -872,15 +872,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint
-&gt;&gt;&gt; from PySide6.QtTest import QTest
-&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; center, radius = circle.geometry_of()
-&gt;&gt;&gt; QTest.mouseClick(circle, Qt.MouseButton.LeftButton, pos=QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
-&gt;&gt;&gt; circle.cell
-('outer', 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtTest</span> <span class="kn">import</span> <span class="n">QTest</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseClick</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">MouseButton</span><span class="p">.</span><span class="n">LeftButton</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">QPoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span> <span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
+<span class="go">('outer', 0)
+</span></code></pre></div></div>
 
 <h3 id="explorablecirclemousemoveevent">ExplorableCircle.mouseMoveEvent</h3>
 
@@ -897,16 +897,16 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtCore import QPoint
-&gt;&gt;&gt; from PySide6.QtTest import QTest
-&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.resize(400, 400)
-&gt;&gt;&gt; circle.show()
-&gt;&gt;&gt; center, radius = circle.geometry_of()
-&gt;&gt;&gt; QTest.mouseMove(circle, QPoint(int(center.x()), int(center.y() - 0.9 * radius)))
-&gt;&gt;&gt; circle.hover
-('outer', 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QPoint</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">PySide6.QtTest</span> <span class="kn">import</span> <span class="n">QTest</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">geometry_of</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">QTest</span><span class="p">.</span><span class="n">mouseMove</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">QPoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span><span class="p">()),</span> <span class="nb">int</span><span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">radius</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span>
+<span class="go">('outer', 0)
+</span></code></pre></div></div>
 
 <h3 id="explorablecircleleaveevent">ExplorableCircle.leaveEvent</h3>
 
@@ -923,12 +923,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; circle.hover = ("outer", 1)
-&gt;&gt;&gt; circle.leaveEvent(QEvent(QEvent.Type.Leave))
-&gt;&gt;&gt; circle.hover is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span> <span class="o">=</span> <span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">(</span><span class="n">QEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">Leave</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">hover</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="explorablecirclekeypressevent">ExplorableCircle.keyPressEvent</h3>
 
@@ -947,15 +947,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; circle = ExplorableCircle()
-&gt;&gt;&gt; press = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Right, Qt.KeyboardModifier.NoModifier)
-&gt;&gt;&gt; circle.keyPressEvent(press)
-&gt;&gt;&gt; circle.cell
-('outer', 0)
-&gt;&gt;&gt; circle.keyPressEvent(press)
-&gt;&gt;&gt; circle.cell
-('outer', 1)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span> <span class="o">=</span> <span class="n">ExplorableCircle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">press</span> <span class="o">=</span> <span class="n">QKeyEvent</span><span class="p">(</span><span class="n">QKeyEvent</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="n">KeyPress</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Key</span><span class="p">.</span><span class="n">Key_Right</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">KeyboardModifier</span><span class="p">.</span><span class="n">NoModifier</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
+<span class="go">('outer', 0)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">press</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">cell</span>
+<span class="go">('outer', 1)
+</span></code></pre></div></div>
 
 <h2 id="referencepanel">ReferencePanel</h2>
 
@@ -977,11 +977,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ReferencePanel()
-&gt;&gt;&gt; panel.circle.select("outer", place=1)
-&gt;&gt;&gt; "&lt;b&gt;G major&lt;/b&gt;" in panel.explanation.text()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ReferencePanel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">circle</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"outer"</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"&lt;b&gt;G major&lt;/b&gt;"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">explanation</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -995,10 +995,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ReferencePanel()
-&gt;&gt;&gt; panel.explanation.text() == ""
-False
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ReferencePanel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">explanation</span><span class="p">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s">""</span>
+<span class="go">False
+</span></code></pre></div></div>
 
 <h2 id="clefreferencepanel">ClefReferencePanel</h2>
 
@@ -1019,10 +1019,10 @@ False
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; panel = ClefReferencePanel()
-&gt;&gt;&gt; "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">panel</span> <span class="o">=</span> <span class="n">ClefReferencePanel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"C clef"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="s">"mezzo"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span> <span class="ow">and</span> <span class="s">"bottom line"</span> <span class="ow">in</span> <span class="n">panel</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="s">"french"</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -1036,9 +1036,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ClefReferencePanel</span><span class="p">().</span><span class="n">rows</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">CLEF_BASICS_CLEFS</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="scalereferencepanel">ScaleReferencePanel</h2>
 
@@ -1074,9 +1074,9 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteReferencePanel(KeyboardNotes()).lesson_button.text()
-'New to this? Take the full lesson  →'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteReferencePanel</span><span class="p">(</span><span class="n">KeyboardNotes</span><span class="p">()).</span><span class="n">lesson_button</span><span class="p">.</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'New to this? Take the full lesson  →'
+</span></code></pre></div></div>
 
 <h2 id="pluginreferencepanel">PluginReferencePanel</h2>
 
@@ -1104,10 +1104,10 @@ True
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; demo = Lesson(key="pack.d.l", title="Parts", about="", summary="", category="D", steps=(), exercise="x")
-&gt;&gt;&gt; PluginReferencePanel(NoteNames(), lessons=[demo]).lesson_buttons[0].text()
-'New to this? Take the lesson: Parts  →'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">demo</span> <span class="o">=</span> <span class="n">Lesson</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">"pack.d.l"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">"Parts"</span><span class="p">,</span> <span class="n">about</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s">""</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s">"D"</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">(),</span> <span class="n">exercise</span><span class="o">=</span><span class="s">"x"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">PluginReferencePanel</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">(),</span> <span class="n">lessons</span><span class="o">=</span><span class="p">[</span><span class="n">demo</span><span class="p">]).</span><span class="n">lesson_buttons</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">()</span>
+<span class="go">'New to this? Take the lesson: Parts  →'
+</span></code></pre></div></div>
 
 <h2 id="reference_panel_for">reference_panel_for</h2>
 
@@ -1130,12 +1130,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises.library import NoteNames
-&gt;&gt;&gt; isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
-(True, True)
-&gt;&gt;&gt; type(reference_panel_for(ClefBasics())).__name__
-'ClefReferencePanel'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises.library</span> <span class="kn">import</span> <span class="n">NoteNames</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">()),</span> <span class="n">NoteReferencePanel</span><span class="p">),</span> <span class="n">reference_panel_for</span><span class="p">(</span><span class="n">CircleOfFifths</span><span class="p">())</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">(True, True)
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">reference_panel_for</span><span class="p">(</span><span class="n">ClefBasics</span><span class="p">())).</span><span class="n">__name__</span>
+<span class="go">'ClefReferencePanel'
+</span></code></pre></div></div>
 
 
           
@@ -1422,8 +1422,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

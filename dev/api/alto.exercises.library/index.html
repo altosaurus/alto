@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -681,10 +681,10 @@ the exercises to the home screen.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; from alto.exercises import REGISTRY
-&gt;&gt;&gt; [cls.name for cls in REGISTRY][:3]
-['Note Identification', 'Keyboard Note Identification', 'Note Construction']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span> <span class="nn">alto.exercises</span> <span class="kn">import</span> <span class="n">REGISTRY</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">cls</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">cls</span> <span class="ow">in</span> <span class="n">REGISTRY</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">['Note Identification', 'Keyboard Note Identification', 'Note Construction']
+</span></code></pre></div></div>
 
 <h2 id="notenames">NoteNames</h2>
 
@@ -697,10 +697,10 @@ the exercises to the home screen.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteNames().generate(random.Random(1))
-&gt;&gt;&gt; len(q.staff), q.answer in q.choices
-(1, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NoteNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">(1, True)
+</span></code></pre></div></div>
 
 <p><strong>Constructor</strong></p>
 
@@ -714,9 +714,9 @@ the exercises to the home screen.</p>
 
 <p><strong>Constructor examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames(accidentals=True).accidentals
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">accidentals</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamescard_prompt">NoteNames.card_prompt</h3>
 
@@ -739,9 +739,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().card_prompt(Question("", choices=[], answer="C"))
-'Identify the note.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">))</span>
+<span class="go">'Identify the note.'
+</span></code></pre></div></div>
 
 <h3 id="notenamespractice_signature">NoteNames.practice_signature</h3>
 
@@ -758,9 +758,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().settings_signature() != NoteNames(accidentals=True).settings_signature()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span> <span class="o">!=</span> <span class="n">NoteNames</span><span class="p">(</span><span class="n">accidentals</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">settings_signature</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamesinstructions">NoteNames.instructions</h3>
 
@@ -777,9 +777,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Press the button with its name" in NoteNames().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Press the button with its name"</span> <span class="ow">in</span> <span class="n">NoteNames</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamesmake_question">NoteNames.make_question</h3>
 
@@ -802,10 +802,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteNames().generate(random.Random(2))
-&gt;&gt;&gt; q.clef in ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone", "grand")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NoteNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">clef</span> <span class="ow">in</span> <span class="p">(</span><span class="s">"treble"</span><span class="p">,</span> <span class="s">"bass"</span><span class="p">,</span> <span class="s">"alto"</span><span class="p">,</span> <span class="s">"tenor"</span><span class="p">,</span> <span class="s">"soprano"</span><span class="p">,</span> <span class="s">"mezzo"</span><span class="p">,</span> <span class="s">"baritone"</span><span class="p">,</span> <span class="s">"grand"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamescard_count">NoteNames.card_count</h3>
 
@@ -822,9 +822,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteNames().card_count() &gt; 0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteNames</span><span class="p">().</span><span class="n">card_count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamesdaily_candidates">NoteNames.daily_candidates</h3>
 
@@ -847,9 +847,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">NoteNames</span><span class="p">().</span><span class="n">daily_candidates</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))),</span> <span class="n">Question</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notenamesreview_question">NoteNames.review_question</h3>
 
@@ -877,11 +877,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteNames()
-&gt;&gt;&gt; q = ex.generate(random.Random(1))
-&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span> <span class="o">=</span> <span class="n">NoteNames</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">review_question</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">same_settings</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="intervalnames">IntervalNames</h2>
 
@@ -892,10 +892,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(3))
-&gt;&gt;&gt; [len(chord) for chord in q.staff], q.answer in q.choices
-([2], True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">IntervalNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">chord</span><span class="p">)</span> <span class="k">for</span> <span class="n">chord</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">],</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">([2], True)
+</span></code></pre></div></div>
 
 <h3 id="intervalnamescard_prompt">IntervalNames.card_prompt</h3>
 
@@ -918,11 +918,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; IntervalNames().card_prompt(Question("", choices=[], answer="3"))
-'Identify the numeric interval.'
-&gt;&gt;&gt; IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
-'Identify the interval and quality.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalNames</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"3"</span><span class="p">))</span>
+<span class="go">'Identify the numeric interval.'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalNames</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"M3"</span><span class="p">))</span>
+<span class="go">'Identify the interval and quality.'
+</span></code></pre></div></div>
 
 <h3 id="intervalnamesinstructions">IntervalNames.instructions</h3>
 
@@ -939,9 +939,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "quality followed by a number" in IntervalNames().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"quality followed by a number"</span> <span class="ow">in</span> <span class="n">IntervalNames</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="intervalnamessettings_signature">IntervalNames.settings_signature</h3>
 
@@ -958,9 +958,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Harmonic" in IntervalNames().settings_signature()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Harmonic"</span> <span class="ow">in</span> <span class="n">IntervalNames</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="intervalnamesrefresh">IntervalNames.refresh</h3>
 
@@ -983,10 +983,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
-&gt;&gt;&gt; IntervalNames().refresh(q).choices
-['A3', 'M3', 'P4', 'm3', 'd3']
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"d3"</span><span class="p">,</span> <span class="s">"m3"</span><span class="p">,</span> <span class="s">"P4"</span><span class="p">,</span> <span class="s">"M3"</span><span class="p">,</span> <span class="s">"A3"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"m3"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">IntervalNames</span><span class="p">().</span><span class="n">refresh</span><span class="p">(</span><span class="n">q</span><span class="p">).</span><span class="n">choices</span>
+<span class="go">['A3', 'M3', 'P4', 'm3', 'd3']
+</span></code></pre></div></div>
 
 <h3 id="intervalnamesgenerate">IntervalNames.generate</h3>
 
@@ -1009,10 +1009,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalNames().generate(random.Random(4))
-&gt;&gt;&gt; q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">IntervalNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s">"PMmAd"</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">:].</span><span class="n">isdigit</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="intervalconstruction">IntervalConstruction</h2>
 
@@ -1023,10 +1023,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = IntervalConstruction().generate(random.Random(2))
-&gt;&gt;&gt; q.construct is not None and q.check_placed(q.construct)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">IntervalConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">construct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">check_placed</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">construct</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="intervalconstructioninstructions">IntervalConstruction.instructions</h3>
 
@@ -1043,8 +1043,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">The reference describes the difference between melodic and harmonic placement.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The reference describes the difference between melodic and harmonic placement.
+</code></pre></div></div>
 
 <h3 id="intervalconstructionsettings_signature">IntervalConstruction.settings_signature</h3>
 
@@ -1061,8 +1061,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A change in staff ranges changes which stored questions are eligible.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A change in staff ranges changes which stored questions are eligible.
+</code></pre></div></div>
 
 <h3 id="intervalconstructiongenerate">IntervalConstruction.generate</h3>
 
@@ -1085,8 +1085,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">A harmonic question asks for a note above its starting note.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A harmonic question asks for a note above its starting note.
+</code></pre></div></div>
 
 <h2 id="keyboardintervals">KeyboardIntervals</h2>
 
@@ -1103,10 +1103,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardIntervals().generate(random.Random(5))
-&gt;&gt;&gt; len(q.keyboard_notes), q.answer in q.choices, q.staff
-(2, True, [])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeyboardIntervals</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">keyboard_notes</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">staff</span>
+<span class="go">(2, True, [])
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalscard_prompt">KeyboardIntervals.card_prompt</h3>
 
@@ -1129,9 +1129,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
-'Identify the interval.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardIntervals</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"P5"</span><span class="p">))</span>
+<span class="go">'Identify the interval.'
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalssettings_signature">KeyboardIntervals.settings_signature</h3>
 
@@ -1148,9 +1148,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; bool(KeyboardIntervals().settings_signature())
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">bool</span><span class="p">(</span><span class="n">KeyboardIntervals</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">())</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalsinstructions">KeyboardIntervals.instructions</h3>
 
@@ -1167,9 +1167,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "A4 / d5" in KeyboardIntervals().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"A4 / d5"</span> <span class="ow">in</span> <span class="n">KeyboardIntervals</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardintervalsgenerate">KeyboardIntervals.generate</h3>
 
@@ -1192,10 +1192,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardIntervals().generate(random.Random(7))
-&gt;&gt;&gt; 1 &lt;= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi &lt;= 12
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeyboardIntervals</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">.</span><span class="n">keyboard_notes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">midi</span> <span class="o">-</span> <span class="n">q</span><span class="p">.</span><span class="n">keyboard_notes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">midi</span> <span class="o">&lt;=</span> <span class="mi">12</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="keysignatures">KeySignatures</h2>
 
@@ -1206,10 +1206,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatures().generate(random.Random(5))
-&gt;&gt;&gt; q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeySignatures</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignaturespractice_signature">KeySignatures.practice_signature</h3>
 
@@ -1226,9 +1226,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatures().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatures</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignaturesinstructions">KeySignatures.instructions</h3>
 
@@ -1245,9 +1245,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Key Signature Identification" in KeySignatures().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Key Signature Identification"</span> <span class="ow">in</span> <span class="n">KeySignatures</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignaturesrefresh">KeySignatures.refresh</h3>
 
@@ -1270,10 +1270,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
-&gt;&gt;&gt; KeySignatures().refresh(old).caption
-'_ minor'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">old</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span><span class="s">"Which minor key has this key signature?"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">"C"</span><span class="p">],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C"</span><span class="p">,</span> <span class="n">key</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">show_staff</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatures</span><span class="p">().</span><span class="n">refresh</span><span class="p">(</span><span class="n">old</span><span class="p">).</span><span class="n">caption</span>
+<span class="go">'_ minor'
+</span></code></pre></div></div>
 
 <h3 id="keysignaturesmake_question">KeySignatures.make_question</h3>
 
@@ -1296,10 +1296,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatures().generate(random.Random(6))
-&gt;&gt;&gt; q.show_staff and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeySignatures</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">show_staff</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="keysignatureconstruction">KeySignatureConstruction</h2>
 
@@ -1310,10 +1310,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatureConstruction().generate(random.Random(5))
-&gt;&gt;&gt; q.build_key, q.staff, q.choices
-(True, [], [])
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeySignatureConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">build_key</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">(True, [], [])
+</span></code></pre></div></div>
 
 <h3 id="keysignatureconstructionsettings_signature">KeySignatureConstruction.settings_signature</h3>
 
@@ -1330,9 +1330,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeySignatureConstruction().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeySignatureConstruction</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignatureconstructioninstructions">KeySignatureConstruction.instructions</h3>
 
@@ -1349,9 +1349,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Key Signature Construction" in KeySignatureConstruction().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Key Signature Construction"</span> <span class="ow">in</span> <span class="n">KeySignatureConstruction</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keysignatureconstructiongenerate">KeySignatureConstruction.generate</h3>
 
@@ -1374,12 +1374,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeySignatureConstruction().generate(random.Random(1))
-&gt;&gt;&gt; q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
-True
-&gt;&gt;&gt; q.answer == format_key_signature(q.key)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeySignatureConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">caption</span><span class="p">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"C"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"E"</span><span class="p">,</span> <span class="s">"F"</span><span class="p">,</span> <span class="s">"G"</span><span class="p">,</span> <span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">}</span> <span class="ow">or</span> <span class="s">"♯"</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">caption</span> <span class="ow">or</span> <span class="s">"♭"</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">caption</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="o">==</span> <span class="n">format_key_signature</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">key</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="orderofkeys">OrderOfKeys</h2>
 
@@ -1390,9 +1390,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().generate(random.Random(1)).place_signature
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">OrderOfKeys</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">place_signature</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="orderofkeyssettings_signature">OrderOfKeys.settings_signature</h3>
 
@@ -1409,9 +1409,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; OrderOfKeys().settings_signature()
-''
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">OrderOfKeys</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
+<span class="go">''
+</span></code></pre></div></div>
 
 <h3 id="orderofkeysinstructions">OrderOfKeys.instructions</h3>
 
@@ -1428,9 +1428,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Undo" in OrderOfKeys().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Undo"</span> <span class="ow">in</span> <span class="n">OrderOfKeys</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="orderofkeysgenerate">OrderOfKeys.generate</h3>
 
@@ -1453,10 +1453,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = OrderOfKeys().generate(random.Random(2))
-&gt;&gt;&gt; q.show_staff and not q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">OrderOfKeys</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">show_staff</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="scaleidentification">ScaleIdentification</h2>
 
@@ -1467,10 +1467,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(7))
-&gt;&gt;&gt; len(q.staff), q.answer in q.choices
-(8, True)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ScaleIdentification</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">),</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">(8, True)
+</span></code></pre></div></div>
 
 <h3 id="scaleidentificationsettings_signature">ScaleIdentification.settings_signature</h3>
 
@@ -1487,9 +1487,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleIdentification().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleIdentification</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleidentificationinstructions">ScaleIdentification.instructions</h3>
 
@@ -1506,9 +1506,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Scale Identification" in ScaleIdentification().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Scale Identification"</span> <span class="ow">in</span> <span class="n">ScaleIdentification</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleidentificationgenerate">ScaleIdentification.generate</h3>
 
@@ -1531,10 +1531,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleIdentification().generate(random.Random(8))
-&gt;&gt;&gt; q.staff[0][0].name == q.staff[-1][0].name and not q.caption
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ScaleIdentification</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="n">caption</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="scaleconstruction">ScaleConstruction</h2>
 
@@ -1545,10 +1545,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleConstruction().generate(random.Random(5))
-&gt;&gt;&gt; len(q.construct_scale or []), q.choices, q.key
-(8, [], 0)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ScaleConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">construct_scale</span> <span class="ow">or</span> <span class="p">[]),</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">key</span>
+<span class="go">(8, [], 0)
+</span></code></pre></div></div>
 
 <h3 id="scaleconstructionsettings_signature">ScaleConstruction.settings_signature</h3>
 
@@ -1565,9 +1565,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ScaleConstruction().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ScaleConstruction</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleconstructioninstructions">ScaleConstruction.instructions</h3>
 
@@ -1584,9 +1584,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Scale Construction" in ScaleConstruction().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Scale Construction"</span> <span class="ow">in</span> <span class="n">ScaleConstruction</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="scaleconstructiongenerate">ScaleConstruction.generate</h3>
 
@@ -1609,13 +1609,13 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ScaleConstruction().generate(random.Random(1))
-&gt;&gt;&gt; scale = q.construct_scale or []
-&gt;&gt;&gt; scale[0].name == scale[-1].name and q.accidentals
-True
-&gt;&gt;&gt; q.check_scale(scale)
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ScaleConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scale</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">construct_scale</span> <span class="ow">or</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span> <span class="o">==</span> <span class="n">scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">name</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">accidentals</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">check_scale</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="circleoffifths">CircleOfFifths</h2>
 
@@ -1626,10 +1626,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = CircleOfFifths().generate(random.Random(3))
-&gt;&gt;&gt; q.circle is not None and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">CircleOfFifths</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">circle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="circleoffifthspractice_signature">CircleOfFifths.practice_signature</h3>
 
@@ -1646,9 +1646,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; CircleOfFifths().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">CircleOfFifths</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="circleoffifthsinstructions">CircleOfFifths.instructions</h3>
 
@@ -1665,9 +1665,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "circle of fifths" in CircleOfFifths().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"circle of fifths"</span> <span class="ow">in</span> <span class="n">CircleOfFifths</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="circleoffifthsmake_question">CircleOfFifths.make_question</h3>
 
@@ -1690,12 +1690,12 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; settings.circle.questions = {"minor"}
-&gt;&gt;&gt; q = CircleOfFifths().generate(random.Random(5))
-&gt;&gt;&gt; q.circle_kind, q.prompt
-('minor', 'Which minor key is the relative minor of F major?')
-&gt;&gt;&gt; settings.circle.questions = set(settings.CIRCLE_QUESTIONS)
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">circle</span><span class="p">.</span><span class="n">questions</span> <span class="o">=</span> <span class="p">{</span><span class="s">"minor"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">CircleOfFifths</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">circle_kind</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">prompt</span>
+<span class="go">('minor', 'Which minor key is the relative minor of F major?')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">circle</span><span class="p">.</span><span class="n">questions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">CIRCLE_QUESTIONS</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="chordqualities">ChordQualities</h2>
 
@@ -1706,10 +1706,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ChordQualities().generate(random.Random(9))
-&gt;&gt;&gt; len(q.staff[0]) in (3, 4) and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ChordQualities</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">9</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="chordqualitiescard_prompt">ChordQualities.card_prompt</h3>
 
@@ -1732,9 +1732,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
-'Identify the Chord Quality.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ChordQualities</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"Major"</span><span class="p">))</span>
+<span class="go">'Identify the Chord Quality.'
+</span></code></pre></div></div>
 
 <h3 id="chordqualitiesinstructions">ChordQualities.instructions</h3>
 
@@ -1751,9 +1751,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "root position" in ChordQualities().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"root position"</span> <span class="ow">in</span> <span class="n">ChordQualities</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="chordqualitiesmake_question">ChordQualities.make_question</h3>
 
@@ -1776,10 +1776,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ChordQualities().generate(random.Random(10))
-&gt;&gt;&gt; q.answer in CHORDS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ChordQualities</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">CHORDS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="arpeggionames">ArpeggioNames</h2>
 
@@ -1790,10 +1790,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ArpeggioNames().generate(random.Random(11))
-&gt;&gt;&gt; q.octaves is not None and len(q.staff) &gt;= 4
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ArpeggioNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">11</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">octaves</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="arpeggionamespractice_signature">ArpeggioNames.practice_signature</h3>
 
@@ -1810,9 +1810,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ArpeggioNames().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ArpeggioNames</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="arpeggionamesinstructions">ArpeggioNames.instructions</h3>
 
@@ -1829,9 +1829,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "inversion" in ArpeggioNames().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"inversion"</span> <span class="ow">in</span> <span class="n">ArpeggioNames</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="arpeggionamesmake_question">ArpeggioNames.make_question</h3>
 
@@ -1860,10 +1860,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ArpeggioNames().generate(random.Random(12))
-&gt;&gt;&gt; " · " in q.answer
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ArpeggioNames</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">" · "</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="keyboardnotes">KeyboardNotes</h2>
 
@@ -1874,10 +1874,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardNotes().generate(random.Random(13))
-&gt;&gt;&gt; q.keyboard is not None and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">13</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">keyboard</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardnotescard_prompt">KeyboardNotes.card_prompt</h3>
 
@@ -1900,9 +1900,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
-'Identify the note by letter and octave.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"C4"</span><span class="p">,</span> <span class="n">octaves</span><span class="o">=</span><span class="p">[</span><span class="s">"C4"</span><span class="p">]))</span>
+<span class="go">'Identify the note by letter and octave.'
+</span></code></pre></div></div>
 
 <h3 id="keyboardnotespractice_signature">KeyboardNotes.practice_signature</h3>
 
@@ -1919,9 +1919,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; KeyboardNotes().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardnotesinstructions">KeyboardNotes.instructions</h3>
 
@@ -1938,9 +1938,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "highlighted" in KeyboardNotes().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"highlighted"</span> <span class="ow">in</span> <span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="keyboardnotesmake_question">KeyboardNotes.make_question</h3>
 
@@ -1963,11 +1963,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = KeyboardNotes().generate(random.Random(14))
-&gt;&gt;&gt; # noinspection PyUnresolvedReferences
-&gt;&gt;&gt; q.keyboard_range[0] &lt;= q.keyboard.midi &lt;= q.keyboard_range[1]
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">KeyboardNotes</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">14</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="c1"># noinspection PyUnresolvedReferences
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">keyboard_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">.</span><span class="n">keyboard</span><span class="p">.</span><span class="n">midi</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">.</span><span class="n">keyboard_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="noteconstruction">NoteConstruction</h2>
 
@@ -1978,10 +1978,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteConstruction().generate(random.Random(15))
-&gt;&gt;&gt; q.construct is not None and q.prompt.startswith("Place ")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NoteConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">construct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">prompt</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"Place "</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructioncard_prompt">NoteConstruction.card_prompt</h3>
 
@@ -2004,11 +2004,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
-'Place F♯4 on the staff.'
-&gt;&gt;&gt; NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
-'Place B♭3 on the staff.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteConstruction</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">"Place F♯4 on the staff."</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"F♯4"</span><span class="p">))</span>
+<span class="go">'Place F♯4 on the staff.'
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteConstruction</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">"B♭3"</span><span class="p">))</span>
+<span class="go">'Place B♭3 on the staff.'
+</span></code></pre></div></div>
 
 <h3 id="noteconstructionsettings_signature">NoteConstruction.settings_signature</h3>
 
@@ -2025,9 +2025,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteConstruction</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructioninstructions">NoteConstruction.instructions</h3>
 
@@ -2044,9 +2044,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Click the staff" in NoteConstruction().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Click the staff"</span> <span class="ow">in</span> <span class="n">NoteConstruction</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructiongenerate">NoteConstruction.generate</h3>
 
@@ -2069,10 +2069,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NoteConstruction().generate(random.Random(16))
-&gt;&gt;&gt; q.answer in q.prompt
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NoteConstruction</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">prompt</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructioncard_count">NoteConstruction.card_count</h3>
 
@@ -2089,9 +2089,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NoteConstruction().card_count() &gt; 0
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NoteConstruction</span><span class="p">().</span><span class="n">card_count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructiondaily_candidates">NoteConstruction.daily_candidates</h3>
 
@@ -2114,9 +2114,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">NoteConstruction</span><span class="p">().</span><span class="n">daily_candidates</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">5</span><span class="p">))).</span><span class="n">construct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="noteconstructionreview_question">NoteConstruction.review_question</h3>
 
@@ -2144,11 +2144,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ex = NoteConstruction()
-&gt;&gt;&gt; q = ex.generate(random.Random(3))
-&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span> <span class="o">=</span> <span class="n">NoteConstruction</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">review_question</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">same_settings</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="clefbasics">ClefBasics</h2>
 
@@ -2159,10 +2159,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ClefBasics().generate(random.Random(1))
-&gt;&gt;&gt; q.answer == q.place_clef and q.place_clef in settings.CLEF_BASICS_CLEFS
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ClefBasics</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">place_clef</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">place_clef</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">.</span><span class="n">CLEF_BASICS_CLEFS</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefbasicssettings_signature">ClefBasics.settings_signature</h3>
 
@@ -2179,8 +2179,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Changing Button count leaves staff-placement reviews available.
+</code></pre></div></div>
 
 <h3 id="clefbasicspractice_signature">ClefBasics.practice_signature</h3>
 
@@ -2197,9 +2197,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ClefBasics().settings_signature().startswith("[")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ClefBasics</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"["</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefbasicsinstructions">ClefBasics.instructions</h3>
 
@@ -2216,9 +2216,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "Clef Basics" in ClefBasics().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"Clef Basics"</span> <span class="ow">in</span> <span class="n">ClefBasics</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="clefbasicsmake_question">ClefBasics.make_question</h3>
 
@@ -2241,15 +2241,15 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = ClefBasics().generate(random.Random(3))
-&gt;&gt;&gt; q.prompt.startswith("Place the ") and q.caption == q.prompt
-True
-&gt;&gt;&gt; settings.clef_basics.question_type = "identification"
-&gt;&gt;&gt; q = ClefBasics().generate(random.Random(3))
-&gt;&gt;&gt; q.answer in q.choices, q.place_clef, q.caption
-(True, '', 'Which clef is this?')
-&gt;&gt;&gt; settings.clef_basics.question_type = "construction"
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ClefBasics</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">prompt</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"Place the "</span><span class="p">)</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">caption</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">prompt</span>
+<span class="go">True
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">clef_basics</span><span class="p">.</span><span class="n">question_type</span> <span class="o">=</span> <span class="s">"identification"</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ClefBasics</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">place_clef</span><span class="p">,</span> <span class="n">q</span><span class="p">.</span><span class="n">caption</span>
+<span class="go">(True, '', 'Which clef is this?')
+</span><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">clef_basics</span><span class="p">.</span><span class="n">question_type</span> <span class="o">=</span> <span class="s">"construction"</span>
+</code></pre></div></div>
 
 <h2 id="notationidentification">NotationIdentification</h2>
 
@@ -2260,10 +2260,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(2))
-&gt;&gt;&gt; bool(q.staff or q.notation_excerpt) and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NotationIdentification</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">bool</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">staff</span> <span class="ow">or</span> <span class="n">q</span><span class="p">.</span><span class="n">notation_excerpt</span><span class="p">)</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationsettings_signature">NotationIdentification.settings_signature</h3>
 
@@ -2280,8 +2280,8 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">Changing Button count leaves staff-placement reviews available.
-</code></pre>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Changing Button count leaves staff-placement reviews available.
+</code></pre></div></div>
 
 <h3 id="notationidentificationpractice_signature">NotationIdentification.practice_signature</h3>
 
@@ -2298,9 +2298,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; NotationIdentification().settings_signature()
-''
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">NotationIdentification</span><span class="p">().</span><span class="n">settings_signature</span><span class="p">()</span>
+<span class="go">''
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationinstructions">NotationIdentification.instructions</h3>
 
@@ -2317,9 +2317,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "number" in NotationIdentification().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"number"</span> <span class="ow">in</span> <span class="n">NotationIdentification</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationrefresh">NotationIdentification.refresh</h3>
 
@@ -2342,11 +2342,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
-&gt;&gt;&gt; q = ex.generate(random.Random(1))
-&gt;&gt;&gt; ex.refresh(q) == q
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span> <span class="o">=</span> <span class="n">NotationIdentification</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationmake_question">NotationIdentification.make_question</h3>
 
@@ -2369,10 +2369,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = NotationIdentification().generate(random.Random(0))
-&gt;&gt;&gt; q.notation_target[0] == q.answer
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">NotationIdentification</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">notation_target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationcard_groups">NotationIdentification.card_groups</h3>
 
@@ -2389,9 +2389,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; bool(NotationIdentification().card_groups())
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">bool</span><span class="p">(</span><span class="n">NotationIdentification</span><span class="p">().</span><span class="n">card_groups</span><span class="p">())</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationdaily_candidates">NotationIdentification.daily_candidates</h3>
 
@@ -2414,9 +2414,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">next</span><span class="p">(</span><span class="n">NotationIdentification</span><span class="p">().</span><span class="n">daily_candidates</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">4</span><span class="p">))).</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">.</span><span class="n">notation</span><span class="p">.</span><span class="n">terms</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="notationidentificationreview_question">NotationIdentification.review_question</h3>
 
@@ -2444,11 +2444,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; ex = NotationIdentification()
-&gt;&gt;&gt; q = ex.generate(random.Random(4))
-&gt;&gt;&gt; ex.review_question(q, same_settings=True) == q
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span> <span class="o">=</span> <span class="n">NotationIdentification</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">review_question</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">same_settings</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">q</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="rythmicequations">RythmicEquations</h2>
 
@@ -2459,10 +2459,10 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; q = RythmicEquations().generate(random.Random(2))
-&gt;&gt;&gt; "_" in q.prompt and q.answer in q.choices
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">q</span> <span class="o">=</span> <span class="n">RythmicEquations</span><span class="p">().</span><span class="n">generate</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"_"</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">prompt</span> <span class="ow">and</span> <span class="n">q</span><span class="p">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">q</span><span class="p">.</span><span class="n">choices</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="rythmicequationsinstructions">RythmicEquations.instructions</h3>
 
@@ -2479,9 +2479,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; "keys" in RythmicEquations().instructions()
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="s">"keys"</span> <span class="ow">in</span> <span class="n">RythmicEquations</span><span class="p">().</span><span class="n">instructions</span><span class="p">()</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h3 id="rythmicequationscard_prompt">RythmicEquations.card_prompt</h3>
 
@@ -2504,9 +2504,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().card_prompt(Question("", choices=[], answer=""))
-'Which note or rest balances the equation?'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RythmicEquations</span><span class="p">().</span><span class="n">card_prompt</span><span class="p">(</span><span class="n">Question</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="n">answer</span><span class="o">=</span><span class="s">""</span><span class="p">))</span>
+<span class="go">'Which note or rest balances the equation?'
+</span></code></pre></div></div>
 
 <h3 id="rythmicequationspractice_signature">RythmicEquations.practice_signature</h3>
 
@@ -2523,9 +2523,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().practice_signature()
-''
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RythmicEquations</span><span class="p">().</span><span class="n">practice_signature</span><span class="p">()</span>
+<span class="go">''
+</span></code></pre></div></div>
 
 <h3 id="rythmicequationsmake_question">RythmicEquations.make_question</h3>
 
@@ -2548,9 +2548,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().make_question(random.Random(0)).prompt.count("_")
-1
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">RythmicEquations</span><span class="p">().</span><span class="n">make_question</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">)).</span><span class="n">prompt</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="s">"_"</span><span class="p">)</span>
+<span class="go">1
+</span></code></pre></div></div>
 
 
           
@@ -2717,8 +2717,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

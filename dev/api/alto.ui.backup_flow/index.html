@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
   
 </head>
 <body>
@@ -682,9 +682,9 @@ saved next to the database, so a wrong choice can be undone.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; default_name(now=0.0).endswith(".altobackup")
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mf">0.0</span><span class="p">).</span><span class="n">endswith</span><span class="p">(</span><span class="s">".altobackup"</span><span class="p">)</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="default_name">default_name</h2>
 
@@ -710,9 +710,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; default_name(now=datetime(2026, 11, 13, 12).timestamp())
-'alto-backup-2026-11-13.altobackup'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">default_name</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">12</span><span class="p">).</span><span class="n">timestamp</span><span class="p">())</span>
+<span class="go">'alto-backup-2026-11-13.altobackup'
+</span></code></pre></div></div>
 
 <h2 id="counted">counted</h2>
 
@@ -740,9 +740,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; counted(1, noun="profile"), counted(12345, noun="answer")
-('1 profile', '12,345 answers')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">counted</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"profile"</span><span class="p">),</span> <span class="n">counted</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span> <span class="n">noun</span><span class="o">=</span><span class="s">"answer"</span><span class="p">)</span>
+<span class="go">('1 profile', '12,345 answers')
+</span></code></pre></div></div>
 
 <h2 id="describe">describe</h2>
 
@@ -765,11 +765,11 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; text = describe(BackupInfo(datetime(2026, 11, 13, 9, 30).timestamp(), app_version="0.1.0", schema_version=1,
-...                            profiles=2, attempts=1500))
-&gt;&gt;&gt; text
-'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles and 1,500 answers.'
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span> <span class="o">=</span> <span class="n">describe</span><span class="p">(</span><span class="n">BackupInfo</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">).</span><span class="n">timestamp</span><span class="p">(),</span> <span class="n">app_version</span><span class="o">=</span><span class="s">"0.1.0"</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">...</span><span class="w">                            </span><span class="n">profiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1500</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">text</span>
+<span class="go">'Made on 13 November 2026, 09:30 by Alto 0.1.0. It holds 2 profiles and 1,500 answers.'
+</span></code></pre></div></div>
 
 <h2 id="export_backup">export_backup</h2>
 
@@ -797,9 +797,9 @@ True
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; export_backup(QWidget(), db=Database())  # doctest: +SKIP
-PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">export_backup</span><span class="p">(</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">())</span>  <span class="c1"># doctest: +SKIP
+</span><span class="go">PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
+</span></code></pre></div></div>
 
 <h2 id="safety_copy">safety_copy</h2>
 
@@ -828,9 +828,9 @@ PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; safety_copy(Database()) is None
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">safety_copy</span><span class="p">(</span><span class="n">Database</span><span class="p">())</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True
+</span></code></pre></div></div>
 
 <h2 id="import_backup">import_backup</h2>
 
@@ -862,9 +862,9 @@ caller has to reload what is on screen afterwards.</p>
 
 <p><strong>Examples</strong></p>
 
-<pre><code class="language-pycon">&gt;&gt;&gt; import_backup(QWidget(), db=Database())  # doctest: +SKIP
-True
-</code></pre>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">import_backup</span><span class="p">(</span><span class="n">QWidget</span><span class="p">(),</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">())</span>  <span class="c1"># doctest: +SKIP
+</span><span class="go">True
+</span></code></pre></div></div>
 
 
           
@@ -1083,8 +1083,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
