@@ -38,19 +38,20 @@
 Alto is a free desktop music theory trainer. Read notes on any clef, name intervals, chords and arpeggios, spell scales,
 learn key signatures, and find keys on a keyboard. Your answers determine when each question comes back for review.
 
-On Linux, you can answer **Interval Construction** questions by playing a USB MIDI keyboard or the Virtual MIDI Piano
-Keyboard (VMPK). If Alto asks for a perfect fifth above C4, play G4 to submit your answer.
-[MIDI setup for Interval Construction](docs/exercises.md#interval-construction).
-
-If you already study with Anki, you can export selected exercises as flashcards and review them alongside your other decks.
-You can also carry over due dates and intervals from SM-2 or FSRS. [Anki export guide](docs/data.md#anki-decks).
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/circle-of-fifths-dark.png">
     <img src="docs/assets/img/circle-of-fifths.png" alt="Alto's Circle of Fifths exercise, with the list of exercises open on the left" width="760">
   </picture>
 </p>
+
+## Key Features
+
+- **Note reading and intervals.** Identify notes across clefs, name the distance between two notes, or build an interval above or below a given note.
+- **Scales, keys, and harmony.** Construct scales, work around the circle of fifths, and identify chords and arpeggios.
+- **Rhythm.** Complete rhythmic equations with notes and rests. [Exercise guide](docs/exercises.md).
+- **MIDI input on Linux.** Play answers on a USB MIDI keyboard or use the Virtual MIDI Piano Keyboard (VMPK). [MIDI setup](docs/exercises.md#midi-keyboard-input).
+- **Anki export.** Export selected exercises as flashcards, including their SM-2 or FSRS review schedules. [Anki export guide](docs/data.md#anki-decks).
 
 ## Make it yours
 

@@ -19,6 +19,16 @@ Each exercise remembers its own **Next Question** setting.
 
 With SM-2 or FSRS, a missed card returns later. If you grade correct answers yourself, choosing **Hard**, **Good**, or **Easy** schedules the card and advances to the next question. [Spaced repetition]({{ '/practice/' | relative_url }})
 
+## MIDI keyboard input
+
+On Linux, connect a USB MIDI keyboard or open the Virtual MIDI Piano Keyboard (VMPK). In VMPK, choose **Edit → MIDI Connections** and set **MIDI OUT Driver** to **ALSA**. In Alto, open **MIDI** in the exercise toolbar and select the keyboard’s output. VMPK may appear as **MIDI Out out**. You can play in the VMPK window while Alto receives the notes.
+
+- **Note Identification.** Play the note on the staff. Any octave counts when **Octave** is off.
+- **Interval Construction.** Play the missing endpoint in the requested octave. For a perfect fifth above C4, play G4.
+- **Scale Construction.** Play the scale in the requested direction. **Undo** removes the last note. The final note submits the scale unless the question asks for whole and half steps. In that case, mark the steps on screen and choose **Answer**.
+
+Alto uses the exercise’s written spelling for matching pitches. On Ubuntu, install `alsa-utils` if the MIDI menu prompts for it. Reopen the menu after connecting a device. Choose **MIDI → Off** to disconnect, or leave the exercise.
+
 ## Note Identification
 
 A note is drawn on a staff. Press the button with its name.
@@ -198,9 +208,7 @@ is m3.
 
 Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.
 
-On Ubuntu, connect a USB MIDI keyboard or start VMPK with its ALSA output enabled. Open **MIDI** in the exercise toolbar and choose the input. For a perfect fifth above C4, play G4. Each key press submits an answer, even while VMPK has focus. Alto checks the sounding pitch and octave and shows the accepted spelling on the staff. To practice choosing the spelling yourself, use the staff controls. Choose **MIDI → Off** to disconnect. Leaving the exercise also disconnects it.
-
-If the MIDI menu asks for `alsa-utils`, install it with `sudo apt install alsa-utils`. Reopen the menu after connecting a new device.
+You can also play the endpoint on a [MIDI keyboard](#midi-keyboard-input).
 
 **Clefs**, **Range**, and **Staff Key** determine where the notes can appear. **Display Mode** stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under **Quality**, choose **Interval and Quality** for an exact spelling, **Interval Only** for a number, or **Quality Only** for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. **Intervals**, **Accidentals**, and **Note Value** control which spellings, written signs, and durations appear.
 

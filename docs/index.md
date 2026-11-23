@@ -57,10 +57,10 @@ topics:
   {% endfor %}
 </div>
 
-## What makes it different
+## Key Features
 
 - **Spaced repetition.** ASRS and ARTS use your accuracy and response time to choose the next exercise question. SM-2 and FSRS schedule a due date for each review. [Compare the four algorithms]({{ '/practice/' | relative_url }}).
-- **MIDI keyboard input.** On Linux, choose your USB keyboard or VMPK from the **MIDI** menu in Interval Construction. Play the missing note and Alto checks its pitch and octave. [MIDI setup]({{ '/exercises/' | relative_url }}#interval-construction).
+- **MIDI keyboard input.** On Linux, play answers on a USB MIDI keyboard or use the Virtual MIDI Piano Keyboard (VMPK) to practice notes, intervals, and scales. [MIDI setup]({{ '/exercises/' | relative_url }}#midi-keyboard-input).
 - **Anki-compatible decks.** Add music theory to your usual Anki reviews by exporting just the exercises you want, such as interval identification in bass clef. [Anki export guide]({{ '/data/' | relative_url }}#anki-decks).
 - **Statistics and a database browser.** Charts of accuracy, speed and volume, plus a calendar heatmap of a year of practice, filterable by exercise and timeframe, plus a table view of everything stored. [Statistics]({{ '/statistics/' | relative_url }}).
 - **Notation and keyboards your way.** Eleven notation styles, including Finale Maestro, Leland, Bravura and two handwritten jazz styles, and eleven keyboard looks from a modern piano to a French harpsichord. [Settings]({{ '/settings/' | relative_url }}).
