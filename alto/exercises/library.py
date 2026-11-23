@@ -107,6 +107,7 @@ def _degree_choices(
     *,
     key: int,
     naming: str = "degrees",
+    minor: bool = False,
 ) -> tuple[list[str], dict[str, tuple[int, int]]]:
     """
     Arrange scale-degree answers by degree, with raised degrees above lowered degrees.
@@ -119,6 +120,8 @@ def _degree_choices(
         The major key signature. Keyword-only.
     naming : str, default "degrees"
         Caret notation ("degrees") or function names ("functions"). Keyword-only.
+    minor : bool, default False
+        Count degrees from the relative natural minor tonic. Keyword-only.
 
     Returns
     -------
@@ -130,14 +133,15 @@ def _degree_choices(
     >>> _degree_choices({(3, 1)}, key=1)
     (['7̂'], {'7̂': (0, 6)})
     """
-    ordered = sorted(pool, key=lambda item: ((item[0] - 4 * key) % 7, item[1]))
+    tonic_letter = (4 * key + (5 if minor else 0)) % 7
+    ordered = sorted(pool, key=lambda item: ((item[0] - tonic_letter) % 7, item[1]))
     alterations = [accidental - key_accidental(letter, count=key) for letter, accidental in ordered]
     rows = {alteration: row for row, alteration in enumerate(sorted(set(alterations), reverse=True))}
     choices, grid = [], {}
     for (letter, accidental), alteration in zip(ordered, alterations, strict=True):
-        label = spell(Note(4, letter=letter, accidental=accidental), naming=naming, key=key)
+        label = spell(Note(4, letter=letter, accidental=accidental), naming=naming, key=key, minor=minor)
         choices.append(label)
-        grid[label] = divmod(len(choices) - 1, 4) if naming == "functions" else (rows[alteration], (letter - 4 * key) % 7)
+        grid[label] = divmod(len(choices) - 1, 4) if naming == "functions" else (rows[alteration], (letter - tonic_letter) % 7)
     return choices, grid
 
 
@@ -166,7 +170,9 @@ def _note_card_prompt(q: Question) -> str:
         prompt += " Use solfège."
     elif naming in settings.DEGREE_NAMINGS:
         term = "scale degree" if naming == "degrees" else "scale-degree function"
-        prompt += f" Give its {term} in {MAJOR_KEYS[q.key]} major."
+        tonic = mode_tonic(q.key, mode="Natural minor (Aeolian)").name if q.minor else MAJOR_KEYS[q.key]
+        mode = "natural minor" if q.minor else "major"
+        prompt += f" Give its {term} in {tonic} {mode}."
     if q.octaves:
         prompt += " Include the octave."
     return prompt
@@ -224,7 +230,11 @@ class NoteNames(ChoiceExercise):
         >>> NoteNames().settings_signature() != NoteNames(accidentals=True).settings_signature()
         True
         """
-        return signature(settings.note_names, self.accidentals)
+        cfg = settings.note_names
+        parts = vars(cfg).copy()
+        if not cfg.minor_degrees or cfg.naming not in settings.DEGREE_NAMINGS:
+            del parts["minor_degrees"]
+        return signature(parts, self.accidentals)
 
     def instructions(self) -> str:
         """
@@ -249,7 +259,7 @@ class NoteNames(ChoiceExercise):
         )
         if settings.note_names.naming in settings.DEGREE_NAMINGS:
             text += (
-                "<br><br>Degrees 1–7 follow the staff's major key signature (C major without a signature). "
+                "<br><br>Degrees 1–7 start at the tonic of the major or natural minor key named in the question. "
                 "A prefix such as ♭3 or ♯4 lowers or "
                 "raises that degree. Type the degree digit; in a chromatic bank, add Shift for a sharp or Ctrl for a flat. "
                 "Add Alt as well for a double alteration."
@@ -428,7 +438,8 @@ class NoteNames(ChoiceExercise):
         with_accidentals = self.accidentals or cfg.accidentals
         in_key = key_accidental(note.letter, count=key)
         acc = note.accidental
-        name = spell(note, naming=cfg.naming, key=key)
+        minor = cfg.minor_degrees and cfg.naming in settings.DEGREE_NAMINGS
+        name = spell(note, naming=cfg.naming, key=key, minor=minor)
         octaves = None
         joiner = ""
         answer = name
@@ -448,7 +459,7 @@ class NoteNames(ChoiceExercise):
         else:
             pool = {(l, key_accidental(l, count=k)) for l in range(7) for k in cfg.active_keys()}
         if cfg.naming in settings.DEGREE_NAMINGS:
-            choices, grid = _degree_choices(pool, key=key, naming=cfg.naming)
+            choices, grid = _degree_choices(pool, key=key, naming=cfg.naming, minor=minor)
         else:
             ordered = sorted(pool)
             choices = [spell(Note(4, letter=l, accidental=a), naming=cfg.naming) for l, a in ordered]
@@ -458,11 +469,13 @@ class NoteNames(ChoiceExercise):
                 rows = {a: r for r, a in enumerate(sorted({a for _, a in pool}, reverse=True))}
                 grid = {c: (rows[a], l) for c, (l, a) in zip(choices, ordered)}
 
+        tonic = mode_tonic(key, mode="Natural minor (Aeolian)").name if minor else MAJOR_KEYS[key]
+        mode = "natural minor" if minor else "major"
         expl = []
         if cfg.naming in settings.DEGREE_NAMINGS:
-            expl.append(f"{note.name} is scale degree {name} in {MAJOR_KEYS[key]} major.")
+            expl.append(f"{note.name} is scale degree {name} in {tonic} {mode}.")
         if key:
-            expl.append(f"{MAJOR_KEYS[key]} major has {format_key_signature(key)}.")
+            expl.append(f"{tonic} {mode} has {format_key_signature(key)}.")
         if acc != in_key:
             expl.append("The accidental on the note overrides the key signature.")
         return Question(
@@ -471,6 +484,7 @@ class NoteNames(ChoiceExercise):
             answer=answer,
             staff=[[note]],
             clef=clef,
+            minor=minor,
             explanation=" ".join(expl),
             key=key,
             value=value,
@@ -3947,3 +3961,148 @@ class NotationIdentification(ChoiceExercise):
         if question.answer not in settings.notation.terms or question.item_key() not in self._examples(question.answer):
             return None
         return self.refresh(question) if same_settings else self._with_buttons(question, rng=random.Random(question.item_key()))
+
+
+@register
+class RythmicEquations(ChoiceExercise):
+    """
+    Complete arithmetic equations with written note values.
+
+    Examples
+    --------
+    >>> q = RythmicEquations().generate(random.Random(2))
+    >>> "_" in q.prompt and q.answer in q.choices
+    True
+    """
+
+    name = "Rythmic Equations"
+    category = "Rhythm"
+    description = "Fill in the missing note value to balance the equation."
+    has_sound = False
+
+    durations = settings.RHYTHM_DURATIONS
+
+    def instructions(self) -> str:
+        """
+        Explain how to complete the equation with a button or its shortcut.
+
+        Returns
+        -------
+        str
+            Instructions for the exercise.
+
+        Examples
+        --------
+        >>> "keys" in RythmicEquations().instructions()
+        True
+        """
+        return "Choose the symbol that balances the durations. Click its button or use the keys shown when you hover."
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Ask for the missing note or rest on an exported card.
+
+        Parameters
+        ----------
+        question : Question
+            The equation on the card.
+
+        Returns
+        -------
+        str
+            The instruction shown above the equation.
+
+        Examples
+        --------
+        >>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+        'Which note or rest balances the equation?'
+        """
+        return "Which note or rest balances the equation?"
+
+    def practice_signature(self) -> str:
+        """
+        Keep review questions tied to the options that generated them.
+
+        Returns
+        -------
+        str
+            The selected operators and symbols, or an empty string for the original defaults.
+
+        Examples
+        --------
+        >>> RythmicEquations().practice_signature()
+        ''
+        """
+        default_operators = settings.rhythm_operators == settings.DEFAULT_RHYTHM_OPERATORS
+        groups = {name: True for name, enabled in (("ties", settings.rhythm_ties), ("beams", settings.rhythm_beams)) if enabled}
+        if groups:
+            return signature(settings.rhythm_operators, settings.rhythm_symbols, groups)
+        if default_operators and settings.rhythm_symbols == settings.DEFAULT_RHYTHM_SYMBOLS:
+            return ""
+        return signature(settings.rhythm_operators, settings.rhythm_symbols)
+
+    def make_question(self, rng: random.Random) -> Question:
+        """
+        Write a rhythm equation and hide one of its note values.
+
+        Parameters
+        ----------
+        rng : random.Random
+            Chooses the note value, operation, and blank position.
+
+        Returns
+        -------
+        Question
+            The equation and the note values available as answers.
+
+        Examples
+        --------
+        >>> RythmicEquations().make_question(random.Random(0)).prompt.count("_")
+        1
+        """
+        symbols = {name: duration for name, duration in self.durations.items() if name in settings.rhythm_symbols}
+        durations = symbols.copy()
+        if settings.rhythm_ties:
+            notes = [name for name in symbols if not name.endswith("-rest")]
+            for index, first in enumerate(notes):
+                for second in notes[index:]:
+                    durations[f"{first}~{second}"] = symbols[first] + symbols[second]
+        if settings.rhythm_beams:
+            for name in settings.RHYTHM_BEAM_COUNTS:
+                if name in symbols:
+                    durations[f"{name}|{name}"] = 2 * symbols[name]
+        by_duration: dict[float, list[str]] = {}
+        for term, duration in durations.items():
+            by_duration.setdefault(duration, []).append(term)
+
+        available = {}
+        for operator in sorted(settings.rhythm_operators):
+            groups = {"ordinary": [], "tied": [], "beamed": []}
+            for left, duration in durations.items():
+                operands = durations.items() if operator in {"+", "−"} else [(str(n), n) for n in range(2, 9)]
+                for right, amount in operands:
+                    total = duration + amount if operator in {"+", "−"} else duration * amount
+                    for result in by_duration.get(total, ()):
+                        terms = (result, right, left) if operator in {"−", "÷"} else (left, right, result)
+                        groups_in_question = ["tied" if "~" in term else "beamed" for term in terms if "~" in term or "|" in term]
+                        blanks = [index for index, term in enumerate(terms) if term in symbols]
+                        if len(groups_in_question) <= 1 and blanks:
+                            group = groups_in_question[0] if groups_in_question else "ordinary"
+                            groups[group].append((terms, blanks))
+            if any(groups.values()):
+                available[operator] = [group for group in groups.values() if group]
+
+        if not available:
+            return Question("Choose operators and symbols that can form an equation.", choices=[], answer="")
+        operator = rng.choice(list(available))
+        terms, blanks = rng.choice(rng.choice(available[operator]))
+        terms = list(terms)
+        blank = rng.choice(blanks)
+        answer = terms[blank]
+        terms[blank] = "_"
+        return Question(
+            f"{terms[0]} {operator} {terms[1]} = {terms[2]}",
+            choices=list(symbols),
+            answer=answer,
+            accept=tuple(name for name, duration in symbols.items() if name != answer and duration == symbols[answer]),
+        )

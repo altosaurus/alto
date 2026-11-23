@@ -34,7 +34,8 @@ In the exercise settings you can choose:
 - **Note values:** whole notes up to thirty-second notes, and the double whole note.
 - **Note names:** letters (C D E), solfège (Do Re Mi), or the **Scale degrees** group, with **Caret**
   (1̂ 2̂ 3̂) and **Function** (Tonic, Supertonic, Mediant, and so on). Every option has a text label beside its preview.
-  Degrees refer to the major key signature (C major without a signature). Caret labels use accidental prefixes,
+  Choose **Major** or **Natural minor** as the reference scale. The question names the key. With an empty key signature,
+  the choices use C major or A natural minor. Caret labels use accidental prefixes,
   while function labels use words such as **Raised Supertonic** and **Lowered Mediant**.
 - **Accidentals:** whether notes with their own sharp, flat or natural sign appear.
 - **Octave:** turn this on to answer with both the note name and its octave. Middle C is C4.
@@ -63,6 +64,12 @@ dynamics, ornaments, octave signs, and instrumental techniques. For example, you
 quarter-tone accidentals, or practice bowing and pedal marks. For advanced markings, Alto uses the selected music font
 when it contains the symbol and the bundled Bravura font otherwise. Glyph codes follow the
 [Standard Music Font Layout index](https://github.com/w3c/smufl/blob/gh-pages/metadata/glyphnames.json).
+
+## Rythmic Equations
+
+Choose the note symbol that makes both sides of the equation last the same amount of time.
+For example, a quarter note plus another quarter note equals a half note. The blank can appear on either side of the equals sign.
+Use **Operators** to choose addition, subtraction, multiplication, and division. Multiplication and division use whole-number factors from 2 through 8 when the selected symbols allow them. Use **Symbols** to select notes, rests, and dotted notes from double whole through thirty-second values. A selected note and rest of the same duration both count as correct. Turn on **Ties** or **Beams** to mix in questions where a pair of notes counts as one duration. Beams group eighth, sixteenth, or thirty-second notes.
 
 ## Keyboard Note Identification
 

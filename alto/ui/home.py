@@ -94,6 +94,7 @@ from alto.ui.zoom import css, px
 
 # Icon for each exercise, keyed by class name.
 EXERCISE_ICONS = {
+    "RythmicEquations": icons.EXERCISE_RHYTHMIC_EQUATIONS,
     "NotationIdentification": icons.EXERCISE_NOTATION_IDENTIFICATION,
     "NoteNames": icons.EXERCISE_NOTE_NAMES,
     "KeyboardNotes": icons.EXERCISE_KEYBOARD,

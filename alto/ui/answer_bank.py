@@ -41,14 +41,16 @@ class AnswerBank(QScrollArea):
     []
     """
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(self, parent: QWidget | None = None, *, show_all_rows: bool = False) -> None:
         """
-        Create a bank that shows at most four rows before scrolling.
+        Create a bank that can show all rows or scroll longer lists.
 
         Parameters
         ----------
         parent : QWidget or None, default None
             The widget that owns the bank.
+        show_all_rows : bool, default False
+            Let the bank grow to fit every row. Keyword-only.
 
         Examples
         --------
@@ -56,6 +58,7 @@ class AnswerBank(QScrollArea):
         True
         """
         super().__init__(parent)
+        self._show_all_rows = show_all_rows
         self.buttons: list[QAbstractButton] = []
         self._positions: list[tuple[int, int]] = []
         self.content = QWidget()
@@ -128,7 +131,9 @@ class AnswerBank(QScrollArea):
         rows = len(wrapped_rows)
         content_height = rows * height + max(0, rows - 1) * 8 + 16
         self.content.setMinimumHeight(content_height)
-        visible_height = min(240, min(rows, 4) * height + max(0, min(rows, 4) - 1) * 8 + 16)
+        visible_height = content_height
+        if not self._show_all_rows:
+            visible_height = min(240, min(rows, 4) * height + max(0, min(rows, 4) - 1) * 8 + 16)
         if self.minimumHeight() != visible_height or self.maximumHeight() != visible_height:
             self.setFixedHeight(visible_height)
 

@@ -411,6 +411,7 @@ class NoteNameSettings(StaffRangeSettings):
     _: KW_ONLY
     key_signatures: set[int] = field(default_factory=lambda: {0})  # sharps (+) / flats (-) of the keys to use
     naming: str = "letters"  # key of NAMINGS
+    minor_degrees: bool = False  # Use the relative natural minor for degree answers.
     accidentals: bool = False  # also ask notes with explicit sharps/flats/naturals
     require_octave: bool = False  # the answer also includes the note's written octave
 
@@ -549,6 +550,20 @@ class IntervalSettings(StaffRangeSettings):
 
 intervals = IntervalSettings()
 interval_construction = IntervalSettings()
+
+RHYTHM_OPERATORS = {"+": "Addition (+)", "−": "Subtraction (−)", "×": "Multiplication (×)", "÷": "Division (÷)"}
+DEFAULT_RHYTHM_OPERATORS = {"+", "−"}
+RHYTHM_DURATIONS = {"breve": 32, "whole": 16, "half": 8, "quarter": 4, "eighth": 2, "sixteenth": 1, "thirty_second": 0.5}
+DEFAULT_RHYTHM_SYMBOLS = set(RHYTHM_DURATIONS) - {"breve", "thirty_second"}
+RHYTHM_DURATIONS.update({f"{name}-rest": duration for name, duration in RHYTHM_DURATIONS.items()})
+RHYTHM_DURATIONS.update(
+    {f"dotted-{name}": duration * 1.5 for name, duration in RHYTHM_DURATIONS.items() if not name.endswith("-rest")},
+)
+rhythm_operators = DEFAULT_RHYTHM_OPERATORS.copy()
+rhythm_symbols = DEFAULT_RHYTHM_SYMBOLS.copy()
+rhythm_ties = False
+rhythm_beams = False
+RHYTHM_BEAM_COUNTS = {"eighth": 1, "sixteenth": 2, "thirty_second": 3}
 
 # Keyboard exercise: the whole piano is A0..C8 (MIDI 21..108); by default it asks C3..C5.
 KEYBOARD_FULL = (21, 108)

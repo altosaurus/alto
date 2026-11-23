@@ -25,6 +25,7 @@ from PySide6.QtGui import (
     QFont,
     QIcon,
     QPainter,
+    QPainterPath,
     QPaintEvent,
     QPalette,
     QPen,
@@ -69,6 +70,17 @@ VALUE_NAMES = {
     "eighth": "Eighth",
     "sixteenth": "16th",
     "thirty_second": "32nd",
+}
+
+
+REST_GLYPHS = {
+    f"{value}-rest": codepoint
+    for codepoint, value in enumerate(("breve", "whole", "half", "quarter", "eighth", "sixteenth", "thirty_second"), start=0xE4E2)
+}
+RHYTHM_SYMBOL_NAMES = {
+    **{value: label if value == "breve" else f"{label} note" for value, label in VALUE_NAMES.items()},
+    **{value: VALUE_NAMES[value.removesuffix("-rest")].replace(" note", "") + " rest" for value in REST_GLYPHS},
+    **{f"dotted-{value}": f"Dotted {label.lower().removesuffix(' note')} note" for value, label in VALUE_NAMES.items()},
 }
 
 
@@ -715,6 +727,8 @@ class ValuePictures(_Picture):
     """
 
     H, W, GAP, SPACING = 40, 18, 4.5, 4
+    tied = False
+    beam_count = 0
     HEAD_X, HEAD_Y = 6.5, 25.0  # where each symbol's head sits in its box (about level with the text beside it)
 
     def __init__(
@@ -770,7 +784,7 @@ class ValuePictures(_Picture):
         self.values = list(values)
         count = max(len(self.values), 1)
         self._fit(count * self.W + (count - 1) * self.SPACING, height=self.H)
-        self.setToolTip(", ".join(VALUE_NAMES[v] for v in self.values))
+        self.setToolTip(", ".join(VALUE_NAMES[v] if v in VALUE_NAMES else RHYTHM_SYMBOL_NAMES[v] for v in self.values))
         self.update()
 
     @classmethod
@@ -820,6 +834,22 @@ class ValuePictures(_Picture):
         text, _line = self._colors()
         for i, value in enumerate(self.values):
             x = i * (self.W + self.SPACING)
+            if value in REST_GLYPHS:
+                path = engraving.notation_glyph(current_style().font or "bravura", codepoint=REST_GLYPHS[value])
+                center = path.boundingRect().center()
+                p.save()
+                p.translate(x + self.W / 2, self.H / 2)
+                p.scale(0.18, 0.18)
+                p.translate(-center)
+                p.fillPath(path, text)
+                if value in {"whole-rest", "half-rest"}:
+                    bounds = path.boundingRect()
+                    baseline = bounds.top() if value == "whole-rest" else bounds.bottom()
+                    p.fillRect(QRectF(bounds.left() - 8, baseline - 2, bounds.width() + 16, 4), text)
+                p.restore()
+                continue
+            dotted = value.startswith("dotted-")
+            value = value.removeprefix("dotted-")
             wide = value in ("breve", "whole")  # the heads without stems are wider, so center them in the box
             y = self.H / 2 if wide and self.center_stemless else self.HEAD_Y
             # drawn by the same routine as the staff, so the symbol matches the one in the exercise
@@ -830,10 +860,58 @@ class ValuePictures(_Picture):
                 y=y,
                 gap=self.GAP,
                 color=text,
-                value=value,
+                value="quarter" if self.beam_count else value,
                 stem_down=False,
-                font=current_style().font,
+                font=(current_style().font or "bravura") if self.beam_count else current_style().font,
             )
+
+            if dotted:
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(text)
+                p.drawEllipse(QPointF(x + self.W - 2, y), 1.1, 1.1)
+
+        if self.beam_count and len(self.values) == 2:
+            left = self.HEAD_X + self.GAP * 0.45
+            right = left + self.W + self.SPACING
+            top = self.HEAD_Y - engraving.STEM_LENGTH["quarter"] * self.GAP
+            for beam in range(self.beam_count):
+                p.fillRect(QRectF(left, top + beam * self.GAP * 0.8, right - left, self.GAP * 0.5), text)
+
+        if self.tied and len(self.values) == 2:
+            y = self.HEAD_Y + 3
+            left = self.HEAD_X
+            right = self.HEAD_X + self.W + self.SPACING
+            path = QPainterPath(QPointF(left, y))
+            path.quadTo((left + right) / 2, y + 10, right, y)
+            p.strokePath(path, QPen(text, 1.2))
+
+
+def rhythm_picture(term: str) -> ValuePictures | None:
+    """
+    Render a single note, rest, tied pair, or beamed pair from an equation term.
+
+    Parameters
+    ----------
+    term : str
+        The stored term, with a tilde between tied notes or a bar between beamed notes.
+
+    Returns
+    -------
+    ValuePictures or None
+        The engraved term, or None for an operator, numeral, or blank.
+
+    Examples
+    --------
+    >>> rhythm_picture("eighth|eighth").beam_count
+    1
+    """
+    values = term.replace("|", "~").split("~")
+    if any(value not in settings.RHYTHM_DURATIONS for value in values):
+        return None
+    picture = ValuePictures(values, scale=1.7)
+    picture.tied = "~" in term
+    picture.beam_count = settings.RHYTHM_BEAM_COUNTS[values[0]] if "|" in term else 0
+    return picture
 
 
 class KeySignaturePicture(_Picture):

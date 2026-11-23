@@ -24,11 +24,14 @@ from alto.exercises.library import (
     NotationIdentification,
     NoteConstruction,
     NoteNames,
+    RythmicEquations,
 )
 from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.pictures import ValuePictures
+from alto.ui.settings_menu import ChoiceChecklist, ToggleRow
 from alto.ui.store import store
 
 if TYPE_CHECKING:
@@ -821,3 +824,118 @@ def test_the_staff_for_placing_a_note_is_capped_too(app: QApplication) -> None:
     QTest.qWait(50)
     assert view.input_staff.width() == view.input_staff.maximumWidth() < 1000
     view.hide()
+
+
+@pytest.mark.parametrize("ties", [False, True])
+@pytest.mark.parametrize("operator", ["+", "−", "×", "÷"])
+def test_rythmic_equations_show_and_fill_the_missing_note(
+    app: QApplication,
+    monkeypatch: pytest.MonkeyPatch,
+    operator: str,
+    ties: bool,
+) -> None:
+    """
+    Check the equation arithmetic and fill the visual blank through an answer button.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Isolates the operator selection.
+    operator : str
+        The operator under test.
+    ties : bool
+        Whether the generator may use tied notes.
+    """
+    monkeypatch.setattr(settings, "rhythm_operators", {operator})
+    monkeypatch.setattr(settings, "rhythm_ties", ties)
+    exercise = RythmicEquations()
+    rng = random.Random(2)
+    factors, tie_states = set(), set()
+    for _ in range(60):
+        question = exercise.generate(rng)
+        left, shown_operator, right, _, result = question.prompt.replace("_", question.answer).split()
+        assert shown_operator == operator
+        a, b, c = (
+            int(term) if term.isdecimal() else sum(settings.RHYTHM_DURATIONS[value] for value in term.split("~"))
+            for term in (left, right, result)
+        )
+        assert {"+": a + b, "−": a - b, "×": a * b, "÷": a / b}[operator] == c
+        tie_states.add("~" in question.prompt)
+        assert "~" not in question.answer
+        if operator in {"×", "÷"}:
+            factor = question.prompt.split()[2]
+            assert factor.isdecimal()
+            factors.add(int(factor))
+    assert tie_states == ({False, True} if ties else {False})
+    if operator in {"×", "÷"}:
+        assert len(factors) > 1 and factors <= set(range(2, 9))
+        if ties:
+            assert 3 in factors
+    view = view_of(exercise)
+    view.show()
+    app.processEvents()
+    question = view.question
+    assert question is not None and view.rhythm_equation.isVisible() and view.prompt.isHidden()
+    assert view.rhythm_terms.count() == 5
+    assert all(not button.icon().isNull() for button in view.buttons)
+    view.buttons[question.choices.index(question.answer)].click()
+    assert view.answered
+    assert "blank" not in view.rhythm_equation.accessibleName()
+    view.close()
+
+
+def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Exercise the saved controls and render questions with a tie or a beam.
+
+    Parameters
+    ----------
+    app : QApplication
+        The shared Qt application.
+    monkeypatch : pytest.MonkeyPatch
+        Keep exercise settings local to this test.
+    """
+    monkeypatch.setattr(settings, "rhythm_operators", settings.DEFAULT_RHYTHM_OPERATORS.copy())
+    monkeypatch.setattr(settings, "rhythm_symbols", settings.DEFAULT_RHYTHM_SYMBOLS.copy())
+    monkeypatch.setattr(settings, "rhythm_ties", False)
+    monkeypatch.setattr(settings, "rhythm_beams", False)
+    exercise = RythmicEquations()
+    view = view_of(exercise)
+    view.show()
+    panel = view.settings_panel
+    checklists = panel.findChildren(ChoiceChecklist)
+    operators = next(listing for listing in checklists if "+" in listing.boxes)
+    symbols = next(listing for listing in checklists if "dotted-quarter" in listing.boxes)
+    operators.boxes["−"].click()
+    symbols.boxes["dotted-quarter"].click()
+    assert exercise.settings_signature()
+    assert store().value("rythmicEquations/operators") == "+"
+    assert "dotted-quarter" in str(store().value("rythmicEquations/symbols"))
+    switches = {control.toolTip(): control for control in panel.findChildren(ToggleRow)}
+    for kind, marker in (("tied", "~"), ("beamed", "|")):
+        switch = switches[f"Show two {kind} notes as one duration"]
+        switch.click()
+        assert exercise.settings_signature()
+        for _ in range(50):
+            view.next_question()
+            question = view.question
+            assert question is not None
+            if marker in question.prompt:
+                index = next(index for index, term in enumerate(question.prompt.split()) if marker in term)
+                item = view.rhythm_terms.itemAt(index)
+                assert item is not None
+                picture = item.widget()
+                assert isinstance(picture, ValuePictures) and not picture.grab().isNull()
+                break
+        else:
+            pytest.fail(f"No {kind} question")
+        switch.click()
+    for name, box in symbols.boxes.items():
+        if name != "quarter":
+            box.setChecked(False)
+    question = view.question
+    assert question is not None and question.choices == []
+    assert view.prompt.isVisible() and not view.rhythm_equation.isVisible()
+    view.close()

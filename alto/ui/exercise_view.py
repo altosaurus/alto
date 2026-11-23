@@ -75,7 +75,9 @@ from alto.exercises.library import (
     IntervalNames,
     KeyboardIntervals,
     NotationIdentification,
+    NoteNames,
     OrderOfKeys,
+    RythmicEquations,
     ScaleIdentification,
 )
 from alto.exercises.packs import PackExercise
@@ -112,10 +114,11 @@ from alto.ui.key_fork import (
     KeyFork,
 )
 from alto.ui.keyboard import KeyboardWidget
-from alto.ui.pictures import symbol_icon
+from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, ValuePictures, rhythm_picture, symbol_icon
 from alto.ui.reference import reference_panel_for
 from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import (
+    CORNER_RADIUS,
     MAX_STEP,
     StaffWidget,
     clef_targets,
@@ -629,7 +632,7 @@ class ExerciseView(QWidget):
             8,
         )
         self.choice_box.setSpacing(10)
-        self.interval_answers = AnswerBank()
+        self.interval_answers = AnswerBank(show_all_rows=isinstance(exercise, RythmicEquations))
         self.interval_answers.hide()
         self._pair_token = 0  # counts questions, so a pending 'try again' reset can tell it is out of date
         self.destroyed.connect(lambda: setattr(self, "_pair_token", -1))  # invalidate queued playback callbacks on deletion
@@ -702,6 +705,23 @@ class ExerciseView(QWidget):
         prompt_row.addWidget(self.prompt, 100)
         prompt_row.addStretch(1)
         lay.addLayout(prompt_row)
+        if isinstance(self.exercise, RythmicEquations):
+            self.rhythm_equation = QFrame()
+            self.rhythm_equation.setObjectName("rhythmEquation")
+            self.rhythm_equation.setStyleSheet(
+                css(
+                    f"QFrame#rhythmEquation {{ background: white; border-radius: {CORNER_RADIUS}px; }} "
+                    "QFrame#rhythmEquation QLabel { color: black; }",
+                ),
+            )
+            paper_palette = self.rhythm_equation.palette()
+            paper_palette.setColor(QPalette.ColorRole.Text, QColor("black"))
+            paper_palette.setColor(QPalette.ColorRole.Base, QColor("white"))
+            self.rhythm_equation.setPalette(paper_palette)
+            self.rhythm_terms = QHBoxLayout(self.rhythm_equation)
+            self.rhythm_terms.setContentsMargins(px(24), px(16), px(24), px(16))
+            self.rhythm_terms.setSpacing(px(14))
+            lay.addWidget(self.rhythm_equation, alignment=Qt.AlignmentFlag.AlignHCenter)
         placement_layout = lay
         if isinstance(self.scale_input, SignatureInput):
             signature_area = QWidget()
@@ -1249,8 +1269,35 @@ class ExerciseView(QWidget):
         self._pending = {}  # 'name' / 'octave' -> (text, button), for two-part answers
         self._busy = False
         self.staff.column_colors.clear()
-        self.prompt.setText(q.prompt)
-        self.prompt.setVisible(bool(q.prompt) and not q.caption)  # some need none; a caption goes on the staff
+        prompt = q.prompt
+        if isinstance(self.exercise, NoteNames) and q.staff and app_settings.note_names.naming in app_settings.DEGREE_NAMINGS:
+            prompt = self.exercise.card_prompt(q)
+        self.prompt.setText(prompt)
+        self.prompt.setVisible(bool(prompt) and not q.caption)  # some need none; a caption goes on the staff
+        if isinstance(self.exercise, RythmicEquations):
+            while self.rhythm_terms.count():
+                item = self.rhythm_terms.takeAt(0)
+                if item is not None and (widget := item.widget()) is not None:
+                    widget.hide()
+                    widget.deleteLater()
+            self.rhythm_equation.setVisible(bool(q.choices))
+            if q.choices:
+                self.prompt.hide()
+                self.rhythm_equation.setAccessibleName(
+                    " ".join("blank" if token == "_" else token for token in q.prompt.split())
+                    .replace("~", " tied to ")
+                    .replace("|", " beamed with "),
+                )
+                for term in q.prompt.split():
+                    picture = rhythm_picture(term)
+                    if picture is not None:
+                        picture.setPalette(self.rhythm_equation.palette())
+                        widget = picture
+                    else:
+                        label = QLabel("□" if term == "_" else term)
+                        label.setStyleSheet(css("font-size: 22pt;"))
+                        widget = label
+                    self.rhythm_terms.addWidget(widget, alignment=Qt.AlignmentFlag.AlignVCenter)
         construct = q.construct is not None
         scale = q.places_sequence
         clef = bool(q.place_clef)
@@ -1345,6 +1392,11 @@ class ExerciseView(QWidget):
         keys = choice_keys(q.choices)
         for i, c in enumerate(q.choices):
             b = DegreeButton(c)
+            if isinstance(self.exercise, RythmicEquations):
+                b.setAccessibleName(RHYTHM_SYMBOL_NAMES[c])
+                b.setText("")
+                b.setIcon(ValuePictures.icon(c))
+                b.setIconSize(QSize(px(32), px(64)))
             if isinstance(self.exercise, IntervalNames) and c in INTERVAL_QUALITY_SYMBOLS:
                 b.setText(INTERVAL_QUALITY_SYMBOLS[c])
                 b.setAccessibleName(c)
@@ -2641,6 +2693,20 @@ class ExerciseView(QWidget):
         if ok:
             if button is None:
                 self.prompt.setText(q.prompt)
+            if isinstance(self.exercise, RythmicEquations):
+                blank = q.prompt.split().index("_")
+                item = self.rhythm_terms.takeAt(blank)
+                if item is not None and (widget := item.widget()) is not None:
+                    widget.hide()
+                    widget.deleteLater()
+                picture = ValuePictures([choice], scale=1.7)
+                picture.setPalette(self.rhythm_equation.palette())
+                self.rhythm_terms.insertWidget(blank, picture, alignment=Qt.AlignmentFlag.AlignVCenter)
+                self.rhythm_equation.setAccessibleName(
+                    " ".join(choice if token == "_" else token for token in q.prompt.split())
+                    .replace("~", " tied to ")
+                    .replace("|", " beamed with "),
+                )
             notes = q.staff or ([q.keyboard_notes] if q.keyboard_notes else [[q.keyboard]] if q.keyboard else [])
             if isinstance(self.exercise, IntervalNames) and q.prompt in INTERVAL_INVERSION_PROMPTS.values():
                 first, second = (note for column in q.staff for note in column)

@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -56,6 +56,7 @@ from alto.exercises.library import (
     NoteConstruction,
     NoteNames,
     OrderOfKeys,
+    RythmicEquations,
     ScaleConstruction,
     ScaleIdentification,
 )
@@ -95,6 +96,7 @@ from alto.ui.pack_settings_panel import (
     PackSettingsPanel,
 )
 from alto.ui.pictures import (
+    RHYTHM_SYMBOL_NAMES,
     ClefPictures,
     NamePicture,
     RangePictures,
@@ -291,6 +293,14 @@ class NoteNameSettingsPanel(StaffRangePanel):
                 degree_layout.addWidget(radio)
             else:
                 nlay.addWidget(radio)
+        degree_layout.addWidget(QLabel("Reference scale"))
+        reference = QButtonGroup(self)
+        for minor, label in ((False, "Major"), (True, "Natural minor")):
+            radio = QRadioButton(label)
+            reference.addButton(radio)
+            radio.setChecked(minor == cfg.minor_degrees)
+            radio.clicked.connect(lambda _checked=False, selected=minor: self._degree_reference_edited(selected))
+            degree_layout.addWidget(radio)
         nlay.addWidget(degree_group)
         names_page = subpage("Note names", body=names_body, back=lambda: self._go(0))
 
@@ -368,6 +378,22 @@ class NoteNameSettingsPanel(StaffRangePanel):
         'solfege'
         """
         self.cfg.naming = next(k for k, r in self.naming_radios.items() if r.isChecked())
+        self._save_and_emit()
+
+    def _degree_reference_edited(self, minor: bool) -> None:
+        """
+        Change the reference scale for degree answers and save it.
+
+        Parameters
+        ----------
+        minor : bool
+            Whether to count from the relative natural minor tonic.
+
+        Examples
+        --------
+        Selecting Natural minor makes A the tonic on a staff with no key signature.
+        """
+        self.cfg.minor_degrees = minor
         self._save_and_emit()
 
     def _accidentals_toggled(self, on: bool) -> None:
@@ -3134,6 +3160,8 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
         assert menu is not None
         layout = menu.layout()
         assert isinstance(layout, QVBoxLayout)
+    if isinstance(exercise, RythmicEquations):
+        _add_rhythm_options(panel, layout=layout)
     if isinstance(exercise, ChoiceExercise):
         _add_choice_buttons(panel, exercise=exercise, layout=layout)
 
@@ -3185,6 +3213,131 @@ def settings_panel_for(exercise: Exercise, *, learner: Learner | None = None) ->
     stack.insertWidget(0, scrolling(menu))
     stack.setCurrentIndex(0)
     return panel
+
+
+def _add_rhythm_options(panel: ExerciseSettingsPanel, *, layout: QVBoxLayout) -> None:
+    """
+    Add checklists for the operations and note symbols used in rhythm equations.
+
+    Parameters
+    ----------
+    panel : ExerciseSettingsPanel
+        The pane to extend.
+    layout : QVBoxLayout
+        The main settings menu. Keyword-only.
+
+    Examples
+    --------
+    Rythmic Equations offers Operators and Symbols alongside the shared Buttons page.
+    """
+    stack = panel.stack
+    ties = ToggleRow("Ties")
+    ties.setOn(settings.rhythm_ties)
+    ties.setToolTip("Show two tied notes as one duration")
+
+    def save_ties(on: bool) -> None:
+        """
+        Save tie practice and refresh the question.
+
+        Parameters
+        ----------
+        on : bool
+            Whether to include tied notes.
+
+        Examples
+        --------
+        Enabling Ties shows a pair of notes connected by a curved line.
+        """
+        settings.rhythm_ties = on
+        store().setValue("rythmicEquations/ties", "true" if on else "false")
+        panel.changed.emit()
+
+    ties.switched.connect(save_ties)
+    layout.insertWidget(layout.count() - 1, ties)
+    beams = ToggleRow("Beams")
+    beams.setOn(settings.rhythm_beams)
+    beams.setToolTip("Show two beamed notes as one duration")
+
+    def save_beams(on: bool) -> None:
+        """
+        Save beam practice and refresh the question.
+
+        Parameters
+        ----------
+        on : bool
+            Whether to include beamed note pairs.
+
+        Examples
+        --------
+        Enabling Beams can show two eighth notes joined by one beam.
+        """
+        settings.rhythm_beams = on
+        store().setValue("rythmicEquations/beams", "true" if on else "false")
+        panel.changed.emit()
+
+    beams.switched.connect(save_beams)
+    layout.insertWidget(layout.count() - 1, beams)
+    for title, attribute, labels in (
+        ("Operators", "rhythm_operators", settings.RHYTHM_OPERATORS),
+        ("Symbols", "rhythm_symbols", RHYTHM_SYMBOL_NAMES),
+    ):
+        row = MenuRow(title)
+        selected = getattr(settings, attribute)
+        positions: dict[object, tuple[int, int]] | None = None
+        if title == "Symbols":
+            notes = [name for name in labels if f"{name}-rest" in labels]
+            positions = {
+                symbol: (row_index, column)
+                for row_index, name in enumerate(notes)
+                for column, symbol in enumerate((name, f"{name}-rest"))
+            }
+            dotted = [name for name in labels if name.startswith("dotted-")]
+            positions.update({name: (len(notes) + index, 0) for index, name in enumerate(dotted)})
+        choices = ChoiceChecklist([("", list(labels.items()))], selected=selected, positions=positions)
+        if title == "Symbols":
+            for name, label in labels.items():
+                box = choices.boxes[name]
+                box.setAccessibleName(label)
+                box.setText("")
+                box.setIcon(ValuePictures.icon(name, scale=1.0))
+                box.setIconSize(QSize(px(18), px(40)))
+        row.value.setText(", ".join(name for name in labels if name in selected) if title == "Operators" else str(len(selected)))
+        layout.insertWidget(layout.count() - 1, row)
+        page = stack.addWidget(subpage(title, body=scrolling(choices), back=lambda: stack.slide_to(0), fill=True))
+        row.clicked.connect(lambda _checked=False, index=page: stack.slide_to(index))
+
+        def save(
+            *,
+            choices: ChoiceChecklist = choices,
+            row: MenuRow = row,
+            attribute: str = attribute,
+            title: str = title,
+        ) -> None:
+            """
+            Save the edited checklist and ask a new question.
+
+            Parameters
+            ----------
+            choices : ChoiceChecklist
+                The edited checklist.
+            row : MenuRow
+                The corresponding menu entry.
+            attribute : str
+                The settings attribute to update.
+            title : str
+                The settings page name.
+
+            Examples
+            --------
+            Unchecking Addition leaves only subtraction questions.
+            """
+            selected = choices.selected()
+            setattr(settings, attribute, selected)
+            store().setValue(f"rythmicEquations/{title.lower()}", ",".join(sorted(selected)))
+            row.value.setText(", ".join(sorted(selected)) if title == "Operators" else str(len(selected)))
+            panel.changed.emit()
+
+        choices.changed.connect(save)
 
 
 def _add_choice_buttons(panel: ExerciseSettingsPanel, *, exercise: ChoiceExercise, layout: QVBoxLayout) -> None:

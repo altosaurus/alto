@@ -69,6 +69,7 @@ from alto.anki_export import (
 from alto.exercises import REGISTRY, Exercise, Question
 from alto.exercises.library import (
     IntervalConstruction,
+    RythmicEquations,
 )
 from alto.exercises.packs import load_packs
 from alto.learning import Database, Learner
@@ -85,6 +86,7 @@ from alto.ui.home import category_tree, exercise_icon
 from alto.ui.keyboard import KeyboardWidget
 from alto.ui.keyboard_styles import load_style as load_keyboard_style
 from alto.ui.notation import load_style as load_notation_style
+from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, rhythm_picture
 from alto.ui.settings_menu import ExerciseSettingsPanel
 from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import MAX_STEP, StaffWidget
@@ -193,6 +195,14 @@ def card_fields(question: Question, *, folder: Path, exercise: Exercise) -> list
         circle.reveal(animate=False)
         back.append(_picture(circle, folder=folder, label="Completed circle of fifths"))
     solution_text = " and ".join(q.required) if q.required else q.answer
+    if isinstance(exercise, RythmicEquations):
+        terms = []
+        for term in q.prompt.split():
+            picture = rhythm_picture(term)
+            label = "□" if term == "_" else term
+            terms.append(_picture(picture, folder=folder, label=label) if picture is not None else escape(label))
+        front.append(" ".join(terms))
+        solution_text = " / ".join(RHYTHM_SYMBOL_NAMES[name] for name in (q.answer, *q.accept))
     if (q.keyboard is not None or isinstance(exercise, IntervalConstruction)) and q.accept:
         solution_text = " / ".join((q.answer, *q.accept))
     answer = "<br>".join([escape(solution_text), *back])

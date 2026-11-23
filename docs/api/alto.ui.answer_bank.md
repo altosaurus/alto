@@ -17,7 +17,11 @@ A responsive, scrollable grid for large banks of answer buttons.
 ## AnswerBank
 
 ```python
-AnswerBank(parent: QWidget | None = None)
+AnswerBank(
+    parent: QWidget | None = None,
+    *,
+    show_all_rows: bool = False,
+)
 ```
 
 Bases: `QScrollArea`
@@ -39,11 +43,12 @@ Wrap existing answer buttons to fit the available width and scroll long lists.
 
 **Constructor**
 
-Create a bank that shows at most four rows before scrolling.
+Create a bank that can show all rows or scroll longer lists.
 
 **Parameters**
 
 - `parent` (*QWidget or None, default None*): The widget that owns the bank.
+- `show_all_rows` (*bool, default False*): Let the bank grow to fit every row. Keyword-only.
 
 **Constructor examples**
 

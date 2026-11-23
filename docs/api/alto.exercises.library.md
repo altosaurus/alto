@@ -1746,4 +1746,104 @@ Recover an eligible saved example under the current term and button selections.
 >>> ex.review_question(q, same_settings=True) == q
 True
 ```
+
+## RythmicEquations
+
+```python
+class RythmicEquations(ChoiceExercise)
+```
+
+Complete arithmetic equations with written note values.
+
+**Examples**
+
+```pycon
+>>> q = RythmicEquations().generate(random.Random(2))
+>>> "_" in q.prompt and q.answer in q.choices
+True
+```
+
+### RythmicEquations.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to complete the equation with a button or its shortcut.
+
+**Returns**
+
+- *str*: Instructions for the exercise.
+
+**Examples**
+
+```pycon
+>>> "keys" in RythmicEquations().instructions()
+True
+```
+
+### RythmicEquations.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Ask for the missing note or rest on an exported card.
+
+**Parameters**
+
+- `question` (*Question*): The equation on the card.
+
+**Returns**
+
+- *str*: The instruction shown above the equation.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+'Which note or rest balances the equation?'
+```
+
+### RythmicEquations.practice_signature
+
+```python
+def practice_signature() -> str
+```
+
+Keep review questions tied to the options that generated them.
+
+**Returns**
+
+- *str*: The selected operators and symbols, or an empty string for the original defaults.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().practice_signature()
+''
+```
+
+### RythmicEquations.make_question
+
+```python
+def make_question(rng: random.Random) -> Question
+```
+
+Write a rhythm equation and hide one of its note values.
+
+**Parameters**
+
+- `rng` (*random.Random*): Chooses the note value, operation, and blank position.
+
+**Returns**
+
+- *Question*: The equation and the note values available as answers.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().make_question(random.Random(0)).prompt.count("_")
+1
+```
 {% endraw %}
