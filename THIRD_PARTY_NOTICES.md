@@ -15,7 +15,7 @@ All are under the SIL Open Font License 1.1 (OFL), whose texts are kept beside t
 | Leland | MuseScore Limited | https://github.com/musescore/MuseScore/tree/main/fonts/leland |
 | MuseJazz | Torsten Hämmerle and Abraham Lee | https://github.com/musescore/MuseScore/tree/main/fonts/musejazz |
 | Eugene | Mikko Patama | https://github.com/mikkopatama/eugenefont |
-| Leipzig | Etienne Darbellay, Jean-François Martin and Laurent Pugin | https://github.com/rism-digital/leipzig |
+| Leipzig | Etienne Darbellay, Jean-François Marti and Laurent Pugin | https://github.com/rism-digital/leipzig |
 | Sebastian | Florian Kretlow and Ben Byram-Wigfield | https://github.com/fkretlow/sebastian |
 | Golden Age | Don Rice | https://github.com/benwiggy/GoldenAge |
 | Finale Maestro, Finale Broadway | MakeMusic, Inc. | https://github.com/musescore/MuseScore/tree/main/fonts |
@@ -27,7 +27,7 @@ Dorico, Finale, MuseScore or Verovio, which are mentioned only to say where a fo
 
 Alto includes eight piano passages from free CC0 transcriptions in the [OpenScore Lieder catalogue](https://fourscoreandmore.org/openscore/lieder/).
 OpenScore distributes the transcriptions under its [CC0 1.0 public-domain dedication](https://github.com/OpenScore/Lieder/blob/main/LICENSE.txt).
-The historical editions used for these transcriptions are listed below.
+The historical editions used for these transcriptions are listed below. The OpenScore file for *Die Lotosblume* credits flutemouse as its transcriber.
 
 | Work | Source edition | Piano measures |
 | --- | --- | --- |
@@ -49,33 +49,38 @@ and faded to 2.5 s, and levelled. Details are in `alto/assets/piano/SOURCE.txt`.
 
 ## Other instrument recordings (`alto/assets/samples/`: marimba, vibraphone, flute, horn, viola_bowed, viola_plucked)
 
-The marimba, vibraphone, flute, French horn and viola recordings come from the Musical Instrument Samples of the University of Iowa
-Electronic Music Studios (https://theremin.music.uiowa.edu/MIS.html). The site states that these recordings "have been
-freely available on this website and may be downloaded and used for any projects, without restrictions." They were
-converted to mono, trimmed and faded for use here. The viola is the 2012 recording by Manuel Tabora, the flute the 2000 recording by Sonja Feig and the horn the 1997 recording by Jessica Wiskus. Details are in
-`alto/assets/samples/SOURCE.txt`.
+Lawrence Fritts created the University of Iowa Electronic Music Studios’ Musical Instrument Samples collection.
+The studio permits the recordings to be downloaded and used in any project without restrictions. Alto converted the samples
+to mono, trimmed them, and added fades. [University of Iowa collection and use terms](https://theremin.music.uiowa.edu/MIS.html)
+
+Andrew Thierauf played marimba and vibraphone, Manuel Tabora played viola, Sonja Feig played flute, and Jessica Wiskus
+played French horn. The recording dates, sources, and edits are documented in `alto/assets/samples/SOURCE.txt`.
 
 ## App icons (`alto/assets/icon.svg`, `alto/assets/icon-treble.svg`)
 
 The clef in each icon is an outline from the Noto Music font (Google, SIL Open Font License 1.1), set on a rounded
 square: the alto clef in `icon.svg` and the treble clef in `icon-treble.svg`.
 
-## Anki logo
-
-Alto’s exporter uses a monochrome outline adapted from Anki Software, LLC’s single-star logo. The artwork is distributed under the GNU Affero General
-Public License v3.0, included in `alto/assets/licenses/Anki-AGPL-3.0.txt`.
-[Anki](https://apps.ankiweb.net/) · [Original star artwork](https://github.com/ankitects/anki/blob/a78c31d2954f4e6d620e74e992ed994b0febe9d4/docs-site/media/anki-logo.svg) · [Anki logo credits](https://github.com/ankitects/anki/blob/main/LICENSE)
-
-Alto’s README badge uses Anki Software, LLC’s desktop launcher icon, resized from the [original Anki artwork](https://github.com/ankitects/anki/blob/a78c31d2954f4e6d620e74e992ed994b0febe9d4/qt/installer/app/resources/anki.png).
-
 ## Fonts used from the system, not bundled
 
 - Noto Music (Google, SIL OFL 1.1) draws the "Noto Music" notation style, and DejaVu Sans (Bitstream Vera license with
   DejaVu changes, free to redistribute) draws a few sharp and flat signs. Alto asks the operating system for them by name.
 
+## SuperMemo SM-2
+
+Alto’s SM-2 review scheduler is based on the spaced repetition algorithm Piotr Woźniak developed for SuperMemo in 1987.
+Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/) · [Original SM-2 specification](https://super-memory.com/english/ol/sm2.htm) · [SuperMemo’s attribution policy](https://www.supermemo.com/en/blog/licensing-and-copyrighting-of-supermemo-algorithms)
+
 ## Software dependencies
 
-- PySide6 / Qt for Python (LGPL-3.0 or GPL-3.0 or commercial), numpy (BSD-3-Clause). pytest (MIT) is used for tests only.
+- The desktop installers use Qt, PySide6, and Shiboken under LGPL-3.0. The installed `licenses/Qt/` directory
+  contains the license texts, upstream credits, source archive names and checksums, and instructions for replacing
+  the libraries. The matching source archives accompany the installers on the [Alto releases page](https://github.com/altosaurus/alto/releases).
+- Alto uses genanki to export Anki decks. Copyright © 2017 Kerrick Staley. The MIT license is installed at
+  `licenses/genanki/LICENSE.txt`.
+- Alto uses PyNaCl to verify update signatures. Its Apache License 2.0 is installed at `licenses/PyNaCl/LICENSE`.
+  PyNaCl bundles Frank Denis’s libsodium library. Its ISC license is installed at `licenses/libsodium/LICENSE.libsodium.txt`.
+- NumPy uses the BSD-3-Clause license. pytest (MIT) is used for tests only.
 
 ## Iconoir icons (`alto/ui/icons.py`)
 

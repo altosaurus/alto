@@ -1,11 +1,15 @@
 Instrument samples: University of Iowa Electronic Music Studios, Musical Instrument Samples
-(https://theremin.music.uiowa.edu/MIS.html). The source states the recordings are freely
+(https://theremin.music.uiowa.edu/MIS.html). Lawrence Fritts created the collection. The source states the recordings are freely
 available and may be used for any project, without restrictions.
 
 Used: marimba (yarn mallets, ff), vibraphone (sustain, ff), the viola, flute and French horn (see below).
 Converted to mono 22.05 kHz, silence trimmed from the start, cut to 2.2 s with a fade-out and levelled
 per instrument. For the marimba and vibraphone only every second semitone is stored (file names are MIDI
 note numbers); the app pitch-shifts the nearest stored note for the others.
+
+Marimba and vibraphone: Andrew Thierauf played both instruments. Daniel Frantz and Will Huff were the recording technicians.
+Marimba, March 20, 2013 (https://theremin.music.uiowa.edu/Mismarimba.html).
+Vibraphone, June 10, 2013 (https://theremin.music.uiowa.edu/Misvibraphone.html).
 
 Viola (viola_bowed and viola_plucked): University of Iowa Electronic Music Studios, Musical Instrument Samples,
 Viola (2012) (https://theremin.music.uiowa.edu/MISviola2012.html). Played by Manuel Tabora on a viola by Anton Krutz
