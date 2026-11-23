@@ -56,7 +56,7 @@
       {% if site.preview_pr %}
       <a class="dd-btn pr-link" href="{{ '/' | relative_url }}" aria-label="Documentation preview for PR #{{ site.preview_pr }}">
         <svg class="i" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M6 7v10m7-12h1a4 4 0 0 1 4 4v8M15 2l-3 3 3 3"/></svg>
-        PR #{{ site.preview_pr }}
+        pr #{{ site.preview_pr }}
       </a>
       {% else %}
       <div class="version" id="version-slot" data-version="{{ site.docs_version }}" data-root="{{ site.site_root }}"><span class="version-name">{{ site.docs_version }}</span></div>
