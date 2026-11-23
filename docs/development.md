@@ -575,6 +575,23 @@ home page, says `toc: false` in its front matter. `docs/api/index.md` is written
 
 The previous and next links at the bottom of each page follow the sidebar’s reading order.
 
+### Pull request previews
+
+On a PR’s **Conversation** tab, click **View rendered documentation** in the GitHub Actions bot comment.
+The **docs/preview** check links to the same site. After each push, the bot updates its comment with the commit
+it verified. If the build or deployment fails, the link opens the run log.
+
+**Docs check** builds the proposed merge with read-only permissions. **Publish docs preview** runs from the default
+branch, finds the open PR and its current head through GitHub, and publishes the rendered files to the preview fork.
+The preview for PR 97, for example, is served at `https://genedan.github.io/alto/pr-97/dev/`.
+Previously published previews remain accessible after the PR closes.
+
+To configure the publisher, set the upstream Actions variable `DOCS_PREVIEW_REPOSITORY` to the preview repository
+(`genedan/alto`). Set that repository’s Pages source to the root of its `docs-previews` branch with a
+`.nojekyll` file. Add a write deploy key to the preview repository and store the private key as
+`DOCS_PREVIEW_DEPLOY_KEY` in the upstream `docs-preview-publisher` environment. Restrict that environment to
+the `main` branch. Use a preview hostname separate from the production site, since the rendered content comes from PRs.
+
 ### Building the docs
 
 The plugin tutorials are not stored in Alto. They live in
