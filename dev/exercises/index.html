@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404421">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795405715">
   
 </head>
 <body>
@@ -689,6 +689,18 @@
 
 <p>With SM-2 or FSRS, a missed card returns later. If you grade correct answers yourself, choosing <strong>Hard</strong>, <strong>Good</strong>, or <strong>Easy</strong> schedules the card and advances to the next question. <a href="/alto/dev/practice/">Spaced repetition</a></p>
 
+<h2 id="midi-keyboard-input">MIDI keyboard input</h2>
+
+<p>On Linux, connect a USB MIDI keyboard or open the Virtual MIDI Piano Keyboard (VMPK). In VMPK, choose <strong>Edit → MIDI Connections</strong> and set <strong>MIDI OUT Driver</strong> to <strong>ALSA</strong>. In Alto, open <strong>MIDI</strong> in the exercise toolbar and select the keyboard’s output. VMPK may appear as <strong>MIDI Out out</strong>. You can play in the VMPK window while Alto receives the notes.</p>
+
+<ul>
+  <li><strong>Note Identification.</strong> Play the note on the staff. Any octave counts when <strong>Octave</strong> is off.</li>
+  <li><strong>Interval Construction.</strong> Play the missing endpoint in the requested octave. For a perfect fifth above C4, play G4.</li>
+  <li><strong>Scale Construction.</strong> Play the scale in the requested direction. <strong>Undo</strong> removes the last note. The final note submits the scale unless the question asks for whole and half steps. In that case, mark the steps on screen and choose <strong>Answer</strong>.</li>
+</ul>
+
+<p>Alto uses the exercise’s written spelling for matching pitches. On Ubuntu, install <code class="language-plaintext highlighter-rouge">alsa-utils</code> if the MIDI menu prompts for it. Reopen the menu after connecting a device. Choose <strong>MIDI → Off</strong> to disconnect, or leave the exercise.</p>
+
 <h2 id="note-identification">Note Identification</h2>
 
 <p>A note is drawn on a staff. Press the button with its name.</p>
@@ -926,9 +938,7 @@ Choose <strong>All</strong> to show every eligible answer for the current staff 
 
 <p>Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.</p>
 
-<p>On Ubuntu, connect a USB MIDI keyboard or start VMPK with its ALSA output enabled. Open <strong>MIDI</strong> in the exercise toolbar and choose the input. For a perfect fifth above C4, play G4. Each key press submits an answer, even while VMPK has focus. Alto checks the sounding pitch and octave and shows the accepted spelling on the staff. To practice choosing the spelling yourself, use the staff controls. Choose <strong>MIDI → Off</strong> to disconnect. Leaving the exercise also disconnects it.</p>
-
-<p>If the MIDI menu asks for <code class="language-plaintext highlighter-rouge">alsa-utils</code>, install it with <code class="language-plaintext highlighter-rouge">sudo apt install alsa-utils</code>. Reopen the menu after connecting a new device.</p>
+<p>You can also play the endpoint on a <a href="#midi-keyboard-input">MIDI keyboard</a>.</p>
 
 <p><strong>Clefs</strong>, <strong>Range</strong>, and <strong>Staff Key</strong> determine where the notes can appear. <strong>Display Mode</strong> stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under <strong>Quality</strong>, choose <strong>Interval and Quality</strong> for an exact spelling, <strong>Interval Only</strong> for a number, or <strong>Quality Only</strong> for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. <strong>Intervals</strong>, <strong>Accidentals</strong>, and <strong>Note Value</strong> control which spellings, written signs, and durations appear.</p>
 
@@ -1384,8 +1394,8 @@ from the signature, so a natural sign appears where the chord needs one.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404421" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404421" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795405715" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795405715" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
