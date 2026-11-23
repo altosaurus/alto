@@ -38,9 +38,14 @@ import pytest  # noqa: E402
 from PySide6.QtCore import (  # noqa: E402
     QEvent,
     QSettings,
+    Qt,
 )
 from PySide6.QtGui import QPalette  # noqa: E402
-from PySide6.QtWidgets import QApplication  # noqa: E402
+from PySide6.QtTest import QTest  # noqa: E402
+from PySide6.QtWidgets import (  # noqa: E402
+    QApplication,
+    QWidget,
+)
 
 from alto import settings  # noqa: E402
 from alto.audio import sounds  # noqa: E402
@@ -73,6 +78,25 @@ def app() -> QCoreApplication:
     return QApplication.instance() or QApplication([])
 
 
+def _let_go_of_the_mouse() -> None:
+    """
+    Release any mouse button that Qt still thinks is held when a test ends.
+
+    `QTest.mouseDClick` leaves the button held, and while one is, Qt sends no hover events, so a later test that points at a
+    button sees it never light up. A button is released over a spare window, which is closed again.
+    """
+    held = QApplication.mouseButtons()
+    if held == Qt.MouseButton.NoButton:
+        return
+    spare = QWidget()
+    spare.show()
+    for button in (Qt.MouseButton.LeftButton, Qt.MouseButton.RightButton, Qt.MouseButton.MiddleButton):
+        if held & button:
+            QTest.mouseRelease(spare, button)
+    spare.close()
+    spare.deleteLater()
+
+
 def _close_every_window() -> None:
     """Close and delete every window a test left open, so none is torn down by Qt after the application is gone."""
     if QApplication.instance() is None:
@@ -100,6 +124,36 @@ def _zoom_at_100() -> Iterator[None]:
     zoom._percent, zoom._base_font = zoom.DEFAULT, None
     if isinstance(app, QApplication) and font is not None:
         app.setFont(font)
+
+
+TEST_TIME_LIMIT = 8.0  # seconds a test may take, unless it is marked slow; about three times the slowest ordinary test on CI
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_runtest_call(item: pytest.Item) -> Iterator[None]:
+    """
+    Fail a test that takes longer than `TEST_TIME_LIMIT`, unless it is marked `slow` or `perf`, so the suite stays fast.
+
+    Parameters
+    ----------
+    item : pytest.Item
+        The test being run.
+
+    Yields
+    ------
+    None
+        Control, while the test runs.
+    """
+    start = time.perf_counter()
+    result = yield
+    took = time.perf_counter() - start
+    exempt = any(item.iter_markers(name=name) for name in ("slow", "perf"))
+    if took > TEST_TIME_LIMIT and not exempt:
+        pytest.fail(
+            f"The test took {took:.1f} s, over the limit of {TEST_TIME_LIMIT:.0f} s. Let animations finish with "
+            "motion.settle() instead of waiting, test less at once, or mark it @pytest.mark.slow if it must be thorough.",
+        )
+    return result
 
 
 @pytest.fixture(autouse=True)
@@ -182,6 +236,8 @@ def _isolated_state() -> Iterator[None]:
     look = (app.styleSheet(), QPalette(app.palette())) if isinstance(app, QApplication) else None
     yield
     _close_every_window()
+    if isinstance(app, QApplication):
+        _let_go_of_the_mouse()
     sounds.enabled = muted
     if isinstance(app, QApplication) and look is not None and app.styleSheet() != look[0]:
         app.setStyleSheet(look[0])  # a test that applied a theme leaves the next one the look it found

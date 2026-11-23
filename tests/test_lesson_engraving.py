@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import time
 from unittest.mock import patch
 
 import pytest
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import QColor, QPalette
 from PySide6.QtTest import QTest
+from PySide6.QtWidgets import (
+    QApplication,
+    QWidget,
+)
 
 from alto.lessons.clef_basics import CLEF_BASICS
 from alto.lessons.key_signatures import KEY_SIGNATURES
@@ -19,9 +23,6 @@ from alto.ui.lesson import StepView
 from alto.ui.notation import BY_KEY
 from alto.ui.staff import StaffWidget, _repaint_staffs
 from alto.ui.style import app_style
-
-if TYPE_CHECKING:
-    from PySide6.QtWidgets import QApplication
 
 
 @pytest.mark.parametrize(
@@ -251,6 +252,38 @@ def test_key_signatures_opening_matches_the_responsive_example(app: QApplication
     view.close()
 
 
+def point_at(
+    widget: QWidget,
+    place: QPoint,
+    *,
+    button: QWidget,
+    over: bool,
+) -> None:
+    """
+    Move the pointer to a place and wait until the button knows whether the pointer is over it.
+
+    The move reaches the widgets through the event loop, so on a busy machine a picture taken at once can show the button as it
+    was before the move.
+
+    Parameters
+    ----------
+    widget : QWidget
+        The widget to point at.
+    place : QPoint
+        Where in it.
+    button : QWidget
+        The button whose hover state to wait for. Keyword-only.
+    over : bool
+        Whether the pointer ends over the button. Keyword-only.
+    """
+    QTest.mouseMove(widget, place)
+    deadline = time.monotonic() + 2
+    while button.underMouse() != over and time.monotonic() < deadline:
+        QApplication.processEvents()
+    assert button.underMouse() == over
+    QApplication.processEvents()  # and let the style repaint it for its new state
+
+
 def test_paper_playback_uses_light_variant_in_dark_theme(app: QApplication, request: pytest.FixtureRequest) -> None:
     """
     Compare the rendered playback button before and after switching a live lesson to Studio Dark.
@@ -272,14 +305,14 @@ def test_paper_playback_uses_light_variant_in_dark_theme(app: QApplication, requ
     for key in ("studio", "studio_dark"):
         theme.apply_theme(key)
         app.processEvents()
-        QTest.mouseMove(view, QPoint(1, 1))
+        point_at(view, QPoint(1, 1), button=button, over=False)
         button.clearFocus()
         rest = button.grab().toImage()
         assert button.palette().buttonText().color() == QColor("#545a65")
         assert view.again.palette().buttonText().color() == app.palette().buttonText().color()
-        QTest.mouseMove(button, button.rect().center())
+        point_at(button, button.rect().center(), button=button, over=True)
         hover = button.grab().toImage()
-        QTest.mouseMove(view, QPoint(1, 1))
+        point_at(view, QPoint(1, 1), button=button, over=False)
         button.setFocus()
         focus = button.grab().toImage()
         button.setDown(True)

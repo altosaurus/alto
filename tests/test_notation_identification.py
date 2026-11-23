@@ -213,6 +213,7 @@ def test_select_none_clears_and_restores_notation_terms(app: QApplication, mode:
     assert not panel.select_none.isOn() and settings.notation.terms == set(CATALOG["Ornaments"])
 
 
+@pytest.mark.slow  # every term in every notation font: 1,600 pictures
 def test_each_notation_term_draws_a_highlight(app: QApplication, monkeypatch: pytest.MonkeyPatch) -> None:
     """
     Select every term individually and verify its saved question paints visible colored ink.
