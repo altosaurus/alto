@@ -204,8 +204,8 @@ begin
   end
   else if (ResultCode <> 0) and (ResultCode <> 1638) then  { 0: installed; 1638: a newer version was already there }
   begin
-    Result := Format('Alto needs the Microsoft Visual C++ Runtime, whose installer ended with code %d, so Alto was not installed.',
-      [ResultCode]);
+    Result := Format('Alto needs the Microsoft Visual C++ Runtime, whose installer ended with code %d, ' +
+      'so Alto was not installed.', [ResultCode]);
     Exit;
   end;
   if not RuntimeRestart and not RuntimeReady then
@@ -227,15 +227,15 @@ end;
   try again. }
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
-  Error: String;
+  Problem: String;
 begin
   Result := True;
   if (CurPageID = wpReady) and not WizardSilent and RuntimeNeeded then
   begin
-    Error := InstallRuntime(RuntimeDownload);
-    if Error <> '' then
+    Problem := InstallRuntime(RuntimeDownload);
+    if Problem <> '' then
     begin
-      MsgBox(Error, mbError, MB_OK);
+      MsgBox(Problem, mbError, MB_OK);
       Result := False;
     end;
   end;
