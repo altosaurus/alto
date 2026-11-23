@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795400453">
   
 </head>
 <body>
@@ -920,6 +920,52 @@ False
 0
 </code></pre>
 
+<h3 id="wheelzoomfollow">WheelZoom.follow</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">follow</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">QGuiApplication</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Watch the window that has the focus, and each window that gains it later, such as a dialog that opens.</p>
+
+<p>The filter goes on the windows, not on the application. A window is handed each wheel turn before the widget under the
+pointer is, so a turn anywhere in it is seen, while the many events that pass between the widgets inside it are not:
+a filter on the application runs for every one of those, which made building a page half as slow again.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">app</code> (<em>QGuiApplication</em>): The application whose windows to watch.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; handler = WheelZoom()
+&gt;&gt;&gt; handler.follow(app)
+</code></pre>
+
+<h3 id="wheelzoomwatch">WheelZoom.watch</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="n">window</span><span class="p">:</span> <span class="n">QWindow</span> <span class="o">|</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Zoom when the wheel turns with Ctrl held over a window.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">window</code> (<em>QWindow or None</em>): The window. None, which is what Qt passes when no window has the focus, does nothing.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; from PySide6.QtWidgets import QWidget
+&gt;&gt;&gt; widget = QWidget()
+&gt;&gt;&gt; widget.show()
+&gt;&gt;&gt; handler = WheelZoom()
+&gt;&gt;&gt; handler.watch(widget.windowHandle())
+&gt;&gt;&gt; handler.watch(None)
+</code></pre>
+
 <h3 id="wheelzoomeventfilter">WheelZoom.eventFilter</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span>
@@ -1270,8 +1316,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795400453" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795400453" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795400453">
   
 </head>
 <body>
@@ -672,8 +672,7 @@
 
 <p>The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: <code class="language-plaintext highlighter-rouge">play</code> starts an animation, <code class="language-plaintext highlighter-rouge">later</code> runs a step after a delay and <code class="language-plaintext highlighter-rouge">start_timer</code> starts a timer that
-does. A button given a key with <code class="language-plaintext highlighter-rouge">set_shortcut</code> shows as pressed for a moment when the key is pressed, then clicks. In the app
-they take their real time.</p>
+does. In the app they take their real time. A button is given its key with <code class="language-plaintext highlighter-rouge">set_shortcut</code>.</p>
 
 <p>Tests switch to instant motion with <code class="language-plaintext highlighter-rouge">set_instant</code>. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls <code class="language-plaintext highlighter-rouge">settle</code>. That runs everything waiting, in the order
@@ -912,7 +911,7 @@ RuntimeError: Motion is still going after 3 rounds.
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
 </code></pre></div></div>
 
-<p>Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.</p>
+<p>Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.</p>
 
 <p><strong>Parameters</strong></p>
 
@@ -928,6 +927,10 @@ RuntimeError: Motion is still going after 3 rounds.
 &gt;&gt;&gt; set_shortcut(button, key="Backspace")
 &gt;&gt;&gt; button.shortcut().toString()
 'Backspace'
+&gt;&gt;&gt; set_instant(True)
+&gt;&gt;&gt; held = QPushButton("Answer")
+&gt;&gt;&gt; set_shortcut(held, key="Return")  # in a test: the key clicks it at once
+&gt;&gt;&gt; set_instant(False)
 </code></pre>
 
 
@@ -1193,8 +1196,8 @@ RuntimeError: Motion is still going after 3 rounds.
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795400453" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795400453" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
