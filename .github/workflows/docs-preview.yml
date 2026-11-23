@@ -69,15 +69,18 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/site.zip"
           python3 .github/scripts/extract-docs-preview.py "$RUNNER_TEMP/site.zip" "$RUNNER_TEMP/preview"
 
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          repository: ${{ needs.locate.outputs.repository }}
-          ref: docs-previews
-          path: pages
-          ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
-
       - name: Publish and verify the live revision
-        run: bash .github/scripts/publish-docs-preview.sh
+        env:
+          DOCS_PREVIEW_DEPLOY_KEY: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
+        run: |
+          umask 077
+          ssh_dir=$(mktemp -d)
+          trap 'rm -rf "$ssh_dir"' EXIT
+          printf '%s\n' "$DOCS_PREVIEW_DEPLOY_KEY" > "$ssh_dir/key"
+          unset DOCS_PREVIEW_DEPLOY_KEY
+          gh api meta --jq '.ssh_keys[] | "github.com " + .' > "$ssh_dir/known_hosts"
+          export GIT_SSH_COMMAND="ssh -i '$ssh_dir/key' -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile='$ssh_dir/known_hosts'"
+          bash .github/scripts/publish-docs-preview.sh
 
   report:
     needs: [locate, publish]
