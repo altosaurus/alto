@@ -76,6 +76,11 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
 - The desktop installers use Qt, PySide6, and Shiboken under LGPL-3.0. The installed `licenses/Qt/` directory
   contains the license texts, upstream credits, source archive names and checksums, and instructions for replacing
   the libraries. The matching source archives accompany the installers on the [Alto releases page](https://github.com/altosaurus/alto/releases).
+- The Linux download contains system libraries from Ubuntu, copied unchanged from Ubuntu's packages, among them GLib,
+  PulseAudio, libsndfile, the X11 and XCB libraries, OpenSSL, and GCC's C++ runtime. Each keeps its own license. The
+  installed `licenses/Linux/` directory lists every library with its package, version, and checksum, and contains each
+  package's copyright file and the license texts they refer to. The Ubuntu source packages of the libraries under the LGPL
+  or GPL accompany the download on the [Alto releases page](https://github.com/altosaurus/alto/releases).
 - Alto uses genanki to export Anki decks. Copyright © 2017 Kerrick Staley. The MIT license is installed at
   `licenses/genanki/LICENSE.txt`.
 - Alto uses PyNaCl to verify update signatures. Its Apache License 2.0 is installed at `licenses/PyNaCl/LICENSE`.

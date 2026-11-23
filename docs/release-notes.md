@@ -37,6 +37,7 @@ Changes that are in the development docs and not in a release yet.
 {: .no-toc}
 
 - The Windows installer now uses the Microsoft Visual C++ Runtime installed on Windows. If Windows lacks it or has an older version, the installer downloads Microsoft's installer for it from Microsoft, checks Microsoft's signature, and runs it; Windows asks for administrator permission and Microsoft's window asks to accept Microsoft's license. This happens once, also when Alto updates itself. Alto now needs Windows 10 or later.
+- The Linux download is smaller: it no longer includes Qt's GTK 3 theme plugin, the GTK libraries it loaded, or Python's readline module, none of which Alto uses. It now includes the copyright and license terms of the system libraries it contains, in `licenses/Linux`, and each release publishes the Ubuntu source packages of the LGPL and GPL ones beside the download.
 - Alto no longer depends on NumPy, which makes the installed program about 35–40 MB smaller on Linux and Windows. Sound previews are mixed as quickly as before, and the staff's click map is built about four times faster. Notes made by pitch shifting or synthesis are now kept and reused instead of being made again each time they play, and the current instrument's missing notes are made while Alto is idle after it opens, so even their first play is quick. Previews of plugin instruments are kept too, until the plugin's recordings change.
 
 ### Fixed

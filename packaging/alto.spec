@@ -9,6 +9,11 @@
 #   - PyNaCl, which checks the signature of an update: it loads a compiled helper (`_cffi_backend`) by a name that PyInstaller cannot
 #     see from the imports, so without this the program does not start at all. `alto --self-test` and the build catch it if it breaks.
 #
+# On Linux, PyInstaller copies the system libraries that Python and Qt link to from the machine it runs on. Qt's GTK 3
+# theme plugin is left out (Alto draws its own dialogs), and with it the libraries only that plugin needed; Python's
+# readline module is left out too. ALTO_SYSTEM_LIBRARIES, if set, names a file in which the build lists the system
+# libraries that remain, for packaging/linux_libraries.py, which writes their notices and collects their sources.
+#
 # ALTO_ICON, if set, names the icon of the program: a .ico on Windows. It is not set on Linux, where the menu entry names the icon.
 #
 # On Windows, Microsoft's Visual C++ runtime (vcruntime140.dll, msvcp140.dll and the like) is left out: the program uses
@@ -16,11 +21,13 @@
 # (packaging/windows/alto.iss). ALTO_RUNTIME_FILE, if set, names a file in which the build writes what the
 # installer must check: the names of the runtime files left out, and the newest version among them, which the system's
 # copies must at least match.
+import json
 import os
 import re
 import sys
 from pathlib import Path
 
+from PyInstaller.depend.bindepend import get_imports
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy_metadata
 
 if sys.platform == "win32":
@@ -30,7 +37,8 @@ a = Analysis(
     ["launcher.py"],
     datas=collect_data_files("alto") + copy_metadata("alto") + copy_metadata("fsrs"),
     hiddenimports=["_cffi_backend", *collect_submodules("nacl")],
-    excludes=["tkinter", "pytest", "numpy"],  # numpy is for the tests only; Alto does not use it
+    # numpy is for the tests only; Alto does not use it. readline is for an interactive prompt, which Alto does not have.
+    excludes=["tkinter", "pytest", "numpy", "readline"],
 )
 # Qt's hooks collect optional plugins and their native libraries. Alto draws its own keyboard
 # and plays local PCM WAVs with QSoundEffect, which uses the platform audio output.
@@ -39,14 +47,49 @@ def unused_qt_component(destination):
     return (
         "virtualkeyboard" in destination.lower()
         or "ffmpeg" in name
-        or name in {"libqpdf.so", "qpdf.dll"}
+        or name in {"libqpdf.so", "qpdf.dll", "libqgtk3.so"}
         or name.startswith(("libqt6pdf.", "qt6pdf."))
         or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*)", name)
     )
 
 
+# A system library is one copied from the build machine's own library folders into the top of the bundle, not Python's own
+# files (which a system Python also keeps there) or a wheel's.
+SYSTEM_FOLDERS = ("/lib/", "/lib64/", "/usr/lib/", "/usr/lib64/")
+
+
+def system_library(name, source):
+    return (
+        sys.platform.startswith("linux")
+        and "/" not in name
+        and not name.startswith("libpython")
+        and os.path.realpath(source).startswith(SYSTEM_FOLDERS)
+    )
+
+
+def linked_names(entries):
+    # ldd lists every library a file loads, directly or through another library.
+    return {Path(name).name for _name, source, _kind in entries for name, _path in get_imports(source)}
+
+
+unused = [entry for entry in a.binaries if unused_qt_component(entry[0])]
 a.binaries = [entry for entry in a.binaries if not unused_qt_component(entry[0])]
 a.datas = [entry for entry in a.datas if not unused_qt_component(entry[0])]
+# Drop the system libraries that only the components left out needed, keeping any that something else still loads.
+if sys.platform.startswith("linux"):
+    still_needed = linked_names(entry for entry in a.binaries if not system_library(entry[0], entry[1]))
+    only_unused = linked_names(unused) - still_needed
+    a.binaries = [
+        entry for entry in a.binaries if not (system_library(entry[0], entry[1]) and Path(entry[0]).name in only_unused)
+    ]
+    if os.environ.get("ALTO_SYSTEM_LIBRARIES"):
+        Path(os.environ["ALTO_SYSTEM_LIBRARIES"]).write_text(
+            json.dumps(
+                [{"name": name, "source": source} for name, source, _kind in a.binaries if system_library(name, source)],
+                indent=1,
+            ),
+            encoding="utf-8",
+        )
 
 # Microsoft's C and C++ runtime: the Visual C++ runtime, and the Universal C runtime that Windows 10 and later include.
 MICROSOFT_RUNTIME = re.compile(
@@ -115,3 +158,5 @@ for path in Path(coll.name).rglob("*"):
         raise SystemExit(f"Microsoft's runtime must not be in the desktop package: {path}")
     if path.name == "numpy" and path.is_dir():
         raise SystemExit(f"numpy must not be in the desktop package: {path}")
+    if re.match(r"(?:lib)?(?:readline|gtk-3|gdk-3)\b", path.name):
+        raise SystemExit(f"readline and GTK must not be in the desktop package: {path}")

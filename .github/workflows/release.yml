@@ -85,6 +85,7 @@ jobs:
           - **Linux:** `alto-*-linux-x86_64.tar.gz`. Unpack it and run `sh install.sh install`. `sh install.sh uninstall` removes it and keeps your data; add `--purge` to delete that too.
           - **Windows:** `alto-*-windows-x64-setup.exe`. Windows may say it protects your PC because the publisher is unknown, as the installer is not signed yet: choose **More info**, then **Run anyway**.
           - Qt and PySide/Shiboken source archives (`*-everywhere-src-*.tar.xz`) correspond to the Qt libraries in the installers. Versions and checksums are listed in the installed `licenses/Qt/README.txt`.
+          - `alto-*-linux-x86_64-library-sources.tar` has the Ubuntu source packages of the LGPL and GPL system libraries in the Linux download. They are listed in the installed `licenses/Linux/README.txt`.
           - `SHA256SUMS` has the checksum of each file, and `SHA256SUMS.sig` is its signature. A copy of Alto that updates itself checks the signature first.
           NOTES
 
@@ -92,5 +93,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/SHA256SUMS dist/SHA256SUMS.sig \
+          gh release create "${GITHUB_REF_NAME}" dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/alto-*-library-sources.tar dist/SHA256SUMS dist/SHA256SUMS.sig \
             --title "Alto ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag
