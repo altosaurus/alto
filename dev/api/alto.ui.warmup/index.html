@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795460563">
   
 </head>
 <body>
@@ -685,6 +685,9 @@ several sizes, so a first visit could spend a tenth of a second looking for font
 size the interface uses, a little at a time while nothing else is happening, makes the first visit to a page about as quick as the
 second.</p>
 
+<p>Notes the current instrument has no recording of are made by shifting the nearest recording the first time they play, which
+takes a few tens of milliseconds each. They are made here too, one per step, so that even a first play is quick.</p>
+
 <p><strong>Examples</strong></p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">warmed</span> <span class="o">=</span> <span class="p">[]</span>
@@ -707,7 +710,10 @@ second.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">warmup_steps</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="bp">None</span><span class="p">]]</span>
 </code></pre></div></div>
 
-<p>List the steps of the warm-up: the application’s own font size and each style sheet size, plain and bold, at the zoom.</p>
+<p>List the steps of the warm-up.</p>
+
+<p>They draw a staff; lay out text in the application’s own font size and each style sheet size, plain and bold, at the zoom;
+and, while sound is on, make the notes the current instrument has no recording of.</p>
 
 <p><strong>Returns</strong></p>
 
@@ -717,8 +723,9 @@ second.</p>
 
 <p><strong>Examples</strong></p>
 
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">warmup_steps</span><span class="p">())</span>  <span class="c1"># a staff, then the application's size and the ten style sheet sizes, in two weights
-</span><span class="go">23
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">notes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sounds</span><span class="p">.</span><span class="n">unrecorded</span><span class="p">())</span> <span class="k">if</span> <span class="n">sounds</span><span class="p">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">warmup_steps</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">22</span> <span class="o">+</span> <span class="n">notes</span>  <span class="c1"># the staff, eleven sizes in two weights, and the notes
+</span><span class="go">True
 </span></code></pre></div></div>
 
 <h2 id="start">start</h2>
@@ -1070,8 +1077,8 @@ owner is deleted first (the window closed), the rest of the steps are dropped.</
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795460563" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795460563" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

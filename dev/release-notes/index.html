@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795460563">
   
 </head>
 <body>
@@ -706,6 +706,13 @@ Each release’s downloads are on its GitHub release.</p>
   <li>The Pitches and Notes lesson labels C and brackets its neighboring pair of black keys before asking learners to name the next white key.</li>
 </ul>
 
+<h3 class="no-toc" id="changed">Changed</h3>
+
+<ul>
+  <li>The Windows installer now uses the Microsoft Visual C++ Runtime installed on Windows. If Windows lacks it or has an older version, the installer downloads Microsoft’s installer for it from Microsoft, checks Microsoft’s signature, and runs it; Windows asks for administrator permission and Microsoft’s window asks to accept Microsoft’s license. This happens once, also when Alto updates itself. Alto now needs Windows 10 or later.</li>
+  <li>Alto no longer depends on NumPy, which makes the installed program about 35–40 MB smaller on Linux and Windows. Sound previews are mixed as quickly as before, and the staff’s click map is built about four times faster. Notes made by pitch shifting or synthesis are now kept and reused instead of being made again each time they play, and the current instrument’s missing notes are made while Alto is idle after it opens, so even their first play is quick. Previews of plugin instruments are kept too, until the plugin’s recordings change.</li>
+</ul>
+
 <h3 class="no-toc" id="fixed">Fixed</h3>
 
 <ul>
@@ -778,7 +785,7 @@ notation (1̂–7̂), function names (Tonic, Supertonic, and so on), altered deg
 Note-name previews have visible text labels.</li>
 </ul>
 
-<h3 class="no-toc" id="changed">Changed</h3>
+<h3 class="no-toc" id="changed-1">Changed</h3>
 
 <ul>
   <li>
@@ -853,7 +860,7 @@ main button names the visitor’s system and goes to the right file, with the ot
 applies to the exercise, the lessons and the reference.</li>
 </ul>
 
-<h3 class="no-toc" id="changed-1">Changed</h3>
+<h3 class="no-toc" id="changed-2">Changed</h3>
 
 <ul>
   <li>The notation-font previews in Settings use the DSCH motif (D, E♭, C, B) in treble clef.</li>
@@ -1302,8 +1309,8 @@ installer is not signed, so Windows may warn about an unknown publisher the firs
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795460563" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795460563" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

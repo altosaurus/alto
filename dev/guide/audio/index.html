@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795460563">
   
 </head>
 <body>
@@ -700,11 +700,15 @@ header (the <strong>RIFF</strong> container) saying the rate, depth and channels
 which is all <code class="language-plaintext highlighter-rouge">audio.py</code> needs:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">wave</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">getnframes</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">"&lt;i2"</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">/</span> <span class="mi">32768</span>
+    <span class="n">pcm</span> <span class="o">=</span> <span class="n">array</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="s">"h"</span><span class="p">)</span>  <span class="c1"># signed 16-bit integers
+</span>    <span class="n">pcm</span><span class="p">.</span><span class="n">frombytes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">getnframes</span><span class="p">()))</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="o">/</span> <span class="mi">32768</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pcm</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">"&lt;i2"</code> means “little-endian signed 16-bit integer”; dividing by 32,768 turns the integers into floating-point numbers between
--1 and 1, which are easier to compute with. Writing does the reverse: multiply by 32,767 and store as <code class="language-plaintext highlighter-rouge">"&lt;i2"</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">array.array("h")</code> holds signed 16-bit integers. A WAV file stores them little-endian, least significant byte first, and <code class="language-plaintext highlighter-rouge">wave</code>
+hands them over in the computer’s own byte order, swapping them itself on a big-endian computer, which is the order <code class="language-plaintext highlighter-rouge">array</code> reads.
+Dividing by 32,768 turns the integers into floating-point numbers between -1 and 1, which are easier to compute with. Writing does
+the reverse: multiply by 32,767 and store as 16-bit integers, which <code class="language-plaintext highlighter-rouge">wave</code> writes little-endian.</p>
 
 <h3 id="the-sampling-theorem-and-aliasing">The sampling theorem and aliasing</h3>
 
@@ -774,8 +778,11 @@ of these, since each note is played once at one level.</p>
 
 <ol>
   <li><strong><code class="language-plaintext highlighter-rouge">_note_file</code></strong> returns the recording’s path if that note has one. If it does not, it picks the <em>nearest</em> recorded note and
-makes a new WAV by shifting its pitch (below), saved in <code class="language-plaintext highlighter-rouge">alto_sounds</code> in the system temporary folder. The piano is special:
-beyond two semitones from a recording it is synthesized instead (below).</li>
+makes a new WAV by shifting its pitch (below), saved in <code class="language-plaintext highlighter-rouge">alto_sounds</code> in the system temporary folder and reused after that.
+The file’s name includes the size and modification time of the recording it came from, so a plugin update that replaces a
+recording gets a new file. The piano is special: beyond two semitones from a recording it is synthesized instead (below).
+Making a note takes a few tens of milliseconds, so <code class="language-plaintext highlighter-rouge">alto.ui.warmup</code> makes the current instrument’s missing notes ahead of
+time (<code class="language-plaintext highlighter-rouge">Sounds.unrecorded</code> and <code class="language-plaintext highlighter-rouge">Sounds.prepare</code>), one per idle moment after the window opens.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">_effect</code></strong> wraps the file in a <code class="language-plaintext highlighter-rouge">QSoundEffect</code> the first time and keeps it, so a note is loaded once.
 <strong><code class="language-plaintext highlighter-rouge">QSoundEffect</code></strong> is Qt Multimedia’s class for short, uncompressed sounds that must start with low delay: it loads the whole
 file into memory, so <code class="language-plaintext highlighter-rouge">play()</code> is quick. Qt has two others: <code class="language-plaintext highlighter-rouge">QMediaPlayer</code> streams longer, compressed audio and starts slower,
@@ -785,13 +792,22 @@ and <code class="language-plaintext highlighter-rouge">QAudioSink</code> is a lo
 <code class="language-plaintext highlighter-rouge">sounds.enabled</code> is the master switch the sound button controls; <code class="language-plaintext highlighter-rouge">force=True</code> plays anyway, for the instrument preview.</li>
 </ol>
 
+<p>A <strong>preview</strong> (the phrase played when you choose an instrument, and the sequences in some exercises) is one WAV with every note
+in it, so the notes stay evenly spaced whatever the computer is doing. <code class="language-plaintext highlighter-rouge">_preview_file</code> mixes it without leaving 16-bit integers:
+it reads the part of each note that is heard, fades out its tail, and adds the notes together with <code class="language-plaintext highlighter-rouge">map(operator.add, ...)</code>, so
+Python’s own C code does nearly all the work, at the rate the recordings share, so nothing is resampled. That is about as quick
+as NumPy would be. The clip is kept under a name made of everything it depends on, so a phrase is mixed once.</p>
+
 <h3 id="pitch-shifting-by-resampling">Pitch shifting by resampling</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shift_pitch</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">semitones</span><span class="p">):</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">semitones</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
-    <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">interp</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)),</span> <span class="n">samples</span><span class="p">)</span>
-</code></pre></div></div>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="n">ceil</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_interpolate</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">)</span>  <span class="c1"># the value at 0, ratio, 2 * ratio, ...
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">_interpolate</code> takes each position <code class="language-plaintext highlighter-rouge">x</code>, the sample <code class="language-plaintext highlighter-rouge">a</code> just before it and the one after, and returns <code class="language-plaintext highlighter-rouge">a + (after - a) * (x - i)</code>,
+where <code class="language-plaintext highlighter-rouge">i</code> is the whole part of <code class="language-plaintext highlighter-rouge">x</code>: a straight line between the two neighbors.</p>
 
 <p>To raise a recording by two semitones, read it 12% faster: take the samples at positions 0, 1.122, 2.245, … and interpolate
 between neighbors. This is <strong>resampling</strong>, and it is the simplest pitch shifter. It has two well-known side effects: the
@@ -805,7 +821,7 @@ two semitones on a flute or a viola neither is noticeable, which is why Alto shi
   <li><strong>Phase vocoder</strong>: works in the frequency domain, so it can change pitch without changing duration, at some cost in clarity.</li>
   <li><strong>PSOLA</strong> (<em>pitch-synchronous overlap-add</em>): cuts the sound into one-period grains and overlaps them at new spacing; good for
 speech and single voices.</li>
-  <li><strong>Better interpolation</strong>: <code class="language-plaintext highlighter-rouge">np.interp</code> is <strong>linear interpolation</strong>, which smooths the high frequencies slightly. Sinc or
+  <li><strong>Better interpolation</strong>: drawing straight lines is <strong>linear interpolation</strong>, which smooths the high frequencies slightly. Sinc or
 polynomial interpolation is more accurate (a polyphase resampler such as <code class="language-plaintext highlighter-rouge">scipy.signal.resample_poly</code>).</li>
 </ul>
 
@@ -816,13 +832,20 @@ waves, one per partial. The code has several pieces of real physics, each one li
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f0</span> <span class="o">=</span> <span class="mf">440.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">((</span><span class="n">midi</span> <span class="o">-</span> <span class="mi">69</span><span class="p">)</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">17</span><span class="p">):</span>  <span class="c1"># the first 16 partials
-</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">inharm</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>  <span class="c1"># stiff strings: partials sit slightly sharp
+</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">inharm</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>  <span class="c1"># stiff strings: partials sit slightly sharp
 </span>    <span class="n">amp</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span><span class="o">**</span><span class="mf">1.15</span>  <span class="c1"># higher partials are quieter
 </span>    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">amp</span> <span class="o">*=</span> <span class="mf">0.3</span>  <span class="c1"># the hammer strikes ~1/7 along the string, which suppresses these
 </span>    <span class="n">decay</span> <span class="o">=</span> <span class="mf">2.2</span> <span class="o">+</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="p">(</span><span class="n">midi</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.03</span>  <span class="c1"># higher partials, and higher notes, die faster
+</span>    <span class="n">phase</span> <span class="o">=</span> <span class="n">rng</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># one hammer strikes both strings, so they start together
 </span>    <span class="k">for</span> <span class="n">detune</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.0008</span><span class="p">,</span> <span class="mf">0.0008</span><span class="p">):</span>  <span class="c1"># two strings per note, slightly apart: the shimmer
-</span>        <span class="n">out</span> <span class="o">+=</span> <span class="n">amp</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">detune</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">phase</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">decay</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+</span>        <span class="c1"># amp * 0.5 * sin(2π f (1 + detune) t + phase) * exp(-decay t), made one sample at a time
+</span>        <span class="n">step</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">detune</span><span class="p">)</span> <span class="o">/</span> <span class="n">SAMPLE_RATE</span>
+        <span class="n">turn</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">math</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">step</span><span class="p">),</span> <span class="n">math</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="n">step</span><span class="p">))</span> <span class="o">*</span> <span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">decay</span> <span class="o">/</span> <span class="n">SAMPLE_RATE</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">complex</span><span class="p">(</span><span class="n">math</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">),</span> <span class="n">math</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">z</span><span class="p">.</span><span class="n">imag</span>
+            <span class="n">z</span> <span class="o">*=</span> <span class="n">turn</span>
 </code></pre></div></div>
 
 <ul>
@@ -836,8 +859,13 @@ short burst of <strong>filtered noise</strong> for the hammer’s thump (white n
 and a 50 ms fade-out so the file does not end with a click.</li>
 </ul>
 
+<p>Alto computes this in plain Python, without NumPy: multiplying a complex number by the same small rotation, which also shrinks
+it a little, traces a decaying sine one sample at a time, so no sine or exponential is computed per sample. A note takes a fraction
+of a second, and the result is saved, so each note is made once.</p>
+
 <p>You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesized middle C
-is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz):</p>
+is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz). This uses
+NumPy, which the tests install (<code class="language-plaintext highlighter-rouge">pip install -e ".[dev]"</code>) and Alto itself does not need:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">from</span> <span class="nn">alto.audio</span> <span class="kn">import</span> <span class="n">synth_piano</span><span class="p">,</span> <span class="n">SAMPLE_RATE</span>
@@ -1071,8 +1099,8 @@ of the recordings Alto ships.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795460563" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795460563" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

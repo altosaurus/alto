@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795460563">
   
 </head>
 <body>
@@ -1639,6 +1639,13 @@ prompt); its <code class="language-plaintext highlighter-rouge">AppId</code> in 
 whether to also remove the practice history (<code class="language-plaintext highlighter-rouge">%APPDATA%\Alto</code>) and the settings (<code class="language-plaintext highlighter-rouge">HKEY_CURRENT_USER\Software\alto</code>); a silent
 uninstall keeps them unless it is given <code class="language-plaintext highlighter-rouge">/PURGE=1</code>. The installer is not signed, so Windows shows an “unknown publisher” warning.</p>
 
+<p>Microsoft’s Visual C++ runtime comes from Windows, not from the installer. <code class="language-plaintext highlighter-rouge">packaging/alto.spec</code> leaves out the copies that Python,
+Qt and Shiboken bring, fails the build if one remains, and records which runtime files the program needs and the newest version
+among them. The installer checks that Windows has them, at least that new, and otherwise downloads Microsoft’s Visual C++
+Redistributable, checks Microsoft’s signature on it and runs it, both in an ordinary install and in the silent install of an update.
+The build test runs that step once with <code class="language-plaintext highlighter-rouge">/RUNTIMETEST=1</code>, so it needs the internet. Alto does not use NumPy, which is only a test
+dependency.</p>
+
 <h3 id="signing-releases-once">Signing releases, once</h3>
 
 <p>A packaged copy of Alto updates itself, and it installs only what is signed with a key that came with it. The key pair is made once:</p>
@@ -1795,8 +1802,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795460563" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795460563" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
