@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795406885">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795436810">
   
 </head>
 <body>
@@ -43,7 +43,9 @@
       <span>Alto</span>
     </a>
     <div class="top-actions">
+      
       <div class="version" id="version-slot" data-version="dev" data-root="/alto"><span class="version-name">dev</span></div>
+      
       <div class="dd" id="theme-dd">
         <button type="button" class="dd-btn icon" id="theme-button" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-menu" aria-label="Color theme" title="Color theme"><svg class="i" width="18" height="18" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <div class="dd-menu" id="theme-menu" role="menu" hidden>
@@ -1473,6 +1475,22 @@ home page, says <code class="language-plaintext highlighter-rouge">toc: false</c
 
 <p>The previous and next links at the bottom of each page follow the sidebar’s reading order.</p>
 
+<h3 id="pull-request-previews">Pull request previews</h3>
+
+<p>On a PR’s <strong>Conversation</strong> tab, click <strong>View rendered documentation</strong> in the GitHub Actions bot comment.
+The <strong>docs/preview</strong> check links to the same site. After each push, the bot updates its comment with the commit
+it verified. If the build or deployment fails, the link opens the run log.</p>
+
+<p><strong>Docs check</strong> builds the proposed merge with read-only permissions. <strong>Publish docs preview</strong> runs from the default
+branch, finds the open PR and its current head through GitHub, and publishes the rendered files to the preview fork.
+The preview for PR 97, for example, is served at <code class="language-plaintext highlighter-rouge">https://genedan.github.io/alto/pr-97/dev/</code>.
+Previously published previews remain accessible after the PR closes.</p>
+
+<p>The file <code class="language-plaintext highlighter-rouge">.github/docs-preview-repository</code> names the preview repository (<code class="language-plaintext highlighter-rouge">genedan/alto</code>). Set that repository’s Pages source to the root of its <code class="language-plaintext highlighter-rouge">docs-previews</code> branch with a
+<code class="language-plaintext highlighter-rouge">.nojekyll</code> file. Add a write deploy key to the preview repository and store the private key as
+<code class="language-plaintext highlighter-rouge">DOCS_PREVIEW_DEPLOY_KEY</code> in the upstream <code class="language-plaintext highlighter-rouge">docs-preview-publisher</code> environment. Restrict that environment to
+the <code class="language-plaintext highlighter-rouge">main</code> branch. Use a preview hostname separate from the production site, since the rendered content comes from PRs.</p>
+
 <h3 id="building-the-docs">Building the docs</h3>
 
 <p>The plugin tutorials are not stored in Alto. They live in
@@ -1777,8 +1795,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795406885" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795406885" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795436810" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795436810" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
