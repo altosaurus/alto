@@ -123,7 +123,8 @@ their own licenses. See LGPL-3.0-only.txt, GPL-3.0-only.txt, and upstream-notice
 You may modify these libraries, replace them with compatible builds, and reverse engineer Alto to debug those
 modifications. Close Alto first. On Windows, the Qt libraries are under _internal/PySide6. On Linux they are
 under _internal/PySide6/Qt/lib. Preserve the relative layout, filenames, and ABI when replacing the libraries.
-The binding extensions are under _internal/PySide6 and _internal/shiboken6.
+The binding extensions are under _internal/PySide6 and _internal/shiboken6, and so are the bindings' Python
+modules, as .py files that can be replaced with modified ones in the same way.
 
 Download the corresponding sources alongside this installer on Alto's GitHub release page:
 https://github.com/altosaurus/alto/releases/tag/v{version("alto")}

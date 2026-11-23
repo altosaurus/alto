@@ -39,7 +39,12 @@ a = Analysis(
     hiddenimports=["_cffi_backend", *collect_submodules("nacl")],
     # numpy is for the tests only; Alto does not use it. readline is for an interactive prompt, which Alto does not have.
     excludes=["tkinter", "pytest", "numpy", "readline"],
+    # PySide's and Shiboken's Python modules are kept as .py files in _internal, not compiled into the program, so that they can be
+    # replaced with modified ones like the Qt libraries (LGPL-3; see licenses/Qt/README.txt).
+    module_collection_mode={"PySide6": "py", "shiboken6": "py"},
 )
+if [name for name, *_ in a.pure if name.split(".")[0] in {"PySide6", "shiboken6"}]:
+    raise SystemExit("PySide6 and shiboken6 modules must be kept as .py files, not compiled into the program")
 # Qt's hooks collect optional plugins and their native libraries. Alto draws its own keyboard
 # and plays local PCM WAVs with QSoundEffect, which uses the platform audio output. Its windows are drawn without OpenGL,
 # so Qt's software OpenGL renderer for Windows (opengl32sw.dll, a build of Mesa) is left out too.
