@@ -128,6 +128,7 @@ def test_the_packages_carry_the_notices_of_python_its_packages_and_the_native_co
         assert f'("{package}", "LICENSE", "{package}/LICENSE")' in helper
     for source in (
         "/python/cpython/v{python}/Doc/license.rst",
+        "/python/cpython/v{python}/Modules/_hacl/{name}",
         "https://pypi.org/pypi/certifi/{certifi}/json",
         "https://www.mozilla.org/media/MPL/2.0/index.txt",
         "/yaml/libyaml/{libyaml}/License",
@@ -138,6 +139,7 @@ def test_the_packages_carry_the_notices_of_python_its_packages_and_the_native_co
     ):
         assert source in helper
     assert '"notices.json"' in helper and '"README.txt"' in helper
+    assert '"Python/HACL-star.txt"' in helper  # HACL*'s MIT notice, which CPython's license.rst does not list
     for script in ("build-linux.sh", "build-windows.ps1"):
         text = (ROOT / "scripts" / script).read_text(encoding="utf-8")
         assert "dependency_licenses.py" in text and "copy" in text and "verify" in text
