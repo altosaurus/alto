@@ -50,6 +50,7 @@ jobs:
           release=$(python3 scripts/docs_site.py latest $(git tag --list 'v*'))
           printf 'url: %s\nsite_root: %s\nbaseurl: %s/dev\ndocs_version: dev\napp_version: "%s"\n' \
             "$host" "$root" "$root" "${release#v}" > version.yml
+          printf 'preview_pr: %s\n' "$PR" >> version.yml
           bundle exec jekyll build --source docs --destination site/dev --config docs/_config.yml,version.yml
           printf '%s\n' "$HEAD_SHA" > site/dev/commit.txt
           python3 scripts/docs_site.py finish site --root-files docs/site-root --site-url "$host$root"
