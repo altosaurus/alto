@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795380047">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
   
 </head>
 <body>
@@ -678,7 +678,11 @@
 
 <h2 id="answerbank">AnswerBank</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AnswerBank</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AnswerBank</span><span class="p">(</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">show_all_rows</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div></div>
 
 <p>Bases: <code class="language-plaintext highlighter-rouge">QScrollArea</code></p>
@@ -701,12 +705,13 @@
 
 <p><strong>Constructor</strong></p>
 
-<p>Create a bank that shows at most four rows before scrolling.</p>
+<p>Create a bank that can show all rows or scroll longer lists.</p>
 
 <p><strong>Parameters</strong></p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">parent</code> (<em>QWidget or None, default None</em>): The widget that owns the bank.</li>
+  <li><code class="language-plaintext highlighter-rouge">show_all_rows</code> (<em>bool, default False</em>): Let the bank grow to fit every row. Keyword-only.</li>
 </ul>
 
 <p><strong>Constructor examples</strong></p>
@@ -974,8 +979,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795380047" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795380047" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

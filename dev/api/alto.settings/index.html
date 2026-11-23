@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795380047">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
   
 </head>
 <body>
@@ -911,6 +911,7 @@ instance of it (<code class="language-plaintext highlighter-rouge">note_names</c
     <span class="o">*</span><span class="p">,</span>
     <span class="n">key_signatures</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">}),</span>
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">'letters'</span><span class="p">,</span>
+    <span class="n">minor_degrees</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">accidentals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
     <span class="n">require_octave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1930,8 +1931,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795380047" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795380047" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

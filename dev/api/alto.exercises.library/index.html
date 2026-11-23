@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795380047">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
   
 </head>
 <body>
@@ -2444,6 +2444,108 @@ True
 True
 </code></pre>
 
+<h2 id="rythmicequations">RythmicEquations</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RythmicEquations</span><span class="p">(</span><span class="n">ChoiceExercise</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Complete arithmetic equations with written note values.</p>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; q = RythmicEquations().generate(random.Random(2))
+&gt;&gt;&gt; "_" in q.prompt and q.answer in q.choices
+True
+</code></pre>
+
+<h3 id="rythmicequationsinstructions">RythmicEquations.instructions</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">instructions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Explain how to complete the equation with a button or its shortcut.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: Instructions for the exercise.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; "keys" in RythmicEquations().instructions()
+True
+</code></pre>
+
+<h3 id="rythmicequationscard_prompt">RythmicEquations.card_prompt</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">card_prompt</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="n">Question</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Ask for the missing note or rest on an exported card.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">question</code> (<em>Question</em>): The equation on the card.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The instruction shown above the equation.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+'Which note or rest balances the equation?'
+</code></pre>
+
+<h3 id="rythmicequationspractice_signature">RythmicEquations.practice_signature</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">practice_signature</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Keep review questions tied to the options that generated them.</p>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>str</em>: The selected operators and symbols, or an empty string for the original defaults.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().practice_signature()
+''
+</code></pre>
+
+<h3 id="rythmicequationsmake_question">RythmicEquations.make_question</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_question</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="p">.</span><span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Question</span>
+</code></pre></div></div>
+
+<p>Write a rhythm equation and hide one of its note values.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rng</code> (<em>random.Random</em>): Chooses the note value, operation, and blank position.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>Question</em>: The equation and the note values available as answers.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; RythmicEquations().make_question(random.Random(0)).prompt.count("_")
+1
+</code></pre>
+
 
           
           
@@ -2609,8 +2711,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795380047" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795380047" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

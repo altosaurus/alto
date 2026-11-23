@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795380047">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795399366">
   
 </head>
 <body>
@@ -955,6 +955,31 @@ False
 False
 </code></pre>
 
+<h2 id="rhythm_picture">rhythm_picture</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rhythm_picture</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValuePictures</span> <span class="o">|</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Render a single note, rest, tied pair, or beamed pair from an equation term.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">term</code> (<em>str</em>): The stored term, with a tilde between tied notes or a bar between beamed notes.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>ValuePictures or None</em>: The engraved term, or None for an operator, numeral, or blank.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; rhythm_picture("eighth|eighth").beam_count
+1
+</code></pre>
+
 <h2 id="keysignaturepicture">KeySignaturePicture</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">KeySignaturePicture</span><span class="p">(</span>
@@ -1535,8 +1560,8 @@ False
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795380047" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795380047" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795399366" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795399366" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
