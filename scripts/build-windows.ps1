@@ -139,7 +139,14 @@ $Target = Join-Path $Work "installed"
 $Data = Join-Path $env:APPDATA "Alto"
 $Quiet = @("/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART")
 $InstallLog = Join-Path $Work "install.log"
-RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target", "/RUNTIMETEST=1", "/LOG=$InstallLog"))
+try {
+    RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target", "/RUNTIMETEST=1", "/LOG=$InstallLog"))
+}
+catch {
+    # Exit code 7 means the runtime step stopped the installation: the log says why.
+    if (Test-Path $InstallLog) { Get-Content $InstallLog | Select-String -Pattern "Visual C\+\+|Runtime|Microsoft|download|Exception|error|code" | ForEach-Object { Write-Host $_ } }
+    throw
+}
 if (-not (Test-Path (Join-Path $Target "alto.exe"))) { throw "The installer did not install alto.exe in $Target" }
 if (-not (Select-String -Path $InstallLog -SimpleMatch "The Microsoft Visual C++ Runtime is ready." -Quiet)) {
     Get-Content $InstallLog | Select-String -Pattern "Visual C\+\+|Runtime" | ForEach-Object { Write-Host $_ }
