@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795436810">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
   
   <script defer src="/alto/dev/assets/vendor/temml-0.14.0/temml.min.js"
           onload="temml.renderMathInElement(document.querySelector('article'), {fences: '(', annotate: true})"></script>
@@ -1049,6 +1049,8 @@ The scheduler uses the same intervals as the corresponding grade buttons.</p>
 
 <h2 id="sm-2">SM-2</h2>
 
+<p>Alto’s SM-2 scheduler is based on Piotr Woźniak’s algorithm. Algorithm SM-2, © SuperMemo World, 1991. <a href="https://www.supermemo.com/">SuperMemo</a></p>
+
 <p><strong>SuperMemo 2 (SM-2)</strong> keeps a count of successive successful reviews, the last interval in days, and an <strong>ease factor</strong> \(E\) for each card. A new card starts with \(E=2.5\). During calibration, Alto grades a correct first answer Good and a miss Again. Under <strong>Settings → Practice</strong>, select <strong>Grade correct answers with Hard, Good, or Easy</strong> to choose the grade yourself. Each button shows its interval above it. A wrong answer records Again and advances automatically. The exercise’s <strong>Next Question</strong> preference is disabled while self-grading is on. <a href="https://super-memory.com/english/ol/sm2.htm">Original SM-2 specification</a></p>
 
 <h3 id="review-intervals-and-ease">Review intervals and ease</h3>
@@ -1402,8 +1404,8 @@ The scheduler uses the same intervals as the corresponding grade buttons.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795436810" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795436810" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

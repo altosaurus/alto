@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795436810">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795453621">
   
 </head>
 <body>
@@ -680,7 +680,7 @@
 <p>Alto’s own code is released under the <a href="https://github.com/altosaurus/alto/blob/main/LICENSE">MIT License</a>. You can use,
 change and share it freely, including in other projects.</p>
 
-<p>The fonts and recordings bundled with Alto are not covered by that license. Each keeps its author’s terms.</p>
+<p>The bundled music fonts, recordings, and score transcriptions each carry the terms listed below.</p>
 
 <h2 id="music-fonts">Music fonts</h2>
 
@@ -716,7 +716,7 @@ change and share it freely, including in other projects.</p>
     </tr>
     <tr>
       <td><a href="https://github.com/rism-digital/leipzig">Leipzig</a></td>
-      <td>Etienne Darbellay, Jean-François Martin and Laurent Pugin</td>
+      <td>Etienne Darbellay, Jean-François Marti and Laurent Pugin</td>
     </tr>
     <tr>
       <td><a href="https://github.com/fkretlow/sebastian">Sebastian</a></td>
@@ -745,9 +745,16 @@ grand recorded with two AKG C414 microphones, used under the
 <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> license. Alto uses 30 of its recordings from one
 dynamic layer, converted to mono, trimmed, faded and levelled. The author does not endorse Alto.</p>
 
-<p>The flute, French horn, viola, marimba and vibraphone use recordings from the
-<a href="https://theremin.music.uiowa.edu/MIS.html">Musical Instrument Samples</a> of the University of Iowa Electronic Music
-Studios, which the studio makes freely available for any project. Alto converted them to mono, trimmed and faded them.</p>
+<p>Lawrence Fritts created the University of Iowa Electronic Music Studios’ sample collection. Andrew Thierauf played
+marimba and vibraphone, Sonja Feig played flute, Jessica Wiskus played French horn, and Manuel Tabora played viola.
+The studio permits use in any project. Alto converted the recordings to mono, trimmed them, and added fades.
+<a href="https://theremin.music.uiowa.edu/MIS.html">University of Iowa Musical Instrument Samples</a></p>
+
+<h2 id="score-excerpts">Score excerpts</h2>
+
+<p>Notation Identification uses the piano parts from Schubert’s <em>Erlkönig</em> and Schumann’s <em>Schöne Fremde</em> and <em>Die Lotosblume</em>.
+OpenScore Lieder contributors transcribed the historical editions and released their transcriptions under CC0 1.0.
+Alto engraved eight short passages from those transcriptions. <a href="https://fourscoreandmore.org/openscore/lieder/">OpenScore Lieder catalogue</a> · <a href="https://github.com/OpenScore/Lieder/blob/main/LICENSE.txt">CC0 dedication</a></p>
 
 <h2 id="platform-logos">Platform logos</h2>
 
@@ -1091,8 +1098,8 @@ Windows mark is four squares. The marks belong to their owners and are shown onl
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795436810" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795436810" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795453621" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795453621" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
