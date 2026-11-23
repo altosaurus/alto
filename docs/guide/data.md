@@ -37,7 +37,9 @@ Concepts the code relies on:
 - **Transactions.** `with self.conn:` groups statements so they all happen or none do, and commits at the end. Alto writes the
   attempt, item summary and any review schedule update in one transaction in `Learner.record`.
 - **Indexes.** `CREATE INDEX attempts_by_item ON attempts(profile_id, exercise, item_key)` makes "find all attempts for this
-  question" fast. Without it SQLite reads every row.
+  question" fast. Without it SQLite reads every row. An index can also be the slower way: `EXPLAIN QUERY PLAN` shows which one
+  SQLite picked. The database page's newest answers are found faster by walking the table from its end and stopping at the
+  limit, so that query writes `+a.profile_id`, which keeps SQLite from using an index for that column.
 - **`sqlite3.Row`** (`conn.row_factory = sqlite3.Row`) lets you read a column by name: `row["strain"]`.
 - **In-memory databases.** `Database()` with no path uses `":memory:"`: a fresh database that vanishes when closed. Every test
   and every doctest uses one, and the simulation in [Spaced repetition]({{ '/guide/spaced-repetition/' | relative_url }}) does too.

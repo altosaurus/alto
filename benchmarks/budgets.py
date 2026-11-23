@@ -22,7 +22,7 @@ MILLISECOND = 0.001
 
 # The longest an operation may take, in milliseconds, by its name; a name ending in ":" stands for every name that starts with it.
 WARM_MS = {
-    "page:statistics": 400,
+    "page:statistics": 200,
     "page:settings": 400,
     "page:lesson": 200,
     "page:lesson-step": 150,
@@ -34,7 +34,7 @@ WARM_MS = {
     "resize:": 150,  # ten sizes of the circle of fifths
     "question:": 50,
     "answer:": 50,
-    "data:attempt-rows": 200,
+    "data:attempt-rows": 100,
     "data:item-rows": 80,
     "data:": 40,
     "learner:": 20,
