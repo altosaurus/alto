@@ -61,6 +61,9 @@ CURL = [
     "--connect-timeout",
     "30",
 ]
+# CPython's copies of HACL*, the verified hash functions compiled into its hashlib modules (into _md5, _sha1, _sha2 and _sha3
+# on Linux, and into python3XX.dll on Windows). Each file begins with HACL*'s MIT notice.
+HACL_SOURCES = ("Hacl_Hash_MD5.c", "Hacl_Hash_SHA1.c", "Hacl_Hash_SHA2.c", "Hacl_Hash_SHA3.c")
 
 
 @dataclass
@@ -210,13 +213,74 @@ def python_notices(licenses: Path) -> Notice:
         expect="Licenses and Acknowledgements for Incorporated Software",
     )
     (licenses / "Python" / "license.rst").write_bytes(incorporated)
+    (licenses / "Python" / "HACL-star.txt").write_text(hacl_notice(python), encoding="utf-8")
     return Notice(
         f"Python {python}",
         where="the program itself, _internal (the interpreter, its standard library and extension modules)",
-        files=["Python/LICENSE.txt", "Python/license.rst"],
+        files=["Python/LICENSE.txt", "Python/license.rst", "Python/HACL-star.txt"],
         note="LICENSE.txt is the interpreter's own license file. license.rst is CPython's list of the licenses and "
-        "acknowledgements for the software incorporated in it.",
+        "acknowledgements for the software incorporated in it. HACL-star.txt is the notice of the HACL* hash functions "
+        "compiled into it, which license.rst does not list.",
     )
+
+
+def mit_header(source: str) -> str:
+    r"""
+    Return the MIT notice that begins a C source file, without the comment's markers.
+
+    Parameters
+    ----------
+    source : str
+        The file.
+
+    Returns
+    -------
+    str
+        The notice, or an empty string if the file does not begin with one.
+
+    Examples
+    --------
+    >>> mit_header("/* MIT License\n *\n * Copyright (c) 2023 A\n */\n#include <x.h>\n")
+    'MIT License\n\nCopyright (c) 2023 A'
+    >>> mit_header("#include <x.h>\n")
+    ''
+    """
+    found = re.match(r"/\* (MIT License\n.*?)\n \*/", source, re.DOTALL)
+    if found is None:
+        return ""
+    return "\n".join(line.removeprefix(" *").removeprefix(" ") for line in found.group(1).split("\n"))
+
+
+def hacl_notice(python: str) -> str:
+    """
+    Return the notice of the HACL* code compiled into a CPython version, from that version's own source.
+
+    Parameters
+    ----------
+    python : str
+        The CPython version, such as ``3.13.18``.
+
+    Returns
+    -------
+    str
+        The notice, with a line naming the files it comes from.
+
+    Raises
+    ------
+    SystemExit
+        If a file lacks the notice, or the files' notices differ.
+    """
+    headers = set()
+    for name in HACL_SOURCES:
+        source = fetch(f"{RAW}/python/cpython/v{python}/Modules/_hacl/{name}", expect="HACL").decode()
+        header = mit_header(source)
+        if "Permission is hereby granted" not in header:
+            raise SystemExit(f"CPython {python}'s Modules/_hacl/{name} does not begin with HACL*'s MIT notice")
+        headers.add(header)
+    if len(headers) != 1:
+        raise SystemExit(f"CPython {python}'s HACL* files have {len(headers)} different notices; install each of them")
+    files = ", ".join(HACL_SOURCES)
+    return f"HACL*, compiled into Python {python}. From CPython's Modules/_hacl ({files}).\n\n{headers.pop()}\n"
 
 
 def certifi_notices(licenses: Path) -> Notice:

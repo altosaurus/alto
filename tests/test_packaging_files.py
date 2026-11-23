@@ -128,6 +128,7 @@ def test_the_packages_carry_the_notices_of_python_its_packages_and_the_native_co
         assert f'("{package}", "LICENSE", "{package}/LICENSE")' in helper
     for source in (
         "/python/cpython/v{python}/Doc/license.rst",
+        "/python/cpython/v{python}/Modules/_hacl/{name}",
         "https://pypi.org/pypi/certifi/{certifi}/json",
         "https://www.mozilla.org/media/MPL/2.0/index.txt",
         "/yaml/libyaml/{libyaml}/License",
@@ -138,6 +139,7 @@ def test_the_packages_carry_the_notices_of_python_its_packages_and_the_native_co
     ):
         assert source in helper
     assert '"notices.json"' in helper and '"README.txt"' in helper
+    assert '"Python/HACL-star.txt"' in helper  # HACL*'s MIT notice, which CPython's license.rst does not list
     for script in ("build-linux.sh", "build-windows.ps1"):
         text = (ROOT / "scripts" / script).read_text(encoding="utf-8")
         assert "dependency_licenses.py" in text and "copy" in text and "verify" in text
@@ -148,12 +150,18 @@ def test_the_qt_notices_follow_the_license_files_qt_names_and_mesa_is_left_out()
     Check that the Qt notices include every license file a qt_attribution.json names, and that Windows has no Mesa renderer.
 
     PCRE2's LICENCE.md and Shiboken's Python license are found only through the attribution files. The build fails if a named
-    file is missing from the source. Alto does not draw with OpenGL, so Qt's software OpenGL renderer is not shipped.
+    file is missing from the source. Alto does not draw with OpenGL, so Qt's software OpenGL renderer is not shipped. The
+    bindings' Python modules are shipped as files, so they can be replaced like the libraries.
     """
     helper = (ROOT / "packaging" / "qt_sources.py").read_text(encoding="utf-8")
     assert '"LicenseFiles"' in helper and '"LicenseFile"' in helper and '"licence"' in helper
     assert '{"FTL.TXT", "GPLv2.TXT"}' in helper and "are not in it" in helper
-    assert '"opengl32sw.dll"' in (ROOT / "packaging" / "alto.spec").read_text(encoding="utf-8")
+    spec = (ROOT / "packaging" / "alto.spec").read_text(encoding="utf-8")
+    assert '"opengl32sw.dll"' in spec
+    # The bindings' Python modules stay replaceable files, as the LGPL-3 notice says, and the build fails if one is compiled in.
+    assert 'module_collection_mode={"PySide6": "py", "shiboken6": "py"}' in spec
+    assert "PySide6 and shiboken6 modules must be kept as .py files" in spec
+    assert "as .py files that can be replaced with modified ones" in helper
 
 
 def test_a_silent_install_asks_for_the_microsoft_terms_once_before_changing_anything() -> None:
