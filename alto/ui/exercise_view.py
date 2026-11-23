@@ -18,6 +18,7 @@ from __future__ import annotations
 import math
 import random
 import re
+import sys
 import time
 from dataclasses import replace
 from typing import TYPE_CHECKING
@@ -47,6 +48,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QAbstractButton,
+    QApplication,
     QButtonGroup,
     QFrame,
     QGridLayout,
@@ -114,6 +116,7 @@ from alto.ui.key_fork import (
     KeyFork,
 )
 from alto.ui.keyboard import KeyboardWidget
+from alto.ui.midi_input import MidiInput
 from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, ValuePictures, rhythm_picture, symbol_icon
 from alto.ui.reference import reference_panel_for
 from alto.ui.settings_panel import settings_panel_for
@@ -673,6 +676,11 @@ class ExerciseView(QWidget):
             book.toggled.connect(self._toggle_reference)  # the pane it opens is built below
             top.addWidget(book)
             self.book_btn = book
+        self.midi_input = None
+        if isinstance(exercise, IntervalConstruction) and sys.platform.startswith("linux"):
+            self.midi_input = MidiInput()
+            self.midi_input.note_pressed.connect(self._place_midi)
+            top.addWidget(self.midi_input)
         self.sound_btn = QToolButton()
         self.sound_btn.setAutoRaise(True)
         self.sound_btn.setIconSize(QSize(px(24), px(24)))
@@ -901,6 +909,8 @@ class ExerciseView(QWidget):
         False
         """
         self._count_timer.stop()
+        if self.midi_input is not None:
+            self.midi_input.disconnect_port()
         if self._hidden_at is None:
             self._timing_valid = False
             self._hidden_at = time.monotonic()
@@ -1769,6 +1779,30 @@ class ExerciseView(QWidget):
         anim.valueChanged.connect(lambda t: self._input().set_note_color(blend(start, b=end, t=t)))
         self._anims.append(anim)
         anim.start()
+
+    def _place_midi(self, pitch: int) -> None:
+        """
+        Submit a played pitch using the written spelling of a matching interval endpoint.
+
+        Parameters
+        ----------
+        pitch : int
+            MIDI note number, including its octave.
+
+        Examples
+        --------
+        Playing MIDI note 67 answers a perfect fifth above C4 with G4.
+        """
+        q = self.question
+        if not self.isVisible() or QApplication.activeModalWidget() or QApplication.activePopupWidget():
+            return
+        if q is None or q.construct is None:
+            return
+        note = q.construct
+        if note.midi != pitch:
+            alternatives = (Note.parse(name) for name in q.accept)
+            note = next((alt for alt in alternatives if alt.midi == pitch), Note.parse(app_settings.key_name(pitch)))
+        self._place(note)
 
     def _place(self, note: Note) -> None:
         """

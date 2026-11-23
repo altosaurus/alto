@@ -198,6 +198,10 @@ is m3.
 
 Place a second note on the staff to form the requested interval. For a minor third above C, count C, D, E, then choose a flat and place E♭. Clicking the staff submits the note. You can also move the caret with the arrow keys and press Enter.
 
+On Ubuntu, connect a USB MIDI keyboard or start VMPK with its ALSA output enabled. Open **MIDI** in the exercise toolbar and choose the input. For a perfect fifth above C4, play G4. Each key press submits an answer, even while VMPK has focus. Alto checks the sounding pitch and octave and shows the accepted spelling on the staff. To practice choosing the spelling yourself, use the staff controls. Choose **MIDI → Off** to disconnect. Leaving the exercise also disconnects it.
+
+If the MIDI menu asks for `alsa-utils`, install it with `sudo apt install alsa-utils`. Reopen the menu after connecting a new device.
+
 **Clefs**, **Range**, and **Staff Key** determine where the notes can appear. **Display Mode** stacks harmonic intervals and places melodic notes in sequence, ascending or descending. Under **Quality**, choose **Interval and Quality** for an exact spelling, **Interval Only** for a number, or **Quality Only** for a quality. When several enabled intervals fit the prompt, any of their endpoints is correct. **Intervals**, **Accidentals**, and **Note Value** control which spellings, written signs, and durations appear.
 
 {% include shot.html src="interval-construction.png" alt="Interval Construction showing the starting note, the requested interval, and the staff placement controls" %}

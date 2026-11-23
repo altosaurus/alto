@@ -184,7 +184,7 @@ Note(octave=4, letter=2, accidental=0)
 def parse(text: str) -> Note
 ```
 
-Parse a note written in plain text, such as 'F#4', 'Bb3' or 'Ebb2'.
+Parse a note with ASCII or musical accidentals, such as 'F#4', 'B♭3' or 'E𝄫2'.
 
 **Parameters**
 
@@ -206,6 +206,8 @@ Parse a note written in plain text, such as 'F#4', 'Bb3' or 'Ebb2'.
 Note(octave=4, letter=3, accidental=1)
 >>> Note.parse("Bb3")
 Note(octave=3, letter=6, accidental=-1)
+>>> str(Note.parse("G𝄫4"))
+'G𝄫4'
 >>> Note.parse("H4")
 Traceback (most recent call last):
     ...
