@@ -23,7 +23,10 @@ from alto.location import (
     database_path,
     desktop_name,
 )
-from alto.ui import zoom
+from alto.ui import (
+    warmup,
+    zoom,
+)
 from alto.ui.main_window import MainWindow
 from alto.ui.profile_dialog import startup_profile
 from alto.ui.theme import (
@@ -84,6 +87,7 @@ def main() -> int:
     # noinspection PyUnresolvedReferences
     app.main_window = window  # pyright: ignore[reportAttributeAccessIssue]
     window.show()
+    warmup.start(window)  # get the fonts the pages need ready while the window sits idle
     if problems:
         QMessageBox.warning(window, "Plugin loading", "Alto skipped these packs.\n\n" + "\n".join(problems))
     DailyReleaseCheck(window)
