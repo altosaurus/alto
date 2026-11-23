@@ -74,7 +74,10 @@
                 "'question:ChordQualities'",
                 "'page:ArpeggioNames'",
                 "'paint:ArpeggioNames'",
-                "'question:ArpeggioNames'"
+                "'question:ArpeggioNames'",
+                "'page:RythmicEquations'",
+                "'paint:RythmicEquations'",
+                "'question:RythmicEquations'"
             ]
         ],
         "rounds": 2,
