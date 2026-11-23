@@ -1763,6 +1763,48 @@ Complete arithmetic equations with written note values.
 True
 ```
 
+### RythmicEquations.instructions
+
+```python
+def instructions() -> str
+```
+
+Explain how to complete the equation with a button or its shortcut.
+
+**Returns**
+
+- *str*: Instructions for the exercise.
+
+**Examples**
+
+```pycon
+>>> "keys" in RythmicEquations().instructions()
+True
+```
+
+### RythmicEquations.card_prompt
+
+```python
+def card_prompt(question: Question) -> str
+```
+
+Ask for the missing note or rest on an exported card.
+
+**Parameters**
+
+- `question` (*Question*): The equation on the card.
+
+**Returns**
+
+- *str*: The instruction shown above the equation.
+
+**Examples**
+
+```pycon
+>>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+'Which note or rest balances the equation?'
+```
+
 ### RythmicEquations.practice_signature
 
 ```python

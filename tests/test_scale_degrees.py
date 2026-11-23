@@ -269,7 +269,11 @@ def test_note_name_labels_and_degree_group(app: QApplication) -> None:
     load_note_names()
     assert settings.note_names.minor_degrees
     exercise = NoteNames()
-    q = exercise._question_for(Note.parse("E4"), clef="treble", key=1, value="whole")
+    settings.note_names.clefs = {"treble"}
+    settings.note_names.key_signatures = {1}
+    position = Note.parse("E4").diatonic
+    settings.note_names.ranges = {"treble": (position, position)}
+    q = exercise.generate(random.Random(0))
     assert q.minor and q.answer == "1̂" and "E natural minor" in exercise.card_prompt(q)
     assert q.grid[q.answer] == (0, 0)
     panel.close()

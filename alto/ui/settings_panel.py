@@ -3283,7 +3283,7 @@ def _add_rhythm_options(panel: ExerciseSettingsPanel, *, layout: QVBoxLayout) ->
     ):
         row = MenuRow(title)
         selected = getattr(settings, attribute)
-        positions = None
+        positions: dict[object, tuple[int, int]] | None = None
         if title == "Symbols":
             notes = [name for name in labels if f"{name}-rest" in labels]
             positions = {
@@ -3295,8 +3295,9 @@ def _add_rhythm_options(panel: ExerciseSettingsPanel, *, layout: QVBoxLayout) ->
             positions.update({name: (len(notes) + index, 0) for index, name in enumerate(dotted)})
         choices = ChoiceChecklist([("", list(labels.items()))], selected=selected, positions=positions)
         if title == "Symbols":
-            for name, box in choices.boxes.items():
-                box.setAccessibleName(labels[name])
+            for name, label in labels.items():
+                box = choices.boxes[name]
+                box.setAccessibleName(label)
                 box.setText("")
                 box.setIcon(ValuePictures.icon(name, scale=1.0))
                 box.setIconSize(QSize(px(18), px(40)))

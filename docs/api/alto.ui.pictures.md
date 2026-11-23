@@ -285,6 +285,29 @@ Draw each note value.
 False
 ```
 
+## rhythm_picture
+
+```python
+def rhythm_picture(term: str) -> ValuePictures | None
+```
+
+Render a single note, rest, tied pair, or beamed pair from an equation term.
+
+**Parameters**
+
+- `term` (*str*): The stored term, with a tilde between tied notes or a bar between beamed notes.
+
+**Returns**
+
+- *ValuePictures or None*: The engraved term, or None for an operator, numeral, or blank.
+
+**Examples**
+
+```pycon
+>>> rhythm_picture("eighth|eighth").beam_count
+1
+```
+
 ## KeySignaturePicture
 
 ```python

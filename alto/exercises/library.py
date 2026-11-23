@@ -3982,6 +3982,43 @@ class RythmicEquations(ChoiceExercise):
 
     durations = settings.RHYTHM_DURATIONS
 
+    def instructions(self) -> str:
+        """
+        Explain how to complete the equation with a button or its shortcut.
+
+        Returns
+        -------
+        str
+            Instructions for the exercise.
+
+        Examples
+        --------
+        >>> "keys" in RythmicEquations().instructions()
+        True
+        """
+        return "Choose the symbol that balances the durations. Click its button or use the keys shown when you hover."
+
+    def card_prompt(self, question: Question) -> str:
+        """
+        Ask for the missing note or rest on an exported card.
+
+        Parameters
+        ----------
+        question : Question
+            The equation on the card.
+
+        Returns
+        -------
+        str
+            The instruction shown above the equation.
+
+        Examples
+        --------
+        >>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
+        'Which note or rest balances the equation?'
+        """
+        return "Which note or rest balances the equation?"
+
     def practice_signature(self) -> str:
         """
         Keep review questions tied to the options that generated them.

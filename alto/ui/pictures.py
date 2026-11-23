@@ -886,6 +886,34 @@ class ValuePictures(_Picture):
             p.strokePath(path, QPen(text, 1.2))
 
 
+def rhythm_picture(term: str) -> ValuePictures | None:
+    """
+    Render a single note, rest, tied pair, or beamed pair from an equation term.
+
+    Parameters
+    ----------
+    term : str
+        The stored term, with a tilde between tied notes or a bar between beamed notes.
+
+    Returns
+    -------
+    ValuePictures or None
+        The engraved term, or None for an operator, numeral, or blank.
+
+    Examples
+    --------
+    >>> rhythm_picture("eighth|eighth").beam_count
+    1
+    """
+    values = term.replace("|", "~").split("~")
+    if any(value not in settings.RHYTHM_DURATIONS for value in values):
+        return None
+    picture = ValuePictures(values, scale=1.7)
+    picture.tied = "~" in term
+    picture.beam_count = settings.RHYTHM_BEAM_COUNTS[values[0]] if "|" in term else 0
+    return picture
+
+
 class KeySignaturePicture(_Picture):
     """
     A key signature as a plain row of its sharps or flats, with no staff or clef.

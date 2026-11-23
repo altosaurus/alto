@@ -114,7 +114,7 @@ from alto.ui.key_fork import (
     KeyFork,
 )
 from alto.ui.keyboard import KeyboardWidget
-from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, ValuePictures, symbol_icon
+from alto.ui.pictures import RHYTHM_SYMBOL_NAMES, ValuePictures, rhythm_picture, symbol_icon
 from alto.ui.reference import reference_panel_for
 from alto.ui.settings_panel import settings_panel_for
 from alto.ui.staff import (
@@ -1289,11 +1289,8 @@ class ExerciseView(QWidget):
                     .replace("|", " beamed with "),
                 )
                 for term in q.prompt.split():
-                    values = re.split(r"[~|]", term)
-                    if all(value in self.exercise.durations for value in values):
-                        picture = ValuePictures(values, scale=1.7)
-                        picture.tied = "~" in term
-                        picture.beam_count = app_settings.RHYTHM_BEAM_COUNTS[values[0]] if "|" in term else 0
+                    picture = rhythm_picture(term)
+                    if picture is not None:
                         picture.setPalette(self.rhythm_equation.palette())
                         widget = picture
                     else:
