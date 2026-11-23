@@ -172,8 +172,9 @@ begin
     else
       DownloadTemporaryFile(RuntimeUrl, RuntimeSetup, '', nil);
   except
-    Result := 'Alto needs the Microsoft Visual C++ Runtime, but it could not be downloaded from Microsoft: ' + GetExceptionMessage +
-      #13#10#13#10 + 'Connect to the internet and try again, or install it yourself from ' +
+    { A line must not begin with a character code such as #13: the preprocessor would read it as one of its directives. }
+    Result := 'Alto needs the Microsoft Visual C++ Runtime, but it could not be downloaded from Microsoft: ' +
+      GetExceptionMessage + #13#10#13#10 + 'Connect to the internet and try again, or install it yourself from ' +
       'https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist and then run this installer again.';
     Exit;
   end;

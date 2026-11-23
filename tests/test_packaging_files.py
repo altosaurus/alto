@@ -121,6 +121,8 @@ def test_the_windows_package_leaves_out_microsofts_runtime_and_the_installer_get
     assert "'/install /norestart'" in iss  # Microsoft's own window, where the person accepts Microsoft's license
     assert "MinVersion=10.0" in iss and "{#RuntimeVersion}" in iss and "{#RuntimeFiles}" in iss
     assert 'Type: filesandordirs; Name: "{app}\\_internal"' in iss  # an update removes files older versions installed
+    # Inno Setup's preprocessor reads a line that begins with # as a directive, which a Pascal character code such as #13 is not.
+    assert not [line for line in iss.splitlines() if re.match(r"\s*#\d", line)]
     script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
     assert "/RUNTIMETEST=1" in script and "The Microsoft Visual C++ Runtime is ready." in script
     assert script.count("$InstallerDefines") == 3  # defined once, given to both installers the script compiles
