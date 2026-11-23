@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404421">
   
 </head>
 <body>
@@ -614,6 +614,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
                 
@@ -1128,6 +1131,10 @@
       <td>Checking for a newer Alto and installing it: the questions asked, the progress shown, and the restart afterwards.</td>
     </tr>
     <tr>
+      <td><a href="alto.ui.warmup/">alto.ui.warmup</a></td>
+      <td>Get ready, while Alto sits idle just after it opens, what a first visit to a page would otherwise pay for.</td>
+    </tr>
+    <tr>
       <td><a href="alto.ui.widgets/">alto.ui.widgets</a></td>
       <td>Small widgets shared by several screens: the sidebar toggle, the help button and a segmented control.</td>
     </tr>
@@ -1272,8 +1279,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404421" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404421" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

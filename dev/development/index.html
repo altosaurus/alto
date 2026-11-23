@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404421">
   
 </head>
 <body>
@@ -614,6 +614,9 @@
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.update_flow/">update_flow</a></li>
                 
                 
+                    <li><a class="row sub" href="/alto/dev/api/alto.ui.warmup/">warmup</a></li>
+                
+                
                     <li><a class="row sub" href="/alto/dev/api/alto.ui.widgets/">widgets</a></li>
                 
                 
@@ -810,6 +813,10 @@ workflow (<code class="language-plaintext highlighter-rouge">.github/workflows/p
 branch <code class="language-plaintext highlighter-rouge">asv-results</code>. A change of more than 30% against the previous release is written in the run’s summary. That is advice and not a
 failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
 would catch.</li>
+  <li><strong>First visits.</strong> The first time a page shows text with ♯, ♭ or ♮ in a new size, Qt spends about 40 ms looking for a font that
+has the signs, because the interface font does not. <code class="language-plaintext highlighter-rouge">alto/ui/warmup.py</code> does that once for each size the interface uses, and
+loads the music font, a step at a time while the app is idle after it opens, so the first visit to a page is nearly as quick as
+the second. A new style sheet size belongs in its <code class="language-plaintext highlighter-rouge">SIZES</code>.</li>
   <li><strong>By hand, before a release.</strong> The run takes a minute or two, and the feel of animations on a real screen is not something a test
 can judge, so look at the lesson, the circle of fifths and the statistics page on a real display as well.</li>
 </ul>
@@ -1770,8 +1777,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404421" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404421" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
