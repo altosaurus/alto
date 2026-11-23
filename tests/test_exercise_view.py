@@ -30,6 +30,7 @@ from alto.theory.pitch import Note
 from alto.ui import motion
 from alto.ui.colors import CORRECT_ANSWER_COLOR
 from alto.ui.exercise_view import ExerciseView
+from alto.ui.pictures import ValuePictures
 from alto.ui.settings_menu import ChoiceChecklist, ToggleRow
 from alto.ui.store import store
 
@@ -922,7 +923,11 @@ def test_rhythm_settings_apply_symbols_and_grouped_notes(app: QApplication, monk
             question = view.question
             assert question is not None
             if marker in question.prompt:
-                assert not view.rhythm_equation.grab().isNull()
+                index = next(index for index, term in enumerate(question.prompt.split()) if marker in term)
+                item = view.rhythm_terms.itemAt(index)
+                assert item is not None
+                picture = item.widget()
+                assert isinstance(picture, ValuePictures) and not picture.grab().isNull()
                 break
         else:
             pytest.fail(f"No {kind} question")
