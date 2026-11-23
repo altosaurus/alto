@@ -531,7 +531,7 @@ def test_click_any_matching_excerpt_marking(app: QApplication) -> None:
         view.resize(width, 650)
         app.processEvents()
         rect = staff.excerpt.music_rect(QRectF(staff.rect()))
-        hit_map = staff.excerpt.hits
+        hit_map = np.asarray(staff.excerpt.hits)
         ys, xs = np.where(hit_map == target + 1)
         point = QPoint(
             round(rect.left() + xs[len(xs) // 2] * rect.width() / hit_map.shape[1]),

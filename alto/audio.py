@@ -16,9 +16,13 @@ Examples
 
 from __future__ import annotations
 
+import array
 import hashlib
 import io
+import math
+import operator
 import os
+import random
 import tempfile
 import time
 import wave
@@ -33,7 +37,6 @@ from dataclasses import (
 )
 from pathlib import Path
 
-import numpy as np
 from PySide6.QtCore import (
     QPropertyAnimation,
     QTimer,
@@ -54,11 +57,12 @@ def synth_piano(
     midi: int,
     *,
     duration: float = 1.6,
-) -> np.ndarray:
+) -> list[float]:
     """
     Synthesize a piano note, for notes outside the recorded range.
 
-    An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump.
+    An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump. Each partial
+    is a decaying sine made by rotating a complex number one sample at a time, which needs no sine or exponential per sample.
 
     Parameters
     ----------
@@ -69,7 +73,7 @@ def synth_piano(
 
     Returns
     -------
-    numpy.ndarray
+    list of float
         Mono samples at `SAMPLE_RATE`, scaled so the loudest is 0.8.
 
     Examples
@@ -77,36 +81,48 @@ def synth_piano(
     >>> samples = synth_piano(60, duration=0.1)
     >>> len(samples)
     4410
-    >>> round(float(np.max(np.abs(samples))), 1)
+    >>> round(max(abs(s) for s in samples), 1)
     0.8
     """
-    rng = np.random.default_rng(midi)  # deterministic per note
+    rng = random.Random(midi)  # deterministic per note
     f0 = 440.0 * 2 ** ((midi - 69) / 12)
-    t = np.arange(int(SAMPLE_RATE * duration)) / SAMPLE_RATE
+    count = int(SAMPLE_RATE * duration)
     inharm = 0.00008 * (1 + max(0, 60 - midi) / 24) ** 2 if midi < 60 else 0.0002 * (midi - 55) / 10
-    out = np.zeros_like(t)
+    out = [0.0] * count
     for n in range(1, 17):
-        f = n * f0 * np.sqrt(1 + inharm * n * n)
+        f = n * f0 * math.sqrt(1 + inharm * n * n)
         if f > 12000:
             break
         amp = 1.0 / n**1.15
         if n % 7 == 0:  # strike-point comb: hammer hits ~1/7 along the string
             amp *= 0.3
         decay = 2.2 + 1.1 * n + (midi - 60) * 0.03  # higher partials/notes die faster
-        # two slightly detuned strings give the characteristic shimmer
+        # two slightly detuned strings give the characteristic shimmer; one hammer strikes both, so they start in phase
+        phase = rng.uniform(0, 2 * math.pi)
         for detune in (-0.0008, 0.0008):
-            out += amp * 0.5 * np.sin(2 * np.pi * f * (1 + detune) * t + rng.uniform(0, 2 * np.pi)) * np.exp(-decay * t)
-    # soft attack, then a quick dip into the long sustain
-    out *= 1 - np.exp(-t / 0.002)
-    out *= 0.65 + 0.35 * np.exp(-t / 0.25)
-    # hammer thump: very short band-limited noise burst
-    n_th = int(0.02 * SAMPLE_RATE)
-    thump = rng.standard_normal(n_th)
-    # noinspection PyTypeChecker
-    thump = np.convolve(thump, np.ones(24) / 24, mode="same") * np.exp(-np.arange(n_th) / (0.004 * SAMPLE_RATE))
-    out[:n_th] += 0.25 * thump * (1.0 / (1 + (midi - 40) / 30))
-    out *= np.minimum(1.0, (duration - t) / 0.05)  # fade out to avoid a click
-    return out / np.max(np.abs(out)) * 0.8
+            step = 2 * math.pi * f * (1 + detune) / SAMPLE_RATE
+            turn = complex(math.cos(step), math.sin(step)) * math.exp(-decay / SAMPLE_RATE)
+            z = amp * 0.5 * complex(math.cos(phase), math.sin(phase))
+            for k in range(count):
+                out[k] += z.imag
+                z *= turn
+    # soft attack, then a quick dip into the long sustain, and a fade out to avoid a click
+    for k in range(count):
+        t = k / SAMPLE_RATE
+        out[k] *= (1 - math.exp(-t / 0.002)) * (0.65 + 0.35 * math.exp(-t / 0.25)) * min(1.0, (duration - t) / 0.05)
+    # hammer thump: a very short noise burst, smoothed by a 24-sample moving average
+    thump_count = min(count, int(0.02 * SAMPLE_RATE))
+    noise = [rng.gauss(0.0, 1.0) for _ in range(thump_count)]
+    totals = [0.0]
+    for value in noise:
+        totals.append(totals[-1] + value)
+    level = 0.25 * (1.0 / (1 + (midi - 40) / 30))
+    for k in range(thump_count):
+        smooth = (totals[min(thump_count, k + 12)] - totals[max(0, k - 12)]) / 24
+        t = k / SAMPLE_RATE
+        out[k] += level * smooth * math.exp(-k / (0.004 * SAMPLE_RATE)) * min(1.0, (duration - t) / 0.05)
+    peak = max((abs(value) for value in out), default=0.0) or 1.0
+    return [value / peak * 0.8 for value in out]
 
 
 @dataclass(frozen=True)
@@ -299,7 +315,60 @@ def instrument_groups() -> list[tuple[str, list[Instrument]]]:
     return list(groups.items())
 
 
-def read_wav(path: Path) -> tuple[np.ndarray, int]:
+def _pcm(data: bytes) -> array.array[int]:
+    """
+    Read 16-bit samples as Python's `wave` module hands them over: in the computer's own byte order.
+
+    WAV files store samples little-endian, and `wave` swaps the bytes itself on a big-endian computer, both when it reads frames
+    and when it writes them, so the samples here never need swapping.
+
+    Parameters
+    ----------
+    data : bytes
+        The samples, two bytes each, as `wave.Wave_read.readframes` returns them.
+
+    Returns
+    -------
+    array.array of int
+        The samples, from -32768 to 32767.
+
+    Examples
+    --------
+    >>> list(_pcm(array.array("h", [1, -1]).tobytes()))
+    [1, -1]
+    """
+    samples = array.array("h")
+    samples.frombytes(data)
+    return samples
+
+
+def _frame_rate(path: Path) -> int:
+    """
+    Read the sample rate of a WAV file without reading its samples.
+
+    Parameters
+    ----------
+    path : Path
+        The file.
+
+    Returns
+    -------
+    int
+        Samples per second.
+
+    Examples
+    --------
+    >>> import tempfile
+    >>> path_ = Path(tempfile.mkdtemp()) / "quiet.wav"
+    >>> _ = path_.write_bytes(to_wav_bytes([0.0], rate=22050))
+    >>> _frame_rate(path_)
+    22050
+    """
+    with wave.open(str(path)) as w:
+        return w.getframerate()
+
+
+def read_wav(path: Path) -> tuple[list[float], int]:
     """
     Read a mono 16-bit WAV file.
 
@@ -310,27 +379,65 @@ def read_wav(path: Path) -> tuple[np.ndarray, int]:
 
     Returns
     -------
-    tuple of (numpy.ndarray, int)
+    tuple of (list of float, int)
         The samples as floats from -1 to 1, and the sample rate in hertz.
 
     Examples
     --------
     >>> import tempfile
     >>> path_ = Path(tempfile.mkdtemp()) / "silence.wav"
-    >>> _ = path_.write_bytes(to_wav_bytes(np.zeros(10)))
+    >>> _ = path_.write_bytes(to_wav_bytes([0.0] * 10))
     >>> samples, rate = read_wav(path_)
     >>> len(samples), rate
     (10, 44100)
     """
     with wave.open(str(path)) as w:
-        return np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float64) / 32768, w.getframerate()
+        frames, rate = w.readframes(w.getnframes()), w.getframerate()
+    return [value / 32768 for value in _pcm(frames)], rate
+
+
+def _interpolate(
+    samples: Sequence[float],
+    *,
+    step: float,
+    count: int,
+) -> list[float]:
+    """
+    Read samples at evenly spaced fractional positions, drawing straight lines between neighbors.
+
+    Positions past the last sample give the last sample, as `numpy.interp` does.
+
+    Parameters
+    ----------
+    samples : sequence of float
+        Mono samples.
+    step : float
+        The distance between positions, in samples. Keyword-only.
+    count : int
+        How many positions, starting at 0. Keyword-only.
+
+    Returns
+    -------
+    list of float
+        The values at the positions.
+
+    Examples
+    --------
+    >>> _interpolate([0.0, 1.0, 0.0], step=0.5, count=6)
+    [0.0, 0.5, 1.0, 0.5, 0.0, 0.0]
+    """
+    last = len(samples) - 1
+    inside = min(count, max(0, math.ceil(last / step)))  # the positions that fall before the last sample
+    out = [(a := samples[i := int(x := k * step)]) + (samples[i + 1] - a) * (x - i) for k in range(inside)]
+    out.extend([samples[last]] * (count - inside))
+    return out
 
 
 def shift_pitch(
-    samples: np.ndarray,
+    samples: Sequence[float],
     *,
     semitones: float,
-) -> np.ndarray:
+) -> list[float]:
     """
     Change the pitch of samples by resampling them.
 
@@ -338,28 +445,28 @@ def shift_pitch(
 
     Parameters
     ----------
-    samples : numpy.ndarray
+    samples : sequence of float
         Mono samples.
     semitones : float
         How far to shift; positive is higher. Keyword-only.
 
     Returns
     -------
-    numpy.ndarray
+    list of float
         The resampled samples, shorter when shifted up and longer when shifted down.
 
     Examples
     --------
-    >>> len(shift_pitch(np.zeros(100), semitones=12))  # an octave up: half as long
+    >>> len(shift_pitch([0.0] * 100, semitones=12))  # an octave up: half as long
     50
     """
     ratio = 2 ** (semitones / 12)
-    positions = np.arange(0, len(samples) - 1, ratio)
-    return np.interp(positions, np.arange(len(samples)), samples)
+    count = max(0, math.ceil((len(samples) - 1) / ratio))
+    return _interpolate(samples, step=ratio, count=count)
 
 
 def to_wav_bytes(
-    samples: np.ndarray,
+    samples: Iterable[float],
     *,
     rate: int = SAMPLE_RATE,
 ) -> bytes:
@@ -368,8 +475,8 @@ def to_wav_bytes(
 
     Parameters
     ----------
-    samples : numpy.ndarray
-        Mono samples from -1 to 1.
+    samples : iterable of float
+        Mono samples from -1 to 1; anything beyond is clipped.
     rate : int, default SAMPLE_RATE
         The sample rate in hertz. Keyword-only.
 
@@ -380,15 +487,24 @@ def to_wav_bytes(
 
     Examples
     --------
-    >>> to_wav_bytes(np.zeros(10))[:4]
+    >>> to_wav_bytes([0.0] * 10)[:4]
     b'RIFF'
+    >>> import tempfile
+    >>> clipped = Path(tempfile.mkdtemp()) / "clipped.wav"
+    >>> _ = clipped.write_bytes(to_wav_bytes([2.0, -3.0, 0.5]))
+    >>> [round(value, 3) for value in read_wav(clipped)[0]]  # beyond full scale is clipped
+    [1.0, -1.0, 0.5]
     """
+    values = list(samples)
+    if values and (min(values) < -1.0 or max(values) > 1.0):
+        values = [-1.0 if value < -1.0 else min(value, 1.0) for value in values]
+    pcm = array.array("h", [int(value * 32767) for value in values])  # wave writes them little-endian, swapping if need be
     buf = io.BytesIO()
     with wave.open(buf, "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)
         w.setframerate(rate)
-        w.writeframes((samples * 32767).astype("<i2").tobytes())
+        w.writeframes(pcm.tobytes())
     return buf.getvalue()
 
 
@@ -550,14 +666,107 @@ class Sounds:
         if midi in samples:
             return samples[midi]
         self._dir.mkdir(exist_ok=True)
-        path = self._dir / f"{inst.key}_{midi}.wav"
-        if samples and (inst.key != "piano" or abs(min(samples, key=lambda m: abs(m - midi)) - midi) <= 2):
+        source: Path | None = None
+        semitones = 0
+        if samples:
             nearest = min(samples, key=lambda m: abs(m - midi))
-            audio, rate = read_wav(samples[nearest])
-            write_file_atomically(path, data=to_wav_bytes(shift_pitch(audio, semitones=midi - nearest), rate=rate))
+            if inst.key != "piano" or abs(nearest - midi) <= 2:
+                source, semitones = samples[nearest], midi - nearest
+        if source is not None:
+            stat = source.stat()
+            # A pack update can replace a recording under the same name, so the made file is named after the recording's state.
+            identity: tuple[object, ...] = ("shift", str(source), stat.st_size, stat.st_mtime_ns, semitones)
         else:  # the piano outside its sampled range
+            identity = ("synth-2", midi)
+        path = self._dir / f"{inst.key}_{midi}_{hashlib.sha256(repr(identity).encode()).hexdigest()[:16]}.wav"
+        if path.exists():
+            return path
+        if source is not None:
+            audio, rate = read_wav(source)
+            write_file_atomically(path, data=to_wav_bytes(shift_pitch(audio, semitones=semitones), rate=rate))
+        else:
             write_file_atomically(path, data=to_wav_bytes(synth_piano(midi)))
         return path
+
+    def unrecorded(self, instrument: str | None = None) -> list[int]:
+        """
+        List the notes within an instrument's recorded range that have no recording of their own, nearest middle C first.
+
+        Each is made the first time it plays, by shifting the nearest recording. `alto.ui.warmup` makes them ahead of time with
+        `prepare`, so that even a first play is quick.
+
+        Parameters
+        ----------
+        instrument : str or None, default None
+            The instrument's key, or None for the current one.
+
+        Returns
+        -------
+        list of int
+            MIDI note numbers.
+
+        Examples
+        --------
+        >>> notes = Sounds().unrecorded("piano")  # the piano is recorded every third semitone
+        >>> notes[:2], 60 in notes, len(notes)
+        ([61, 59], False, 58)
+        """
+        recorded = self.recordings(INSTRUMENT_BY_KEY.get(instrument or self.instrument, INSTRUMENTS[0]))
+        if not recorded:
+            return []
+        missing = [midi for midi in range(min(recorded), max(recorded) + 1) if midi not in recorded]
+        return sorted(missing, key=lambda midi: (abs(midi - 60), -midi))
+
+    def prepare(self, midi: int, *, instrument: str | None = None) -> None:
+        """
+        Make the file a note plays, if it has no recording and was not made before, so that its first play is quick.
+
+        Parameters
+        ----------
+        midi : int
+            The MIDI note number.
+        instrument : str or None, default None
+            The instrument's key, or None for the current one. Keyword-only.
+
+        Examples
+        --------
+        >>> Sounds().prepare(61, instrument="piano")
+        """
+        self._note_file(INSTRUMENT_BY_KEY.get(instrument or self.instrument, INSTRUMENTS[0]), midi=midi)
+
+    def _at_sample_rate(self, path: Path) -> Path:
+        """
+        Return a recording at `SAMPLE_RATE`, converting it once and keeping the result for later previews.
+
+        Parameters
+        ----------
+        path : Path
+            A mono 16-bit WAV file.
+
+        Returns
+        -------
+        Path
+            The file itself if it is already at `SAMPLE_RATE`, otherwise a converted copy in the temporary folder.
+
+        Examples
+        --------
+        >>> piano = Sounds()._note_file(INSTRUMENT_BY_KEY["piano"], midi=60)
+        >>> Sounds()._at_sample_rate(piano) == piano
+        True
+        """
+        with wave.open(str(path)) as w:
+            rate, total = w.getframerate(), w.getnframes()
+        if rate == SAMPLE_RATE:
+            return path
+        stat = path.stat()
+        identity = ("rate", str(path), stat.st_size, stat.st_mtime_ns, SAMPLE_RATE)
+        converted = self._dir / f"rate_{hashlib.sha256(repr(identity).encode()).hexdigest()[:16]}.wav"
+        if not converted.exists():
+            samples, _rate = read_wav(path)
+            step = rate / SAMPLE_RATE  # read at 0, step, 2 * step, ... to the end, drawing straight lines between samples
+            self._dir.mkdir(parents=True, exist_ok=True)
+            write_file_atomically(converted, data=to_wav_bytes(_interpolate(samples, step=step, count=math.ceil(total / step))))
+        return converted
 
     def note_duration_ms(self, midi: int, *, instrument: str | None = None) -> int:
         """
@@ -742,6 +951,11 @@ class Sounds:
         """
         Render a preview as one WAV file with note onsets a fixed number of samples apart.
 
+        The notes are mixed as 16-bit integers at the rate their recordings share, so no sample is converted or resampled:
+        Python's own C code does the adding, and only each note's short fade-out is worked out sample by sample. Recordings at
+        different rates are first converted to `SAMPLE_RATE`, once. The clip is kept, named after everything it is made from,
+        including the state of a pack's recordings, so playing the same phrase again costs nothing.
+
         Parameters
         ----------
         inst : Instrument
@@ -763,46 +977,55 @@ class Sounds:
         >>> Sounds()._preview_file(INSTRUMENT_BY_KEY["piano"], midis=(74, 75, 72, 71), step_ms=300).suffix
         '.wav'
         """
+        # A pack update can replace the recordings under the same instrument key, so their state is part of the clip's name.
+        recordings = tuple((str(source), (stat := source.stat()).st_size, stat.st_mtime_ns) for _midi, source in inst.samples)
         identity = repr(
             (
-                "full-step-duration",
+                "integer-mix",
                 inst.key,
                 midis,
                 step_ms,
                 self.FADE_MS,
                 tail_ms,
+                recordings,
             ),
         ).encode()
         path = self._dir / f"preview_{hashlib.sha256(identity).hexdigest()}.wav"
-        if not inst.samples and path.exists():
+        if path.exists():
             return path
-        gap = max(1, round(SAMPLE_RATE * step_ms / 1000))
-        fade = max(1, round(SAMPLE_RATE * self.FADE_MS / 1000))
+        files = [self._note_file(inst, midi=midi) for midi in midis]
+        rates = {_frame_rate(file) for file in files}
+        if len(rates) > 1:
+            files = [self._at_sample_rate(file) for file in files]
+        rate = rates.pop() if len(rates) == 1 else SAMPLE_RATE
+        gap = max(1, round(rate * step_ms / 1000))
+        fade = max(1, round(rate * self.FADE_MS / 1000))
+        extra = round(rate * tail_ms / 1000)
         notes = []
-        for index, midi in enumerate(midis):
-            audio, rate = read_wav(self._note_file(inst, midi=midi))
-            if rate != SAMPLE_RATE:
-                positions = np.arange(0, len(audio), rate / SAMPLE_RATE)
-                audio = np.interp(positions, np.arange(len(audio)), audio)
-            hold = gap + (round(SAMPLE_RATE * tail_ms / 1000) if index == len(midis) - 1 else 0)
-            audio = audio[: hold + fade].copy()
-            tail = max(0, len(audio) - hold)
-            if tail:
-                audio[hold:] *= np.linspace(1.0, 0.0, tail)
-            notes.append(audio)
-        length = max((i * gap + len(audio) for i, audio in enumerate(notes)), default=0)
+        for index, file in enumerate(files):
+            hold = gap + (extra if index == len(files) - 1 else 0)
+            with wave.open(str(file)) as w:
+                pcm = _pcm(w.readframes(min(w.getnframes(), hold + fade)))
+            tail = max(0, len(pcm) - hold)
+            for k in range(tail):  # fade from full to silent over the tail, ending at 0
+                pcm[hold + k] = int(pcm[hold + k] * (1.0 - k / (tail - 1) if tail > 1 else 1.0))
+            notes.append(pcm)
+        length = max((i * gap + len(pcm) for i, pcm in enumerate(notes)), default=0)
         # Short recordings still need the full final beat for displays that follow the output clock.
-        phrase = np.zeros(max(length, len(midis) * gap + round(SAMPLE_RATE * tail_ms / 1000)))
-        for i, audio in enumerate(notes):
-            start = i * gap
-            phrase[start : start + len(audio)] += audio
+        phrase = [0] * max(length, len(files) * gap + extra)
+        for i, pcm in enumerate(notes):
+            start, end = i * gap, i * gap + len(pcm)
+            phrase[start:end] = map(operator.add, phrase[start:end], pcm)
+        if phrase and (min(phrase) < -32768 or max(phrase) > 32767):
+            phrase = [-32768 if value < -32768 else min(value, 32767) for value in phrase]
+        buf = io.BytesIO()
+        with wave.open(buf, "wb") as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(rate)
+            w.writeframes(array.array("h", phrase).tobytes())
         self._dir.mkdir(parents=True, exist_ok=True)
-        wav = to_wav_bytes(np.clip(phrase, -1.0, 1.0))
-        if inst.samples:
-            # A pack update can replace the recordings under the same instrument key.
-            path = self._dir / f"preview_{hashlib.sha256(wav).hexdigest()}.wav"
-        if not path.exists():
-            write_file_atomically(path, data=wav)
+        write_file_atomically(path, data=buf.getvalue())
         return path
 
     def preview(

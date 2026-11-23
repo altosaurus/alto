@@ -1,0 +1,24 @@
+MICROSOFT COMPONENTS
+
+Alto for Windows uses the Microsoft Visual C++ Runtime, which is not part of Alto. If your computer does not
+already have a recent enough version, this installer downloads Microsoft's own installer for it from Microsoft,
+and Microsoft's installer asks you to accept Microsoft's license for it.
+
+Alto's program files also contain small parts of Microsoft code that Microsoft's compiler places in every program
+it builds, including the builds of Python and Qt that Alto uses ("Microsoft Distributable Code"). By installing
+Alto, you agree that you will not:
+
+- alter any copyright, trademark or patent notice in the Microsoft Distributable Code;
+- use Microsoft's trademarks in your programs' names or in a way that suggests your programs come from or are
+  endorsed by Microsoft;
+- distribute the Microsoft Distributable Code to run on a platform other than Microsoft operating systems,
+  run-time technologies or application platforms;
+- include the Microsoft Distributable Code in malicious, deceptive or unlawful programs; or
+- reverse engineer, decompile or disassemble the Microsoft Distributable Code, except where applicable law
+  permits it despite this limitation.
+
+Microsoft and its suppliers provide the Microsoft Distributable Code "as is", without warranties of any kind, and
+are not liable for any damages arising from its use.
+
+These terms apply only to Microsoft's code. Alto is under the MIT License above, and the other components Alto
+includes are under the licenses described in THIRD_PARTY_NOTICES.md, installed with Alto.

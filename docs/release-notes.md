@@ -33,6 +33,12 @@ Changes that are in the development docs and not in a release yet.
 - Lesson keyboards highlight each note as it sounds and show chord tones together during playback.
 - The Pitches and Notes lesson labels C and brackets its neighboring pair of black keys before asking learners to name the next white key.
 
+### Changed
+{: .no-toc}
+
+- The Windows installer now uses the Microsoft Visual C++ Runtime installed on Windows. If Windows lacks it or has an older version, the installer downloads Microsoft's installer for it from Microsoft, checks Microsoft's signature, and runs it; Windows asks for administrator permission and Microsoft's window asks to accept Microsoft's license. This happens once, also when Alto updates itself. Alto now needs Windows 10 or later.
+- Alto no longer depends on NumPy, which makes the installed program about 35–40 MB smaller on Linux and Windows. Sound previews are mixed as quickly as before, and the staff's click map is built about four times faster. Notes made by pitch shifting or synthesis are now kept and reused instead of being made again each time they play, and the current instrument's missing notes are made while Alto is idle after it opens, so even their first play is quick. Previews of plugin instruments are kept too, until the plugin's recordings change.
+
 ### Fixed
 {: .no-toc}
 

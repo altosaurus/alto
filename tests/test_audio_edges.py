@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 import wave
 from typing import (
     TYPE_CHECKING,
@@ -15,7 +16,10 @@ from PySide6.QtTest import QTest
 
 from alto.audio import (
     INSTRUMENT_BY_KEY,
+    SAMPLE_RATE,
     Sounds,
+    read_wav,
+    to_wav_bytes,
 )
 from alto.theory.pitch import Note
 
@@ -302,3 +306,62 @@ def test_a_sequence_waiting_for_its_notes_to_load_gives_way_to_a_newer_one(
     QTest.qWait(150)
     assert played == [62]  # the first one gave up without playing
     slow.loading = False
+
+
+def test_samples_are_stored_little_endian_whatever_the_computer(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that WAV files stay little-endian, as the format requires, and read back right, also on a big-endian computer.
+
+    Python's `wave` module swaps the bytes itself on a big-endian computer, so Alto must not swap them again.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A scratch folder unique to this test.
+    monkeypatch : pytest.MonkeyPatch
+        Pretends the computer is big-endian.
+    """
+    path = tmp_path / "note.wav"
+    path.write_bytes(to_wav_bytes([0.5, -0.25]))
+    assert path.read_bytes()[44:] == bytes([0xFF, 0x3F, 0x01, 0xE0])  # 16383 and -8191, least significant byte first
+    assert [round(value, 3) for value in read_wav(path)[0]] == [0.5, -0.25]
+    monkeypatch.setattr(sys, "byteorder", "big")
+    assert to_wav_bytes([0.5, -0.25])[44:] == bytes([0x3F, 0xFF, 0xE0, 0x01])  # what this little-endian computer's memory holds
+
+
+def test_an_instrument_without_recordings_has_no_notes_to_make(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that an instrument with no recordings lists nothing for the warm-up to make.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Takes the recordings away.
+    """
+    player = Sounds()
+    monkeypatch.setattr(player, "recordings", lambda _inst: {})
+    assert player.unrecorded("piano") == []
+
+
+def test_loud_notes_that_overlap_in_a_preview_are_clipped(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that a preview whose notes add up beyond full scale where they overlap is clipped rather than wrapped around.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A temporary sound cache.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the recordings with a loud steady tone.
+    """
+    loud = tmp_path / "loud.wav"
+    loud.write_bytes(to_wav_bytes([0.9] * SAMPLE_RATE))
+    player = Sounds()
+    player._dir = tmp_path / "cache"
+    monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: loud)
+    samples, _rate = read_wav(player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=(60, 62), step_ms=300))
+    assert max(samples) == 32767 / 32768  # where the first note fades out under the second, 0.9 + 0.9 is held at full scale
+    assert min(samples) >= 0

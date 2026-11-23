@@ -94,10 +94,45 @@ def test_the_installer_keeps_its_id_installs_for_one_user_and_asks_about_the_dat
     iss = INSTALLER.read_text(encoding="utf-8")
     assert "AppId={{26F851E3-0F09-45A0-A9C4-13D12F91DA07}" in iss  # a newer installer finds the copy to update by this
     assert "PrivilegesRequired=lowest" in iss and "DefaultDirName={autopf}\\Alto" in iss
-    assert "LicenseFile=..\\..\\LICENSE" in iss and "THIRD_PARTY_NOTICES.md" in iss
+    assert "LicenseFile={#LicenseFile}" in iss and "THIRD_PARTY_NOTICES.md" in iss
     assert "{userappdata}\\Alto" in iss and "Software\\alto" in iss  # where Alto keeps its history and its settings
     assert "UninstallSilent" in iss and "{param:PURGE|0}" in iss and "mbConfirmation" in iss
     assert "MB_DEFBUTTON2" in iss  # the question defaults to No, so the data is kept unless the person says otherwise
+
+
+def test_the_windows_package_leaves_out_microsofts_runtime_and_the_installer_gets_it_from_microsoft() -> None:
+    """
+    Check that the program uses the Visual C++ runtime installed on Windows, and that the installer makes sure it is there.
+
+    The build leaves the runtime out and fails if any copy remains, and numpy is not a dependency. The installer downloads
+    Microsoft's redistributable, checks Microsoft's signature, and runs it, also in a silent update. The license page has the
+    terms for the Microsoft code in compiled programs.
+    """
+    spec = (ROOT / "packaging" / "alto.spec").read_text(encoding="utf-8")
+    assert '"numpy"' in spec.split("excludes=")[1].split("]")[0]
+    assert "MICROSOFT_RUNTIME" in spec and "ALTO_RUNTIME_FILE" in spec
+    assert "Microsoft's runtime must not be in the desktop package" in spec
+    dependencies = re.search(r"(?ms)^dependencies = \[(.*?)^\]", (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    assert dependencies and "numpy" not in dependencies.group(1)
+    iss = INSTALLER.read_text(encoding="utf-8")
+    assert "https://aka.ms/vs/17/release/vc_redist.x64.exe" in iss and "SignedByMicrosoft" in iss
+    assert "O=Microsoft Corporation" in iss and "Get-AuthenticodeSignature" in iss
+    assert "function PrepareToInstall" in iss  # the silent update path, before anything is changed
+    assert "'/install /norestart'" in iss  # Microsoft's own window, where the person accepts Microsoft's license
+    assert "MinVersion=10.0" in iss and "{#RuntimeVersion}" in iss and "{#RuntimeFiles}" in iss
+    assert 'Type: filesandordirs; Name: "{app}\\_internal"' in iss  # an update removes files older versions installed
+    script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
+    assert "/RUNTIMETEST=1" in script and "The Microsoft Visual C++ Runtime is ready." in script
+    assert script.count("$InstallerDefines") == 3  # defined once, given to both installers the script compiles
+    terms = (ROOT / "packaging" / "windows" / "microsoft-components.txt").read_text(encoding="utf-8")
+    for condition in (
+        "alter any copyright, trademark or patent notice",
+        "use Microsoft's trademarks",
+        "other than Microsoft operating systems",
+        "malicious, deceptive or unlawful programs",
+    ):
+        assert condition in terms  # the conditions of CPython's PC/crtlicense.txt
+    assert terms.isascii()
 
 
 def test_the_windows_build_reads_the_version_from_pyproject_and_tests_the_installer() -> None:

@@ -8,7 +8,7 @@ permalink: /getting-started/
 
 - Python 3.11 or newer.
 - A desktop operating system that runs Qt 6: Linux, macOS or Windows.
-- Alto installs [PySide6](https://doc.qt.io/qtforpython-6/) (6.8 or newer) and numpy for you.
+- Alto installs [PySide6](https://doc.qt.io/qtforpython-6/) (6.8 or newer) for you.
 
 The default notation style, Finale Maestro, uses a font that comes with Alto, so nothing more needs to be installed. Only the
 "Noto Music" style reads a font from your system; most Linux distributions include it in their Noto font packages. You can
@@ -17,7 +17,8 @@ change the notation style in [Settings]({{ '/settings/' | relative_url }}).
 ## Download and install
 
 Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs to be installed.
+carry their own Python and Qt, so nothing else needs to be installed, apart from Microsoft's Visual C++ Runtime on Windows,
+which the installer takes care of.
 
 **Linux.** Download `alto-<version>-linux-x86_64.tar.gz`, unpack it, and in the folder it makes run:
 
@@ -33,6 +34,12 @@ history and settings; add `--purge` to delete those too (use **Export backup…*
 Alto to the Start menu, and lists it in Settings → Apps. Windows may say it protects your PC because the publisher is unknown: the
 installer is not signed yet. Choose **More info**, then **Run anyway**. To update, run the newer installer. To uninstall, use
 Settings → Apps; the uninstaller asks whether to also remove your practice history and settings.
+
+Alto needs Windows 10 or 11 and Microsoft's Visual C++ Runtime, which most computers already have because many programs use it.
+If yours does not, or has an older one, the installer downloads Microsoft's installer for it from Microsoft and runs it: Windows asks
+for administrator permission, and Microsoft's window asks you to accept Microsoft's license. This happens once, and only the first
+time it is needed. Without an internet connection, install the runtime yourself from
+[Microsoft's download page](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) and run Alto's installer again.
 
 ### Check your download
 

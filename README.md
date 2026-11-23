@@ -25,7 +25,6 @@
     <td>
       <a href="https://github.com/altosaurus/alto/blob/main/.github/workflows/tests.yml"><img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd%2BUAAAD80lEQVRIx62WT4hVVRzHv%2Be9%2B0anGadJkDQbISIRHJGZJKIMC0oTLSUiKapFi7DaZejOlRsXRkG1SBCpFhJhoKtoqGQSUukPYWoGRSpuLKxRZnrvnvP5tnh33rz3ZnxTTQcOl9%2B98Pvc7%2Fd8z7k3qMN48u0TmpgYHzI8D9xn0gDQB2Qm5aT0J%2FALpKOGA8f3Pv2bZhmlTg8nJsZX2%2F7A9jabxdhLDD2GeUAv9lLDWuM9wBv37ni%2Ff05A2xttlkp%2B1rDRKZ0DBEkGmaSirhi2ARtmA2YdgbDQxiScYrTtAkQBornODHfNCQgpGPdDOmS5ajMwA6hRA2FuCu2TNu%2FZDrKDMTYyDEFaBchOBSzJeDbeFHDzvi8qttca1kFaCARSkmGMybVKjebVdoWAKiUyX3l1u1JYKSnKnJH4KCx582oL8LHXj3UBO2zvtOk3xVrZqiuaXrdba6wsoyRpi6RHZSSnJMdhX3xxRxh4d7yRUmC97F2GfkCYTuGYVttIsiSFusdJci5RK4v8GTk%2B2LItbD8F3DxD3Atls9WWJXVlHpfjfJFratb6RG1Ti6WGNf9GUYuVdpHocPGJod8vK%2BUrRJIc1bg63dMO7Bz3xERMXDc2CVGsoZGkANavKxZPHHx53aUNStwmYgGMk8A7WoCY%2Bc3xprDVUAMOr1k29vnwwFgqB4JtqREe1FWOWrNs7Kblt17fInhEjqEOSk3Q1NuucAJY0KaQUmD%2F4e3f%2FbioN39F1u2SghTqAZlqWBKpRylldTXNyhq21loVki4YVjZbGZN%2F2rP55xOLevJ9IixqOu%2BmYE6awb42YJScLrSklMSp9kM5wbm1d%2F6xXJ6ENatqJLCYebEN2u5NTsfPWrcFfGy4Zk8pFNTKwd0NGOnGDdvvOW96kXhF5sNWheZTYD%2FQfGSVLdctJJd8I0itAzjlkg5IOjkJbJzu9%2B861GN7o0mrgUoe%2Ff2pXd8MlZRemx4GRuX41dQ%2BixIxyBE5IWKo%2B68zko6EwePXpgFn%2FFpcemmvnHbOEIbTIj9bpLAsR4uInA6FwS8P%2F%2BfPk8glNSexoWhQxMEiROdFXCCnJZJ%2FkNQR2PEXQ67RmrZpgfla5mE5Pif5Wv3tOo%2FZFJ6WUxQxaz05Goq7JPdJ6peUSzo7R2A8Ksd3RHxBjr2ttiLJqySNSPpL0kFJn8wGnPUfxOc3zZN5SI6Pizgsx8UyXZKqki5L%2BlbSEUnHwuDx6pyBLfAfHuiTuUXSvELV1ebI%2F29jePhuLV%2B3f8Zn67e9pa1bt%2F7jXh0V7t69O3R3d5cqlUpWqVSyLMuycrlcCiEE204pkVKKeZ7HPM9jtVpldHTUIyMjN%2Bz5NxwyvNFnwN4eAAAAAElFTkSuQmCC" alt="Python"></a>
       <a href="https://doc.qt.io/qtforpython-6/"><img src="https://img.shields.io/badge/Qt_6-PySide6-2E7D32?logo=qt&amp;logoColor=41CD52" alt="Qt 6 | PySide6"></a>
-      <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-013243?logo=numpy&amp;logoColor=white" alt="NumPy"></a>
       <a href="https://pypi.org/project/fsrs/"><img src="docs/assets/img/fsrs-badge.svg" alt="FSRS 6"></a>
       <a href="https://sqlite.org/"><img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite&amp;logoColor=white" alt="SQLite"></a>
     </td>
@@ -130,7 +129,7 @@ the Linux version. Alto may run on macOS too, but there is no package for it and
 ## Download
 
 Each release on the [Releases page](https://github.com/altosaurus/alto/releases) has a Linux download and a Windows installer. They
-carry their own Python and Qt, so nothing else needs to be installed. See
+carry their own Python and Qt. On Windows the installer also makes sure Microsoft's Visual C++ Runtime is installed. See
 [Getting started](https://altosaurus.github.io/alto/latest/getting-started/) for how to install, update and uninstall them.
 
 ## Get started from the source

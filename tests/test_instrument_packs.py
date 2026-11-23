@@ -144,7 +144,7 @@ def test_installed_pack_sound_in_settings(tmp_path: Path, app: QApplication, mon
     player._dir = tmp_path / "cache"
     inst = INSTRUMENT_BY_KEY[key]
     rendered = player._preview_file(inst, midis=(62,), step_ms=300)
-    assert abs(read_wav(rendered)[0]).max() > 0.02
+    assert max(abs(value) for value in read_wav(rendered)[0]) > 0.02
     other_take = replace(inst, samples=((62, VIOLA.parent / "sounds/C3.wav"),))
     assert player._preview_file(other_take, midis=(62,), step_ms=300) != rendered
 
