@@ -41,13 +41,14 @@ a = Analysis(
     excludes=["tkinter", "pytest", "numpy", "readline"],
 )
 # Qt's hooks collect optional plugins and their native libraries. Alto draws its own keyboard
-# and plays local PCM WAVs with QSoundEffect, which uses the platform audio output.
+# and plays local PCM WAVs with QSoundEffect, which uses the platform audio output. Its windows are drawn without OpenGL,
+# so Qt's software OpenGL renderer for Windows (opengl32sw.dll, a build of Mesa) is left out too.
 def unused_qt_component(destination):
     name = Path(destination).name.lower()
     return (
         "virtualkeyboard" in destination.lower()
         or "ffmpeg" in name
-        or name in {"libqpdf.so", "qpdf.dll", "libqgtk3.so"}
+        or name in {"libqpdf.so", "qpdf.dll", "libqgtk3.so", "opengl32sw.dll"}
         or name.startswith(("libqt6pdf.", "qt6pdf."))
         or re.fullmatch(r"(?:lib)?(?:avcodec|avformat|avutil|swresample|swscale)(?:-\d+\.dll|\.so(?:\.\d+)*)", name)
     )

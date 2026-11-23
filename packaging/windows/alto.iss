@@ -13,6 +13,11 @@
 ; The installer is for one user: no administrator prompt, Alto in %LOCALAPPDATA%\Programs\Alto, an entry in the Start menu and in
 ; Settings > Apps. Running a newer installer over an older one updates it, because AppId stays the same. The uninstaller asks
 ; whether to also remove the practice history and the settings, and a silent uninstall keeps them unless /PURGE=1 is given.
+;
+; The terms in microsoft-components.txt are accepted once for each Windows account: on the license page of an ordinary install,
+; or, for a silent one (an update started from inside Alto), in a message before anything is changed. Canceling it ends the
+; installer with nothing changed, and Alto's update reopens the version already installed. /ACCEPTTERMS=1 accepts them for an
+; automated install. TermsVersion names the terms accepted: raise it whenever microsoft-components.txt changes.
 
 #ifndef AppVersion
   #error Pass the version: iscc /DAppVersion=0.0.0 packaging\windows\alto.iss
@@ -26,6 +31,7 @@
 #ifndef LicenseFile
   #error Pass the license to show: /DLicenseFile=license.txt (Alto's LICENSE followed by microsoft-components.txt)
 #endif
+#define TermsVersion "1"
 ; SourceDir: the folder PyInstaller made. OutputDir: where the installer is written. IconFile: an .ico, if there is one.
 #ifndef SourceDir
   #define SourceDir "..\..\dist\alto"
@@ -92,6 +98,9 @@ Filename: "{app}\alto.exe"; Flags: nowait; Check: ShouldRelaunch
 const
   RuntimeUrl = 'https://aka.ms/vs/17/release/vc_redist.x64.exe';  { Microsoft's permanent link to its latest x64 redistributable }
   RuntimeSetup = 'vc_redist.x64.exe';
+
+  TermsKey = 'Software\Alto Installer';  { not Software\alto, Alto's settings, which removing the settings deletes }
+  TermsValue = 'AcceptedTerms';
 
 var
   RuntimeDownload: TDownloadWizardPage;
@@ -237,6 +246,80 @@ begin
   RuntimeHandled := True;
 end;
 
+function TermsAccepted: Boolean;
+var
+  Accepted: String;
+begin
+  Result := RegQueryStringValue(HKEY_CURRENT_USER, TermsKey, TermsValue, Accepted) and (Accepted = '{#TermsVersion}');
+end;
+
+procedure RecordTermsAccepted;
+begin
+  if RegWriteStringValue(HKEY_CURRENT_USER, TermsKey, TermsValue, '{#TermsVersion}') then
+    Log('The terms in microsoft-components.txt (version {#TermsVersion}) are accepted.')
+  else
+    Log('The acceptance of the terms could not be recorded.');
+end;
+
+{ The terms as paragraphs: the file wraps its lines for reading as text, which a message would wrap again. }
+function TermsText: String;
+var
+  Raw: AnsiString;
+  Text: String;
+  Lines: TArrayOfString;
+  I: Integer;
+begin
+  Result := '';
+  ExtractTemporaryFile('microsoft-components.txt');
+  if not LoadStringFromFile(ExpandConstant('{tmp}\microsoft-components.txt'), Raw) then
+    Exit;
+  Text := String(Raw);
+  StringChangeEx(Text, #13#10, #10, True);
+  Lines := StringSplit(Text, [#10], stAll);
+  for I := 0 to GetArrayLength(Lines) - 1 do
+  begin
+    if Lines[I] = '' then
+      Result := Result + #13#10 + #13#10
+    else if (Result = '') or (Copy(Result, Length(Result), 1) = #10) then
+      Result := Result + Lines[I]
+    else if Copy(Lines[I], 1, 2) = '- ' then
+      Result := Result + #13#10 + Lines[I]
+    else
+      Result := Result + ' ' + Trim(Lines[I]);
+  end;
+  Result := Trim(Result);
+end;
+
+{ A silent install skips the license page, so the first one for this Windows account asks here, before anything is changed. A
+  message shown with MsgBox is shown even with /SUPPRESSMSGBOXES. Returning False ends the installer with exit code 1. }
+function InitializeSetup: Boolean;
+var
+  Terms: String;
+begin
+  Result := True;
+  if not WizardSilent or TermsAccepted then
+    Exit;
+  if ExpandConstant('{param:ACCEPTTERMS|0}') = '1' then
+  begin
+    RecordTermsAccepted;
+    Exit;
+  end;
+  Terms := TermsText;
+  if Terms = '' then
+  begin
+    Log('The terms could not be read, so nothing was installed.');
+    Result := False;
+    Exit;
+  end;
+  Terms := 'This version of Alto comes with these terms for the Microsoft code in its program files.' + #13#10 + #13#10 +
+    Terms + #13#10 + #13#10 + 'Choose Yes to accept them and continue, or No to cancel without changing anything.';
+  Result := MsgBox(Terms, mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES;
+  if Result then
+    RecordTermsAccepted
+  else
+    Log('The terms were not accepted, so nothing was installed.');
+end;
+
 procedure InitializeWizard;
 begin
   RuntimeDownload := CreateDownloadPage('Microsoft Visual C++ Runtime',
@@ -250,6 +333,8 @@ var
   Problem: String;
 begin
   Result := True;
+  if CurPageID = wpLicense then  { Next is enabled there only once "I accept the agreement" is chosen }
+    RecordTermsAccepted;
   if (CurPageID = wpReady) and not WizardSilent and RuntimeNeeded then
   begin
     Problem := InstallRuntime(RuntimeDownload);
@@ -280,6 +365,7 @@ procedure RemoveUserData;
 begin
   DelTree(ExpandConstant('{userappdata}\Alto'), True, True, True);
   RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\alto');
+  RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, TermsKey);
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

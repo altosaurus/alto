@@ -85,6 +85,17 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
   `licenses/genanki/LICENSE.txt`.
 - Alto uses PyNaCl to verify update signatures. Its Apache License 2.0 is installed at `licenses/PyNaCl/LICENSE`.
   PyNaCl bundles Frank Denis’s libsodium library. Its ISC license is installed at `licenses/libsodium/LICENSE.libsodium.txt`.
+- The desktop installers contain the Python interpreter and its standard library (Python Software Foundation License,
+  with the licenses of the software CPython incorporates), and these Python packages, each with its license installed
+  under `licenses/`: FSRS (MIT), typing_extensions (PSF License), Chevron (MIT), cached-property (BSD-3-Clause), PyYAML
+  (MIT) with the LibYAML library compiled into it (MIT), and cffi (MIT-0) with the libffi library compiled into it (MIT).
+- Alto checks update downloads with the certificate authorities in certifi, under the Mozilla Public License 2.0. Its
+  license and where to get the source of the version in the installers are installed at `licenses/certifi/`.
+- The Linux Qt libraries use ICU (Unicode License), and the Windows installer contains OpenSSL (Apache License 2.0),
+  brought by Python and by Qt. `licenses/README.txt` lists each of these components with its version and the files of its
+  license.
+- The documentation uses Temml by Ron Kok (MIT) to show mathematical notation. Temml is derived from KaTeX, by Khan Academy
+  and other contributors (MIT). Both licenses are in `docs/assets/vendor/temml-0.14.0/`.
 - pytest (MIT) and NumPy (BSD-3-Clause) are used for tests only, and neither is part of the desktop installers.
 - On Windows, Alto uses the Microsoft Visual C++ Runtime but does not include it: if Windows lacks it, the installer downloads
   Microsoft's own installer from Microsoft, which asks the user to accept Microsoft's license. Programs built with Microsoft's
