@@ -91,6 +91,10 @@ behind it.
   branch `asv-results`. A change of more than 30% against the previous release is written in the run's summary. That is advice and not a
   failure, because a shared build machine is too noisy for a strict gate; it is there to show a slow creep that no single budget
   would catch.
+- **First visits.** The first time a page shows text with ♯, ♭ or ♮ in a new size, Qt spends about 40 ms looking for a font that
+  has the signs, because the interface font does not. `alto/ui/warmup.py` does that once for each size the interface uses, and
+  loads the music font, a step at a time while the app is idle after it opens, so the first visit to a page is nearly as quick as
+  the second. A new style sheet size belongs in its `SIZES`.
 - **By hand, before a release.** The run takes a minute or two, and the feel of animations on a real screen is not something a test
   can judge, so look at the lesson, the circle of fifths and the statistics page on a real display as well.
 

@@ -41,6 +41,7 @@ DOCUMENTED = [
     "alto/ui/exercise_settings.py",
     "alto/ui/background.py",
     "alto/ui/motion.py",
+    "alto/ui/warmup.py",
     "alto/ui/engraving.py",
     "alto/ui/keyboard_styles.py",
     "alto/ui/notes.py",
