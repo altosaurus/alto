@@ -255,6 +255,52 @@ Start with no wheel turned.
 0
 ```
 
+### WheelZoom.follow
+
+```python
+def follow(app: QGuiApplication) -> None
+```
+
+Watch the window that has the focus, and each window that gains it later, such as a dialog that opens.
+
+The filter goes on the windows, not on the application. A window is handed each wheel turn before the widget under the
+pointer is, so a turn anywhere in it is seen, while the many events that pass between the widgets inside it are not:
+a filter on the application runs for every one of those, which made building a page half as slow again.
+
+**Parameters**
+
+- `app` (*QGuiApplication*): The application whose windows to watch.
+
+**Examples**
+
+```pycon
+>>> handler = WheelZoom()
+>>> handler.follow(app)
+```
+
+### WheelZoom.watch
+
+```python
+def watch(window: QWindow | None) -> None
+```
+
+Zoom when the wheel turns with Ctrl held over a window.
+
+**Parameters**
+
+- `window` (*QWindow or None*): The window. None, which is what Qt passes when no window has the focus, does nothing.
+
+**Examples**
+
+```pycon
+>>> from PySide6.QtWidgets import QWidget
+>>> widget = QWidget()
+>>> widget.show()
+>>> handler = WheelZoom()
+>>> handler.watch(widget.windowHandle())
+>>> handler.watch(None)
+```
+
 ### WheelZoom.eventFilter
 
 ```python

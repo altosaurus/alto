@@ -9,8 +9,7 @@ Animations and feedback delays, run in one place so that tests decide when they 
 
 The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. A button given a key with `set_shortcut` shows as pressed for a moment when the key is pressed, then clicks. In the app
-they take their real time.
+does. In the app they take their real time. A button is given its key with `set_shortcut`.
 
 Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
@@ -249,7 +248,7 @@ def set_shortcut(
 ) -> None
 ```
 
-Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.
+Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.
 
 **Parameters**
 
@@ -264,5 +263,9 @@ Give a button a key that presses it, shown as pressed for a moment as Qt does, b
 >>> set_shortcut(button, key="Backspace")
 >>> button.shortcut().toString()
 'Backspace'
+>>> set_instant(True)
+>>> held = QPushButton("Answer")
+>>> set_shortcut(held, key="Return")  # in a test: the key clicks it at once
+>>> set_instant(False)
 ```
 {% endraw %}

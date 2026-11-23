@@ -3,8 +3,7 @@ Animations and feedback delays, run in one place so that tests decide when they 
 
 The interface moves: pages slide, feedback stays on screen for a moment and the next question follows. Each of those goes
 through this module: `play` starts an animation, `later` runs a step after a delay and `start_timer` starts a timer that
-does. A button given a key with `set_shortcut` shows as pressed for a moment when the key is pressed, then clicks. In the app
-they take their real time.
+does. In the app they take their real time. A button is given its key with `set_shortcut`.
 
 Tests switch to instant motion with `set_instant`. Then nothing moves on by itself: animations hold still and delayed steps
 and timers wait in a queue, however long the test takes, until it calls `settle`. That runs everything waiting, in the order
@@ -405,19 +404,17 @@ def settle(*, rounds: int = 1000) -> None:
         raise RuntimeError(f"Motion is still going after {rounds} rounds.")
 
 
-PRESS_MS = 100  # how long a button that a key presses shows as pressed before it clicks, as Qt has it
-
-
 class _KeyPress(QObject):
     """
-    Click a button when its key is pressed: after a moment showing as pressed in the app, and at once with instant motion.
+    With instant motion, click a button at once when its key is pressed.
 
-    It takes the place of Qt's own handling, which waits on a timer that tests cannot hold or settle.
+    Qt shows a button that a key presses as pressed for a moment, then clicks it, on a timer of its own that tests cannot hold
+    or settle. This filter takes its place, but only in tests: a filter runs for every event that reaches the button (paints,
+    hovers, layout), and in the app Qt's own handling is what should happen anyway.
 
     Examples
     --------
     >>> from PySide6.QtWidgets import QPushButton
-    >>> set_instant(True)
     >>> button = QPushButton("Answer")
     >>> clicks = []
     >>> _ = button.clicked.connect(lambda: clicks.append(1))
@@ -425,12 +422,11 @@ class _KeyPress(QObject):
     True
     >>> clicks
     [1]
-    >>> set_instant(False)
     """
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (Qt passes both arguments positionally)
         """
-        Press the button whose key it is, unless the key is shared and Qt only moves the focus.
+        Click the button whose key it is, unless the key is shared and Qt only moves the focus.
 
         Parameters
         ----------
@@ -452,49 +448,19 @@ class _KeyPress(QObject):
         False
         >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, True))  # shared: Qt moves the focus
         False
-        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))  # shown pressed, then clicked
+        >>> button.setEnabled(False)
+        >>> _KeyPress().eventFilter(button, QShortcutEvent(QKeySequence("Return"), None, False))  # taken, but nothing happens
         True
-        >>> button.isDown()
-        True
-        >>> settle()
-        >>> button.isDown()
-        False
         """
         if event.type() != QEvent.Type.Shortcut or not isinstance(watched, QAbstractButton):
             return False
         if not isinstance(event, QShortcutEvent) or event.isAmbiguous():
             return False
-        if watched.isEnabled() and not watched.isDown():
+        if watched.isEnabled():
             if watched.isCheckable() and watched.focusPolicy() & Qt.FocusPolicy.ClickFocus:
                 watched.setFocus(Qt.FocusReason.ShortcutFocusReason)
-            if _instant:
-                watched.click()
-            else:
-                watched.setDown(True)
-                later(PRESS_MS, owner=watched, step=lambda: _release(watched))
+            watched.click()
         return True
-
-
-def _release(button: QAbstractButton) -> None:
-    """
-    Let go of a button that a key pressed, and click it.
-
-    Parameters
-    ----------
-    button : QAbstractButton
-        The button.
-
-    Examples
-    --------
-    >>> from PySide6.QtWidgets import QPushButton
-    >>> button = QPushButton("Next")
-    >>> button.setDown(True)
-    >>> _release(button)
-    >>> button.isDown()
-    False
-    """
-    button.setDown(False)
-    button.click()
 
 
 _key_press = _KeyPress()
@@ -506,7 +472,7 @@ def set_shortcut(
     key: QKeySequence | str,
 ) -> None:
     """
-    Give a button a key that presses it, shown as pressed for a moment as Qt does, but run through this module.
+    Give a button a key that presses it. In the app Qt handles the key; with instant motion it clicks the button at once.
 
     Parameters
     ----------
@@ -522,6 +488,11 @@ def set_shortcut(
     >>> set_shortcut(button, key="Backspace")
     >>> button.shortcut().toString()
     'Backspace'
+    >>> set_instant(True)
+    >>> held = QPushButton("Answer")
+    >>> set_shortcut(held, key="Return")  # in a test: the key clicks it at once
+    >>> set_instant(False)
     """
     button.setShortcut(key)
-    button.installEventFilter(_key_press)  # installing it again only moves it to the front
+    if _instant:  # only tests need it, and it would cost the app a call for every event the button gets
+        button.installEventFilter(_key_press)  # installing it again only moves it to the front

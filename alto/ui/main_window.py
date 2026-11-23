@@ -474,8 +474,8 @@ class MainWindow(QMainWindow):
         zoom.signals.changed.connect(self._zoom_changed)
         self._wheel_zoom = zoom.WheelZoom(self)
         app = QApplication.instance()
-        assert app is not None
-        app.installEventFilter(self._wheel_zoom)
+        assert isinstance(app, QApplication)
+        self._wheel_zoom.follow(app)  # on each window in turn: a filter on the whole application slows every widget
         self.setWindowTitle(self.APP_TITLE)
         self.resize(*default_size())
         saved_geometry = store().value("ui/windowGeometry", QByteArray())
