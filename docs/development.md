@@ -586,8 +586,7 @@ branch, finds the open PR and its current head through GitHub, and publishes the
 The preview for PR 97, for example, is served at `https://genedan.github.io/alto/pr-97/dev/`.
 Previously published previews remain accessible after the PR closes.
 
-To configure the publisher, set the upstream Actions variable `DOCS_PREVIEW_REPOSITORY` to the preview repository
-(`genedan/alto`). Set that repository’s Pages source to the root of its `docs-previews` branch with a
+The file `.github/docs-preview-repository` names the preview repository (`genedan/alto`). Set that repository’s Pages source to the root of its `docs-previews` branch with a
 `.nojekyll` file. Add a write deploy key to the preview repository and store the private key as
 `DOCS_PREVIEW_DEPLOY_KEY` in the upstream `docs-preview-publisher` environment. Restrict that environment to
 the `main` branch. Use a preview hostname separate from the production site, since the rendered content comes from PRs.

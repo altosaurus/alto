@@ -41,10 +41,10 @@ jobs:
       - name: Build the docs
         env:
           BUNDLE_GEMFILE: ${{ github.workspace }}/docs/Gemfile
-          PREVIEW_REPOSITORY: ${{ vars.DOCS_PREVIEW_REPOSITORY || github.repository }}
           PR: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          PREVIEW_REPOSITORY=$(cat .github/docs-preview-repository)
           host="https://${PREVIEW_REPOSITORY%/*}.github.io"
           root="/${PREVIEW_REPOSITORY#*/}/pr-$PR"
           release=$(python3 scripts/docs_site.py latest $(git tag --list 'v*'))
@@ -59,7 +59,6 @@ jobs:
           for page in index getting-started release-notes; do test -s "site/dev/${page}.html" || test -s "site/dev/${page}/index.html"; done
 
       - name: Save the rendered preview
-        if: vars.DOCS_PREVIEW_REPOSITORY != ''
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: docs-preview

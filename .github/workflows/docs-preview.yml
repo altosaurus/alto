@@ -10,14 +10,16 @@ permissions: {}
 jobs:
   locate:
     if: >-
-      vars.DOCS_PREVIEW_REPOSITORY != '' &&
+      github.repository == 'altosaurus/alto' &&
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.path == '.github/workflows/docs-check.yml'
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
     outputs:
       pr: ${{ steps.find.outputs.pr }}
+      repository: ${{ steps.find.outputs.repository }}
     steps:
       # workflow_run.pull_requests can be empty for forks. Resolve identity from GitHub, never the artifact.
       - id: find
@@ -31,6 +33,9 @@ jobs:
             -f head="${HEAD_REPO%/*}:$HEAD_BRANCH" \
             --jq '.[] | select(.head.repo.full_name == env.HEAD_REPO and .head.sha == env.HEAD_SHA) | .number')
           echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          repository=$(gh api -H 'Accept: application/vnd.github.raw+json' \
+            "repos/$GITHUB_REPOSITORY/contents/.github/docs-preview-repository?ref=$GITHUB_SHA")
+          echo "repository=$repository" >> "$GITHUB_OUTPUT"
 
   publish:
     needs: locate
@@ -48,7 +53,7 @@ jobs:
       HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
       BUILD_ID: ${{ github.event.workflow_run.id }}
       BUILD_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-      PREVIEW_REPOSITORY: ${{ vars.DOCS_PREVIEW_REPOSITORY }}
+      PREVIEW_REPOSITORY: ${{ needs.locate.outputs.repository }}
     steps:
       # Only the scripts from the base repository's default branch run in this job.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -66,7 +71,7 @@ jobs:
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          repository: ${{ vars.DOCS_PREVIEW_REPOSITORY }}
+          repository: ${{ needs.locate.outputs.repository }}
           ref: docs-previews
           path: pages
           ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
@@ -94,7 +99,7 @@ jobs:
           PUBLISHED: ${{ needs.publish.result }}
           BUILD_RESULT: ${{ github.event.workflow_run.conclusion }}
           BUILD_URL: ${{ github.event.workflow_run.html_url }}
-          PREVIEW_REPOSITORY: ${{ vars.DOCS_PREVIEW_REPOSITORY }}
+          PREVIEW_REPOSITORY: ${{ needs.locate.outputs.repository }}
         run: |
           current=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq 'select(.state == "open") | .head.sha')
           [[ "$current" == "$HEAD_SHA" ]] || exit 0
