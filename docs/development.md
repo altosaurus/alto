@@ -740,6 +740,13 @@ prompt); its `AppId` in `alto.iss` must never change, because a newer installer 
 whether to also remove the practice history (`%APPDATA%\Alto`) and the settings (`HKEY_CURRENT_USER\Software\alto`); a silent
 uninstall keeps them unless it is given `/PURGE=1`. The installer is not signed, so Windows shows an "unknown publisher" warning.
 
+Microsoft's Visual C++ runtime comes from Windows, not from the installer. `packaging/alto.spec` leaves out the copies that Python,
+Qt and Shiboken bring, fails the build if one remains, and records which runtime files the program needs and the newest version
+among them. The installer checks that Windows has them, at least that new, and otherwise downloads Microsoft's Visual C++
+Redistributable, checks Microsoft's signature on it and runs it, both in an ordinary install and in the silent install of an update.
+The build test runs that step once with `/RUNTIMETEST=1`, so it needs the internet. Alto does not use NumPy, which is only a test
+dependency.
+
 ### Signing releases, once
 
 A packaged copy of Alto updates itself, and it installs only what is signed with a key that came with it. The key pair is made once:

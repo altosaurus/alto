@@ -28,11 +28,15 @@ which is all `audio.py` needs:
 
 ```python
 with wave.open(str(path)) as w:
-    samples = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float64) / 32768
+    pcm = array.array("h")  # signed 16-bit integers
+    pcm.frombytes(w.readframes(w.getnframes()))
+    samples = [value / 32768 for value in pcm]
 ```
 
-`"<i2"` means "little-endian signed 16-bit integer"; dividing by 32,768 turns the integers into floating-point numbers between
--1 and 1, which are easier to compute with. Writing does the reverse: multiply by 32,767 and store as `"<i2"`.
+`array.array("h")` holds signed 16-bit integers. A WAV file stores them little-endian, least significant byte first, and `wave`
+hands them over in the computer's own byte order, swapping them itself on a big-endian computer, which is the order `array` reads.
+Dividing by 32,768 turns the integers into floating-point numbers between -1 and 1, which are easier to compute with. Writing does
+the reverse: multiply by 32,767 and store as 16-bit integers, which `wave` writes little-endian.
 
 ### The sampling theorem and aliasing
 
@@ -101,8 +105,11 @@ play_midi(midi)
 ```
 
 1. **`_note_file`** returns the recording's path if that note has one. If it does not, it picks the *nearest* recorded note and
-   makes a new WAV by shifting its pitch (below), saved in `alto_sounds` in the system temporary folder. The piano is special:
-   beyond two semitones from a recording it is synthesized instead (below).
+   makes a new WAV by shifting its pitch (below), saved in `alto_sounds` in the system temporary folder and reused after that.
+   The file's name includes the size and modification time of the recording it came from, so a plugin update that replaces a
+   recording gets a new file. The piano is special: beyond two semitones from a recording it is synthesized instead (below).
+   Making a note takes a few tens of milliseconds, so `alto.ui.warmup` makes the current instrument's missing notes ahead of
+   time (`Sounds.unrecorded` and `Sounds.prepare`), one per idle moment after the window opens.
 2. **`_effect`** wraps the file in a `QSoundEffect` the first time and keeps it, so a note is loaded once.
    **`QSoundEffect`** is Qt Multimedia's class for short, uncompressed sounds that must start with low delay: it loads the whole
    file into memory, so `play()` is quick. Qt has two others: `QMediaPlayer` streams longer, compressed audio and starts slower,
@@ -111,14 +118,23 @@ play_midi(midi)
    `try/except` and prints rather than raises: **audio must never break an exercise**, and machines with no sound card exist.
    `sounds.enabled` is the master switch the sound button controls; `force=True` plays anyway, for the instrument preview.
 
+A **preview** (the phrase played when you choose an instrument, and the sequences in some exercises) is one WAV with every note
+in it, so the notes stay evenly spaced whatever the computer is doing. `_preview_file` mixes it without leaving 16-bit integers:
+it reads the part of each note that is heard, fades out its tail, and adds the notes together with `map(operator.add, ...)`, so
+Python's own C code does nearly all the work, at the rate the recordings share, so nothing is resampled. That is about as quick
+as NumPy would be. The clip is kept under a name made of everything it depends on, so a phrase is mixed once.
+
 ### Pitch shifting by resampling
 
 ```python
 def shift_pitch(samples, *, semitones):
     ratio = 2 ** (semitones / 12)
-    positions = np.arange(0, len(samples) - 1, ratio)
-    return np.interp(positions, np.arange(len(samples)), samples)
+    count = math.ceil((len(samples) - 1) / ratio)
+    return _interpolate(samples, step=ratio, count=count)  # the value at 0, ratio, 2 * ratio, ...
 ```
+
+`_interpolate` takes each position `x`, the sample `a` just before it and the one after, and returns `a + (after - a) * (x - i)`,
+where `i` is the whole part of `x`: a straight line between the two neighbors.
 
 To raise a recording by two semitones, read it 12% faster: take the samples at positions 0, 1.122, 2.245, ... and interpolate
 between neighbors. This is **resampling**, and it is the simplest pitch shifter. It has two well-known side effects: the
@@ -131,7 +147,7 @@ If you ever need large shifts, there are better algorithms, each a topic of its 
 - **Phase vocoder**: works in the frequency domain, so it can change pitch without changing duration, at some cost in clarity.
 - **PSOLA** (*pitch-synchronous overlap-add*): cuts the sound into one-period grains and overlaps them at new spacing; good for
   speech and single voices.
-- **Better interpolation**: `np.interp` is **linear interpolation**, which smooths the high frequencies slightly. Sinc or
+- **Better interpolation**: drawing straight lines is **linear interpolation**, which smooths the high frequencies slightly. Sinc or
   polynomial interpolation is more accurate (a polyphase resampler such as `scipy.signal.resample_poly`).
 
 ### Making a piano with arithmetic
@@ -142,13 +158,20 @@ waves, one per partial. The code has several pieces of real physics, each one li
 ```python
 f0 = 440.0 * 2 ** ((midi - 69) / 12)
 for n in range(1, 17):  # the first 16 partials
-    f = n * f0 * np.sqrt(1 + inharm * n * n)  # stiff strings: partials sit slightly sharp
+    f = n * f0 * math.sqrt(1 + inharm * n * n)  # stiff strings: partials sit slightly sharp
     amp = 1.0 / n**1.15  # higher partials are quieter
     if n % 7 == 0:
         amp *= 0.3  # the hammer strikes ~1/7 along the string, which suppresses these
     decay = 2.2 + 1.1 * n + (midi - 60) * 0.03  # higher partials, and higher notes, die faster
+    phase = rng.uniform(0, 2 * math.pi)  # one hammer strikes both strings, so they start together
     for detune in (-0.0008, 0.0008):  # two strings per note, slightly apart: the shimmer
-        out += amp * 0.5 * np.sin(2 * np.pi * f * (1 + detune) * t + phase) * np.exp(-decay * t)
+        # amp * 0.5 * sin(2π f (1 + detune) t + phase) * exp(-decay t), made one sample at a time
+        step = 2 * math.pi * f * (1 + detune) / SAMPLE_RATE
+        turn = complex(math.cos(step), math.sin(step)) * math.exp(-decay / SAMPLE_RATE)
+        z = amp * 0.5 * complex(math.cos(phase), math.sin(phase))
+        for k in range(count):
+            out[k] += z.imag
+            z *= turn
 ```
 
 - **Inharmonicity.** A stiff string's partials are not exact multiples of the fundamental; they are slightly *sharper*, by a factor
@@ -160,8 +183,13 @@ for n in range(1, 17):  # the first 16 partials
   short burst of **filtered noise** for the hammer's thump (white noise smoothed by a moving average, a crude low-pass filter),
   and a 50 ms fade-out so the file does not end with a click.
 
+Alto computes this in plain Python, without NumPy: multiplying a complex number by the same small rotation, which also shrinks
+it a little, traces a decaying sine one sample at a time, so no sine or exponential is computed per sample. A note takes a fraction
+of a second, and the result is saved, so each note is made once.
+
 You can check the result in a few lines. A Fourier transform shows the spectrum, and the loudest peak of a synthesized middle C
-is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz):
+is at 261.9 Hz (the frequency resolution of a 1.6 second clip is about 0.6 Hz, so this is the fundamental, 261.63 Hz). This uses
+NumPy, which the tests install (`pip install -e ".[dev]"`) and Alto itself does not need:
 
 ```python
 import numpy as np

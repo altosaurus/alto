@@ -57,7 +57,7 @@ Windows mark is four squares. The marks belong to their owners and are shown onl
 
 ## Software
 
-Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0) and [numpy](https://numpy.org/) (BSD-3-Clause).
+Alto uses [PySide6](https://doc.qt.io/qtforpython-6/) (Qt for Python, LGPL-3.0).
 
 The complete list, with license texts, is in
 [THIRD_PARTY_NOTICES.md](https://github.com/altosaurus/alto/blob/main/THIRD_PARTY_NOTICES.md) in the repository.

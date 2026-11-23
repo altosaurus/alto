@@ -80,7 +80,11 @@ Algorithm SM-2, © SuperMemo World, 1991. [SuperMemo](https://www.supermemo.com/
   `licenses/genanki/LICENSE.txt`.
 - Alto uses PyNaCl to verify update signatures. Its Apache License 2.0 is installed at `licenses/PyNaCl/LICENSE`.
   PyNaCl bundles Frank Denis’s libsodium library. Its ISC license is installed at `licenses/libsodium/LICENSE.libsodium.txt`.
-- NumPy uses the BSD-3-Clause license. pytest (MIT) is used for tests only.
+- pytest (MIT) and NumPy (BSD-3-Clause) are used for tests only, and neither is part of the desktop installers.
+- On Windows, Alto uses the Microsoft Visual C++ Runtime but does not include it: if Windows lacks it, the installer downloads
+  Microsoft's own installer from Microsoft, which asks the user to accept Microsoft's license. Programs built with Microsoft's
+  compiler, including the Python and Qt in the Windows installer, contain small parts of Microsoft code; the terms that protect
+  that code are shown by the installer and installed at `licenses/Microsoft/microsoft-components.txt`.
 
 ## Iconoir icons (`alto/ui/icons.py`)
 

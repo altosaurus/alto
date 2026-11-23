@@ -14,6 +14,9 @@ several sizes, so a first visit could spend a tenth of a second looking for font
 size the interface uses, a little at a time while nothing else is happening, makes the first visit to a page about as quick as the
 second.
 
+Notes the current instrument has no recording of are made by shifting the nearest recording the first time they play, which
+takes a few tens of milliseconds each. They are made here too, one per step, so that even a first play is quick.
+
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
@@ -38,7 +41,10 @@ False
 def warmup_steps() -> list[Callable[[], None]]
 ```
 
-List the steps of the warm-up: the application's own font size and each style sheet size, plain and bold, at the zoom.
+List the steps of the warm-up.
+
+They draw a staff; lay out text in the application's own font size and each style sheet size, plain and bold, at the zoom;
+and, while sound is on, make the notes the current instrument has no recording of.
 
 **Returns**
 
@@ -47,8 +53,9 @@ List the steps of the warm-up: the application's own font size and each style sh
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(warmup_steps())  # a staff, then the application's size and the ten style sheet sizes, in two weights
-23
+>>> notes = len(sounds.unrecorded()) if sounds.enabled else 0
+>>> len(warmup_steps()) == 1 + 22 + notes  # the staff, eleven sizes in two weights, and the notes
+True
 ```
 
 ## start

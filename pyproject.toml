@@ -43,7 +43,6 @@ dependencies = [
     # painting on Python 3.11 (3.12 and later never free None, so they are not affected).
     "PySide6>=6.8,!=6.12.0 ; python_version < '3.12'",
     "PySide6>=6.8 ; python_version >= '3.12'",
-    "numpy>=1.26",
     "PyNaCl>=1.5",  # checks the signature of an update (Ed25519)
     "certifi>=2024.2.2",  # the certificate authorities for the update check, which a packaged build cannot count on the system for
     "fsrs>=6,<7",
@@ -67,6 +66,7 @@ dev = [
     "pre-commit>=3.5",
     "asv>=0.6",
     "diff-cover>=9.2",
+    "numpy>=1.26",  # for the tests' image and sound checks and scripts/excerpt_hit_map.py; Alto itself does not use it
 ]
 package = [
     "pyinstaller>=6.10",  # to build the Linux and Windows downloads: see scripts/build-linux.sh

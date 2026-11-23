@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import array
 import re
 from functools import lru_cache
 
-import numpy as np
 from PySide6.QtCore import QByteArray, QPoint, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QImage, QPainter
 from PySide6.QtSvg import QSvgRenderer
@@ -21,11 +21,12 @@ class ScoreExcerpt:
         self.excerpt = excerpt
 
         image = QImage(str(excerpt.folder / "hits.png")).convertToFormat(QImage.Format.Format_Grayscale16)
-        self.hits = (
-            np.frombuffer(image.constBits(), dtype=np.uint16)
-            .reshape(image.height(), image.bytesPerLine() // 2)[:, : image.width()]
-            .copy()
-        )
+        bits, stride = bytes(image.constBits()), image.bytesPerLine()
+        self.hits: list[array.array[int]] = []  # one row per line of pixels: 0 for paper, else 1 + the target's index
+        for y in range(image.height()):
+            row = array.array("H")
+            row.frombytes(bits[y * stride : y * stride + 2 * image.width()])  # both use the computer's byte order
+            self.hits.append(row)
 
     def music_rect(self, paper: QRectF) -> QRectF:
         """
@@ -37,7 +38,7 @@ class ScoreExcerpt:
             Destination rectangle shared by display and pointer hit testing.
         """
         area = paper.adjusted(10, 8, -10, -27)
-        height, width = self.hits.shape
+        height, width = len(self.hits), len(self.hits[0]) if self.hits else 0
         scale = max(0.0, min(area.width() / width, area.height() / height))
         rect = QRectF(0, 0, width * scale, height * scale)
         rect.moveCenter(area.center())
@@ -53,10 +54,10 @@ class ScoreExcerpt:
             Term and marker index, or None on blank paper.
         """
         if rect.contains(point) and rect.width() and rect.height():
-            height, width = self.hits.shape
+            height, width = len(self.hits), len(self.hits[0]) if self.hits else 0
             x = min(width - 1, int((point.x() - rect.left()) * width / rect.width()))
             y = min(height - 1, int((point.y() - rect.top()) * height / rect.height()))
-            index = int(self.hits[y, x]) - 1
+            index = self.hits[y][x] - 1
             if index >= 0:
                 return self.excerpt.targets[index], index
         return None

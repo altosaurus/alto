@@ -7,6 +7,10 @@
 # packaging\windows\alto.iss, and then installs the result silently, runs it, uninstalls it keeping the data, installs it again and
 # uninstalls it removing the data. The installer is not run with administrator rights and nothing is left installed afterwards, but
 # the data check uses the real %APPDATA%\Alto, so run this only on a computer where that folder can be touched (a CI runner).
+#
+# Microsoft's Visual C++ runtime is left out of the program (see packaging\alto.spec); the installer makes sure Windows has it. The
+# first test install runs that step even though the runner has the runtime (/RUNTIMETEST=1): it downloads Microsoft's
+# redistributable, checks its signature and runs it quietly, so this needs the internet and an administrator account, as a runner has.
 $ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $PSScriptRoot
@@ -63,15 +67,35 @@ Image.open(sys.argv[1]).save(sys.argv[2], sizes=[(16, 16), (24, 24), (32, 32), (
 Run $Py @($MakeIcon, (Join-Path $Root "alto\assets\icon.png"), $Icon)
 
 $env:ALTO_ICON = $Icon
+$RuntimeFile = Join-Path $Work "runtime.txt"
+$env:ALTO_RUNTIME_FILE = $RuntimeFile
 Push-Location $Work
 try {
     Run (Join-Path $Work "venv\Scripts\pyinstaller.exe") @("--noconfirm", "--clean", "--log-level", "WARN", "--distpath", (Join-Path $Work "dist"), "--workpath", (Join-Path $Work "work"), (Join-Path $Root "packaging\alto.spec"))
 }
 finally {
     Pop-Location
-    Remove-Item Env:ALTO_ICON -ErrorAction SilentlyContinue
+    Remove-Item Env:ALTO_ICON, Env:ALTO_RUNTIME_FILE -ErrorAction SilentlyContinue
 }
 $Frozen = Join-Path $Work "dist\alto"
+
+# What the installer must make sure of: the Visual C++ runtime files that were left out, and the version they must at least have.
+$Runtime = @{}
+foreach ($Line in Get-Content $RuntimeFile) {
+    $Key, $Value = $Line -split "=", 2
+    $Runtime[$Key] = $Value
+}
+if (-not $Runtime["version"] -or -not $Runtime["files"]) { throw "The build did not record the Visual C++ runtime it needs: $RuntimeFile" }
+Write-Host "The installer will make sure of the Visual C++ runtime $($Runtime['version']): $($Runtime['files'])"
+$Microsoft = Get-ChildItem -Path $Frozen -Recurse -File | Where-Object { $_.Name -match '^(vcruntime|msvcp|concrt|vccorlib|vcamp|vcomp)\d|^ucrtbase\.dll$|^api-ms-win-' }
+if ($Microsoft) { throw "Microsoft's runtime must not be in the program: $($Microsoft.FullName -join ', ')" }
+if (Get-ChildItem -Path $Frozen -Recurse -Directory -Filter "numpy") { throw "numpy must not be in the program" }
+
+# The license the installer shows: Alto's, then the terms that protect the Microsoft code that every compiled program contains.
+$License = Join-Path $Work "license.txt"
+$LicenseText = (Get-Content -Raw (Join-Path $Root "LICENSE")).TrimEnd() + "`r`n`r`n`r`n" + (Get-Content -Raw (Join-Path $Root "packaging\windows\microsoft-components.txt"))
+Set-Content -Path $License -Value $LicenseText -Encoding ascii -NoNewline
+$InstallerDefines = @("/DRuntimeVersion=$($Runtime['version'])", "/DRuntimeFiles=$($Runtime['files'])", "/DLicenseFile=$License")
 $DependencyLicenses = Join-Path $Root "packaging\dependency_licenses.py"
 Run $Py @($DependencyLicenses, "copy", $Frozen)
 Run $Py @((Join-Path $Root "packaging\qt_sources.py"), $Frozen, (Join-Path $Root "dist\qt-sources"))
@@ -105,7 +129,7 @@ Write-Host "The frozen program starts."
 $Iscc = (Get-Command iscc.exe -ErrorAction SilentlyContinue).Source
 if (-not $Iscc) { $Iscc = Join-Path ${env:ProgramFiles(x86)} "Inno Setup 6\ISCC.exe" }
 if (-not (Test-Path $Iscc)) { throw "Inno Setup 6 (ISCC.exe) was not found. Install it from https://jrsoftware.org/isinfo.php" }
-Run $Iscc @("/Qp", "/DAppVersion=$Version", "/DSourceDir=$Frozen", "/DOutputDir=$(Join-Path $Root 'dist')", "/DIconFile=$Icon", (Join-Path $Root "packaging\windows\alto.iss"))
+Run $Iscc (@("/Qp", "/DAppVersion=$Version", "/DSourceDir=$Frozen", "/DOutputDir=$(Join-Path $Root 'dist')", "/DIconFile=$Icon") + $InstallerDefines + @((Join-Path $Root "packaging\windows\alto.iss")))
 $Setup = Join-Path $Root "dist\alto-$Version-windows-x64-setup.exe"
 if (-not (Test-Path $Setup)) { throw "The installer was not written: $Setup" }
 Write-Host "Wrote $Setup ($([math]::Round((Get-Item $Setup).Length / 1MB)) MB)"
@@ -114,12 +138,25 @@ Write-Host "Wrote $Setup ($([math]::Round((Get-Item $Setup).Length / 1MB)) MB)"
 $Target = Join-Path $Work "installed"
 $Data = Join-Path $env:APPDATA "Alto"
 $Quiet = @("/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART")
-RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target", "/LOG=$(Join-Path $Work 'install.log')"))
+$InstallLog = Join-Path $Work "install.log"
+try {
+    RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target", "/RUNTIMETEST=1", "/LOG=$InstallLog"))
+}
+catch {
+    # Exit code 7 means the runtime step stopped the installation: the log says why.
+    if (Test-Path $InstallLog) { Get-Content $InstallLog | ForEach-Object { Write-Host $_ } }
+    throw
+}
 if (-not (Test-Path (Join-Path $Target "alto.exe"))) { throw "The installer did not install alto.exe in $Target" }
+if (-not (Select-String -Path $InstallLog -SimpleMatch "The Microsoft Visual C++ Runtime is ready." -Quiet)) {
+    Get-Content $InstallLog | Select-String -Pattern "Visual C\+\+|Runtime" | ForEach-Object { Write-Host $_ }
+    throw "The installer did not download, check and run Microsoft's Visual C++ Redistributable"
+}
+Write-Host "The installer downloads Microsoft's Visual C++ Redistributable, checks Microsoft's signature on it and runs it."
 Run (Join-Path $Target "alto.exe") @("--version")
 CheckStaysOpen (Join-Path $Target "alto.exe")
 Run $Py @($DependencyLicenses, "verify", $Target)
-foreach ($Notice in @("THIRD_PARTY_NOTICES.md", "licenses/Qt/README.txt", "licenses/Qt/upstream-notices.zip", "licenses/Qt/LGPL-3.0-only.txt", "licenses/Qt/GPL-3.0-only.txt")) {
+foreach ($Notice in @("THIRD_PARTY_NOTICES.md", "licenses/Microsoft/microsoft-components.txt", "licenses/Qt/README.txt", "licenses/Qt/upstream-notices.zip", "licenses/Qt/LGPL-3.0-only.txt", "licenses/Qt/GPL-3.0-only.txt")) {
     if (-not (Test-Path (Join-Path $Target $Notice))) { throw "The installer is missing $Notice" }
 }
 
@@ -140,7 +177,7 @@ Write-Host "An uninstall with /PURGE=1 removes the data too."
 # An update, the way Alto does it: Alto starts the step that Alto itself builds (`selfupdate.windows_handoff_command`) and quits; the step
 # waits for it to end, runs the newer installer, and opens Alto again. Here the open Alto is stopped, standing in for quitting.
 $Newer = "99.0.0"
-Run $Iscc @("/Qp", "/DAppVersion=$Newer", "/DSourceDir=$Frozen", "/DOutputDir=$Work", "/DIconFile=$Icon", (Join-Path $Root "packaging\windows\alto.iss"))
+Run $Iscc (@("/Qp", "/DAppVersion=$Newer", "/DSourceDir=$Frozen", "/DOutputDir=$Work", "/DIconFile=$Icon") + $InstallerDefines + @((Join-Path $Root "packaging\windows\alto.iss")))
 $NewerSetup = Join-Path $Work "alto-$Newer-windows-x64-setup.exe"
 if (-not (Test-Path $NewerSetup)) { throw "The newer installer was not written: $NewerSetup" }
 RunAndWait $Setup ($Quiet + @("/CURRENTUSER", "/DIR=$Target"))
@@ -155,12 +192,15 @@ try {
     $Step = Start-Process -FilePath "powershell.exe" -ArgumentList @("-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", $Encoded) -PassThru
     Start-Sleep -Seconds 2
     if ($Step.HasExited) { throw "The update step ended before Alto had quit" }
-    # Seed the obsolete 0.0.2 DLLs after startup so the in-place upgrade exercises its cleanup.
+    # Seed files that an older installation may have and this version does not, after startup, so the in-place upgrade exercises its
+    # cleanup.
     $LegacyDlls = @(
-        "Qt6VirtualKeyboard.dll", "plugins/platforminputcontexts/qtvirtualkeyboardplugin.dll",
-        "Qt6Pdf.dll", "plugins/imageformats/qpdf.dll", "plugins/multimedia/ffmpegmediaplugin.dll",
-        "avcodec-63.dll", "avformat-63.dll", "avutil-61.dll", "swresample-7.dll", "swscale-10.dll"
-    ) | ForEach-Object { Join-Path $Target "_internal/PySide6/$_" }
+        "PySide6/Qt6VirtualKeyboard.dll", "PySide6/plugins/platforminputcontexts/qtvirtualkeyboardplugin.dll",
+        "PySide6/Qt6Pdf.dll", "PySide6/plugins/imageformats/qpdf.dll", "PySide6/plugins/multimedia/ffmpegmediaplugin.dll",
+        "PySide6/avcodec-63.dll", "PySide6/avformat-63.dll", "PySide6/avutil-61.dll", "PySide6/swresample-7.dll", "PySide6/swscale-10.dll",
+        "VCRUNTIME140.dll", "VCRUNTIME140_1.dll", "PySide6/MSVCP140.dll", "PySide6/VCRUNTIME140.dll", "shiboken6/MSVCP140.dll",
+        "numpy/__init__.py", "numpy.libs/msvcp140-a4c2229bdc2a2a630acdc095b4d86008.dll"
+    ) | ForEach-Object { Join-Path $Target "_internal/$_" }
     foreach ($File in $LegacyDlls) {
         New-Item -ItemType Directory -Force -Path (Split-Path -Parent $File) | Out-Null
         New-Item -ItemType File -Path $File -ErrorAction Stop | Out-Null

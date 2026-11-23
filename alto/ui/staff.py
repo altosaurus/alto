@@ -24,7 +24,6 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 from weakref import WeakSet
 
-import numpy as np
 from PySide6.QtCore import (
     QEvent,
     QPoint,
@@ -518,8 +517,9 @@ class StaffWidget(QWidget):
         self.locate_notation = False
         self._hover_point: QPoint | None = None
         self._pick_geometry: tuple | None = None
-        self._pick_map = np.empty((0, 0), dtype=np.uint16)
+        self._pick_images: list[QImage] = []  # each paints three components, one per color channel, on black
         self._pick_parts: list[Component] = []
+        self._pick_faint: list[bool] = []  # whether a component's ink counts a third, as a staff line's does
         self.clef_hidden = False  # draw the staff without its clef, for a clef the learner places
         self._fit_height("treble")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
@@ -1049,48 +1049,81 @@ class StaffWidget(QWidget):
         for dx, dy in PICK_OFFSETS:
             x, y = point.x() + dx, point.y() + dy
             if 0 <= x < self.width() and 0 <= y < self.height():
-                index = self._pick_map[y, x]
+                index = self._pick_index(x, y=y)
                 if index:
                     return self._pick_parts[index - 1]
         return None
 
-    def _build_pick_map(self) -> None:
+    def _pick_index(self, x: int, *, y: int) -> int:
         """
-        Record which visible component owns each pixel of the score.
+        Find which component owns a pixel: the one whose ink there is strongest.
 
-        Each paint pass measures three components in separate color channels on black paper.
-        The strongest visible ink wins. Staff lines have lower priority at crossings so a thin
-        symbol drawn over a line can still be picked.
+        Staff lines count a third of their ink, so a thin symbol drawn over a line still wins. Components are weighed in the
+        order they were drawn, and a later one must be strictly stronger to win.
+
+        Parameters
+        ----------
+        x : int
+            The pixel's column, inside the widget.
+        y : int
+            The pixel's row, inside the widget. Keyword-only.
+
+        Returns
+        -------
+        int
+            One more than the component's place in `_pick_parts`, or 0 for empty paper.
 
         Examples
         --------
         >>> staff = StaffWidget()
         >>> staff._build_pick_map()
-        >>> staff._pick_map.shape == (staff.height(), staff.width())
+        >>> staff._pick_index(0, y=0)  # the corner is empty paper
+        0
+        """
+        strongest = index = 0
+        for page, image in enumerate(self._pick_images):
+            rgb = image.pixel(x, y)
+            for channel, coverage in enumerate(((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255)):
+                part = page * 3 + channel
+                if part >= len(self._pick_parts):
+                    break
+                weight = coverage // 3 if self._pick_faint[part] else coverage
+                if coverage > 32 and weight > strongest:
+                    strongest, index = weight, part + 1
+        return index
+
+    def _build_pick_map(self) -> None:
+        """
+        Paint the score so that `_pick_index` can tell which visible component owns any pixel.
+
+        Each paint pass draws three components in separate color channels on black paper, and the images are kept: a lookup
+        reads only the few pixels around the pointer, so nothing has to be worked out for the rest of the score.
+
+        Examples
+        --------
+        >>> staff = StaffWidget()
+        >>> staff._build_pick_map()
+        >>> all(image.size() == staff.size() for image in staff._pick_images)
         True
         """
         parts: defaultdict[Component, int] = defaultdict(lambda: len(parts))
-        self._pick_map = np.zeros((self.height(), self.width()), dtype=np.uint16)
-        strongest = np.zeros_like(self._pick_map, dtype=np.uint8)
-        image = QImage(self.size(), QImage.Format.Format_RGBA8888)
         black = QColor("black")
+        images = []
         first = 0
         while first == 0 or first < len(parts):
             channels = {first + i: QColor(color) for i, color in enumerate(("red", "lime", "blue"))}
+            image = QImage(self.size(), QImage.Format.Format_RGB32)
             image.fill(black)
             with QPainter(image) as painter:
                 painter.setFont(self.font())
                 self._draw_score(painter, ink=lambda part, palette=channels: palette.get(parts[part], black), paper=black)
-            pixels = np.frombuffer(image.constBits(), dtype=np.uint8).reshape(self.height(), self.width(), 4)
-            for channel, part in enumerate(list(parts)[first : first + 3]):
-                coverage = pixels[:, :, channel]
-                background_line = part[0] == "Staff line" and (self.locate_notation or part != self.notation_target)
-                weight = coverage // 3 if background_line else coverage
-                visible = (coverage > 32) & (weight > strongest)
-                self._pick_map[visible] = first + channel + 1
-                strongest[visible] = weight[visible]
+            images.append(image)
             first += 3
+        self._pick_images = images
         self._pick_parts = list(parts)
+        self._pick_faint = [
+            part[0] == "Staff line" and (self.locate_notation or part != self.notation_target) for part in self._pick_parts
+        ]
 
     def _draw_score(
         self,

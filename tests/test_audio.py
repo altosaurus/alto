@@ -6,6 +6,7 @@ import io
 import os
 import time
 import wave
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -179,7 +180,7 @@ def test_pitch_shift_moves_the_frequency() -> None:
     """
     t = np.arange(SAMPLE_RATE) / SAMPLE_RATE
     tone = np.sin(2 * np.pi * 440 * t)
-    shifted = shift_pitch(tone, semitones=2)  # up a whole tone: ~493.9 Hz
+    shifted = shift_pitch(tone.tolist(), semitones=2)  # up a whole tone: ~493.9 Hz
     peak = np.argmax(np.abs(np.fft.rfft(shifted))) * SAMPLE_RATE / len(shifted)
     assert abs(peak - 493.9) < 3
 
@@ -534,16 +535,17 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
         files[note_number] = path
     monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: files[midi])
     path = player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300)
-    samples, rendered_rate = read_wav(path)
-    assert rendered_rate == SAMPLE_RATE
-    assert len(samples) >= len(midis) * SAMPLE_RATE * 300 // 1000
+    rendered, rendered_rate = read_wav(path)
+    samples = np.asarray(rendered)
+    assert rendered_rate == rate  # mixed at the recordings' own rate, without resampling
+    assert len(samples) >= len(midis) * rate * 300 // 1000
     sounding = np.flatnonzero(np.abs(samples) > 0.01)
     onsets = sounding[np.r_[True, np.diff(sounding) > 1]]
-    assert onsets.tolist() == [
+    assert [onset * 1000 / rate for onset in onsets.tolist()] == [
         0,
-        13230,
-        26460,
-        39690,
+        300,
+        600,
+        900,
     ]
     assert np.allclose(
         samples[onsets],
@@ -557,6 +559,63 @@ def test_preview_note_onsets_are_evenly_spaced_in_the_rendered_audio(
     )
     monkeypatch.setattr(player, "_note_file", lambda *_args, **_kwargs: pytest.fail("cached preview reread its notes"))
     assert player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=midis, step_ms=300) == path
+
+
+def test_a_preview_of_recordings_at_different_rates_is_mixed_at_the_standard_rate(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """
+    Check that notes recorded at different rates are converted to `SAMPLE_RATE` before they are mixed, keeping their spacing.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A temporary sound cache.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the recordings with short impulses at two rates.
+    """
+    player = Sounds()
+    player._dir = tmp_path
+    files = {}
+    for index, (midi, rate) in enumerate(((60, 22050), (62, 44100))):
+        samples = [0.0] * (rate // 100)
+        samples[0] = (index + 1) / 10
+        files[midi] = tmp_path / f"{midi}.wav"
+        files[midi].write_bytes(to_wav_bytes(samples, rate=rate))
+    monkeypatch.setattr(player, "_note_file", lambda _inst, *, midi: files[midi])
+    rendered, rate = read_wav(player._preview_file(INSTRUMENT_BY_KEY["flute"], midis=(60, 62), step_ms=300))
+    assert rate == SAMPLE_RATE
+    onsets = [k for k, value in enumerate(rendered) if abs(value) > 0.01 and (k == 0 or abs(rendered[k - 1]) <= 0.01)]
+    assert onsets == [0, SAMPLE_RATE * 300 // 1000]
+
+
+def test_a_pack_preview_is_kept_until_its_recordings_change(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    Check that a pack instrument's preview is rendered once, and again when an update changes one of its recordings.
+
+    Parameters
+    ----------
+    tmp_path : Path
+        A temporary sound cache and pack folder.
+    monkeypatch : pytest.MonkeyPatch
+        Makes a second render fail the test while the recordings are unchanged.
+    """
+    recording = tmp_path / "62.wav"
+    recording.write_bytes(to_wav_bytes([0.5] * 4410))
+    pack = replace(INSTRUMENT_BY_KEY["flute"], key="pack-flute", samples=((62, recording),))
+    player = Sounds()
+    player._dir = tmp_path / "cache"
+    first = player._preview_file(pack, midis=(62,), step_ms=300)
+    with monkeypatch.context() as patched:
+        patched.setattr(
+            player,
+            "_note_file",
+            lambda *_args, **_kwargs: pytest.fail("an unchanged pack preview was rendered again"),
+        )
+        assert player._preview_file(pack, midis=(62,), step_ms=300) == first
+    recording.write_bytes(to_wav_bytes([0.25] * 2205))  # the pack is updated with another take
+    assert player._preview_file(pack, midis=(62,), step_ms=300) != first
 
 
 def test_a_preview_reuses_one_clip_and_stops_it_before_replaying(

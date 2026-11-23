@@ -8,6 +8,9 @@ several sizes, so a first visit could spend a tenth of a second looking for font
 size the interface uses, a little at a time while nothing else is happening, makes the first visit to a page about as quick as the
 second.
 
+Notes the current instrument has no recording of are made by shifting the nearest recording the first time they play, which
+takes a few tens of milliseconds each. They are made here too, one per step, so that even a first play is quick.
+
 Examples
 --------
 >>> warmed = []
@@ -39,6 +42,7 @@ from PySide6.QtGui import (
     QGuiApplication,
 )
 
+from alto.audio import sounds
 from alto.theory.pitch import Note
 from alto.ui import zoom
 from alto.ui.staff import StaffWidget
@@ -101,9 +105,45 @@ def _staff_step() -> None:
     staff.deleteLater()
 
 
+def _note_step(midi: int) -> Callable[[], None]:
+    """
+    Make the step that makes one note the current instrument has no recording of.
+
+    Parameters
+    ----------
+    midi : int
+        The MIDI note number.
+
+    Returns
+    -------
+    callable
+        The step.
+
+    Examples
+    --------
+    >>> _note_step(61)()
+    """
+
+    def step() -> None:
+        """
+        Make the note's file, unless sound has been turned off since the warm-up began.
+
+        Examples
+        --------
+        >>> step()  # doctest: +SKIP
+        """
+        if sounds.enabled:
+            sounds.prepare(midi)
+
+    return step
+
+
 def warmup_steps() -> list[Callable[[], None]]:
     """
-    List the steps of the warm-up: the application's own font size and each style sheet size, plain and bold, at the zoom.
+    List the steps of the warm-up.
+
+    They draw a staff; lay out text in the application's own font size and each style sheet size, plain and bold, at the zoom;
+    and, while sound is on, make the notes the current instrument has no recording of.
 
     Returns
     -------
@@ -112,13 +152,19 @@ def warmup_steps() -> list[Callable[[], None]]:
 
     Examples
     --------
-    >>> len(warmup_steps())  # a staff, then the application's size and the ten style sheet sizes, in two weights
-    23
+    >>> notes = len(sounds.unrecorded()) if sounds.enabled else 0
+    >>> len(warmup_steps()) == 1 + 22 + notes  # the staff, eleven sizes in two weights, and the notes
+    True
     """
     app = QGuiApplication.instance()
     own = app.font().pointSizeF() if isinstance(app, QGuiApplication) else 10.0
     sizes = [own, *(size * zoom.factor() for size in SIZES)]
-    return [_staff_step, *(_text_step(size, bold=bold) for size in sizes for bold in (False, True))]
+    notes = sounds.unrecorded() if sounds.enabled else []
+    return [
+        _staff_step,
+        *(_text_step(size, bold=bold) for size in sizes for bold in (False, True)),
+        *(_note_step(midi) for midi in notes),
+    ]
 
 
 def start(

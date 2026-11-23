@@ -28,12 +28,13 @@ def synth_piano(
     midi: int,
     *,
     duration: float = 1.6,
-) -> np.ndarray
+) -> list[float]
 ```
 
 Synthesize a piano note, for notes outside the recorded range.
 
-An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump.
+An additive model: stretched partials, a decay for each partial, a detuned string pair, and a hammer thump. Each partial
+is a decaying sine made by rotating a complex number one sample at a time, which needs no sine or exponential per sample.
 
 **Parameters**
 
@@ -42,7 +43,7 @@ An additive model: stretched partials, a decay for each partial, a detuned strin
 
 **Returns**
 
-- *numpy.ndarray*: Mono samples at `SAMPLE_RATE`, scaled so the loudest is 0.8.
+- *list of float*: Mono samples at `SAMPLE_RATE`, scaled so the loudest is 0.8.
 
 **Examples**
 
@@ -50,7 +51,7 @@ An additive model: stretched partials, a decay for each partial, a detuned strin
 >>> samples = synth_piano(60, duration=0.1)
 >>> len(samples)
 4410
->>> round(float(np.max(np.abs(samples))), 1)
+>>> round(max(abs(s) for s in samples), 1)
 0.8
 ```
 
@@ -187,7 +188,7 @@ Ways of playing one instrument share a single entry.
 ## read_wav
 
 ```python
-def read_wav(path: Path) -> tuple[np.ndarray, int]
+def read_wav(path: Path) -> tuple[list[float], int]
 ```
 
 Read a mono 16-bit WAV file.
@@ -198,14 +199,14 @@ Read a mono 16-bit WAV file.
 
 **Returns**
 
-- *tuple of (numpy.ndarray, int)*: The samples as floats from -1 to 1, and the sample rate in hertz.
+- *tuple of (list of float, int)*: The samples as floats from -1 to 1, and the sample rate in hertz.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> path_ = Path(tempfile.mkdtemp()) / "silence.wav"
->>> _ = path_.write_bytes(to_wav_bytes(np.zeros(10)))
+>>> _ = path_.write_bytes(to_wav_bytes([0.0] * 10))
 >>> samples, rate = read_wav(path_)
 >>> len(samples), rate
 (10, 44100)
@@ -215,10 +216,10 @@ Read a mono 16-bit WAV file.
 
 ```python
 def shift_pitch(
-    samples: np.ndarray,
+    samples: Sequence[float],
     *,
     semitones: float,
-) -> np.ndarray
+) -> list[float]
 ```
 
 Change the pitch of samples by resampling them.
@@ -227,17 +228,17 @@ It also changes the length, which is fine for a few semitones.
 
 **Parameters**
 
-- `samples` (*numpy.ndarray*): Mono samples.
+- `samples` (*sequence of float*): Mono samples.
 - `semitones` (*float*): How far to shift; positive is higher. Keyword-only.
 
 **Returns**
 
-- *numpy.ndarray*: The resampled samples, shorter when shifted up and longer when shifted down.
+- *list of float*: The resampled samples, shorter when shifted up and longer when shifted down.
 
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> len(shift_pitch(np.zeros(100), semitones=12))  # an octave up: half as long
+>>> len(shift_pitch([0.0] * 100, semitones=12))  # an octave up: half as long
 50
 ```
 
@@ -245,7 +246,7 @@ It also changes the length, which is fine for a few semitones.
 
 ```python
 def to_wav_bytes(
-    samples: np.ndarray,
+    samples: Iterable[float],
     *,
     rate: int = SAMPLE_RATE,
 ) -> bytes
@@ -255,7 +256,7 @@ Encode samples as a mono 16-bit WAV file in memory.
 
 **Parameters**
 
-- `samples` (*numpy.ndarray*): Mono samples from -1 to 1.
+- `samples` (*iterable of float*): Mono samples from -1 to 1; anything beyond is clipped.
 - `rate` (*int, default SAMPLE_RATE*): The sample rate in hertz. Keyword-only.
 
 **Returns**
@@ -265,8 +266,13 @@ Encode samples as a mono 16-bit WAV file in memory.
 **Examples**
 
 ```console?lang=python&prompt=%3E%3E%3E,...
->>> to_wav_bytes(np.zeros(10))[:4]
+>>> to_wav_bytes([0.0] * 10)[:4]
 b'RIFF'
+>>> import tempfile
+>>> clipped = Path(tempfile.mkdtemp()) / "clipped.wav"
+>>> _ = clipped.write_bytes(to_wav_bytes([2.0, -3.0, 0.5]))
+>>> [round(value, 3) for value in read_wav(clipped)[0]]  # beyond full scale is clipped
+[1.0, -1.0, 0.5]
 ```
 
 ## write_file_atomically
@@ -353,6 +359,56 @@ Return the notes an instrument has a recording for on disk.
 ```console?lang=python&prompt=%3E%3E%3E,...
 >>> 60 in Sounds().recordings(INSTRUMENT_BY_KEY["piano"])
 True
+```
+
+### Sounds.unrecorded
+
+```python
+def unrecorded(instrument: str | None = None) -> list[int]
+```
+
+List the notes within an instrument's recorded range that have no recording of their own, nearest middle C first.
+
+Each is made the first time it plays, by shifting the nearest recording. `alto.ui.warmup` makes them ahead of time with
+`prepare`, so that even a first play is quick.
+
+**Parameters**
+
+- `instrument` (*str or None, default None*): The instrument's key, or None for the current one.
+
+**Returns**
+
+- *list of int*: MIDI note numbers.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> notes = Sounds().unrecorded("piano")  # the piano is recorded every third semitone
+>>> notes[:2], 60 in notes, len(notes)
+([61, 59], False, 58)
+```
+
+### Sounds.prepare
+
+```python
+def prepare(
+    midi: int,
+    *,
+    instrument: str | None = None,
+) -> None
+```
+
+Make the file a note plays, if it has no recording and was not made before, so that its first play is quick.
+
+**Parameters**
+
+- `midi` (*int*): The MIDI note number.
+- `instrument` (*str or None, default None*): The instrument's key, or None for the current one. Keyword-only.
+
+**Examples**
+
+```console?lang=python&prompt=%3E%3E%3E,...
+>>> Sounds().prepare(61, instrument="piano")
 ```
 
 ### Sounds.note_duration_ms
