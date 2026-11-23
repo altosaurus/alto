@@ -12,7 +12,7 @@ One `ExerciseView` works for every exercise. It asks the exercise (or, with a pr
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
 >>> # noinspection PyUnresolvedReferences
@@ -44,7 +44,7 @@ Ctrl for a flat, and Alt added for double alterations.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> choice_keys(["major", "minor", "diminished"])
 ['1', '2', '3']
 >>> choice_keys(list("CDEFGAB") + ["C♯", "B♭"] + ["F♯"])
@@ -80,7 +80,7 @@ digit takes that digit.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> second_row_keys(["1", "2", "3"], labels=["root position", "1st inversion"])
 ['A', 'S']
 >>> second_row_keys(["C", "Shift+C"], labels=["3", "4", "5"])
@@ -112,7 +112,7 @@ Return a note's name as it is written, with its octave: F♯4.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> note_name(Note.parse("F#4"))
 'F♯4'
 ```
@@ -142,7 +142,7 @@ Return a note's name in words, for a screen reader: "F sharp 4".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> note_words(Note.parse("F#4")), note_words(Note.parse("Bb3")), note_words(Note.parse("C4"))
 ('F sharp 4', 'B flat 3', 'C 4')
 ```
@@ -192,7 +192,7 @@ The screen for practicing one exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
 >>> view.score.text()
@@ -212,7 +212,7 @@ Build the screen and show the first question.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeySignatures
 >>> view = ExerciseView(KeySignatures(), rng=random.Random(2))
 >>> view.settings_panel is not None  # the exercise has settings behind the gear button
@@ -233,7 +233,7 @@ Pause automatic advancement and answer timing while browsing another page.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames())
 >>> view.show()
@@ -256,7 +256,7 @@ Resume the exercise's answer clock and pending advance when it reappears.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames())
 >>> view.show()
@@ -280,7 +280,7 @@ Remember the exercise settings pane, selected page, and scroll position before a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> ExerciseView(NoteNames(), rng=random.Random(1)).settings_state()
 (False, 0, 0)
@@ -300,7 +300,7 @@ Restore exercise settings navigation immediately after rebuilding the view.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
 >>> view.restore_settings_state((True, 0, 0))
@@ -318,7 +318,7 @@ Refresh the visible exercise or invalidate its queue until it is reopened.
 
 **Examples**
 
-```pycon
+```text
 Lowering the daily allowance on the home page also applies to a previously opened exercise.
 ```
 
@@ -332,7 +332,7 @@ Show the next question: its staff, keyboard or text, and a fresh set of answer b
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> view = ExerciseView(NoteNames(), rng=random.Random(1))
 >>> view.next_question()
@@ -363,7 +363,7 @@ Handle staff clicks in notation questions and forward wheel turns to the fork or
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint, QPointF
 >>> from PySide6.QtGui import QWheelEvent
 >>> from alto.exercises.library import KeySignatureConstruction
@@ -400,7 +400,7 @@ In SM-2 and FSRS the card returns at its scheduled retry time. ASRS and ARTS all
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> sounds.enabled = False
 >>> view = ExerciseView(NoteNames(), rng=random.Random(1))

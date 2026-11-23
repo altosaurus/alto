@@ -12,7 +12,7 @@ the middle, and the text underneath explains it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.select("outer", place=2)
 >>> circle.title, circle.signature
@@ -38,7 +38,7 @@ A circle of fifths that shows every key and lets you pick one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.cell, circle.title
 (None, 'Circle of fifths')
@@ -54,7 +54,7 @@ Build the circle with every key named and none picked.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ExplorableCircle().shown["inner"] == set(range(12))
 True
 ```
@@ -73,7 +73,7 @@ Let the circle be clicked and moved with the keys, or make it a picture.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.set_interactive(False)
 >>> circle.interactive, circle.focusPolicy() == Qt.FocusPolicy.NoFocus
@@ -90,7 +90,7 @@ Pick nothing: every key is named, none is lit and the middle says what to do.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.select("outer", place=4)
 >>> circle.clear()
@@ -119,7 +119,7 @@ A minor key has the key signature, and the chords, of its relative major.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.select("inner", place=3)
 >>> circle.title, circle.subtitle, sorted(circle.lit), circle.numerals[("outer", 4)]
@@ -144,7 +144,7 @@ Return the cell under a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.resize(400, 400)
 >>> middle, size = circle.geometry_of()
@@ -179,7 +179,7 @@ Return how bright a cell is drawn: as for any question, and a little brighter un
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.hover = ("outer", 5)
 >>> circle.lift_of("outer", place=5), circle.lift_of("outer", place=6)
@@ -200,7 +200,7 @@ Pick the cell that is clicked; a click in the middle clears the pick.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint
 >>> from PySide6.QtTest import QTest
 >>> circle = ExplorableCircle()
@@ -225,7 +225,7 @@ Light the cell under the pointer, and show a hand over the ones that can be pick
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint
 >>> from PySide6.QtTest import QTest
 >>> circle = ExplorableCircle()
@@ -251,7 +251,7 @@ Stop lighting a cell once the pointer has left.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> circle.hover = ("outer", 1)
 >>> circle.leaveEvent(QEvent(QEvent.Type.Leave))
@@ -275,7 +275,7 @@ Escape clears the pick, and Home picks C major.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = ExplorableCircle()
 >>> press = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Right, Qt.KeyboardModifier.NoModifier)
 >>> circle.keyPressEvent(press)
@@ -305,7 +305,7 @@ The reference for the circle of fifths: a short description, the circle to explo
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ReferencePanel()
 >>> panel.circle.select("outer", place=1)
 >>> "<b>G major</b>" in panel.explanation.text()
@@ -322,7 +322,7 @@ Build the panel with nothing picked.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ReferencePanel()
 >>> panel.explanation.text() == ""
 False
@@ -346,7 +346,7 @@ The reference for the clefs: how they are made, and a picture of each with where
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ClefReferencePanel()
 >>> "C clef" in panel.rows["mezzo"].text() and "bottom line" in panel.rows["french"].text()
 True
@@ -362,7 +362,7 @@ Build the panel: the lesson button, a line of explanation and a row for each cle
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(ClefReferencePanel().rows) == len(settings.CLEF_BASICS_CLEFS)
 True
 ```
@@ -401,7 +401,7 @@ Show the hints for the current note exercise.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteReferencePanel(KeyboardNotes()).lesson_button.text()
 'New to this? Take the full lesson  →'
 ```
@@ -431,7 +431,7 @@ Show the exercise's description and a button for each lesson that goes with it.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> demo = Lesson(key="pack.d.l", title="Parts", about="", summary="", category="D", steps=(), exercise="x")
 >>> PluginReferencePanel(NoteNames(), lessons=[demo]).lesson_buttons[0].text()
 'New to this? Take the lesson: Parts  →'
@@ -455,7 +455,7 @@ Return the reference pane for an exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> isinstance(reference_panel_for(NoteNames()), NoteReferencePanel), reference_panel_for(CircleOfFifths()) is not None
 (True, True)

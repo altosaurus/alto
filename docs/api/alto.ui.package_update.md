@@ -13,7 +13,7 @@ window says that Alto will close, install the update and open again, and OK hand
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.updates import Release
 >>> PackageUpdateDialog  # doctest: +ELLIPSIS
 <class '...PackageUpdateDialog'>
@@ -38,7 +38,7 @@ Download and check an update on another thread, and report how it goes through s
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> UpdatePreparer().prepared is None
 True
 ```
@@ -94,7 +94,7 @@ Say whether the person has canceled.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> UpdatePreparer().is_canceled()
 False
 ```
@@ -149,7 +149,7 @@ Download and check the update, showing the window until the person has read how 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> here = Target("linux", folder=Path("/x"), prefix=None)
 >>> # noinspection PyTypeChecker
 >>> PackageUpdateDialog(None, release=Release("0.1.0", tag="v0.1.0", url=""), target=here).ready

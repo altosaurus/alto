@@ -11,7 +11,7 @@ It is a mock of the home page, with the app's own cards, that switches from the 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.show_transition("cascade")
 >>> preview.transition.key
@@ -35,7 +35,7 @@ card to move.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> first, second = make_sides()
 >>> len(first), len(second) > len(LESSONS)
 (6, True)
@@ -58,7 +58,7 @@ The page of the mock window: it draws the cards that are resting, and the transi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stage().resting
 []
 ```
@@ -73,7 +73,7 @@ Build the stage with nothing on it.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stage().canvas.running
 False
 ```
@@ -92,7 +92,7 @@ Keep the canvas the size of the stage.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> stage = Stage()
 >>> stage.show()  # a hidden widget is only told about its size once it is shown
 >>> stage.resize(300, 200)
@@ -114,7 +114,7 @@ Draw the cards at rest, unless a transition is drawing them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> stage = Stage()
 >>> stage.resize(100, 100)
 >>> stage.grab().isNull()
@@ -143,7 +143,7 @@ it plays the transition to the other side, so the learner can try it as often as
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.side
 0
@@ -159,7 +159,7 @@ Build the preview, showing the default transition.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> TransitionPreview().transition.key
 'cascade'
 ```
@@ -178,7 +178,7 @@ Show a transition: the exercises appear, and after a moment they change to the l
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.show_transition("flip")
 >>> preview.transition.key
@@ -195,7 +195,7 @@ Play the transition that is showing again, from the exercises.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.replay()
 >>> preview.transition.key
@@ -218,7 +218,7 @@ A transition that is still playing ends first. Nothing happens if that side is a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.go_to(1)
 >>> preview.side, preview.switch.current()
@@ -242,7 +242,7 @@ Lay the cards out again for the new size, unless a transition is playing.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview = TransitionPreview()
 >>> preview.resize(700, 500)
 >>> preview.stage.resting[0].rect.width() <= CARD_W

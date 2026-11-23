@@ -11,7 +11,7 @@ Colors come from the palette so it follows the system light/dark theme.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RADIUS
 10
 ```
@@ -34,7 +34,7 @@ Style category headings in the navigation pane and tile filters.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> navigation_heading_style(QPalette())[0].bold()
 True
 ```
@@ -65,7 +65,7 @@ other standard buttons have graphite-gray outlines.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QApplication
 >>> sheet = app_style(QApplication.palette())
 >>> "QPushButton" in sheet and "border-radius" in sheet

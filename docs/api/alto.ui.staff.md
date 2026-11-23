@@ -13,7 +13,7 @@ font chosen in the settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_signature_positions("treble", sign=1)
 ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
 >>> staff = StaffWidget()
@@ -40,7 +40,7 @@ Return the ways a clef can be written: the symbol and where on the staff it goes
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> clef_targets("treble") == {("G", 2)} and clef_targets("mezzo") == {("C", 2)}
 True
 >>> sorted(clef_targets("baritone"))
@@ -67,7 +67,7 @@ Return the symbol and the place of one way of writing a clef.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> clef_target_of("bass"), clef_target_of("soprano")
 (('F', 6), ('C', 0))
 ```
@@ -107,7 +107,7 @@ Draw the sharps or flats of a key signature, left to right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(200, 120, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
@@ -150,7 +150,7 @@ Draw one sharp or flat at its written position in a key signature.
 
 **Examples**
 
-```pycon
+```text
 Both the printed signature and signs placed by the learner use this drawing.
 ```
 
@@ -198,7 +198,7 @@ A staff with notes, a clef, a key signature and, optionally, a caption.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.show_notes([[Note.parse("E4")], [Note.parse("G4")]], clef="treble")
 >>> len(staff.columns)
@@ -222,7 +222,7 @@ Create an empty treble staff.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffWidget(gap=8.0, compact=True).GAP
 8.0
 ```
@@ -258,7 +258,7 @@ Show some notes, with a clef and a key signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.show_notes([[Note.parse("C4")]], clef="bass", key=-1, value="quarter", caption="_ Major")
 >>> staff.clef, staff.key, staff.value, staff.caption
@@ -281,7 +281,7 @@ A capped staff asks for its full capped width, so a layout that centers it gives
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget(max_step=120.0)
 >>> staff.show_notes([[Note.parse("C4")]])
 >>> staff.sizeHint().width()
@@ -302,7 +302,7 @@ Reflow a lesson excerpt when its available width changes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget(lesson_layout=True)
 >>> staff.resize(300, staff.height())
 ```
@@ -321,7 +321,7 @@ Highlight a sounding note or chord, preserving the staff's other markings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.highlight_column(0)
 >>> staff.playback_column
@@ -342,7 +342,7 @@ Apply feedback to the highlighted notation component or to the notes when there 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.set_note_color(QColor("#2e7d32"))
 >>> # noinspection PyUnresolvedReferences
@@ -367,7 +367,7 @@ Return where each staff is drawn.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.resize(400, 400)
 >>> staff.staff_bottoms()
@@ -388,7 +388,7 @@ Draw the paper, the staff lines, the clef, the key signature, the notes and the 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffWidget()
 >>> staff.resize(400, 400)
 >>> staff.show_notes([[Note.parse("C4")]], clef="treble")
@@ -410,7 +410,7 @@ Preview the component under the pointer in Click on Staff questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffWidget().hasMouseTracking()
 False
 ```
@@ -429,7 +429,7 @@ Clear the component preview when the pointer leaves the music.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffWidget().leaveEvent(QEvent(QEvent.Type.Leave))
 ```
 
@@ -451,7 +451,7 @@ Check for target ink within four logical pixels of a click on the score.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffWidget().hits_notation(QPoint(0, 0))
 False
 ```

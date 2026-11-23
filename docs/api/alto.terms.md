@@ -12,7 +12,7 @@ page merges these with the built-in terms and lists them under their own names.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> entry = PluginTerm(name="scroll", pack="Demo", definition="The carved end.", lessons=("pack.demo.parts",))
 >>> register_term(entry)
 >>> PLUGIN_TERMS["scroll"] is entry
@@ -50,7 +50,7 @@ One glossary entry from a plugin.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> PluginTerm(name="nut", pack="Demo", definition="It holds the strings.").exercises
 ()
 ```
@@ -73,7 +73,7 @@ Add a plugin's glossary entry.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> register_term(PluginTerm(name="bridge", pack="Demo", definition="It lifts the strings."))
 >>> register_term(PluginTerm(name="bridge", pack="Other", definition="Again."))
 Traceback (most recent call last):
@@ -117,7 +117,7 @@ Validate the optional ``glossary`` list of a plugin manifest.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_terms(None, pack_id="demo", pack_name="Demo", instruments={}, exercises={}, lessons={})
 ()
 >>> read_terms([{"term": "nut", "definition": "It holds the strings."}], pack_id="demo", pack_name="Demo",

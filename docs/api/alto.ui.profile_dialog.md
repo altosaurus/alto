@@ -9,7 +9,7 @@ Choosing who is practicing. There is no password: a profile is just a name that 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> remember_profile(db.add_profile("Ada"))
 >>> # noinspection PyUnresolvedReferences
@@ -45,7 +45,7 @@ another.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> dialog = ProfileDialog(db)
 >>> dialog.windowTitle()  # nobody has a profile yet
@@ -64,7 +64,7 @@ Build the dialog for the profiles in a database.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> _ = database.add_profile("Ada")
 >>> ProfileDialog(database).windowTitle()
@@ -85,7 +85,7 @@ Remember which profile was used, so the next launch can open with it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> remember_profile(Profile(7, name="Ada"))
 >>> int_value(store(), key="profile/last", default=-1)
 7
@@ -109,7 +109,7 @@ Return the profile to open with: the one used last time, else ask.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> ada = database.add_profile("Ada")
 >>> remember_profile(ada)

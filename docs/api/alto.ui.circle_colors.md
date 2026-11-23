@@ -9,7 +9,7 @@ The pages of the circle of fifths settings that choose its colors: a grid of sch
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> SchemeThumb(preset("midnight")).scheme.name
 'Midnight'
@@ -33,7 +33,7 @@ Make the scheme a new one starts as: colors by key signature, from cyan through 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> blank("custom-3")["id"], blank("custom-3")["mode"]
 ('custom-3', 'signature')
 ```
@@ -59,7 +59,7 @@ A small picture of the circle in a color scheme, to click to choose the scheme.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> thumb = SchemeThumb(preset("paper"))
 >>> thumb.isCheckable(), thumb.toolTip()
@@ -78,7 +78,7 @@ Build the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> SchemeThumb(preset("paper"), size=80).width()
 80
@@ -98,7 +98,7 @@ Return the size it asks for.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> SchemeThumb(preset("paper"), size=90).sizeHint().width()
 90
@@ -118,7 +118,7 @@ Draw the circle, with one cell asked and its relative lit, and a ring around it 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> SchemeThumb(preset("midnight")).grab().isNull()
 False
@@ -143,7 +143,7 @@ The page that lists the color schemes: the presets, the user's own, and a button
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = SchemePage()
 >>> page.load(current="midnight", customs=[])
 >>> page.thumbs["midnight"].isChecked(), len(page.thumbs)
@@ -160,7 +160,7 @@ Build the page, empty until `load` is called.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SchemePage().thumbs
 {}
 ```
@@ -184,7 +184,7 @@ Fill the page: a picture and a name for each scheme, with the current one marked
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = SchemePage()
 >>> from alto.circle_schemes import record_of
 >>> mine = record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])
@@ -219,7 +219,7 @@ edited.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
 >>> editor.record()["mode"], editor.record()["id"]
@@ -236,7 +236,7 @@ Build the editor.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(SchemeEditor().swatches)
 3
 ```
@@ -260,7 +260,7 @@ Start editing a scheme, or a new one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
 >>> editor.name.text(), editor.delete_button.isHidden()
@@ -281,7 +281,7 @@ Return the scheme as it is being edited.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
 >>> editor.record()["colors"]
@@ -307,7 +307,7 @@ Set one of the colors.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = SchemeEditor()
 >>> editor.load(None, taken=[])
 >>> editor.set_color(0, color="#ff0000")

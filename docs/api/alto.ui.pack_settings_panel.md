@@ -12,7 +12,7 @@ the built-in exercises' panels. Its options are saved under the exercise's name.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> COMMIT_DELAY_MS
 150
 ```
@@ -45,7 +45,7 @@ accidentals and for the octave. Edits are live: each changes the options, saves 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     controls = {"octave": True}
 >>> panel = PackSettingsPanel(Demo)
@@ -65,7 +65,7 @@ Build the menu and, if the plugin offers a range, its page.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Sounds(PackExercise):
 ...     controls = {"sound": "Demo sound"}
 >>> panel = PackSettingsPanel(Sounds)
@@ -103,7 +103,7 @@ The plugin picks which controls appear. Edits are live: each changes the options
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     controls = {"range": True, "intervals": True, "manuals": True}
 ...     spec = {"type": "keyboard-intervals"}
@@ -127,7 +127,7 @@ Build the menu and the pages the plugin offers.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Sounds(PackExercise):
 ...     controls = {"sound": "Demo sound"}
 ...     spec = {"type": "keyboard-intervals"}
@@ -147,7 +147,7 @@ Save the options and ask a new question now, if an edit is waiting.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     controls = {"sound": "Demo sound"}
 ...     spec = {"type": "keyboard-intervals"}
@@ -173,7 +173,7 @@ Keep an edit that is still waiting when the panel closes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     controls = {"sound": "Demo sound"}
 ...     spec = {"type": "keyboard-intervals"}

@@ -9,7 +9,7 @@ Ties the profile, the database and the scheduler together for the exercise scree
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
@@ -30,7 +30,7 @@ The current exercise has no scheduled cards available.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> issubclass(PracticeComplete, Exception)
 True
 ```
@@ -45,7 +45,7 @@ Carry the next missed card's due time to the exercise screen.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> PracticeComplete().retry_at is None
 True
 ```
@@ -70,7 +70,7 @@ Chooses what a profile is asked next and records how it was answered.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
@@ -92,7 +92,7 @@ Create a learner for one profile.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> learner = Learner(database, profile=database.add_profile("Ada"))
 >>> learner.profile.name
@@ -113,7 +113,7 @@ Open a profile's practice queues and resume its selected scheduler.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
 >>> learner.set_profile(db.add_profile("Ben"))
@@ -136,7 +136,7 @@ Return this profile's question scheduler.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> Learner(db, profile=db.add_profile("Ada")).mode
 'ASRS'
@@ -157,7 +157,7 @@ Read the profile's SM-2 and FSRS grading preference.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> Learner(db, profile=db.add_profile("Ada")).self_grading
 False
@@ -181,7 +181,7 @@ Read the rolling sample for one exercise and the current profile's thresholds.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> Learner(db, profile=db.add_profile("Ada")).response_times("KeyboardNotes").times
 ()
@@ -210,7 +210,7 @@ Save the two tail percentages for this profile.
 
 **Examples**
 
-```pycon
+```text
 Setting both tails to zero assigns Good to every correct first answer.
 ```
 
@@ -228,7 +228,7 @@ Choose how this profile grades correct calendar reviews.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
 >>> learner.set_self_grading(True)
@@ -254,7 +254,7 @@ Select the question scheduler for this profile.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
 >>> learner.set_mode("FSRS")
@@ -293,7 +293,7 @@ Return the next eligible question using the profile's selected scheduler.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))
@@ -344,7 +344,7 @@ Log one answer and update what is known about the question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> learner = Learner(db, profile=db.add_profile("Ada"))

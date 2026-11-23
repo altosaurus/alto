@@ -15,7 +15,7 @@ source folder is told to update with git.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> brief("fatal: unable to access 'https://example.org/': Could not resolve host\n")
 "fatal: unable to access 'https://example.org/': Could not resolve host"
 ```
@@ -43,7 +43,7 @@ Cut what a program printed down to what is worth showing in a message: the end o
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> brief("  one\ntwo  \n")
 'one\ntwo'
 >>> brief("x" * 10, limit=4)
@@ -67,7 +67,7 @@ Run one program without freezing the window, handing on what it prints as it pri
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> runner = CommandRunner()
 >>> runner.running
 False
@@ -115,7 +115,7 @@ Start a program.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import sys
 >>> runner = CommandRunner()
 >>> runner.start(sys.executable, arguments=["-c", "import time; time.sleep(30)"])
@@ -134,7 +134,7 @@ Stop the program, if it is running, without announcing that it has ended.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CommandRunner().stop()
 ```
 
@@ -152,7 +152,7 @@ Return what the update check follows, as chosen in Settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> saved_channel()
 'releases'
 >>> save_channel("main")
@@ -175,7 +175,7 @@ Remember what the update check follows.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_channel("nonsense")
 >>> saved_channel()
 'releases'
@@ -258,7 +258,7 @@ Ask, showing the window until there is an answer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
 >>> CheckDialog(None, source=Source("https://example.org/a.git", commit="abc1234"), git="git").canceled
 False
@@ -280,7 +280,7 @@ Ask GitHub for the latest release on another thread, so that the window never fr
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ReleaseFetcher().cancel()
 ```
 
@@ -327,7 +327,7 @@ Check for published releases in the background and honor the learner’s reminde
 
 **Examples**
 
-```pycon
+```text
 Reopening Alto on the same afternoon reuses the previous check time.
 ```
 
@@ -341,7 +341,7 @@ Schedule the first check after the startup window has opened.
 
 **Constructor examples**
 
-```pycon
+```text
 Source checkouts continue to use Git for updates.
 ```
 
@@ -379,7 +379,7 @@ Ask, showing the window until there is an answer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
 >>> ReleaseDialog(None).canceled
 False
@@ -435,7 +435,7 @@ Install the update, showing the window until the person has read how it went.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
 >>> UpdateDialog(None, command=("uv", ["tool", "install", "alto"])).succeeded
 False
@@ -486,7 +486,7 @@ or the main branch, and can install it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> check_for_updates  # doctest: +SKIP
 ```
 
@@ -515,7 +515,7 @@ Ask GitHub for the latest release and compare it with the version that is runnin
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> check_release  # doctest: +SKIP
 ```
 
@@ -548,7 +548,7 @@ Ask whether to upgrade using the installation's supported update path.
 
 **Examples**
 
-```pycon
+```text
 A manual check can offer a version the learner previously declined.
 ```
 
@@ -573,7 +573,7 @@ Ask the address Alto came from for the newest commit on its main branch and comp
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> check_main  # doctest: +SKIP
 ```
 
@@ -600,7 +600,7 @@ Install a release, or the newest commit of the main branch, showing the progress
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> install  # doctest: +SKIP
 ```
 
@@ -627,7 +627,7 @@ Replace a packaged copy after the user agrees: download and check it, say that A
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> update_package  # doctest: +SKIP
 ```
 {% endraw %}

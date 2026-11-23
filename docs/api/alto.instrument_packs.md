@@ -74,7 +74,7 @@ One keyboard of an instrument, drawn by Alto from the range of keys the plugin g
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keys = PackKeyboard("Manual", "C4", "E4")
 >>> keys.naturals
 3
@@ -97,7 +97,7 @@ Count the natural keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> PackKeyboard("M", "C4", "C5").naturals
 8
 ```
@@ -120,7 +120,7 @@ Report whether a pitch is a key on this keyboard.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> board = PackKeyboard("M", "C4", "E4")
 >>> board.has("C#4"), board.has("E#4"), board.has("F4"), board.has("Db4")
 (True, False, False, False)
@@ -144,7 +144,7 @@ How a plugin's keyboards look: the colors of the keys and case, and the proporti
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> style = PackKeyboardStyle((("cap", "#eee3c8"),), (("length", 4.5),))
 >>> dict(style.colors), dict(style.numbers)
 ({'cap': '#eee3c8'}, {'length': 4.5})
@@ -177,7 +177,7 @@ Validate the optional look of an instrument's keyboards.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_keyboard_style(None, where="pack.v.va") is None
 True
 >>> # noinspection PyUnresolvedReferences
@@ -223,7 +223,7 @@ Find one of the instrument's keyboards by name.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keys = PackKeyboard("Manual", "C4", "E4")
 >>> board = PackInstrument("pack.x.y", Path("a.png"), (10, 20), (), None, keyboards=(keys,))
 >>> board.keyboard("Manual") is keys, board.keyboard("Pedals")
@@ -248,7 +248,7 @@ Find the picture for a view: the instrument's main picture for an empty name, ot
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> back = PackView("back", Path("back.png"), (30, 40))
 >>> board = PackInstrument("pack.x.y", Path("front.png"), (10, 20), (), None, views=(back,))
 >>> board.picture(), board.picture("back"), board.picture("side")
@@ -393,7 +393,7 @@ Validate the optional facts a pack gives about where its recordings came from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> info = read_sound_info({"summary": "A viola."}, where="pack.v.va", pack_name="Viola")
 >>> info.source if info else None
 'Viola'
@@ -424,7 +424,7 @@ Check that a manifest entry is nonblank plain text of a reasonable length.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> plain_text("Name the note.", limit=40), plain_text("<b>Name</b>", limit=40), plain_text(None, limit=40)
 (True, False, False)
 ```
@@ -460,7 +460,7 @@ Check one piece of plain text and return it trimmed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_text("  Hello ", limit=10, what="title", where="lesson demo")
 'Hello'
 ```
@@ -494,7 +494,7 @@ Validate a picture question's region to show.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_focus([0, 10, 200, 100], width=400, height=300)
 (0.0, 10.0, 200.0, 100.0)
 ```
@@ -521,7 +521,7 @@ Validate a picture's marker size.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_marker_size(0), read_marker_size(24)
 (0.0, 24.0)
 ```
@@ -553,7 +553,7 @@ Read a plugin's tile icon: a plain SVG of simple shapes, redrawn in the theme's 
 
 **Examples**
 
-```pycon
+```text
 The viola's icon is its own silhouette traced from the museum photograph.
 ```
 
@@ -611,7 +611,7 @@ Validate the optional extra pictures of an instrument, such as a view of its bac
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyTypeChecker
 >>> read_views(None, files=None, where="pack.v.va")
 ()
@@ -644,7 +644,7 @@ Validate the optional keyboards of an instrument, which Alto draws from their ra
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_keyboards(None, where="pack.v.va")
 ()
 >>> read_keyboards([{"name": "Manual", "lowest": "C4", "highest": "E4"}], where="pack.v.va")[0].naturals
@@ -678,7 +678,7 @@ Validate the optional named positions along a string, which label the ruler besi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_positions([{"name": "1st", "half_steps": 2}, {"name": "2nd", "half_steps": 3}], where="pack.v.va")
 ((2, '1st'), (3, '2nd'))
 >>> read_positions(None, where="pack.v.va")

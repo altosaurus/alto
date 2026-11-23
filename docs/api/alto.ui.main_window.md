@@ -11,7 +11,7 @@ Navigation stays on the left of the top bar, with data tools on the right. Brows
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.title_label.text()
 'Alto - Music Theory'
@@ -33,7 +33,7 @@ It is big enough for a lesson step, with its circle, to show without scrolling, 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> width, height = default_size()
 >>> 0 < width <= DEFAULT_WIDTH and 0 < height <= DEFAULT_HEIGHT
 True
@@ -67,7 +67,7 @@ The application window.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> window = MainWindow()
 >>> window.open_exercise(NoteNames)
@@ -86,7 +86,7 @@ Build the window and load every saved setting.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> window_ = MainWindow(Learner(db, profile=db.add_profile("Ada")))
@@ -110,7 +110,7 @@ Remember the window's size and position when the app closes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> closeEvent()  # doctest: +SKIP
 ```
 
@@ -136,7 +136,7 @@ Highlight the search field's outline while it has keyboard focus.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.eventFilter(window.search_field, QEvent(QEvent.Type.FocusIn))
 False
@@ -158,7 +158,7 @@ Return how wide the exercise list is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MainWindow().sidebar_width()
 0
 ```
@@ -173,7 +173,7 @@ Slide the list closed, or back open, for the user's button. The choice is rememb
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.toggle_sidebar()
 >>> window._sidebar_pref
@@ -194,7 +194,7 @@ Show an exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeySignatures
 >>> window = MainWindow()
 >>> window.open_exercise(KeySignatures)
@@ -212,7 +212,7 @@ Show the installed version, development status, and purpose of Alto.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window.show_about()  # doctest: +SKIP
 ```
 
@@ -226,7 +226,7 @@ Open the modeless exporter with a private copy of the current exercise settings.
 
 **Examples**
 
-```pycon
+```text
 Choose Anki Exporter from Tools to prepare a deck while keeping the exercise open.
 ```
 
@@ -242,7 +242,7 @@ If the theme was changed, the window is rebuilt in it once the settings are clos
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.open_settings()
 >>> # noinspection PyUnresolvedReferences
@@ -266,7 +266,7 @@ already open or closed as it was, not sliding.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> old_root = window.centralWidget()
 >>> window.rebuild()
@@ -284,7 +284,7 @@ Toggle the glossary from its toolbar button.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> open_glossary()  # doctest: +SKIP
 ```
 
@@ -298,7 +298,7 @@ Show the statistics in place of the current page. Nothing happens without a prof
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
@@ -318,7 +318,7 @@ Open the workspace from tiles, or toggle its navigation pane without leaving the
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.toggle_navigation()
 >>> window.stack.currentWidget() is window.empty_page, window.view_button.accessibleName()
@@ -335,7 +335,7 @@ Go to the start screen showing the lessons.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.show_lessons()
 >>> window.home.mode
@@ -357,7 +357,7 @@ Open a lesson in place of the current page, at the step it was left at, with the
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.open_lessons("circle-of-fifths")
 >>> window.title_label.text(), window.nav_stack.currentWidget() is window.lesson_nav
@@ -375,7 +375,7 @@ Show the database browser in place of the current page. Nothing happens without 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
@@ -395,7 +395,7 @@ Leave the statistics or database page and show the page that was open before it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> window = MainWindow(Learner(db, profile=db.add_profile("Ada")))
@@ -417,7 +417,7 @@ Their history and questions are kept apart; the next question comes from theirs.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> window = MainWindow()
 >>> window.switch_profile()  # without a profile there is nothing to switch
 ```
@@ -432,7 +432,7 @@ Save a backup of everything: ask where, then write profiles, history and setting
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MainWindow().export_backup()  # does nothing without a profile
 ```
 
@@ -446,7 +446,7 @@ Ask whether a newer Alto is available; if so and the person agrees, install it a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MainWindow().check_for_updates()  # doctest: +SKIP
 ```
 
@@ -460,7 +460,7 @@ Replace everything with a backup: ask for the file, check it, ask again, and rel
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MainWindow().import_backup()  # does nothing without a profile
 ```
 
@@ -474,7 +474,7 @@ Go back to the start screen, closing the statistics or database and hiding the e
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> window = MainWindow()
 >>> window.open_exercise(NoteNames)
@@ -493,7 +493,7 @@ Manage installed plugins, install by code or ZIP, and update from registered rel
 
 **Examples**
 
-```pycon
+```text
 Choose Plugins in Tools to see the installed viola pack.
 ```
 
@@ -514,7 +514,7 @@ Install a downloaded instrument pack and offer to restart Alto.
 
 **Examples**
 
-```pycon
+```text
 Press Install plugin from file in the Plugins dialog and open viola.zip.
 ```
 
@@ -537,7 +537,7 @@ Move a plugin to the system trash after confirming, then restart Alto.
 
 **Examples**
 
-```pycon
+```text
 Select Viola Instrument Pack in the Plugins dialog and press Uninstall plugin.
 ```
 
@@ -558,7 +558,7 @@ Launch a fresh copy of the app, then close this one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MainWindow().restart_app()  # doctest: +SKIP
 ```
 {% endraw %}

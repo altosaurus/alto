@@ -9,7 +9,7 @@ The editor for a theme of the user's own: a name, and a color for every part of 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> editor.load(None)
 >>> editor.record()["name"]
@@ -39,7 +39,7 @@ Make a theme from a set of colors, to draw a picture of it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> theme_of({part: "#102030" for part in PARTS}, dark=True).window
 '#102030'
 ```
@@ -72,7 +72,7 @@ colors at once.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeEditor().save_button.text()
 'Save'
 ```
@@ -87,7 +87,7 @@ Build the form, ready to make a new theme.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sorted(ThemeEditor().colors)
 ['dark', 'light']
 ```
@@ -114,7 +114,7 @@ Light up the code written beside a color while the pointer is over the color.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> button = editor.buttons["light"]["accent"]
 >>> _ = editor.eventFilter(button, QEvent(QEvent.Type.Enter))
@@ -139,7 +139,7 @@ Fill the form from a theme that was saved, or for a new one that starts as Studi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> editor.load(None)
 >>> editor.delete_button.isHidden(), editor.name_edit.text()
@@ -160,7 +160,7 @@ Give the theme as it is now in the form.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = ThemeEditor()
 >>> editor.record()["light"]["window"] == editor.colors["light"]["window"]
 True

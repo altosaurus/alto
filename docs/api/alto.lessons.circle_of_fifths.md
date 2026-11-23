@@ -12,7 +12,7 @@ key mean.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(CIRCLE_OF_FIFTHS.steps)
 8
 >>> summary("outer", place=2)
@@ -42,7 +42,7 @@ Return the first name of the key in a cell, written out.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_name("outer", place=1), key_name("inner", place=1)
 ('G major', 'E minor')
 ```
@@ -70,7 +70,7 @@ Say a key and its key signature in one line.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> summary("outer", place=0), summary("inner", place=11)
 ('<b>C major</b>: no sharps or flats', '<b>D minor</b>: 1 flat (B♭)')
 ```
@@ -93,7 +93,7 @@ Ask for the letter a fifth above a random letter, answered with buttons.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = fifth_task(random.Random(1))
 >>> task.correct in LETTERS and len(task.choices) == 4 and task.correct in task.choices
 True
@@ -117,7 +117,7 @@ Ask for the major key with a given number of sharps, answered on the circle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = sharps_task(random.Random(2))
 >>> ring, at = next(iter(task.cells))
 >>> ring, SIGNATURES[at] == int(task.prompt.split("<b>")[1].split()[0])
@@ -142,7 +142,7 @@ Ask for the major key with a given number of flats, answered on the circle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = flats_task(random.Random(3))
 >>> ring, at = next(iter(task.cells))
 >>> ring, -SIGNATURES[at] == int(task.prompt.split("<b>")[1].split()[0])
@@ -167,7 +167,7 @@ Ask for the relative minor of a major key, answered on the circle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = relative_task(random.Random(4))
 >>> task.cells <= {("inner", at) for at in range(12)}
 True
@@ -191,7 +191,7 @@ Ask for the key a fifth above or below a random key, answered on the circle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = neighbor_task(random.Random(5))
 >>> ring, at = next(iter(task.cells))
 >>> ring, at in range(12)

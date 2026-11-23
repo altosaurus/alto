@@ -23,7 +23,7 @@ Edit a profile's daily limits or an exercise's overrides.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> editor = DailyLimitsEditor(Learner(db, profile=db.add_profile("Ada")))
@@ -42,7 +42,7 @@ Build one number field per limit, with an inheritance choice in exercise setting
 
 **Constructor examples**
 
-```pycon
+```text
 The exercise fields initially show the values from Practice settings.
 ```
 
@@ -56,7 +56,7 @@ Show current values and disable fields that follow the profile defaults.
 
 **Examples**
 
-```pycon
+```text
 Reopening Daily Limits reflects edits made in the global settings dialog.
 ```
 {% endraw %}

@@ -9,7 +9,7 @@ Interactive notation and step patterns for learning scales.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> explorer = ScaleExplorer()
 >>> len(explorer.notes)
 8
@@ -33,7 +33,7 @@ Compare scales on a staff and hear individual steps.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleExplorer().mode.currentText()
 'Major (Ionian)'
 ```
@@ -51,7 +51,7 @@ Build the scale diagram and its controls.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleExplorer(scale="Dorian", tonic="D4").notes[0].name
 'D'
 ```
@@ -66,7 +66,7 @@ Rebuild the notation and gap labels for the selected example.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> explorer = ScaleExplorer()
 >>> explorer.mode.setCurrentText("Harmonic minor")
 >>> explorer.steps[5].text()
@@ -87,7 +87,7 @@ Highlight and play the notes around a gap.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> explorer = ScaleExplorer()
 >>> explorer.select_gap(2)  # doctest: +SKIP
 ```
@@ -109,7 +109,7 @@ Play the example using the selected instrument.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleExplorer().hear()  # doctest: +SKIP
 ```
 {% endraw %}

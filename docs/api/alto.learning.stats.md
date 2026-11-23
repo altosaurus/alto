@@ -12,7 +12,7 @@ Later attempts at the same showing show up as extra attempts per question, not a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for i, ok in enumerate((True, True, False)):
@@ -51,7 +51,7 @@ The answers given in one period (an hour, day, week or month), for the charts.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> bucket = Bucket(datetime(2026, 1, 5), label="Jan 5", questions=2, first_right=1, times=[2.0, 4.0])
 >>> bucket.accuracy, bucket.median_seconds
 (50.0, 3.0)
@@ -72,7 +72,7 @@ Return the percentage of questions in the period that were right on the first tr
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Bucket(datetime(2026, 1, 5), label="Jan 5", questions=4, first_right=3).accuracy
 75.0
 >>> Bucket(datetime(2026, 1, 5), label="Jan 5").accuracy is None
@@ -94,7 +94,7 @@ Return the typical time to a first answer in the period.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Bucket(datetime(2026, 1, 5), label="Jan 5", times=[1.0, 2.0, 9.0]).median_seconds
 2.0
 ```
@@ -122,7 +122,7 @@ How practice is going on one exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ExerciseStats("NoteNames", questions=40, accuracy=87.5, median_seconds=3.2).accuracy
 87.5
 ```
@@ -156,7 +156,7 @@ A question that needs practice, for the list on the statistics screen.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HardQuestion("NoteNames", text="Treble: G4", strain=4.5, seen=6, wrong=5).wrong
 5
 ```
@@ -198,7 +198,7 @@ Everything the statistics screen shows.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stats().accuracy is None  # nothing answered yet
 True
 >>> Stats(4, first_right=3, attempts=6).attempts_per_question
@@ -220,7 +220,7 @@ Return the percentage of questions that were right on the first try.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stats(4, first_right=3).accuracy
 75.0
 ```
@@ -240,7 +240,7 @@ Return the average number of answers it took per question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Stats(4, attempts=5).attempts_per_question
 1.25
 ```
@@ -268,7 +268,7 @@ Return the moment a chart period ends, which is when the next one begins.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> period_end(datetime(2026, 1, 5), granularity="week")
 datetime.datetime(2026, 1, 12, 0, 0)
 >>> period_end(datetime(2026, 12, 1), granularity="month")
@@ -293,7 +293,7 @@ Return a short line saying what a question was, for the list of questions that n
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.base import Question
 >>> describe(Question("What type of chord is this?", choices=["major", "minor"], answer="minor"))
 'What type of chord is this? → minor'
@@ -331,7 +331,7 @@ counts questions (first attempts), not attempts, like everything else here.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> ada = database.add_profile("Ada")
 >>> noon = datetime(2026, 11, 13, 12).timestamp()
@@ -375,7 +375,7 @@ Work out everything the statistics screen shows.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database = Database()
 >>> ada = database.add_profile("Ada")
 >>> database.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,

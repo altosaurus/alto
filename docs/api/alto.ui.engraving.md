@@ -13,7 +13,7 @@ anchors the font publishes for each head. Heights are measured upward, so they a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sorted(HEADS)
 ['breve', 'half', 'whole']
 >>> ACCIDENTALS[1]
@@ -44,7 +44,7 @@ Read a score marking from a bundled font at four staff spaces per em.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> notation_glyph("bravura", codepoint=0xE260).isEmpty()
 False
 ```
@@ -72,7 +72,7 @@ Return the thickness of a staff line, as the font specifies.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff_line_width("bravura", gap=16) >= 1.0
 True
 ```
@@ -100,7 +100,7 @@ Return the thickness of a ledger line, as the font specifies.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ledger_width("bravura", gap=16) >= 1.2
 True
 ```
@@ -140,7 +140,7 @@ The head, then a stem and (for the short values) a flag, placed on the font's an
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
@@ -181,7 +181,7 @@ Draw a clef with its left edge at a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))
@@ -218,7 +218,7 @@ Return how wide a sharp, flat or natural is drawn, so that it can be placed besi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> accidental_width(font="bravura", sign=1, gap=16) > accidental_width(font="bravura", sign=1, gap=8)
 True
 ```
@@ -258,7 +258,7 @@ Draw a sharp, flat or natural with its left edge at a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> painter = QPainter(image)
@@ -303,7 +303,7 @@ Draw the font's brace stretched between two heights, for a grand staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> painter = QPainter(image)

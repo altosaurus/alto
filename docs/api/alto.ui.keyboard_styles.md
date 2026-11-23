@@ -11,7 +11,7 @@ There are ready-made styles (`STYLES`) and a custom one built from colors chosen
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> BY_KEY["classic"].label
 'Classic'
 >>> style_for("no such style").key == DEFAULT
@@ -75,7 +75,7 @@ How a keyboard looks: the colors of the keys and the case, and a few details of 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> style = BY_KEY["modern"]
 >>> style.label, style.case
 ('Modern piano', '#0d0d0f')
@@ -95,7 +95,7 @@ Return the color of each part of the custom keyboard.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sorted(custom_colors())
 ['caps', 'case', 'felt', 'naturals', 'sharps']
 ```
@@ -116,7 +116,7 @@ Gradients and outlines are worked out from each part's color.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> custom_style().key, custom_style().label
 ('custom', 'Custom')
 ```
@@ -139,7 +139,7 @@ Return the style with a given key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> style_for("modern").label
 'Modern piano'
 >>> style_for("nonsense").label
@@ -160,7 +160,7 @@ Return the keyboard style in use.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> current().key in BY_KEY or current().key == CUSTOM
 True
 ```
@@ -175,7 +175,7 @@ Apply the saved style (Classic if none is saved or it is unknown), and the saved
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("ui/keyboard", "modern")
 >>> load_style()
 >>> current().key
@@ -197,7 +197,7 @@ Choose and save a style, and redraw every keyboard already on screen.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_style("modern")
 >>> current().label
 'Modern piano'
@@ -223,7 +223,7 @@ Color one part of the custom keyboard and switch to the custom style.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_custom_color("naturals", color="#ffffff")
 >>> current().key, custom_colors()["naturals"]
 ('custom', '#ffffff')
@@ -248,7 +248,7 @@ this module.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
 >>> def repaint() -> None:
 ...     calls.append(1)
@@ -282,7 +282,7 @@ Report whether a key has swapped colors, as the low preset keys of an organ do.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from dataclasses import replace
 >>> reversed_key(BY_KEY["classic"], midi=40)
 False
@@ -319,7 +319,7 @@ Return the fill for a key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_brush(BY_KEY["classic"], midi=60, black=False, y=0, height=100).color().name()
 '#fbfbfc'
 >>> key_brush(BY_KEY["modern"], midi=60, black=False, y=0, height=100).gradient() is not None
@@ -351,7 +351,7 @@ Return the outline color for a key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> edge_color(BY_KEY["classic"], midi=60, black=False).name()
 '#9a9a9f'
 >>> edge_color(BY_KEY["classic"], midi=61, black=True).name()

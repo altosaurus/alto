@@ -14,7 +14,7 @@ The module-level `sounds` is the one the interface uses.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [inst.label for inst in INSTRUMENTS][:2]
 ['Piano', 'Flute']
 >>> Sounds().instrument
@@ -46,7 +46,7 @@ An additive model: stretched partials, a decay for each partial, a detuned strin
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> samples = synth_piano(60, duration=0.1)
 >>> len(samples)
 4410
@@ -91,7 +91,7 @@ An instrument that notes can be played on, and where its recordings are.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Instrument("flute", label="Flute", folder="samples/flute", sustained=True).gain
 1.0
 >>> INSTRUMENT_BY_KEY["piano"].damped, INSTRUMENT_BY_KEY["marimba"].damped
@@ -113,7 +113,7 @@ Name what sort of instrument this is, in lowercase.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> INSTRUMENT_BY_KEY["viola_bowed"].kind_name, INSTRUMENT_BY_KEY["flute"].kind_name
 ('viola', 'flute')
 ```
@@ -133,7 +133,7 @@ Identify the instrument's entry in the sound picker.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> INSTRUMENT_BY_KEY["viola_bowed"].picker_group
 'Viola'
 ```
@@ -156,7 +156,7 @@ Return the output volume for a note or clip played on this instrument.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> INSTRUMENT_BY_KEY["flute"].playback_volume()
 0.85
 ```
@@ -177,7 +177,7 @@ Ways of playing one instrument share a single entry.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [name for name, _ in instrument_groups()]
 ['Piano', 'Flute', 'French Horn', 'Viola', 'Marimba', 'Vibraphone']
 >>> [inst_.variant for inst_ in dict(instrument_groups())["Viola"]]
@@ -202,7 +202,7 @@ Read a mono 16-bit WAV file.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> path_ = Path(tempfile.mkdtemp()) / "silence.wav"
 >>> _ = path_.write_bytes(to_wav_bytes(np.zeros(10)))
@@ -236,7 +236,7 @@ It also changes the length, which is fine for a few semitones.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(shift_pitch(np.zeros(100), semitones=12))  # an octave up: half as long
 50
 ```
@@ -264,7 +264,7 @@ Encode samples as a mono 16-bit WAV file in memory.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> to_wav_bytes(np.zeros(10))[:4]
 b'RIFF'
 ```
@@ -290,7 +290,7 @@ The bytes go to a file of the writer's own first and then replace the file in on
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> folder = Path(tempfile.mkdtemp())
 >>> write_file_atomically(folder / "note.wav", data=b"RIFF")
 >>> (folder / "note.wav").read_bytes(), [p.name for p in folder.iterdir()]
@@ -313,7 +313,7 @@ A lazy cache of notes played through `QSoundEffect`, in the chosen instrument.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> s = Sounds()
 >>> s.enabled, s.instrument
 (True, 'piano')
@@ -327,7 +327,7 @@ Create a player with the piano chosen and sound on.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Sounds().instrument
 'piano'
 ```
@@ -350,7 +350,7 @@ Return the notes an instrument has a recording for on disk.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> 60 in Sounds().recordings(INSTRUMENT_BY_KEY["piano"])
 True
 ```
@@ -378,7 +378,7 @@ Read the playback length of a note for synchronized instrument animations.
 
 **Examples**
 
-```pycon
+```text
 A one-second sample has the same 1000 ms feedback interval when muted.
 ```
 
@@ -412,7 +412,7 @@ that start together. Nothing plays while muted unless
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> s = Sounds()
 >>> s.enabled = False
 >>> s.play_midi(60)  # muted: returns at once
@@ -429,7 +429,7 @@ Silence every note at once, and cancel any fade-outs underway.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Sounds().stop_all()
 ```
 
@@ -457,7 +457,7 @@ Starting a preview silences the one before it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sounds.preview("flute", midis=[60, 64, 67])  # doctest: +SKIP
 ```
 
@@ -490,7 +490,7 @@ The notes within a column sound together, a little quieter the more there are.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> s = Sounds()
 >>> s.enabled = False
 >>> s.play_notes([[Note.parse("C4"), Note.parse("E4"), Note.parse("G4")]])  # muted: nothing sounds
@@ -510,7 +510,7 @@ Stop a displayed sample if it still owns playback.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Sounds().stop_sample(print)
 ```
 
@@ -541,7 +541,7 @@ Play a displayed sample and report the sounding column until it ends or is inter
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> player = Sounds()
 >>> player.enabled = False
 >>> player.play_sample([[Note.parse("C4")]], gap_ms=300, on_step=print)
@@ -564,7 +564,7 @@ Play a note that climbs the C major scale (C5 to C6) as the streak grows, then w
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> s = Sounds()
 >>> s.enabled = False
 >>> s.play_correct(3)  # muted: nothing sounds

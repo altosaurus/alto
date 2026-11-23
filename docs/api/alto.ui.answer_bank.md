@@ -9,7 +9,7 @@ A responsive, scrollable grid for large banks of answer buttons.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> AnswerBank().maximumHeight()
 240
 ```
@@ -35,7 +35,7 @@ Wrap existing answer buttons to fit the available width and scroll long lists.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> bank = AnswerBank()
 >>> bank.buttons
 []
@@ -52,7 +52,7 @@ Create a bank that can show all rows or scroll longer lists.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> AnswerBank().horizontalScrollBarPolicy() == Qt.ScrollBarPolicy.ScrollBarAlwaysOff
 True
 ```
@@ -76,7 +76,7 @@ Display answer buttons in a stable order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> bank = AnswerBank()
 >>> bank.set_buttons([QPushButton("m3"), QPushButton("P5")])
@@ -98,7 +98,7 @@ Rewrap the buttons when the exercise or settings pane changes width.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> bank = AnswerBank()
 >>> bank.resize(300, 200)
 >>> bank.width()

@@ -13,7 +13,7 @@ a new exercise needs no new interface code.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> question = Question("Name this note.", choices=["C", "D", "E"], answer="D")
 >>> question.check("D"), question.check("E")
 (True, False)
@@ -34,7 +34,7 @@ A written pitch on one string, with the tuning needed to redraw it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> FingerboardPosition(("C3", "G3", "D4", "A4"), 2, "E4").string
 2
 ```
@@ -73,7 +73,7 @@ A pack-owned image and a marked location in its original pixels.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> PicturePosition("pack.studio.drum", (80, 50)).point
 (80, 50)
 >>> PicturePosition("pack.studio.organ", (0, 0), keys=(("Great", "C4"), ("Swell", "E4"))).keys[1]
@@ -177,7 +177,7 @@ One question, with what to show for it and which answer is right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Which note is this?", choices=["C", "D", "E"], answer="D", staff=[[Note.parse("D4")]])
 >>> q.check("D")
 True
@@ -205,7 +205,7 @@ The spelling must match exactly. The octave must also match unless `any_octave` 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Place C4", choices=[], answer="C4", construct=Note.parse("C4"))
 >>> q.check_placed(Note.parse("C4"))
 True
@@ -231,7 +231,7 @@ Return the given and placed notes grouped by onset, omitting the answer until it
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Place a major third.", choices=[], answer="E4", staff=[[Note.parse("C4"), Note.parse("E4")]])
 >>> q.placement_columns(None) == [[Note.parse("C4")]]
 True
@@ -259,7 +259,7 @@ but a scale with one note in the wrong octave is not. With `exact_octave` the sc
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> asked = [Note.parse("C4"), Note.parse("D4")]
 >>> q = Question("Place C D.", choices=[], answer="C4 D4", construct_scale=asked)
 >>> q.check_scale([Note.parse("C4"), Note.parse("D4")])
@@ -293,7 +293,7 @@ Report whether the steps marked between the notes of a scale are the right ones.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Mark the steps.", choices=[], answer="W H", construct_steps=["W", "H"])
 >>> q.check_steps(["W", "H"]), q.check_steps(["H", "W"]), q.check_steps(["W"])
 (True, False, False)
@@ -319,7 +319,7 @@ Report whether a key signature built with the fork is the one asked for.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Build D major.", choices=[], answer="2 sharps", key=2, show_staff=True, build_key=True)
 >>> q.check_built(2), q.check_built(-2)
 (True, False)
@@ -340,7 +340,7 @@ Report whether the learner enters successive positions on the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Question("D major", choices=[], answer="F♯5 C♯5", place_signature=True).places_sequence
 True
 ```
@@ -363,7 +363,7 @@ Report whether a chosen answer is right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("", choices=["F♯", "G♭"], answer="F♯", accept=("G♭",))
 >>> q.check("F♯"), q.check("G♭"), q.check("A")
 (True, True, False)
@@ -390,7 +390,7 @@ Report whether the answers given so far are all of those needed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> both = Question("", choices=["B", "C♭"], answer="B", required=("B", "C♭"))
 >>> both.complete({"B"}), both.complete({"C♭", "B"})
 (False, True)
@@ -414,7 +414,7 @@ It covers what is asked and where it is drawn, but not the note value or the ord
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> a = Question("Name it.", choices=["C", "D"], answer="C")
 >>> b = Question("Name it.", choices=["D", "C"], answer="C")  # the same question, buttons in another order
 >>> a.item_key() == b.item_key()
@@ -437,7 +437,7 @@ Return the question as plain data, so it can be stored and asked again.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> data = Question("Name it.", choices=["C"], answer="C", staff=[[Note.parse("C4")]]).to_dict()
 >>> data["answer"], data["staff"]
 ('C', [[{'octave': 4, 'letter': 0, 'accidental': 0}]])
@@ -462,7 +462,7 @@ Rebuild a question from the data that `to_dict` made.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("Name it.", choices=["C", "D"], answer="C", key=2, accept=("D",))
 >>> Question.from_dict(q.to_dict()) == q
 True
@@ -486,7 +486,7 @@ Rebuild a note from stored data.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> note_from({"octave": 4, "letter": 0, "accidental": 0})
 Note(octave=4, letter=0, accidental=0)
 >>> note_from(None) is None
@@ -511,7 +511,7 @@ Describe the exercise settings in force, so a stored question is only asked agai
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> signature({"clefs": {"bass", "treble"}}, 3)
 '[{"clefs": ["bass", "treble"]}, 3]'
 >>> signature({"clefs": {"treble", "bass"}}, 3) == signature({"clefs": {"bass", "treble"}}, 3)
@@ -538,7 +538,7 @@ What every exercise provides: its name, how it makes questions and how long a go
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     name = "Demo"
 ...     def generate(self, rng):
@@ -565,7 +565,7 @@ Choose the instrument that plays this exercise's notes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> NoteNames().sound_instrument("pack.viola.bowed-viola")
 'pack.viola.bowed-viola'
@@ -587,7 +587,7 @@ A stored question is only asked again while this is unchanged. Exercises with se
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     def generate(self, rng):
 ...         return Question("?", choices=["A"], answer="A")
@@ -615,7 +615,7 @@ Exercises whose on-screen prompt depends on the screen (buttons to press, a staf
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     name = "Demo"
 ...     def generate(self, rng):
@@ -640,7 +640,7 @@ Map playable examples to the skills that share a calendar review date.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeyboardNotes
 >>> KeyboardNotes().card_groups() is None
 True
@@ -660,7 +660,7 @@ Count distinct cards possible with the current settings when the exercise has an
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeyboardNotes
 >>> KeyboardNotes().card_count() is None
 True
@@ -684,7 +684,7 @@ Yield distinct questions until 100 consecutive draws find no new playable item.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeyboardNotes
 >>> isinstance(next(KeyboardNotes().daily_candidates(random.Random(1))), Question)
 True
@@ -713,7 +713,7 @@ Adapt a stored question for review under the active settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import KeyboardNotes
 >>> ex = KeyboardNotes()
 >>> q = ex.generate(random.Random(1))
@@ -742,7 +742,7 @@ have drawn differently. The default leaves it as it is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     def generate(self, rng):
 ...         return Question("?", choices=["A"], answer="A")
@@ -767,7 +767,7 @@ Exercises override it to describe themselves.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(Exercise):
 ...     description = "Spot the note."
 ...     def generate(self, rng):
@@ -795,7 +795,7 @@ Make one new question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> q = NoteNames().generate(random.Random(1))
 >>> q.answer in q.choices
@@ -815,7 +815,7 @@ An exercise’s choice of answer layout and maximum number of buttons per group.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ButtonSettings().button_mode
 'all'
 ```
@@ -832,7 +832,7 @@ Supply the eligible choices in `make_question`. Set `default_limit` to start in 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import ChordQualities
 >>> ChordQualities.button_settings().button_mode
 'limited'
@@ -854,7 +854,7 @@ Return the preferences shared by instances of this particular exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> NoteNames.button_settings().button_mode
 'all'
@@ -874,7 +874,7 @@ Include custom answer layouts when deciding which questions can be replayed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import ChordQualities
 >>> ChordQualities().settings_signature()
 ''
@@ -894,7 +894,7 @@ Identify the exercise settings other than the answer layout.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import ChordQualities
 >>> ChordQualities().practice_signature()
 ''
@@ -918,7 +918,7 @@ Generate the musical task and apply the selected button count.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import ChordQualities
 >>> len(ChordQualities().generate(random.Random(0)).choices)
 5
@@ -947,7 +947,7 @@ Limit each answer group while keeping all the buttons needed to complete the que
 
 **Examples**
 
-```pycon
+```text
 A note and octave question keeps the correct name and octave in their respective groups.
 ```
 
@@ -970,7 +970,7 @@ Generate the task and eligible answer choices before the button limit is applied
 
 **Examples**
 
-```pycon
+```text
 Note Identification supplies the note names appropriate to the active clef and key settings.
 ```
 
@@ -995,7 +995,7 @@ once, with all its exercises under it. Used as a class decorator.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> @register
 ... class Demo(Exercise):
 ...     name = "Demo"
@@ -1034,7 +1034,7 @@ Choose wrong answers to offer alongside the right one, and shuffle them all.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> choices_ = pick_distractors("C", pool=["C", "D", "E", "F"], n=2, rng=random.Random(0))
 >>> len(choices_), "C" in choices_
 (3, True)

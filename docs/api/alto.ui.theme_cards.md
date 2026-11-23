@@ -12,7 +12,7 @@ which is cut through on a slant to show it is light or dark as the desktop is) a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = ThemeCard("sage")
 >>> sorted(card.thumbs)
 ['sage', 'sage_auto', 'sage_dark']
@@ -36,7 +36,7 @@ Give the colors of a theme's picture.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> colors_of("dark")["window"], colors_of("studio")["window"]
 ('#2b2b2b', '#eceef1')
 ```
@@ -67,7 +67,7 @@ A small picture of the window in a theme, to click to choose the theme.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeThumb("dark", colors=DARK).theme_key
 'dark'
 ```
@@ -86,7 +86,7 @@ Build the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeThumb("system", colors=LIGHT, other=DARK).width(), ThemeThumb("light", colors=LIGHT, scale=2.0).width()
 (116, 232)
 ```
@@ -105,7 +105,7 @@ Draw the window, cut through on a slant if it has two halves, with an outline th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeThumb("light", colors=LIGHT).grab().isNull()
 False
 ```
@@ -138,7 +138,7 @@ because that version is light or dark as the desktop is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = ThemeCard("default")
 >>> list(card.thumbs)
 ['light', 'dark', 'system']
@@ -156,7 +156,7 @@ Build the card of a family.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeCard("studio").family
 'studio'
 ```
@@ -175,7 +175,7 @@ Mark the picture of the theme that is in use, and outline the card that has it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = ThemeCard("sage")
 >>> card.show_current("sage_dark")
 >>> [k for k, picture in card.thumbs.items() if picture.isChecked()]

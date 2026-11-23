@@ -14,7 +14,7 @@ before anything is changed, so a damaged or foreign file is refused instead of h
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> from alto.learning.database import Database
 >>> db = Database()
@@ -38,7 +38,7 @@ A backup file could not be written or read: it is damaged, is not a backup, or w
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> str(BackupError("This is not an Alto backup."))
 'This is not an Alto backup.'
 ```
@@ -67,7 +67,7 @@ What a backup says about itself.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> BackupInfo(100.0, app_version="0.1.0", schema_version=1, profiles=2, attempts=30).profiles
 2
 ```
@@ -92,7 +92,7 @@ A backup that has been read and checked, ready to be applied.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Backup(BackupInfo(1.0, app_version="0.1.0", schema_version=1, profiles=0, attempts=0), settings={}, database=b"").settings
 {}
 ```
@@ -111,7 +111,7 @@ Return the version of Alto that is running.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> app_version().count(".") >= 1
 True
 ```
@@ -137,7 +137,7 @@ dictionary with the bytes in base64, so `decode_value` can bring them back.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> encode_value("dark"), encode_value(5), encode_value(["a", "b"])
 ('dark', 5, ['a', 'b'])
 >>> encode_value(b"\x00\x01")
@@ -162,7 +162,7 @@ Undo `encode_value`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> decode_value({"bytes": "AAE="})
 b'\x00\x01'
 >>> decode_value([1, 2])
@@ -200,7 +200,7 @@ Write a backup of the database and the saved preferences to a file.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> from alto.learning.database import Database
 >>> folder = Path(tempfile.mkdtemp())
@@ -230,7 +230,7 @@ Read a backup file and check it all the way through, without changing anything.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> folder = Path(tempfile.mkdtemp())
 >>> (folder / "x.altobackup").write_bytes(b"not a zip")
@@ -264,7 +264,7 @@ Replace everything in the database with what a backup holds.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import tempfile
 >>> from alto.learning.database import Database
 >>> source = Database()

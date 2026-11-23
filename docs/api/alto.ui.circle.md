@@ -13,7 +13,7 @@ and its name (or its Roman numeral) is blank until the answer is right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("major", place=3, title="F♯ minor")
 >>> circle.target
@@ -47,7 +47,7 @@ Return the outline of one wedge of a ring.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> shape = wedge_path(center=QPointF(100, 100), inner=40, outer=90, index=0)
 >>> shape.contains(QPointF(100, 30)), shape.contains(QPointF(100, 170))  # the top of the circle, and the bottom
 (True, False)
@@ -78,7 +78,7 @@ Return the point in the middle of a wedge, at a given distance from the center.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> wedge_middle(center=QPointF(100, 100), radius=50, index=0).toTuple()  # straight up
 (100.0, 50.0)
 >>> round(wedge_middle(center=QPointF(100, 100), radius=50, index=3).x())  # a quarter of the way around: to the right
@@ -112,7 +112,7 @@ Return the color of a wedge in a color scheme: quiet when it is not being talked
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.circle_schemes import preset
 >>> spectrum = preset("spectrum")
 >>> wedge_color(0, inner=False, lift=1.0, scheme=spectrum).hue(), wedge_color(6, inner=False, scheme=spectrum).hue()
@@ -158,7 +158,7 @@ the sharps, flats and naturals are the glyphs of the notation style that the sta
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(120, 60, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("black"))
@@ -193,7 +193,7 @@ The circle of fifths, drawn for an exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("major", place=0, title="A minor")
 >>> circle.reveal(animate=False)
@@ -211,7 +211,7 @@ Build the circle, with nothing asked.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> FifthsCircle().target is None
 True
 ```
@@ -230,7 +230,7 @@ Return the size it would like: a square, big enough to read.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> FifthsCircle().sizeHint().width()
 460
 ```
@@ -264,7 +264,7 @@ asks for the Roman numeral of one of them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("minor", place=3, title="A major")
 >>> circle.target, circle.shown["outer"] == set(range(12)), circle.shown["inner"], circle.signature
@@ -284,7 +284,7 @@ Clear everything: no question, no names shown, no animation running.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("major", place=2, title="B minor")
 >>> circle.reset()
@@ -311,7 +311,7 @@ For a Roman numeral question every chord of the key shows its numeral, as the ci
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("minor", place=5, title="B major / C♭ major")
 >>> circle.reveal(animate=False)
@@ -333,7 +333,7 @@ Change the small text in the middle, for example to say that a second answer is 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.set_subtitle("and its other name")
 >>> circle.subtitle
@@ -350,7 +350,7 @@ Flash the cell asked about in the red of a wrong answer, striped as well so that
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("major", place=0, title="A minor")
 >>> circle.flash_wrong()
@@ -384,7 +384,7 @@ lit, to show the pair; in a Roman numeral question the six chords of the key are
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.show_question("major", place=0, title="A minor")
 >>> circle.lift_of("outer", place=0), circle.lift_of("inner", place=0), circle.lift_of("outer", place=5)
@@ -410,7 +410,7 @@ The circle fits the widget as a square in the middle of it, but no larger than `
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.resize(400, 300)
 >>> middle, radius = circle.geometry_of()
@@ -435,7 +435,7 @@ Draw the two rings, the names, the question and the disc in the middle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> circle = FifthsCircle()
 >>> circle.resize(400, 400)
 >>> circle.show_question("major", place=0, title="A minor")

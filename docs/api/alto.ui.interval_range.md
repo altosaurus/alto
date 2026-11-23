@@ -9,7 +9,7 @@ A two-handle slider for selecting interval distances without changing the keyboa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> slider = IntervalRangeSlider()
 >>> slider.set_range(3, high=12, maximum=24)
 >>> slider.low, slider.high
@@ -35,7 +35,7 @@ A draggable interval range with keyboard controls for either endpoint.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> slider = IntervalRangeSlider()
 >>> slider.low, slider.high, slider.maximum
 (1, 12, 24)
@@ -51,7 +51,7 @@ Create the slider with a one-octave selection.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider().height()
 36
 ```
@@ -81,7 +81,7 @@ Synchronize the slider without emitting an edit.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> slider = IntervalRangeSlider()
 >>> slider.set_range(3, high=7, maximum=12)
 >>> slider.low, slider.high
@@ -107,7 +107,7 @@ Move an endpoint by a number of half-step distances.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> slider = IntervalRangeSlider()
 >>> slider.move_endpoint("low", delta=2)
 >>> slider.low
@@ -128,7 +128,7 @@ Draw the track, selected span, and both handles.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider().grab().isNull()
 False
 ```
@@ -147,7 +147,7 @@ Choose the nearest handle and start dragging it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider()._dragging
 False
 ```
@@ -166,7 +166,7 @@ Move the active handle while dragging.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider().maximum
 24
 ```
@@ -185,7 +185,7 @@ Finish dragging a handle.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider()._dragging
 False
 ```
@@ -204,7 +204,7 @@ Adjust the active endpoint with arrow keys, Home, or End.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalRangeSlider().focusPolicy() == Qt.FocusPolicy.StrongFocus
 True
 ```

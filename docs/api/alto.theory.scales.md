@@ -12,7 +12,7 @@ and the other functions work out key signatures, mode tonics and arpeggios from 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [str(n) for n in build(Note.parse("D4"), intervals=SCALES["Dorian"])]
 ['D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
 >>> [str(n) for n in build(Note.parse("C4"), intervals=CHORDS["minor 7th"])]
@@ -41,7 +41,7 @@ Return the tonic of the major key with a given number of sharps or flats.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> str(major_key_tonic(2))  # two sharps: D major
 'D4'
 >>> str(major_key_tonic(-3))  # three flats: E♭ major
@@ -74,7 +74,7 @@ signature of C major, started from its second note.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> str(mode_tonic(0, mode="Dorian"))  # no sharps or flats: D Dorian
 'D4'
 >>> str(mode_tonic(2, mode="Natural minor (Aeolian)"))  # two sharps: B minor
@@ -106,7 +106,7 @@ Return a chord broken and rising from its lowest note, then that note again an o
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"])]
 ['C4', 'E4', 'G4', 'C5']
 >>> [str(n) for n in arpeggio(Note.parse("C4"), intervals=CHORDS["major"], inversion=1)]
@@ -136,7 +136,7 @@ Build the notes of a scale or chord above a tonic.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [str(n) for n in build(Note.parse("G4"), intervals=SCALES["Major (Ionian)"])]
 ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F♯5']
 ```
@@ -164,7 +164,7 @@ Return the key signature of a scale as a signed count of accidentals.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_signature("G")  # G major has one sharp
 1
 >>> key_signature("Eb")  # E♭ major has three flats
@@ -191,7 +191,7 @@ Describe a key signature in words.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> format_key_signature(0)
 'no sharps or flats'
 >>> format_key_signature(1)
@@ -218,7 +218,7 @@ Return every spelled tonic in octave 4, within a limit on accidentals.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(all_tonics())
 21
 >>> [str(n) for n in all_tonics(0)]

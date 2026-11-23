@@ -9,7 +9,7 @@ Run slow work, such as a download, on another thread, and hear how it went on th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import time
 >>> heard = []
 >>> owner = QObject()
@@ -51,7 +51,7 @@ does not keep Alto from quitting.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import time
 >>> heard = []
 >>> owner = QObject()

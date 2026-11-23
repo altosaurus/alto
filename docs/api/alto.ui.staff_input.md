@@ -11,7 +11,7 @@ One note for the note construction exercise, a row of them for scale constructio
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.accidental is None and not staff.locked
 True
@@ -41,7 +41,7 @@ the note that would be placed: `move_cursor` and `jump_to_letter` move it, and `
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble", key=0)
 >>> staff.resize(400, 300)
@@ -59,7 +59,7 @@ Create the staff.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffInput().hasMouseTracking()
 True
 ```
@@ -87,7 +87,7 @@ Clear the staff for a new question, drawing a key signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.accidental, staff.locked = 1, True
 >>> staff.reset("bass", key=-2)
@@ -116,7 +116,7 @@ staff and the lower half on the bass staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble", key=1)  # G major: F is sharp
 >>> staff.resize(400, 300)
@@ -147,7 +147,7 @@ The step is kept within five ledger lines of the staff, as clicking is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble", key=1)  # G major: F is sharp
 >>> str(staff.note_for(Note.parse("F4").diatonic))
@@ -171,7 +171,7 @@ Return the staff step the caret starts from, when the keyboard first moves it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> str(Note.from_diatonic(staff.caret_start()))
@@ -195,7 +195,7 @@ Return the note that the keyboard would place.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("bass")
 >>> staff.caret_note() is None
@@ -221,7 +221,7 @@ The first move starts from `caret_start`. The caret stays within the furthest le
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> staff.move_cursor(1)
@@ -249,7 +249,7 @@ Move the caret to the nearest note with a letter name, above or below where it i
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> staff.move_cursor(0)  # B4, the middle line
@@ -271,7 +271,7 @@ Place the note at the caret, as a click would.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> placed = []
@@ -300,7 +300,7 @@ Draw a single note on the staff, or clear it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.show_note(Note.parse("C4"))
 >>> len(staff.columns)
@@ -323,7 +323,7 @@ has put the caret somewhere.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.refresh_preview()  # the pointer is not over the staff, and there is no caret: nothing to redraw
 >>> staff.columns
@@ -348,7 +348,7 @@ Show the note under the pointer, in a lighter color.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> staff.resize(400, 300)
@@ -374,7 +374,7 @@ Remove the pointer's note when the pointer leaves the staff, showing the note at
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.show_note(Note.parse("C4"))
 >>> staff.leaveEvent(QEvent(QEvent.Type.Leave))
@@ -396,7 +396,7 @@ Place the note on a left click, or step through the accidentals on a right click
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = StaffInput()
 >>> staff.reset("treble")
 >>> staff.resize(400, 300)
@@ -440,7 +440,7 @@ The mouse wheel or a right click changes it, and a left click marks it and moves
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPointF
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=8)
@@ -462,7 +462,7 @@ Create the staff.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleInput().notes
 []
 ```
@@ -492,7 +492,7 @@ Clear the staff for a new scale: a staff with room for its notes, and the key si
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.notes, staff.slots = [Note.parse("C4")], 3
 >>> staff.reset_scale("bass", slots=8, caption="D Major")
@@ -518,7 +518,7 @@ Report whether every note of the scale has been placed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=1)
 >>> staff.complete
@@ -543,7 +543,7 @@ Report whether it is the turn of the steps: they are asked for, every note is pl
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=2, with_steps=True)
 >>> staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
@@ -569,7 +569,7 @@ Report whether everything asked for is placed: every note and, if they are asked
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=2, with_steps=True)
 >>> staff.notes.extend([Note.parse("C4"), Note.parse("D4")])
@@ -599,7 +599,7 @@ Show the pointer's note in the next place, or take it away.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=4)
 >>> staff.show_note(Note.parse("G4"))
@@ -621,7 +621,7 @@ Choose the step that the next click marks.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=3, with_steps=True)
 >>> chosen = []
@@ -641,7 +641,7 @@ Switch the step that the next click marks between whole and half.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=3, with_steps=True)
 >>> staff.toggle_step()
@@ -662,7 +662,7 @@ Take back the last thing placed: the last step if there is one, otherwise the la
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=4)
 >>> staff.notes.append(Note.parse("C4"))
@@ -688,7 +688,7 @@ While steps are marked each notch switches between whole and half. Once everythi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint, QPointF
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=2, with_steps=True)
@@ -720,7 +720,7 @@ Return the staff step the caret starts from: that of the last note placed, or th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=8)
 >>> str(Note.from_diatonic(staff.caret_start()))  # the middle line
@@ -744,7 +744,7 @@ Place the next note, or mark the next step once the notes are placed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=2, with_steps=True)
 >>> staff.place_next(Note.parse("C4"))
@@ -764,7 +764,7 @@ Place the next note at the caret, or mark the next step, as a click would.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=2)
 >>> staff.move_cursor(2)
@@ -787,7 +787,7 @@ Place the next note or mark the next step on a left click; change the sign or th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPointF
 >>> staff = ScaleInput()
 >>> staff.reset_scale("treble", slots=1)
@@ -811,7 +811,7 @@ Place accidentals in consecutive key-signature slots immediately after the clef.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
 >>> staff.reset_scale("treble", slots=7, caption="D major")
 >>> staff.place_next(Note.parse("F#5"))
@@ -842,7 +842,7 @@ Set the fixed signs for this question and clear the learner’s entries.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
 >>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
 >>> len(staff.template), staff.template[1]
@@ -863,7 +863,7 @@ Combine the fixed signs and the learner's entries in staff order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
 >>> staff.reset_signature("treble", key=2, caption="D major", starting_slots=[1])
 >>> staff.place_next(Note.parse("F#5"))
@@ -885,7 +885,7 @@ Draw the blank staff and caption, then the placed signs and the next sign under 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = SignatureInput()
 >>> staff.reset_scale("bass", slots=7)
 >>> staff.place_next(Note.parse("Bb2"))
@@ -919,7 +919,7 @@ follows the pointer from place to place, in a lighter color, until you click. Wi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G", "F"])
 >>> staff.step_symbol(1)
@@ -937,7 +937,7 @@ Create the staff.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefInput().hasMouseTracking()
 True
 ```
@@ -961,7 +961,7 @@ Clear the staff for a new question and offer some symbols to choose from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["C", "F"], caption="Place the alto clef.")
 >>> staff.selected, staff.placed_symbol, staff.caption
@@ -982,7 +982,7 @@ Choose a symbol.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G", "C", "F"])
 >>> staff.select("F")
@@ -1004,7 +1004,7 @@ Choose the next symbol of the options, or the one before, going around.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G", "C", "F"])
 >>> staff.step_symbol(-1)
@@ -1030,7 +1030,7 @@ Return the line or space nearest to a height in the widget.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G"])
 >>> staff.resize(400, 300)
@@ -1053,7 +1053,7 @@ Move the place the keyboard would put the symbol.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G"])
 >>> staff.move_caret(1)
@@ -1078,7 +1078,7 @@ Put the chosen symbol in a place, drawn solid, and say so.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["F"])
 >>> got = []
@@ -1098,7 +1098,7 @@ Place the symbol where the keyboard put it, or on the middle line if it has not 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G"])
 >>> staff.move_caret(-2)
@@ -1117,7 +1117,7 @@ Take the placed symbol off the staff, so another can be tried.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.place(1)
 >>> staff.clear_placed()
@@ -1139,7 +1139,7 @@ Draw the placed symbol in a color, for feedback, or back in black.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.set_clef_color(QColor("#2e7d32"))
 >>> staff.clef_color == QColor("#2e7d32")
@@ -1160,7 +1160,7 @@ Show the symbol in the place under the pointer, in a lighter color.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G"])
 >>> staff.resize(400, 300)
@@ -1186,7 +1186,7 @@ Stop following the pointer when it leaves the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff._hover = 2
 >>> staff.leaveEvent(QEvent(QEvent.Type.Leave))
@@ -1208,7 +1208,7 @@ Place the symbol on a left click, or choose the next symbol on a right click.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G", "F"])
 >>> staff.resize(400, 300)
@@ -1234,7 +1234,7 @@ Choose the next symbol for each notch of the wheel turned up, and the one before
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint, QPointF
 >>> staff = ClefInput()
 >>> staff.reset(["G", "F"])
@@ -1261,7 +1261,7 @@ A symbol on a ledger line has the ledger lines it needs drawn behind it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> staff = ClefInput()
 >>> staff.reset(["G"])
 >>> staff.place(1)

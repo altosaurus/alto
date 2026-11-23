@@ -9,7 +9,7 @@ The application's saved settings (a thin layer over `QSettings`).
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings = store()
 >>> settings.setValue("demo/count", 3)
 >>> int_value(settings, key="demo/count", default=0)
@@ -35,7 +35,7 @@ and nothing is brought across from the system's own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings = store()
 >>> settings.setValue("demo/name", "Ada")
 >>> str(store().value("demo/name"))
@@ -74,7 +74,7 @@ Read an integer setting.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/count", "42")
 >>> int_value(settings_, key="demo/count", default=0)
@@ -114,7 +114,7 @@ Read a saved setting as text.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/name", "viola")
 >>> text_value(settings_, key="demo/name", default="piano")
@@ -149,7 +149,7 @@ Read a switch saved as the text "true" or "false".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> save_bool(settings_, key="demo/on", value=True)
 >>> bool_value(settings_, key="demo/on", default=False), bool_value(settings_, key="demo/missing", default=True)
@@ -181,7 +181,7 @@ Save a switch as the text "true" or "false", the form `bool_value` reads.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> save_bool(settings_, key="demo/on", value=False)
 >>> settings_.value("demo/on")
@@ -216,7 +216,7 @@ Read a saved list of words, such as "treble,bass".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/clefs", "treble,,bass")
 >>> list_value(settings_, key="demo/clefs"), list_value(settings_, key="demo/missing")
@@ -254,7 +254,7 @@ Read a saved set of choices, keeping only the ones that are still offered.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/clefs", "treble,gone,bass")
 >>> sorted(choices_value(settings_, key="demo/clefs", allowed=("treble", "bass", "alto")))
@@ -285,7 +285,7 @@ Read a saved set of key signatures, each a number of sharps (positive) or flats 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/keys", "-2,0,9,x,3")
 >>> sorted(keys_value(settings_, key="demo/keys"))
@@ -316,7 +316,7 @@ Write values as the text that `list_value`, `choices_value` and `keys_value` rea
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> joined([-1, 0, 2]), joined(["major", "minor"], separator="|")
 ('-1,0,2', 'major|minor')
 ```
@@ -335,7 +335,7 @@ Return every saved preference, by key, for a backup.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_ = store()
 >>> settings_.setValue("demo/name", "Ada")
 >>> export_settings()["demo/name"]
@@ -360,7 +360,7 @@ brought across again is kept, so an old installation's leftovers cannot leak bac
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import_settings({"demo/name": "Ada", "demo/count": 3})
 >>> store().value("demo/name"), int_value(store(), key="demo/count", default=0)
 ('Ada', 3)

@@ -13,7 +13,7 @@ saved next to the database, so a wrong choice can be undone.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> default_name(now=0.0).endswith(".altobackup")
 True
 ```
@@ -39,7 +39,7 @@ Suggest a file name for a backup made now.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> default_name(now=datetime(2026, 11, 13, 12).timestamp())
 'alto-backup-2026-11-13.altobackup'
 ```
@@ -67,7 +67,7 @@ Write a count with its noun, in the plural unless there is one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> counted(1, noun="profile"), counted(12345, noun="answer")
 ('1 profile', '12,345 answers')
 ```
@@ -90,7 +90,7 @@ Say what a backup holds and when it was made, for the question asked before impo
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> text = describe(BackupInfo(datetime(2026, 11, 13, 9, 30).timestamp(), app_version="0.1.0", schema_version=1,
 ...                            profiles=2, attempts=1500))
 >>> text
@@ -120,7 +120,7 @@ Ask where to save a backup, and write it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> export_backup(QWidget(), db=Database())  # doctest: +SKIP
 PosixPath('/home/ada/alto-backup-2026-11-13.altobackup')
 ```
@@ -147,7 +147,7 @@ Save a backup of what the database holds now, beside it, before it is replaced.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> safety_copy(Database()) is None
 True
 ```
@@ -179,7 +179,7 @@ caller has to reload what is on screen afterwards.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> import_backup(QWidget(), db=Database())  # doctest: +SKIP
 True
 ```

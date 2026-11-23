@@ -9,7 +9,7 @@ The SQLite store: profiles, every answer given, and what is known about each que
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=True,
@@ -40,7 +40,7 @@ Check that bytes are an intact Alto database that this version can read, and say
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> check_snapshot(Database().snapshot()) == (SCHEMA_VERSION, 0, 0)
 True
 >>> check_snapshot(b"not a database")
@@ -68,7 +68,7 @@ A person who practices: their answers are kept apart from everyone else's.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Profile(1, name="Ada")
 Profile(id=1, name='Ada')
 ```
@@ -106,7 +106,7 @@ What a profile's history says about one question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> record = ItemRecord(2.0, seen=3, first_try_right=1, wrong_attempts=2, total_first_ms=9000,
 ...                     last_seen=100.0, signature="s", payload="{}")
 >>> record.seen
@@ -127,7 +127,7 @@ The SQLite database behind profiles, answers and per-question history.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()  # in memory; give a path to keep it on disk
 >>> db.profiles()
 []
@@ -145,7 +145,7 @@ Open the database, creating it and its tables if they do not exist.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> db.conn.execute("PRAGMA user_version").fetchone()[0] == SCHEMA_VERSION
 True
@@ -166,7 +166,7 @@ Share the caller's write transaction or begin one before reading the state to be
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> with db.write_transaction():
 ...     print(db.conn.in_transaction)
@@ -185,7 +185,7 @@ Close the connection.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> db.close()
 ```
@@ -204,7 +204,7 @@ Return the whole database as bytes: every profile, answer and question record, e
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> check_snapshot(db.snapshot()) == (SCHEMA_VERSION, 1, 0)
@@ -232,7 +232,7 @@ place with the same ids. A snapshot made by an older version of Alto is brought 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> source = Database()
 >>> ada = source.add_profile("Ada")
 >>> target = Database()
@@ -256,7 +256,7 @@ Return every profile, sorted by name without regard to case.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> _ = db.add_profile("ben")
 >>> _ = db.add_profile("Ada")
@@ -282,7 +282,7 @@ Return one profile by its id.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> # noinspection PyUnresolvedReferences
@@ -314,7 +314,7 @@ Create a profile.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> db.add_profile("  Ada   Lovelace ")
 Profile(id=1, name='Ada Lovelace')
@@ -338,7 +338,7 @@ Delete a profile together with all of its answers and question history.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.delete_profile(ada.id)
@@ -371,7 +371,7 @@ Return what is known about one question for a profile.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.get_item(ada.id, exercise="NoteNames", item_key="k") is None
@@ -401,7 +401,7 @@ Store what is known about a question, replacing any earlier record of it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> record = ItemRecord(2.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=3000,
@@ -445,7 +445,7 @@ Log one answer, right or wrong.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=1, answer="C", correct=False,
@@ -477,7 +477,7 @@ Return all of a profile's answers in the order they were given.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for i, name in enumerate(["NoteNames", "IntervalNames"]):
@@ -516,7 +516,7 @@ Return answers given, oldest first, for some profiles, an exercise and a period.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for t in (10.0, 20.0, 30.0):
@@ -551,7 +551,7 @@ Count the questions first answered on each day, in local time, counting the days
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for attempt_no in (1, 2, 1):
@@ -590,7 +590,7 @@ Return the questions that need most practice, the same question from different p
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for key, strain in (("easy", 0.5), ("hard", 4.0)):
@@ -628,7 +628,7 @@ Return how many answers a profile has given, optionally of one exercise and with
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.count_attempts(ada.id)
@@ -669,7 +669,7 @@ Return the newest answers first, each with the stored question it was an answer 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> for t in (1.0, 2.0):
@@ -704,7 +704,7 @@ Return what is known about each of a profile's questions, the most strained firs
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> db.item_rows(ada.id)
@@ -725,7 +725,7 @@ Return every profile with how many answers and questions it has.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> _ = db.add_profile("Ada")
 >>> [(r["name"], r["attempts"], r["questions"]) for r in db.profile_rows()]
@@ -761,7 +761,7 @@ Return questions asked before under these same settings: the ones that need most
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
 >>> item = ItemRecord(3.0, seen=1, first_try_right=0, wrong_attempts=1, total_first_ms=1000,

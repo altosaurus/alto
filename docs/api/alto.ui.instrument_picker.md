@@ -9,7 +9,7 @@ Choosing the instrument that plays notes, with a summary of what each one is mad
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> format_size(2_500_000)
 '2.5 MB'
 >>> list(PREVIEW)
@@ -28,7 +28,7 @@ The piano is used if nothing is saved or the saved key is not an instrument.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("audio/instrument", "flute")
 >>> load_instrument()
 >>> sounds.instrument
@@ -49,7 +49,7 @@ Remember the instrument in use.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sounds.instrument = "marimba"
 >>> save_instrument()
 >>> str(store().value("audio/instrument"))
@@ -78,7 +78,7 @@ All are mixed from the system palette so they follow its light or dark theme.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> colors = tokens(QWidget())
 >>> sorted(colors)[:3]
 ['accent', 'accent_soft', 'bad']
@@ -104,7 +104,7 @@ Write a file size the way the instrument page shows it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> format_size(2_500_000), format_size(500_000), format_size(10)
 ('2.5 MB', '500 KB', '1 KB')
 ```
@@ -131,7 +131,7 @@ An instrument that can be played in more than one way (the viola, arco or pizzic
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.select("viola_plucked")
 >>> picker.shown
@@ -148,7 +148,7 @@ Build the picker, showing the page of the instrument in use.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.list.count() == len(picker.groups)
 True
@@ -168,7 +168,7 @@ Show the page of the entry an instrument belongs to.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.select("marimba")
 >>> picker.shown
@@ -189,7 +189,7 @@ Fill the summary page for an entry from what is known about it and what is on di
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.show_group("Flute")
 >>> picker.shown
@@ -210,7 +210,7 @@ Redraw the summary page when the palette changes, so its colors follow the theme
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> picker.show_group("Flute")
 >>> picker.changeEvent(QEvent(QEvent.Type.PaletteChange))
@@ -234,7 +234,7 @@ Nothing happens if it has no recordings installed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = InstrumentPicker()
 >>> chosen = []
 >>> _ = picker.chosen.connect(chosen.append)
@@ -258,7 +258,7 @@ Play the DSCH motif in an instrument, even if sound is muted.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> InstrumentPicker().preview("flute")  # doctest: +SKIP
 ```
 {% endraw %}

@@ -13,7 +13,7 @@ objects the built-in lessons use, so the lesson pages need to know nothing about
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> inline("A **scroll** is the carved end.")
 'A <b>scroll</b> is the carved end.'
 ```
@@ -36,7 +36,7 @@ Escape plain text for a lesson page, turning ``**word**`` into bold type for a t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> inline("The **nut** & the bridge.")
 'The <b>nut</b> &amp; the bridge.'
 ```
@@ -76,7 +76,7 @@ Validate the optional ``lessons`` list of a plugin manifest and build its lesson
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_lessons(None, pack_id="demo", pack_name="Demo", instruments={}, exercises={})
 ()
 ```

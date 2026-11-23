@@ -11,7 +11,7 @@ A switch at the top chooses between the exercises and the lessons.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> len(page.cards) == len(REGISTRY)
@@ -36,7 +36,7 @@ Build a navigation tree with themed checkboxes and right-aligned expansion arrow
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> category_tree("Decks").columnCount()
 2
 ```
@@ -65,7 +65,7 @@ same icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = TileCard(icon=icons.EXERCISE_CIRCLE, category="Scales & Keys", name="Circle of Fifths", about="Find keys.")
 >>> (card.width(), card.height()) == (CARD_W, CARD_H)
 True
@@ -88,7 +88,7 @@ Build a card.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = TileCard(icon=icons.HELP, category="Help", name="Help", about="Get help.", progress=(1, 8))
 >>> card.toolTip(), card.accessibleDescription()
 ('Get help.', 'Get help. Continue at step 2 of 8.')
@@ -108,7 +108,7 @@ Recolor the icon when the tile receives a new palette.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = lesson_card(LESSONS[0])
 >>> card.changeEvent(QEvent(QEvent.Type.PaletteChange))
 ```
@@ -131,7 +131,7 @@ Find the icon for an exercise: the one its plugin supplies, or Alto's own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> exercise_icon("NoteNames") == icons.EXERCISE_NOTE_NAMES
 True
 >>> exercise_icon("pack.nothing.here") == icons.EXERCISE_NOTE_NAMES
@@ -156,7 +156,7 @@ Find the icon for a lesson's tile: its own if a plugin gave it one, otherwise it
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> lesson_icon(LESSONS[0]) == exercise_icon(LESSONS[0].exercise)
 True
 ```
@@ -177,7 +177,7 @@ The card of an exercise: its icon on top, then its category, name and a one-line
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> card = ExerciseCard(NoteNames)
 >>> card.toolTip() == NoteNames.description
@@ -197,7 +197,7 @@ Build the card for one exercise.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import IntervalNames
 >>> ExerciseCard(IntervalNames).toolTip()
 'Name the interval between two notes.'
@@ -217,7 +217,7 @@ Show due reviews, new cards, and outstanding incorrect cards in the upper right 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> card = ExerciseCard(NoteNames)
 >>> card.set_counts((2, 3, 1))
@@ -250,7 +250,7 @@ Make the card of a lesson: the icon of the exercise that practices the same topi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = lesson_card(LESSONS[0])
 >>> card.accessibleName()
 'Pitches and Notes, Notation'
@@ -289,7 +289,7 @@ The start screen: a row of exercise buttons for each category.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> chosen = []
@@ -312,7 +312,7 @@ Build the page.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> len(HomePage([NoteNames]).cards)
 1
@@ -332,7 +332,7 @@ Show only tiles matching a title, description or category search.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> page.set_search("keyboard")
@@ -363,7 +363,7 @@ Check whether a tile matches the search text and the selection for its section.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> page = HomePage([NoteNames])
 >>> page.matches_filter(page.cards[0], section="exercises")
@@ -392,7 +392,7 @@ Fit the open filter sidebar when its workspace changes width.
 
 **Examples**
 
-```pycon
+```text
 Dragging the navigation divider resizes the space available for the filters.
 ```
 
@@ -410,7 +410,7 @@ Show the filter control on browsing and exercise pages, remembering the sidebar'
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = HomePage([])
 >>> page.set_filter_available(False)
 >>> page.category_filter.isHidden()
@@ -436,7 +436,7 @@ Restore exercise and lesson checkboxes after a theme change.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HomePage([]).restore_tile_filters({})
 ```
 
@@ -454,7 +454,7 @@ Select the tiles of one category, or all tiles when the category is absent.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HomePage([]).set_category(None)
 ```
 
@@ -480,7 +480,7 @@ waits on it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> page.set_mode("lessons")
@@ -499,7 +499,7 @@ Animate the tiles from an empty grid on return, or stop the animation when leavi
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = HomePage([])
 >>> page.page_changed()
 >>> page.canvas.running
@@ -516,7 +516,7 @@ Refresh each exercise tile and the totals for the current filters.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HomePage([]).refresh_counts()
 ```
 
@@ -534,7 +534,7 @@ Bring the lesson cards up to date each time the page is shown, so they say where
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> page.show()
@@ -554,7 +554,7 @@ Lay the cards out again when the page changes size.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> page = HomePage(REGISTRY)
 >>> page.show()

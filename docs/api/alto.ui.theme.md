@@ -11,7 +11,7 @@ A theme with colors of its own is a `CustomTheme`: a fixed palette that is light
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [key for key, label in THEMES][:4]
 ['system', 'light', 'dark', 'studio']
 ```
@@ -54,7 +54,7 @@ A theme with colors of its own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CUSTOM_THEMES[0].key, CUSTOM_THEMES[0].dark, len(CUSTOM_THEMES)
 ('studio', False, 50)
 ```
@@ -84,7 +84,7 @@ Turn a color given as hue, saturation and lightness into "#rrggbb".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> hsl_hex(0, saturation=100, lightness=50), hsl_hex(210, saturation=0, lightness=100)
 ('#ff0000', '#ffffff')
 ```
@@ -107,7 +107,7 @@ Make the light and the dark theme of a seed: neutrals tinted by one hue, and an 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pale, deep = seeded_themes(SEEDS[0])
 >>> pale.key, deep.key, pale.dark, deep.dark
 ('parchment', 'parchment_dark', False, True)
@@ -131,7 +131,7 @@ Split a theme's key into its family and which version of it that is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> family_of("sage_dark"), family_of("sage"), family_of("sage_auto"), family_of("dark"), family_of("system")
 (('sage', 'dark'), ('sage', 'light'), ('sage', 'system'), ('default', 'dark'), ('default', 'system'))
 ```
@@ -159,7 +159,7 @@ Give the key of one version of a family.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> variant_key("sage", version="dark"), variant_key("sage", version="system"), variant_key("default", version="dark")
 ('sage_dark', 'sage_auto', 'dark')
 ```
@@ -174,7 +174,7 @@ A theme the user made, as it is saved: its key, its name, and the colors of its 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ThemeRecord(id="my_1", name="Mine", light={}, dark={})["name"]
 'Mine'
 ```
@@ -193,7 +193,7 @@ Read the themes the user has made, as they are saved.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> user_records()
 []
@@ -213,7 +213,7 @@ Save the themes the user has made.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_user_records([])
 >>> user_records()
 []
@@ -233,7 +233,7 @@ Make the key for a new theme of the user's.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> new_family_id().startswith("my_")
 True
 ```
@@ -252,7 +252,7 @@ Save a theme the user made, replacing the one with the same key if there is one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> colors = {part: "#112233" for part in PARTS}
 >>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
@@ -276,7 +276,7 @@ Remove a theme the user made.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> colors = {part: "#112233" for part in PARTS}
 >>> upsert_user_theme(ThemeRecord(id="my_a", name="Mine", light=colors, dark=colors))
@@ -299,7 +299,7 @@ Give the themes the user has made, light and dark versions of each.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> user_themes()
 ()
@@ -319,7 +319,7 @@ List every theme there is to choose, the user's own first.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().remove("ui/userThemes")
 >>> families() == FAMILIES
 True
@@ -343,7 +343,7 @@ Find a theme with colors of its own, one of the built-in ones or one the user ma
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> custom_theme("studio_dark") is CUSTOM_THEMES[1], custom_theme("dark")
 (True, None)
 ```
@@ -366,7 +366,7 @@ Say which color scheme a theme uses: light, dark, or the desktop's own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> scheme_of("dark") == Qt.ColorScheme.Dark, scheme_of("sage_auto") == Qt.ColorScheme.Unknown, scheme_of("nonsense")
 (True, True, None)
 ```
@@ -389,7 +389,7 @@ Pick the colors for the small picture of a theme in the settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preview_colors(CUSTOM_THEMES[0])["window"], sorted(preview_colors(CUSTOM_THEMES[0]))[:3]
 ('#eceef1', ['accent', 'faint', 'ink'])
 ```
@@ -412,7 +412,7 @@ Build the Qt palette of a theme with colors of its own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> colors = theme_palette(CUSTOM_THEMES[0])
 >>> colors.color(QPalette.ColorRole.Window).name(), colors.color(QPalette.ColorRole.Highlight).name()
 ('#eceef1', '#2f7fc1')
@@ -432,7 +432,7 @@ Return the theme the user chose.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_theme("dark")
 >>> saved_theme()
 'dark'
@@ -453,7 +453,7 @@ Remember the theme the user chose.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_theme("light")
 >>> saved_theme()
 'light'
@@ -476,7 +476,7 @@ A theme that follows the desktop does not force one, so this is what it asks.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> system_is_dark() in {True, False}
 True
 ```
@@ -495,7 +495,7 @@ Switch the application's color scheme and rebuild the stylesheet from the new pa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> apply_theme("system")
 >>> # noinspection PyUnresolvedReferences
 >>> app.styleSheet() != ""

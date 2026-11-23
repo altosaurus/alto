@@ -14,7 +14,7 @@ question. The widgets the panels are built from are in `alto.ui.settings_menu`, 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = settings_panel_for(ClefBasics())
 >>> type(panel).__name__
 'ClefBasicsSettingsPanel'
@@ -50,7 +50,7 @@ each. Edits are live: each changes the settings, saves them and emits `changed`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = NoteNameSettingsPanel(NoteNameSettings())
 >>> panel.cfg.active_clefs()
 ['treble', 'bass']
@@ -67,7 +67,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = NoteNameSettingsPanel(NoteNameSettings())
 >>> panel.stack.count()  # the menu and five pages
 6
@@ -100,7 +100,7 @@ and emits `changed`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = KeyboardSettingsPanel(settings.KeyboardSettings())
 >>> panel.low_label.text(), panel.high_label.text()
 ('C3', 'C5')
@@ -117,7 +117,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardSettingsPanel(settings.KeyboardSettings()).stack.count()  # the menu, the range and the keys
 3
 ```
@@ -148,7 +148,7 @@ emits `changed`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = NoteConstructionSettingsPanel(settings.ConstructionSettings())
 >>> sorted(panel.boxes)[:3]
 ['alto', 'baritone', 'bass']
@@ -165,7 +165,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteConstructionSettingsPanel(settings.ConstructionSettings()).stack.count()
 4
 ```
@@ -186,7 +186,7 @@ Choose the notation and answer format for written intervals.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalSettingsPanel(settings.IntervalSettings()).stack.count()
 10
 ```
@@ -202,7 +202,7 @@ Build the interval settings menu with direction choices under Melodic.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalSettingsPanel(settings.IntervalSettings()).quality_row.value.text()
 'Interval and Quality'
 ```
@@ -233,7 +233,7 @@ Range and interval selection pages for keyboard interval identification.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
 >>> panel.stack.count()
 4
@@ -250,7 +250,7 @@ Build the range selector and interval checklist.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = KeyboardIntervalSettingsPanel(settings.KeyboardIntervalSettings())
 >>> panel.low_label.text(), panel.high_label.text()
 ('C3', 'C5')
@@ -284,7 +284,7 @@ and emits `changed`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ArpeggioSettingsPanel(settings.ArpeggioSettings())
 >>> panel.types_row.value.text()
 '4 of 9'
@@ -301,7 +301,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioSettingsPanel(settings.ArpeggioSettings()).stack.count()  # the menu and four pages
 5
 ```
@@ -340,7 +340,7 @@ construction also has Octave and Steps switches. Edits are live: each changes th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = KeySignatureSettingsPanel(settings.KeySignatureSettings())
 >>> panel.modes_row.value.text()
 '2 of 7'
@@ -359,7 +359,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignatureSettingsPanel(settings.KeySignatureSettings()).stack.count()  # the menu and three pages
 4
 ```
@@ -376,7 +376,7 @@ Choose the question type and the notation terms to practice.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Trill" in NotationSettingsPanel().terms.boxes
 True
 ```
@@ -387,7 +387,7 @@ Build the settings menu and its Question Type and Terms pages.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(NotationSettingsPanel().terms.boxes) == len(settings.NOTATION_TERMS)
 True
 ```
@@ -419,7 +419,7 @@ only this exercise has, at the bottom. Edits are live: each changes the settings
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings())
 >>> panel.stack.count()  # the menu and two pages
 3
@@ -436,7 +436,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ClefBasicsSettingsPanel(settings.ClefBasicsSettings(clefs={"subbass"}))
 >>> panel.boxes["subbass"].isChecked(), list(panel.boxes)[-2:]
 (True, ['french', 'subbass'])
@@ -456,7 +456,7 @@ Return the inversions as they are written in the settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_inversion_names()
 ('Root position', '1st inversion', '2nd inversion', '3rd inversion')
 ```
@@ -491,7 +491,7 @@ of question emits `changed`, and a new color scheme emits `restyled`, which keep
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = CircleSettingsPanel(settings.CircleSettings())
 >>> panel.questions_row.value.text(), panel.colors_row.value.text()
 ('3 of 3', 'Cyan to indigo')
@@ -508,7 +508,7 @@ Build the panel for a set of settings.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleSettingsPanel(settings.CircleSettings()).stack.count()  # the menu, the questions, the colors and the editor
 4
 ```
@@ -536,7 +536,7 @@ Return the settings panel for an exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import IntervalNames, NoteNames
 >>> type(settings_panel_for(NoteNames())).__name__
 'NoteNameSettingsPanel'

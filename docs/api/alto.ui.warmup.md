@@ -16,7 +16,7 @@ second.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> warmed = []
 >>> owner = QObject()
 >>> start(owner, steps=[lambda: warmed.append(1), lambda: warmed.append(2)], delay=0)
@@ -46,7 +46,7 @@ List the steps of the warm-up: the application's own font size and each style sh
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(warmup_steps())  # a staff, then the application's size and the ten style sheet sizes, in two weights
 23
 ```
@@ -75,7 +75,7 @@ owner is deleted first (the window closed), the rest of the steps are dropped.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> start(QObject(), steps=[], delay=0)  # nothing to do
 ```
 {% endraw %}

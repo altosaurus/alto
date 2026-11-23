@@ -9,7 +9,7 @@ A popup showing a stored question the way the exercise showed it, with its answe
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> question = Question("Name the note.", choices=["C", "D"], answer="C")
 >>> QuestionPreview("Note Identification", question=question).windowTitle()
 'Note Identification'
@@ -38,7 +38,7 @@ A question as it appeared (the notes on the staff, or the highlighted key), then
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.theory.pitch import Note
 >>> question = Question("Name the note.", choices=["C", "D"], answer="C", staff=[[Note.parse("C4")]])
 >>> dialog = QuestionPreview("Note Identification", question=question, details=["You answered: D"])
@@ -60,7 +60,7 @@ Build the popup.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.theory.pitch import Note
 >>> question_ = Question("", choices=["C"], answer="C", keyboard=Note.parse("C4"))
 >>> QuestionPreview("Keyboard Note Identification", question=question_).minimumWidth()

@@ -11,7 +11,7 @@ It is the lessons' counterpart of the exercise list, and looks the same.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nav = LessonNav()
 >>> nav.show_lesson("circle-of-fifths")
 >>> nav.count() > len(LESSONS)
@@ -41,7 +41,7 @@ Make a section label for a list: small, gray capitals that cannot be selected.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> section_item("Scales & Keys", palette=QPalette()).text()
 'SCALES & KEYS'
 ```
@@ -63,7 +63,7 @@ A flat list of the lessons by category, with the steps of the open lesson listed
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nav = LessonNav()
 >>> chosen = []
 >>> _ = nav.step_chosen.connect(chosen.append)
@@ -84,7 +84,7 @@ Build the list with no lesson open.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> LessonNav().objectName()
 'nav'
 ```
@@ -103,7 +103,7 @@ Fill the list, with the steps of one lesson under it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nav = LessonNav()
 >>> nav.show_lesson("circle-of-fifths")
 >>> len(nav.step_items)
@@ -127,7 +127,7 @@ Highlight the step that is showing.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nav = LessonNav()
 >>> nav.show_lesson("circle-of-fifths")
 >>> nav.select_step(3)
