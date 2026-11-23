@@ -228,7 +228,14 @@ def test_the_window_has_the_zoom_shortcuts_and_the_wheel(app: QApplication, monk
     assert zoom.percent() == 100
     QTest.qWait(main_window.ZOOM_SETTLE_MS + 60)
     assert rebuilt.call_count == 2
-    app.sendEvent(app, wheel(120, control=True))
+    window.show()
+    window.activateWindow()
+    assert QTest.qWaitForWindowActive(window, 2000)  # the window gains the focus, so the zoom watches it
+    handle = window.windowHandle()
+    assert handle is not None
+    app.sendEvent(handle, wheel(120, control=True))  # a turn reaches the window before any widget in it
+    assert zoom.percent() == 110
+    app.sendEvent(app, wheel(120, control=True))  # nothing watches the application itself, which every widget's events cross
     assert zoom.percent() == 110
 
 

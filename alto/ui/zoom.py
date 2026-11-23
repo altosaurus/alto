@@ -20,11 +20,24 @@ from __future__ import annotations
 
 import re
 
-from PySide6.QtCore import QEvent, QObject, Qt, Signal
-from PySide6.QtGui import QFont, QWheelEvent
+from PySide6.QtCore import (
+    QEvent,
+    QObject,
+    Qt,
+    Signal,
+)
+from PySide6.QtGui import (
+    QFont,
+    QGuiApplication,
+    QWheelEvent,
+    QWindow,
+)
 from PySide6.QtWidgets import QApplication
 
-from alto.ui.store import int_value, store
+from alto.ui.store import (
+    int_value,
+    store,
+)
 
 STEPS = (50, 67, 75, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300)  # the zoom levels, as percentages
 DEFAULT = 100
@@ -346,6 +359,49 @@ class WheelZoom(QObject):
         """
         super().__init__(parent)
         self._turned = 0
+
+    def follow(self, app: QGuiApplication) -> None:
+        """
+        Watch the window that has the focus, and each window that gains it later, such as a dialog that opens.
+
+        The filter goes on the windows, not on the application. A window is handed each wheel turn before the widget under the
+        pointer is, so a turn anywhere in it is seen, while the many events that pass between the widgets inside it are not:
+        a filter on the application runs for every one of those, which made building a page half as slow again.
+
+        Parameters
+        ----------
+        app : QGuiApplication
+            The application whose windows to watch.
+
+        Examples
+        --------
+        >>> handler = WheelZoom()
+        >>> handler.follow(app)
+        """
+        app.focusWindowChanged.connect(self.watch)
+        self.watch(app.focusWindow())
+
+    def watch(self, window: QWindow | None) -> None:
+        """
+        Zoom when the wheel turns with Ctrl held over a window.
+
+        Parameters
+        ----------
+        window : QWindow or None
+            The window. None, which is what Qt passes when no window has the focus, does nothing.
+
+        Examples
+        --------
+        >>> from PySide6.QtWidgets import QWidget
+        >>> widget = QWidget()
+        >>> widget.show()
+        >>> handler = WheelZoom()
+        >>> handler.watch(widget.windowHandle())
+        >>> handler.watch(None)
+        """
+        if window is not None:
+            window.removeEventFilter(self)  # so a window that gains the focus again is not watched twice
+            window.installEventFilter(self)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802, PLR0917 (Qt passes both arguments positionally)
         """
