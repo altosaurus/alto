@@ -144,7 +144,7 @@ try {
 }
 catch {
     # Exit code 7 means the runtime step stopped the installation: the log says why.
-    if (Test-Path $InstallLog) { Get-Content $InstallLog | Select-String -Pattern "Visual C\+\+|Runtime|Microsoft|download|Exception|error|code" | ForEach-Object { Write-Host $_ } }
+    if (Test-Path $InstallLog) { Get-Content $InstallLog | ForEach-Object { Write-Host $_ } }
     throw
 }
 if (-not (Test-Path (Join-Path $Target "alto.exe"))) { throw "The installer did not install alto.exe in $Target" }

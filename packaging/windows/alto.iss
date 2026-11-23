@@ -147,10 +147,14 @@ var
 begin
   Result := False;
   Report := ExpandConstant('{tmp}\signature.txt');
-  { PowerShell writes the signature's status and its signer's name; the decision is made here, where it can be logged. }
+  { PowerShell writes the signature's status and its signer's name, or the error that stopped it; the decision is made here,
+    where it can be logged. The module path is reset to the machine's, because Windows PowerShell started from PowerShell 7
+    inherits PowerShell 7's modules and then cannot load the one that checks signatures. }
   if not Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
-    '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$s = Get-AuthenticodeSignature -LiteralPath ''' + Path + '''; ' +
-    'Set-Content -LiteralPath ''' + Report + ''' -Encoding ASCII -Value ([string]$s.Status + ''|'' + $s.SignerCertificate.Subject)"',
+    '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "' +
+    '$env:PSModulePath = [Environment]::GetEnvironmentVariable(''PSModulePath'', ''Machine''); ' +
+    'try { $s = Get-AuthenticodeSignature -LiteralPath ''' + Path + '''; $v = [string]$s.Status + ''|'' + $s.SignerCertificate.Subject } ' +
+    'catch { $v = ''Error|'' + $_ }; Set-Content -LiteralPath ''' + Report + ''' -Encoding ASCII -Value $v"',
     '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
   begin
     Log(Format('PowerShell could not be started to check the signature: %s', [SysErrorMessage(ResultCode)]));
