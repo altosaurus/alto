@@ -36,6 +36,13 @@ Leave it out when running a few tests, where starting the processes would take l
 every core. The budgets time real operations, so they run in the Budgets workflow instead (see below). Set `ALTO_TEST_WORKERS`
 to use a different number of processes.
 
+Two checks keep the suite fast as it grows. A test that takes longer than 8 seconds fails (`TEST_TIME_LIMIT` in
+`tests/conftest.py`) unless it is marked `@pytest.mark.slow`, for a thorough check that is worth the time. And
+`tests/test_test_speed.py` fails when a test file gains a fixed wait (`QTest.qWait` or `time.sleep`) outside tests marked
+`motion` or `slow`: let animations and feedback finish with `motion.settle()` instead, which takes no time (see the
+[Animation]({{ '/guide/animation/' | relative_url }}#testing-animations) guide). When a file loses a wait, lower its number in
+that test's `BASELINE`.
+
 The tests that touch widgets run with Qt's offscreen platform, so no display is needed.
 
 The tests never read or change your own settings, profile or history. `tests/conftest.py` points them at a throwaway
