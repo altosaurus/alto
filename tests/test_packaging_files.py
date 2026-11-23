@@ -84,9 +84,35 @@ def test_the_installer_and_the_workflows_agree_on_the_names_of_what_is_built() -
     assert 'NAME="alto-$VERSION-linux-$(uname -m)"' in (ROOT / "scripts" / "build-linux.sh").read_text(encoding="utf-8")
     assert "path: dist/alto-*.tar.gz" in BUILD
     assert BUILD.count("path: dist/qt-sources/*.tar.xz") == 2
-    assert "dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/SHA256SUMS" in RELEASE
+    assert "path: dist/alto-*-library-sources.tar" in BUILD
+    release_files = "dist/alto-*.tar.gz dist/alto-*-setup.exe dist/*-everywhere-src-*.tar.xz dist/alto-*-library-sources.tar"
+    assert release_files + " dist/SHA256SUMS" in RELEASE
     assert "sha256sum alto-* *-everywhere-src-*.tar.xz > SHA256SUMS" in RELEASE
     assert "alto-$Version-windows-x64-setup.exe" in (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
+
+
+def test_the_linux_download_leaves_out_gtk_and_readline_and_covers_its_system_libraries() -> None:
+    """
+    Check that the Linux download leaves out Qt's GTK 3 theme and Python's readline, and notices its system libraries.
+
+    The spec drops the theme plugin with the libraries only it needed, excludes readline, fails if either is still in the
+    bundle, and lists the system libraries that remain. The build installs their notices and writes the sources archive,
+    whose copyleft and permissive package lists do not overlap.
+    """
+    spec = (ROOT / "packaging" / "alto.spec").read_text(encoding="utf-8")
+    assert '"readline"' in spec.split("excludes=")[1].split("]")[0]
+    assert '"libqgtk3.so"' in spec and "only_unused" in spec and "ALTO_SYSTEM_LIBRARIES" in spec
+    assert "readline and GTK must not be in the desktop package" in spec
+    script = (ROOT / "scripts" / "build-linux.sh").read_text(encoding="utf-8")
+    assert 'ALTO_SYSTEM_LIBRARIES="$WORK/system-libraries.json"' in script
+    assert '"$ROOT/packaging/linux_libraries.py" "$FROZEN" "$WORK/system-libraries.json"' in script
+    assert '"$ROOT/dist/$NAME-library-sources.tar"' in script and "licenses/Linux/README.txt" in script
+    helper = (ROOT / "packaging" / "linux_libraries.py").read_text(encoding="utf-8")
+    copyleft = set(re.findall(r'"([a-z0-9.+-]+)",', helper.split("SOURCE_PACKAGES = frozenset(")[1].split(")")[0]))
+    permissive = set(re.findall(r'"([a-z0-9.+-]+)",', helper.split("NOTICE_PACKAGES = frozenset(")[1].split(")")[0]))
+    assert {"glib2.0", "libsndfile", "pulseaudio", "gcc-12"} <= copyleft
+    assert copyleft.isdisjoint(permissive)
+    assert not {"gtk+3.0", "readline"} & (copyleft | permissive)  # left out of the download, so never expected
 
 
 def test_the_installer_keeps_its_id_installs_for_one_user_and_asks_about_the_data() -> None:
