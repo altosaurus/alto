@@ -38,6 +38,10 @@
 Alto is a free desktop music theory trainer. Read notes on any clef, name intervals, chords and arpeggios, spell scales,
 learn key signatures, and find keys on a keyboard. Your answers determine when each question comes back for review.
 
+On Linux, you can answer **Interval Construction** questions by playing a USB MIDI keyboard or the Virtual MIDI Piano
+Keyboard (VMPK). If Alto asks for a perfect fifth above C4, play G4 to submit your answer.
+[MIDI setup for Interval Construction](docs/exercises.md#interval-construction).
+
 If you already study with Anki, you can export selected exercises as flashcards and review them alongside your other decks.
 You can also carry over due dates and intervals from SM-2 or FSRS. [Anki export guide](docs/data.md#anki-decks).
 
