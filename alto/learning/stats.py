@@ -555,12 +555,8 @@ def daily_counts(
     today = datetime.fromtimestamp(now).date()
     first = today - timedelta(days=today.weekday() + 7 * (weeks - 1))  # the Monday that starts the first week shown
     since = datetime.combine(first, datetime.min.time()).timestamp()
-    counts: dict[date, int] = {}
-    for r in db.attempts_in(profile_ids, exercise=exercise, since=since):
-        if r["attempt_no"] == 1:
-            day = datetime.fromtimestamp(r["answered_at"]).date()
-            counts[day] = counts.get(day, 0) + 1
-    return counts
+    per_day = db.first_attempts_per_day(profile_ids, exercise=exercise, since=since)  # counted by the database
+    return {date.fromisoformat(day): count for day, count in per_day.items()}
 
 
 def _period_buckets(start: datetime, *, end: datetime, gran: str) -> dict[datetime, Bucket]:

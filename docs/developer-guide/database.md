@@ -40,7 +40,7 @@ One row per local practice profile.
 
 ### Attempts
 
-One row per submitted answer, including each retry. The `attempts_by_item` index covers `(profile_id, exercise, item_key)`. The browser uses these three columns in a left join to obtain the question payload when an item summary exists.
+One row per submitted answer, including each retry. The `attempts_by_item` index covers `(profile_id, exercise, item_key)`. The browser uses these three columns in a left join to obtain the question payload when an item summary exists. The `attempts_by_time` index covers `(profile_id, answered_at)`, for a profile's answers since a date, which the statistics read. It is created when the database opens rather than in a schema version, since an index changes no data and an older Alto can still open the file.
 
 | Column | SQLite type | Key or default | Meaning |
 |---|---|---|---|

@@ -526,6 +526,41 @@ Return answers given, oldest first, for some profiles, an exercise and a period.
 [20.0, 30.0]
 ```
 
+### Database.first_attempts_per_day
+
+```python
+def first_attempts_per_day(
+    profile_ids: list[int] | None = None,
+    *,
+    exercise: str | None = None,
+    since: float | None = None,
+) -> dict[str, int]
+```
+
+Count the questions first answered on each day, in local time, counting the days in the database.
+
+**Parameters**
+
+- `profile_ids` (*list of int or None, default None*): The profiles to count; None for all of them.
+- `exercise` (*str or None, default None*): Only this exercise's questions; None for every exercise. Keyword-only.
+- `since` (*float or None, default None*): Only answers from this time on, in seconds since the epoch. Keyword-only.
+
+**Returns**
+
+- *dict of str to int*: The number of first answers on each day that has any, by the day as "YYYY-MM-DD".
+
+**Examples**
+
+```pycon
+>>> db = Database()
+>>> ada = db.add_profile("Ada")
+>>> for attempt_no in (1, 2, 1):
+...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=attempt_no, answer="C", correct=True,
+...                    duration_ms=900, answered_at=86_400.0 * 100 + 43_200)
+>>> list(db.first_attempts_per_day([ada.id]).values())  # the second try of a question is not counted
+[2]
+```
+
 ### Database.strained_items
 
 ```python
