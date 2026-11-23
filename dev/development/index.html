@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404294">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
   
 </head>
 <body>
@@ -726,6 +726,13 @@ Leave it out when running a few tests, where starting the processes would take l
 <code class="language-plaintext highlighter-rouge">sh scripts/run-tests.sh</code> runs the suite the way the pre-push hook and GitHub do: everything but the performance budgets, on
 every core. The budgets time real operations, so they run in the Budgets workflow instead (see below). Set <code class="language-plaintext highlighter-rouge">ALTO_TEST_WORKERS</code>
 to use a different number of processes.</p>
+
+<p>Two checks keep the suite fast as it grows. A test that takes longer than 8 seconds fails (<code class="language-plaintext highlighter-rouge">TEST_TIME_LIMIT</code> in
+<code class="language-plaintext highlighter-rouge">tests/conftest.py</code>) unless it is marked <code class="language-plaintext highlighter-rouge">@pytest.mark.slow</code>, for a thorough check that is worth the time. And
+<code class="language-plaintext highlighter-rouge">tests/test_test_speed.py</code> fails when a test file gains a fixed wait (<code class="language-plaintext highlighter-rouge">QTest.qWait</code> or <code class="language-plaintext highlighter-rouge">time.sleep</code>) outside tests marked
+<code class="language-plaintext highlighter-rouge">motion</code> or <code class="language-plaintext highlighter-rouge">slow</code>: let animations and feedback finish with <code class="language-plaintext highlighter-rouge">motion.settle()</code> instead, which takes no time (see the
+<a href="/alto/dev/guide/animation/#testing-animations">Animation</a> guide). When a file loses a wait, lower its number in
+that test’s <code class="language-plaintext highlighter-rouge">BASELINE</code>.</p>
 
 <p>The tests that touch widgets run with Qt’s offscreen platform, so no display is needed.</p>
 
@@ -1763,8 +1770,8 @@ original directory so older answers can still be opened.</p>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404294" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404294" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

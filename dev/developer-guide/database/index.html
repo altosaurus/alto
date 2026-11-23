@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404294">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
   
 </head>
 <body>
@@ -810,7 +810,7 @@
 
 <h3 id="attempts">Attempts</h3>
 
-<p>One row per submitted answer, including each retry. The <code class="language-plaintext highlighter-rouge">attempts_by_item</code> index covers <code class="language-plaintext highlighter-rouge">(profile_id, exercise, item_key)</code>. The browser uses these three columns in a left join to obtain the question payload when an item summary exists.</p>
+<p>One row per submitted answer, including each retry. The <code class="language-plaintext highlighter-rouge">attempts_by_item</code> index covers <code class="language-plaintext highlighter-rouge">(profile_id, exercise, item_key)</code>. The browser uses these three columns in a left join to obtain the question payload when an item summary exists. The <code class="language-plaintext highlighter-rouge">attempts_by_time</code> index covers <code class="language-plaintext highlighter-rouge">(profile_id, answered_at)</code>, for a profile’s answers since a date, which the statistics read. It is created when the database opens rather than in a schema version, since an index changes no data and an older Alto can still open the file.</p>
 
 <table>
   <thead>
@@ -1215,8 +1215,8 @@
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404294" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404294" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

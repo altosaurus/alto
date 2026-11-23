@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404294">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
   
 </head>
 <body>
@@ -724,7 +724,9 @@ still pass every value as a parameter.</li>
   <li><strong>Transactions.</strong> <code class="language-plaintext highlighter-rouge">with self.conn:</code> groups statements so they all happen or none do, and commits at the end. Alto writes the
 attempt, item summary and any review schedule update in one transaction in <code class="language-plaintext highlighter-rouge">Learner.record</code>.</li>
   <li><strong>Indexes.</strong> <code class="language-plaintext highlighter-rouge">CREATE INDEX attempts_by_item ON attempts(profile_id, exercise, item_key)</code> makes “find all attempts for this
-question” fast. Without it SQLite reads every row.</li>
+question” fast. Without it SQLite reads every row. An index can also be the slower way: <code class="language-plaintext highlighter-rouge">EXPLAIN QUERY PLAN</code> shows which one
+SQLite picked. The database page’s newest answers are found faster by walking the table from its end and stopping at the
+limit, so that query writes <code class="language-plaintext highlighter-rouge">+a.profile_id</code>, which keeps SQLite from using an index for that column.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">sqlite3.Row</code></strong> (<code class="language-plaintext highlighter-rouge">conn.row_factory = sqlite3.Row</code>) lets you read a column by name: <code class="language-plaintext highlighter-rouge">row["strain"]</code>.</li>
   <li><strong>In-memory databases.</strong> <code class="language-plaintext highlighter-rouge">Database()</code> with no path uses <code class="language-plaintext highlighter-rouge">":memory:"</code>: a fresh database that vanishes when closed. Every test
 and every doctest uses one, and the simulation in <a href="/alto/dev/guide/spaced-repetition/">Spaced repetition</a> does too.</li>
@@ -1004,8 +1006,8 @@ the chapter on stream processing covers the log-and-derived-state idea.</li>
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404294" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404294" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>

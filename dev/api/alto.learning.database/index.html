@@ -22,7 +22,7 @@
     try { var saved = localStorage.getItem("alto-docs-theme"); if (saved === "light" || saved === "dark") { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
   </script>
   <link rel="icon" href="/alto/dev/assets/img/icon.png">
-  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404294">
+  <link rel="stylesheet" href="/alto/dev/assets/css/site.css?v=1795404335">
   
 </head>
 <body>
@@ -1208,6 +1208,43 @@ True
 [20.0, 30.0]
 </code></pre>
 
+<h3 id="databasefirst_attempts_per_day">Database.first_attempts_per_day</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">first_attempts_per_day</span><span class="p">(</span>
+    <span class="n">profile_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">since</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Count the questions first answered on each day, in local time, counting the days in the database.</p>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">profile_ids</code> (<em>list of int or None, default None</em>): The profiles to count; None for all of them.</li>
+  <li><code class="language-plaintext highlighter-rouge">exercise</code> (<em>str or None, default None</em>): Only this exercise’s questions; None for every exercise. Keyword-only.</li>
+  <li><code class="language-plaintext highlighter-rouge">since</code> (<em>float or None, default None</em>): Only answers from this time on, in seconds since the epoch. Keyword-only.</li>
+</ul>
+
+<p><strong>Returns</strong></p>
+
+<ul>
+  <li><em>dict of str to int</em>: The number of first answers on each day that has any, by the day as “YYYY-MM-DD”.</li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+<pre><code class="language-pycon">&gt;&gt;&gt; db = Database()
+&gt;&gt;&gt; ada = db.add_profile("Ada")
+&gt;&gt;&gt; for attempt_no in (1, 2, 1):
+...     db.add_attempt(ada.id, exercise="NoteNames", item_key="k", attempt_no=attempt_no, answer="C", correct=True,
+...                    duration_ms=900, answered_at=86_400.0 * 100 + 43_200)
+&gt;&gt;&gt; list(db.first_attempts_per_day([ada.id]).values())  # the second try of a question is not counted
+[2]
+</code></pre>
+
 <h3 id="databasestrained_items">Database.strained_items</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">strained_items</span><span class="p">(</span>
@@ -1603,8 +1640,8 @@ True
     if (systemDark.addEventListener) { systemDark.addEventListener("change", show); }
     show();
   </script>
-  <script src="/alto/dev/assets/js/nav.js?v=1795404294" defer></script>
-  <script src="/alto/dev/assets/js/toc.js?v=1795404294" defer></script>
+  <script src="/alto/dev/assets/js/nav.js?v=1795404335" defer></script>
+  <script src="/alto/dev/assets/js/toc.js?v=1795404335" defer></script>
   <script src="/alto/version-switcher.js" defer></script>
 </body>
 </html>
