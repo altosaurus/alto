@@ -1,15 +1,9 @@
 name: Docs check
 
-# Builds the docs with Jekyll on a pull request that changes them, so that a broken page shows before the merge and not when the
-# Docs workflow runs on main. Nothing is published: the Docs workflow does that, from main.
+# Build the proposed merge with read-only permissions, including contributions from forks.
 on:
   pull_request:
-    paths:
-      - "docs/**"
-      - "CHANGELOG.md"
-      - "scripts/check_plugin_registry.py"
-      - "scripts/tutorial_docs.py"
-      - ".github/workflows/docs-check.yml"
+    branches: [main]
 
 permissions:
   contents: read
@@ -27,6 +21,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Check plugin registrations
         env:
@@ -43,14 +38,31 @@ jobs:
           bundler-cache: true
           working-directory: docs
 
-      # The same build as the Docs workflow makes for dev: the same configuration, with the version a page knows itself by.
       - name: Build the docs
         env:
           BUNDLE_GEMFILE: ${{ github.workspace }}/docs/Gemfile
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          printf 'baseurl: /alto/dev\ndocs_version: dev\napp_version: ""\n' > version.yml
-          bundle exec jekyll build --source docs --destination site --config docs/_config.yml,version.yml
+          PREVIEW_REPOSITORY=$(cat .github/docs-preview-repository)
+          host="https://${PREVIEW_REPOSITORY%/*}.github.io"
+          root="/${PREVIEW_REPOSITORY#*/}/pr-$PR"
+          release=$(python3 scripts/docs_site.py latest $(git tag --list 'v*'))
+          printf 'url: %s\nsite_root: %s\nbaseurl: %s/dev\ndocs_version: dev\napp_version: "%s"\n' \
+            "$host" "$root" "$root" "${release#v}" > version.yml
+          printf 'preview_pr: %s\n' "$PR" >> version.yml
+          bundle exec jekyll build --source docs --destination site/dev --config docs/_config.yml,version.yml
+          printf '%s\n' "$HEAD_SHA" > site/dev/commit.txt
+          python3 scripts/docs_site.py finish site --root-files docs/site-root --site-url "$host$root"
 
       - name: Check that the pages are there
         run: |
-          for page in index getting-started release-notes; do test -s "site/${page}.html" || test -s "site/${page}/index.html"; done
+          for page in index getting-started release-notes; do test -s "site/dev/${page}.html" || test -s "site/dev/${page}/index.html"; done
+
+      - name: Save the rendered preview
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: docs-preview
+          path: site/
+          retention-days: 3
+          if-no-files-found: error

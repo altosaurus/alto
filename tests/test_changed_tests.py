@@ -138,10 +138,11 @@ def test_python_tool_workflows_select_source_and_their_own_configuration() -> No
         assert trigger["push"] == {"branches": ["main"]}
 
 
-def test_the_docs_are_built_on_a_pull_request_that_changes_them_and_nothing_is_published() -> None:
-    """Check the Docs check workflow: it builds with Jekyll for the docs paths and has no permission to write."""
+def test_each_main_pull_request_builds_a_read_only_docs_preview() -> None:
+    """Build on every main pull request and pass the site to the publisher with a read-only token."""
     workflow = (WORKFLOWS / "docs-check.yml").read_text(encoding="utf-8")
-    assert "pull_request:" in workflow and 'paths:\n      - "docs/**"' in workflow
+    assert "pull_request:\n    branches: [main]" in workflow and "paths:" not in workflow
+    assert "actions/upload-artifact@" in workflow and "secrets." not in workflow
     assert (
         "jekyll build" in workflow
         and "contents: read" in workflow

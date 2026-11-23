@@ -1,0 +1,128 @@
+name: Publish docs preview
+
+on:
+  workflow_run:
+    workflows: ["Docs check"]
+    types: [completed]
+
+permissions: {}
+
+jobs:
+  locate:
+    if: >-
+      github.repository == 'altosaurus/alto' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.path == '.github/workflows/docs-check.yml'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      pr: ${{ steps.find.outputs.pr }}
+      repository: ${{ steps.find.outputs.repository }}
+    steps:
+      # workflow_run.pull_requests can be empty for forks. Resolve identity from GitHub, never the artifact.
+      - id: find
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          pr=$(gh api -X GET "repos/$GITHUB_REPOSITORY/pulls" -f state=open -f base=main \
+            -f head="${HEAD_REPO%/*}:$HEAD_BRANCH" \
+            --jq '.[] | select(.head.repo.full_name == env.HEAD_REPO and .head.sha == env.HEAD_SHA) | .number')
+          echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          repository=$(gh api -H 'Accept: application/vnd.github.raw+json' \
+            "repos/$GITHUB_REPOSITORY/contents/.github/docs-preview-repository?ref=$GITHUB_SHA")
+          echo "repository=$repository" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: locate
+    if: needs.locate.outputs.pr != '' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: docs-preview-publisher
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ needs.locate.outputs.pr }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      BUILD_ID: ${{ github.event.workflow_run.id }}
+      BUILD_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+      PREVIEW_REPOSITORY: ${{ needs.locate.outputs.repository }}
+    steps:
+      # Only the scripts from the base repository's default branch run in this job.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Read the successful run's static files
+        run: |
+          id=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_ID/artifacts" -f name=docs-preview \
+            --jq '.artifacts[] | select(.expired == false) | .id')
+          [[ "$id" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/site.zip"
+          python3 .github/scripts/extract-docs-preview.py "$RUNNER_TEMP/site.zip" "$RUNNER_TEMP/preview"
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: ${{ needs.locate.outputs.repository }}
+          ref: docs-previews
+          path: pages
+          ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
+
+      - name: Publish and verify the live revision
+        run: bash .github/scripts/publish-docs-preview.sh
+
+  report:
+    needs: [locate, publish]
+    if: always() && needs.locate.outputs.pr != '' && github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: docs-preview-comment-${{ needs.locate.outputs.pr }}
+      cancel-in-progress: false
+    permissions:
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Update the PR link and commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.locate.outputs.pr }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PUBLISHED: ${{ needs.publish.result }}
+          BUILD_RESULT: ${{ github.event.workflow_run.conclusion }}
+          BUILD_URL: ${{ github.event.workflow_run.html_url }}
+          PREVIEW_REPOSITORY: ${{ needs.locate.outputs.repository }}
+        run: |
+          current=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq 'select(.state == "open") | .head.sha')
+          [[ "$current" == "$HEAD_SHA" ]] || exit 0
+          url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          state=failure
+          description="Docs preview unavailable"
+          if [[ "$PUBLISHED" == success ]]; then
+            state=success
+            description="View rendered documentation"
+            url="https://${PREVIEW_REPOSITORY%/*}.github.io/${PREVIEW_REPOSITORY#*/}/pr-$PR/dev/"
+          elif [[ "$BUILD_RESULT" != success ]]; then
+            url="$BUILD_URL"
+          fi
+          gh api -X POST "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" -f context=docs/preview \
+            -f state="$state" -f target_url="$url" -f description="$description" --silent
+
+          marker='<!-- alto-docs-preview -->'
+          printf '%s\n\n[**%s**](%s) · `%s`\n' "$marker" "$description" "$url" "${HEAD_SHA:0:7}" > "$RUNNER_TEMP/comment.md"
+          comments="repos/$GITHUB_REPOSITORY/issues"
+          id=$(gh api --paginate "$comments/$PR/comments?per_page=100" \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- alto-docs-preview -->"))) | .id' | head -1)
+          if [[ -n "$id" ]]; then
+            gh api -X PATCH "$comments/comments/$id" -F "body=@$RUNNER_TEMP/comment.md" --silent
+          else
+            gh api -X POST "$comments/$PR/comments" -F "body=@$RUNNER_TEMP/comment.md" --silent
+          fi
