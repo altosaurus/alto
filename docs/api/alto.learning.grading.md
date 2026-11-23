@@ -24,7 +24,7 @@ SM-2 learning step, review history, and actual delay for the current presentatio
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Sm2State.read(None).phase
 'learning'
 ```
@@ -48,7 +48,7 @@ Read a button-graded or original automatic SM-2 schedule.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Sm2State.read("[2, 6, 2.5]").phase
 'review'
 ```
@@ -82,7 +82,7 @@ Translate one saved calendar schedule into the other scheduler's initial state.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> result = inherited_state("abc", source="SM-2", state="[8, 180, 2.5]", due=200 * DAY, rating=Rating.Good)
 >>> Card.from_json(result).stability
 180.0
@@ -117,7 +117,7 @@ Calculate a consistent set of answer-button intervals from one scheduling state.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> review_options("abc", mode="SM-2", previous=None, due=0, now=0)[Rating.Again][0]
 60
 ```

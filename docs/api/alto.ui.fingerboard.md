@@ -25,7 +25,7 @@ Find how many half steps the ruler covers: an octave, or further if the pack nam
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
 >>> ruler_reach(bare)
@@ -57,7 +57,7 @@ Locate where a ruler tick for one half step starts, beside the fingerboard rathe
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> from alto.instrument_packs import PackString
 >>> strings = (PackString("C3", (0, 10), (100, 10)), PackString("G3", (0, 0), (100, 0)))
@@ -92,7 +92,7 @@ The scroll, the pegs and everything past the bridge are left out, since the ques
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> from alto.instrument_packs import PackString
 >>> strings = (PackString("C3", (100, 60), (900, 60)), PackString("G3", (100, 40), (900, 40)))
@@ -120,7 +120,7 @@ Build the look of an instrument's drawn keyboards from its plugin's ``keyboard_s
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> bare = PackInstrument("pack.x.y", Path("a.png"), (10, 10), (), None)
 >>> manual_style(bare)
@@ -194,7 +194,7 @@ Let a click on the picture be an answer, and say so with the pointer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> board = FingerboardWidget()
 >>> board.set_pickable(True)
 >>> board.cursor().shape() == Qt.CursorShape.PointingHandCursor
@@ -215,7 +215,7 @@ Mark the right place on a picture that has no marker, or clear the mark.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> board = FingerboardWidget()
 >>> board.show_target((10.0, 20.0))
 >>> board.show_target(None)

@@ -12,7 +12,7 @@ points at middle C, and the rarer clefs.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(CLEF_BASICS.steps)
 10
 >>> symbol_task(random.Random(1)).choices
@@ -37,7 +37,7 @@ Ask which of the three symbols a clef is made with.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = symbol_task(random.Random(2))
 >>> task.correct == CLEF_SYMBOL_NAMES[SYMBOLS[task.clef]]
 True
@@ -61,7 +61,7 @@ Ask which clef is drawn on a staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = identify_task(random.Random(3))
 >>> task.correct in task.choices and task.clef != ""
 True
@@ -85,7 +85,7 @@ Ask which line of a blank staff a named clef is written on.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = line_task(random.Random(4))
 >>> task.correct in LINES and task.clef == ""
 True

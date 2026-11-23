@@ -12,7 +12,7 @@ scored or recorded.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> task = Task(prompt="Click the key.", cells=frozenset({("outer", 1)}), hint="Count.", explanation="One step.")
 >>> task.check(("outer", 1)), task.check(("outer", 2))
 (True, False)
@@ -52,7 +52,7 @@ It is answered either by clicking a cell of the circle (`cells`) or by pressing 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Task(prompt="Which?", hint="Count.", explanation="Five.", choices=("A", "B"), correct="B").check("B")
 True
 >>> Task(prompt="Click it.", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(12.0, y=11.0)
@@ -82,7 +82,7 @@ Say whether a click on the instrument picture is on one of the right places.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Task(prompt="?", hint="", explanation="", targets=((10.0, 10.0, 5.0),)).hits(30.0, y=10.0)
 False
 ```
@@ -105,7 +105,7 @@ Say whether an answer is right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Task(prompt="?", hint="", explanation="", cells=frozenset({("inner", 0)})).check(("inner", 0))
 True
 >>> Task(prompt="?", hint="", explanation="", choices=("A", "B"), correct="A").check(("outer", 0))
@@ -134,7 +134,7 @@ A staff to show beside the words of a step: a clef, and perhaps a note, with a l
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Staff(clef="alto", note="C4", caption="Alto clef").note
 'C4'
 ```
@@ -189,7 +189,7 @@ One page of a lesson.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Step(title="Hello", text="<p>Hi.</p>").circle
 'none'
 ```
@@ -226,7 +226,7 @@ A lesson: a title, a line about it, and its steps.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> steps = (Step(title="One", text=""),)
 >>> lesson = Lesson(
 ...     key="demo",

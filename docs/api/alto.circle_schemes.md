@@ -16,7 +16,7 @@ A color is a hue (0 to 360), a saturation and a lightness (both 0 to 1).
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> scheme = preset("cyan-indigo")
 >>> scheme.name, scheme.light
 ('Cyan to indigo', False)
@@ -95,7 +95,7 @@ Return the color of a cell as it is lit.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> red, green, blue = preset("spectrum").color("outer", place=0, lift=1.0)
 >>> red > green and red > blue
 True
@@ -117,7 +117,7 @@ Return the colors of the names written on the wedges.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preset("paper").names()["ink"], preset("spectrum").names()["ink"]
 ('#1b2030', '#f5f5f5')
 ```
@@ -148,7 +148,7 @@ white names can stand is brought down to the limit.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> r, g, b = rgb_of((60.0, 0.9, 0.5), capped=True)
 >>> 0.299 * r + 0.587 * g + 0.114 * b <= MAX_BRIGHTNESS + 1e-9
 True
@@ -174,7 +174,7 @@ Write a color as "#rrggbb".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> hex_of((1.0, 0.5, 0.0))
 '#ff8000'
 ```
@@ -197,7 +197,7 @@ Read a color written as "#rrggbb".
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> hsl_of("#ff0000")
 (0.0, 1.0, 0.5)
 ```
@@ -220,7 +220,7 @@ Return how far a place is from C, with flats as negative: the key signature of t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [signature_of(at) for at in (0, 1, 6, 7, 11)]
 [0, 1, 6, -5, -1]
 ```
@@ -247,7 +247,7 @@ Return a preset by its key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> preset("midnight").name
 'Midnight'
 >>> len(PRESETS)
@@ -283,7 +283,7 @@ Make the record of a scheme of the user's own.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> record_of("custom-1", name="Mine", mode="single", colors=["#2f6bd0"])["light"]
 False
 ```
@@ -306,7 +306,7 @@ Check one saved scheme of the user's own, and tidy it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> good = record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"])
 >>> clean_record(good) == good
 True
@@ -339,7 +339,7 @@ light wedges, paler).
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> scheme = custom_scheme(record_of("custom-1", name="Mine", mode="rings", colors=["#2f6bd0", "#18a0c0"]))
 >>> scheme.key, scheme.name, scheme.light
 ('custom-1', 'Mine', False)
@@ -365,7 +365,7 @@ Write the user's own schemes as text to save.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dump_customs([])
 '[]'
 ```
@@ -388,7 +388,7 @@ Read the user's own schemes back, leaving out any that are not valid and any bey
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_customs("not json"), load_customs("[1, 2]")
 ([], [])
 >>> one = record_of("custom-1", name="A", mode="single", colors=["#2f6bd0"])
@@ -419,7 +419,7 @@ Find a scheme by its key, among the presets and the user's own, falling back to 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> resolve("midnight", customs=[]).name, resolve("gone", customs=[]).key
 ('Midnight', 'cyan-indigo')
 ```
@@ -442,7 +442,7 @@ Return a key that none of the user's schemes has.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> taken = [record_of("custom-1", name="", mode="single", colors=[])]
 >>> next_custom_key([]), next_custom_key(taken)
 ('custom-1', 'custom-2')

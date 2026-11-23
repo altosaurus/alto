@@ -9,7 +9,7 @@ A read-only look at what is stored: every answer, every question's record, and t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(_when(0.0)[0])  # a timestamp as 'YYYY-MM-DD HH:MM:SS'
 19
 ```
@@ -40,7 +40,7 @@ Rows of (text shown, value to sort by) cells, as a table model. Numbers are righ
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> model = RowsModel(["Name", "Count"], rows=[[("Ada", "Ada"), ("3", 3)]], numeric={1})
 >>> model.rowCount(), model.columnCount()
 (1, 2)
@@ -62,7 +62,7 @@ Create the model.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RowsModel(["Name"], rows=[[("Ada", "Ada")]]).extras
 [{}]
 ```
@@ -85,7 +85,7 @@ Return the number of rows.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RowsModel(["Name"], rows=[[("Ada", "Ada")], [("Ben", "Ben")]]).rowCount()
 2
 ```
@@ -108,7 +108,7 @@ Return the number of columns.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RowsModel(["Name", "Count"], rows=[]).columnCount()
 2
 ```
@@ -135,7 +135,7 @@ Return one piece of a cell for a role.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> model = RowsModel(["Name", "Count"], rows=[[("Ada", "Ada"), ("3", 3)]], numeric={1})
 >>> model.data(model.index(0, 0))
 'Ada'
@@ -168,7 +168,7 @@ Return a column heading.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> model = RowsModel(["Name", "Count"], rows=[])
 >>> model.headerData(1, Qt.Orientation.Horizontal)
 'Count'
@@ -184,7 +184,7 @@ Describes stored questions in words, remembering each one so it is worked out on
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> texts = QuestionTexts()
 >>> texts("NoteNames", key="k", payload=None)
 '(no longer stored)'
@@ -196,7 +196,7 @@ Create an empty memory.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> QuestionTexts()._described
 {}
 ```
@@ -226,7 +226,7 @@ Turn answers read from the database into the cells of a table, and the hidden de
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
@@ -264,7 +264,7 @@ Show the question behind a row of an answers table, if its record is still store
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> model = RowsModel(["Name"], rows=[[("Ada", "Ada")]])
 >>> open_preview(model.index(0, 0), names={}, parent=QWidget())  # a row with no stored question shows nothing
 ```
@@ -291,7 +291,7 @@ A table of answers that sorts when a heading is clicked and opens the question b
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> table = AnswerList(names={})
 >>> table.show_answers([])
 >>> table.proxy.rowCount()
@@ -310,7 +310,7 @@ Create an empty table.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> AnswerList(names={}).isSortingEnabled()
 True
 ```
@@ -329,7 +329,7 @@ Show answers, newest first.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> table = AnswerList(names={})
 >>> table.show_answers([])
 >>> assert table.model_ is not None
@@ -364,7 +364,7 @@ Answers and questions are the active profile's own; profiles lists everyone.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))
@@ -383,7 +383,7 @@ Build the page, showing the answers table.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))
@@ -410,7 +410,7 @@ Show one of the tables.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = DatabasePage(Learner(db, profile=db.add_profile("Ada")))

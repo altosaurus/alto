@@ -21,7 +21,7 @@ Sorted millisecond timings and the profile's fastest and slowest tail percentage
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> sample = ResponseTimes(tuple(range(1, 101)), 15, 15)
 >>> sample.grade(1).name, sample.grade(50).name, sample.grade(100).name
 ('Easy', 'Good', 'Hard')
@@ -42,7 +42,7 @@ Check whether this exercise has enough eligible answers.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ResponseTimes((), 15, 15).ready
 False
 ```
@@ -65,7 +65,7 @@ Interpolate a percentile between adjacent observations in a nonempty sample.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ResponseTimes((1000, 2000), 15, 15).percentile(25)
 1250.0
 ```
@@ -88,7 +88,7 @@ Grade a correct first answer against earlier answers to this exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ResponseTimes((1000,) * 40, 15, 15).grade(1000).name
 'Good'
 ```

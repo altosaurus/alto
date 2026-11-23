@@ -12,7 +12,7 @@ that is being worked on can have its own history and settings, apart from the co
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
 '/tmp/alto-dev/data/alto.db'
 ```
@@ -38,7 +38,7 @@ Give the folder named by `ALTO_HOME`, if there is one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> alto_home(environ={}) is None
 True
 >>> alto_home(environ={"ALTO_HOME": ""}) is None
@@ -70,7 +70,7 @@ Give the file that holds the practice history.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> database_path(environ={"ALTO_HOME": "/tmp/alto-dev"}).as_posix()
 '/tmp/alto-dev/data/alto.db'
 >>> database_path(environ={}).name
@@ -98,7 +98,7 @@ Give the folder that holds the settings when `ALTO_HOME` moves them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings_folder(environ={}) is None
 True
 >>> str(settings_folder(environ={"ALTO_HOME": "/tmp/alto-dev"}))
@@ -126,7 +126,7 @@ Give the name the desktop uses to match Alto's window to its menu entry, and so 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> desktop_name(environ={}), desktop_name(environ={"ALTO_HOME": "/tmp/alto-dev"})
 ('alto', 'alto-dev')
 ```

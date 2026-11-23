@@ -9,7 +9,7 @@ Shared dropdown fields with rounded popup windows.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> FieldComboBox().property("field")
 True
 ```
@@ -26,7 +26,7 @@ A shared dropdown whose field and popup both use Alto's rounded styling.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = FieldComboBox()
 >>> picker.addItems(["m2", "M2", "m3"])
 >>> picker.currentText()
@@ -43,7 +43,7 @@ Create a themed dropdown and prepare to clip its popup corners.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> FieldComboBox().maxVisibleItems()
 12
 ```
@@ -58,7 +58,7 @@ Open the dropdown with a rounded outer window, including its native container.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picker = FieldComboBox()
 >>> picker.addItems(["P4", "P5"])
 >>> picker.showPopup()

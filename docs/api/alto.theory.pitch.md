@@ -13,7 +13,7 @@ fifth. Together they can transpose a note by an interval and work out the interv
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> c4 = Note.parse("C4")
 >>> str(c4.transpose(Interval.parse("M3")))
 'E4'
@@ -45,7 +45,7 @@ different lines of the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> middle_c = Note(4, letter=0)
 >>> middle_c.midi
 60
@@ -70,7 +70,7 @@ Return the MIDI note number, where middle C (C4) is 60.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=0).midi
 60
 >>> Note(4, letter=1, accidental=-1).midi  # D♭4 sounds like C♯4
@@ -95,7 +95,7 @@ staff steps is the difference of their indexes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=0).diatonic  # C4
 28
 >>> Note(4, letter=2, accidental=1).diatonic  # E♯4 is on the same step as E4
@@ -117,7 +117,7 @@ Return the pitch class: the note's MIDI number modulo 12.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=0, accidental=1).pitch_class  # C♯4
 1
 >>> Note(3, letter=6, accidental=1).pitch_class  # B♯3 sounds like C
@@ -139,7 +139,7 @@ Return the pitch-class name with Unicode accidentals, without the octave.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note(4, letter=3, accidental=1).name
 'F♯'
 >>> Note(4, letter=3).name
@@ -170,7 +170,7 @@ Build a note from an absolute staff-step index.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note.from_diatonic(30)
 Note(octave=4, letter=2, accidental=0)
 >>> str(Note.from_diatonic(30, accidental=-1))
@@ -201,7 +201,7 @@ Parse a note with ASCII or musical accidentals, such as 'F#4', 'B♭3' or 'E𝄫
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Note.parse("F#4")
 Note(octave=4, letter=3, accidental=1)
 >>> Note.parse("Bb3")
@@ -237,7 +237,7 @@ Move the note up or down by an interval, keeping the spelling correct.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> str(Note.parse("C4").transpose(Interval.parse("M3")))
 'E4'
 >>> str(Note.parse("C4").transpose(Interval.parse("m3")))
@@ -265,7 +265,7 @@ A simple or compound interval between two spelled notes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval(3, quality="M").semitones
 4
 >>> str(Interval.parse("P5"))
@@ -287,7 +287,7 @@ Invert the spelled interval within an octave.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval.parse("M3").inversion.short, Interval.parse("A4").inversion.short
 ('m6', 'd5')
 >>> Interval.parse("m10").inversion.short, Interval.parse("P15").inversion.short
@@ -309,7 +309,7 @@ Report whether this size of interval is "perfect type" (unison, fourth, fifth, o
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval.parse("P5").is_perfect_type
 True
 >>> Interval.parse("M3").is_perfect_type
@@ -331,7 +331,7 @@ Return the size of the interval in semitones.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval.parse("M3").semitones
 4
 >>> Interval.parse("d5").semitones
@@ -355,7 +355,7 @@ Return the interval in short form: its quality followed by its number.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval(7, quality="m").short
 'm7'
 ```
@@ -384,7 +384,7 @@ Work out the interval from one note up to a higher one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval.between(Note.parse("C4"), high=Note.parse("E4"))
 Interval(number=3, quality='M')
 >>> Interval.between(Note.parse("C4"), high=Note.parse("F#4")).short
@@ -410,7 +410,7 @@ Parse an interval written in short form, such as 'M3', 'P5' or 'd7'.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Interval.parse("m7")
 Interval(number=7, quality='m')
 >>> Interval.parse("P8").semitones
@@ -440,7 +440,7 @@ Return the accidental a key signature applies to a letter.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_accidental(3, count=1)  # F in G major
 1
 >>> key_accidental(6, count=-1)  # B in F major

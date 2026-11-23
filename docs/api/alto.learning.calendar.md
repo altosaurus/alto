@@ -27,7 +27,7 @@ A preview of one rating for a card in its current scheduling state.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ReviewInterval(600, (1, "NoteNames", "abc", "FSRS"), None).seconds
 600
 ```
@@ -47,7 +47,7 @@ Format a review interval for display above a grade button or beside the music.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ReviewInterval(330, (1, "NoteNames", "abc", "FSRS"), None).duration
 '5 min 30 s'
 ```
@@ -62,7 +62,7 @@ Prepare daily exercise queues and store each scheduler's review dates.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> practice = CalendarPractice(Database())
 >>> practice.db.profiles()
 []
@@ -78,7 +78,7 @@ Attach the queues to an Alto database.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CalendarPractice(Database())._batches
 {}
 ```
@@ -102,7 +102,7 @@ Initialize missing schedules for this profile from the other calendar scheduler.
 
 **Examples**
 
-```pycon
+```text
 Switching to FSRS carries over an SM-2 due date without consuming a review.
 ```
 
@@ -129,7 +129,7 @@ Return the effective daily new-card and review limits.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CalendarPractice(Database()).limits(1)
 (10, 200)
 ```
@@ -157,7 +157,7 @@ Read the two explicitly saved limits for an exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CalendarPractice(Database()).overrides(1, exercise="NoteNames")
 (None, None)
 ```
@@ -185,7 +185,7 @@ Save the profile defaults or an exercise's individual overrides.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> db = Database()
 >>> practice = CalendarPractice(db)
 >>> profile = db.add_profile("Ada").id
@@ -208,7 +208,7 @@ Restore the profile defaults and remove its exercise overrides.
 
 **Examples**
 
-```pycon
+```text
 Restoring defaults keeps the day's introductions and completed reviews.
 ```
 
@@ -239,7 +239,7 @@ Find due reviews and prepare the remaining new cards for this local day.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> ada = db.add_profile("Ada")
@@ -275,7 +275,7 @@ Count due reviews and unseen cards available with the selected settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> CalendarPractice(db).counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[1] > 0
@@ -309,7 +309,7 @@ Count available reviews, new cards, and missed cards awaiting a correct review.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> CalendarPractice(db).tile_counts(NoteNames(), profile=db.add_profile("Ada").id, mode="SM-2", now=100)[2]
@@ -345,7 +345,7 @@ Count the exercise queues and identify the queue of the question on screen.
 
 **Examples**
 
-```pycon
+```text
 A missed card that comes due again is underlined as incorrect during its retry.
 ```
 
@@ -376,7 +376,7 @@ Take the first eligible card, recording a new introduction only when served.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import ChordQualities
 >>> db = Database()
 >>> practice = CalendarPractice(db)
@@ -416,7 +416,7 @@ Draw an eligible card or return the time when a missed card can be reviewed.
 
 **Examples**
 
-```pycon
+```text
 A single missed card can wake the exercise when its learning step expires.
 ```
 
@@ -443,7 +443,7 @@ Register a calendar introduction once, in the caller's draw or answer transactio
 
 **Examples**
 
-```pycon
+```text
 Answering a pending card keeps its original introduction day.
 ```
 
@@ -476,7 +476,7 @@ Preview the next correct answer without grading the card.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CalendarPractice(Database()).correct_interval("NoteNames", profile=1, key="abc", mode="FSRS", now=1000).seconds
 600
 ```
@@ -512,7 +512,7 @@ Preview the three passing outcomes from one snapshot of this card.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> practice = CalendarPractice(Database())
 >>> practice.passing_intervals("NoteNames", profile=1, key="abc", mode="SM-2", now=0)[Rating.Good].seconds
 600
@@ -549,7 +549,7 @@ Reschedule a card from the first submission to this presentation.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises.library import NoteNames
 >>> db = Database()
 >>> ada = db.add_profile("Ada")

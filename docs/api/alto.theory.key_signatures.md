@@ -38,7 +38,7 @@ the treble, bass, alto and tenor clefs, and works out the rest.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_signature_positions("treble", sign=1)
 ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
 >>> key_signature_positions("bass", sign=-1)
@@ -68,7 +68,7 @@ Spell a key signature at its conventional staff positions, from left to right.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> [str(note) for note in written_signature("bass", key=-2)]
 ['B♭2', 'E♭3']
 ```

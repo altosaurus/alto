@@ -12,7 +12,7 @@ into a `QIcon`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> svg_icon(HELP, color=QColor("black")).isNull()
 False
 ```
@@ -35,7 +35,7 @@ Assign a native Qt icon and refresh it whenever the application palette changes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> button = QPushButton()
 >>> set_palette_icon(button, lambda palette: svg_icon(HELP, color=palette.text().color()))
@@ -66,7 +66,7 @@ Tint an SVG icon with the control's current foreground or accent color.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> button = QPushButton()
 >>> set_svg_icon(button, HELP)
@@ -92,7 +92,7 @@ Recolor the current rows of a navigation list or tree without rebuilding it.
 
 **Examples**
 
-```pycon
+```text
 A category tree keeps its checked and expanded items when the theme changes.
 ```
 
@@ -123,7 +123,7 @@ Render 24 by 24 SVG shapes into a crisp icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> icon = svg_icon(PLAY, color=QColor("#336699"), size=16)
 >>> icon.isNull()
 False

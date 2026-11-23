@@ -13,7 +13,7 @@ Changes apply as soon as they are made. Each style is a card that previews it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.windowTitle()
 'Settings'
@@ -45,7 +45,7 @@ A selectable tile that previews a style: a picture drawn in it, with its name an
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = PreviewCard(QLabel("♪"), key="demo", title="Demo", blurb="A short note.", height=120)
 >>> card.style_key, card.isCheckable(), card.height()
 ('demo', True, 120)
@@ -66,7 +66,7 @@ Build the card around its preview.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = QLabel("♪")
 >>> card = PreviewCard(label, key="demo", title="Demo", blurb="", height=120)
 >>> label.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
@@ -94,7 +94,7 @@ A selectable tile that previews a notation style: a short phrase on a staff, dra
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = StyleCard(notation.BY_KEY["leland"])
 >>> card.style_key, card.isCheckable()
 ('leland', True)
@@ -111,7 +111,7 @@ Build the card for a notation style.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StyleCard(notation.BY_KEY["bravura"]).width()
 232
 ```
@@ -137,7 +137,7 @@ A selectable tile that previews a keyboard style: a short stretch of keys drawn 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = KeyboardCard(keyboard_styles.BY_KEY["modern"])
 >>> card.style_key
 'modern'
@@ -154,7 +154,7 @@ Build the card for a keyboard style.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> # noinspection PyUnresolvedReferences
 >>> KeyboardCard(keyboard_styles.BY_KEY["classic"]).keys.style_override.key
 'classic'
@@ -176,7 +176,7 @@ The custom card follows the colors being edited.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> card = KeyboardCard(keyboard_styles.BY_KEY["classic"])
 >>> card.show_style(keyboard_styles.BY_KEY["modern"])
 >>> # noinspection PyUnresolvedReferences
@@ -204,7 +204,7 @@ the Custom style.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> builder = KeyboardBuilder()
 >>> sorted(builder.swatches)
 ['caps', 'case', 'felt', 'naturals', 'sharps']
@@ -220,7 +220,7 @@ Build the rows and show each part's current color.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardBuilder().swatches["naturals"].width()
 46
 ```
@@ -235,7 +235,7 @@ Show each part's current color on its swatch.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> builder = KeyboardBuilder()
 >>> builder.refresh()
 >>> builder.swatches["naturals"].text()  # a color is set, so the swatch shows it, not "none"
@@ -280,7 +280,7 @@ Pages are built when first selected, so hidden previews do not slow down opening
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.theme_changed
 False
@@ -297,7 +297,7 @@ Build the dialog with the Appearance page showing.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.categories.currentRow()
 0
@@ -324,7 +324,7 @@ been looked at exist.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> "sage" in dialog.theme_cards
 False
@@ -350,7 +350,7 @@ Give the scroll area that holds a theme's card, which is the page the stack show
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.card_page("sage").widget() is dialog.card("sage")
 True
@@ -374,7 +374,7 @@ Give the clickable picture that chooses a theme, with the card it is on built if
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.thumb("sage_dark").isChecked()
 False
@@ -394,7 +394,7 @@ Switch the color theme, remember it, and note that the window should be rebuilt 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> dialog = AppSettingsDialog()
 >>> dialog.choose_theme("light")
 >>> dialog.theme_changed, saved_theme()

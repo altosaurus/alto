@@ -9,7 +9,7 @@ The Plugins dialog: the installed plugins on the left, and the buttons that add 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> PluginsDialog(Path("no-such-plugins-folder")).windowTitle()
 'Plugins'
@@ -44,7 +44,7 @@ Registered releases are downloaded in the background. The parent window handles 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
 >>> dialog.list.count(), dialog.uninstall_button.isEnabled()
@@ -62,7 +62,7 @@ Build the dialog for the plugins in a folder.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> PluginsDialog(Path("no-such-plugins-folder")).minimumWidth() > 0
 True
@@ -82,7 +82,7 @@ Return the plugin selected in the list.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> PluginsDialog(Path("no-such-plugins-folder")).selected() is None
 True
@@ -98,7 +98,7 @@ Read the plugins folder again and keep the same plugin selected if it is still t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> dialog = PluginsDialog(Path("no-such-plugins-folder"))
 >>> dialog.refresh()

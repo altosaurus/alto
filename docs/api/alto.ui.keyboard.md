@@ -12,7 +12,7 @@ range that will be asked, and can be dragged to change it. Colors and materials 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.show_key(60)
 >>> keyboard.highlight
@@ -47,7 +47,7 @@ A piano keyboard drawn to real proportions that can highlight one or more keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> (keyboard.lo, keyboard.hi)  # C3 to C5, until another range is shown
 (48, 72)
@@ -64,7 +64,7 @@ Create a keyboard showing the default range, with no key highlighted.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardWidget().highlight is None
 True
 ```
@@ -84,7 +84,7 @@ Return the style the keyboard is drawn in.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.style_override = keyboard_styles.BY_KEY["modern"]
 >>> keyboard.style.label
@@ -103,7 +103,7 @@ Some styles have a taller strip above the keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.refit()
 >>> keyboard.height() > 0
@@ -124,7 +124,7 @@ Measure the keyboard case when its keys reach their maximum width.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardWidget().full_width()
 590
 ```
@@ -143,7 +143,7 @@ Change the height to match the new width, since keys are drawn to real proportio
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.show()
 >>> keyboard.resize(300, 300)
@@ -170,7 +170,7 @@ Highlight a key, and optionally choose the range of keys to show.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.show_key(60, span=(49, 71))  # C#3 is widened to C3
 >>> (keyboard.lo, keyboard.hi, keyboard.highlight)
@@ -196,7 +196,7 @@ Highlight several keys together, clearing highlights from the previous question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.show_keys([60, 66], span=(48, 72))
 >>> keyboard.highlight, keyboard.additional_highlights
@@ -220,7 +220,7 @@ Choose the color of the highlighted key and redraw.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.set_highlight_color(QColor("#2e7d32"))
 >>> keyboard.highlight_color.name()
@@ -241,7 +241,7 @@ Draw the case, the keys, the highlighted key and the style's extras.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard = KeyboardWidget()
 >>> keyboard.show_key(60)
 >>> keyboard.grab().isNull()
@@ -275,7 +275,7 @@ changes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> span = KeyboardSpan()
 >>> span.set_span(60, hi=72)
 >>> (span.lo, span.hi)
@@ -294,7 +294,7 @@ Create the miniature, shading the default range.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardSpan(compact=True, size=(100, 20)).size().width()
 100
 ```
@@ -317,7 +317,7 @@ Return the key under a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> span = KeyboardSpan()
 >>> span.resize(500, 64)
 >>> span.key_at(QPointF(0, 50)), span.key_at(QPointF(499, 50))  # the lowest and highest keys
@@ -340,7 +340,7 @@ Start choosing a span: grab an edge, pick the span up, or start a new one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> span = KeyboardSpan()
 >>> span.resize(500, 64)
@@ -367,7 +367,7 @@ Drag the span, or (with no button held) show the cursor for what a press here wo
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> span = KeyboardSpan()
 >>> span.resize(500, 64)
@@ -392,7 +392,7 @@ Finish a drag and refresh the cursor for where the pointer now is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> span = KeyboardSpan()
 >>> span.resize(500, 64)
@@ -422,7 +422,7 @@ Choose which keys are shaded and redraw.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> span = KeyboardSpan()
 >>> span.set_span(48, hi=72)
 >>> (span.lo, span.hi)
@@ -443,7 +443,7 @@ Draw the whole piano in miniature with the asked keys shaded and the span's edge
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> span = KeyboardSpan()
 >>> span.grab().isNull()
 False

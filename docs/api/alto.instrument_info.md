@@ -13,7 +13,7 @@ Grand Piano). What is on disk
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> coverage(range(60, 73)).describe()
 '13 notes, C4 to C5, every semitone'
 ```
@@ -49,7 +49,7 @@ The facts about where an instrument's recordings came from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> info = InstrumentInfo("A flute.", source=IOWA, source_url="https://example.org/flute")
 >>> info.terms == IOWA_TERMS
 True
@@ -78,7 +78,7 @@ Which notes an instrument has recordings for.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Coverage(0).describe()
 'None installed'
 ```
@@ -98,7 +98,7 @@ Report whether any recordings are on disk.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Coverage(0).installed, coverage([60]).installed
 (False, True)
 ```
@@ -117,7 +117,7 @@ Describe the coverage in a sentence for the instrument settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> coverage(range(60, 73)).describe()
 '13 notes, C4 to C5, every semitone'
 >>> coverage([60, 62, 64, 65]).describe()
@@ -146,7 +146,7 @@ Summarize the notes that have a recording.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> coverage([64, 60, 62])
 Coverage(count=3, lowest=60, highest=64, gaps=2)
 ```

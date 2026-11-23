@@ -13,7 +13,7 @@ number to choose it, drag the circle along the fork, or turn the mouse wheel to 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> fork.set_value(-3)
 >>> fork.value
@@ -38,7 +38,7 @@ Return where a signature sits on the fork.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> node_position(0).x() < node_position(1).x() < node_position(2).x()
 True
 >>> node_position(3).y() < node_position(0).y() < node_position(-3).y()
@@ -63,7 +63,7 @@ Return the way along the fork from the end of the stem to a signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(route(0)), len(route(2)) > len(route(1)) > len(route(0))
 (1, True)
 >>> route(-1)[-1] == node_position(-1)
@@ -97,7 +97,7 @@ The circle goes back along the tine it is on, around the U and out along the oth
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> path_between(2, b=2) == [node_position(2)]
 True
 >>> path_between(1, b=-1)[0] == node_position(1) and path_between(1, b=-1)[-1] == node_position(-1)
@@ -129,7 +129,7 @@ Return the point a fraction of the way along a path made of short straight piece
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> point_along([QPointF(0, 0), QPointF(10, 0), QPointF(10, 10)], t=0.75).toTuple()
 (10.0, 5.0)
 >>> point_along([QPointF(0, 0), QPointF(3, 4)], t=0.5).toTuple()  # slanting pieces are measured along their length
@@ -154,7 +154,7 @@ Return the point on the fork's line that is closest to a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nearest_on_fork(QPointF(node_position(2).x(), 0)) == node_position(2)  # straight above the number
 True
 >>> nearest_on_fork(QPointF(-50, node_position(0).y())) == node_position(0)  # past the end of the stem
@@ -175,7 +175,7 @@ Return the outline of the fork: the stem, a half circle for the U, and the two t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> outline = fork_path()
 >>> outline.boundingRect().left() == STEM_X and outline.boundingRect().top() == TOP_Y
 True
@@ -204,7 +204,7 @@ Draw a natural sign: two upright lines joined by two slanting bars.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QPixmap
 >>> canvas = QPixmap(20, 20)
 >>> painter = QPainter(canvas)
@@ -233,7 +233,7 @@ A tuning fork on its side, for choosing how many sharps or flats a key signature
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> got = []
 >>> _ = fork.changed.connect(got.append)
@@ -253,7 +253,7 @@ Build the fork, set to no sharps or flats.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyFork().value
 0
 ```
@@ -277,7 +277,7 @@ Choose a signature and move the circle to it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> fork.set_value(99)
 >>> fork.value
@@ -301,7 +301,7 @@ Color the circle, for a right or wrong answer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> fork.set_marker_color(QColor("#2e7d32"))
 >>> fork._marker_color == QColor("#2e7d32")
@@ -327,7 +327,7 @@ Return the signature whose number is under a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> fork.value_at(node_position(3)), fork.value_at(node_position(-4)), fork.value_at(node_position(0))
 (3, -4, 0)
@@ -349,7 +349,7 @@ Pick up the circle if it was pressed, or choose the number that was clicked.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> point = node_position(-2)
@@ -375,7 +375,7 @@ The signature changes to the nearest number as the circle passes it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> here = node_position(0)
@@ -402,7 +402,7 @@ Let go of the circle, which slides to the number it is nearest.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> fork._dragging = True
@@ -428,7 +428,7 @@ Stop lighting a number when the mouse leaves the fork.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fork = KeyFork()
 >>> fork._hover = 3
 >>> fork.leaveEvent(QEvent(QEvent.Type.Leave))
@@ -452,7 +452,7 @@ Rolling up goes toward more sharps and down toward more flats, passing through t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QPoint
 >>> fork = KeyFork()
 >>> point = QPointF(100, 50)
@@ -476,7 +476,7 @@ Move the circle with the arrow keys: up or right for a sharp, down or left for a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> fork = KeyFork()
 >>> fork.keyPressEvent(QKeyEvent(QEvent.Type.KeyPress, Qt.Key.Key_Up, Qt.KeyboardModifier.NoModifier))
@@ -498,7 +498,7 @@ Draw the fork, its numbers and the circle on the chosen one.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyFork().grab().isNull()
 False
 ```

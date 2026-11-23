@@ -9,7 +9,7 @@ Draw scale-degree carets above their digits without relying on font-specific com
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> button = DegreeButton("♭3̂")
 >>> button.text()
 '♭3̂'
@@ -38,7 +38,7 @@ Draw text with each combining circumflex centered above its preceding digit.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QPixmap
 >>> pixmap = QPixmap(100, 40)
 >>> painter_ = QPainter(pixmap)
@@ -65,7 +65,7 @@ Render caret examples as an inline image for Qt's rich-text tooltip.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> degree_tooltip("Letters")
 'Letters'
 >>> "data:image/png;base64," in degree_tooltip("Caret (1̂ 2̂ 3̂)")
@@ -82,7 +82,7 @@ An answer button that draws scale-degree carets directly above the digits.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> DegreeButton("2̂").text()
 '2̂'
 ```
@@ -101,7 +101,7 @@ Keep the native button appearance and position degree accents explicitly.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> DegreeButton("2̂").grab().isNull()
 False
 ```
@@ -132,7 +132,7 @@ A plain-text label with explicitly positioned scale-degree carets.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> DegreeLabel("Note to place: 2̂ / 4").text()
 'Note to place: 2̂ / 4'
 ```
@@ -151,7 +151,7 @@ Paint degree labels with carets centered above their numbers.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> DegreeLabel("2̂").grab().isNull()
 False
 ```

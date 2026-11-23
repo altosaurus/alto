@@ -12,7 +12,7 @@ the exercises to the home screen.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.exercises import REGISTRY
 >>> [cls.name for cls in REGISTRY][:3]
 ['Note Identification', 'Keyboard Note Identification', 'Note Construction']
@@ -30,7 +30,7 @@ Name the note shown on a staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NoteNames().generate(random.Random(1))
 >>> len(q.staff), q.answer in q.choices
 (1, True)
@@ -46,7 +46,7 @@ Create the exercise.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNames(accidentals=True).accidentals
 True
 ```
@@ -69,7 +69,7 @@ Say what to name on a flashcard, and in which form: letters, solfège or a scale
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNames().card_prompt(Question("", choices=[], answer="C"))
 'Identify the note.'
 ```
@@ -88,7 +88,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNames().settings_signature() != NoteNames(accidentals=True).settings_signature()
 True
 ```
@@ -107,7 +107,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Press the button with its name" in NoteNames().instructions()
 True
 ```
@@ -130,7 +130,7 @@ Make a note to name, on one of the chosen clefs, in a chosen key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NoteNames().generate(random.Random(2))
 >>> q.clef in ("treble", "bass", "alto", "tenor", "soprano", "mezzo", "baritone", "grand")
 True
@@ -150,7 +150,7 @@ Count written pitches across the selected ranges, clefs and signatures.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNames().card_count() > 0
 True
 ```
@@ -173,7 +173,7 @@ Visit each selectable written note once, in shuffled order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> isinstance(next(NoteNames().daily_candidates(random.Random(0))), Question)
 True
 ```
@@ -201,7 +201,7 @@ Rebuild a previously seen note when its pitch and answer are eligible.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ex = NoteNames()
 >>> q = ex.generate(random.Random(1))
 >>> ex.review_question(q, same_settings=True) == q
@@ -218,7 +218,7 @@ Name the interval between two written notes.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = IntervalNames().generate(random.Random(3))
 >>> [len(chord) for chord in q.staff], q.answer in q.choices
 ([2], True)
@@ -242,7 +242,7 @@ Say whether to name the interval's number, its quality, both, or its inversion.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalNames().card_prompt(Question("", choices=[], answer="3"))
 'Identify the numeric interval.'
 >>> IntervalNames().card_prompt(Question("", choices=[], answer="M3"))
@@ -263,7 +263,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "quality followed by a number" in IntervalNames().instructions()
 True
 ```
@@ -282,7 +282,7 @@ Identify the settings used to generate and grade the interval.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Harmonic" in IntervalNames().settings_signature()
 True
 ```
@@ -305,7 +305,7 @@ Arrange written interval answers by quality, with interval numbers in columns.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = Question("", choices=["d3", "m3", "P4", "M3", "A3"], answer="m3")
 >>> IntervalNames().refresh(q).choices
 ['A3', 'M3', 'P4', 'm3', 'd3']
@@ -329,7 +329,7 @@ Make two notes whose interval is to be named.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = IntervalNames().generate(random.Random(4))
 >>> q.answer[0] in "PMmAd" and q.answer[1:].isdigit()
 True
@@ -345,7 +345,7 @@ Place a second written note at the requested interval from a given note.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = IntervalConstruction().generate(random.Random(2))
 >>> q.construct is not None and q.check_placed(q.construct)
 True
@@ -365,7 +365,7 @@ Explain staff placement and spelling for interval construction.
 
 **Examples**
 
-```pycon
+```text
 The reference describes the difference between melodic and harmonic placement.
 ```
 
@@ -383,7 +383,7 @@ Identify the construction settings used to generate a stored card.
 
 **Examples**
 
-```pycon
+```text
 A change in staff ranges changes which stored questions are eligible.
 ```
 
@@ -405,7 +405,7 @@ Generate a staff, an interval prompt, and its eligible placements.
 
 **Examples**
 
-```pycon
+```text
 A harmonic question asks for a note above its starting note.
 ```
 
@@ -423,7 +423,7 @@ Identify the ascending interval between two highlighted piano keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeyboardIntervals().generate(random.Random(5))
 >>> len(q.keyboard_notes), q.answer in q.choices, q.staff
 (2, True, [])
@@ -447,7 +447,7 @@ Say what to name on a flashcard.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervals().card_prompt(Question("", choices=[], answer="P5"))
 'Identify the interval.'
 ```
@@ -466,7 +466,7 @@ Identify the keyboard range and selected intervals for stored-question reviews.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> bool(KeyboardIntervals().settings_signature())
 True
 ```
@@ -485,7 +485,7 @@ Explain how to identify an interval from two highlighted keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "A4 / d5" in KeyboardIntervals().instructions()
 True
 ```
@@ -508,7 +508,7 @@ Highlight two distinct keys at a selected interval within the chosen range.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeyboardIntervals().generate(random.Random(7))
 >>> 1 <= q.keyboard_notes[1].midi - q.keyboard_notes[0].midi <= 12
 True
@@ -524,7 +524,7 @@ Read a key signature drawn on a staff and name the key it belongs to.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeySignatures().generate(random.Random(5))
 >>> q.answer in q.choices
 True
@@ -544,7 +544,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignatures().settings_signature().startswith("[")
 True
 ```
@@ -563,7 +563,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Key Signature Identification" in KeySignatures().instructions()
 True
 ```
@@ -586,7 +586,7 @@ Give a stored signature question the caption on its staff that older versions di
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> old = Question("Which minor key has this key signature?", choices=["C"], answer="C", key=-3, show_staff=True)
 >>> KeySignatures().refresh(old).caption
 '_ minor'
@@ -610,7 +610,7 @@ Make a key signature to read.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeySignatures().generate(random.Random(6))
 >>> q.show_staff and q.answer in q.choices
 True
@@ -626,7 +626,7 @@ Build the key signature of a named key on a blank staff, with the fork.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeySignatureConstruction().generate(random.Random(5))
 >>> q.build_key, q.staff, q.choices
 (True, [], [])
@@ -646,7 +646,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignatureConstruction().settings_signature().startswith("[")
 True
 ```
@@ -665,7 +665,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Key Signature Construction" in KeySignatureConstruction().instructions()
 True
 ```
@@ -688,7 +688,7 @@ Name a key whose signature is to be built.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeySignatureConstruction().generate(random.Random(1))
 >>> q.caption.split()[0] in {"C", "D", "E", "F", "G", "A", "B"} or "♯" in q.caption or "♭" in q.caption
 True
@@ -706,7 +706,7 @@ Write the accidentals of a named key signature in order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> OrderOfKeys().generate(random.Random(1)).place_signature
 True
 ```
@@ -725,7 +725,7 @@ Identify the selections used to generate a practice question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> OrderOfKeys().settings_signature()
 ''
 ```
@@ -744,7 +744,7 @@ Explain how to enter and submit a signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Undo" in OrderOfKeys().instructions()
 True
 ```
@@ -767,7 +767,7 @@ Choose a key from the selected scales and signatures and spell it in a selected 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = OrderOfKeys().generate(random.Random(2))
 >>> q.show_staff and not q.choices
 True
@@ -783,7 +783,7 @@ Identify the tonic and type of a scale drawn on a staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ScaleIdentification().generate(random.Random(7))
 >>> len(q.staff), q.answer in q.choices
 (8, True)
@@ -803,7 +803,7 @@ Identify the clefs, scale types and staff and scale signatures in force.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleIdentification().settings_signature().startswith("[")
 True
 ```
@@ -822,7 +822,7 @@ Explain how to identify the scale, including a staff with a different signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Scale Identification" in ScaleIdentification().instructions()
 True
 ```
@@ -845,7 +845,7 @@ Draw a one-octave scale and offer scale names without revealing the answer on th
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ScaleIdentification().generate(random.Random(8))
 >>> q.staff[0][0].name == q.staff[-1][0].name and not q.caption
 True
@@ -861,7 +861,7 @@ Place the notes of a named scale on a blank staff, one after another.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ScaleConstruction().generate(random.Random(5))
 >>> len(q.construct_scale or []), q.choices, q.key
 (8, [], 0)
@@ -881,7 +881,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleConstruction().settings_signature().startswith("[")
 True
 ```
@@ -900,7 +900,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Scale Construction" in ScaleConstruction().instructions()
 True
 ```
@@ -923,7 +923,7 @@ Name a scale to be placed on the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ScaleConstruction().generate(random.Random(1))
 >>> scale = q.construct_scale or []
 >>> scale[0].name == scale[-1].name and q.accidentals
@@ -942,7 +942,7 @@ Questions on the circle of fifths: a relative major, a relative minor, or the Ro
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = CircleOfFifths().generate(random.Random(3))
 >>> q.circle is not None and q.answer in q.choices
 True
@@ -962,7 +962,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleOfFifths().settings_signature().startswith("[")
 True
 ```
@@ -981,7 +981,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "circle of fifths" in CircleOfFifths().instructions()
 True
 ```
@@ -1004,7 +1004,7 @@ Pick a kind of question that is switched on, and ask it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings.circle.questions = {"minor"}
 >>> q = CircleOfFifths().generate(random.Random(5))
 >>> q.circle_kind, q.prompt
@@ -1022,7 +1022,7 @@ Identify the quality of a triad or seventh chord in root position.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ChordQualities().generate(random.Random(9))
 >>> len(q.staff[0]) in (3, 4) and q.answer in q.choices
 True
@@ -1046,7 +1046,7 @@ Say what to name on a flashcard.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ChordQualities().card_prompt(Question("", choices=[], answer="Major"))
 'Identify the Chord Quality.'
 ```
@@ -1065,7 +1065,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "root position" in ChordQualities().instructions()
 True
 ```
@@ -1088,7 +1088,7 @@ Make a chord in root position whose quality is to be named.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ChordQualities().generate(random.Random(10))
 >>> q.answer in CHORDS
 True
@@ -1104,7 +1104,7 @@ Name the type and the inversion of a broken chord.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ArpeggioNames().generate(random.Random(11))
 >>> q.octaves is not None and len(q.staff) >= 4
 True
@@ -1124,7 +1124,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioNames().settings_signature().startswith("[")
 True
 ```
@@ -1143,7 +1143,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "inversion" in ArpeggioNames().instructions()
 True
 ```
@@ -1170,7 +1170,7 @@ Make an arpeggio on one of the chosen clefs, in a chosen position.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ArpeggioNames().generate(random.Random(12))
 >>> " · " in q.answer
 True
@@ -1186,7 +1186,7 @@ Name the highlighted key on a piano keyboard.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeyboardNotes().generate(random.Random(13))
 >>> q.keyboard is not None and q.answer in q.choices
 True
@@ -1210,7 +1210,7 @@ Say what to name on a flashcard. Letter names give the octave if it counts, and 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardNotes().card_prompt(Question("", choices=[], answer="C4", octaves=["C4"]))
 'Identify the note by letter and octave.'
 ```
@@ -1229,7 +1229,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardNotes().settings_signature().startswith("[")
 True
 ```
@@ -1248,7 +1248,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "highlighted" in KeyboardNotes().instructions()
 True
 ```
@@ -1271,7 +1271,7 @@ Make a keyboard with one key highlighted.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = KeyboardNotes().generate(random.Random(14))
 >>> # noinspection PyUnresolvedReferences
 >>> q.keyboard_range[0] <= q.keyboard.midi <= q.keyboard_range[1]
@@ -1288,7 +1288,7 @@ Place a named note on the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NoteConstruction().generate(random.Random(15))
 >>> q.construct is not None and q.prompt.startswith("Place ")
 True
@@ -1312,7 +1312,7 @@ Say which note to place, whichever way the on-screen prompt words it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteConstruction().card_prompt(Question("Place F♯4 on the staff.", choices=[], answer="F♯4"))
 'Place F♯4 on the staff.'
 >>> NoteConstruction().card_prompt(Question("", choices=[], answer="B♭3"))
@@ -1333,7 +1333,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteConstruction().settings_signature().startswith("[")
 True
 ```
@@ -1352,7 +1352,7 @@ Return the help text for the exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Click the staff" in NoteConstruction().instructions()
 True
 ```
@@ -1375,7 +1375,7 @@ Make a note name to be placed on the staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NoteConstruction().generate(random.Random(16))
 >>> q.answer in q.prompt
 True
@@ -1395,7 +1395,7 @@ Count distinct construction cards without rendering them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteConstruction().card_count() > 0
 True
 ```
@@ -1418,7 +1418,7 @@ Visit all eligible placements in a randomized order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> next(NoteConstruction().daily_candidates(random.Random(5))).construct is not None
 True
 ```
@@ -1446,7 +1446,7 @@ Determine whether an introduced placement belongs to the current construction ca
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ex = NoteConstruction()
 >>> q = ex.generate(random.Random(3))
 >>> ex.review_question(q, same_settings=True) == q
@@ -1463,7 +1463,7 @@ Put a named clef on a blank staff: choose the G, C or F symbol and put it on the
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ClefBasics().generate(random.Random(1))
 >>> q.answer == q.place_clef and q.place_clef in settings.CLEF_BASICS_CLEFS
 True
@@ -1483,7 +1483,7 @@ Use button preferences for reviews only when the learner answers with buttons.
 
 **Examples**
 
-```pycon
+```text
 Changing Button count leaves staff-placement reviews available.
 ```
 
@@ -1501,7 +1501,7 @@ Return what identifies the settings that shape these questions.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefBasics().settings_signature().startswith("[")
 True
 ```
@@ -1520,7 +1520,7 @@ Return the help text for the exercise, for the kind of question that is being as
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Clef Basics" in ClefBasics().instructions()
 True
 ```
@@ -1543,7 +1543,7 @@ Name a clef to place, or draw a clef to name.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = ClefBasics().generate(random.Random(3))
 >>> q.prompt.startswith("Place the ") and q.caption == q.prompt
 True
@@ -1564,7 +1564,7 @@ Identify the highlighted part of a written phrase.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NotationIdentification().generate(random.Random(2))
 >>> bool(q.staff or q.notation_excerpt) and q.answer in q.choices
 True
@@ -1584,7 +1584,7 @@ Use button preferences for reviews only when the learner answers with buttons.
 
 **Examples**
 
-```pycon
+```text
 Changing Button count leaves staff-placement reviews available.
 ```
 
@@ -1602,7 +1602,7 @@ Identify the terms eligible for review.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NotationIdentification().settings_signature()
 ''
 ```
@@ -1621,7 +1621,7 @@ Explain how to answer the notation question.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "number" in NotationIdentification().instructions()
 True
 ```
@@ -1644,7 +1644,7 @@ Replace unchecked distractors in older practice questions before replay.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ex = NotationIdentification()
 >>> q = ex.generate(random.Random(1))
 >>> ex.refresh(q) == q
@@ -1669,7 +1669,7 @@ Choose a phrase and a single visible feature to highlight.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = NotationIdentification().generate(random.Random(0))
 >>> q.notation_target[0] == q.answer
 True
@@ -1689,7 +1689,7 @@ Group the active question type’s playable examples by the symbol being practic
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> bool(NotationIdentification().card_groups())
 True
 ```
@@ -1712,7 +1712,7 @@ Choose one example for each selected notation term.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> next(NotationIdentification().daily_candidates(random.Random(4))).answer in settings.notation.terms
 True
 ```
@@ -1740,7 +1740,7 @@ Recover an eligible saved example under the current term and button selections.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ex = NotationIdentification()
 >>> q = ex.generate(random.Random(4))
 >>> ex.review_question(q, same_settings=True) == q
@@ -1757,7 +1757,7 @@ Complete arithmetic equations with written note values.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> q = RythmicEquations().generate(random.Random(2))
 >>> "_" in q.prompt and q.answer in q.choices
 True
@@ -1777,7 +1777,7 @@ Explain how to complete the equation with a button or its shortcut.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "keys" in RythmicEquations().instructions()
 True
 ```
@@ -1800,7 +1800,7 @@ Ask for the missing note or rest on an exported card.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RythmicEquations().card_prompt(Question("", choices=[], answer=""))
 'Which note or rest balances the equation?'
 ```
@@ -1819,7 +1819,7 @@ Keep review questions tied to the options that generated them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RythmicEquations().practice_signature()
 ''
 ```
@@ -1842,7 +1842,7 @@ Write a rhythm equation and hide one of its note values.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RythmicEquations().make_question(random.Random(0)).prompt.count("_")
 1
 ```

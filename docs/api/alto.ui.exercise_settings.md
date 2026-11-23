@@ -13,7 +13,7 @@ Values saved by older versions are converted, and anything saved that is not val
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_note_names()
 >>> settings.note_names.naming in NAMINGS
 True
@@ -32,7 +32,7 @@ in the saved data that is not valid is ignored.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg_ = settings.note_names
 >>> cfg_.clefs = {"alto"}
 >>> save_note_names()
@@ -54,7 +54,7 @@ Save the note identification settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg_ = settings.note_names
 >>> cfg_.naming = "solfege"
 >>> save_note_names()
@@ -76,7 +76,7 @@ A saved range that is not a valid span of keys, or a key list with nothing usabl
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg_ = settings.keyboard
 >>> cfg_.require_octave = True
 >>> save_keyboard()
@@ -98,7 +98,7 @@ Save the keyboard exercise settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg_ = settings.keyboard
 >>> save_keyboard()
 >>> int(store().value("keyboard/low")) == cfg_.low
@@ -115,7 +115,7 @@ Load keyboard interval settings, ignoring invalid values and intervals that cann
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_keyboard_intervals()
 >>> settings.keyboard_intervals.bounds()[0] < settings.keyboard_intervals.bounds()[1]
 True
@@ -135,7 +135,7 @@ Save the keyboard interval range and selected distances.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_keyboard_intervals(settings.KeyboardIntervalSettings())
 >>> int(store().value("keyboardIntervals/low"))
 48
@@ -151,7 +151,7 @@ Load the saved note construction settings into the shared settings object.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("construction/accidentals", "true")
 >>> load_construction()
 >>> settings.construction.accidentals
@@ -172,7 +172,7 @@ Save the note construction settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settings.construction.degrees = {1, 3}
 >>> save_construction(settings.construction)
 >>> str(store().value("construction/degrees"))
@@ -193,7 +193,7 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("arpeggio/types", "major")
 >>> load_arpeggio()
 >>> settings.arpeggio.types
@@ -216,7 +216,7 @@ Save the arpeggio settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_arpeggio(settings.arpeggio)
 >>> str(store().value("arpeggio/clefs")) == ",".join(settings.arpeggio.active_clefs())
 True
@@ -241,7 +241,7 @@ Restore the saved staff interval options, keeping valid choices and per-clef ran
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_intervals()
 >>> bool(settings.intervals.active_clefs())
 True
@@ -266,7 +266,7 @@ Save the settings of a key exercise: its clefs, scales and key signatures, and t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> saved_ = settings.ScaleConstructionSettings(modes={"Major (Ionian)", "Dorian"}, steps=True)
 >>> save_key_settings(saved_, prefix="doctestScales")
 >>> loaded_ = settings.ScaleConstructionSettings()
@@ -288,7 +288,7 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("keySignatures/clefs", "alto")
 >>> load_key_signatures()
 >>> settings.key_signatures.clefs
@@ -309,7 +309,7 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("keyConstruction/keys", "-3,4")
 >>> load_key_construction()
 >>> settings.key_construction.active_keys()
@@ -328,7 +328,7 @@ Restore the clefs, scales, and key signatures selected for Order of Keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_order_of_keys()
 ```
 
@@ -342,7 +342,7 @@ Load the saved scale identification options independently of scale construction.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_scale_identification()
 >>> settings.scale_identification.active_staff_keys()
 [0]
@@ -360,7 +360,7 @@ Anything in the saved data that is not valid is ignored, and a list with nothing
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("scaleConstruction/keys", "1,-1")
 >>> store().setValue("scaleConstruction/steps", "true")
 >>> store().setValue("scaleConstruction/octave", "true")
@@ -386,7 +386,7 @@ Read the last nonempty selection of notation terms.
 
 **Examples**
 
-```pycon
+```text
 Switching Select none off restores these checkboxes.
 ```
 
@@ -400,7 +400,7 @@ Restore the question type and term selection, defaulting to Answer Button and al
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_notation_terms()
 >>> bool(settings.notation.terms)
 True
@@ -419,7 +419,7 @@ setting as it was.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("clefBasics/clefs", "alto,subbass,flute")
 >>> store().setValue("clefBasics/type", "identification")
 >>> load_clef_basics()
@@ -443,7 +443,7 @@ Save clef basics settings, the form `load_clef_basics` reads.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_clef_basics(settings.ClefBasicsSettings(clefs={"french", "treble"}, question_type="identification"))
 >>> str(store().value("clefBasics/clefs")), str(store().value("clefBasics/type"))
 ('treble,french', 'identification')
@@ -463,7 +463,7 @@ saved color scheme that no longer exists (it was deleted, or comes from a newer 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("circle/questions", "numeral,nonsense")
 >>> store().setValue("circle/scheme", "midnight")
 >>> load_circle()
@@ -488,7 +488,7 @@ Save the circle of fifths settings.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_circle(settings.CircleSettings(scheme="ink"))
 >>> store().value("circle/scheme")
 'ink'
@@ -507,7 +507,7 @@ Anything in the saved data that is not valid is ignored.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_pack_options()
 ```
 
@@ -525,7 +525,7 @@ Save the options chosen for one plugin exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> save_pack_options("pack.nothing.here")
 ```
 
@@ -539,7 +539,7 @@ Restore the independent button preferences for each multiple-choice exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_choice_buttons()
 >>> from alto.exercises.library import NoteNames
 >>> NoteNames.button_settings().button_mode in {"all", "limited"}
@@ -556,7 +556,7 @@ Load the saved exercise options before creating a practice or export settings pa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> load_exercise_settings()
 ```
 {% endraw %}

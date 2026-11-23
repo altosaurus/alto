@@ -16,7 +16,7 @@ is diminished and has no wedge.)
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MAJORS[3], MINORS[3], SIGNATURES[3]
 (('A',), ('F♯m',), 3)
 >>> relative_minor("A")
@@ -49,7 +49,7 @@ Return where a major key is on the circle, by either of its names.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> place_of_major("A"), place_of_major("C♭"), place_of_major("G♭")
 (3, 5, 6)
 ```
@@ -72,7 +72,7 @@ Return the relative minor of a major key.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> relative_minor("C"), relative_minor("E♭"), relative_minor("C♯")
 ('Am', 'Cm', 'B♭m')
 ```
@@ -95,7 +95,7 @@ Return the six wedges that hold the chords of a major key, and the Roman numeral
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cells = cells_of_key(0)
 >>> cells[("outer", 11)], cells[("inner", 0)], cells[("inner", 1)]  # F is IV; Am is vi; Em is iii
 ('IV', 'vi', 'iii')
@@ -125,7 +125,7 @@ A wedge with two names, such as D♭ and C♯, is the same chord, but the key de
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> numeral_chords(0)
 {'I': 'C', 'ii': 'Dm', 'iii': 'Em', 'IV': 'F', 'V': 'G', 'vi': 'Am'}
 >>> numeral_chords(6)["V"], numeral_chords(7)["IV"]  # in F♯ major the V is C♯; in D♭ major the IV is G♭
@@ -150,7 +150,7 @@ Return the major key of a place as it is written to ask about it: "A major", or 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> display_major(3), display_major(5)
 ('A major', 'B major / C♭ major')
 ```
@@ -173,7 +173,7 @@ Return the minor key of a place as it is written to ask about it: "F♯ minor", 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> display_minor(3), display_minor(5)
 ('F♯ minor', 'G♯ minor / A♭ minor')
 ```
@@ -196,7 +196,7 @@ Return the sharps or flats of a key signature, in the order they are written.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> accidentals_of(3), accidentals_of(0)
 (['F♯', 'C♯', 'G♯'], [])
 ```
@@ -224,7 +224,7 @@ Explain a cell of the circle: its key signature, where it comes from, its relati
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> text = explain("outer", place=1)
 >>> "<b>G major</b>" in text and "1 sharp: F♯" in text and "a fifth above C" in text
 True

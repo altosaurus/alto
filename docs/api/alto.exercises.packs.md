@@ -17,7 +17,7 @@ A finite set of illustrated multiple-choice cards declared by an instrument pack
 
 **Examples**
 
-```pycon
+```text
 The viola pack contributes one practice card for every eligible string and pitch.
 ```
 
@@ -36,7 +36,7 @@ Return the learner's options for this exercise, creating the defaults the first 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     span = (21, 30)
 ...     range_clef = "alto"
@@ -60,7 +60,7 @@ Report whether this is a keyboard interval exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     spec = {"type": "keyboard-intervals"}
 >>> Demo().is_keyboard
@@ -82,7 +82,7 @@ Find the lowest and highest key a keyboard exercise asks.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     key_span, key_default = (28, 89), (48, 72)
 >>> Demo.chosen_keys()
@@ -104,7 +104,7 @@ Name the lowest and highest key a keyboard exercise asks, for drawing the keyboa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     key_span, key_default = (28, 89), (48, 72)
 >>> Demo.chosen_span()
@@ -126,7 +126,7 @@ Find the intervals a keyboard exercise asks.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     interval_names = ("m2", "M2", "m3")
 >>> Demo.chosen_intervals()
@@ -148,7 +148,7 @@ Find the keyboards a keyboard exercise puts its highlighted keys on.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> class Demo(PackExercise):
 ...     manual_names = ("Upper manual", "Lower manual")
 >>> Demo.chosen_manuals()
@@ -169,7 +169,7 @@ Build the cards for the learner's settings: the sharps and flats, the octave, an
 
 **Examples**
 
-```pycon
+```text
 An exercise whose pack declares no settings always asks every card.
 ```
 
@@ -191,7 +191,7 @@ Play the pack's own sound unless the pack offers the choice and the learner chos
 
 **Examples**
 
-```pycon
+```text
 An exercise with no sound setting always plays the pack's instrument.
 ```
 
@@ -214,7 +214,7 @@ disk is left out.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.audio import INSTRUMENTS
 >>> class Demo(PackExercise):
 ...     pack_name = "Demo pack"
@@ -237,7 +237,7 @@ Identify the pack settings used to generate this catalog.
 
 **Examples**
 
-```pycon
+```text
 Adding an eligible pitch changes the signature, and so does asking sharps and flats or the octave.
 ```
 
@@ -259,7 +259,7 @@ Restore the instrument reference on cards saved by the single-instrument prototy
 
 **Examples**
 
-```pycon
+```text
 An existing D-string card keeps its original position when a pack is upgraded.
 ```
 
@@ -281,7 +281,7 @@ Pick one of the illustrated questions in the pack.
 
 **Examples**
 
-```pycon
+```text
 An open D4 on a viola asks for D.
 ```
 
@@ -303,7 +303,7 @@ Visit each question in the pack once in shuffled order.
 
 **Examples**
 
-```pycon
+```text
 Open G and G on the C string yield separate cards.
 ```
 
@@ -321,7 +321,7 @@ Count the distinct questions in the exercise.
 
 **Examples**
 
-```pycon
+```text
 The viola example offers twenty positions.
 ```
 
@@ -354,7 +354,7 @@ Validate the settings a pack offers for one of its exercises.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> read_controls({"range": "alto", "octave": True}, where="pack.v.notes")
 {'range': 'alto', 'octave': True}
 >>> read_controls({"range": True, "intervals": True}, where="pack.v.keys", kinds=KEYBOARD_CONTROL_KINDS)
@@ -385,7 +385,7 @@ Read and validate every exercise before making any of them available.
 
 **Examples**
 
-```pycon
+```text
 The viola example contributes note identification and instrument anatomy exercises.
 ```
 
@@ -407,7 +407,7 @@ Find each installed ZIP or folder manifest, including packs that failed validati
 
 **Examples**
 
-```pycon
+```text
 An author can install either viola.zip or viola/pack.json.
 ```
 
@@ -429,7 +429,7 @@ Read a pack's manifest for display or duplicate detection without loading its me
 
 **Examples**
 
-```pycon
+```text
 A damaged pack can still be listed for removal by filename.
 ```
 
@@ -455,7 +455,7 @@ One pack in the plugins folder, as listed for removal.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> import os
 >>> plugin = InstalledPlugin(title="Viola", path=Path("viola.zip"), manifest=Path("viola.zip"), snapshot=os.stat("."))
@@ -481,7 +481,7 @@ List the packs in the plugins folder, including damaged ones, so each can be rem
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from pathlib import Path
 >>> installed_plugins(Path("no-such-plugins-folder"))
 ([], [])
@@ -519,7 +519,7 @@ Validate a copy of the selected ZIP and install it for the next startup.
 
 **Examples**
 
-```pycon
+```text
 Installing a downloaded viola.zip adds both of its exercises on the next launch.
 ```
 
@@ -541,7 +541,7 @@ Register valid packs and return readable errors for any packs that were skipped.
 
 **Examples**
 
-```pycon
+```text
 A missing plugins folder yields an empty list.
 ```
 {% endraw %}

@@ -15,7 +15,7 @@ checksums verifies against a key that came with Alto, the list names the file, a
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> self_update_target(executable=Path("/nowhere/alto"), system="linux") is None
 True
 ```
@@ -56,7 +56,7 @@ A packaged copy that can replace itself, and where it is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Target("windows", folder=Path("C:/Alto"), prefix=None).system
 'windows'
 ```
@@ -81,7 +81,7 @@ An update that has been downloaded and checked, and is ready to be handed over.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Prepared(Path("/tmp/x"), installer=None, root=Path("/tmp/x/unpacked/alto-0.1.0")).installer is None
 True
 ```
@@ -112,7 +112,7 @@ someone unpacked and ran from cannot. On Windows a copy can if the installer mad
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> self_update_target(executable=Path("/usr/bin/python3"), system="linux") is None
 True
 >>> self_update_target(executable=Path("/nowhere/alto.exe"), system="windows") is None
@@ -198,7 +198,7 @@ Take a note of progress and do nothing with it, for a download whose progress no
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ignore_progress(1, 2)
 ```
 
@@ -264,7 +264,7 @@ what it passed on. The desktop's start-up token is for this launch only, so it i
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": "/usr/lib", "_PYI_ARCHIVE_FILE": "x"})
 {'LD_LIBRARY_PATH': '/usr/lib', 'PYINSTALLER_RESET_ENVIRONMENT': '1'}
 >>> clean_environment({"LD_LIBRARY_PATH": "/app/lib", "LD_LIBRARY_PATH_ORIG": ""})
@@ -287,7 +287,7 @@ Give the file the Linux helper writes to, so that a failed update can be looked 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> log_path().name
 'update.log'
 ```
@@ -320,7 +320,7 @@ up. So Alto starts this command and quits, and the command waits for Alto's proc
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> command = windows_handoff_command(Path("C:/Temp/setup.exe"), pid=42, alto=Path("C:/Alto/alto.exe"))
 >>> command[0], command[1:-1] == list(POWERSHELL_ARGUMENTS)
 ('powershell.exe', True)
@@ -370,7 +370,7 @@ Make a new temporary folder for an update, whose name says what it is for.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> folder = new_work_folder()
 >>> folder.is_dir() and folder.name.startswith(LEFTOVER_PREFIX)
 True
@@ -402,7 +402,7 @@ Remove the temporary folders of earlier updates that were never cleaned up, such
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> remove_leftovers(root=Path("/no/such/folder"))
 0
 ```

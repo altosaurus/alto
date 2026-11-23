@@ -11,7 +11,7 @@ It shows the active profile's own answers, filterable by exercise and by timefra
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> since_for(None, now=1000.0) is None  # all time: from the start
 True
 >>> format_duration(3600)
@@ -41,7 +41,7 @@ Return the timestamp a timeframe starts from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> since_for(7, now=864000.0)
 259200.0
 >>> since_for(None, now=864000.0) is None
@@ -68,7 +68,7 @@ Write a length of time the way the statistics show it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> format_duration(5), format_duration(90), format_duration(3000)
 ('5 s', '2 min', '50 min')
 >>> format_duration(3 * 3600 + 7 * 60)
@@ -98,7 +98,7 @@ Name a chart period in words, for the heading of its list of answers.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> period_title(datetime(2026, 1, 5, 14), granularity="hour")
 'Mon 5 Jan 2026, 14:00'
 >>> period_title(datetime(2026, 1, 5), granularity="day")
@@ -130,7 +130,7 @@ One headline number with its caption.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> tile = Tile("Questions answered")
 >>> tile.value.text()
 '–'
@@ -150,7 +150,7 @@ Create a tile showing a dash until it is given a value.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> tile = Tile("Days practiced")
 >>> tile.caption.text()
 'Days practiced'
@@ -170,7 +170,7 @@ Show a number (or any text) in the tile.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> tile = Tile("Typical first answer")
 >>> tile.show_value("7.6 s")
 >>> tile.value.text()
@@ -203,7 +203,7 @@ The statistics, as a page of the main window.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
@@ -222,7 +222,7 @@ Build the page and fill it for the current filters.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))
@@ -240,7 +240,7 @@ Recalculate everything for the chosen exercise and timeframe and show it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.learning import Database
 >>> db = Database()
 >>> page = StatsPage(Learner(db, profile=db.add_profile("Ada")))

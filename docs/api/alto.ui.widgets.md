@@ -9,7 +9,7 @@ Small widgets shared by several screens: the sidebar toggle, the help button and
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SidebarToggle().toolTip()
 'Hide exercise list'
 ```
@@ -24,7 +24,7 @@ Colored counts for calendar practice on tiles and in the exercise screen.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = PracticeCounts()
 >>> label.set_counts((2, 3, 1), studying=True, current="incorrect")
 >>> "1 incorrect card" in label.toolTip()
@@ -54,7 +54,7 @@ Show the counts in blue, red, green order and underline the active queue.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> label = PracticeCounts()
 >>> label.set_counts((1, 2, 0))
 >>> label.toolTip().startswith("Blue — 2 new cards available")
@@ -79,7 +79,7 @@ Connect to `clicked`; the main window decides what to show and calls `set_open` 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> button = SidebarToggle()
 >>> button.toolTip()
 'Hide exercise list'
@@ -99,7 +99,7 @@ Create the toggle, showing the list as open.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SidebarToggle().autoRaise()
 True
 >>> SidebarToggle(noun="lesson list").toolTip()
@@ -120,7 +120,7 @@ Show the icon and tooltip for the list being open or closed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> button = SidebarToggle()
 >>> button.set_open(False)
 >>> button.toolTip()
@@ -145,7 +145,7 @@ Click anywhere else to close it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HelpButton(lambda: "<b>Press the right note.</b>").toolTip()
 'How this exercise works'
 ```
@@ -161,7 +161,7 @@ Create the button.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
 >>> button = HelpButton(lambda: calls.append(1) or "help")
 >>> calls  # the text is not asked for until the button is clicked
@@ -178,7 +178,7 @@ Open the popover under the button, right-aligned with it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HelpButton(lambda: "<b>Help</b>").show_help()  # doctest: +SKIP
 ```
 
@@ -204,7 +204,7 @@ A pill-shaped row of choices of which exactly one is chosen, like the switch bet
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> control = SegmentedControl(["Exercises", "Lessons"])
 >>> control.current()
 0
@@ -225,7 +225,7 @@ Build the control with the first choice chosen.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(SegmentedControl(["A", "B", "C"]).buttons)
 3
 >>> SegmentedControl(["A"], icons=[HELP]).buttons[0].icon().isNull()
@@ -248,7 +248,7 @@ The text is still the tooltip and the name a screen reader says.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> control = SegmentedControl(["Exercises", "Lessons"], icons=[HELP, HELP])
 >>> control.set_compact(True)
 >>> control.buttons[0].text(), control.buttons[0].toolTip()
@@ -272,7 +272,7 @@ Return the number of the chosen choice.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SegmentedControl(["A", "B"]).current()
 0
 ```
@@ -291,7 +291,7 @@ Choose one, without announcing it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> control = SegmentedControl(["A", "B"])
 >>> control.set_current(1)
 >>> control.current()
@@ -311,7 +311,7 @@ the settings, is restyled by calling this.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "segments" in SegmentedControl(["A", "B"]).styleSheet()
 True
 ```

@@ -11,7 +11,7 @@ Also holds the choice of how the baritone clef is written (an F clef or a C clef
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> BY_KEY["leland"].label
 'Leland'
 >>> clef_shape("treble")
@@ -43,7 +43,7 @@ One look for the music: a font and how heavy the staff lines are.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> style = BY_KEY["noto"]
 >>> style.label, style.font
 ('Noto Music', None)
@@ -63,7 +63,7 @@ Return which way the baritone clef is written.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> baritone_clef() in BARITONE_CLEFS
 True
 ```
@@ -86,7 +86,7 @@ Return the clef as it is drawn.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> clef_shape("alto")
 'alto'
 >>> set_baritone_clef("c")
@@ -111,7 +111,7 @@ Choose and save how the baritone clef is written, and redraw every staff already
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_baritone_clef("c")
 >>> baritone_clef()
 'c'
@@ -134,7 +134,7 @@ Return the notation style in use.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> current().key in BY_KEY
 True
 ```
@@ -149,7 +149,7 @@ Apply the saved choices: the style (Finale Maestro if none is saved or it is unk
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue("ui/notation", "bravura")
 >>> load_style()
 >>> current().key
@@ -171,7 +171,7 @@ Choose and save a style, and redraw every staff already on screen.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_style("leland")
 >>> current().label
 'Leland'
@@ -195,7 +195,7 @@ this module.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
 >>> def repaint() -> None:
 ...     calls.append(1)

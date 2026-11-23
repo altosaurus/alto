@@ -19,7 +19,7 @@ file, and the file's hash is the one listed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
 'b6e2091'
 ```
@@ -44,7 +44,7 @@ Where an installed copy of Alto came from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Source("https://github.com/altosaurus/alto.git", commit="b6e2091").ref
 'HEAD'
 ```
@@ -67,7 +67,7 @@ Shorten a commit id to the seven characters people use for it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> short("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe")
 'b6e2091'
 ```
@@ -90,7 +90,7 @@ Read where a package was installed from, out of the `direct_url.json` that the i
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> parse_direct_url('{"url": "https://example.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234"}}')
 Source(url='https://example.org/a.git', commit='abc1234', ref='HEAD')
 >>> named = '{"url": "https://x.org/a.git", "vcs_info": {"vcs": "git", "commit_id": "abc1234", "requested_revision": "dev"}}'
@@ -117,7 +117,7 @@ Say where the Alto that is running was installed from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> source = installed_source()
 >>> source is None or len(source.commit) == COMMIT_LENGTH
 True
@@ -144,7 +144,7 @@ Say whether Alto is running from an environment that `uv tool` made, which is wh
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> is_tool_install(prefix=Path("/nowhere"))
 False
 ```
@@ -166,7 +166,7 @@ How the running copy of Alto got where it is, which decides how it can be update
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> InstallKind.SCRIPT.name
 'SCRIPT'
 ```
@@ -185,7 +185,7 @@ Say whether Alto is running as a packaged build, made with PyInstaller, rather t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> is_frozen()
 False
 ```
@@ -215,7 +215,7 @@ Decide what kind of copy of Alto this is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> here = Source("https://example.org/a.git", commit="abc1234")
 >>> install_kind(here, tool=True, frozen=False).name
 'SCRIPT'
@@ -243,7 +243,7 @@ Say why a kind of copy cannot update itself at all, if it cannot.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cannot_update(InstallKind.SOURCE) == SOURCE_FOLDER, cannot_update(InstallKind.OTHER) == NOT_BY_SCRIPT
 (True, True)
 >>> cannot_update(InstallKind.SCRIPT) is None and cannot_update(InstallKind.PACKAGE) is None
@@ -273,7 +273,7 @@ Find a program to run, also in the places the installers put them, which a progr
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> find_program("no-such-program-anywhere") is None
 True
 ```
@@ -301,7 +301,7 @@ Give the command that asks the address Alto came from for the commit at the end 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> check_command(Source("https://example.org/a.git", commit="abc1234"), git="git")
 ('git', ['ls-remote', 'https://example.org/a.git', 'HEAD'])
 ```
@@ -334,7 +334,7 @@ installed from, and a copy that follows a release must be able to move to the ma
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> here = Source("https://example.org/alto.git", commit="abc1234")
 >>> install_command(here, uv="uv", tag="v0.1.0")
 ('uv', ['tool', 'install', '--force', 'git+https://example.org/alto.git@v0.1.0'])
@@ -360,7 +360,7 @@ Read the commit id out of what `git ls-remote` printed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> parse_ls_remote("b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe\tHEAD\n")
 'b6e2091ba08f6b79dcf293d1a77d86f7a812d4fe'
 >>> parse_ls_remote("") is None, parse_ls_remote("fatal: repository not found") is None
@@ -387,7 +387,7 @@ A file of a release: the installer, the tarball, the checksums or their signatur
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Asset("SHA256SUMS", url="https://example.org/s", size=300).size
 300
 ```
@@ -414,7 +414,7 @@ A release of Alto, as published on GitHub.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Release("0.1.0", tag="v0.1.0", url="https://example.org/r").version
 '0.1.0'
 ```
@@ -437,7 +437,7 @@ Turn a version, with or without the "v" of a tag, into numbers that can be compa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> version_key("v0.10.2"), version_key("1.0")
 ((0, 10, 2), (1, 0))
 >>> version_key("1.0.0rc1") is None, version_key("") is None, version_key("unknown") is None
@@ -467,7 +467,7 @@ Say whether one version is newer than another, comparing numbers and not text, s
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> is_newer("0.10.0", installed="0.9.0"), is_newer("v0.1.0", installed="0.0.0")
 (True, True)
 >>> is_newer("1.0", installed="1.0.0"), is_newer("0.0.0", installed="0.1.0")
@@ -490,7 +490,7 @@ Give the version of Alto that is running.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> installed_version().count(".") >= 1
 True
 ```
@@ -513,7 +513,7 @@ Read GitHub's answer about the latest release.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> answer = '{"tag_name": "v0.1.0", "html_url": "https://example.org/r", "draft": false, "prerelease": false}'
 >>> parse_latest_release(answer)
 Release(version='0.1.0', tag='v0.1.0', url='https://example.org/r', assets=())
@@ -546,7 +546,7 @@ Make sense of what came back when the latest release was asked for.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> release_answer(404, text="") == NO_RELEASE
 True
 >>> release_answer(0, text="Name or service not known")
@@ -578,7 +578,7 @@ Fetch a web address, waiting at most a number of seconds. It blocks, so the inte
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> fetch_text("http://127.0.0.1:9/", seconds=2)[0]  # nothing listens there
 0
 ```
@@ -600,7 +600,7 @@ them, and a connection would then fail on a distribution that keeps them somewhe
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ssl_context().verify_mode == ssl.CERT_REQUIRED, len(ssl_context().get_ca_certs()) > 100
 (True, True)
 ```
@@ -630,7 +630,7 @@ Give the name of the file that updates a packaged copy on this system, as the re
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> platform_asset_name("0.1.0", system="Linux", machine="x86_64")
 'alto-0.1.0-linux-x86_64.tar.gz'
 >>> platform_asset_name("0.1.0", system="Windows", machine="AMD64")
@@ -664,7 +664,7 @@ Find a file of a release by its name, if it is at the address where a release ke
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> files = (Asset("a", url=DOWNLOAD_BASE + "v1/a"), Asset("b", url="https://example.org/b"))
 >>> found = find_asset(Release("1", tag="v1", url="", assets=files), name="a")
 >>> found.name if found else None
@@ -691,7 +691,7 @@ Read a `SHA256SUMS` file: a line for each file, with its SHA-256 hash and its na
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> entry = "ab" * 32 + "  alto-0.1.0-linux-x86_64.tar.gz"
 >>> parse_checksums(entry + "\nnot a line\n" + "cd" * 32 + "  ../evil")
 {'alto-0.1.0-linux-x86_64.tar.gz': 'abababababababababababababababababababababababababababababababab'}
@@ -722,7 +722,7 @@ Say whether an Ed25519 signature of some data was made with one of the keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from nacl.signing import SigningKey
 >>> pair = SigningKey.generate()
 >>> public = base64.b64encode(bytes(pair.verify_key)).decode()
@@ -752,7 +752,7 @@ signature library (which PyInstaller must be told about), and that the keys in t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> self_check()
 []
 ```

@@ -187,7 +187,9 @@ def render_doc(doc: str | None) -> str:
         if not title:
             continue
         if title == "Examples":
-            out.append(f"**Examples**\n\n```pycon\n{text}\n```")
+            # Rouge uses its console lexer for Python sessions, including continuation prompts.
+            lexer = "console?lang=python&prompt=%3E%3E%3E,..." if ">>> " in text else "text"
+            out.append(f"**Examples**\n\n```{lexer}\n{text}\n```")
         elif title in LIST_SECTIONS:
             lines = []
             for name, kind, desc in entries(text):

@@ -19,7 +19,7 @@ since its pressed look is all there is to see in the meantime.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_instant(True)
 >>> owner = QObject()
 >>> done = []
@@ -47,7 +47,7 @@ Say whether motion waits for `settle`, as it does in tests.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> instant()
 False
 ```
@@ -66,7 +66,7 @@ Make motion wait for `settle`, for tests, or give it back its real time.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_instant(True)
 >>> instant()
 True
@@ -94,7 +94,7 @@ Run a step after a delay, such as clearing wrong-answer feedback so the learner 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_instant(True)
 >>> owner = QObject()
 >>> done = []
@@ -126,7 +126,7 @@ The timer can be stopped as usual, and then it does not fire.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_instant(True)
 >>> timer = QTimer()
 >>> timer.setSingleShot(True)
@@ -160,7 +160,7 @@ Start an animation. With instant motion it holds still at its start until `settl
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QVariantAnimation
 >>> set_instant(True)
 >>> animation = QVariantAnimation()
@@ -190,7 +190,7 @@ Say whether any motion is still to come: a delayed step, an active timer or a ru
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> busy()
 False
 ```
@@ -219,7 +219,7 @@ the next question, which slides in) happens too. In the app's real time this wai
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> settle()
 >>> busy()
 False
@@ -257,7 +257,7 @@ Give a button a key that presses it. In the app Qt handles the key; with instant
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QPushButton
 >>> button = QPushButton("Undo")
 >>> set_shortcut(button, key="Backspace")

@@ -12,7 +12,7 @@ as the label of a choice. Colors come from the palette, so they work in light an
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CLEF_NAMES["treble"], VALUE_NAMES["sixteenth"]
 ('Treble', '16th')
 >>> ClefPictures(["treble", "bass"]).toolTip()
@@ -46,7 +46,7 @@ The G, C and F clefs are drawn the same size as they are on a staff, so the thre
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> symbol_icon("F", color=QColor("black")).isNull()
 False
 ```
@@ -76,7 +76,7 @@ Showing each clef on its own staff lets alto and tenor, which share a symbol, lo
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefPictures(["alto", "tenor"]).toolTip()
 'Alto, Tenor'
 ```
@@ -93,7 +93,7 @@ Create the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefPictures(["treble"], scale=2.0).width()
 60
 ```
@@ -112,7 +112,7 @@ Show different clefs and size the picture for them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = ClefPictures()
 >>> pictures.set_clefs(["treble", "bass", "alto"])
 >>> pictures.width()  # three clefs and the space between them
@@ -145,7 +145,7 @@ Return one clef as an icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefPictures.icon("grand").isNull()
 False
 ```
@@ -164,7 +164,7 @@ Draw each clef on its staff, or the grand staff with its brace.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefPictures(["treble", "grand"]).grab().isNull()
 False
 ```
@@ -192,7 +192,7 @@ Note values as engraved symbols (no staff), each with its head on the same basel
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = ValuePictures(["whole", "quarter", "eighth"])
 >>> pictures.values
 ['whole', 'quarter', 'eighth']
@@ -211,7 +211,7 @@ Create the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ValuePictures(["half"], center_stemless=True).center_stemless
 True
 ```
@@ -230,7 +230,7 @@ Show different note values and size the picture for them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = ValuePictures()
 >>> pictures.set_values(["breve", "whole"])
 >>> pictures.values
@@ -261,7 +261,7 @@ Return one note value as an icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ValuePictures.icon("quarter").isNull()
 False
 ```
@@ -280,7 +280,7 @@ Draw each note value.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ValuePictures(["whole", "half", "quarter"]).grab().isNull()
 False
 ```
@@ -303,7 +303,7 @@ Render a single note, rest, tied pair, or beamed pair from an equation term.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> rhythm_picture("eighth|eighth").beam_count
 1
 ```
@@ -333,7 +333,7 @@ Each sign sits at the height it has after a treble clef, and C major, which has 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePicture(2).toolTip()
 'D major: 2 sharps'
 ```
@@ -350,7 +350,7 @@ Create the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePicture(0).toolTip()
 'C major: no sharps or flats'
 >>> KeySignaturePicture(-1).toolTip()
@@ -381,7 +381,7 @@ Return a key signature as an icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePicture.icon(3).isNull()
 False
 ```
@@ -400,7 +400,7 @@ Draw the row of sharps or flats, or a natural sign for C major.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePicture(-3).grab().isNull()
 False
 ```
@@ -430,7 +430,7 @@ For each clef, a staff with its lowest and highest note, so the range can be rea
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = RangePictures([("treble", 22, 52)])
 >>> pictures.toolTip()
 'Treble: D3 to F7'
@@ -449,7 +449,7 @@ Create the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RangePictures([("treble", 22, 52)], max_width=238).scale
 1.9
 ```
@@ -468,7 +468,7 @@ Show the ranges of some clefs and size the picture for them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> pictures = RangePictures()
 >>> pictures.set_items([("bass", 10, 40), ("alto", 21, 35)])
 >>> pictures.toolTip().splitlines()
@@ -489,7 +489,7 @@ Draw a staff for each clef with its lowest and highest note.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RangePictures([("treble", 22, 52), ("bass", 10, 40)]).grab().isNull()
 False
 ```
@@ -517,7 +517,7 @@ How notes are named: C, D and E on a staff, labeled with letters, solfège sylla
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NamePicture("solfege").toolTip()
 'Solfège (Do Re Mi)'
 ```
@@ -534,7 +534,7 @@ Create the picture.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NamePicture().naming
 'letters'
 ```
@@ -553,7 +553,7 @@ Choose which labels are drawn.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> picture = NamePicture()
 >>> picture.set_naming("solfege")
 >>> picture.toolTip()
@@ -584,7 +584,7 @@ Return the picture as an icon.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NamePicture.icon("letters").isNull()
 False
 ```
@@ -603,7 +603,7 @@ Draw the staff, the clef, the three notes and their labels.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NamePicture("letters").grab().isNull()
 False
 ```

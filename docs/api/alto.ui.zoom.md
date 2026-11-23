@@ -14,7 +14,7 @@ Minus, or turning the mouse wheel with Ctrl held, moves one step, and Ctrl and 0
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_percent(100)
 False
 >>> px(20), px(0)
@@ -37,7 +37,7 @@ Give the zoom now in force.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> percent()
 100
 ```
@@ -56,7 +56,7 @@ Give the zoom as a multiplier.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> factor()
 1.0
 ```
@@ -79,7 +79,7 @@ Scale a length in pixels by the zoom.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> px(20), px(0), px(-4)
 (20, 0, -4)
 ```
@@ -102,7 +102,7 @@ Scale every pixel and point length in a stylesheet by the zoom.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> css("QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }")
 'QLabel { padding: 8px 12px; font-size: 14pt; margin: 0px; }'
 ```
@@ -117,7 +117,7 @@ Make the application font as large as the zoom says, from the size it had at 100
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> apply_font()
 ```
 
@@ -139,7 +139,7 @@ Zoom to the step nearest a percentage, save it and say so.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> set_percent(125)
 True
 >>> percent(), factor()
@@ -168,7 +168,7 @@ Zoom in or out by one step.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> step(1), percent()
 (True, 110)
 >>> step(-1), percent()
@@ -195,7 +195,7 @@ Go back to 100%.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> reset()
 False
 ```
@@ -210,7 +210,7 @@ Take the saved zoom into force, without announcing it, ignoring anything that is
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> store().setValue(SETTING, 150)
 >>> load()
 >>> percent()
@@ -235,7 +235,7 @@ A touchpad that sends small steps is added up, so that a whole notch is needed t
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
 False
 ```
@@ -250,7 +250,7 @@ Start with no wheel turned.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> WheelZoom()._turned
 0
 ```
@@ -273,7 +273,7 @@ a filter on the application runs for every one of those, which made building a p
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> handler = WheelZoom()
 >>> handler.follow(app)
 ```
@@ -292,7 +292,7 @@ Zoom when the wheel turns with Ctrl held over a window.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtWidgets import QWidget
 >>> widget = QWidget()
 >>> widget.show()
@@ -323,7 +323,7 @@ Take a wheel event with Ctrl held as a zoom, and let every other event through.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> WheelZoom().eventFilter(QObject(), QEvent(QEvent.Type.None_))
 False
 ```

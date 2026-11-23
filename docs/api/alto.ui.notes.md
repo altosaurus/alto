@@ -15,7 +15,7 @@ All numbers are in glyph units at a font size of 100, where one staff space is `
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> note_shape("quarter").isEmpty()
 False
 >>> note_shape("whole", stem_down=True) is note_shape("whole")  # a whole note has no stem to turn
@@ -48,7 +48,7 @@ Shapes are cached after their first use.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> up, down = note_shape("quarter"), note_shape("quarter", stem_down=True)
 >>> up == down
 False
@@ -86,7 +86,7 @@ draws with Bravura, which comes with Alto, wherever Noto Music is missing.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtGui import QImage
 >>> image = QImage(100, 100, QImage.Format.Format_ARGB32)
 >>> image.fill(QColor("white"))

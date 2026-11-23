@@ -12,7 +12,7 @@ instance of it (`note_names`, `keyboard` ...) that the exercise and its settings
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings().active_clefs()
 ['treble', 'bass']
 >>> spell(Note.parse("F#4"))
@@ -48,7 +48,7 @@ Return a note name in the chosen naming system, optionally including its octave.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> spell(Note.parse("F#4"))
 'F♯'
 >>> spell(Note.parse("F#4"), naming="solfege")
@@ -85,7 +85,7 @@ Return the name and octave of the natural note on a staff step.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> diatonic_name(30)
 'E4'
 ```
@@ -105,7 +105,7 @@ Settings with a set of chosen clefs, which are always used in the same order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioSettings(clefs={"tenor", "alto"}).active_clefs()
 ['alto', 'tenor']
 ```
@@ -124,7 +124,7 @@ Return the clefs to use, in canonical order.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings(clefs={"grand", "tenor"}).active_clefs()
 ['tenor', 'grand']
 >>> ClefBasicsSettings(clefs={"subbass", "treble"}).active_clefs()
@@ -147,7 +147,7 @@ Settings with a set of chosen key signatures.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardSettings(keys={3, -2}).active_keys()
 [-2, 3]
 ```
@@ -166,7 +166,7 @@ Return the key signatures to draw from, lowest first.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ConstructionSettings(keys={2, -1}).active_keys()
 [-1, 2]
 >>> KeySignatureSettings(keys=set()).active_keys()
@@ -190,7 +190,7 @@ Selected clefs and inclusive pitch limits for each staff.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StaffRangeSettings().active_clefs()
 ['treble', 'bass']
 ```
@@ -209,7 +209,7 @@ Return the note values to draw, from longest to shortest.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings(note_values={"half", "whole"}).active_values()
 ['whole', 'half']
 ```
@@ -232,7 +232,7 @@ Return the range of notes that may be asked on a clef.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings().range_for("treble")
 (22, 52)
 >>> NoteNameSettings(ranges={"treble": (40, 30)}).range_for("treble")  # given in the wrong order
@@ -268,7 +268,7 @@ The settings of the note identification exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = NoteNameSettings(clefs={"bass"}, key_signatures={2})
 >>> cfg.active_clefs(), cfg.active_keys()
 (['bass'], [2])
@@ -291,7 +291,7 @@ signature that stored questions are matched by; renaming it would orphan every l
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> NoteNameSettings(key_signatures={2, -1}).active_keys()
 [-1, 2]
 ```
@@ -329,7 +329,7 @@ Only the options the plugin declares for the exercise are shown and used; the re
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> PackExerciseSettings(clefs={"alto"}).sound is None
 True
 >>> PackExerciseSettings(clefs={"alto"}).keys is None
@@ -360,7 +360,7 @@ Staff signatures, presentations, answer format and spelled intervals for Interva
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalSettings().quality_mode
 'combined'
 ```
@@ -383,7 +383,7 @@ Count the written staff positions in a clef's selected range, including both end
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> IntervalSettings(ranges={"treble": (28, 30)}).staff_span("treble")
 3
 ```
@@ -406,7 +406,7 @@ Return the name of a MIDI note with its octave, black keys as sharps.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> key_name(60), key_name(61)
 ('C4', 'C♯4')
 ```
@@ -440,7 +440,7 @@ The settings of the keyboard identification exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = KeyboardSettings()
 >>> key_name(cfg.low), key_name(cfg.high)
 ('C3', 'C5')
@@ -468,7 +468,7 @@ Name a keyboard interval by its distance, including compound intervals.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> keyboard_interval_name(13), keyboard_interval_name(18), keyboard_interval_name(24)
 ('m9', 'A11 / d12', 'P15')
 >>> keyboard_interval_name(87)
@@ -501,7 +501,7 @@ The keyboard range and interval distances used for keyboard interval identificat
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervalSettings().bounds()
 (48, 72)
 ```
@@ -520,7 +520,7 @@ Return the requested count within the supported range of 1 to 87 buttons.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervalSettings().answer_button_limit()
 6
 >>> KeyboardIntervalSettings(button_count=0).answer_button_limit()
@@ -541,7 +541,7 @@ Return a piano range containing at least two distinct keys.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervalSettings(low=60, high=60).bounds()
 (60, 61)
 ```
@@ -560,7 +560,7 @@ Return selected interval distances that fit the keyboard range.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyboardIntervalSettings(low=60, high=64, intervals={3, 4, 12}).active_intervals()
 [3, 4]
 >>> KeyboardIntervalSettings(intervals=set()).active_intervals()
@@ -606,7 +606,7 @@ The settings of the note construction exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ConstructionSettings(clefs={"grand"}).active_clefs()
 ['grand']
 ```
@@ -638,7 +638,7 @@ The settings of the arpeggio identification exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioSettings().active_types()
 ['major', 'minor', 'dominant 7th', 'diminished 7th']
 ```
@@ -657,7 +657,7 @@ Return the chord types to ask, triads first and then seventh chords.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioSettings(types={"minor 7th", "major"}).active_types()
 ['major', 'minor 7th']
 ```
@@ -676,7 +676,7 @@ Return the inversions to ask, root position first.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ArpeggioSettings(inversions={2, 0}).active_inversions()
 [0, 2]
 ```
@@ -702,7 +702,7 @@ used.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = ArpeggioSettings()
 >>> cfg.inversions_for("major"), cfg.inversions_for("dominant 7th")
 ([0, 1, 2], [0, 1, 2, 3])
@@ -733,7 +733,7 @@ The settings of the key signature identification exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = KeySignatureSettings()
 >>> cfg.active_clefs(), len(cfg.active_keys())
 (['treble', 'bass'], 15)
@@ -753,7 +753,7 @@ Return the scales to ask about, in the order of `KEY_MODES`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignatureSettings().active_modes()
 ['Major (Ionian)', 'Natural minor (Aeolian)']
 ```
@@ -777,7 +777,7 @@ Choose the starting signs for writing a key signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> OrderOfKeysSettings(keys={-2, 4}).available_starts()
 range(-2, 5)
 ```
@@ -796,7 +796,7 @@ Return starting counts that fit at least one selected signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> list(OrderOfKeysSettings(keys={-2}).available_starts())
 [-2, -1, 0]
 ```
@@ -819,7 +819,7 @@ The settings of the key signature construction exercise: the same choices as key
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = KeyConstructionSettings(keys={-2})
 >>> cfg.active_keys(), cfg.active_modes()
 ([-2], ['Major (Ionian)', 'Natural minor (Aeolian)'])
@@ -854,7 +854,7 @@ Choose the clefs, scale types and independent staff and scale key signatures for
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = ScaleIdentificationSettings(keys={2}, staff_keys={-3})
 >>> cfg.active_keys(), cfg.active_staff_keys()
 ([2], [-3])
@@ -874,7 +874,7 @@ Return the selected staff signatures, falling back to no signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleIdentificationSettings(staff_keys=set()).active_staff_keys()
 [0]
 ```
@@ -913,7 +913,7 @@ major scale has to be placed with naturals where the staff would otherwise flatt
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = ScaleConstructionSettings(keys={3})
 >>> cfg.active_keys(), cfg.active_clefs(), cfg.steps, cfg.octave, cfg.active_staff_keys()
 ([3], ['treble', 'bass'], False, False, [0])
@@ -933,7 +933,7 @@ Return the key signatures that may be drawn on the staff, lowest first.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleConstructionSettings(staff_keys={-2, 3}).active_staff_keys()
 [-2, 3]
 >>> ScaleConstructionSettings(staff_keys=set()).active_staff_keys()
@@ -964,7 +964,7 @@ on the second line. The three symbols can always be chosen from.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefBasicsSettings(clefs={"subbass", "alto"}).active_clefs()
 ['alto', 'subbass']
 >>> ClefBasicsSettings().question_type
@@ -985,7 +985,7 @@ Return the kind of question to ask.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefBasicsSettings(question_type="identification").active_type()
 'identification'
 >>> ClefBasicsSettings(question_type="nonsense").active_type()
@@ -1006,7 +1006,7 @@ Return the clefs to offer as buttons when a clef is to be named: those asked for
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ClefBasicsSettings(clefs={"alto", "tenor"}).answer_clefs()
 ['alto', 'tenor']
 >>> ClefBasicsSettings(clefs={"alto"}).answer_clefs()
@@ -1026,7 +1026,7 @@ Terms eligible to be highlighted in Notation Identification.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> "Notehead" in NotationSettings().terms
 True
 ```
@@ -1051,7 +1051,7 @@ The settings of the circle of fifths exercise.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleSettings().active_questions()
 ['major', 'minor', 'numeral']
 >>> CircleSettings(questions={"numeral"}).active_questions()
@@ -1074,7 +1074,7 @@ Return the kinds of question to ask, in the order they are listed.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleSettings(questions=set()).active_questions()
 ['major', 'minor', 'numeral']
 >>> CircleSettings(questions={"minor", "nonsense"}).active_questions()
@@ -1095,7 +1095,7 @@ Return the color scheme to draw the circle in.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> CircleSettings(scheme="midnight").active_scheme().name
 'Midnight'
 >>> CircleSettings(scheme="deleted").active_scheme().key

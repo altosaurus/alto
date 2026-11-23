@@ -8,6 +8,10 @@
   --accent: #1f6fb5;
   --accent-soft: #e3eef8;
   --code-bg: #eef0ef;
+  --code-keyword: #783b86;
+  --code-string: #205e41;
+  --code-number: #8a470c;
+  --code-name: #14548a;
   --good: #2e7d32;
   --bad: #c62828;
   --button: #1f6fb5;  /* the Download buttons: filled, with white words */
@@ -23,6 +27,10 @@
     --accent: #6fb1ea;
     --accent-soft: #223443;
     --code-bg: #262d30;
+    --code-keyword: #e1a9ed;
+    --code-string: #9fd5a8;
+    --code-number: #f4b786;
+    --code-name: #8ec8f5;
     --button: #2f6bd0;  /* royal blue: white words 5.1:1, and 3.3:1 against the page; too faint for link text, so only buttons use it */
     --button-text: #ffffff;
       color-scheme: dark;
@@ -37,6 +45,10 @@
     --accent: #6fb1ea;
     --accent-soft: #223443;
     --code-bg: #262d30;
+    --code-keyword: #e1a9ed;
+    --code-string: #9fd5a8;
+    --code-number: #f4b786;
+    --code-name: #8ec8f5;
     --button: #2f6bd0;  /* royal blue: white words 5.1:1, and 3.3:1 against the page; too faint for link text, so only buttons use it */
     --button-text: #ffffff;
     color-scheme: dark;
@@ -109,6 +121,13 @@ li { margin: .2em 0; }
 code { font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); padding: .12em .35em; border-radius: 5px; }
 pre { max-width: 100%; background: var(--code-bg); padding: 14px 16px; border-radius: 10px; overflow-x: auto; line-height: 1.5; }
 pre code { background: none; padding: 0; }
+
+/* Rouge marks tokens in fenced code at build time. */
+.highlight :is(.c, .c1, .ch, .cm, .cp, .cpf, .cs) { color: var(--muted); font-style: italic; }
+.highlight :is(.k, .kc, .kd, .kn, .kp, .kr, .kt, .o, .ow, .si) { color: var(--code-keyword); }
+.highlight :is(.s, .s1, .s2, .sa, .sb, .sc, .sd, .se, .sh, .sr, .ss, .sx) { color: var(--code-string); }
+.highlight :is(.m, .mb, .mf, .mh, .mi, .il, .mo, .no) { color: var(--code-number); }
+.highlight :is(.bp, .na, .nb, .nc, .nd, .nf, .fm, .nl, .nn, .nt, .nv, .vc, .vg, .vi, .vm, .gp) { color: var(--code-name); }
 kbd { font: .85em ui-monospace, Menlo, Consolas, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: .08em .4em; background: var(--panel); }
 table { border-collapse: collapse; width: 100%; margin: 0 0 1.2em; font-size: .96rem; display: block; overflow-x: auto; }
 th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }

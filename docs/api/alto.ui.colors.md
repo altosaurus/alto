@@ -9,7 +9,7 @@ Mixing colors. The interface blends palette colors to get its soft tints and hig
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=0.5)
 '#808080'
 ```
@@ -39,7 +39,7 @@ Return the color a given fraction of the way from one color to another.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> blend(QColor("#000000"), b=QColor("#ffffff"), t=0.0).name()
 '#000000'
 >>> blend(QColor("#ff0000"), b=QColor("#0000ff"), t=1.0).name()
@@ -71,7 +71,7 @@ Return the hex name of a blended color, for use in a stylesheet.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> blend_name(QColor("#000000"), b=QColor("#ffffff"), t=1.0)
 '#ffffff'
 ```

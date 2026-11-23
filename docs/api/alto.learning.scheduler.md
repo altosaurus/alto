@@ -18,7 +18,7 @@ often while well-known ones fade into the background.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> strain = update_strain(NEW_STRAIN, correct=False, attempt_no=1, seconds=4.0, par_seconds=4.0)
 >>> strain  # a miss pushes the question up
 3.0
@@ -51,7 +51,7 @@ Score a previously answered item for Adaptive Response-Time-based Sequencing.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> arts_priority(1, correct=False, duration_ms=200)
 2.0
 >>> arts_priority(0, correct=True, duration_ms=3000)
@@ -81,7 +81,7 @@ Return the strain change for how long the first answer took.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> speed_term(1.0, par_seconds=10.0)  # at or under half of par: the full bonus
 -0.6
 >>> round(speed_term(7.5, par_seconds=10.0), 2)
@@ -121,7 +121,7 @@ Return the question's strain after one more answer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> update_strain(1.5, correct=False, attempt_no=1, seconds=5.0, par_seconds=5.0)
 3.0
 >>> round(update_strain(1.5, correct=True, attempt_no=1, seconds=1.0, par_seconds=5.0), 2)  # right, and quick
@@ -158,7 +158,7 @@ learned is not repeated right away but what you struggle with returns within the
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> round(weight(None, last_seen=None, now=0.0), 2)  # a new question
 2.46
 >>> round(weight(3.0, last_seen=0.0, now=1e9), 2)  # a hard question, long unseen
@@ -192,7 +192,7 @@ Pick one option at random, in proportion to its weight.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> choose(["a", "b"], weights=[1.0, 0.0], rng=random.Random(0))
 'a'
 ```

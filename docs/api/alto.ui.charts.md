@@ -12,7 +12,7 @@ show, and explains the bar or square under the pointer in a tooltip.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nice_ticks(13)
 [0, 5, 10, 15]
 >>> chart = StackedBarChart("Questions answered")
@@ -44,7 +44,7 @@ Return round tick values from 0 up to just above a top value.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> nice_ticks(13)
 [0, 5, 10, 15]
 >>> nice_ticks(8)[-1] >= 8
@@ -75,7 +75,7 @@ Questions per period, the first-try right ones in green with the missed ones sta
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = StackedBarChart("Questions answered per day")
 >>> chart.set_data(["Mon", "Tue", "Wed"], right=[3, 0, 5], wrong=[1, 2, 0])
 >>> chart.labels
@@ -94,7 +94,7 @@ Create an empty chart.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> StackedBarChart("Questions").right
 []
 ```
@@ -120,7 +120,7 @@ Show a count of right and missed questions for each period.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = StackedBarChart("Questions")
 >>> chart.set_data(["a", "b"], right=[2, 0], wrong=[0, 4])
 >>> chart.right, chart.wrong
@@ -141,7 +141,7 @@ Draw the axes and a bar for each period, or a message when no questions were ans
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = StackedBarChart("Questions")
 >>> chart.resize(400, 300)
 >>> chart.set_data(["a", "b"], right=[3, 1], wrong=[1, 0])
@@ -163,7 +163,7 @@ Explain the bar under the pointer in a tooltip.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> from PySide6.QtGui import QMouseEvent
 >>> chart = StackedBarChart("Questions")
@@ -200,7 +200,7 @@ Periods with no answers leave a gap rather than a zero.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = LineChart("Right on the first try", fmt=lambda v: f"{v:.0f}%", fixed_top=100)
 >>> chart.set_data(["Mon", "Tue", "Wed"], values=[40.0, None, 80.0])
 >>> chart.values
@@ -220,7 +220,7 @@ Create an empty chart.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> LineChart("Speed", fmt=lambda v: f"{v:.1f} s").fixed_top is None
 True
 ```
@@ -244,7 +244,7 @@ Show a value for each period.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
 >>> chart.set_data(["a", "b"], values=[2.5, None])
 >>> chart.labels
@@ -265,7 +265,7 @@ Draw the axes, the line (one run at a time, so gaps show) and a dot for each val
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
 >>> chart.resize(400, 300)
 >>> chart.set_data(["a", "b", "c"], values=[2.0, None, 3.0])
@@ -287,7 +287,7 @@ Say what the value under the pointer is in a tooltip.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> from PySide6.QtGui import QMouseEvent
 >>> chart = LineChart("Speed", fmt=lambda v: f"{v:.1f} s")
@@ -319,7 +319,7 @@ One bar per name, on a fixed 0-100 scale, each with its value at the end.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HBarChart("Right on the first try, by exercise")
 >>> chart.set_data([("Intervals", 77.0, "77%  ·  52 q"), ("Chords", 88.0, "88%  ·  48 q")])
 >>> len(chart.rows)
@@ -337,7 +337,7 @@ Create an empty chart.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HBarChart("By exercise").rows
 []
 ```
@@ -356,7 +356,7 @@ Show a bar for each name, and make the chart tall enough for them.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HBarChart("By exercise")
 >>> chart.set_data([(f"Exercise {i}", 50.0, "50%") for i in range(10)])
 >>> chart.minimumHeight()
@@ -377,7 +377,7 @@ Draw a bar with its name and value for each row, or a message when there are non
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HBarChart("By exercise")
 >>> chart.resize(400, 300)
 >>> chart.set_data([("Intervals", 77.0, "77%")])
@@ -399,7 +399,7 @@ Highlight the row under the pointer.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> chart = HBarChart("By exercise")
 >>> chart.set_data([("A", 50.0, "50%")])
@@ -433,7 +433,7 @@ A calendar of reviews: a column per week (Monday to Sunday), a square per day, d
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.set_data({date(2026, 11, 13): 12}, today=date(2026, 11, 13))
 >>> chart.counts
@@ -451,7 +451,7 @@ Create an empty calendar for the last 53 weeks.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> HeatmapChart("Reviews").weeks
 53
 ```
@@ -477,7 +477,7 @@ Show how many questions were answered on each day.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.set_data({}, today=date(2026, 11, 13), weeks=26)
 >>> chart.weeks
@@ -498,7 +498,7 @@ Return the first day shown: the Monday that starts the first week.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.set_data({}, today=date(2026, 11, 13))
 >>> chart.first_day(), chart.first_day().weekday()
@@ -523,7 +523,7 @@ Return how dark a day's square is.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.set_data({date(2026, 11, 13): 40, date(2026, 11, 12): 20, date(2026, 11, 11): 1}, today=date(2026, 11, 13))
 >>> chart.level(0), chart.level(1), chart.level(40)
@@ -548,7 +548,7 @@ Return the day whose square is under a point.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.resize(760, 190)
 >>> chart.set_data({}, today=date(2026, 11, 13))
@@ -573,7 +573,7 @@ Draw the month and weekday labels, a square for each day, and the Less-More lege
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> chart = HeatmapChart("Reviews")
 >>> chart.resize(760, 190)
 >>> chart.set_data({date(2026, 11, 13): 5}, today=date(2026, 11, 13))
@@ -595,7 +595,7 @@ Say how many questions were answered on the day under the pointer, in a tooltip.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from PySide6.QtCore import QEvent
 >>> from PySide6.QtGui import QMouseEvent
 >>> chart = HeatmapChart("Reviews")

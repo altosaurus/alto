@@ -14,7 +14,7 @@ in `alto.ui.settings_panel` and `alto.ui.pack_settings_panel`.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> _key_label(2)
 'D  ·  2♯'
 >>> row = MenuRow("Clefs")
@@ -41,7 +41,7 @@ Disable the only checked box, so that at least one choice always stays selected.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> first, second = QCheckBox(), QCheckBox()
 >>> first.setChecked(True)
 >>> guard_last([first, second])
@@ -76,7 +76,7 @@ Make a small arrow button that repeats while it is held.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> button = arrow_button(Qt.ArrowType.UpArrow, tip="Raise the lowest note")
 >>> button.toolTip(), button.autoRepeat()
 ('Raise the lowest note', True)
@@ -112,7 +112,7 @@ Arrows on the left move the lower bound, arrows on the right move the upper boun
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> editor = RangeEditor("treble", low=28, high=34)
 >>> editor.caption_text.text()
 '<b>C4 – B4</b>'
@@ -132,7 +132,7 @@ Build the editor for a clef's range.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> RangeEditor("bass", low=14, high=28).limits == settings.RANGE_LIMITS["bass"]
 True
 >>> RangeEditor("alto", low=21, high=30, limits=(21, 30)).limits
@@ -163,7 +163,7 @@ Selected keys are filled, the rest are hollow.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyDiagram({0, 2}).toolTip()
 'C, D'
 ```
@@ -179,7 +179,7 @@ Create the diagram.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyDiagram().keys
 set()
 ```
@@ -198,7 +198,7 @@ Choose which key signatures are shown as selected.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> diagram = KeyDiagram()
 >>> diagram.set_keys({2, -1, 0})
 >>> diagram.toolTip()
@@ -219,7 +219,7 @@ Draw a dot for each key signature, filled when selected.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyDiagram({0, 1, -1}).grab().isNull()
 False
 ```
@@ -247,7 +247,7 @@ The name stays as the tooltip and the accessible name.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> box = QCheckBox()
 >>> label_with_picture(box, picture=ClefPictures(["treble"]), name="Treble")
 >>> box.toolTip(), box.accessibleName()
@@ -286,7 +286,7 @@ Build the "Clefs" page that every exercise with a choice of clefs shares.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> checked = []
 >>> boxes_, page_ = clef_choice_page(
 ...     ("treble", "bass"),
@@ -324,7 +324,7 @@ Show the selected keys as a diagram in a menu row, or "Off" when key signatures 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row_, diagram_ = MenuRow("Key signatures"), KeyDiagram()
 >>> show_keys(row_, diagram=diagram_, enabled=False, keys={0})
 >>> row_.value.text(), diagram_.isHidden()
@@ -357,7 +357,7 @@ readable.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row = MenuRow("Range", tall=True)
 >>> row.tall, row.title.text()
 (True, '<b>Range</b>')
@@ -375,7 +375,7 @@ Build the row.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> MenuRow("Clefs").minimumHeight()
 48
 ```
@@ -396,7 +396,7 @@ Just after the value text, or (in a tall row) centered on its own line below.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row = MenuRow("Clefs")
 >>> picture = ClefPictures(["treble"])
 >>> row.attach(picture)
@@ -417,7 +417,7 @@ A button does not size itself to a layout inside it.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row = MenuRow("Range", tall=True)
 >>> row.attach(QLabel("a picture"))
 >>> row.minimumHeight() > 0
@@ -440,7 +440,7 @@ A pill-shaped on/off switch whose knob slides across when toggled.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> switch = Switch()
 >>> switch.setChecked(True)
 >>> switch.isChecked()
@@ -457,7 +457,7 @@ Create a switch that is off.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Switch().isChecked()
 False
 ```
@@ -476,7 +476,7 @@ Turn the switch on or off without animating, as when a setting is loaded.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> switch = Switch()
 >>> switch.setChecked(True)
 >>> switch._pos
@@ -497,7 +497,7 @@ Draw the track, tinted between off and on, and the knob.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Switch().grab().isNull()
 False
 ```
@@ -516,7 +516,7 @@ Return the switch's fixed size.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> Switch().sizeHint()
 PySide6.QtCore.QSize(42, 24)
 ```
@@ -538,7 +538,7 @@ A menu row with a switch that changes a setting in place instead of opening a pa
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row = ToggleRow("Accidentals")
 >>> changes = []
 >>> _ = row.switched.connect(changes.append)
@@ -557,7 +557,7 @@ Build the row with its switch off.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ToggleRow("Accidentals").isOn()
 False
 ```
@@ -576,7 +576,7 @@ Report whether the switch is on.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ToggleRow("Accidentals").isOn()
 False
 ```
@@ -595,7 +595,7 @@ Set the switch without announcing it, as when a setting is loaded.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> row = ToggleRow("Accidentals")
 >>> row.setOn(True)
 >>> row.isOn()
@@ -629,7 +629,7 @@ Build a second-layer page: a Back button and title above a body.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> calls = []
 >>> page_ = subpage("Clefs", body=QWidget(), back=lambda: calls.append("back"))
 >>> next(b for b in page_.findChildren(QToolButton) if b.text() == "‹ Back").click()
@@ -649,7 +649,7 @@ A stacked widget whose pages slide in from the right (going deeper) or the left 
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> stack = SlideStack()
 >>> _ = stack.addWidget(QWidget())
 >>> _ = stack.addWidget(QWidget())
@@ -667,7 +667,7 @@ Create an empty stack.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SlideStack().count()
 0
 ```
@@ -687,7 +687,7 @@ Report whether a page is sliding in.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> SlideStack().sliding
 False
 ```
@@ -709,7 +709,7 @@ slide, or for the page already showing, is ignored.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> stack = SlideStack()
 >>> _ = stack.addWidget(QWidget())
 >>> _ = stack.addWidget(QWidget())
@@ -733,7 +733,7 @@ What every exercise's settings pane has in common: it says when a setting has be
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> panel = ExerciseSettingsPanel()
 >>> got = []
 >>> _ = panel.changed.connect(lambda: got.append(1))
@@ -762,7 +762,7 @@ Update scheduling controls for the active scheduler and profile.
 
 **Examples**
 
-```pycon
+```text
 Switching to ASRS hides the row and leaves its submenu.
 ```
 
@@ -782,7 +782,7 @@ A settings pane with a Clefs page, whose checkboxes choose the clefs that are as
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> from alto.ui.settings_panel import ClefBasicsSettingsPanel
 >>> isinstance(ClefBasicsSettingsPanel(settings.ClefBasicsSettings()), ClefsPanel)
 True
@@ -798,7 +798,7 @@ Shared navigation and per-clef pitch range editors.
 
 **Examples**
 
-```pycon
+```text
 Note and interval identification both open Range on page two.
 ```
 
@@ -828,7 +828,7 @@ At least one stays checked. Each is labeled with a picture of its signature.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyChecklist({0, 2}).selected() == {0, 2}
 True
 ```
@@ -847,7 +847,7 @@ Build the checklist.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> len(KeyChecklist({0}).boxes)
 15
 ```
@@ -866,7 +866,7 @@ Return the checked key signatures.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeyChecklist({-3, 1}).selected() == {-3, 1}
 True
 ```
@@ -896,7 +896,7 @@ The key signature sub-page: a switch for using key signatures at all, and the ke
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = KeySignaturePage(True, selected={0, 1})
 >>> page.enabled(), page.selected() == {0, 1}
 (True, True)
@@ -916,7 +916,7 @@ Build the page.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = KeySignaturePage(False, selected={0})
 >>> page.checklist.isEnabled()
 False
@@ -936,7 +936,7 @@ Report whether key signatures are switched on.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePage(True, selected={0}).enabled()
 True
 ```
@@ -955,7 +955,7 @@ Return the checked key signatures.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> KeySignaturePage(True, selected={-2, 0}).selected() == {-2, 0}
 True
 ```
@@ -976,7 +976,7 @@ Select major and minor keys independently.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleKeyPicker(major_keys={0}, minor_keys={-2}).count()
 2
 ```
@@ -992,7 +992,7 @@ Build one checklist per mode.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ScaleKeyPicker(major_keys=set(), minor_keys={0}).currentIndex()
 1
 ```
@@ -1022,7 +1022,7 @@ Checkboxes for a list of choices, optionally under headings and allowing an empt
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> groups = [("Triads", [("major", "Major"), ("minor", "Minor")]), ("", [("x", "Other")])]
 >>> checklist = ChoiceChecklist(groups, selected={"major"})
 >>> checklist.selected()
@@ -1043,7 +1043,7 @@ Build the checklist.
 
 **Constructor examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> checklist = ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0})
 >>> # noinspection PyTypeChecker
 >>> sorted(checklist.boxes)
@@ -1064,7 +1064,7 @@ Return the checked choices.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> ChoiceChecklist([("", [(0, "Root"), (1, "1st")])], selected={0, 1}).selected()
 {0, 1}
 ```
@@ -1094,7 +1094,7 @@ Build the shared Limited and All answer-button submenu.
 
 **Examples**
 
-```pycon
+```text
 Choosing All hides the count picker and retains its last value.
 ```
 
@@ -1121,7 +1121,7 @@ Choose the direction of a scale.
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> cfg = settings.ScaleIdentificationSettings()
 >>> choices = direction_choices(cfg, edited=lambda: None)
 >>> next(b for b in choices.findChildren(QRadioButton) if b.text() == "Descending").click()
@@ -1147,7 +1147,7 @@ Put a page's body in a scroll area, so a long page scrolls inside the pane and n
 
 **Examples**
 
-```pycon
+```console?lang=python&prompt=%3E%3E%3E,...
 >>> page = QWidget()
 >>> scrolling(page).widget() is page
 True
