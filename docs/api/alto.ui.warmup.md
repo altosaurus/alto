@@ -26,6 +26,10 @@ second.
 ...     app.processEvents()
 >>> warmed
 [1, 2]
+>>> while any(timer.isActive() for timer in owner.findChildren(QTimer)) and time.monotonic() < deadline:
+...     app.processEvents()
+>>> any(timer.isActive() for timer in owner.findChildren(QTimer))  # it stops once every step has run
+False
 ```
 
 ## warmup_steps
