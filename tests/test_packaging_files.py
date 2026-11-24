@@ -218,7 +218,8 @@ def test_the_windows_package_leaves_out_microsofts_runtime_and_the_installer_get
     dependencies = re.search(r"(?ms)^dependencies = \[(.*?)^]", (ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     assert dependencies and "numpy" not in dependencies.group(1)
     iss = INSTALLER.read_text(encoding="utf-8")
-    assert "https://aka.ms/vs/17/release/vc_redist.x64.exe" in iss and "SignedByMicrosoft" in iss
+    assert "RuntimeUrl = 'https://aka.ms/vc14/vc_redist.x64.exe';" in iss and "SignedByMicrosoft" in iss
+    assert "aka.ms/vs/17" not in iss.split("RuntimeUrl = ")[1]  # Visual Studio 2022's link stays at an older runtime
     assert "O=Microsoft Corporation" in iss and "Get-AuthenticodeSignature" in iss
     assert "function PrepareToInstall" in iss  # the silent update path, before anything is changed
     assert "'/install /norestart'" in iss  # Microsoft's own window, where the person accepts Microsoft's license
@@ -231,6 +232,7 @@ def test_the_windows_package_leaves_out_microsofts_runtime_and_the_installer_get
     assert {line.strip() for line in iss.splitlines() if line.lstrip().startswith("[")} <= sections
     script = (ROOT / "scripts" / "build-windows.ps1").read_text(encoding="utf-8")
     assert "/RUNTIMETEST=1" in script and "The Microsoft Visual C++ Runtime is ready." in script
+    assert "older than the $($Runtime['version']) the program needs" in script  # what the link serves is new enough
     assert script.count("$InstallerDefines") == 3  # defined once, given to both installers the script compiles
     terms = (ROOT / "packaging" / "windows" / "microsoft-components.txt").read_text(encoding="utf-8")
     for condition in (

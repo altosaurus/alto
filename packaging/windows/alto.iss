@@ -96,7 +96,10 @@ Filename: "{app}\alto.exe"; Flags: nowait; Check: ShouldRelaunch
 
 [Code]
 const
-  RuntimeUrl = 'https://aka.ms/vs/17/release/vc_redist.x64.exe';  { Microsoft's permanent link to its latest x64 redistributable }
+  { Microsoft's permanent link to its latest x64 Visual C++ v14 redistributable. (aka.ms/vs/17/release is Visual Studio 2022's,
+    which stays at 14.44 and is older than what newer builds of Python and Qt need.) scripts\build-windows.ps1 checks that what
+    it serves is at least RuntimeVersion. }
+  RuntimeUrl = 'https://aka.ms/vc14/vc_redist.x64.exe';
   RuntimeSetup = 'vc_redist.x64.exe';
 
   TermsKey = 'Software\Alto Installer';  { not Software\alto, Alto's settings, which removing the settings deletes }
