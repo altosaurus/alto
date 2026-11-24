@@ -87,6 +87,18 @@ foreach ($Line in Get-Content $RuntimeFile) {
 }
 if (-not $Runtime["version"] -or -not $Runtime["files"]) { throw "The build did not record the Visual C++ runtime it needs: $RuntimeFile" }
 Write-Host "The installer will make sure of the Visual C++ runtime $($Runtime['version']): $($Runtime['files'])"
+# The installer gets the runtime from the address in alto.iss, so what that address serves now must be at least the version the
+# program needs, or a computer with an older runtime could not install Alto. (GitHub's runner has a newer runtime already, so the
+# install test below would not notice.)
+$RuntimeUrl = [regex]::Match((Get-Content -Raw (Join-Path $Root "packaging\windows\alto.iss")), "RuntimeUrl = '([^']+)'").Groups[1].Value
+if (-not $RuntimeUrl) { throw "alto.iss names no RuntimeUrl" }
+$Redistributable = Join-Path $Work "vc_redist.x64.exe"
+Invoke-WebRequest -Uri $RuntimeUrl -OutFile $Redistributable -UseBasicParsing
+$Served = (Get-Item $Redistributable).VersionInfo.FileVersionRaw
+if ($Served -lt [version]$Runtime['version']) {
+    throw "$RuntimeUrl serves the Visual C++ runtime $Served, older than the $($Runtime['version']) the program needs"
+}
+Write-Host "$RuntimeUrl serves the Visual C++ runtime $Served."
 $Microsoft = Get-ChildItem -Path $Frozen -Recurse -File | Where-Object { $_.Name -match '^(vcruntime|msvcp|concrt|vccorlib|vcamp|vcomp)\d|^ucrtbase\.dll$|^api-ms-win-' }
 if ($Microsoft) { throw "Microsoft's runtime must not be in the program: $($Microsoft.FullName -join ', ')" }
 if (Get-ChildItem -Path $Frozen -Recurse -Directory -Filter "numpy") { throw "numpy must not be in the program" }
